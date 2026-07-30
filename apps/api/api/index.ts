@@ -1,14 +1,15 @@
-import { server } from '../src/server';
+// Vercel Serverless Entry Point
+import { NativeServer } from '@moon/server';
+import baseAddons from '@moon/base';
+
+// Instantiate the server WITHOUT calling start() 
+// (We don't want to listen on port 4000 or run migrations on every cold start in Vercel)
+const server = new NativeServer({
+  database: process.env.DATABASE_URL || 'postgres://localhost/moonwitness',
+  jwtSecret: process.env.JWT_SECRET || 'secret',
+  addons: baseAddons.models
+});
 
 export default function handler(req: any, res: any) {
-  // Use the extracted handleRequest method from NativeServer
-  // We need to ensure the server is booted, but Vercel Serverless Functions
-  // might hit this handler before start() completes if we don't await it.
-  
-  // Since server.start() is asynchronous, we might need a quick boot wrapper.
-  // For now, NativeServer handles requests synchronously and boots the ORM 
-  // immediately via the constructor (setupOrm).
-  // The forge() schema sync happens in start(), which we might skip for serverless.
-  
   return server.handleRequest(req, res);
 }
