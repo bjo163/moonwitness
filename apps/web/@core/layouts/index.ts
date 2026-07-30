@@ -1,5 +1,4 @@
 export { PageLayout } from "./page-layout"
 export { ContentWrapper } from "./content-wrapper"
 export { SubNavigation } from "./sub-navigation"
-export { AutoBreadcrumb } from "./auto-breadcrumb"
 export type { SubNavLink } from "./sub-navigation"

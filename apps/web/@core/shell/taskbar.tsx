@@ -38,7 +38,11 @@ export function Taskbar() {
   }, [lang])
 
   // Hide global taskbar on dedicated system portals
-  if (pathname?.startsWith("/erp") || pathname?.startsWith("/console") || pathname?.startsWith("/auth")) {
+  if (
+    pathname?.startsWith("/erp") ||
+    pathname?.startsWith("/console") ||
+    pathname?.startsWith("/auth")
+  ) {
     return null
   }
 

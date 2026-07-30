@@ -15,7 +15,11 @@ export default defineModule({
   basePath: "/console",
   defaultRoute: "terminal",
   routes: [
-    { slug: "terminal", label: "Terminal", icon: "TerminalSquare", component: ConsoleView },
+    {
+      slug: "terminal",
+      label: "Terminal",
+      icon: "TerminalSquare",
+      component: ConsoleView,
+    },
   ],
 })
-

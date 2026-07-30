@@ -14,4 +14,3 @@ export type { NavLinkConfig } from "@modules/types"
 
 // Re-export navigation builder for convenience
 export { buildGlobalNavigation } from "@modules/index"
-

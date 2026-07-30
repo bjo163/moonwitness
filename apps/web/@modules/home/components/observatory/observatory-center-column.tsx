@@ -6,9 +6,9 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
   const [activeTab, setActiveTab] = useState("CELESTIAL VIEW")
 
   return (
-    <div className="bg-space/40 backdrop-blur-xl relative flex min-h-[500px] flex-col justify-between overflow-hidden rounded-2xl border border-cyan-500/40 p-6 shadow-[0_0_40px_rgba(0,240,255,0.08)] transition-all duration-500 hover:border-cyan-400/60 lg:col-span-6">
+    <div className="bg-space/40 relative flex min-h-[500px] flex-col justify-between overflow-hidden rounded-2xl border border-cyan-500/40 p-6 shadow-[0_0_40px_rgba(0,240,255,0.08)] backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/60 lg:col-span-6">
       {/* Top View Selector Tabs */}
-      <div className="bg-space/60 backdrop-blur-md z-10 mx-auto mb-6 flex w-full max-w-lg items-center justify-center gap-2 rounded-lg border border-cyan-500/30 p-1.5 shadow-inner">
+      <div className="bg-space/60 z-10 mx-auto mb-6 flex w-full max-w-lg items-center justify-center gap-2 rounded-lg border border-cyan-500/30 p-1.5 shadow-inner backdrop-blur-md">
         {["CELESTIAL VIEW", "ORBIT VIEW", "HEMISPHERE", "DEEP SKY"].map(
           (tab) => (
             <button
@@ -16,7 +16,7 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
               onClick={() => setActiveTab(tab)}
               className={`flex-1 rounded py-1.5 text-[10px] font-black tracking-wider uppercase transition-all ${
                 activeTab === tab
-                  ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 shadow-[0_0_12px_rgba(0,240,255,0.3)]"
+                  ? "border border-cyan-500/50 bg-cyan-500/20 text-cyan-400 shadow-[0_0_12px_rgba(0,240,255,0.3)]"
                   : "text-primary hover:text-white"
               }`}
             >
@@ -53,7 +53,7 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
         <div className="pointer-events-none absolute h-[200px] w-[200px] rounded-full border border-emerald-400/10" />
 
         {/* Sun Object */}
-        <div className="bg-space/70 backdrop-blur-md animate-float absolute top-6 left-10 flex items-center gap-2 rounded-lg border border-amber-500/40 p-2 shadow-[0_0_20px_rgba(245,158,11,0.2)]">
+        <div className="bg-space/70 animate-float absolute top-6 left-10 flex items-center gap-2 rounded-lg border border-amber-500/40 p-2 shadow-[0_0_20px_rgba(245,158,11,0.2)] backdrop-blur-md">
           <Sun className="animate-spin-slow h-6 w-6 shrink-0 text-amber-400" />
           <div className="font-mono text-[9px] leading-tight">
             <div className="text-xs font-black text-amber-400">SUN ☀</div>
@@ -70,7 +70,7 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
               className="h-full w-full object-cover"
             />
           </div>
-          <div className="bg-space/80 backdrop-blur-md mt-3 rounded-full border border-cyan-500/40 px-3 py-1 text-center shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+          <div className="bg-space/80 mt-3 rounded-full border border-cyan-500/40 px-3 py-1 text-center shadow-[0_0_15px_rgba(0,240,255,0.2)] backdrop-blur-md">
             <span className="font-mono text-xs font-black tracking-widest text-primary uppercase">
               ◎ MOON // 384,400 KM
             </span>
@@ -78,7 +78,7 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
         </div>
 
         {/* Earth & Qibla Vector */}
-        <div className="bg-space/70 backdrop-blur-md absolute bottom-6 left-6 flex items-center gap-2.5 rounded-lg border border-primary/40 p-2 shadow-[0_0_20px_rgba(0,240,255,0.2)] sm:left-10">
+        <div className="bg-space/70 absolute bottom-6 left-6 flex items-center gap-2.5 rounded-lg border border-primary/40 p-2 shadow-[0_0_20px_rgba(0,240,255,0.2)] backdrop-blur-md sm:left-10">
           <Image
             unoptimized
             width={120}
@@ -93,13 +93,15 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
           </div>
         </div>
 
-        <div className="bg-space/70 backdrop-blur-md absolute right-6 bottom-6 flex items-center gap-2.5 rounded-lg border border-emerald-400/40 p-2.5 shadow-[0_0_20px_rgba(16,185,129,0.2)] sm:right-10">
+        <div className="bg-space/70 absolute right-6 bottom-6 flex items-center gap-2.5 rounded-lg border border-emerald-400/40 p-2.5 shadow-[0_0_20px_rgba(16,185,129,0.2)] backdrop-blur-md sm:right-10">
           <Compass className="animate-bounce-x h-6 w-6 text-emerald-400" />
           <div className="text-right font-mono text-[9px] leading-tight">
             <div className="text-xs font-black text-emerald-400">
               QIBLA VECTOR
             </div>
-            <div className="text-white">{obs.loading ? "---" : obs.qibla}° NW // 8,865 KM</div>
+            <div className="text-white">
+              {obs.loading ? "---" : obs.qibla}° NW // 8,865 KM
+            </div>
           </div>
         </div>
       </div>
@@ -111,12 +113,12 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
           ORBIT TRACE ON
         </span>
         <span className="flex items-center justify-center gap-1.5 rounded border border-purple-400/40 bg-purple-950/40 px-2 py-1 text-purple-300 shadow-[0_0_8px_rgba(168,85,247,0.15)] backdrop-blur-sm">
-          <span className="h-1.5 w-1.5 rounded-full bg-purple-400" /> STAR
-          FIELD ON
+          <span className="h-1.5 w-1.5 rounded-full bg-purple-400" /> STAR FIELD
+          ON
         </span>
         <span className="flex items-center justify-center gap-1.5 rounded border border-blue-400/40 bg-blue-950/40 px-2 py-1 text-blue-300 shadow-[0_0_8px_rgba(59,130,246,0.15)] backdrop-blur-sm">
-          <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />{" "}
-          ATMOSPHERE ON
+          <span className="h-1.5 w-1.5 rounded-full bg-blue-400" /> ATMOSPHERE
+          ON
         </span>
         <span className="flex items-center justify-center gap-1.5 rounded border border-emerald-400/40 bg-emerald-950/40 px-2 py-1 text-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.15)] backdrop-blur-sm">
           <span className="h-1.5 w-1.5 animate-ping rounded-full bg-emerald-400" />{" "}

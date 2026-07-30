@@ -12,7 +12,11 @@ export const erpNavigation: NavLinkConfig[] = [
   { label: "Tasks", href: "/erp/tasks", icon: "CheckSquare" },
   { label: "Reports", href: "/erp/reports", icon: "BarChart3" },
   { label: "Community", href: "/erp/community", icon: "Users" },
-  { label: "Global Intelligence", href: "/erp/global-intelligence", icon: "Globe" },
+  {
+    label: "Global Intelligence",
+    href: "/erp/global-intelligence",
+    icon: "Globe",
+  },
 ]
 
 export const erpQuickLaunch: NavLinkConfig[] = [

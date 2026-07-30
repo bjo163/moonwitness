@@ -1,19 +1,19 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from "axios"
 
 // Default to Fastify backend port 4000
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"
 
 export class OdooRpcClient {
-  private client: AxiosInstance;
+  private client: AxiosInstance
 
   constructor() {
     this.client = axios.create({
       baseURL: BASE_URL,
       timeout: 15000,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-    });
+    })
 
     // TODO: Add request interceptor for JWT authentication later
     this.client.interceptors.request.use((config) => {
@@ -21,8 +21,8 @@ export class OdooRpcClient {
       // if (token) {
       //   config.headers.Authorization = `Bearer ${token}`;
       // }
-      return config;
-    });
+      return config
+    })
   }
 
   /**
@@ -43,16 +43,19 @@ export class OdooRpcClient {
       method,
       args,
       kwargs,
-    };
+    }
 
     try {
-      const response = await this.client.post('/rpc', payload);
-      return response.data.result as T;
+      const response = await this.client.post("/rpc", payload)
+      return response.data.result as T
     } catch (error: any) {
-      console.error(`RPC Error [${model}.${method}]:`, error?.response?.data || error.message);
-      throw new Error(error?.response?.data?.error || 'Unknown RPC Error');
+      console.error(
+        `RPC Error [${model}.${method}]:`,
+        error?.response?.data || error.message
+      )
+      throw new Error(error?.response?.data?.error || "Unknown RPC Error")
     }
   }
 }
 
-export const rpc = new OdooRpcClient();
+export const rpc = new OdooRpcClient()

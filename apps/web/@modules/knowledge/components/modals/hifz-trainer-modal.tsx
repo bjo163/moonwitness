@@ -116,7 +116,7 @@ export function HifzTrainerModal({
           <div className="flex items-center gap-3">
             <button
               onClick={() => setRepeatCount((prev) => prev + 1)}
-              className="btn-primary btn-clip flex w-full items-center justify-center gap-2 py-2 text-xs font-bold"
+              className="btn-primary flex w-full items-center justify-center gap-2 py-2 text-xs font-bold btn-clip"
             >
               <RotateCcw className="h-3.5 w-3.5 text-primary" />
               <span>[ HITUNG PENGULANGAN HAFALAN (+1) ]</span>

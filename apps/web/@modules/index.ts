@@ -29,7 +29,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
 
 // ── Helper: Cari modul berdasarkan ID ───────────────────────────
 export function getModule(id: string): ModuleDefinition | undefined {
-  return MODULE_REGISTRY.find(m => m.id === id)
+  return MODULE_REGISTRY.find((m) => m.id === id)
 }
 
 // ── Helper: Bangun array navigasi global dari semua modul ───────
@@ -38,14 +38,18 @@ export function buildGlobalNavigation(): NavLinkConfig[] {
 }
 
 // ── Helper: Bangun navigasi berdasarkan target placement ────────
-export function buildNavigation(placement: "OS_DOCK" | "ERP_SIDEBAR" | "SYSTEM_TRAY" | "HIDDEN"): NavLinkConfig[] {
-  const filteredModules = MODULE_REGISTRY.filter(m => m.navPlacement === placement)
-  
-  const moduleNavItems: NavLinkConfig[] = filteredModules.map(m => ({
+export function buildNavigation(
+  placement: "OS_DOCK" | "ERP_SIDEBAR" | "SYSTEM_TRAY" | "HIDDEN"
+): NavLinkConfig[] {
+  const filteredModules = MODULE_REGISTRY.filter(
+    (m) => m.navPlacement === placement
+  )
+
+  const moduleNavItems: NavLinkConfig[] = filteredModules.map((m) => ({
     label: m.label,
     href: `${m.basePath}/${m.defaultRoute}`,
     icon: m.icon,
-    subLinks: m.routes.map(r => ({
+    subLinks: m.routes.map((r) => ({
       label: r.label,
       href: `${m.basePath}/${r.slug}`,
       icon: r.icon,
@@ -58,9 +62,9 @@ export function buildNavigation(placement: "OS_DOCK" | "ERP_SIDEBAR" | "SYSTEM_T
 // ── Helper: Ambil semua widget untuk dashboard tertentu ─────────
 export function getWidgetsForDashboard(dashboard: string) {
   const widgets: any[] = []
-  MODULE_REGISTRY.forEach(m => {
+  MODULE_REGISTRY.forEach((m) => {
     if (m.widgets) {
-      widgets.push(...m.widgets.filter(w => w.targetDashboard === dashboard))
+      widgets.push(...m.widgets.filter((w) => w.targetDashboard === dashboard))
     }
   })
   return widgets

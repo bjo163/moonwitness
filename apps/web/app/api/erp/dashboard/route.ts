@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
     // 1. Real Prayer Times from Internal Math Engine (quran-core)
     const now = new Date()
     const todayPrayers = getDailyPrayerTimes(JAKARTA_LAT, JAKARTA_LNG, now)
-    
+
     const formatTime = (d: Date) =>
       `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`
 
@@ -27,30 +27,36 @@ export async function GET(req: NextRequest) {
       { name: "Isha", timeObj: todayPrayers.isha },
     ]
 
-    dashboardData.todayPrayer = prayerSchedule.map(p => {
+    dashboardData.todayPrayer = prayerSchedule.map((p) => {
       const pmins = getMins(p.timeObj)
       let status = "pending"
       if (currentMins >= pmins) status = "done"
       // Simplistic check for 'next'
-      if (status === "pending" && prayerSchedule.find(x => getMins(x.timeObj) > currentMins)?.name === p.name) {
+      if (
+        status === "pending" &&
+        prayerSchedule.find((x) => getMins(x.timeObj) > currentMins)?.name ===
+          p.name
+      ) {
         status = "next"
       }
       return {
         name: p.name,
         time: formatTime(p.timeObj),
         status,
-        countdown: status === "next" ? "LIVE" : undefined
+        countdown: status === "next" ? "LIVE" : undefined,
       }
     })
 
     // 2. Real Knowledge Feed from Supabase DB (Internal API)
     const sb = getSupabaseClient()
-    
+
     // Fetch a real Ayah for the knowledge feed
     const randomAyahId = Math.floor(Math.random() * 6236) + 1
     const { data: ayahData } = await sb
       .from("quran_verses")
-      .select("surah_id, verse_number, text_uthmani, translation_id, surahs(name_latin)")
+      .select(
+        "surah_id, verse_number, text_uthmani, translation_id, surahs(name_latin)"
+      )
       .eq("id", randomAyahId)
       .single()
 
@@ -82,7 +88,6 @@ export async function GET(req: NextRequest) {
         time: "Just Now",
       }
     }
-
   } catch (error) {
     console.error("Failed to fetch real data for ERP Dashboard:", error)
   }

@@ -14,7 +14,7 @@ export function Table({
 }) {
   const _colorHex = THEME_TOKENS.colors[accentColor]
   return (
-    <div className="theme-scrollbar bg-space card-clip w-full overflow-x-auto border border-primary/20">
+    <div className="theme-scrollbar bg-space w-full overflow-x-auto border border-primary/20 card-clip">
       <table className="w-full text-left font-mono text-[10px] sm:text-xs">
         <thead className="bg-panel border-b border-primary/30 text-primary">
           <tr>

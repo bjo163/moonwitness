@@ -35,9 +35,13 @@ export function OSObservatorySystems() {
       className="relative z-10 overflow-hidden border-b border-primary/30 py-20 font-mono text-foreground"
     >
       {/* ═══ LAYER 1: DEEP SPACE SCI-FI GRADIENT & NEBULA MATRIX ═════════════ */}
-      <div 
+      <div
         className="pointer-events-none absolute inset-0"
-        style={{ maskImage: "linear-gradient(to bottom, transparent, black 150px)", WebkitMaskImage: "linear-gradient(to bottom, transparent, black 150px)" }}
+        style={{
+          maskImage: "linear-gradient(to bottom, transparent, black 150px)",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, transparent, black 150px)",
+        }}
       >
         <div className="theme-grid-bg absolute inset-0 opacity-20" />
         <div className="bg-radial-gradient absolute bottom-1/3 left-1/2 h-[700px] w-[1300px] -translate-x-1/2 from-cyan-950/25 via-blue-900/15 to-transparent blur-[160px]" />
@@ -61,14 +65,16 @@ export function OSObservatorySystems() {
           </div>
 
           {/* Atomic Clock & Date Terminal Badge */}
-          <div className="bg-space/40 backdrop-blur-xl flex shrink-0 items-center gap-4 rounded-xl border border-cyan-500/30 p-4 shadow-[0_0_35px_rgba(0,240,255,0.1)] transition-all duration-500 hover:border-cyan-400/50">
+          <div className="bg-space/40 flex shrink-0 items-center gap-4 rounded-xl border border-cyan-500/30 p-4 shadow-[0_0_35px_rgba(0,240,255,0.1)] backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/50">
             <Clock className="h-10 w-10 shrink-0 animate-pulse text-primary drop-shadow-[0_0_8px_#00F0FF]" />
             <div className="text-left">
               <div className="font-mono text-2xl font-black tracking-widest text-white drop-shadow-[0_0_10px_#FFF]">
                 {clockWIB}
               </div>
               <div className="mt-0.5 text-[11px] font-bold text-primary uppercase">
-                {obs.loading ? "SYNCING DATE..." : `${obs.hijri.day} ${obs.hijri.month} ${obs.hijri.year}`}
+                {obs.loading
+                  ? "SYNCING DATE..."
+                  : `${obs.hijri.day} ${obs.hijri.month} ${obs.hijri.year}`}
               </div>
               <div className="font-mono text-[10px] tracking-wider text-primary">
                 SYSTEM TIME UTC+7 • ATOMIC SYNC

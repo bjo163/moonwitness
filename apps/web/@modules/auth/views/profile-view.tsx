@@ -4,7 +4,10 @@ import { ContextBlock } from "@core/ui"
 
 export function ProfileView() {
   return (
-    <div className="theme-grid-bg min-h-screen py-8 font-mono text-foreground" suppressHydrationWarning>
+    <div
+      className="theme-grid-bg min-h-screen py-8 font-mono text-foreground"
+      suppressHydrationWarning
+    >
       <div className="mx-auto max-w-5xl space-y-6 px-4 sm:px-6">
         <ContextBlock
           title="IDENTITY MATRIX"
@@ -13,7 +16,7 @@ export function ProfileView() {
           status="ONLINE"
           accentColor="knowledge"
         />
-        <div className="rounded-2xl border border-cyan-500/20 bg-black/40 p-8 backdrop-blur-xl flex items-center justify-center h-64 text-cyan-500/50">
+        <div className="flex h-64 items-center justify-center rounded-2xl border border-cyan-500/20 bg-black/40 p-8 text-cyan-500/50 backdrop-blur-xl">
           PROFILE DATA INITIALIZING...
         </div>
       </div>

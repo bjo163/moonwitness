@@ -45,9 +45,9 @@ export function ShareCardGeneratorModal({
         <button
           onClick={() => setIsOpen(true)}
           title="Export Infographic Share Card"
-          className="flex h-6 w-6 items-center justify-center rounded bg-white/5 text-[10px] text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 transition-colors"
+          className="flex h-6 w-6 items-center justify-center rounded bg-white/5 text-[10px] text-blue-400 transition-colors hover:bg-blue-500/20 hover:text-blue-300"
         >
-          <Share2 className="w-3 h-3" />
+          <Share2 className="h-3 w-3" />
         </button>
       ) : (
         <ModalTrigger
@@ -103,7 +103,7 @@ export function ShareCardGeneratorModal({
           <div className="flex items-center gap-3">
             <button
               onClick={handleCopyCardText}
-              className="btn-primary btn-clip flex w-full items-center justify-center gap-2 py-2.5 text-xs font-bold"
+              className="btn-primary flex w-full items-center justify-center gap-2 py-2.5 text-xs font-bold btn-clip"
             >
               {copied ? (
                 <Check className="text-success h-4 w-4" />
@@ -160,7 +160,7 @@ export function ShareCardGeneratorModal({
                   link.click()
                 }
               }}
-              className="btn-primary btn-primary-purple btn-clip flex w-full items-center justify-center gap-2 py-2.5 text-xs font-bold"
+              className="btn-primary btn-primary-purple flex w-full items-center justify-center gap-2 py-2.5 text-xs font-bold btn-clip"
             >
               <Download className="h-4 w-4 text-secondary" />
               <span>[ 📥 DOWNLOAD IMAGE PNG ]</span>

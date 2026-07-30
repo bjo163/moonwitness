@@ -33,21 +33,20 @@ export function ErpNavbar() {
   }, [])
 
   // Auto-generate title from pathname
-  const pageTitle = pathname?.split("/").pop()?.replace(/-/g, " ") || "Dashboard"
+  const pageTitle =
+    pathname?.split("/").pop()?.replace(/-/g, " ") || "Dashboard"
 
   return (
-    <header className="sticky top-0 z-40 flex h-20 w-full items-center justify-between border-b border-cyan-500/20 bg-space/90 px-6 shadow-sm backdrop-blur-md">
-      
+    <header className="bg-space/90 sticky top-0 z-40 flex h-20 w-full items-center justify-between border-b border-cyan-500/20 px-6 shadow-sm backdrop-blur-md">
       {/* Page Title */}
       <div className="flex items-center gap-4">
-        <h2 className="font-sans text-lg font-bold uppercase tracking-wider text-white">
+        <h2 className="font-sans text-lg font-bold tracking-wider text-white uppercase">
           {pageTitle}
         </h2>
       </div>
 
       {/* Right Actions */}
       <div className="flex items-center gap-6">
-        
         {/* Search */}
         <div className="hidden items-center gap-2 rounded-full border border-cyan-500/30 bg-black/40 px-4 py-2 sm:flex">
           <Search className="h-4 w-4 text-primary/50" />
@@ -67,8 +66,12 @@ export function ErpNavbar() {
         {/* User Profile */}
         <div className="flex items-center gap-3 border-l border-cyan-500/30 pl-6">
           <div className="hidden flex-col items-end sm:flex">
-            <span className="font-sans text-sm font-bold text-white">{profile?.name || "Rezza Fahlevi"}</span>
-            <span className="font-mono text-[10px] text-cyan-400">{profile?.title || "Explorer of Truth"}</span>
+            <span className="font-sans text-sm font-bold text-white">
+              {profile?.name || "Rezza Fahlevi"}
+            </span>
+            <span className="font-mono text-[10px] text-cyan-400">
+              {profile?.title || "Explorer of Truth"}
+            </span>
           </div>
           <AutoAvatar seed={profile?.name || "Rezza Fahlevi"} size={40} />
         </div>
@@ -77,7 +80,7 @@ export function ErpNavbar() {
           variant="secondary"
           accentColor="system"
           className="hidden md:flex"
-          onClick={() => window.location.href = "/home"}
+          onClick={() => (window.location.href = "/home")}
         >
           PUBLIC
         </Button>

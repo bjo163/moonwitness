@@ -28,7 +28,7 @@ export function HomeView() {
 
       {/* 5. ASTRONOMY SECTION */}
       <HomeAstronomySection />
-      
+
       {/* 6. ANALYTICS SECTION */}
       <HomeAnalyticsSection />
 

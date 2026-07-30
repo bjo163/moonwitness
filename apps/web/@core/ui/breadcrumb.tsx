@@ -43,23 +43,31 @@ export function AutoBreadcrumb({
   customLastLabel?: string
 }) {
   const pathname = usePathname()
-  
-  if (!pathname || pathname === "/" || pathname === "/home" || pathname.startsWith("/auth") || pathname.startsWith("/erp") || pathname.startsWith("/console")) {
+
+  if (
+    !pathname ||
+    pathname === "/" ||
+    pathname === "/home" ||
+    pathname.startsWith("/auth") ||
+    pathname.startsWith("/erp") ||
+    pathname.startsWith("/console")
+  ) {
     return null
   }
 
   // Split path into segments and remove empty ones
   const segments = pathname.split("/").filter(Boolean)
-  
+
   // Format segments into readable labels (e.g. "canonical-scriptures" -> "CANONICAL SCRIPTURES")
   const formatLabel = (str: string) => str.replace(/-/g, " ").toUpperCase()
 
   const paths = segments.map((segment, index) => {
     const isLast = index === segments.length - 1
     const href = "/" + segments.slice(0, index + 1).join("/")
-    
+
     // Use custom label for the last segment if provided (e.g. to show "Al-Qur'an" instead of "1")
-    const label = (isLast && customLastLabel) ? customLastLabel : formatLabel(segment)
+    const label =
+      isLast && customLastLabel ? customLastLabel : formatLabel(segment)
 
     return {
       label,
@@ -68,17 +76,24 @@ export function AutoBreadcrumb({
   })
 
   return (
-    <div className={`flex items-center gap-2 text-[10px] uppercase tracking-widest font-bold text-white/40 ${className}`}>
-      <Link href="/home" className="hover:text-blue-400 flex items-center gap-1">
+    <div
+      className={`flex items-center gap-2 text-[10px] font-bold tracking-widest text-white/40 uppercase ${className}`}
+    >
+      <Link
+        href="/home"
+        className="flex items-center gap-1 hover:text-blue-400"
+      >
         MOONWITNESS OS
       </Link>
       {paths.map((p, i) => (
         <React.Fragment key={i}>
           <span>&gt;</span>
           {p.href ? (
-             <Link href={p.href} className="hover:text-blue-400">{p.label}</Link>
+            <Link href={p.href} className="hover:text-blue-400">
+              {p.label}
+            </Link>
           ) : (
-             <span className="text-blue-400">{p.label}</span>
+            <span className="text-blue-400">{p.label}</span>
           )}
         </React.Fragment>
       ))}

@@ -18,14 +18,14 @@ function OrbitingEarthAndMoon({ rotation }: { rotation: number }) {
         <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary shadow-[0_0_15px_#00F0FF]">
           <Globe className="h-4 w-4 text-black" />
         </div>
-        <span className="mt-0.5 text-[7px] font-bold text-primary">
-          EARTH
-        </span>
+        <span className="mt-0.5 text-[7px] font-bold text-primary">EARTH</span>
 
         {/* Orbiting Moon around Earth */}
         <div
           className="absolute flex h-10 w-10 items-center justify-center"
-          style={{ transform: `rotate(${rotation * MOON_ORBIT_SPEED_MULTIPLIER}deg)` }}
+          style={{
+            transform: `rotate(${rotation * MOON_ORBIT_SPEED_MULTIPLIER}deg)`,
+          }}
         >
           <div className="absolute top-0 flex h-3 w-3 items-center justify-center rounded-full bg-white shadow-[0_0_10px_white]">
             <Moon className="h-2 w-2 text-black" />

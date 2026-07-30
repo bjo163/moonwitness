@@ -185,7 +185,7 @@ export function PersatuanUmatView() {
             <button
               onClick={handlePledge}
               disabled={pledged}
-              className={`btn-primary btn-clip mx-auto flex items-center gap-3 px-8 py-3.5 text-xs font-black transition-all sm:text-sm ${
+              className={`btn-primary mx-auto flex items-center gap-3 px-8 py-3.5 text-xs font-black transition-all btn-clip sm:text-sm ${
                 pledged
                   ? "bg-success/20 text-success border-success"
                   : "border-primary bg-primary/20 text-primary hover:bg-primary/40"

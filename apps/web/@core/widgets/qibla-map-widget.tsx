@@ -52,7 +52,8 @@ export function QiblaMapWidget() {
             {/* KOORDINAT GPS LOKAL */}
           </span>
           <div className="font-bold text-foreground">
-            {userCoords.lat.toFixed(COORD_DECIMAL_DIGITS)}° N, {userCoords.lng.toFixed(COORD_DECIMAL_DIGITS)}° E
+            {userCoords.lat.toFixed(COORD_DECIMAL_DIGITS)}° N,{" "}
+            {userCoords.lng.toFixed(COORD_DECIMAL_DIGITS)}° E
           </div>
         </div>
 

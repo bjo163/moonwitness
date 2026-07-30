@@ -50,7 +50,7 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#05070A" />
       </head>
-      <body className="relative min-h-screen bg-space pb-[34px]">
+      <body className="bg-space relative min-h-screen pb-[34px]">
         <Cosmic3DBackground />
 
         {/* Accessible Skip Navigation */}
@@ -63,7 +63,7 @@ export default function RootLayout({
         <LanguageProvider>
           <AudioProvider>
             <ToastProvider>
-              <main id="main-content" className="flex-1 w-full h-full">
+              <main id="main-content" className="h-full w-full flex-1">
                 {children}
               </main>
               <Suspense fallback={null}>

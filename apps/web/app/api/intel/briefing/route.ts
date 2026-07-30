@@ -38,9 +38,13 @@ export async function POST(request: NextRequest) {
     // 1. Fetch live data
     // Fetch Weather (Jakarta & New York)
     const [jktRes, nyRes, btcRes] = await Promise.all([
-      fetch("https://api.open-meteo.com/v1/forecast?latitude=-6.2088&longitude=106.8456&current_weather=true"),
-      fetch("https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.0060&current_weather=true"),
-      fetch("https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT")
+      fetch(
+        "https://api.open-meteo.com/v1/forecast?latitude=-6.2088&longitude=106.8456&current_weather=true"
+      ),
+      fetch(
+        "https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.0060&current_weather=true"
+      ),
+      fetch("https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT"),
     ])
 
     const jktData = jktRes.ok ? await jktRes.json() : null
@@ -55,7 +59,7 @@ RAW INTELLIGENCE DATA FOR TODAY:
     `.trim()
 
     const shuffledKeys = [...keys].sort(() => Math.random() - 0.5)
-    
+
     // --- 1. GENERATE TEXT (Failover Loop) ---
     let finalText = ""
     let textError: any = null
@@ -65,21 +69,26 @@ RAW INTELLIGENCE DATA FOR TODAY:
       const currentKey = shuffledKeys[i]!
       const ai = new GoogleGenAI({ apiKey: currentKey })
       try {
-        console.log(`[Intel Briefing] Text Attempt ${i + 1}/${shuffledKeys.length} using Key: ${currentKey.substring(0, 10)}...`)
+        console.log(
+          `[Intel Briefing] Text Attempt ${i + 1}/${shuffledKeys.length} using Key: ${currentKey.substring(0, 10)}...`
+        )
         const response = await ai.models.generateContent({
           model: textModelName,
           contents: [{ role: "user", parts: [{ text: dataContext }] }],
           config: {
             systemInstruction: SYSTEM_PROMPT,
             temperature: 0.7,
-          }
+          },
         })
         finalText = response.text || ""
         break // Success, exit loop
       } catch (err: any) {
         textError = err
-        const isQuota = err?.status === 429 || err?.message?.includes("Quota exceeded")
-        console.warn(`[Intel Briefing] Text failover Key ${currentKey.substring(0, 10)} (Quota: ${isQuota})`)
+        const isQuota =
+          err?.status === 429 || err?.message?.includes("Quota exceeded")
+        console.warn(
+          `[Intel Briefing] Text failover Key ${currentKey.substring(0, 10)} (Quota: ${isQuota})`
+        )
       }
     }
 
@@ -93,27 +102,35 @@ RAW INTELLIGENCE DATA FOR TODAY:
       const currentKey = shuffledKeys[i]!
       const ai = new GoogleGenAI({ apiKey: currentKey })
       try {
-        console.log(`[Intel Briefing] Image Attempt ${i + 1}/${shuffledKeys.length} using Key: ${currentKey.substring(0, 10)}...`)
+        console.log(
+          `[Intel Briefing] Image Attempt ${i + 1}/${shuffledKeys.length} using Key: ${currentKey.substring(0, 10)}...`
+        )
         const imgResponse = await ai.models.generateContent({
           model: "gemini-2.5-flash-image",
-          contents: "A highly detailed, sci-fi military head-up display (HUD) showing global intelligence data. The theme is 'The Stillness Before the Shift'. It features a dark, glowing neon green and cyan holographic map of the world. There are floating data panels showing climate stability, bitcoin market consolidation, and an ominous warning symbol. The style should be cyberpunk, esoteric, and hyper-realistic, looking like a dashboard from a divine-military observation terminal.",
-          config: { responseModalities: ["Image"] }
+          contents:
+            "A highly detailed, sci-fi military head-up display (HUD) showing global intelligence data. The theme is 'The Stillness Before the Shift'. It features a dark, glowing neon green and cyan holographic map of the world. There are floating data panels showing climate stability, bitcoin market consolidation, and an ominous warning symbol. The style should be cyberpunk, esoteric, and hyper-realistic, looking like a dashboard from a divine-military observation terminal.",
+          config: { responseModalities: ["Image"] },
         })
-        
+
         if (imgResponse.candidates?.[0]?.content?.parts?.[0]?.inlineData) {
-          const mimeType = imgResponse.candidates[0].content.parts[0].inlineData.mimeType || "image/png"
-          const data = imgResponse.candidates[0].content.parts[0].inlineData.data
+          const mimeType =
+            imgResponse.candidates[0].content.parts[0].inlineData.mimeType ||
+            "image/png"
+          const data =
+            imgResponse.candidates[0].content.parts[0].inlineData.data
           imageUrl = `data:${mimeType};base64,${data}`
           break // Success, exit loop
         }
       } catch (err: any) {
-        const isQuota = err?.status === 429 || err?.message?.includes("Quota exceeded")
-        console.warn(`[Intel Briefing] Image failover Key ${currentKey.substring(0, 10)} (Quota: ${isQuota})`)
+        const isQuota =
+          err?.status === 429 || err?.message?.includes("Quota exceeded")
+        console.warn(
+          `[Intel Briefing] Image failover Key ${currentKey.substring(0, 10)} (Quota: ${isQuota})`
+        )
       }
     }
 
     return NextResponse.json({ briefing: finalText, imageUrl })
-    
   } catch (error: any) {
     console.error("[Intel Briefing Error]", error)
     return NextResponse.json({ error: error.message }, { status: 500 })

@@ -18,10 +18,29 @@ export default defineModule({
   basePath: "/history",
   defaultRoute: "timeline",
   routes: [
-    { slug: "timeline", label: "Timeline", icon: "History", component: HistoryTimelineView },
-    { slug: "sejarah-sirah", label: "Sejarah & Sirah", icon: "Map", component: SejarahSirahView },
-    { slug: "nubuat-peradaban", label: "Nubuat Peradaban", icon: "Eye", component: NubuatPeradabanView },
-    { slug: "mukjizat-sains", label: "Mukjizat Sains", icon: "Sparkles", component: MukjizatSainsView },
+    {
+      slug: "timeline",
+      label: "Timeline",
+      icon: "History",
+      component: HistoryTimelineView,
+    },
+    {
+      slug: "sejarah-sirah",
+      label: "Sejarah & Sirah",
+      icon: "Map",
+      component: SejarahSirahView,
+    },
+    {
+      slug: "nubuat-peradaban",
+      label: "Nubuat Peradaban",
+      icon: "Eye",
+      component: NubuatPeradabanView,
+    },
+    {
+      slug: "mukjizat-sains",
+      label: "Mukjizat Sains",
+      icon: "Sparkles",
+      component: MukjizatSainsView,
+    },
   ],
 })
-

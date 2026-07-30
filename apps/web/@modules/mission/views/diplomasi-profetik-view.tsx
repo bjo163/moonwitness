@@ -131,7 +131,7 @@ export function DiplomasiProfetikView() {
                 setSelectedScenarioIdx((prev) => prev + 1)
                 setChosenOption(null)
               }}
-              className="btn-primary btn-clip mt-2 w-full py-2.5 text-xs font-bold"
+              className="btn-primary mt-2 w-full py-2.5 text-xs font-bold btn-clip"
             >
               <span>SKENARIO DIPLOMASI BERIKUTNYA →</span>
             </button>
@@ -141,4 +141,3 @@ export function DiplomasiProfetikView() {
     </div>
   )
 }
-

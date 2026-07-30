@@ -22,23 +22,176 @@ type Edge = {
 }
 
 const KNOWLEDGE_NODES: Node[] = [
-  { id: "n1", label: "Imam Al-Ghazali", type: "person", x: 0, y: 0, vx: 0, vy: 0, radius: 20 },
-  { id: "n2", label: "Ihya Ulumuddin", type: "concept", x: 0, y: 0, vx: 0, vy: 0, radius: 15 },
-  { id: "n3", label: "Baghdad", type: "place", x: 0, y: 0, vx: 0, vy: 0, radius: 25 },
-  { id: "n4", label: "Baitul Hikmah", type: "place", x: 0, y: 0, vx: 0, vy: 0, radius: 22 },
-  { id: "n5", label: "Imam Syafi'i", type: "person", x: 0, y: 0, vx: 0, vy: 0, radius: 20 },
-  { id: "n6", label: "Ushul Fiqh", type: "concept", x: 0, y: 0, vx: 0, vy: 0, radius: 18 },
-  { id: "n7", label: "Kairo (Mesir)", type: "place", x: 0, y: 0, vx: 0, vy: 0, radius: 25 },
-  { id: "n8", label: "Al-Azhar", type: "place", x: 0, y: 0, vx: 0, vy: 0, radius: 22 },
-  { id: "n9", label: "Salahuddin Al-Ayyubi", type: "person", x: 0, y: 0, vx: 0, vy: 0, radius: 24 },
-  { id: "n10", label: "Yerusalem", type: "place", x: 0, y: 0, vx: 0, vy: 0, radius: 25 },
-  { id: "n11", label: "Perang Hittin", type: "event", x: 0, y: 0, vx: 0, vy: 0, radius: 18 },
-  { id: "n12", label: "Makkah", type: "place", x: 0, y: 0, vx: 0, vy: 0, radius: 30 },
-  { id: "n13", label: "Madinah", type: "place", x: 0, y: 0, vx: 0, vy: 0, radius: 30 },
-  { id: "n14", label: "Hijrah", type: "event", x: 0, y: 0, vx: 0, vy: 0, radius: 25 },
-  { id: "n15", label: "Cordoba (Andalusia)", type: "place", x: 0, y: 0, vx: 0, vy: 0, radius: 26 },
-  { id: "n16", label: "Ibnu Rusyd", type: "person", x: 0, y: 0, vx: 0, vy: 0, radius: 20 },
-  { id: "n17", label: "Ibnu Sina", type: "person", x: 0, y: 0, vx: 0, vy: 0, radius: 20 },
+  {
+    id: "n1",
+    label: "Imam Al-Ghazali",
+    type: "person",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 20,
+  },
+  {
+    id: "n2",
+    label: "Ihya Ulumuddin",
+    type: "concept",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 15,
+  },
+  {
+    id: "n3",
+    label: "Baghdad",
+    type: "place",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 25,
+  },
+  {
+    id: "n4",
+    label: "Baitul Hikmah",
+    type: "place",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 22,
+  },
+  {
+    id: "n5",
+    label: "Imam Syafi'i",
+    type: "person",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 20,
+  },
+  {
+    id: "n6",
+    label: "Ushul Fiqh",
+    type: "concept",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 18,
+  },
+  {
+    id: "n7",
+    label: "Kairo (Mesir)",
+    type: "place",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 25,
+  },
+  {
+    id: "n8",
+    label: "Al-Azhar",
+    type: "place",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 22,
+  },
+  {
+    id: "n9",
+    label: "Salahuddin Al-Ayyubi",
+    type: "person",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 24,
+  },
+  {
+    id: "n10",
+    label: "Yerusalem",
+    type: "place",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 25,
+  },
+  {
+    id: "n11",
+    label: "Perang Hittin",
+    type: "event",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 18,
+  },
+  {
+    id: "n12",
+    label: "Makkah",
+    type: "place",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 30,
+  },
+  {
+    id: "n13",
+    label: "Madinah",
+    type: "place",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 30,
+  },
+  {
+    id: "n14",
+    label: "Hijrah",
+    type: "event",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 25,
+  },
+  {
+    id: "n15",
+    label: "Cordoba (Andalusia)",
+    type: "place",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 26,
+  },
+  {
+    id: "n16",
+    label: "Ibnu Rusyd",
+    type: "person",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 20,
+  },
+  {
+    id: "n17",
+    label: "Ibnu Sina",
+    type: "person",
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    radius: 20,
+  },
 ]
 
 const KNOWLEDGE_EDGES: Edge[] = [
@@ -74,7 +227,7 @@ export function IntelligenceGraphView() {
     if (!ctx) return
 
     let animationFrameId: number
-    
+
     const resizeCanvas = () => {
       const parent = canvas.parentElement
       if (parent) {
@@ -86,7 +239,7 @@ export function IntelligenceGraphView() {
     window.addEventListener("resize", resizeCanvas)
 
     // Initialize random positions
-    KNOWLEDGE_NODES.forEach(n => {
+    KNOWLEDGE_NODES.forEach((n) => {
       n.x = Math.random() * canvas.width
       n.y = Math.random() * canvas.height
       n.vx = (Math.random() - 0.5) * 1
@@ -117,7 +270,7 @@ export function IntelligenceGraphView() {
       let currentlyHovered: Node | null = null
 
       // Physics and movement
-      KNOWLEDGE_NODES.forEach(n => {
+      KNOWLEDGE_NODES.forEach((n) => {
         n.x += n.vx
         n.y += n.vy
 
@@ -131,21 +284,24 @@ export function IntelligenceGraphView() {
           currentlyHovered = n
         }
       })
-      
+
       setHoveredNode(currentlyHovered)
 
       // Draw Edges
-      KNOWLEDGE_EDGES.forEach(edge => {
-        const source = KNOWLEDGE_NODES.find(n => n.id === edge.source)
-        const target = KNOWLEDGE_NODES.find(n => n.id === edge.target)
+      KNOWLEDGE_EDGES.forEach((edge) => {
+        const source = KNOWLEDGE_NODES.find((n) => n.id === edge.source)
+        const target = KNOWLEDGE_NODES.find((n) => n.id === edge.target)
         if (!source || !target) return
 
-        const isHighlighted = currentlyHovered && (currentlyHovered.id === source.id || currentlyHovered.id === target.id)
-        
+        const isHighlighted =
+          currentlyHovered &&
+          (currentlyHovered.id === source.id ||
+            currentlyHovered.id === target.id)
+
         ctx.beginPath()
         ctx.moveTo(source.x, source.y)
         ctx.lineTo(target.x, target.y)
-        
+
         if (isHighlighted) {
           ctx.strokeStyle = "rgba(255, 255, 255, 0.8)"
           ctx.lineWidth = 2
@@ -161,14 +317,14 @@ export function IntelligenceGraphView() {
 
       // Draw Nodes
       ctx.shadowBlur = 0
-      KNOWLEDGE_NODES.forEach(n => {
+      KNOWLEDGE_NODES.forEach((n) => {
         const isHovered = currentlyHovered?.id === n.id
         const color = getColor(n.type)
 
         ctx.beginPath()
         ctx.arc(n.x, n.y, isHovered ? n.radius * 1.5 : n.radius, 0, Math.PI * 2)
         ctx.fillStyle = isHovered ? "white" : color
-        
+
         if (isHovered) {
           ctx.shadowBlur = 20
           ctx.shadowColor = color
@@ -208,44 +364,65 @@ export function IntelligenceGraphView() {
         accentColor="primary"
       />
 
-      <div className="panel-box bg-space relative overflow-hidden border-2 border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.15)] flex flex-col h-[700px]">
-        
+      <div className="panel-box bg-space relative flex h-[700px] flex-col overflow-hidden border-2 border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.15)]">
         {/* Top Bar HUD */}
-        <div className="absolute top-0 left-0 w-full z-10 p-4 flex justify-between items-center pointer-events-none">
+        <div className="pointer-events-none absolute top-0 left-0 z-10 flex w-full items-center justify-between p-4">
           <div className="flex items-center gap-3">
-            <Network className="w-5 h-5 text-primary animate-pulse" />
+            <Network className="h-5 w-5 animate-pulse text-primary" />
             <div>
-              <div className="text-[10px] text-primary/50 font-bold tracking-widest">GRAPH DATABASE</div>
-              <div className="text-xs font-mono font-bold text-primary">NODES: {KNOWLEDGE_NODES.length} | EDGES: {KNOWLEDGE_EDGES.length}</div>
+              <div className="text-[10px] font-bold tracking-widest text-primary/50">
+                GRAPH DATABASE
+              </div>
+              <div className="font-mono text-xs font-bold text-primary">
+                NODES: {KNOWLEDGE_NODES.length} | EDGES:{" "}
+                {KNOWLEDGE_EDGES.length}
+              </div>
             </div>
           </div>
-          
-          <div className="bg-black/50 border border-primary/30 p-2 backdrop-blur-sm flex items-center gap-4 text-[10px] font-bold">
-            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#00f0ff]" /> TOKOH</span>
-            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#00ff66]" /> LOKASI</span>
-            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#ff3366]" /> PERISTIWA</span>
-            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#ffaa00]" /> KONSEP</span>
+
+          <div className="flex items-center gap-4 border border-primary/30 bg-black/50 p-2 text-[10px] font-bold backdrop-blur-sm">
+            <span className="flex items-center gap-1">
+              <span className="h-2 w-2 rounded-full bg-[#00f0ff]" /> TOKOH
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="h-2 w-2 rounded-full bg-[#00ff66]" /> LOKASI
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="h-2 w-2 rounded-full bg-[#ff3366]" /> PERISTIWA
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="h-2 w-2 rounded-full bg-[#ffaa00]" /> KONSEP
+            </span>
           </div>
         </div>
 
         {/* Canvas Engine */}
-        <canvas ref={canvasRef} className="w-full h-full cursor-crosshair z-0" />
+        <canvas
+          ref={canvasRef}
+          className="z-0 h-full w-full cursor-crosshair"
+        />
 
         {/* Selected Node HUD */}
         {hoveredNode && (
-          <div className="absolute bottom-6 right-6 z-10 bg-black/80 border border-primary p-4 backdrop-blur-md max-w-[300px] pointer-events-none shadow-[0_0_20px_rgba(0,240,255,0.2)]">
-            <div className="flex items-center gap-2 mb-2 border-b border-primary/20 pb-2">
-              <Scan className="w-4 h-4 text-accent animate-spin-slow" />
-              <span className="text-xs font-bold text-primary tracking-widest">TARGET ACQUIRED</span>
+          <div className="pointer-events-none absolute right-6 bottom-6 z-10 max-w-[300px] border border-primary bg-black/80 p-4 shadow-[0_0_20px_rgba(0,240,255,0.2)] backdrop-blur-md">
+            <div className="mb-2 flex items-center gap-2 border-b border-primary/20 pb-2">
+              <Scan className="animate-spin-slow h-4 w-4 text-accent" />
+              <span className="text-xs font-bold tracking-widest text-primary">
+                TARGET ACQUIRED
+              </span>
             </div>
-            <h3 className="text-xl font-black text-white">{hoveredNode.label}</h3>
-            <div className="text-[10px] text-primary/70 uppercase mt-1">CLASS: {hoveredNode.type}</div>
-            <p className="text-xs text-primary/50 mt-3">
-              Analisis relasi intelektual terdeteksi. Sistem menampilkan jaringan keterikatan sejarah.
+            <h3 className="text-xl font-black text-white">
+              {hoveredNode.label}
+            </h3>
+            <div className="mt-1 text-[10px] text-primary/70 uppercase">
+              CLASS: {hoveredNode.type}
+            </div>
+            <p className="mt-3 text-xs text-primary/50">
+              Analisis relasi intelektual terdeteksi. Sistem menampilkan
+              jaringan keterikatan sejarah.
             </p>
           </div>
         )}
-
       </div>
     </>
   )

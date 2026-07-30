@@ -32,18 +32,36 @@ export function HomeGlobalCoordinatesWidget() {
             lng: position.coords.longitude,
             city: "LOCAL NODE",
           })
-          setPrayerData(getIslamicData(position.coords.latitude, position.coords.longitude, new Date()))
+          setPrayerData(
+            getIslamicData(
+              position.coords.latitude,
+              position.coords.longitude,
+              new Date()
+            )
+          )
         },
         (_error) => {
           // Fallback to Jakarta
-          setGpsLocation({ lat: FALLBACK_LAT, lng: FALLBACK_LNG, city: "ASIA/JAKARTA" })
+          setGpsLocation({
+            lat: FALLBACK_LAT,
+            lng: FALLBACK_LNG,
+            city: "ASIA/JAKARTA",
+          })
           setPrayerData(getIslamicData(FALLBACK_LAT, FALLBACK_LNG, new Date()))
         },
-        { enableHighAccuracy: false, timeout: GEOLOCATION_TIMEOUT_MS, maximumAge: 0 }
+        {
+          enableHighAccuracy: false,
+          timeout: GEOLOCATION_TIMEOUT_MS,
+          maximumAge: 0,
+        }
       )
     } else {
       setTimeout(() => {
-        setGpsLocation({ lat: FALLBACK_LAT, lng: FALLBACK_LNG, city: "ASIA/JAKARTA" })
+        setGpsLocation({
+          lat: FALLBACK_LAT,
+          lng: FALLBACK_LNG,
+          city: "ASIA/JAKARTA",
+        })
         setPrayerData(getIslamicData(FALLBACK_LAT, FALLBACK_LNG, new Date()))
       }, 0)
     }
@@ -58,8 +76,12 @@ export function HomeGlobalCoordinatesWidget() {
   }
 
   // Map calibration
-  const mapX = gpsLocation ? MAP_CENTER_OFFSET + gpsLocation.lng * LNG_SCALE_FACTOR : FALLBACK_MAP_X
-  const mapY = gpsLocation ? MAP_CENTER_OFFSET - gpsLocation.lat * LAT_SCALE_FACTOR : FALLBACK_MAP_Y
+  const mapX = gpsLocation
+    ? MAP_CENTER_OFFSET + gpsLocation.lng * LNG_SCALE_FACTOR
+    : FALLBACK_MAP_X
+  const mapY = gpsLocation
+    ? MAP_CENTER_OFFSET - gpsLocation.lat * LAT_SCALE_FACTOR
+    : FALLBACK_MAP_Y
 
   return (
     <div className="flex h-full flex-col lg:col-span-3">

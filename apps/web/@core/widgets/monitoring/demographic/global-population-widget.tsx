@@ -20,8 +20,8 @@ export function GlobalPopulationWidget() {
       const msSinceBase = now.getTime() - baseDate
       const secSinceBase = msSinceBase / 1000
 
-      const currentPop = 8118000000 + (secSinceBase * netGrowthPerSec)
-      
+      const currentPop = 8118000000 + secSinceBase * netGrowthPerSec
+
       // Calculate today's stats (reset at midnight UTC)
       const startOfDay = new Date(now)
       startOfDay.setUTCHours(0, 0, 0, 0)
@@ -41,35 +41,45 @@ export function GlobalPopulationWidget() {
   return (
     <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-4 xl:col-span-3">
       <div className="mb-4 flex items-center justify-between">
-        <div className="text-[9px] font-black tracking-widest text-primary uppercase flex items-center gap-2">
+        <div className="flex items-center gap-2 text-[9px] font-black tracking-widest text-primary uppercase">
           GLOBAL POPULATION PULSE
-          <span className="bg-primary/20 text-primary px-1.5 py-0.5 rounded-[2px] text-[8px] border border-primary/30 animate-pulse">LIVE</span>
+          <span className="animate-pulse rounded-[2px] border border-primary/30 bg-primary/20 px-1.5 py-0.5 text-[8px] text-primary">
+            LIVE
+          </span>
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col justify-center items-center py-4">
-        <Users className="h-8 w-8 text-white/20 mb-2" />
-        <div className="font-mono text-3xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] tracking-widest">
+      <div className="flex flex-1 flex-col items-center justify-center py-4">
+        <Users className="mb-2 h-8 w-8 text-white/20" />
+        <div className="font-mono text-3xl font-black tracking-widest text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
           {population.toLocaleString("en-US")}
         </div>
-        <div className="text-[10px] text-primary uppercase font-bold mt-1 tracking-widest">
+        <div className="mt-1 text-[10px] font-bold tracking-widest text-primary uppercase">
           ESTIMATED HUMAN LIVES
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-white/10">
-        <div className="bg-white/5 rounded p-2 flex items-center gap-3 border border-success/10">
-          <HeartPulse className="h-5 w-5 text-success animate-pulse" />
+      <div className="mt-4 grid grid-cols-2 gap-2 border-t border-white/10 pt-4">
+        <div className="border-success/10 flex items-center gap-3 rounded border bg-white/5 p-2">
+          <HeartPulse className="text-success h-5 w-5 animate-pulse" />
           <div>
-            <div className="text-[8px] text-white/50 uppercase font-bold">Births Today</div>
-            <div className="font-mono text-sm font-black text-success">+{birthsToday.toLocaleString()}</div>
+            <div className="text-[8px] font-bold text-white/50 uppercase">
+              Births Today
+            </div>
+            <div className="text-success font-mono text-sm font-black">
+              +{birthsToday.toLocaleString()}
+            </div>
           </div>
         </div>
-        <div className="bg-white/5 rounded p-2 flex items-center gap-3 border border-red-500/10">
+        <div className="flex items-center gap-3 rounded border border-red-500/10 bg-white/5 p-2">
           <Skull className="h-5 w-5 text-red-500" />
           <div>
-            <div className="text-[8px] text-white/50 uppercase font-bold">Deaths Today</div>
-            <div className="font-mono text-sm font-black text-red-500">-{deathsToday.toLocaleString()}</div>
+            <div className="text-[8px] font-bold text-white/50 uppercase">
+              Deaths Today
+            </div>
+            <div className="font-mono text-sm font-black text-red-500">
+              -{deathsToday.toLocaleString()}
+            </div>
           </div>
         </div>
       </div>

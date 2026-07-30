@@ -27,13 +27,47 @@ export default defineModule({
   basePath: "/observatory",
   defaultRoute: "daily-transmission",
   routes: [
-    { slug: "daily-transmission", label: "Daily Transmission", icon: "Radio",    component: DailyTransmissionView },
-    { slug: "global-monitoring",  label: "Global Monitoring",  icon: "Globe",    component: GlobalMonitoringView },
-    { slug: "lunar-calendar",     label: "Lunar Calendar",     icon: "Moon",     component: LunarCalendarView },
-    { slug: "eclipse-tracker",    label: "Eclipse Tracker",    icon: "Eclipse",  component: EclipseTrackerView },
-    { slug: "qibla-ar",           label: "Qibla AR",           icon: "Compass",  component: QiblaArView },
-    { slug: "atmospheric-radar",  label: "Atmospheric Radar",  icon: "Radio",    component: AtmosphericRadarView },
-    { slug: "celestial-star-map", label: "Celestial Star Map", icon: "Sparkles", component: CelestialStarMapView },
+    {
+      slug: "daily-transmission",
+      label: "Daily Transmission",
+      icon: "Radio",
+      component: DailyTransmissionView,
+    },
+    {
+      slug: "global-monitoring",
+      label: "Global Monitoring",
+      icon: "Globe",
+      component: GlobalMonitoringView,
+    },
+    {
+      slug: "lunar-calendar",
+      label: "Lunar Calendar",
+      icon: "Moon",
+      component: LunarCalendarView,
+    },
+    {
+      slug: "eclipse-tracker",
+      label: "Eclipse Tracker",
+      icon: "Eclipse",
+      component: EclipseTrackerView,
+    },
+    {
+      slug: "qibla-ar",
+      label: "Qibla AR",
+      icon: "Compass",
+      component: QiblaArView,
+    },
+    {
+      slug: "atmospheric-radar",
+      label: "Atmospheric Radar",
+      icon: "Radio",
+      component: AtmosphericRadarView,
+    },
+    {
+      slug: "celestial-star-map",
+      label: "Celestial Star Map",
+      icon: "Sparkles",
+      component: CelestialStarMapView,
+    },
   ],
 })
-

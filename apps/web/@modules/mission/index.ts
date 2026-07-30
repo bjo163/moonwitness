@@ -20,12 +20,41 @@ export default defineModule({
   basePath: "/mission",
   defaultRoute: "control",
   routes: [
-    { slug: "control", label: "Mission Control", icon: "Target", component: MissionControlView },
-    { slug: "diplomasi-profetik", label: "Diplomasi Profetik", icon: "Globe", component: DiplomasiProfetikView },
-    { slug: "persatuan-umat", label: "Persatuan Umat", icon: "Users", component: PersatuanUmatView },
-    { slug: "piagam-peradaban", label: "Piagam Peradaban", icon: "ScrollText", component: PiagamPeradabanView },
-    { slug: "sertifikat-piagam", label: "Sertifikat Piagam", icon: "Award", component: SertifikatPiagamView },
-    { slug: "toolkit-rasulullah", label: "Toolkit Rasulullah", icon: "Wrench", component: ToolkitRasulullahView },
+    {
+      slug: "control",
+      label: "Mission Control",
+      icon: "Target",
+      component: MissionControlView,
+    },
+    {
+      slug: "diplomasi-profetik",
+      label: "Diplomasi Profetik",
+      icon: "Globe",
+      component: DiplomasiProfetikView,
+    },
+    {
+      slug: "persatuan-umat",
+      label: "Persatuan Umat",
+      icon: "Users",
+      component: PersatuanUmatView,
+    },
+    {
+      slug: "piagam-peradaban",
+      label: "Piagam Peradaban",
+      icon: "ScrollText",
+      component: PiagamPeradabanView,
+    },
+    {
+      slug: "sertifikat-piagam",
+      label: "Sertifikat Piagam",
+      icon: "Award",
+      component: SertifikatPiagamView,
+    },
+    {
+      slug: "toolkit-rasulullah",
+      label: "Toolkit Rasulullah",
+      icon: "Wrench",
+      component: ToolkitRasulullahView,
+    },
   ],
 })
-

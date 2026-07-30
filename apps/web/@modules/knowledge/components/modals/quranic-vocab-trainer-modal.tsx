@@ -118,7 +118,7 @@ export function QuranicVocabTrainerModal() {
 
           <button
             onClick={nextCard}
-            className="btn-primary btn-clip flex items-center gap-2 border-primary px-6 py-2.5 text-xs font-bold text-primary hover:bg-primary/10"
+            className="btn-primary flex items-center gap-2 border-primary px-6 py-2.5 text-xs font-bold text-primary btn-clip hover:bg-primary/10"
           >
             <RefreshCw className="h-4 w-4 text-primary" />
             <span>[ KARTU BERIKUTNYA ]</span>

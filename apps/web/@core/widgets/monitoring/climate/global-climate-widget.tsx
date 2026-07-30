@@ -14,10 +14,10 @@ type CityWeather = {
 
 const CITIES = [
   { name: "JAKARTA", lat: -6.2088, lng: 106.8456 },
-  { name: "NEW YORK", lat: 40.7128, lng: -74.0060 },
+  { name: "NEW YORK", lat: 40.7128, lng: -74.006 },
   { name: "TOKYO", lat: 35.6762, lng: 139.6503 },
   { name: "LONDON", lat: 51.5074, lng: -0.1278 },
-  { name: "MAKKAH", lat: 21.3891, lng: 39.8579 }
+  { name: "MAKKAH", lat: 21.3891, lng: 39.8579 },
 ]
 
 export function GlobalClimateWidget() {
@@ -30,7 +30,9 @@ export function GlobalClimateWidget() {
     const fetchWeather = async () => {
       try {
         const promises = CITIES.map(async (city) => {
-          const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lng}&current_weather=true`)
+          const res = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lng}&current_weather=true`
+          )
           if (!res.ok) throw new Error("Failed to fetch")
           const data = await res.json()
           return {
@@ -39,7 +41,7 @@ export function GlobalClimateWidget() {
             lng: city.lng,
             temp: data.current_weather.temperature,
             windSpeed: data.current_weather.windspeed,
-            weatherCode: data.current_weather.weathercode
+            weatherCode: data.current_weather.weathercode,
           }
         })
 
@@ -63,25 +65,27 @@ export function GlobalClimateWidget() {
   }, [])
 
   return (
-    <div className="bg-space border-sky-500/30 flex flex-col rounded-xl border p-4 lg:col-span-12 xl:col-span-4 h-full">
+    <div className="bg-space flex h-full flex-col rounded-xl border border-sky-500/30 p-4 lg:col-span-12 xl:col-span-4">
       <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-2">
-        <div className="text-[10px] font-black tracking-widest text-sky-400 uppercase flex items-center gap-2">
+        <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-sky-400 uppercase">
           <CloudLightning className="h-4 w-4" />
           GLOBAL CLIMATE
-          <span className="bg-sky-400/20 text-sky-400 px-1.5 py-0.5 rounded-[2px] text-[8px] border border-sky-400/50">LIVE</span>
+          <span className="rounded-[2px] border border-sky-400/50 bg-sky-400/20 px-1.5 py-0.5 text-[8px] text-sky-400">
+            LIVE
+          </span>
         </div>
       </div>
 
       <div className="flex-1 overflow-hidden">
-        <div className="grid grid-cols-12 gap-4 text-[8px] font-bold text-white/50 tracking-widest mb-2 border-b border-white/5 pb-2">
+        <div className="mb-2 grid grid-cols-12 gap-4 border-b border-white/5 pb-2 text-[8px] font-bold tracking-widest text-white/50">
           <div className="col-span-4">METROPOLIS</div>
           <div className="col-span-4 text-center">TEMP</div>
           <div className="col-span-4 text-right">WIND</div>
         </div>
 
-        <div className="hide-scrollbar flex flex-col space-y-1 h-[250px] overflow-y-auto">
+        <div className="hide-scrollbar flex h-[250px] flex-col space-y-1 overflow-y-auto">
           {isLoading ? (
-            <div className="text-center text-sky-400/50 text-[10px] py-10 font-mono flex flex-col items-center gap-2">
+            <div className="flex flex-col items-center gap-2 py-10 text-center font-mono text-[10px] text-sky-400/50">
               <CloudRain className="h-6 w-6 animate-pulse" />
               Syncing with weather satellites...
             </div>
@@ -89,17 +93,19 @@ export function GlobalClimateWidget() {
             weatherData.map((w, idx) => (
               <div
                 key={idx}
-                className="grid grid-cols-12 gap-4 text-[9px] items-center py-2 px-2 bg-white/5 hover:bg-white/10 border border-transparent hover:border-sky-500/30 rounded transition-colors group"
+                className="group grid grid-cols-12 items-center gap-4 rounded border border-transparent bg-white/5 px-2 py-2 text-[9px] transition-colors hover:border-sky-500/30 hover:bg-white/10"
               >
-                <div className="col-span-4 font-bold text-white group-hover:text-sky-400 transition-colors">
+                <div className="col-span-4 font-bold text-white transition-colors group-hover:text-sky-400">
                   {w.name}
                 </div>
                 <div className="col-span-4 text-center font-mono">
-                  <span className={`px-2 py-0.5 font-black rounded-sm ${w.temp > 30 ? 'text-red-400' : w.temp < 15 ? 'text-blue-400' : 'text-green-400'}`}>
+                  <span
+                    className={`rounded-sm px-2 py-0.5 font-black ${w.temp > 30 ? "text-red-400" : w.temp < 15 ? "text-blue-400" : "text-green-400"}`}
+                  >
                     {w.temp}°C
                   </span>
                 </div>
-                <div className="col-span-4 text-right font-mono text-white/70 flex items-center justify-end gap-1">
+                <div className="col-span-4 flex items-center justify-end gap-1 text-right font-mono text-white/70">
                   <Wind className="h-3 w-3" />
                   {w.windSpeed} km/h
                 </div>

@@ -56,7 +56,7 @@ export function HomeTelemetrySidebarWidget() {
       // Try to get GPS, fallback to Jakarta
       const lat = -6.2088
       const lng = 106.8456
-      
+
       const pData = getIslamicData(lat, lng, now)
       setPrayerData(pData)
 
@@ -98,7 +98,7 @@ export function HomeTelemetrySidebarWidget() {
         </div>
       </div>
 
-      <div className="flex items-end justify-between border-b border-white/10 pb-4 mt-3">
+      <div className="mt-3 flex items-end justify-between border-b border-white/10 pb-4">
         <div className="text-[9px] tracking-[0.2em] text-primary uppercase">
           DISTANCE
         </div>

@@ -17,5 +17,5 @@ export const API_ENDPOINTS = {
   ASTRONOMY: {
     MOON_PHASE: "/api/mock/astronomy/moon-phase",
     ECLIPSES: "/api/mock/astronomy/eclipses",
-  }
-} as const;
+  },
+} as const

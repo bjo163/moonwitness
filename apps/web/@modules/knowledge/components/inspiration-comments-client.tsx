@@ -1,7 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { UserProfileModal, UserProfile } from "@modules/auth/components/modals/user-profile-modal"
+import {
+  UserProfileModal,
+  UserProfile,
+} from "@modules/auth/components/modals/user-profile-modal"
 import { useLanguage } from "@core/contexts"
 
 type CommentItem = {
@@ -157,7 +160,7 @@ export function InspirationCommentsClient({
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
-            className="btn-primary btn-primary-ghost btn-clip flex items-center gap-1 px-3 py-1 text-[10px]"
+            className="btn-primary btn-primary-ghost flex items-center gap-1 px-3 py-1 text-[10px] btn-clip"
           >
             <span className="text-primary">⎔</span>
             <span>{t("SETUP USER ID", "PROFILKAN NAMA")}</span>
@@ -181,7 +184,7 @@ export function InspirationCommentsClient({
       {/* Write Comment Form */}
       <form
         onSubmit={handleSubmitComment}
-        className="panel-glass card-clip bg-panel/90 space-y-3 p-4"
+        className="bg-panel/90 space-y-3 panel-glass p-4 card-clip"
       >
         {!userProfile ? (
           <div className="space-y-2 py-4 text-center">
@@ -195,7 +198,7 @@ export function InspirationCommentsClient({
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              className="btn-primary btn-clip mt-1 px-5 py-2 text-xs"
+              className="btn-primary mt-1 px-5 py-2 text-xs btn-clip"
             >
               <span>
                 ⎔{" "}
@@ -256,7 +259,7 @@ export function InspirationCommentsClient({
               <button
                 type="submit"
                 disabled={submitting || !commentText.trim()}
-                className="btn-primary btn-clip px-4 py-2 text-[10px] disabled:opacity-50"
+                className="btn-primary px-4 py-2 text-[10px] btn-clip disabled:opacity-50"
               >
                 <span>
                   {submitting
@@ -278,7 +281,7 @@ export function InspirationCommentsClient({
           {[1, 2].map((i) => (
             <div
               key={i}
-              className="card-clip panel-glass h-16 w-full animate-pulse"
+              className="h-16 w-full animate-pulse panel-glass card-clip"
             />
           ))}
         </div>
@@ -297,7 +300,7 @@ export function InspirationCommentsClient({
             return (
               <div
                 key={c.id}
-                className={`panel-glass card-clip space-y-1.5 p-3.5 ${
+                className={`space-y-1.5 panel-glass p-3.5 card-clip ${
                   isAdmin
                     ? "border-secondary/40 bg-secondary/10"
                     : "bg-panel border-primary/20"

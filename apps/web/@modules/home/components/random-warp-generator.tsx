@@ -166,7 +166,7 @@ export function RandomWarpGenerator() {
       {/* Warp Trigger Button (Task 6) */}
       <button
         onClick={triggerWarp}
-        className="btn-primary btn-primary-purple btn-clip group flex items-center justify-center gap-2 px-3.5 py-1.5 text-[10px] shadow-[0_0_20px_rgba(161,0,255,0.5)] transition-all hover:border-primary"
+        className="btn-primary btn-primary-purple group flex items-center justify-center gap-2 px-3.5 py-1.5 text-[10px] shadow-[0_0_20px_rgba(161,0,255,0.5)] transition-all btn-clip hover:border-primary"
         suppressHydrationWarning
       >
         <span
@@ -192,7 +192,7 @@ export function RandomWarpGenerator() {
         createPortal(
           <div className="bg-space/95 fixed inset-0 z-[99999] flex items-center justify-center p-4 font-mono backdrop-blur-2xl">
             <div
-              className="card-clip corner-box relative my-auto flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden border border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.35)]"
+              className="corner-box relative my-auto flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden border border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.35)] card-clip"
               style={{ backgroundColor: "#0A0F17" }}
             >
               <div className="holo-scan-bar" />
@@ -270,7 +270,7 @@ export function RandomWarpGenerator() {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={triggerWarp}
-                            className="btn-primary btn-clip px-3.5 py-2 text-[10px]"
+                            className="btn-primary px-3.5 py-2 text-[10px] btn-clip"
                           >
                             🔄 WARP AGAIN
                           </button>
@@ -324,7 +324,7 @@ export function RandomWarpGenerator() {
                               stopAudio()
                               setIsOpen(false)
                             }}
-                            className="btn-primary btn-clip px-3.5 py-2 text-[10px]"
+                            className="btn-primary px-3.5 py-2 text-[10px] btn-clip"
                           >
                             READ SURAH →
                           </Link>

@@ -6,22 +6,25 @@ export async function GET() {
     const today = new Date()
     const month = today.getMonth() + 1 // 1-12
     const year = today.getFullYear()
-    
+
     // Fetch Aladhan Gregorian to Hijri calendar for this month
-    const res = await fetch(`http://api.aladhan.com/v1/gToHCalendar/${month}/${year}`)
-    
+    const res = await fetch(
+      `http://api.aladhan.com/v1/gToHCalendar/${month}/${year}`
+    )
+
     if (!res.ok) {
       throw new Error(`Aladhan API Error: ${res.status}`)
     }
-    
+
     const json = await res.json()
     const data = json.data
-    
+
     const formattedDays = data.map((item: any) => {
       const hijriDay = parseInt(item.hijri.day, 10)
       const hijriMonthNumber = item.hijri.month.number
-      const isAyyamulBidh = hijriDay === 13 || hijriDay === 14 || hijriDay === 15
-      
+      const isAyyamulBidh =
+        hijriDay === 13 || hijriDay === 14 || hijriDay === 15
+
       // Calculate Phase Approximations (since Aladhan doesn't provide phases)
       let phaseName = "Waxing Crescent"
       let illumination = Math.min(100, Math.round((hijriDay / 15) * 100))
@@ -61,7 +64,7 @@ export async function GET() {
 
       // Cari Prophetic Event berdasarkan Tanggal & Bulan Hijriyah
       const propheticEvents = PROPHETIC_EVENTS.filter(
-        e => e.dayNumber === hijriDay && e.monthNumber === hijriMonthNumber
+        (e) => e.dayNumber === hijriDay && e.monthNumber === hijriMonthNumber
       )
 
       return {
@@ -77,12 +80,13 @@ export async function GET() {
         isAyyamulBidh,
         icon,
         holidays: item.hijri.holidays || [],
-        propheticEvents: propheticEvents.length > 0 ? propheticEvents : undefined,
+        propheticEvents:
+          propheticEvents.length > 0 ? propheticEvents : undefined,
         moonrise: `${String((18 + Math.floor(hijriDay * 0.8)) % 24).padStart(2, "0")}:15 WIB`,
         moonset: `${String((5 + Math.floor(hijriDay * 0.8)) % 24).padStart(2, "0")}:45 WIB`,
       }
     })
-    
+
     return NextResponse.json({ days: formattedDays })
   } catch (error: any) {
     console.error("[Calendar API Error]", error)

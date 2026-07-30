@@ -46,13 +46,17 @@ export function HomeHeroSection() {
   }, [backgrounds.length])
 
   return (
-    <section id="hero" className="bg-space relative flex min-h-screen w-full flex-col justify-center overflow-hidden pt-20 pb-10 font-sans text-white select-none">
+    <section
+      id="hero"
+      className="bg-space relative flex min-h-screen w-full flex-col justify-center overflow-hidden pt-20 pb-10 font-sans text-white select-none"
+    >
       {/* Background layer */}
-      <div 
+      <div
         className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
         style={{
           maskImage: "linear-gradient(to bottom, black 75%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(to bottom, black 75%, transparent 100%)"
+          WebkitMaskImage:
+            "linear-gradient(to bottom, black 75%, transparent 100%)",
         }}
       >
         {backgrounds.map((bg, idx) => (
@@ -72,7 +76,7 @@ export function HomeHeroSection() {
         </div>
         <div className="from-space via-space/75 absolute inset-0 w-full bg-gradient-to-r to-transparent sm:w-2/3" />
         <div className="from-space absolute inset-0 bg-gradient-to-t via-transparent to-black/50" />
-        
+
         <div className="theme-grid-bg absolute inset-0 opacity-15" />
       </div>
 
@@ -96,9 +100,9 @@ export function HomeHeroSection() {
       {/* Restored Widgets Footer */}
       <footer className="relative z-20 mx-auto mt-auto grid w-full max-w-7xl grid-cols-1 gap-6 px-6 pb-10 sm:px-10 lg:grid-cols-12">
         <HomePlanetaryTelemetryWidget />
-        
+
         <div className="flex h-full flex-col gap-5 lg:col-span-5">
-           <HomeCelestialFeedWidget />
+          <HomeCelestialFeedWidget />
         </div>
 
         <HomeGlobalCoordinatesWidget />
@@ -106,8 +110,8 @@ export function HomeHeroSection() {
 
       {/* DYNAMIC WIDGET INJECTION */}
       {getWidgetsForDashboard("HOME").length > 0 && (
-        <div className="relative z-20 mx-auto mt-4 w-full max-w-7xl px-6 sm:px-10 pb-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="relative z-20 mx-auto mt-4 w-full max-w-7xl px-6 pb-10 sm:px-10">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {getWidgetsForDashboard("HOME").map((widget) => {
               const WidgetComponent = widget.component
               return <WidgetComponent key={widget.id} />

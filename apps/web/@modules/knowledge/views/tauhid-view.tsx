@@ -51,7 +51,7 @@ export function TauhidPortalView() {
           {tauhidPillars.map((pillar, idx) => (
             <div
               key={pillar.title}
-              className="panel-glass card-clip corner-accent flex flex-col justify-between space-y-4 p-6"
+              className="corner-accent flex flex-col justify-between space-y-4 panel-glass p-6 card-clip"
             >
               <div>
                 <div className="mb-4 flex items-center justify-between">
@@ -74,4 +74,3 @@ export function TauhidPortalView() {
     </div>
   )
 }
-

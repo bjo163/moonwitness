@@ -4,13 +4,7 @@ export function GraphSvgPrimaryNodes() {
   return (
     <>
       <defs>
-        <filter
-          id="glow-emerald"
-          x="-50%"
-          y="-50%"
-          width="200%"
-          height="200%"
-        >
+        <filter id="glow-emerald" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="8" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
@@ -31,26 +25,14 @@ export function GraphSvgPrimaryNodes() {
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
-        <filter
-          id="glow-yellow"
-          x="-50%"
-          y="-50%"
-          width="200%"
-          height="200%"
-        >
+        <filter id="glow-yellow" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="6" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
-        <filter
-          id="glow-purple"
-          x="-50%"
-          y="-50%"
-          width="200%"
-          height="200%"
-        >
+        <filter id="glow-purple" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="6" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
@@ -266,7 +248,7 @@ export function GraphSvgPrimaryNodes() {
       <g transform="translate(200,-150)">
         <circle
           r="30"
-          className="fill-black stroke-knowledge"
+          className="stroke-knowledge fill-black"
           strokeWidth="2"
           filter="url(#glow-purple)"
         />

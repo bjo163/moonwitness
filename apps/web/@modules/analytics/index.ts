@@ -18,10 +18,29 @@ export default defineModule({
   basePath: "/analytics",
   defaultRoute: "telemetry",
   routes: [
-    { slug: "telemetry", label: "Global Telemetry", icon: "Activity", component: AnalyticsTelemetryView },
-    { slug: "analisis-tren", label: "Analisis Tren", icon: "TrendingUp", component: AnalisisTrenView },
-    { slug: "diagnostik-hikmah", label: "Diagnostik Hikmah", icon: "Stethoscope", component: DiagnostikHikmahView },
-    { slug: "psikologi-jiwa", label: "Psikologi Jiwa", icon: "Heart", component: PsikologiJiwaView },
+    {
+      slug: "telemetry",
+      label: "Global Telemetry",
+      icon: "Activity",
+      component: AnalyticsTelemetryView,
+    },
+    {
+      slug: "analisis-tren",
+      label: "Analisis Tren",
+      icon: "TrendingUp",
+      component: AnalisisTrenView,
+    },
+    {
+      slug: "diagnostik-hikmah",
+      label: "Diagnostik Hikmah",
+      icon: "Stethoscope",
+      component: DiagnostikHikmahView,
+    },
+    {
+      slug: "psikologi-jiwa",
+      label: "Psikologi Jiwa",
+      icon: "Heart",
+      component: PsikologiJiwaView,
+    },
   ],
 })
-

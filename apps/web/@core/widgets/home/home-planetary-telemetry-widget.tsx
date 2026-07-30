@@ -62,7 +62,8 @@ export function HomePlanetaryTelemetryWidget() {
         if (quakeData.features) {
           const count = quakeData.features.length
           quakeCount = `${count} DETECTED`
-          quakeTrend = count > HIGH_QUAKE_THRESHOLD ? "▲ HIGH (24H)" : "▼ NORMAL"
+          quakeTrend =
+            count > HIGH_QUAKE_THRESHOLD ? "▲ HIGH (24H)" : "▼ NORMAL"
         }
       } catch {
         /* ignore fallback network errors */
@@ -88,7 +89,8 @@ export function HomePlanetaryTelemetryWidget() {
         )
         const kpData = await kpRes.json()
         const validRows = kpData.filter(
-          (row: unknown[]) => String(row[1]) !== "Kp" && !isNaN(parseFloat(String(row[1])))
+          (row: unknown[]) =>
+            String(row[1]) !== "Kp" && !isNaN(parseFloat(String(row[1])))
         )
         const latestKp =
           validRows.length > 0
@@ -157,7 +159,7 @@ export function HomePlanetaryTelemetryWidget() {
         })
       )
     }
-    
+
     updateMetrics()
 
     const timer = setInterval(() => {
@@ -165,7 +167,9 @@ export function HomePlanetaryTelemetryWidget() {
       // Live Global Population Mock
       const basePop = 8118000000
       const baseDate = new Date("2024-01-01T00:00:00Z").getTime()
-      const popGrowth = Math.floor(((now.getTime() - baseDate) / 1000) * POPULATION_GROWTH_PER_SEC)
+      const popGrowth = Math.floor(
+        ((now.getTime() - baseDate) / 1000) * POPULATION_GROWTH_PER_SEC
+      )
       const currentPop = (basePop + popGrowth).toLocaleString()
 
       setSystemMetrics((prev) =>

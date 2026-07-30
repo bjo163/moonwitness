@@ -98,4 +98,3 @@ export function SanadKeilmuanView() {
     </div>
   )
 }
-

@@ -140,7 +140,7 @@ export function SertifikatPiagamView() {
 
               <button
                 onClick={handleGenerateCertificate}
-                className="btn-primary btn-primary-green btn-clip flex w-full items-center justify-center gap-2 py-3 text-xs font-bold"
+                className="btn-primary btn-primary-green flex w-full items-center justify-center gap-2 py-3 text-xs font-bold btn-clip"
               >
                 <Award className="text-success h-4 w-4" />
                 <span>[ TANDATANGANI KOMITMEN & GENERATE SERTIFIKAT ]</span>
@@ -174,7 +174,7 @@ export function SertifikatPiagamView() {
             <div className="flex flex-wrap items-center justify-center gap-3">
               <button
                 onClick={handleDownloadPNG}
-                className="btn-primary btn-primary-green btn-clip flex items-center gap-2 px-6 py-3 text-xs font-bold"
+                className="btn-primary btn-primary-green flex items-center gap-2 px-6 py-3 text-xs font-bold btn-clip"
               >
                 <Download className="text-success h-4 w-4" />
                 <span>[ 📥 DOWNLOAD SERTIFIKAT PNG HD ]</span>
@@ -182,7 +182,7 @@ export function SertifikatPiagamView() {
 
               <button
                 onClick={() => setIsPledged(false)}
-                className="btn-primary btn-primary-ghost btn-clip px-4 py-3 text-xs font-bold"
+                className="btn-primary btn-primary-ghost px-4 py-3 text-xs font-bold btn-clip"
               >
                 <span>EDIT DATA</span>
               </button>
@@ -193,4 +193,3 @@ export function SertifikatPiagamView() {
     </div>
   )
 }
-

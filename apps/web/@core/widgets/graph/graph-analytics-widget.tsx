@@ -45,31 +45,41 @@ export function GraphAnalyticsWidget() {
             <span className="flex items-center gap-2 text-primary">
               <Network className="h-3.5 w-3.5" /> Total Entities
             </span>
-            <span className="font-mono text-white">{loading ? "..." : data?.statistics?.totalEntities}</span>
+            <span className="font-mono text-white">
+              {loading ? "..." : data?.statistics?.totalEntities}
+            </span>
           </div>
           <div className="flex items-center justify-between">
             <span className="flex items-center gap-2 text-primary">
               <Link2 className="h-3.5 w-3.5" /> Total Connections
             </span>
-            <span className="font-mono text-white">{loading ? "..." : data?.statistics?.totalConnections}</span>
+            <span className="font-mono text-white">
+              {loading ? "..." : data?.statistics?.totalConnections}
+            </span>
           </div>
           <div className="flex items-center justify-between">
             <span className="flex items-center gap-2 text-primary">
               <Activity className="h-3.5 w-3.5" /> Active Relations
             </span>
-            <span className="font-mono text-white">{loading ? "..." : data?.statistics?.activeRelations}</span>
+            <span className="font-mono text-white">
+              {loading ? "..." : data?.statistics?.activeRelations}
+            </span>
           </div>
           <div className="flex items-center justify-between">
             <span className="flex items-center gap-2 text-primary">
               <Database className="h-3.5 w-3.5" /> Data Sources
             </span>
-            <span className="font-mono text-white">{loading ? "..." : data?.statistics?.dataSources}</span>
+            <span className="font-mono text-white">
+              {loading ? "..." : data?.statistics?.dataSources}
+            </span>
           </div>
           <div className="mt-2 flex items-center justify-between border-t border-white/10 pt-2">
             <span className="flex items-center gap-2 text-primary">
               <Clock className="h-3.5 w-3.5" /> Last Updated
             </span>
-            <span className="font-mono text-primary">{loading ? "..." : data?.statistics?.lastUpdated}</span>
+            <span className="font-mono text-primary">
+              {loading ? "..." : data?.statistics?.lastUpdated}
+            </span>
           </div>
         </div>
       </div>
@@ -146,26 +156,32 @@ export function GraphAnalyticsWidget() {
         </div>
         <div className="flex-1 space-y-2">
           {loading ? (
-            <div className="text-white/50 text-xs animate-pulse">Loading insights...</div>
+            <div className="animate-pulse text-xs text-white/50">
+              Loading insights...
+            </div>
           ) : (
-            (data?.topEntities as TopEntityItem[] | undefined)?.map((ent: TopEntityItem, i: number) => {
-              const IconComponent = iconMap[ent.i] || BookOpen
-              return (
-                <div
-                  key={i}
-                  className="group flex cursor-pointer items-center justify-between text-[9px]"
-                >
-                  <span className="flex items-center gap-2 text-white/80 transition-colors group-hover:text-white">
-                    <span className="w-4 text-center text-primary">{i + 1}</span>
-                    <IconComponent className={`h-3 w-3 ${ent.col}`} />
-                    <span className="w-24 truncate">{ent.n}</span>
-                  </span>
-                  <span className="font-mono text-[8px] text-primary group-hover:text-primary">
-                    {ent.c} connections
-                  </span>
-                </div>
-              )
-            })
+            (data?.topEntities as TopEntityItem[] | undefined)?.map(
+              (ent: TopEntityItem, i: number) => {
+                const IconComponent = iconMap[ent.i] || BookOpen
+                return (
+                  <div
+                    key={i}
+                    className="group flex cursor-pointer items-center justify-between text-[9px]"
+                  >
+                    <span className="flex items-center gap-2 text-white/80 transition-colors group-hover:text-white">
+                      <span className="w-4 text-center text-primary">
+                        {i + 1}
+                      </span>
+                      <IconComponent className={`h-3 w-3 ${ent.col}`} />
+                      <span className="w-24 truncate">{ent.n}</span>
+                    </span>
+                    <span className="font-mono text-[8px] text-primary group-hover:text-primary">
+                      {ent.c} connections
+                    </span>
+                  </div>
+                )
+              }
+            )
           )}
         </div>
       </div>
@@ -252,8 +268,8 @@ export function GraphAnalyticsWidget() {
               <Zap className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
               <div className="text-[8px] leading-tight text-white/80">
                 New connection found between{" "}
-                <span className="text-primary">Qur&apos;an (55:33)</span> and Black
-                Holes
+                <span className="text-primary">Qur&apos;an (55:33)</span> and
+                Black Holes
               </div>
             </div>
             <div className="flex items-start gap-2">

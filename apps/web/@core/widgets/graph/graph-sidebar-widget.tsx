@@ -14,8 +14,15 @@ import { useKnowledgeGraph } from "../../hooks/use-knowledge-graph"
 
 // Helper to map string icon names to Lucide components
 const iconMap: Record<string, React.ElementType> = {
-  Users, BookOpen, Scroll, Map, Globe2, Telescope, Lightbulb, Book
-};
+  Users,
+  BookOpen,
+  Scroll,
+  Map,
+  Globe2,
+  Telescope,
+  Lightbulb,
+  Book,
+}
 
 type EntityTypeItem = {
   id: string
@@ -26,7 +33,7 @@ type EntityTypeItem = {
 }
 
 export function GraphSidebarWidget() {
-  const { data, loading } = useKnowledgeGraph();
+  const { data, loading } = useKnowledgeGraph()
   return (
     <div className="hide-scrollbar flex w-full shrink-0 flex-col gap-4 overflow-y-auto lg:w-64">
       {/* Search */}
@@ -54,27 +61,33 @@ export function GraphSidebarWidget() {
         </div>
         <div className="space-y-1 text-[9px]">
           {loading ? (
-            <div className="animate-pulse text-white/50 text-xs">Loading entities...</div>
+            <div className="animate-pulse text-xs text-white/50">
+              Loading entities...
+            </div>
           ) : (
-            (data?.entityTypes as EntityTypeItem[] | undefined)?.map((et: EntityTypeItem) => {
-              const IconComponent = iconMap[et.i] || Book;
-              return (
-                <div
-                  key={et.id}
-                  className="group flex cursor-pointer items-center justify-between rounded p-1.5 transition-colors hover:bg-white/5"
-                >
-                  <div className="flex items-center gap-2">
-                    <IconComponent className={`h-3.5 w-3.5 opacity-90 transition-colors group-hover:text-white ${et.col}`} />
-                    <span className="text-white/70 transition-colors group-hover:text-white">
-                      {et.n}
+            (data?.entityTypes as EntityTypeItem[] | undefined)?.map(
+              (et: EntityTypeItem) => {
+                const IconComponent = iconMap[et.i] || Book
+                return (
+                  <div
+                    key={et.id}
+                    className="group flex cursor-pointer items-center justify-between rounded p-1.5 transition-colors hover:bg-white/5"
+                  >
+                    <div className="flex items-center gap-2">
+                      <IconComponent
+                        className={`h-3.5 w-3.5 opacity-90 transition-colors group-hover:text-white ${et.col}`}
+                      />
+                      <span className="text-white/70 transition-colors group-hover:text-white">
+                        {et.n}
+                      </span>
+                    </div>
+                    <span className="font-mono text-primary group-hover:text-primary">
+                      {et.c}
                     </span>
                   </div>
-                  <span className="font-mono text-primary group-hover:text-primary">
-                    {et.c}
-                  </span>
-                </div>
-              );
-            })
+                )
+              }
+            )
           )}
         </div>
       </div>

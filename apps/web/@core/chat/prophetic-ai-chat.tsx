@@ -62,7 +62,8 @@ export function PropheticAIChatTerminal({
     ) {
       setTimeout(() => setSpeechSupported(true), 0)
       const win = window as unknown as WindowWithSpeech
-      const SpeechRecognition = win.SpeechRecognition || win.webkitSpeechRecognition
+      const SpeechRecognition =
+        win.SpeechRecognition || win.webkitSpeechRecognition
       if (!SpeechRecognition) return
       const recognition = new SpeechRecognition()
       recognition.continuous = true
@@ -222,61 +223,61 @@ export function PropheticAIChatTerminal({
             messages.map((m: unknown) => {
               const msg = m as ChatMessage
               return (
-              <div
-                key={msg.id}
-                className={`flex flex-col gap-1.5 ${msg.role === "user" ? "items-end" : "items-start"}`}
-              >
-                <div className="flex w-full max-w-[96%] items-center justify-between px-1 text-[10px] font-bold tracking-wider uppercase opacity-90 sm:max-w-[85%]">
-                  {msg.role === "user" ? (
-                    <span className="ml-auto text-primary">
-                      COMMANDER // YOU
-                    </span>
-                  ) : (
-                    <div className="flex w-full items-center justify-between">
-                      <span className="text-success flex items-center gap-1">
-                        <Sparkles className="text-success h-3 w-3" /> KHIDRA AI
-                        // REVELATION FEED
-                      </span>
-
-                      {/* Tombol TTS Audio Playback pada Pesan AI */}
-                      <button
-                        type="button"
-                        onClick={() => speakText(msg.id, msg.content)}
-                        className="bg-panel hover:bg-success/25 border-success/50 hover:border-success text-success flex cursor-pointer items-center gap-1 rounded-sm border px-2 py-0.5 text-[9px] font-bold shadow-[0_0_10px_rgba(0,255,102,0.15)] transition-all active:scale-95"
-                        title={
-                          speakingMessageId === msg.id
-                            ? "Stop Speech Playback"
-                            : "Listen to KHIDRA AI Voice"
-                        }
-                      >
-                        {speakingMessageId === msg.id ? (
-                          <>
-                            <VolumeX className="h-3 w-3 animate-pulse text-red-400" />
-                            <span className="font-black tracking-widest text-red-400">
-                              STOP AUDIO
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            <Volume2 className="text-success h-3 w-3" />
-                            <span>LISTEN [TTS]</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  )}
-                </div>
-
                 <div
-                  className={`max-w-[96%] rounded-sm p-4 text-xs leading-relaxed font-normal shadow-lg transition-all sm:max-w-[85%] sm:text-sm ${
-                    msg.role === "user"
-                      ? "border-primary/60 text-primary rounded-tr-none border bg-cyan-950/40 font-mono shadow-[0_0_15px_rgba(0,240,255,0.15)]"
-                      : "border-success text-success rounded-tl-none border bg-emerald-950/60 font-sans shadow-[0_0_20px_rgba(0,255,102,0.15)]"
-                  }`}
+                  key={msg.id}
+                  className={`flex flex-col gap-1.5 ${msg.role === "user" ? "items-end" : "items-start"}`}
                 >
-                  <div className="whitespace-pre-wrap">{msg.content}</div>
+                  <div className="flex w-full max-w-[96%] items-center justify-between px-1 text-[10px] font-bold tracking-wider uppercase opacity-90 sm:max-w-[85%]">
+                    {msg.role === "user" ? (
+                      <span className="ml-auto text-primary">
+                        COMMANDER // YOU
+                      </span>
+                    ) : (
+                      <div className="flex w-full items-center justify-between">
+                        <span className="text-success flex items-center gap-1">
+                          <Sparkles className="text-success h-3 w-3" /> KHIDRA
+                          AI // REVELATION FEED
+                        </span>
+
+                        {/* Tombol TTS Audio Playback pada Pesan AI */}
+                        <button
+                          type="button"
+                          onClick={() => speakText(msg.id, msg.content)}
+                          className="bg-panel hover:bg-success/25 border-success/50 hover:border-success text-success flex cursor-pointer items-center gap-1 rounded-sm border px-2 py-0.5 text-[9px] font-bold shadow-[0_0_10px_rgba(0,255,102,0.15)] transition-all active:scale-95"
+                          title={
+                            speakingMessageId === msg.id
+                              ? "Stop Speech Playback"
+                              : "Listen to KHIDRA AI Voice"
+                          }
+                        >
+                          {speakingMessageId === msg.id ? (
+                            <>
+                              <VolumeX className="h-3 w-3 animate-pulse text-red-400" />
+                              <span className="font-black tracking-widest text-red-400">
+                                STOP AUDIO
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <Volume2 className="text-success h-3 w-3" />
+                              <span>LISTEN [TTS]</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  <div
+                    className={`max-w-[96%] rounded-sm p-4 text-xs leading-relaxed font-normal shadow-lg transition-all sm:max-w-[85%] sm:text-sm ${
+                      msg.role === "user"
+                        ? "rounded-tr-none border border-primary/60 bg-cyan-950/40 font-mono text-primary shadow-[0_0_15px_rgba(0,240,255,0.15)]"
+                        : "border-success text-success rounded-tl-none border bg-emerald-950/60 font-sans shadow-[0_0_20px_rgba(0,255,102,0.15)]"
+                    }`}
+                  >
+                    <div className="whitespace-pre-wrap">{msg.content}</div>
+                  </div>
                 </div>
-              </div>
               )
             })
           )}

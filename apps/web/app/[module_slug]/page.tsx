@@ -8,7 +8,7 @@ export default async function ModuleIndexPage({
   params: Promise<{ module_slug: string }>
 }) {
   const { module_slug } = await params
-  
+
   if (module_slug === "api" || module_slug.startsWith("_")) {
     return null
   }
@@ -21,7 +21,7 @@ export default async function ModuleIndexPage({
 
   const defaultRoute = moduleDef.defaultRoute
   const routeDef = moduleDef.routes.find((r) => r.slug === defaultRoute)
-  
+
   if (!routeDef || !routeDef.component) {
     notFound()
   }

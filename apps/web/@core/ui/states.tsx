@@ -159,7 +159,7 @@ export function ErrorState({
       {onRetry && (
         <button
           onClick={onRetry}
-          className="btn-primary btn-primary-ghost btn-clip border-danger/40 text-danger hover:border-danger hover:bg-danger/10 focus-visible:ring-danger flex items-center gap-2 px-4 py-2 text-xs focus-visible:ring-2 focus-visible:outline-none"
+          className="btn-primary btn-primary-ghost border-danger/40 text-danger hover:border-danger hover:bg-danger/10 focus-visible:ring-danger flex items-center gap-2 px-4 py-2 text-xs btn-clip focus-visible:ring-2 focus-visible:outline-none"
         >
           <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
           <span>[ RETRY CONNECTION ]</span>

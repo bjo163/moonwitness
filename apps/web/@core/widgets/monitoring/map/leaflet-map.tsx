@@ -8,7 +8,13 @@ import "leaflet/dist/leaflet.css"
 import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png"
 import iconUrl from "leaflet/dist/images/marker-icon.png"
 import shadowUrl from "leaflet/dist/images/marker-shadow.png"
-import { EarthquakeFeature, ISSPosition, FlightInfo, CyberAttack } from "@core/api/hooks/use-global-monitoring"
+import {
+  EarthquakeFeature,
+  ISSPosition,
+  FlightInfo,
+  CyberAttack,
+  MaritimeShip,
+} from "@core/api/hooks/use-global-monitoring"
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: iconRetinaUrl.src,
@@ -21,7 +27,7 @@ const earthquakeIcon = new L.DivIcon({
   className: "bg-transparent",
   html: `<div class="h-3 w-3 animate-ping rounded-full bg-red-500 opacity-75 shadow-[0_0_15px_#FF0055]"></div><div class="h-3 w-3 rounded-full bg-red-600 absolute top-0 left-0"></div>`,
   iconSize: [12, 12],
-  iconAnchor: [6, 6]
+  iconAnchor: [6, 6],
 })
 
 // Custom icon for ISS
@@ -32,44 +38,46 @@ const issIcon = new L.DivIcon({
            <div class="h-4 w-4 bg-primary rounded shadow-[0_0_20px_#00F0FF] animate-pulse"></div>
          </div>`,
   iconSize: [32, 32],
-  iconAnchor: [16, 16]
+  iconAnchor: [16, 16],
 })
 
 // Custom icon for Flights
-const flightIcon = (track: number) => new L.DivIcon({
-  className: "bg-transparent",
-  html: `<div style="transform: rotate(${track}deg)" class="text-warning text-[14px]">✈</div>`,
-  iconSize: [16, 16],
-  iconAnchor: [8, 8]
-})
+const flightIcon = (track: number) =>
+  new L.DivIcon({
+    className: "bg-transparent",
+    html: `<div style="transform: rotate(${track}deg)" class="text-warning text-[14px]">✈</div>`,
+    iconSize: [16, 16],
+    iconAnchor: [8, 8],
+  })
 
 // Custom icon for Cyber Attacks
 const cyberIcon = new L.DivIcon({
   className: "bg-transparent",
   html: `<div class="h-4 w-4 bg-purple-500 rounded-sm rotate-45 animate-pulse shadow-[0_0_10px_#A855F7]"></div>`,
   iconSize: [16, 16],
-  iconAnchor: [8, 8]
+  iconAnchor: [8, 8],
 })
 
 // Custom icon for Maritime Ships
-const shipIcon = (heading: number) => new L.DivIcon({
-  className: "bg-transparent",
-  html: `<div style="transform: rotate(${heading}deg)" class="text-blue-400 text-[14px]">⛴</div>`,
-  iconSize: [16, 16],
-  iconAnchor: [8, 8]
-})
+const shipIcon = (heading: number) =>
+  new L.DivIcon({
+    className: "bg-transparent",
+    html: `<div style="transform: rotate(${heading}deg)" class="text-blue-400 text-[14px]">⛴</div>`,
+    iconSize: [16, 16],
+    iconAnchor: [8, 8],
+  })
 
-export default function LeafletMap({ 
+export default function LeafletMap({
   earthquakes = [],
   issPosition,
   flights = [],
   cyberAttacks = [],
-  ships = []
-}: { 
-  earthquakes?: EarthquakeFeature[],
-  issPosition?: ISSPosition | null,
-  flights?: FlightInfo[],
-  cyberAttacks?: CyberAttack[],
+  ships = [],
+}: {
+  earthquakes?: EarthquakeFeature[]
+  issPosition?: ISSPosition | null
+  flights?: FlightInfo[]
+  cyberAttacks?: CyberAttack[]
   ships?: MaritimeShip[]
 }) {
   const [mounted, setMounted] = useState(false)
@@ -81,7 +89,7 @@ export default function LeafletMap({
   if (!mounted) return null
 
   return (
-    <div className="h-full w-full rounded-md overflow-hidden border border-white/10">
+    <div className="h-full w-full overflow-hidden rounded-md border border-white/10">
       <MapContainer
         center={[20, 0]}
         zoom={2}
@@ -92,15 +100,21 @@ export default function LeafletMap({
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
         />
-        
+
         {/* Render ISS */}
         {issPosition && (
-          <Marker position={[issPosition.latitude, issPosition.longitude]} icon={issIcon} zIndexOffset={1000}>
-            <Popup className="bg-space text-white border border-white/10">
+          <Marker
+            position={[issPosition.latitude, issPosition.longitude]}
+            icon={issIcon}
+            zIndexOffset={1000}
+          >
+            <Popup className="bg-space border border-white/10 text-white">
               <div className="text-xs">
-                <div className="font-bold text-primary tracking-widest">INTERNATIONAL SPACE STATION</div>
-                <div className="text-[10px] text-white/70 mt-1">
-                  Alt: {issPosition.altitude.toFixed(2)} km <br/>
+                <div className="font-bold tracking-widest text-primary">
+                  INTERNATIONAL SPACE STATION
+                </div>
+                <div className="mt-1 text-[10px] text-white/70">
+                  Alt: {issPosition.altitude.toFixed(2)} km <br />
                   Vel: {issPosition.velocity.toFixed(2)} km/h
                 </div>
               </div>
@@ -110,20 +124,22 @@ export default function LeafletMap({
 
         {/* Render Flights */}
         {flights.map((flight) => (
-          <Marker 
-            key={flight.icao24} 
+          <Marker
+            key={flight.icao24}
             position={[flight.latitude, flight.longitude]}
             icon={flightIcon(flight.true_track || 0)}
           >
-            <Popup className="bg-space border-warning text-foreground font-mono">
+            <Popup className="bg-space border-warning font-mono text-foreground">
               <div className="p-2">
-                <div className="text-warning font-bold mb-1 border-b border-warning/30 pb-1">
+                <div className="text-warning border-warning/30 mb-1 border-b pb-1 font-bold">
                   CALLSIGN: {flight.callsign}
                 </div>
                 <div className="text-xs">
-                  ORIGIN: {flight.origin_country}<br/>
-                  ALTITUDE: {Math.round(flight.altitude || 0)}m<br/>
-                  VELOCITY: {Math.round(flight.velocity || 0)}m/s<br/>
+                  ORIGIN: {flight.origin_country}
+                  <br />
+                  ALTITUDE: {Math.round(flight.altitude || 0)}m<br />
+                  VELOCITY: {Math.round(flight.velocity || 0)}m/s
+                  <br />
                   TRACK: {Math.round(flight.true_track || 0)}°
                 </div>
               </div>
@@ -135,24 +151,26 @@ export default function LeafletMap({
         {cyberAttacks.map((attack) => (
           <React.Fragment key={attack.id}>
             {/* Draw attack trajectory line */}
-            <Polyline 
-              positions={[attack.source, attack.target]} 
-              color="#EF4444" 
-              weight={1} 
-              opacity={0.5} 
+            <Polyline
+              positions={[attack.source, attack.target]}
+              color="#EF4444"
+              weight={1}
+              opacity={0.5}
               dashArray="4"
               className="animate-pulse"
             />
             {/* Target marker */}
             <Marker position={attack.target} icon={cyberIcon}>
-              <Popup className="bg-space border-red-500 text-foreground font-mono">
+              <Popup className="bg-space border-red-500 font-mono text-foreground">
                 <div className="p-2">
-                  <div className="text-red-500 font-bold mb-1 border-b border-red-500/30 pb-1">
+                  <div className="mb-1 border-b border-red-500/30 pb-1 font-bold text-red-500">
                     THREAT: {attack.type}
                   </div>
                   <div className="text-xs">
-                    STATUS: BLOCKED<br/>
-                    LAT: {attack.target[0].toFixed(2)}<br/>
+                    STATUS: BLOCKED
+                    <br />
+                    LAT: {attack.target[0].toFixed(2)}
+                    <br />
                     LNG: {attack.target[1].toFixed(2)}
                   </div>
                 </div>
@@ -163,20 +181,23 @@ export default function LeafletMap({
 
         {/* Render Maritime Ships */}
         {ships.map((ship) => (
-          <Marker 
-            key={ship.id} 
+          <Marker
+            key={ship.id}
             position={[ship.lat, ship.lng]}
             icon={shipIcon(ship.heading)}
           >
-            <Popup className="bg-space border-blue-500 text-foreground font-mono">
+            <Popup className="bg-space border-blue-500 font-mono text-foreground">
               <div className="p-2">
-                <div className="text-blue-400 font-bold mb-1 border-b border-blue-500/30 pb-1">
+                <div className="mb-1 border-b border-blue-500/30 pb-1 font-bold text-blue-400">
                   VESSEL: {ship.name}
                 </div>
                 <div className="text-xs">
-                  TYPE: {ship.type}<br/>
-                  DEST: {ship.destination}<br/>
-                  SPEED: {Math.round(ship.speed)} kts<br/>
+                  TYPE: {ship.type}
+                  <br />
+                  DEST: {ship.destination}
+                  <br />
+                  SPEED: {Math.round(ship.speed)} kts
+                  <br />
                   HDG: {Math.round(ship.heading)}°
                 </div>
               </div>
@@ -189,11 +210,15 @@ export default function LeafletMap({
           const [lng, lat] = eq.geometry.coordinates
           return (
             <Marker key={eq.id} position={[lat, lng]} icon={earthquakeIcon}>
-              <Popup className="bg-space text-white border border-white/10">
+              <Popup className="bg-space border border-white/10 text-white">
                 <div className="text-xs">
-                  <div className="font-bold text-red-400">M {eq.properties.mag.toFixed(1)}</div>
+                  <div className="font-bold text-red-400">
+                    M {eq.properties.mag.toFixed(1)}
+                  </div>
                   <div>{eq.properties.place}</div>
-                  <div className="text-[9px] text-white/50">{new Date(eq.properties.time).toLocaleString()}</div>
+                  <div className="text-[9px] text-white/50">
+                    {new Date(eq.properties.time).toLocaleString()}
+                  </div>
                 </div>
               </Popup>
             </Marker>

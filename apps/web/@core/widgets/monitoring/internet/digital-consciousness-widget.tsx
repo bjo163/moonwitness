@@ -17,35 +17,42 @@ export function DigitalConsciousnessWidget() {
   const [isConnected, setIsConnected] = useState(false)
 
   useEffect(() => {
-    let eventSource: EventSource | null = null;
-    let isMounted = true;
+    let eventSource: EventSource | null = null
+    let isMounted = true
 
     try {
       // Connect to Wikimedia Recent Changes Stream
-      eventSource = new EventSource("https://stream.wikimedia.org/v2/stream/recentchange")
-      
+      eventSource = new EventSource(
+        "https://stream.wikimedia.org/v2/stream/recentchange"
+      )
+
       eventSource.onopen = () => {
         if (isMounted) setIsConnected(true)
       }
 
       eventSource.onmessage = (event) => {
-        if (!isMounted) return;
-        
+        if (!isMounted) return
+
         try {
           const data = JSON.parse(event.data)
           // Filter for only wikipedia edits (ignore wikidata, wikibooks, etc for noise reduction)
           // and only edits that actually change content (type === 'edit')
-          if (data.type === 'edit' && data.server_name.includes('wikipedia.org')) {
+          if (
+            data.type === "edit" &&
+            data.server_name.includes("wikipedia.org")
+          ) {
             const newEdit: WikiEdit = {
               id: data.meta.id,
               title: data.title,
               user: data.user,
               server_url: data.server_url,
-              timestamp: data.meta.dt ? new Date(data.meta.dt).getTime() : Date.now(),
-              comment: data.comment || ""
+              timestamp: data.meta.dt
+                ? new Date(data.meta.dt).getTime()
+                : Date.now(),
+              comment: data.comment || "",
             }
 
-            setEdits(prev => {
+            setEdits((prev) => {
               const updated = [newEdit, ...prev]
               return updated.slice(0, 15) // Keep last 15 edits
             })
@@ -63,7 +70,7 @@ export function DigitalConsciousnessWidget() {
     }
 
     return () => {
-      isMounted = false;
+      isMounted = false
       if (eventSource) {
         eventSource.close()
       }
@@ -73,57 +80,69 @@ export function DigitalConsciousnessWidget() {
   return (
     <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-8 xl:col-span-6">
       <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-2">
-        <div className="text-[10px] font-black tracking-widest text-primary uppercase flex items-center gap-2">
+        <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-primary uppercase">
           <BookOpen className="h-4 w-4" />
           DIGITAL CONSCIOUSNESS
-          <span className="bg-primary/20 text-primary px-1.5 py-0.5 rounded-[2px] text-[8px] border border-primary/50">WIKIPEDIA LIVE</span>
+          <span className="rounded-[2px] border border-primary/50 bg-primary/20 px-1.5 py-0.5 text-[8px] text-primary">
+            WIKIPEDIA LIVE
+          </span>
         </div>
         <div className="flex items-center gap-2">
-          <span className={`text-[8px] uppercase tracking-widest font-bold ${isConnected ? "text-success" : "text-warning"}`}>
+          <span
+            className={`text-[8px] font-bold tracking-widest uppercase ${isConnected ? "text-success" : "text-warning"}`}
+          >
             {isConnected ? "STREAM CONNECTED" : "CONNECTING..."}
           </span>
-          <div className={`h-2 w-2 rounded-full ${isConnected ? "bg-success animate-pulse" : "bg-warning"}`}></div>
+          <div
+            className={`h-2 w-2 rounded-full ${isConnected ? "bg-success animate-pulse" : "bg-warning"}`}
+          ></div>
         </div>
       </div>
 
       <div className="flex-1 overflow-hidden">
-        <div className="grid grid-cols-12 gap-4 text-[8px] font-bold text-white/50 tracking-widest mb-2 border-b border-white/5 pb-2">
+        <div className="mb-2 grid grid-cols-12 gap-4 border-b border-white/5 pb-2 text-[8px] font-bold tracking-widest text-white/50">
           <div className="col-span-2">TIME</div>
           <div className="col-span-5">KNOWLEDGE ARTICLE</div>
           <div className="col-span-3">EDITOR</div>
           <div className="col-span-2 text-right">REGION</div>
         </div>
 
-        <div className="hide-scrollbar flex flex-col space-y-1 h-[250px] overflow-y-auto">
+        <div className="hide-scrollbar flex h-[250px] flex-col space-y-1 overflow-y-auto">
           {edits.length === 0 ? (
-            <div className="text-center text-primary/50 text-[10px] py-10 font-mono flex flex-col items-center gap-2">
+            <div className="flex flex-col items-center gap-2 py-10 text-center font-mono text-[10px] text-primary/50">
               <Activity className="h-6 w-6 animate-pulse" />
               Tuning into global knowledge stream...
             </div>
           ) : (
             edits.map((edit) => {
-              const langCode = edit.server_url.replace("https://", "").split(".")[0].toUpperCase()
+              const langCode =
+                (edit.server_url || "")
+                  .replace("https://", "")
+                  .split(".")[0]
+                  ?.toUpperCase() || "??"
               return (
                 <div
                   key={edit.id}
-                  className="grid grid-cols-12 gap-4 text-[9px] items-start py-2 px-2 hover:bg-white/5 border border-transparent hover:border-white/10 rounded transition-colors group"
+                  className="group grid grid-cols-12 items-start gap-4 rounded border border-transparent px-2 py-2 text-[9px] transition-colors hover:border-white/10 hover:bg-white/5"
                 >
-                  <div className="col-span-2 text-primary/50 font-mono mt-0.5">
-                    {new Date(edit.timestamp).toLocaleTimeString([], { hour12: false })}
+                  <div className="col-span-2 mt-0.5 font-mono text-primary/50">
+                    {new Date(edit.timestamp).toLocaleTimeString([], {
+                      hour12: false,
+                    })}
                   </div>
                   <div className="col-span-5 flex flex-col">
-                    <span className="font-bold text-white group-hover:text-primary transition-colors leading-tight">
+                    <span className="leading-tight font-bold text-white transition-colors group-hover:text-primary">
                       {edit.title}
                     </span>
-                    <span className="text-[7px] text-white/40 mt-1 line-clamp-1 italic">
+                    <span className="mt-1 line-clamp-1 text-[7px] text-white/40 italic">
                       {edit.comment || "No comment"}
                     </span>
                   </div>
-                  <div className="col-span-3 font-mono text-white/70 truncate mt-0.5">
+                  <div className="col-span-3 mt-0.5 truncate font-mono text-white/70">
                     {edit.user}
                   </div>
-                  <div className="col-span-2 text-right mt-0.5">
-                    <span className="px-1.5 py-0.5 bg-white/10 text-white/80 font-black text-[7px] rounded-sm">
+                  <div className="col-span-2 mt-0.5 text-right">
+                    <span className="rounded-sm bg-white/10 px-1.5 py-0.5 text-[7px] font-black text-white/80">
                       {langCode}
                     </span>
                   </div>

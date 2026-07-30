@@ -7,10 +7,21 @@ import dynamic from "next/dynamic"
 import "leaflet/dist/leaflet.css"
 
 // Dynamically import Leaflet components to avoid SSR window errors
-const Map = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), { ssr: false })
-const Tile = dynamic(() => import("react-leaflet").then((mod) => mod.TileLayer), { ssr: false })
-const Marker = dynamic(() => import("react-leaflet").then((mod) => mod.Marker), { ssr: false })
-const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), { ssr: false })
+const Map = dynamic(
+  () => import("react-leaflet").then((mod) => mod.MapContainer),
+  { ssr: false }
+)
+const Tile = dynamic(
+  () => import("react-leaflet").then((mod) => mod.TileLayer),
+  { ssr: false }
+)
+const Marker = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Marker),
+  { ssr: false }
+)
+const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), {
+  ssr: false,
+})
 
 type CrisisMarker = {
   id: string
@@ -24,35 +35,55 @@ type CrisisMarker = {
 
 const MISSION_TARGETS: CrisisMarker[] = [
   {
-    id: "m1", lat: 31.5, lng: 34.46, // Gaza
+    id: "m1",
+    lat: 31.5,
+    lng: 34.46, // Gaza
     title: "KRISIS KEMANUSIAAN JALUR GAZA",
-    severity: "CRITICAL", type: "HUMANITARIAN",
-    description: "Krisis kemanusiaan tingkat tertinggi. Blokade medis dan pangan. Membutuhkan intervensi diplomatik darurat dan jalur suplai independen."
+    severity: "CRITICAL",
+    type: "HUMANITARIAN",
+    description:
+      "Krisis kemanusiaan tingkat tertinggi. Blokade medis dan pangan. Membutuhkan intervensi diplomatik darurat dan jalur suplai independen.",
   },
   {
-    id: "m2", lat: 15.55, lng: 48.51, // Yemen
+    id: "m2",
+    lat: 15.55,
+    lng: 48.51, // Yemen
     title: "KELAPARAN EKSTREM YAMAN",
-    severity: "CRITICAL", type: "HUMANITARIAN",
-    description: "Jutaan warga sipil menghadapi ancaman kelaparan dan wabah penyakit akibat konflik berkepanjangan."
+    severity: "CRITICAL",
+    type: "HUMANITARIAN",
+    description:
+      "Jutaan warga sipil menghadapi ancaman kelaparan dan wabah penyakit akibat konflik berkepanjangan.",
   },
   {
-    id: "m3", lat: 34.55, lng: 69.2, // Afghanistan
+    id: "m3",
+    lat: 34.55,
+    lng: 69.2, // Afghanistan
     title: "KRISIS PENDIDIKAN & EKONOMI AFGHANISTAN",
-    severity: "HIGH", type: "EDUCATION",
-    description: "Pembatasan akses pendidikan dan pembekuan aset internasional menyebabkan kelumpuhan ekonomi massal."
+    severity: "HIGH",
+    type: "EDUCATION",
+    description:
+      "Pembatasan akses pendidikan dan pembekuan aset internasional menyebabkan kelumpuhan ekonomi massal.",
   },
   {
-    id: "m4", lat: 14.49, lng: 14.45, // Sudan / Sahel
+    id: "m4",
+    lat: 14.49,
+    lng: 14.45, // Sudan / Sahel
     title: "KONFLIK BERSENJATA SUDAN",
-    severity: "HIGH", type: "CONFLICT",
-    description: "Perang saudara memicu jutaan pengungsi internal (IDP). Akses kesehatan hancur total."
+    severity: "HIGH",
+    type: "CONFLICT",
+    description:
+      "Perang saudara memicu jutaan pengungsi internal (IDP). Akses kesehatan hancur total.",
   },
   {
-    id: "m5", lat: 23.88, lng: 90.39, // Bangladesh / Rohingya
+    id: "m5",
+    lat: 23.88,
+    lng: 90.39, // Bangladesh / Rohingya
     title: "KAMP PENGUNGSI ROHINGYA",
-    severity: "MEDIUM", type: "HUMANITARIAN",
-    description: "Kondisi kamp pengungsi yang melebihi kapasitas rentan terhadap bencana alam dan wabah penyakit."
-  }
+    severity: "MEDIUM",
+    type: "HUMANITARIAN",
+    description:
+      "Kondisi kamp pengungsi yang melebihi kapasitas rentan terhadap bencana alam dan wabah penyakit.",
+  },
 ]
 
 export function MissionControlView() {
@@ -66,31 +97,42 @@ export function MissionControlView() {
   // To fix Leaflet's default icon missing issues in Next.js dynamically
   useEffect(() => {
     if (mounted) {
-      const L = require('leaflet')
+      const L = require("leaflet")
       delete L.Icon.Default.prototype._getIconUrl
       L.Icon.Default.mergeOptions({
-        iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-        iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+        iconRetinaUrl:
+          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+        iconUrl:
+          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+        shadowUrl:
+          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
       })
     }
   }, [mounted])
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "CRITICAL": return "text-destructive border-destructive"
-      case "HIGH": return "text-warning border-warning"
-      case "MEDIUM": return "text-accent border-accent"
-      default: return "text-primary border-primary"
+      case "CRITICAL":
+        return "text-destructive border-destructive"
+      case "HIGH":
+        return "text-warning border-warning"
+      case "MEDIUM":
+        return "text-accent border-accent"
+      default:
+        return "text-primary border-primary"
     }
   }
 
   const getSeverityBg = (severity: string) => {
     switch (severity) {
-      case "CRITICAL": return "bg-destructive text-white"
-      case "HIGH": return "bg-warning text-black"
-      case "MEDIUM": return "bg-accent text-black"
-      default: return "bg-primary text-black"
+      case "CRITICAL":
+        return "bg-destructive text-white"
+      case "HIGH":
+        return "bg-warning text-black"
+      case "MEDIUM":
+        return "bg-accent text-black"
+      default:
+        return "bg-primary text-black"
     }
   }
 
@@ -101,56 +143,61 @@ export function MissionControlView() {
         subtitle="Pusat kendali taktis untuk melacak zona krisis kemanusiaan dan konflik global. Digunakan untuk merumuskan strategi bantuan, diplomasi, dan resolusi perdamaian."
         operation="TACTICAL-MAPPING"
         status="ONLINE"
-        accentColor="destructive"
+        accentColor="danger"
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
         {/* Radar Map (3 columns wide) */}
-        <div className="lg:col-span-3 panel-box bg-space border-2 border-primary/50 shadow-[0_0_50px_rgba(255,51,102,0.15)] flex flex-col p-1">
-          <div className="p-3 border-b border-primary/20 bg-black flex items-center justify-between">
+        <div className="panel-box bg-space flex flex-col border-2 border-primary/50 p-1 shadow-[0_0_50px_rgba(255,51,102,0.15)] lg:col-span-3">
+          <div className="flex items-center justify-between border-b border-primary/20 bg-black p-3">
             <div className="flex items-center gap-2 text-xs font-bold text-primary">
-              <Target className="w-4 h-4 text-destructive animate-pulse" />
+              <Target className="h-4 w-4 animate-pulse text-destructive" />
               SATELLITE TACTICAL LINK
             </div>
-            <div className="text-[10px] bg-destructive/20 text-destructive px-2 py-1 font-mono font-bold uppercase">
+            <div className="bg-destructive/20 px-2 py-1 font-mono text-[10px] font-bold text-destructive uppercase">
               CLASSIFIED INTELLIGENCE
             </div>
           </div>
 
-          <div className="h-[600px] w-full relative z-0">
+          <div className="relative z-0 h-[600px] w-full">
             {!mounted ? (
-              <div className="w-full h-full flex items-center justify-center text-primary animate-pulse font-mono text-sm bg-black">
+              <div className="flex h-full w-full animate-pulse items-center justify-center bg-black font-mono text-sm text-primary">
                 INITIALIZING TACTICAL MAP...
               </div>
             ) : (
-              <Map 
+              <Map
                 center={[25, 45]} // Centered on Middle East roughly
-                zoom={3} 
+                zoom={3}
                 scrollWheelZoom={true}
-                className="w-full h-full bg-[#0a0f18]"
+                className="h-full w-full bg-[#0a0f18]"
                 zoomControl={false}
               >
                 <Tile
                   url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-                  attribution='&copy; CARTO'
+                  attribution="&copy; CARTO"
                 />
-                
-                {MISSION_TARGETS.map(target => (
-                  <Marker 
-                    key={target.id} 
+
+                {MISSION_TARGETS.map((target) => (
+                  <Marker
+                    key={target.id}
                     position={[target.lat, target.lng]}
                     eventHandlers={{
-                      click: () => setActiveTarget(target)
+                      click: () => setActiveTarget(target),
                     }}
                   >
-                    <Popup className="bg-black border border-primary/30 text-white rounded-none">
-                      <div className="p-1 max-w-[200px]">
-                        <div className={`text-[10px] font-bold px-1 py-0.5 mb-2 inline-block ${getSeverityBg(target.severity)}`}>
+                    <Popup className="rounded-none border border-primary/30 bg-black text-white">
+                      <div className="max-w-[200px] p-1">
+                        <div
+                          className={`mb-2 inline-block px-1 py-0.5 text-[10px] font-bold ${getSeverityBg(target.severity)}`}
+                        >
                           {target.severity} PRIORITY
                         </div>
-                        <h4 className="font-bold text-xs mb-1">{target.title}</h4>
-                        <p className="text-[10px] text-gray-400">{target.type}</p>
+                        <h4 className="mb-1 text-xs font-bold">
+                          {target.title}
+                        </h4>
+                        <p className="text-[10px] text-gray-400">
+                          {target.type}
+                        </p>
                       </div>
                     </Popup>
                   </Marker>
@@ -163,70 +210,90 @@ export function MissionControlView() {
         {/* Intelligence Sidebar */}
         <div className="space-y-6">
           <div className="panel-box bg-panel border-2 border-primary/30 p-6 shadow-lg">
-            <h3 className="text-xs font-bold text-primary tracking-widest flex items-center gap-2 mb-4 border-b border-primary/20 pb-2">
-              <Globe className="w-4 h-4" />
+            <h3 className="mb-4 flex items-center gap-2 border-b border-primary/20 pb-2 text-xs font-bold tracking-widest text-primary">
+              <Globe className="h-4 w-4" />
               TARGET INTELLIGENCE
             </h3>
 
             {activeTarget ? (
-              <div className="space-y-4 animate-in fade-in zoom-in duration-300">
-                <div className={`inline-block px-2 py-1 text-[10px] font-bold ${getSeverityBg(activeTarget.severity)}`}>
+              <div className="animate-in space-y-4 duration-300 fade-in zoom-in">
+                <div
+                  className={`inline-block px-2 py-1 text-[10px] font-bold ${getSeverityBg(activeTarget.severity)}`}
+                >
                   {activeTarget.severity} PRIORITY
                 </div>
-                
-                <h4 className="text-lg font-black text-white leading-tight">
+
+                <h4 className="text-lg leading-tight font-black text-white">
                   {activeTarget.title}
                 </h4>
-                
+
                 <div className="grid grid-cols-2 gap-2 text-[10px]">
-                  <div className="border border-primary/20 p-2 bg-black/50">
-                    <span className="text-primary/50 block mb-1">LATITUDE</span>
-                    <span className="font-mono text-accent">{activeTarget.lat}°</span>
+                  <div className="border border-primary/20 bg-black/50 p-2">
+                    <span className="mb-1 block text-primary/50">LATITUDE</span>
+                    <span className="font-mono text-accent">
+                      {activeTarget.lat}°
+                    </span>
                   </div>
-                  <div className="border border-primary/20 p-2 bg-black/50">
-                    <span className="text-primary/50 block mb-1">LONGITUDE</span>
-                    <span className="font-mono text-accent">{activeTarget.lng}°</span>
+                  <div className="border border-primary/20 bg-black/50 p-2">
+                    <span className="mb-1 block text-primary/50">
+                      LONGITUDE
+                    </span>
+                    <span className="font-mono text-accent">
+                      {activeTarget.lng}°
+                    </span>
                   </div>
                 </div>
 
-                <div className="border-l-2 border-primary/50 pl-3 py-1 my-4">
-                  <div className="text-[10px] text-primary/50 font-bold tracking-widest mb-1">THREAT CLASSIFICATION</div>
-                  <div className="text-xs font-bold text-warning">{activeTarget.type}</div>
+                <div className="my-4 border-l-2 border-primary/50 py-1 pl-3">
+                  <div className="mb-1 text-[10px] font-bold tracking-widest text-primary/50">
+                    THREAT CLASSIFICATION
+                  </div>
+                  <div className="text-warning text-xs font-bold">
+                    {activeTarget.type}
+                  </div>
                 </div>
 
-                <p className="text-xs text-primary/80 leading-relaxed bg-primary/5 p-3 border border-primary/10">
+                <p className="border border-primary/10 bg-primary/5 p-3 text-xs leading-relaxed text-primary/80">
                   {activeTarget.description}
                 </p>
 
-                <button className="w-full mt-4 bg-primary/20 border border-primary text-primary py-2 text-xs font-bold hover:bg-primary/40 transition-colors flex justify-center items-center gap-2">
-                  <ShieldAlert className="w-4 h-4" />
+                <button className="mt-4 flex w-full items-center justify-center gap-2 border border-primary bg-primary/20 py-2 text-xs font-bold text-primary transition-colors hover:bg-primary/40">
+                  <ShieldAlert className="h-4 w-4" />
                   INITIATE RELIEF PROTOCOL
                 </button>
               </div>
             ) : (
-              <div className="text-center py-12 opacity-50">
-                <Info className="w-8 h-8 text-primary mx-auto mb-3" />
-                <p className="text-xs text-primary font-mono">SELECT A TARGET ON THE RADAR TO VIEW INTELLIGENCE DOSSIER</p>
+              <div className="py-12 text-center opacity-50">
+                <Info className="mx-auto mb-3 h-8 w-8 text-primary" />
+                <p className="font-mono text-xs text-primary">
+                  SELECT A TARGET ON THE RADAR TO VIEW INTELLIGENCE DOSSIER
+                </p>
               </div>
             )}
           </div>
-          
+
           {/* Mission Stats */}
           <div className="panel-box bg-panel border border-primary/30 p-4">
-             <div className="text-[10px] text-primary/50 font-bold tracking-widest mb-3">GLOBAL SUMMARY</div>
-             <div className="flex justify-between items-center text-xs mb-2">
-                <span className="text-white">Active Zones</span>
-                <span className="font-mono font-bold text-accent">{MISSION_TARGETS.length}</span>
-             </div>
-             <div className="flex justify-between items-center text-xs mb-2">
-                <span className="text-white">Critical Threats</span>
-                <span className="font-mono font-bold text-destructive">
-                  {MISSION_TARGETS.filter(t => t.severity === "CRITICAL").length}
-                </span>
-             </div>
+            <div className="mb-3 text-[10px] font-bold tracking-widest text-primary/50">
+              GLOBAL SUMMARY
+            </div>
+            <div className="mb-2 flex items-center justify-between text-xs">
+              <span className="text-white">Active Zones</span>
+              <span className="font-mono font-bold text-accent">
+                {MISSION_TARGETS.length}
+              </span>
+            </div>
+            <div className="mb-2 flex items-center justify-between text-xs">
+              <span className="text-white">Critical Threats</span>
+              <span className="font-mono font-bold text-destructive">
+                {
+                  MISSION_TARGETS.filter((t) => t.severity === "CRITICAL")
+                    .length
+                }
+              </span>
+            </div>
           </div>
         </div>
-
       </div>
     </>
   )

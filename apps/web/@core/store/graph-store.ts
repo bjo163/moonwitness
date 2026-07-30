@@ -18,7 +18,9 @@ export const useGraphStore = create<GraphState>((set) => ({
   activeFilters: [],
   setSelectedEntity: (id) => set({ selectedEntityId: id }),
   setZoomLevel: (level) =>
-    set({ zoomLevel: Math.max(MIN_ZOOM_LEVEL, Math.min(level, MAX_ZOOM_LEVEL)) }),
+    set({
+      zoomLevel: Math.max(MIN_ZOOM_LEVEL, Math.min(level, MAX_ZOOM_LEVEL)),
+    }),
   toggleFilter: (filter) =>
     set((state) => ({
       activeFilters: state.activeFilters.includes(filter)

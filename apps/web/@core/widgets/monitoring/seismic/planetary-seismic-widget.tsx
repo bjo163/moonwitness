@@ -2,26 +2,34 @@ import React from "react"
 import { Activity } from "lucide-react"
 import { EarthquakeFeature } from "@core/api/hooks/use-global-monitoring"
 
-export function PlanetarySeismicWidget({ earthquakes = [] }: { earthquakes?: EarthquakeFeature[] }) {
+export function PlanetarySeismicWidget({
+  earthquakes = [],
+}: {
+  earthquakes?: EarthquakeFeature[]
+}) {
   // Sort by magnitude, or just take the most recent 6
   const recentEvents = earthquakes.slice(0, 6)
 
   return (
     <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-6 xl:col-span-7">
-      <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase flex items-center gap-2">
+      <div className="mb-4 flex items-center gap-2 text-[9px] font-black tracking-widest text-primary uppercase">
         PLANETARY SEISMIC ACTIVITY
-        <span className="bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded-[2px] text-[8px] border border-red-500/30 animate-pulse">USGS LIVE</span>
+        <span className="animate-pulse rounded-[2px] border border-red-500/30 bg-red-500/20 px-1.5 py-0.5 text-[8px] text-red-400">
+          USGS LIVE
+        </span>
       </div>
 
       <div className="grid flex-1 grid-cols-2 gap-3 md:grid-cols-3">
         {recentEvents.length === 0 ? (
-          <div className="col-span-full text-center text-primary/50 text-[10px] py-10">Synchronizing with USGS Network...</div>
+          <div className="col-span-full py-10 text-center text-[10px] text-primary/50">
+            Synchronizing with USGS Network...
+          </div>
         ) : (
           recentEvents.map((eq, i) => {
             const mag = eq.properties.mag
             let sev = "Low"
             let color = "#00FF66"
-            
+
             if (mag >= 6) {
               sev = "Critical"
               color = "#FF0055"
@@ -57,7 +65,10 @@ export function PlanetarySeismicWidget({ earthquakes = [] }: { earthquakes?: Ear
                     >
                       {sev}
                     </span>
-                    <span className="font-mono text-[9px] font-bold" style={{ color: color }}>
+                    <span
+                      className="font-mono text-[9px] font-bold"
+                      style={{ color: color }}
+                    >
                       {mag.toFixed(1)}
                     </span>
                   </div>

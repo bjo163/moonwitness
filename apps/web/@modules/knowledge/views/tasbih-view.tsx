@@ -170,7 +170,7 @@ export function TasbihView() {
 
             <button
               onClick={handleReset}
-              className="btn-primary btn-primary-ghost btn-clip text-danger border-danger/30 hover:border-danger flex items-center gap-1.5 px-3 py-1.5 text-xs"
+              className="btn-primary btn-primary-ghost text-danger border-danger/30 hover:border-danger flex items-center gap-1.5 px-3 py-1.5 text-xs btn-clip"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               <span>RESET COUNTER</span>
@@ -181,4 +181,3 @@ export function TasbihView() {
     </div>
   )
 }
-

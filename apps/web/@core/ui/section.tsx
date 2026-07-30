@@ -72,7 +72,7 @@ export function SectionBadge({
 
   return (
     <div
-      className={`inline-flex items-center gap-3 px-3.5 py-1.5 ${c.bg} border-2 ${c.border} ${c.text} btn-clip text-xs font-black tracking-[0.25em] uppercase ${c.shadow}`}
+      className={`inline-flex items-center gap-3 px-3.5 py-1.5 ${c.bg} border-2 ${c.border} ${c.text} text-xs font-black tracking-[0.25em] uppercase btn-clip ${c.shadow}`}
     >
       <span
         className={`px-1.5 py-0.5 ${c.badgeBg} tag-clip font-black text-black`}

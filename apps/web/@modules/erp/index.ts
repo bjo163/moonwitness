@@ -19,11 +19,36 @@ export default defineModule({
   basePath: "/erp",
   defaultRoute: "dashboard",
   routes: [
-    { slug: "dashboard", label: "Dashboard", icon: "LayoutDashboard", component: ERPDashboardView },
-    { slug: "hadiths", label: "Hadith Management", icon: "BookOpen", component: ErpHadithsView },
-    { slug: "scriptures", label: "Scripture Hub", icon: "ScrollText", component: ErpScripturesView },
-    { slug: "users", label: "User Access", icon: "Users", component: ErpUsersView },
-    { slug: "analytics", label: "System Analytics", icon: "Activity", component: ErpAnalyticsView },
+    {
+      slug: "dashboard",
+      label: "Dashboard",
+      icon: "LayoutDashboard",
+      component: ERPDashboardView,
+    },
+    {
+      slug: "hadiths",
+      label: "Hadith Management",
+      icon: "BookOpen",
+      component: ErpHadithsView,
+    },
+    {
+      slug: "scriptures",
+      label: "Scripture Hub",
+      icon: "ScrollText",
+      component: ErpScripturesView,
+    },
+    {
+      slug: "users",
+      label: "User Access",
+      icon: "Users",
+      component: ErpUsersView,
+    },
+    {
+      slug: "analytics",
+      label: "System Analytics",
+      icon: "Activity",
+      component: ErpAnalyticsView,
+    },
   ],
 })
 
@@ -39,7 +64,11 @@ export const ERP_NAVIGATION = [
   { label: "Tasks", href: "/erp/tasks", icon: "CheckSquare" },
   { label: "Reports", href: "/erp/reports", icon: "BarChart3" },
   { label: "Community", href: "/erp/community", icon: "Users" },
-  { label: "Global Intelligence", href: "/erp/global-intelligence", icon: "Globe" },
+  {
+    label: "Global Intelligence",
+    href: "/erp/global-intelligence",
+    icon: "Globe",
+  },
 ]
 
 export const ERP_QUICK_LAUNCH = [
@@ -49,4 +78,3 @@ export const ERP_QUICK_LAUNCH = [
   { label: "Mission Control", href: "/erp/mission-control", icon: "Target" },
   { label: "Research Lab", href: "/erp/research", icon: "FlaskConical" },
 ]
-

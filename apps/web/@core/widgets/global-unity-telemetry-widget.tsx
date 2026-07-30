@@ -16,8 +16,13 @@ export function GlobalUnityTelemetryWidget() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setUnityIndex(() => +(BASE_UNITY_INDEX + Math.random() * UNITY_VARIATION_RANGE).toFixed(2))
-      setPrayersCount((prev) => prev + Math.floor(Math.random() * MAX_NEW_PRAYERS_STEP) + 1)
+      setUnityIndex(
+        () =>
+          +(BASE_UNITY_INDEX + Math.random() * UNITY_VARIATION_RANGE).toFixed(2)
+      )
+      setPrayersCount(
+        (prev) => prev + Math.floor(Math.random() * MAX_NEW_PRAYERS_STEP) + 1
+      )
     }, TELEMETRY_POLLING_INTERVAL_MS)
     return () => clearInterval(timer)
   }, [])

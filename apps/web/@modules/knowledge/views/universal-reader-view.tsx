@@ -1,7 +1,19 @@
 "use client"
 
 import { useState, useEffect, Suspense } from "react"
-import { ArrowLeft, BookOpen, ChevronDown, CheckCircle2, PlayCircle, Pause, Settings2, Info, Search, Bookmark, Share2 } from "lucide-react"
+import {
+  ArrowLeft,
+  BookOpen,
+  ChevronDown,
+  CheckCircle2,
+  PlayCircle,
+  Pause,
+  Settings2,
+  Info,
+  Search,
+  Bookmark,
+  Share2,
+} from "lucide-react"
 import Link from "next/link"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useGlobalAudio } from "@core/contexts/audio-context"
@@ -13,22 +25,24 @@ function ReaderContent({ id }: { id: string }) {
   const [isTajweedOn, setIsTajweedOn] = useState(false)
   const [isTransliterationOn, setIsTransliterationOn] = useState(true)
   const audio = useGlobalAudio()
-  
+
   const searchParams = useSearchParams()
   const router = useRouter()
-  const currentBook = searchParams.get('book') || "1"
-  const currentChapterStr = searchParams.get('chapter') || "1"
+  const currentBook = searchParams.get("book") || "1"
+  const currentChapterStr = searchParams.get("chapter") || "1"
 
   useEffect(() => {
     setIsLoading(true)
-    fetch(`/api/scriptures/${id}/read?book=${currentBook}&chapter=${currentChapterStr}`)
-      .then(res => res.json())
-      .then(json => {
+    fetch(
+      `/api/scriptures/${id}/read?book=${currentBook}&chapter=${currentChapterStr}`
+    )
+      .then((res) => res.json())
+      .then((json) => {
         setData(json.data)
         setIsLoading(false)
         window.scrollTo(0, 0)
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err)
         setIsLoading(false)
       })
@@ -36,30 +50,45 @@ function ReaderContent({ id }: { id: string }) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#040914] flex flex-col items-center justify-center text-white/50 space-y-4">
-        <BookOpen className="w-8 h-8 animate-pulse text-blue-500/50" />
-        <div className="text-xs uppercase tracking-widest font-bold">Unlocking Divine Codex...</div>
+      <div className="flex min-h-screen flex-col items-center justify-center space-y-4 bg-[#040914] text-white/50">
+        <BookOpen className="h-8 w-8 animate-pulse text-blue-500/50" />
+        <div className="text-xs font-bold tracking-widest uppercase">
+          Unlocking Divine Codex...
+        </div>
       </div>
     )
   }
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-[#040914] flex flex-col items-center justify-center text-white space-y-4">
+      <div className="flex min-h-screen flex-col items-center justify-center space-y-4 bg-[#040914] text-white">
         <p>Error loading scripture.</p>
-        <button onClick={() => router.back()} className="px-4 py-2 bg-white/10 rounded">Go Back</button>
+        <button
+          onClick={() => router.back()}
+          className="rounded bg-white/10 px-4 py-2"
+        >
+          Go Back
+        </button>
       </div>
     )
   }
 
-  const { 
-    scripture_name, scripture_arabic, scripture_tag, scripture_desc, stats, 
-    left_sidebar, right_sidebar, bottom_panels, 
-    book, verses, current_chapter 
+  const {
+    scripture_name,
+    scripture_arabic,
+    scripture_tag,
+    scripture_desc,
+    stats,
+    left_sidebar,
+    right_sidebar,
+    bottom_panels,
+    book,
+    verses,
+    current_chapter,
   } = data
 
-  const totalChapters = book.chapters_count || 1;
-  const currentChNum = parseInt(current_chapter) || 1;
+  const totalChapters = book.chapters_count || 1
+  const currentChNum = parseInt(current_chapter) || 1
 
   const navigateToChapter = (ch: number) => {
     if (ch >= 1 && ch <= totalChapters) {
@@ -68,65 +97,93 @@ function ReaderContent({ id }: { id: string }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#040914] text-white font-sans overflow-x-hidden">
-      
+    <div className="min-h-screen overflow-x-hidden bg-[#040914] font-sans text-white">
       {/* 1. TOP HEADER SECTION */}
-      <div className="border-b border-white/10 bg-[#040914]/80 backdrop-blur-xl sticky top-0 z-50">
+      <div className="sticky top-0 z-50 border-b border-white/10 bg-[#040914]/80 backdrop-blur-xl">
         {/* Master Header */}
-        <div className="px-6 py-4 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
-          <div className="flex-1 max-w-2xl">
-            <div className="flex items-center gap-4 mb-2">
-              <h1 className="text-3xl md:text-4xl font-black tracking-tight">{scripture_name}</h1>
-              {scripture_arabic && <span className="text-2xl font-serif text-amber-500">{scripture_arabic}</span>}
-              <span className="px-2 py-1 bg-teal-500/10 border border-teal-500/30 text-teal-400 text-[9px] font-bold tracking-widest rounded">{scripture_tag}</span>
+        <div className="flex flex-col items-start justify-between gap-4 px-6 py-4 md:flex-row md:items-center">
+          <div className="max-w-2xl flex-1">
+            <div className="mb-2 flex items-center gap-4">
+              <h1 className="text-3xl font-black tracking-tight md:text-4xl">
+                {scripture_name}
+              </h1>
+              {scripture_arabic && (
+                <span className="font-serif text-2xl text-amber-500">
+                  {scripture_arabic}
+                </span>
+              )}
+              <span className="rounded border border-teal-500/30 bg-teal-500/10 px-2 py-1 text-[9px] font-bold tracking-widest text-teal-400">
+                {scripture_tag}
+              </span>
             </div>
             <p className="text-sm text-white/60">{scripture_desc}</p>
           </div>
 
           <div className="flex flex-wrap items-center gap-6 text-xs text-white/50">
-            {stats && Object.entries(stats).map(([key, value]) => (
-              <div key={key} className="flex flex-col gap-1">
-                <span className="text-[10px] uppercase tracking-widest font-bold">{key}</span>
-                <span className="text-sm font-bold text-white">{value as React.ReactNode}</span>
-              </div>
-            ))}
+            {stats &&
+              Object.entries(stats).map(([key, value]) => (
+                <div key={key} className="flex flex-col gap-1">
+                  <span className="text-[10px] font-bold tracking-widest uppercase">
+                    {key}
+                  </span>
+                  <span className="text-sm font-bold text-white">
+                    {value as React.ReactNode}
+                  </span>
+                </div>
+              ))}
           </div>
         </div>
       </div>
 
       {/* 2. MAIN 3-COLUMN DASHBOARD */}
-      <div className="px-6 py-4 grid grid-cols-1 md:grid-cols-12 gap-4 max-w-[1920px] mx-auto">
-        
+      <div className="mx-auto grid max-w-[1920px] grid-cols-1 gap-4 px-6 py-4 md:grid-cols-12">
         {/* LEFT SIDEBAR: NAVIGATION */}
-        <div className="md:col-span-3 lg:col-span-2 space-y-6">
-          <div className="bg-[#0A1224] border border-white/5 rounded-xl p-4">
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-4">{left_sidebar.title}</h3>
-            
+        <div className="space-y-6 md:col-span-3 lg:col-span-2">
+          <div className="rounded-xl border border-white/5 bg-[#0A1224] p-4">
+            <h3 className="mb-4 text-[10px] font-black tracking-widest text-white/40 uppercase">
+              {left_sidebar.title}
+            </h3>
+
             <div className="relative mb-4">
-              <Search className="w-4 h-4 absolute left-3 top-2.5 text-white/30" />
-              <input type="text" placeholder="Search..." className="w-full bg-black/40 border border-white/10 rounded-lg pl-9 pr-3 py-2 text-xs focus:outline-none focus:border-blue-500/50" />
+              <Search className="absolute top-2.5 left-3 h-4 w-4 text-white/30" />
+              <input
+                type="text"
+                placeholder="Search..."
+                className="w-full rounded-lg border border-white/10 bg-black/40 py-2 pr-3 pl-9 text-xs focus:border-blue-500/50 focus:outline-none"
+              />
             </div>
 
-            <div className="space-y-1 max-h-[500px] overflow-y-auto custom-scrollbar pr-2">
+            <div className="custom-scrollbar max-h-[500px] space-y-1 overflow-y-auto pr-2">
               {left_sidebar.items.map((item: any) => {
-                const isActive = item.book_number.toString() === currentBook.toString()
+                const isActive =
+                  item.book_number.toString() === currentBook.toString()
                 return (
-                  <button 
+                  <button
                     key={item.id}
-                    onClick={() => router.push(`?book=${item.book_number}&chapter=1`)}
-                    className={`w-full text-left p-3 rounded-lg flex items-center justify-between transition-colors border ${
-                      isActive 
-                        ? 'bg-blue-500/10 border-blue-500/30' 
-                        : 'bg-transparent border-transparent hover:bg-white/5 hover:border-white/10'
+                    onClick={() =>
+                      router.push(`?book=${item.book_number}&chapter=1`)
+                    }
+                    className={`flex w-full items-center justify-between rounded-lg border p-3 text-left transition-colors ${
+                      isActive
+                        ? "border-blue-500/30 bg-blue-500/10"
+                        : "border-transparent bg-transparent hover:border-white/10 hover:bg-white/5"
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-bold ${isActive ? 'bg-blue-500/20 text-blue-400' : 'bg-white/5 text-white/40'}`}>
+                      <div
+                        className={`flex h-6 w-6 items-center justify-center rounded-md text-[10px] font-bold ${isActive ? "bg-blue-500/20 text-blue-400" : "bg-white/5 text-white/40"}`}
+                      >
                         {item.book_number}
                       </div>
                       <div className="flex flex-col">
-                        <span className={`text-xs font-bold ${isActive ? 'text-blue-400' : 'text-white/80'}`}>{item.name}</span>
-                        <span className="text-[9px] text-white/40">{item.subname}</span>
+                        <span
+                          className={`text-xs font-bold ${isActive ? "text-blue-400" : "text-white/80"}`}
+                        >
+                          {item.name}
+                        </span>
+                        <span className="text-[9px] text-white/40">
+                          {item.subname}
+                        </span>
                       </div>
                     </div>
                   </button>
@@ -137,54 +194,85 @@ function ReaderContent({ id }: { id: string }) {
         </div>
 
         {/* CENTER AREA: READER CANVAS */}
-        <div className="md:col-span-6 lg:col-span-7 flex flex-col gap-6">
-          
+        <div className="flex flex-col gap-6 md:col-span-6 lg:col-span-7">
           {/* Tabs */}
-          <div className="flex items-center gap-1 border-b border-white/10 overflow-x-auto custom-scrollbar pb-px">
-            {['OVERVIEW', 'READ & EXPLORE', 'THEMES & TOPICS', 'INSIGHTS', 'CONTEXT'].map((tab, i) => (
-              <button key={tab} className={`px-4 py-3 text-[10px] font-black uppercase tracking-widest whitespace-nowrap border-b-2 transition-colors ${i === 1 ? 'border-blue-500 text-blue-400' : 'border-transparent text-white/40 hover:text-white/80'}`}>
+          <div className="custom-scrollbar flex items-center gap-1 overflow-x-auto border-b border-white/10 pb-px">
+            {[
+              "OVERVIEW",
+              "READ & EXPLORE",
+              "THEMES & TOPICS",
+              "INSIGHTS",
+              "CONTEXT",
+            ].map((tab, i) => (
+              <button
+                key={tab}
+                className={`border-b-2 px-4 py-3 text-[10px] font-black tracking-widest whitespace-nowrap uppercase transition-colors ${i === 1 ? "border-blue-500 text-blue-400" : "border-transparent text-white/40 hover:text-white/80"}`}
+              >
                 {tab}
               </button>
             ))}
           </div>
 
-          <div className="bg-[#0A1224] border border-white/5 rounded-xl p-5 md:p-6 relative overflow-hidden">
+          <div className="relative overflow-hidden rounded-xl border border-white/5 bg-[#0A1224] p-5 md:p-6">
             {/* Header Content */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-6 pb-4 border-b border-white/10">
+            <div className="mb-6 flex flex-col items-start justify-between gap-3 border-b border-white/10 pb-4 md:flex-row md:items-center">
               <div>
-                <span className="px-2 py-1 bg-white/5 rounded text-[10px] font-bold text-amber-500 tracking-widest uppercase mb-2 inline-block">BOOK {currentBook}</span>
-                <h2 className="text-2xl font-black flex items-center gap-3">
-                  {book.name} <span className="text-amber-500/80 font-serif">{book.original_name}</span>
+                <span className="mb-2 inline-block rounded bg-white/5 px-2 py-1 text-[10px] font-bold tracking-widest text-amber-500 uppercase">
+                  BOOK {currentBook}
+                </span>
+                <h2 className="flex items-center gap-3 text-2xl font-black">
+                  {book.name}{" "}
+                  <span className="font-serif text-amber-500/80">
+                    {book.original_name}
+                  </span>
                 </h2>
-                <div className="flex items-center gap-4 mt-2 text-xs font-bold text-white/40">
+                <div className="mt-2 flex items-center gap-4 text-xs font-bold text-white/40">
                   <span>{book.summary}</span>
                   {book.meaning && (
                     <>
                       <span className="text-white/20">•</span>
-                      <span className="text-amber-500/80">Arti: {book.meaning}</span>
+                      <span className="text-amber-500/80">
+                        Arti: {book.meaning}
+                      </span>
                     </>
                   )}
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 {book.audio_url && (
-                  <button 
+                  <button
                     onClick={() => {
-                      if (audio.isPlaying && audio.currentTrack?.url === book.audio_url) {
-                        audio.pause()
+                      const a = audio as any
+                      if (
+                        a.isPlaying &&
+                        a.currentTrack?.url === book.audio_url
+                      ) {
+                        a.pause?.() || a.togglePlay?.()
                       } else {
-                        audio.play({ url: book.audio_url, name: book.name, number: currentChNum })
+                        a.play({
+                          url: book.audio_url,
+                          name: book.name,
+                          number: currentChNum,
+                        })
                       }
                     }}
-                    className={`flex items-center gap-2 px-4 py-2 ${audio.isPlaying && audio.currentTrack?.url === book.audio_url ? 'bg-blue-500/20 text-blue-400 border-blue-500/50' : 'bg-white/5 hover:bg-white/10 text-white border-white/10'} border rounded-lg text-xs font-bold transition-colors`}
+                    className={`flex items-center gap-2 px-4 py-2 ${(audio as any).isPlaying && (audio as any).currentTrack?.url === book.audio_url ? "border-blue-500/50 bg-blue-500/20 text-blue-400" : "border-white/10 bg-white/5 text-white hover:bg-white/10"} rounded-lg border text-xs font-bold transition-colors`}
                   >
-                    {audio.isPlaying && audio.currentTrack?.url === book.audio_url ? <Pause className="w-4 h-4" /> : <PlayCircle className="w-4 h-4" />} 
-                    {audio.isPlaying && audio.currentTrack?.url === book.audio_url ? "Playing..." : "Listen Audio"}
+                    {(audio as any).isPlaying &&
+                    (audio as any).currentTrack?.url === book.audio_url ? (
+                      <Pause className="h-4 w-4" />
+                    ) : (
+                      <PlayCircle className="h-4 w-4" />
+                    )}
+                    {(audio as any).isPlaying &&
+                    (audio as any).currentTrack?.url === book.audio_url
+                      ? "Playing..."
+                      : "Listen Audio"}
                   </button>
                 )}
-                <button className="w-9 h-9 flex items-center justify-center bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-colors">
-                  <Bookmark className="w-4 h-4 text-white/60" />
+                <button className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 transition-colors hover:bg-white/10">
+                  <Bookmark className="h-4 w-4 text-white/60" />
                 </button>
               </div>
             </div>
@@ -192,38 +280,57 @@ function ReaderContent({ id }: { id: string }) {
             {/* Verses Column Layout */}
             <div className="space-y-6">
               {/* Header Row */}
-              <div className="grid grid-cols-12 gap-4 pb-2 border-b border-white/5 text-[9px] font-black uppercase tracking-widest text-white/30">
+              <div className="grid grid-cols-12 gap-4 border-b border-white/5 pb-2 text-[9px] font-black tracking-widest text-white/30 uppercase">
                 <div className="col-span-1 text-center">#</div>
-                <div className="col-span-5 pl-2">Transliteration & Translation</div>
-                <div className="col-span-6 text-right pr-2">Original Text</div>
+                <div className="col-span-5 pl-2">
+                  Transliteration & Translation
+                </div>
+                <div className="col-span-6 pr-2 text-right">Original Text</div>
               </div>
 
               {verses.map((verse: any) => {
-                const isRtl = verse.text_original && (/[\u0590-\u05FF]/.test(verse.text_original) || /[\u0600-\u06FF]/.test(verse.text_original));
+                const isRtl =
+                  verse.text_original &&
+                  (/[\u0590-\u05FF]/.test(verse.text_original) ||
+                    /[\u0600-\u06FF]/.test(verse.text_original))
                 return (
-                  <div key={verse.id} className="grid grid-cols-12 gap-4 items-start group">
+                  <div
+                    key={verse.id}
+                    className="group grid grid-cols-12 items-start gap-4"
+                  >
                     <div className="col-span-1 flex justify-center pt-2">
-                      <div className="w-6 h-6 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[10px] font-bold text-white/50 group-hover:border-blue-500/30 transition-colors">
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full border border-white/10 bg-white/5 text-[10px] font-bold text-white/50 transition-colors group-hover:border-blue-500/30">
                         {verse.verse_number}
                       </div>
                     </div>
-                    
+
                     <div className="col-span-5 space-y-2 pt-1 pl-2">
                       {isTransliterationOn && verse.text_transliteration && (
-                        <p className="text-xs font-mono text-blue-300/70">{verse.text_transliteration}</p>
+                        <p className="font-mono text-xs text-blue-300/70">
+                          {verse.text_transliteration}
+                        </p>
                       )}
-                      <p className="text-sm font-serif text-white/90 leading-relaxed">{verse.text_translated}</p>
+                      <p className="font-serif text-sm leading-relaxed text-white/90">
+                        {verse.text_translated}
+                      </p>
                     </div>
 
-                    <div className="col-span-6 text-right pt-1 pr-2">
-                      {isTajweedOn && verse.text_tajweed && verse.text_tajweed !== verse.text_original ? (
-                        <div 
-                           className="text-2xl font-serif text-amber-400/90 leading-[2.5] tajweed-container" 
-                           dir={isRtl ? 'rtl' : 'ltr'}
-                           dangerouslySetInnerHTML={{ __html: verse.text_tajweed }}
+                    <div className="col-span-6 pt-1 pr-2 text-right">
+                      {isTajweedOn &&
+                      verse.text_tajweed &&
+                      verse.text_tajweed !== verse.text_original ? (
+                        <div
+                          className="tajweed-container font-serif text-2xl leading-[2.5] text-amber-400/90"
+                          dir={isRtl ? "rtl" : "ltr"}
+                          dangerouslySetInnerHTML={{
+                            __html: verse.text_tajweed,
+                          }}
                         />
                       ) : (
-                        <p className="text-2xl font-serif text-amber-400/90 leading-[2.5]" dir={isRtl ? 'rtl' : 'ltr'}>
+                        <p
+                          className="font-serif text-2xl leading-[2.5] text-amber-400/90"
+                          dir={isRtl ? "rtl" : "ltr"}
+                        >
                           {verse.text_original}
                         </p>
                       )}
@@ -234,82 +341,123 @@ function ReaderContent({ id }: { id: string }) {
             </div>
 
             {/* Bottom Toolbar & Pagination */}
-            <div className="mt-12 pt-6 border-t border-white/10 flex items-center justify-between">
+            <div className="mt-12 flex items-center justify-between border-t border-white/10 pt-6">
               <div className="flex flex-wrap gap-2">
-                <button onClick={() => setIsTransliterationOn(!isTransliterationOn)} className={`px-3 py-1.5 border rounded text-[10px] font-bold transition-colors ${isTransliterationOn ? 'bg-blue-500/20 border-blue-500/30 text-blue-400' : 'bg-black/40 border-white/10 text-white/60'}`}>
-                   Transliteration: {isTransliterationOn ? 'ON' : 'OFF'}
+                <button
+                  onClick={() => setIsTransliterationOn(!isTransliterationOn)}
+                  className={`rounded border px-3 py-1.5 text-[10px] font-bold transition-colors ${isTransliterationOn ? "border-blue-500/30 bg-blue-500/20 text-blue-400" : "border-white/10 bg-black/40 text-white/60"}`}
+                >
+                  Transliteration: {isTransliterationOn ? "ON" : "OFF"}
                 </button>
-                {verses.some((v: any) => v.text_tajweed && v.text_tajweed !== v.text_original) && (
-                  <button onClick={() => setIsTajweedOn(!isTajweedOn)} className={`px-3 py-1.5 border rounded text-[10px] font-bold transition-colors ${isTajweedOn ? 'bg-amber-500/20 border-amber-500/30 text-amber-400' : 'bg-black/40 border-white/10 text-white/60'}`}>
-                     Tajweed Colors: {isTajweedOn ? 'ON' : 'OFF'}
+                {verses.some(
+                  (v: any) =>
+                    v.text_tajweed && v.text_tajweed !== v.text_original
+                ) && (
+                  <button
+                    onClick={() => setIsTajweedOn(!isTajweedOn)}
+                    className={`rounded border px-3 py-1.5 text-[10px] font-bold transition-colors ${isTajweedOn ? "border-amber-500/30 bg-amber-500/20 text-amber-400" : "border-white/10 bg-black/40 text-white/60"}`}
+                  >
+                    Tajweed Colors: {isTajweedOn ? "ON" : "OFF"}
                   </button>
                 )}
-                <button className="px-3 py-1.5 bg-black/40 border border-white/10 rounded text-[10px] font-bold text-white/60">Tafsir: ON</button>
+                <button className="rounded border border-white/10 bg-black/40 px-3 py-1.5 text-[10px] font-bold text-white/60">
+                  Tafsir: ON
+                </button>
               </div>
 
               {totalChapters > 1 && (
                 <div className="flex items-center gap-2">
-                  <button onClick={() => navigateToChapter(currentChNum - 1)} disabled={currentChNum <= 1} className="px-3 py-1.5 hover:bg-white/10 rounded-lg text-xs font-bold disabled:opacity-30 border border-white/10">Prev</button>
-                  <span className="text-xs font-bold px-2 text-amber-500">Ch. {currentChNum} / {totalChapters}</span>
-                  <button onClick={() => navigateToChapter(currentChNum + 1)} disabled={currentChNum >= totalChapters} className="px-3 py-1.5 hover:bg-white/10 rounded-lg text-xs font-bold disabled:opacity-30 border border-white/10">Next</button>
+                  <button
+                    onClick={() => navigateToChapter(currentChNum - 1)}
+                    disabled={currentChNum <= 1}
+                    className="rounded-lg border border-white/10 px-3 py-1.5 text-xs font-bold hover:bg-white/10 disabled:opacity-30"
+                  >
+                    Prev
+                  </button>
+                  <span className="px-2 text-xs font-bold text-amber-500">
+                    Ch. {currentChNum} / {totalChapters}
+                  </span>
+                  <button
+                    onClick={() => navigateToChapter(currentChNum + 1)}
+                    disabled={currentChNum >= totalChapters}
+                    className="rounded-lg border border-white/10 px-3 py-1.5 text-xs font-bold hover:bg-white/10 disabled:opacity-30"
+                  >
+                    Next
+                  </button>
                 </div>
               )}
             </div>
-
           </div>
         </div>
 
         {/* RIGHT SIDEBAR: INSIGHTS & FACTS */}
-        <div className="md:col-span-3 lg:col-span-3 space-y-6">
-          
-          <div className="bg-transparent border border-white/10 rounded-xl p-5">
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-blue-400 mb-4">QUICK FACTS</h3>
+        <div className="space-y-6 md:col-span-3 lg:col-span-3">
+          <div className="rounded-xl border border-white/10 bg-transparent p-5">
+            <h3 className="mb-4 text-[10px] font-black tracking-widest text-blue-400 uppercase">
+              QUICK FACTS
+            </h3>
             <div className="space-y-3">
               {right_sidebar.quick_facts?.map((f: any, i: number) => (
-                <div key={i} className="flex justify-between items-start text-xs border-b border-white/5 pb-2">
+                <div
+                  key={i}
+                  className="flex items-start justify-between border-b border-white/5 pb-2 text-xs"
+                >
                   <span className="text-white/40">{f.label}</span>
-                  <span className="text-white/90 font-medium text-right w-1/2">{f.value}</span>
+                  <span className="w-1/2 text-right font-medium text-white/90">
+                    {f.value}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="bg-blue-900/10 border border-blue-500/20 rounded-xl p-5">
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-blue-400 mb-4 flex items-center gap-2">
-              <Info className="w-3 h-3" /> INSIGHTS
+          <div className="rounded-xl border border-blue-500/20 bg-blue-900/10 p-5">
+            <h3 className="mb-4 flex items-center gap-2 text-[10px] font-black tracking-widest text-blue-400 uppercase">
+              <Info className="h-3 w-3" /> INSIGHTS
             </h3>
             <div className="space-y-4">
               {right_sidebar.insights?.map((f: any, i: number) => (
                 <div key={i}>
-                  <span className="text-[10px] text-amber-500 font-bold block mb-1">{f.label}</span>
-                  <span className="text-xs text-white/70 leading-relaxed">{f.value}</span>
+                  <span className="mb-1 block text-[10px] font-bold text-amber-500">
+                    {f.label}
+                  </span>
+                  <span className="text-xs leading-relaxed text-white/70">
+                    {f.value}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
-
         </div>
       </div>
 
       {/* 3. BOTTOM PANELS (EXTRA FEATURES) */}
-      <div className="px-6 py-5 border-t border-white/10 bg-black/40">
-        <div className="max-w-[1920px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-4">
-          
+      <div className="border-t border-white/10 bg-black/40 px-6 py-5">
+        <div className="mx-auto grid max-w-[1920px] grid-cols-1 gap-4 md:grid-cols-4">
           <div>
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-white/50 mb-4">THEMES & TOPICS</h4>
+            <h4 className="mb-4 text-[10px] font-black tracking-widest text-white/50 uppercase">
+              THEMES & TOPICS
+            </h4>
             <div className="flex flex-wrap gap-2">
               {bottom_panels.themes?.map((t: string, i: number) => (
-                <span key={i} className="px-2 py-1 bg-white/5 border border-white/10 rounded text-[9px] font-bold text-white/60 hover:text-white hover:border-blue-500/50 cursor-pointer transition-colors">{t}</span>
+                <span
+                  key={i}
+                  className="cursor-pointer rounded border border-white/10 bg-white/5 px-2 py-1 text-[9px] font-bold text-white/60 transition-colors hover:border-blue-500/50 hover:text-white"
+                >
+                  {t}
+                </span>
               ))}
             </div>
           </div>
 
           <div>
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-white/50 mb-4">RELATED VERSES</h4>
+            <h4 className="mb-4 text-[10px] font-black tracking-widest text-white/50 uppercase">
+              RELATED VERSES
+            </h4>
             <div className="space-y-2">
               {bottom_panels.related?.map((r: any, i: number) => (
                 <div key={i} className="text-xs">
-                  <span className="text-blue-400 font-bold mr-2">{r.ref}</span>
+                  <span className="mr-2 font-bold text-blue-400">{r.ref}</span>
                   <span className="text-white/50">{r.desc}</span>
                 </div>
               ))}
@@ -317,35 +465,45 @@ function ReaderContent({ id }: { id: string }) {
           </div>
 
           <div>
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-white/50 mb-4">TAFSIR HIGHLIGHT</h4>
-            <p className="text-xs text-white/60 italic leading-relaxed border-l-2 border-amber-500 pl-3">
+            <h4 className="mb-4 text-[10px] font-black tracking-widest text-white/50 uppercase">
+              TAFSIR HIGHLIGHT
+            </h4>
+            <p className="border-l-2 border-amber-500 pl-3 text-xs leading-relaxed text-white/60 italic">
               "{bottom_panels.tafsir_highlight?.text}"
-              <span className="block mt-2 font-bold text-white/40 not-italic">— {bottom_panels.tafsir_highlight?.author}</span>
+              <span className="mt-2 block font-bold text-white/40 not-italic">
+                — {bottom_panels.tafsir_highlight?.author}
+              </span>
             </p>
           </div>
 
           <div>
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-white/50 mb-4">FEATURES</h4>
-            <ul className="text-xs text-white/60 space-y-2">
+            <h4 className="mb-4 text-[10px] font-black tracking-widest text-white/50 uppercase">
+              FEATURES
+            </h4>
+            <ul className="space-y-2 text-xs text-white/60">
               {bottom_panels.science?.map((s: string, i: number) => (
                 <li key={i} className="flex items-start gap-2">
-                  <CheckCircle2 className="w-3 h-3 text-teal-500 mt-0.5" />
+                  <CheckCircle2 className="mt-0.5 h-3 w-3 text-teal-500" />
                   <span>{s}</span>
                 </li>
               ))}
             </ul>
           </div>
-
         </div>
       </div>
-
     </div>
   )
 }
 
 export function UniversalReaderView({ id }: { id: string }) {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#040914] text-white p-8">Loading Reader...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#040914] p-8 text-white">
+          Loading Reader...
+        </div>
+      }
+    >
       <ReaderContent id={id} />
     </Suspense>
   )

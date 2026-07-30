@@ -14,8 +14,5 @@ export default defineModule({
   navPlacement: "HIDDEN",
   basePath: "",
   defaultRoute: "home",
-  routes: [
-    { slug: "home", label: "HOME", icon: "Home", component: HomeView },
-  ],
+  routes: [{ slug: "home", label: "HOME", icon: "Home", component: HomeView }],
 })
-

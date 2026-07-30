@@ -20,4 +20,3 @@ export default defineModule({
     { slug: "profile", label: "Profile", icon: "User", component: ProfileView },
   ],
 })
-

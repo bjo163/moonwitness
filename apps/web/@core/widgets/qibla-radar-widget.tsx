@@ -135,7 +135,9 @@ export function QiblaRadarWidget() {
       const currentMins = now.getHours() * MINUTES_PER_HOUR + now.getMinutes()
       const currentSecs = currentMins * SECONDS_PER_MINUTE + now.getSeconds()
 
-      let target = schedule.find((p) => p.mins * SECONDS_PER_MINUTE > currentSecs)
+      let target = schedule.find(
+        (p) => p.mins * SECONDS_PER_MINUTE > currentSecs
+      )
       let isNextDay = false
 
       if (!target) {
@@ -150,7 +152,9 @@ export function QiblaRadarWidget() {
 
       const diffSecs = Math.max(0, targetSecs - currentSecs)
       const hoursLeft = Math.floor(diffSecs / SECONDS_PER_HOUR)
-      const minsLeft = Math.floor((diffSecs % SECONDS_PER_HOUR) / MINUTES_PER_HOUR)
+      const minsLeft = Math.floor(
+        (diffSecs % SECONDS_PER_HOUR) / MINUTES_PER_HOUR
+      )
       const secsLeft = diffSecs % SECONDS_PER_MINUTE
 
       setNextPrayerName(target.name)

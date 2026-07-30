@@ -29,7 +29,7 @@ export function MoonwitnessKnowledgeFramework() {
         {/* OUTER SCI-FI DIAGNOSTIC FRAME (From Image 3 perimeter casing) */}
         <Panel className="bg-space/90 relative p-6 shadow-[0_0_50px_rgba(0,200,255,0.18)] backdrop-blur-xl transition-all duration-700 ease-out">
           {/* Top Frame Telemetry Label */}
-          <div className="bg-space btn-clip absolute -top-3 left-1/2 z-50 -translate-x-1/2 border border-primary/50 px-6 py-0.5 text-[10px] font-black tracking-[0.3em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.4)]">
+          <div className="bg-space absolute -top-3 left-1/2 z-50 -translate-x-1/2 border border-primary/50 px-6 py-0.5 text-[10px] font-black tracking-[0.3em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.4)] btn-clip">
             ─── KNOWLEDGE CORE ───
           </div>
 

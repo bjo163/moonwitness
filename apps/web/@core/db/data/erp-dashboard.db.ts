@@ -102,7 +102,8 @@ export const MOCK_ERP_DASHBOARD = {
     {
       id: "kf1",
       category: "Qur'an",
-      title: "وَفِي خَلْقِ السَّمَاوَاتِ وَالْأَرْضِ وَاخْتِلَافِ اللَّيْلِ وَالنَّهَارِ لَآيَاتٍ لِّأُولِي الْأَلْبَابِ",
+      title:
+        "وَفِي خَلْقِ السَّمَاوَاتِ وَالْأَرْضِ وَاخْتِلَافِ اللَّيْلِ وَالنَّهَارِ لَآيَاتٍ لِّأُولِي الْأَلْبَابِ",
       subtitle: "Surah Al Imran (3:190)",
       time: "Today, 14:30 WIB",
     },
@@ -147,9 +148,24 @@ export const MOCK_ERP_DASHBOARD = {
   tasksOverview: {
     stats: { total: 12, today: 5, tomorrow: 3, overdue: 2, completed: 2 },
     list: [
-      { id: "t1", title: "Study Surah Al-Mulk", due: "Today", status: "pending" },
-      { id: "t2", title: "Complete moon observation", due: "Today", status: "done" },
-      { id: "t3", title: "Review AI research paper", due: "Tomorrow", status: "pending" },
+      {
+        id: "t1",
+        title: "Study Surah Al-Mulk",
+        due: "Today",
+        status: "pending",
+      },
+      {
+        id: "t2",
+        title: "Complete moon observation",
+        due: "Today",
+        status: "done",
+      },
+      {
+        id: "t3",
+        title: "Review AI research paper",
+        due: "Tomorrow",
+        status: "pending",
+      },
     ],
   },
   recentActivity: [

@@ -16,7 +16,17 @@ export default defineModule({
   basePath: "/astronomy",
   defaultRoute: "events",
   routes: [
-    { slug: "events", label: "Celestial Events", icon: "Telescope", component: CelestialEventsView },
-    { slug: "divine", label: "Divine Astronomy", icon: "Orbit", component: DivineAstronomyView },
+    {
+      slug: "events",
+      label: "Celestial Events",
+      icon: "Telescope",
+      component: CelestialEventsView,
+    },
+    {
+      slug: "divine",
+      label: "Divine Astronomy",
+      icon: "Orbit",
+      component: DivineAstronomyView,
+    },
   ],
 })

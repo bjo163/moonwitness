@@ -3,7 +3,15 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Orbit, Menu, X, LogOut, User as UserIcon, ShieldCheck, Terminal } from "lucide-react"
+import {
+  Orbit,
+  Menu,
+  X,
+  LogOut,
+  User as UserIcon,
+  ShieldCheck,
+  Terminal,
+} from "lucide-react"
 import { buildGlobalNavigation } from "@modules/index"
 import { AutoAvatar } from "@workspace/auto-avatar"
 
@@ -34,12 +42,16 @@ export function Navbar() {
     const checkProfile = () => {
       const stored = localStorage.getItem("mw_user_profile")
       if (stored) {
-        try { setUserProfile(JSON.parse(stored) as UserProfileData) } catch { /* ignore parsing errors */ }
+        try {
+          setUserProfile(JSON.parse(stored) as UserProfileData)
+        } catch {
+          /* ignore parsing errors */
+        }
       } else {
         setUserProfile(null)
       }
     }
-    
+
     checkProfile()
     window.addEventListener("storage", checkProfile)
     return () => window.removeEventListener("storage", checkProfile)
@@ -50,9 +62,17 @@ export function Navbar() {
     if (pathname !== "/home" && pathname !== "/") return
 
     const handleScroll = () => {
-      const sections = ["hero", "observatory", "knowledge", "history", "astronomy", "analytics", "mission"]
+      const sections = [
+        "hero",
+        "observatory",
+        "knowledge",
+        "history",
+        "astronomy",
+        "analytics",
+        "mission",
+      ]
       let currentSection = "home"
-      
+
       for (const id of sections) {
         const el = document.getElementById(id)
         if (el) {
@@ -71,12 +91,16 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll)
     // Initialize on mount
     setTimeout(handleScroll, 100)
-    
+
     return () => window.removeEventListener("scroll", handleScroll)
   }, [pathname])
 
   // Hide global navbar on dedicated system portals
-  if (pathname?.startsWith("/erp") || pathname?.startsWith("/console") || pathname?.startsWith("/auth")) {
+  if (
+    pathname?.startsWith("/erp") ||
+    pathname?.startsWith("/console") ||
+    pathname?.startsWith("/auth")
+  ) {
     return null
   }
 
@@ -96,7 +120,8 @@ export function Navbar() {
     label: string
   ) => {
     if (pathname === "/home") {
-      const targetId = label.toLowerCase() === "home" ? "hero" : label.toLowerCase()
+      const targetId =
+        label.toLowerCase() === "home" ? "hero" : label.toLowerCase()
       const el = document.getElementById(targetId)
       if (el) {
         e.preventDefault()
@@ -132,10 +157,10 @@ export function Navbar() {
             <Orbit className="h-5 w-5 text-cyan-400 drop-shadow-[0_0_8px_#00F0FF] transition-transform duration-300 group-hover:scale-110" />
           </div>
           <div>
-            <div className="whitespace-nowrap text-sm font-black tracking-widest text-white uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.7)] sm:text-base">
+            <div className="text-sm font-black tracking-widest whitespace-nowrap text-white uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.7)] sm:text-base">
               MOONWITNESS OS
             </div>
-            <div className="whitespace-nowrap font-sans text-[9px] font-semibold tracking-[0.2em] text-cyan-300 uppercase">
+            <div className="font-sans text-[9px] font-semibold tracking-[0.2em] whitespace-nowrap text-cyan-300 uppercase">
               GLOBAL DIVINE OBSERVATORY
             </div>
           </div>
@@ -149,8 +174,11 @@ export function Navbar() {
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href, link.label)}
                 className={`flex items-center gap-1 transition-colors duration-300 ${
-                  (pathname === "/home" && activeSection === link.label.toLowerCase()) ||
-                  (pathname !== "/home" && (pathname === link.href || pathname?.startsWith(link.href + "/")))
+                  (pathname === "/home" &&
+                    activeSection === link.label.toLowerCase()) ||
+                  (pathname !== "/home" &&
+                    (pathname === link.href ||
+                      pathname?.startsWith(link.href + "/")))
                     ? "text-cyan-300"
                     : "text-primary hover:text-white"
                 }`}
@@ -171,7 +199,8 @@ export function Navbar() {
                     />
                   </svg>
                 )}
-                {((pathname === "/home" && activeSection === link.label.toLowerCase()) ||
+                {((pathname === "/home" &&
+                  activeSection === link.label.toLowerCase()) ||
                   (pathname !== "/home" && pathname === link.href)) && (
                   <span className="absolute bottom-0 left-0 h-[1px] w-full bg-cyan-400 shadow-[0_0_8px_#00F0FF]" />
                 )}
@@ -207,16 +236,24 @@ export function Navbar() {
           <div className="bg-space/80 relative flex items-center gap-4 rounded-full border border-cyan-500/20 px-4 py-1.5 shadow-[0_0_15px_rgba(0,240,255,0.05)] backdrop-blur-md">
             {userProfile ? (
               <>
-                <button 
+                <button
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                   className="group flex items-center gap-3 transition-colors hover:text-cyan-300"
                 >
-                  <AutoAvatar seed={userProfile?.name || "Anonymous"} size={36} />
-                  <div className="flex flex-col items-start font-mono text-left tracking-widest uppercase">
+                  <AutoAvatar
+                    seed={userProfile?.name || "Anonymous"}
+                    size={36}
+                  />
+                  <div className="flex flex-col items-start text-left font-mono tracking-widest uppercase">
                     <span className="text-[9px] font-bold text-white group-hover:text-cyan-300">
-                      {userProfile.name?.substring(0, MAX_NAME_DISPLAY_LENGTH) || "PLAYER"}
+                      {userProfile.name?.substring(
+                        0,
+                        MAX_NAME_DISPLAY_LENGTH
+                      ) || "PLAYER"}
                     </span>
-                    <span className="text-[7px] text-cyan-500">{userProfile.role || "PUBLIC"}</span>
+                    <span className="text-[7px] text-cyan-500">
+                      {userProfile.role || "PUBLIC"}
+                    </span>
                   </div>
                 </button>
 
@@ -226,9 +263,9 @@ export function Navbar() {
                     <div className="mb-2 border-b border-white/10 pb-2 pl-2 font-mono text-[9px] text-white/50 uppercase">
                       SYSTEM ACTIONS
                     </div>
-                    
+
                     <div className="flex flex-col gap-1">
-                      <Link 
+                      <Link
                         href="/auth/profile"
                         onClick={() => setProfileDropdownOpen(false)}
                         className="flex items-center gap-3 rounded-lg px-3 py-2 text-[10px] font-bold text-cyan-400 transition-colors hover:bg-cyan-500/10 hover:text-cyan-300"
@@ -236,15 +273,15 @@ export function Navbar() {
                         <UserIcon className="h-4 w-4" /> PLAYER IDENTITY
                       </Link>
 
-                      <Link 
+                      <Link
                         href="/erp/dashboard"
                         onClick={() => setProfileDropdownOpen(false)}
                         className="flex items-center gap-3 rounded-lg px-3 py-2 text-[10px] font-bold text-fuchsia-400 transition-colors hover:bg-fuchsia-500/10 hover:text-fuchsia-300"
                       >
                         <ShieldCheck className="h-4 w-4" /> ENTER ERP
                       </Link>
-                      
-                      <Link 
+
+                      <Link
                         href="/console/terminal"
                         onClick={() => setProfileDropdownOpen(false)}
                         className="flex items-center gap-3 rounded-lg px-3 py-2 text-[10px] font-bold text-emerald-400 transition-colors hover:bg-emerald-500/10 hover:text-emerald-300"
@@ -252,21 +289,23 @@ export function Navbar() {
                         <Terminal className="h-4 w-4" /> DEVELOPER CONSOLE
                       </Link>
 
-                      <button 
+                      <button
                         disabled
-                        className="flex items-center justify-between rounded-lg px-3 py-2 text-[10px] font-bold text-primary/40 opacity-70 cursor-not-allowed"
+                        className="flex cursor-not-allowed items-center justify-between rounded-lg px-3 py-2 text-[10px] font-bold text-primary/40 opacity-70"
                       >
                         <div className="flex items-center gap-3">
                           <Orbit className="h-4 w-4" /> UNIVERSE
                         </div>
-                        <span className="text-[7px] text-primary/30 border border-primary/20 px-1.5 py-0.5 rounded-sm">COMING SOON</span>
+                        <span className="rounded-sm border border-primary/20 px-1.5 py-0.5 text-[7px] text-primary/30">
+                          COMING SOON
+                        </span>
                       </button>
 
                       <div className="my-1 border-t border-white/10"></div>
 
                       <button
                         onClick={handleLogout}
-                        className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-[10px] font-bold text-danger transition-colors hover:bg-danger/10 hover:text-red-400"
+                        className="text-danger hover:bg-danger/10 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-[10px] font-bold transition-colors hover:text-red-400"
                       >
                         <LogOut className="h-4 w-4" /> SYSTEM LOGOUT
                       </button>
@@ -275,11 +314,13 @@ export function Navbar() {
                 )}
               </>
             ) : (
-              <Link 
+              <Link
                 href="/auth/login"
                 className="group flex items-center gap-2 font-mono text-[10px] tracking-widest uppercase transition-colors hover:text-cyan-300"
               >
-                <span className="text-primary group-hover:text-cyan-400">MISSION STATUS</span>
+                <span className="text-primary group-hover:text-cyan-400">
+                  MISSION STATUS
+                </span>
                 <span className="flex items-center gap-1.5 font-bold text-cyan-400 drop-shadow-[0_0_5px_#00F0FF] group-hover:text-white">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400 shadow-[0_0_8px_#00F0FF] group-hover:bg-white" />
                   ONLINE

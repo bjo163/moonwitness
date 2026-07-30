@@ -18,7 +18,7 @@ import {
   Wifi,
   Anchor,
   Cloud,
-  DollarSign
+  DollarSign,
 } from "lucide-react"
 
 import { useOSStore } from "@core/store/os-store"
@@ -53,24 +53,47 @@ import { IntelBriefingWidget } from "@core/widgets/intelligence/intel-briefing-w
 
 const PROGRESS_SEGMENTS = 20
 
-type MonitoringCategory = "ALL" | "SEISMIC" | "AVIATION" | "MARITIME" | "SPACE_WEATHER" | "CLIMATE" | "SPIRITUAL" | "DEMOGRAPHIC" | "INTERNET" | "CYBER" | "ECONOMY"
+type MonitoringCategory =
+  | "ALL"
+  | "SEISMIC"
+  | "AVIATION"
+  | "MARITIME"
+  | "SPACE_WEATHER"
+  | "CLIMATE"
+  | "SPIRITUAL"
+  | "DEMOGRAPHIC"
+  | "INTERNET"
+  | "CYBER"
+  | "ECONOMY"
 
 import { useGlobalMonitoring } from "@core/api/hooks/use-global-monitoring"
 
 export function GlobalMonitoringView() {
   const [clockWIB, setClockWIB] = useState("00:00:00")
-  const [activeCategory, setActiveCategory] = useState<MonitoringCategory>("ALL")
-  const { earthquakes, globalPrayers, issPosition, spaceWeather, flights, trends, cyberAttacks, ships, isLoading } = useGlobalMonitoring()
+  const [activeCategory, setActiveCategory] =
+    useState<MonitoringCategory>("ALL")
+  const {
+    earthquakes,
+    globalPrayers,
+    issPosition,
+    spaceWeather,
+    flights,
+    trends,
+    cyberAttacks,
+    ships,
+    isLoading,
+  } = useGlobalMonitoring()
   const { tickClock, systemStatus } = useOSStore()
 
   // Centralized clock ticking logic synced to the store
   useEffect(() => {
     const tick = () => {
       const now = new Date()
-      const timeString = now.toLocaleTimeString("en-US", {
+      const timeString =
+        now.toLocaleTimeString("en-US", {
           hour12: false,
           timeZone: "Asia/Jakarta",
-      }) + " WIB"
+        }) + " WIB"
       setClockWIB(timeString)
       tickClock(timeString)
     }
@@ -80,11 +103,18 @@ export function GlobalMonitoringView() {
   }, [tickClock])
 
   // Filter map data based on category
-  const mapEarthquakes = (activeCategory === "ALL" || activeCategory === "SEISMIC") ? earthquakes : []
-  const mapFlights = (activeCategory === "ALL" || activeCategory === "AVIATION") ? flights : []
-  const mapIss = (activeCategory === "ALL" || activeCategory === "SPACE_WEATHER") ? issPosition : null
-  const mapCyber = (activeCategory === "ALL" || activeCategory === "CYBER") ? cyberAttacks : []
-  const mapShips = (activeCategory === "ALL" || activeCategory === "MARITIME") ? ships : []
+  const mapEarthquakes =
+    activeCategory === "ALL" || activeCategory === "SEISMIC" ? earthquakes : []
+  const mapFlights =
+    activeCategory === "ALL" || activeCategory === "AVIATION" ? flights : []
+  const mapIss =
+    activeCategory === "ALL" || activeCategory === "SPACE_WEATHER"
+      ? issPosition
+      : null
+  const mapCyber =
+    activeCategory === "ALL" || activeCategory === "CYBER" ? cyberAttacks : []
+  const mapShips =
+    activeCategory === "ALL" || activeCategory === "MARITIME" ? ships : []
 
   return (
     <section
@@ -118,7 +148,13 @@ export function GlobalMonitoringView() {
                 {clockWIB}
               </div>
               <div className="mt-0.5 text-[9px] font-bold text-primary uppercase">
-                {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase()}
+                {new Date()
+                  .toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })
+                  .toUpperCase()}
               </div>
             </div>
             <div className="border-l border-white/10 pl-6">
@@ -126,13 +162,13 @@ export function GlobalMonitoringView() {
                 STATUS
               </div>
               {isLoading ? (
-                <div className="mt-1 flex items-center gap-2 text-[10px] font-black text-warning">
-                  <div className="h-2 w-2 animate-pulse rounded-full bg-warning shadow-[0_0_10px_#FF9900]" />
+                <div className="text-warning mt-1 flex items-center gap-2 text-[10px] font-black">
+                  <div className="bg-warning h-2 w-2 animate-pulse rounded-full shadow-[0_0_10px_#FF9900]" />
                   SYNCHRONIZING APIs...
                 </div>
               ) : (
-                <div className="mt-1 flex items-center gap-2 text-[10px] font-black text-success">
-                  <div className="h-2 w-2 animate-pulse rounded-full bg-success shadow-[0_0_10px_#00FF66]" />
+                <div className="text-success mt-1 flex items-center gap-2 text-[10px] font-black">
+                  <div className="bg-success h-2 w-2 animate-pulse rounded-full shadow-[0_0_10px_#00FF66]" />
                   API SYNCED
                 </div>
               )}
@@ -153,18 +189,20 @@ export function GlobalMonitoringView() {
             { id: "DEMOGRAPHIC", label: "DEMOGRAPHIC", icon: Users },
             { id: "INTERNET", label: "INTERNET", icon: Wifi },
             { id: "CYBER", label: "CYBER THREATS", icon: ShieldAlert },
-            { id: "ECONOMY", label: "ECONOMY", icon: DollarSign }
+            { id: "ECONOMY", label: "ECONOMY", icon: DollarSign },
           ].map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id as MonitoringCategory)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-sm border text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${
-                activeCategory === cat.id 
-                  ? "bg-primary/20 border-primary text-primary shadow-[0_0_15px_rgba(0,240,255,0.2)]" 
+              className={`flex items-center gap-2 rounded-sm border px-4 py-2 text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${
+                activeCategory === cat.id
+                  ? "border-primary bg-primary/20 text-primary shadow-[0_0_15px_rgba(0,240,255,0.2)]"
                   : "bg-space border-white/10 text-white/50 hover:bg-white/5 hover:text-white"
               }`}
             >
-              <cat.icon className={`h-3 w-3 ${activeCategory === cat.id ? "animate-pulse" : ""}`} />
+              <cat.icon
+                className={`h-3 w-3 ${activeCategory === cat.id ? "animate-pulse" : ""}`}
+              />
               {cat.label}
             </button>
           ))}
@@ -177,16 +215,16 @@ export function GlobalMonitoringView() {
             <GlobalStatusWidget />
           </div>
 
-          {(activeCategory === "DEMOGRAPHIC") && (
-            <div className="lg:col-span-9 xl:col-span-10 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {activeCategory === "DEMOGRAPHIC" && (
+            <div className="grid grid-cols-1 gap-4 lg:col-span-9 lg:grid-cols-2 xl:col-span-10">
               <GlobalPopulationWidget />
             </div>
           )}
-          
-          {(activeCategory === "INTERNET") && (
-            <div className="lg:col-span-9 xl:col-span-10 grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+          {activeCategory === "INTERNET" && (
+            <div className="grid grid-cols-1 gap-4 lg:col-span-9 lg:grid-cols-12 xl:col-span-10">
               {/* Force the layout to adapt for internet tab */}
-              <div className="lg:col-span-8 xl:col-span-8 flex flex-col gap-4">
+              <div className="flex flex-col gap-4 lg:col-span-8 xl:col-span-8">
                 <SocialMediaTrendsWidget />
                 <DigitalConsciousnessWidget />
               </div>
@@ -196,40 +234,55 @@ export function GlobalMonitoringView() {
             </div>
           )}
 
-          {(activeCategory === "MARITIME") && (
+          {activeCategory === "MARITIME" && (
             <div className="lg:col-span-9 xl:col-span-10">
               <MaritimeTrafficWidget ships={ships} />
             </div>
           )}
 
-          {(activeCategory === "CLIMATE") && (
+          {activeCategory === "CLIMATE" && (
             <div className="lg:col-span-9 xl:col-span-10">
               <GlobalClimateWidget />
             </div>
           )}
 
-          {(activeCategory === "ECONOMY") && (
+          {activeCategory === "ECONOMY" && (
             <div className="lg:col-span-9 xl:col-span-10">
               <FinancialMarketsWidget />
             </div>
           )}
 
           {/* Map is kept in the DOM to prevent Leaflet appendChild crashes on unmount, hidden via CSS when not needed */}
-          <div className={`${(activeCategory === "DEMOGRAPHIC" || activeCategory === "INTERNET" || activeCategory === "CLIMATE" || activeCategory === "ECONOMY") ? "hidden" : "block"} lg:col-span-9 xl:col-span-10`}>
-            <LiveWorldMapWidget earthquakes={mapEarthquakes} issPosition={mapIss} flights={mapFlights} cyberAttacks={mapCyber} ships={mapShips} />
+          <div
+            className={`${activeCategory === "DEMOGRAPHIC" || activeCategory === "INTERNET" || activeCategory === "CLIMATE" || activeCategory === "ECONOMY" ? "hidden" : "block"} lg:col-span-9 xl:col-span-10`}
+          >
+            <LiveWorldMapWidget
+              earthquakes={mapEarthquakes}
+              issPosition={mapIss}
+              flights={mapFlights}
+              cyberAttacks={mapCyber}
+              ships={mapShips}
+            />
           </div>
 
           {/* Conditional Widgets based on category */}
-          {(activeCategory !== "DEMOGRAPHIC" && activeCategory !== "INTERNET" && activeCategory !== "CYBER" && activeCategory !== "MARITIME" && activeCategory !== "CLIMATE" && activeCategory !== "ECONOMY") && (
-            <div className="flex flex-col gap-4 lg:col-span-3 xl:col-span-2">
-              {(activeCategory === "ALL" || activeCategory === "SPACE_WEATHER") && (
-                <SpaceWeatherWidget spaceWeather={spaceWeather} />
-              )}
-              {(activeCategory === "ALL" || activeCategory === "SPIRITUAL") && (
-                <GlobalPrayerNetworkWidget globalPrayers={globalPrayers} />
-              )}
-            </div>
-          )}
+          {activeCategory !== "DEMOGRAPHIC" &&
+            activeCategory !== "INTERNET" &&
+            activeCategory !== "CYBER" &&
+            activeCategory !== "MARITIME" &&
+            activeCategory !== "CLIMATE" &&
+            activeCategory !== "ECONOMY" && (
+              <div className="flex flex-col gap-4 lg:col-span-3 xl:col-span-2">
+                {(activeCategory === "ALL" ||
+                  activeCategory === "SPACE_WEATHER") && (
+                  <SpaceWeatherWidget spaceWeather={spaceWeather} />
+                )}
+                {(activeCategory === "ALL" ||
+                  activeCategory === "SPIRITUAL") && (
+                  <GlobalPrayerNetworkWidget globalPrayers={globalPrayers} />
+                )}
+              </div>
+            )}
         </div>
 
         {/* ═══ LAYER 3: SECONDARY WIDGETS ════════════════════════════════════ */}
@@ -243,7 +296,7 @@ export function GlobalMonitoringView() {
           {(activeCategory === "ALL" || activeCategory === "CYBER") && (
             <CyberThreatMonitorWidget cyberAttacks={cyberAttacks} />
           )}
-          {(activeCategory === "ALL") && (
+          {activeCategory === "ALL" && (
             <>
               <GlobalPopulationWidget />
               <SocialMediaTrendsWidget />
@@ -254,9 +307,7 @@ export function GlobalMonitoringView() {
               <MaritimeTrafficWidget ships={ships} />
             </>
           )}
-          {activeCategory === "ALL" && (
-            <RootCauseWidget />
-          )}
+          {activeCategory === "ALL" && <RootCauseWidget />}
         </div>
 
         {/* ═══ LAYER 4: BOTTOM ROW (Actions + Projects + Tasks) ═══════════════ */}
@@ -291,8 +342,8 @@ export function GlobalMonitoringView() {
               GLOBAL INTELLIGENCE CENTER
             </span>
             <div className="hidden border-l border-white/10 pl-3 font-sans text-white/50 normal-case italic lg:block">
-              &quot;Knowledge without action is potential. Action without knowledge
-              is risk. Together, they create a better world.&quot;
+              &quot;Knowledge without action is potential. Action without
+              knowledge is risk. Together, they create a better world.&quot;
             </div>
           </div>
 

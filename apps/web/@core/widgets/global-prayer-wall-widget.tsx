@@ -83,7 +83,7 @@ export function GlobalPrayerWallWidget() {
         />
         <button
           onClick={handleSendPrayer}
-          className="btn-primary btn-clip flex shrink-0 items-center gap-1.5 px-4 py-2.5 text-xs font-bold"
+          className="btn-primary flex shrink-0 items-center gap-1.5 px-4 py-2.5 text-xs font-bold btn-clip"
           style={{
             color: "#00FF66",
             borderColor: "rgba(0,255,102,0.5)",

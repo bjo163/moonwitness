@@ -31,7 +31,8 @@ export function AudioWaveformVisualizer({ isPlaying }: VisualizerProps) {
       for (let i = 0; i < numBars; i++) {
         const height = isPlaying
           ? Math.random() * (canvas.height * MAX_HEIGHT_RATIO) + MIN_BAR_HEIGHT
-          : Math.sin(Date.now() * SIN_TIME_SPEED + i) * SIN_HEIGHT_AMPLITUDE + MIN_BAR_HEIGHT
+          : Math.sin(Date.now() * SIN_TIME_SPEED + i) * SIN_HEIGHT_AMPLITUDE +
+            MIN_BAR_HEIGHT
 
         const x = i * barWidth
         const y = canvas.height - height

@@ -106,7 +106,7 @@ export function BookmarkManagerModal() {
                   <Link
                     href={item.href}
                     onClick={() => setIsOpen(false)}
-                    className="btn-primary btn-clip flex items-center gap-1 border-accent px-3 py-1 text-[9px] text-accent hover:bg-accent/10"
+                    className="btn-primary flex items-center gap-1 border-accent px-3 py-1 text-[9px] text-accent btn-clip hover:bg-accent/10"
                   >
                     <span>BUKA AYAT</span>
                     <ArrowRight className="h-3 w-3" />
