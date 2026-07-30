@@ -23,4 +23,4 @@ services:
     environment:
       - WEB_PORT=${WEB_PORT:-3000}
       - PORT=${WEB_PORT:-3000}
-      - NEXT_PUBLIC_API_URL=http://localhost:${API_PORT:-4000}
+      - NEXT_PUBLIC_API_URL=http://api:${API_PORT:-4000}
