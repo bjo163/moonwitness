@@ -1,0 +1,18 @@
+FROM node:20-alpine
+WORKDIR /app
+RUN corepack enable && corepack prepare pnpm@9.15.9 --activate
+
+# Copy all source files
+COPY . .
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile=false
+
+# Build API and its dependencies
+RUN pnpm run build --filter=api...
+
+# Expose API port
+EXPOSE 4000
+
+# Start API
+CMD ["pnpm", "--filter", "api", "run", "start"]

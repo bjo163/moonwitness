@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    ports:
+      - "4000:4000"
+    restart: unless-stopped
+    # Optional: if you want to use local postgres instead of supabase, 
+    # you can pass DATABASE_URL here pointing to the postgres service.
+    # Otherwise, it will read the Supabase URL from the environment.
+    env_file:
+      - apps/api/.env
+    # environment:
+    #   - DATABASE_URL=postgresql://postgres.fkzzuqkkvzgegclxmlzo:Youknowm%402025@aws-1-ap-northeast-2.pooler.supabase.com:5432/postgres
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    env_file:
+      - apps/web/.env
+    # Optional: pass Next.js environment variables here if needed
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:4000
