@@ -1,5 +1,5 @@
 import { registry, Vertex } from '@moon/orm'
-import { globalRoutes } from './router.js'
+import { globalRoutes, ProxyRoute } from './router.js'
 
 export function generateOpenApi() {
   const schemas: any = {
@@ -121,12 +121,22 @@ export function generateOpenApi() {
 
   if (globalRoutes && globalRoutes.length > 0) {
     for (const route of globalRoutes) {
+      const proxyRoute = route as ProxyRoute
+      const tags = proxyRoute.proxy ? ['External'] : ['Custom Endpoints']
+      const params = proxyRoute.params?.map((p) => ({
+        name: p,
+        in: 'path',
+        required: true,
+        schema: { type: 'string' }
+      })) || []
       if (!paths[route.path]) paths[route.path] = {}
       paths[route.path][route.method.toLowerCase()] = {
-        tags: ['Custom Endpoints'],
-        summary: `Custom route ${route.path}`,
+        tags,
+        summary: proxyRoute.proxy ? `Proxy ${route.path} → ${proxyRoute.proxy.targetUrl}` : `Custom route ${route.path}`,
+        parameters: params.length > 0 ? params : undefined,
         responses: {
-          '200': { description: 'OK' }
+          '200': { description: 'OK' },
+          '502': { description: 'Upstream proxy error' }
         }
       }
     }

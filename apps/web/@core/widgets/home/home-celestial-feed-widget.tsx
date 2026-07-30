@@ -1,36 +1,22 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
+import { useNasaFeeds } from "@core/store/use-nasa-feeds"
 
 const FEED_REFRESH_INTERVAL_MS = 300000
 
 export function HomeCelestialFeedWidget() {
+  const { apod } = useNasaFeeds()
+
   const [liveEarth, setLiveEarth] = useState(
     "https://cdn.star.nesdis.noaa.gov/GOES19/ABI/FD/GEOCOLOR/678x678.jpg"
   )
   const [liveSunRed, setLiveSunRed] = useState(
     "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0304.jpg"
   )
-  const [deepSkyImg, setDeepSkyImg] = useState("/assets/cam_deepsky.png")
 
+  // Auto-refresh real-time image feeds every 5 minutes via cache-busting param
   useEffect(() => {
-    // NASA APOD for Deep Sky Camera
-    const fetchApod = async () => {
-      try {
-        const apodRes = await fetch(
-          "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY"
-        )
-        const apodData = await apodRes.json()
-        if (apodData.url && !apodData.url.includes("youtube")) {
-          setDeepSkyImg(apodData.url)
-        }
-      } catch {
-        /* Ignore offline fallback errors */
-      }
-    }
-    fetchApod()
-
-    // Auto-refresh Real-time space feeds every 5 minutes
     const feedInterval = setInterval(() => {
       const t = new Date().getTime()
       setLiveEarth(
@@ -43,6 +29,8 @@ export function HomeCelestialFeedWidget() {
 
     return () => clearInterval(feedInterval)
   }, [])
+
+  const deepSkyImg = apod?.url ?? "/assets/cam_deepsky.png"
 
   return (
     <div className="relative rounded-lg border border-primary/20 bg-black/10 p-4 shadow-[inset_0_0_20px_rgba(0,255,255,0.02)] backdrop-blur-xl sm:p-5">
@@ -57,13 +45,11 @@ export function HomeCelestialFeedWidget() {
       </div>
 
       <div className="my-auto grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {/* Cam 1: LUNAR OPTICS (Moon) */}
+        {/* Cam 1: LUNAR OPTICS */}
         <div className="group relative flex flex-col items-center justify-between overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] p-2.5 shadow-inner backdrop-blur-md transition-all hover:border-primary">
           <div className="absolute top-1 right-1 z-10 flex items-center gap-1 rounded bg-black/60 px-1 backdrop-blur">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-            <span className="font-mono text-[6px] text-emerald-400">
-              TRACKING
-            </span>
+            <span className="font-mono text-[6px] text-emerald-400">TRACKING</span>
           </div>
           <div className="relative my-1 flex h-24 w-full items-center justify-center overflow-hidden rounded-md border border-white/10 bg-black">
             <img
@@ -80,7 +66,7 @@ export function HomeCelestialFeedWidget() {
           </div>
         </div>
 
-        {/* Cam 2: Live Earth View (NOAA GOES-19 Real-time) */}
+        {/* Cam 2: Live Earth View (NOAA GOES-19) */}
         <div className="group relative flex flex-col items-center justify-between overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] p-2.5 shadow-inner backdrop-blur-md transition-all hover:border-primary">
           <div className="absolute top-1 right-1 z-10 flex items-center gap-1 rounded bg-black/60 px-1 backdrop-blur">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500" />
@@ -89,9 +75,7 @@ export function HomeCelestialFeedWidget() {
           <div className="relative my-1 flex h-24 w-full items-center justify-center overflow-hidden rounded-md border border-white/10 bg-black">
             <img
               src={liveEarth}
-              onError={(e) => {
-                e.currentTarget.src = "/assets/cam_earth.png"
-              }}
+              onError={(e) => { e.currentTarget.src = "/assets/cam_earth.png" }}
               alt="Live Earth NOAA"
               className="h-[120%] w-[120%] object-cover object-center transition-transform duration-700 group-hover:scale-110"
             />
@@ -104,21 +88,17 @@ export function HomeCelestialFeedWidget() {
           </div>
         </div>
 
-        {/* Cam 3: DEEP SKY (Galaxy) */}
+        {/* Cam 3: NASA APOD / Deep Sky */}
         <div className="group relative flex flex-col items-center justify-between overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] p-2.5 shadow-inner backdrop-blur-md transition-all hover:border-fuchsia-400">
           <div className="absolute top-1 right-1 z-10 flex items-center gap-1 rounded bg-black/60 px-1 backdrop-blur">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-            <span className="font-mono text-[6px] text-emerald-400">
-              TRACKING
-            </span>
+            <span className="font-mono text-[6px] text-emerald-400">TRACKING</span>
           </div>
           <div className="relative my-1 flex h-24 w-full items-center justify-center overflow-hidden rounded-md border border-white/10 bg-black">
             <img
               src={deepSkyImg}
-              onError={(e) => {
-                e.currentTarget.src = "/assets/galaxy_milkyway_bg.png"
-              }}
-              alt="Deep Sky"
+              onError={(e) => { e.currentTarget.src = "/assets/galaxy_milkyway_bg.png" }}
+              alt={apod?.title ?? "Deep Sky"}
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
           </div>
@@ -130,7 +110,7 @@ export function HomeCelestialFeedWidget() {
           </div>
         </div>
 
-        {/* Cam 4: SDO AIA-304 (Sun Red) */}
+        {/* Cam 4: SDO AIA-304 (Sun) */}
         <div className="group relative flex flex-col items-center justify-between overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] p-2.5 shadow-inner backdrop-blur-md transition-all hover:border-orange-500">
           <div className="absolute top-1 right-1 z-10 flex items-center gap-1 rounded bg-black/60 px-1 backdrop-blur">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500" />
@@ -139,9 +119,7 @@ export function HomeCelestialFeedWidget() {
           <div className="relative my-1 flex h-24 w-full items-center justify-center overflow-hidden rounded-md border border-white/10 bg-black">
             <img
               src={liveSunRed}
-              onError={(e) => {
-                e.currentTarget.src = "/assets/cam_sun.png"
-              }}
+              onError={(e) => { e.currentTarget.src = "/assets/cam_sun.png" }}
               alt="NASA SDO AIA-304"
               className="h-[110%] w-[110%] object-cover object-center mix-blend-screen transition-transform duration-700 group-hover:scale-110"
             />

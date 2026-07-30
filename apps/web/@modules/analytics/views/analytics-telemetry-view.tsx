@@ -43,9 +43,9 @@ export function AnalyticsTelemetryView() {
           console.warn("Failed to fetch historical metrics:", e)
         }
 
-        // Fetch DB status for general health
-        const statusRes = await fetch("http://localhost:4000/db/status").then(r => r.json()).catch(() => ({}))
-        const modelsRes = await fetch("http://localhost:4000/meta/models").then(r => r.json()).catch(() => [])
+        // Fetch DB status and models via moon api server (cached 30s)
+        const statusRes = await request('GET', '/api/external/db/status').catch(() => ({}))
+        const modelsRes = await request('GET', '/api/external/meta/models').catch(() => [])
         
         setSystemStatus({
           uptime: (statusRes.uptime / 3600).toFixed(2),

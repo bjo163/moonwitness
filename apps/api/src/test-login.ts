@@ -18,6 +18,7 @@ async function run() {
   console.log('Fixed is_active for all nodes!')
   
   const User = getModel('vx.user')
+  if (!User) throw new Error('User model not found');
   const env = createCtx(1, {}, getModel)
   
   const email = 'rocksoultech@gmail.com'

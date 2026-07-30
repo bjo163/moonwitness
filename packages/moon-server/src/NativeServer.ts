@@ -3,7 +3,8 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import nodemailer from 'nodemailer'
 import { setupOrm, forge, getLastPending, getDb, getModel, createCtx, SUPERUSER_ID, ANONYMOUS_ID, Vertex, registerModel, registry, type DbConfig } from '@moon/orm'
-import { globalRoutes } from './router.js'
+import { globalRoutes, Route, HttpHandler } from './router.js'
+import { createProxyHandler } from './proxy.js'
 import { logger } from './logger.js'
 import { generateOpenApi } from './openapi.js'
 import { EventEmitter } from 'node:events'
@@ -25,6 +26,7 @@ export function publish(topic: string, payload: any) {
 
 export class NativeServer {
   private config: MoonConfig;
+  private middlewares: ((req: http.IncomingMessage, res: http.ServerResponse, next: () => Promise<void>) => Promise<void> | void)[] = [];
 
   constructor(config: MoonConfig) {
     this.config = config;
@@ -36,7 +38,67 @@ export class NativeServer {
     }
   }
 
+  private buildHandlerChain(handler: HttpHandler): HttpHandler {
+    const mws = this.middlewares
+    return async (req, res) => {
+      if (mws.length === 0) return handler(req, res)
+      let index = 0
+      const next = async () => {
+        if (index < mws.length) {
+          const mw = mws[index++]!
+          return mw(req, res, next)
+        }
+        return handler(req, res)
+      }
+      return next()
+    }
+  }
+
+  public use(mw: (req: http.IncomingMessage, res: http.ServerResponse, next: () => Promise<void>) => Promise<void> | void) {
+    this.middlewares.push(mw)
+  }
+
+  private registerRoute(method: string, path: string, handler: HttpHandler) {
+    const wrapped = this.buildHandlerChain(handler)
+    globalRoutes.push({
+      method,
+      path,
+      handler: wrapped,
+      params: path.includes(':') ? path.match(/:([^/]+)/g)?.map(p => p.slice(1)) : undefined
+    })
+  }
+
+  public get(path: string, handler: HttpHandler) {
+    this.registerRoute('GET', path, handler)
+  }
+
+  public post(path: string, handler: HttpHandler) {
+    this.registerRoute('POST', path, handler)
+  }
+
+  public put(path: string, handler: HttpHandler) {
+    this.registerRoute('PUT', path, handler)
+  }
+
+  public delete(path: string, handler: HttpHandler) {
+    this.registerRoute('DELETE', path, handler)
+  }
+
+  public proxy(method: string, path: string, targetUrl: string, options?: {
+    cache?: string
+    query?: string[]
+    headers?: Record<string, string>
+    apiKey?: string
+  }) {
+    const handler = createProxyHandler({
+      targetUrl,
+      ...options
+    })
+    this.registerRoute(method, path, handler)
+  }
+
   private sendJson(res: http.ServerResponse, statusCode: number, data: any, req?: http.IncomingMessage) {
+    if (res.headersSent) return;
     const origin = (req?.headers.origin as string) || '*';
     const reqHeaders = (req?.headers['access-control-request-headers'] as string) || 'Content-Type, Authorization, X-Requested-With, Accept, Origin, Cache-Control, Last-Event-ID';
     
@@ -393,7 +455,42 @@ export class NativeServer {
     }
   }
 
-  public handleRequest(req: http.IncomingMessage, res: http.ServerResponse) {
+  private async dispatch(handler: HttpHandler, req: http.IncomingMessage, res: http.ServerResponse) {
+    if (this.middlewares.length === 0) {
+      return handler(req, res)
+    }
+    let index = 0
+    const next = async () => {
+      if (index < this.middlewares.length) {
+        const mw = this.middlewares[index++]!
+        return mw(req, res, next)
+      }
+      return handler(req, res)
+    }
+    return next()
+  }
+
+  private matchParamRoute(req: http.IncomingMessage, route: { path: string; handler: HttpHandler }): { handler: HttpHandler; params: Record<string, string> } | null {
+    const path = ((req.url || '').split('?')[0]) ?? ''
+    if (!route.path.includes(':')) return null
+    const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    const pattern = route.path.split('/').map(segment => {
+      if (segment === '') return ''
+      if (segment.startsWith(':')) return '([^/]+)'
+      return escapeRegex(segment)
+    }).join('/')
+    const regex = new RegExp(`^${pattern}$`)
+    const match = path.match(regex)
+    if (!match) return null
+    const paramNames = (route.path.match(/:([^/]+)/g) || []).map(p => p.slice(1))
+    const params: Record<string, string> = {}
+    paramNames.forEach((name, idx) => {
+      params[name] = match[idx + 1] as string
+    })
+    return { handler: route.handler, params }
+  }
+
+  public async handleRequest(req: http.IncomingMessage, res: http.ServerResponse) {
     const startTime = Date.now()
     
     const originalEnd = res.end
@@ -423,7 +520,7 @@ export class NativeServer {
 
     const restMatch = req.url?.match(/^\/api\/([a-z0-9.-]+)(?:\/(\d+))?(?:\?.*)?$/);
     if (restMatch) {
-      return this.handleRest(req, res, restMatch);
+      return await this.handleRest(req, res, restMatch);
     }
 
     if (req.method === 'GET' && (req.url === '/' || req.url === '')) {
@@ -582,7 +679,7 @@ export class NativeServer {
     }
 
     if (req.method === 'GET' && req.url === '/openapi.json') {
-      return this.sendJson(res, 200, generateOpenApi());
+      return this.dispatch(this.sendJson.bind(this, res, 200, generateOpenApi()), req, res)
     }
 
     if (req.method === 'GET' && req.url === '/docs') {
@@ -608,35 +705,35 @@ export class NativeServer {
 </body>
 </html>`;
       res.writeHead(200, { 'Content-Type': 'text/html' });
-      return res.end(swaggerHtml);
+      return this.dispatch((req, res) => { res.end(swaggerHtml) }, req, res)
     }
     
     if (req.method === 'POST' && req.url === '/auth/login') {
-      return this.handleAuthLogin(req, res);
+      return this.dispatch(this.handleAuthLogin.bind(this), req, res)
     }
     
     if (req.method === 'POST' && req.url === '/auth/register') {
-      return this.handleAuthRegister(req, res);
+      return this.dispatch(this.handleAuthRegister.bind(this), req, res)
     }
 
     if (req.method === 'POST' && req.url === '/auth/forgot-password') {
-      return this.handleAuthForgotPassword(req, res);
+      return this.dispatch(this.handleAuthForgotPassword.bind(this), req, res)
     }
     
     if (req.method === 'POST' && req.url === '/auth/verify-otp') {
-      return this.handleAuthVerifyOtp(req, res);
+      return this.dispatch(this.handleAuthVerifyOtp.bind(this), req, res)
     }
 
     if (req.method === 'POST' && req.url === '/auth/reset-password') {
-      return this.handleAuthResetPassword(req, res);
+      return this.dispatch(this.handleAuthResetPassword.bind(this), req, res)
     }
     
     if (req.method === 'POST' && req.url === '/rpc') {
-      return this.handleRpc(req, res);
+      return this.dispatch(this.handleRpc.bind(this), req, res)
     }
 
     if (req.method === 'GET' && req.url === '/db/status') {
-      return this.sendJson(res, 200, { ok: true, driver: getDb().client.driverName });
+      return this.dispatch(this.sendJson.bind(this, res, 200, { ok: true, driver: getDb().client.driverName }), req, res)
     }
 
     if (req.method === 'GET' && req.url === '/meta/models') {
@@ -648,107 +745,122 @@ export class NativeServer {
           fields: ModelClass.getFieldDefs(ModelClass as any)
         };
       }
-      return this.sendJson(res, 200, { models });
+      return this.dispatch(this.sendJson.bind(this, res, 200, { models }), req, res)
     }
 
     // SSE
     if (req.method === 'GET' && req.url && req.url.startsWith('/live')) {
-      const origin = (req.headers.origin as string) || '*';
-      res.writeHead(200, {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
-        'Access-Control-Allow-Origin': origin,
-        'Access-Control-Allow-Credentials': 'true'
-      });
-      const clientId = Math.random().toString(36).substring(2, 11);
-      
-      const reqAny = req as any;
-      const ipAddress = (String(reqAny.headers['x-forwarded-for'] || (reqAny.socket && reqAny.socket.remoteAddress) || 'unknown').split(',')[0] || 'unknown').trim();
-      const userAgent = reqAny.headers['user-agent'] || 'unknown';
-      
-      if (!(globalThis as any).moonActiveClients) {
-        (globalThis as any).moonActiveClients = new Set();
-      }
-      const activeClients = (globalThis as any).moonActiveClients;
-      activeClients.add(clientId);
-
-      const broadcastStats = () => {
-        if ((globalThis as any).moonEmitter) {
-          (globalThis as any).moonEmitter.emit('moon_event', { 
-            topic: 'system_connections', 
-            payload: { activeCount: activeClients.size, action: 'joined', clientId, ip: ipAddress }
-          });
-        }
-      };
-
-      // Create fx.session record asynchronously
-      const FxSession = getModel('fx.session');
-      let sessionRecordId: number | null = null;
-      
-      if (FxSession) {
-        const env = createCtx(SUPERUSER_ID, {}, getModel as any);
-        // GeoIP lookup
-        let country = 'Unknown';
-        if (ipAddress === '127.0.0.1' || ipAddress === '::1') {
-          country = 'Localhost';
-        } else {
-          fetch(`http://ip-api.com/json/${ipAddress}`).then(res => res.json()).then(data => {
-            if (data.status === 'success' && sessionRecordId) {
-              FxSession.morph(FxSession as any, env, sessionRecordId, { country: data.country }).catch(() => {});
-            }
-          }).catch(() => {});
-        }
+      return this.dispatch((req, res) => {
+        const origin = (req.headers.origin as string) || '*';
+        res.writeHead(200, {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache, no-transform',
+          'Connection': 'keep-alive',
+          'Access-Control-Allow-Origin': origin,
+          'Access-Control-Allow-Credentials': 'true',
+          'X-Accel-Buffering': 'no'
+        });
+        const clientId = Math.random().toString(36).substring(2, 11);
         
-        FxSession.spawn(FxSession as any, env, {
-          clientId,
-          ipAddress,
-          userAgent,
-          country
-        }).then(rec => {
-          sessionRecordId = rec.id;
-        }).catch(e => logger.error('moon.metrics', 'Failed to save fx.session', e));
-      }
-
-      res.write(`data: ${JSON.stringify({ topic: 'system_connections', payload: { activeCount: activeClients.size, action: 'connected', clientId } })}\n\n`);
-      const interval = setInterval(() => res.write(':\n\n'), 15000);
-      
-      const onEvent = (e: any) => res.write(`data: ${JSON.stringify(e)}\n\n`);
-      
-      if (!(globalThis as any).moonEmitter) {
-        (globalThis as any).moonEmitter = new EventEmitter();
-      }
-      (globalThis as any).moonEmitter.on('moon_event', onEvent);
-      
-      // Broadcast that someone joined
-      setTimeout(broadcastStats, 100);
-
-      req.on('close', () => {
-        clearInterval(interval);
-        if ((globalThis as any).moonEmitter) {
-           (globalThis as any).moonEmitter.removeListener('moon_event', onEvent);
-        }
-        activeClients.delete(clientId);
+        const reqAny = req as any;
+        const ipAddress = (String(reqAny.headers['x-forwarded-for'] || (reqAny.socket && reqAny.socket.remoteAddress) || 'unknown').split(',')[0] || 'unknown').trim();
+        const userAgent = reqAny.headers['user-agent'] || 'unknown';
         
-        if (FxSession && sessionRecordId) {
+        if (!(globalThis as any).moonActiveClients) {
+          (globalThis as any).moonActiveClients = new Set();
+        }
+        const activeClients = (globalThis as any).moonActiveClients;
+        activeClients.add(clientId);
+
+        const broadcastStats = () => {
+          if ((globalThis as any).moonEmitter) {
+            (globalThis as any).moonEmitter.emit('moon_event', { 
+              topic: 'system_connections', 
+              payload: { activeCount: activeClients.size, action: 'joined', clientId, ip: ipAddress }
+            });
+          }
+        };
+
+        // Create fx.session record asynchronously
+        const FxSession = getModel('fx.session');
+        let sessionRecordId: number | null = null;
+        
+        if (FxSession) {
           const env = createCtx(SUPERUSER_ID, {}, getModel as any);
-          FxSession.morph(FxSession as any, env, sessionRecordId, { disconnectedAt: new Date() }).catch(e => logger.error('moon.metrics', 'Failed to update disconnectedAt', e));
+          // GeoIP lookup
+          let country = 'Unknown';
+          if (ipAddress === '127.0.0.1' || ipAddress === '::1') {
+            country = 'Localhost';
+          } else {
+            fetch(`http://ip-api.com/json/${ipAddress}`).then(res => res.json()).then(data => {
+              if (data.status === 'success' && sessionRecordId) {
+                FxSession.morph(FxSession as any, env, sessionRecordId, { country: data.country }).catch(() => {});
+              }
+            }).catch(() => {});
+          }
+          
+          FxSession.spawn(FxSession as any, env, {
+            clientId,
+            ipAddress,
+            userAgent,
+            country
+          }).then(rec => {
+            sessionRecordId = rec.id;
+          }).catch(e => logger.error('moon.metrics', 'Failed to save fx.session', e));
         }
 
-        // Broadcast that someone left
-        if ((globalThis as any).moonEmitter) {
-          (globalThis as any).moonEmitter.emit('moon_event', { 
-            topic: 'system_connections', 
-            payload: { activeCount: activeClients.size, action: 'left', clientId }
-          });
+        res.write(`data: ${JSON.stringify({ topic: 'system_connections', payload: { activeCount: activeClients.size, action: 'connected', clientId } })}\n\n`);
+        const interval = setInterval(() => res.write(':\n\n'), 15000);
+        
+        const onEvent = (e: any) => res.write(`data: ${JSON.stringify(e)}\n\n`);
+        
+        if (!(globalThis as any).moonEmitter) {
+          (globalThis as any).moonEmitter = new EventEmitter();
         }
-      });
-      return;
+        (globalThis as any).moonEmitter.on('moon_event', onEvent);
+        
+        // Broadcast that someone joined
+        setTimeout(broadcastStats, 100);
+
+        req.on('close', () => {
+          clearInterval(interval);
+          if ((globalThis as any).moonEmitter) {
+             (globalThis as any).moonEmitter.removeListener('moon_event', onEvent);
+          }
+          activeClients.delete(clientId);
+          
+          if (FxSession && sessionRecordId) {
+            const env = createCtx(SUPERUSER_ID, {}, getModel as any);
+            FxSession.morph(FxSession as any, env, sessionRecordId, { disconnectedAt: new Date() }).catch(e => logger.error('moon.metrics', 'Failed to update disconnectedAt', e));
+          }
+
+          // Broadcast that someone left
+          if ((globalThis as any).moonEmitter) {
+            (globalThis as any).moonEmitter.emit('moon_event', { 
+              topic: 'system_connections', 
+              payload: { activeCount: activeClients.size, action: 'left', clientId }
+            });
+          }
+        });
+      }, req, res)
     }
 
     const customRoute = globalRoutes.find(r => r.method === req.method && r.path === req.url);
     if (customRoute) {
       return customRoute.handler(req, res);
+    }
+
+    const paramRoute = globalRoutes.find(r => {
+      if (r.method !== req.method) return false
+      if (!r.path.includes(':')) return false
+      return this.matchParamRoute(req, r) !== null
+    })
+    if (paramRoute) {
+      const matched = this.matchParamRoute(req, paramRoute)
+      if (matched) {
+        ;(req as any).params = matched.params
+        return matched.handler(req, res)
+      }
     }
 
     this.sendJson(res, 404, { error: 'Not Found' });

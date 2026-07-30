@@ -195,8 +195,8 @@ export class BattleScene extends Scene {
 
     updateHud() {
         this.updateActionHighlight();
-        this.drawHpBar(this.playerBar, 0.18, 0.28, this.playerHp, this.playerStats?.maxHp || 100, 0xff4d4d);
-        this.drawHpBar(this.enemyBar, 0.78, 0.28, this.enemyHp, this.enemyData?.hp || 100, 0x4a90d9);
+        if (this.playerBar) this.drawHpBar(this.playerBar, 0.18, 0.28, this.playerHp, this.playerStats?.maxHp || 100, 0xff4d4d);
+        if (this.enemyBar) this.drawHpBar(this.enemyBar, 0.78, 0.28, this.enemyHp, this.enemyData?.hp || 100, 0x4a90d9);
 
         const heroLabel = this.add.text(0, 0, '');
         heroLabel.setText(`HP ${this.playerHp}/${this.playerStats?.maxHp || 100}`);

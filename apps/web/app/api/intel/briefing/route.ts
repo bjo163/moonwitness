@@ -35,16 +35,12 @@ export async function POST(request: NextRequest) {
     const currentKey = keys[Math.floor(Math.random() * keys.length)]
     const ai = new GoogleGenAI({ apiKey: currentKey })
 
-    // 1. Fetch live data
-    // Fetch Weather (Jakarta & New York)
+    // 1. Fetch live data via moon api server (server-to-server, benefits from caching)
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"
     const [jktRes, nyRes, btcRes] = await Promise.all([
-      fetch(
-        "https://api.open-meteo.com/v1/forecast?latitude=-6.2088&longitude=106.8456&current_weather=true"
-      ),
-      fetch(
-        "https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.0060&current_weather=true"
-      ),
-      fetch("https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT"),
+      fetch(`${apiBase}/api/external/weather?latitude=-6.2088&longitude=106.8456&current_weather=true`),
+      fetch(`${apiBase}/api/external/weather?latitude=40.7128&longitude=-74.0060&current_weather=true`),
+      fetch(`${apiBase}/api/external/binance/ticker?symbol=BTCUSDT`),
     ])
 
     const jktData = jktRes.ok ? await jktRes.json() : null

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useMoonStore } from "@core/store/moon-store"
 
 export type EarthquakeFeature = {
   id: string
@@ -80,6 +81,7 @@ export type MaritimeShip = {
 }
 
 export function useGlobalMonitoring() {
+  const { request } = useMoonStore()
   const [earthquakes, setEarthquakes] = useState<EarthquakeFeature[]>([])
   const [globalPrayers, setGlobalPrayers] = useState<GlobalCityPrayer[]>([])
   const [issPosition, setIssPosition] = useState<ISSPosition | null>(null)
@@ -97,12 +99,9 @@ export function useGlobalMonitoring() {
       try {
         setIsLoading(true)
 
-        // 1. Fetch USGS Earthquakes
-        const usgsPromise = fetch(
-          "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
-        )
-          .then((res) => res.json())
-          .then((data) => data.features || [])
+        // 1. Fetch USGS Earthquakes — via moon api server (cached 5m)
+        const usgsPromise = request('GET', '/api/external/usgs/earthquakes')
+          .then((data: any) => data.features || [])
           .catch(() => [])
 
         // 2. Fetch Aladhan
@@ -134,29 +133,20 @@ export function useGlobalMonitoring() {
           })
         ).then((res) => res.filter(Boolean) as GlobalCityPrayer[])
 
-        // 3. Fetch ISS Tracker
-        const issPromise = fetch(
-          "https://api.wheretheiss.at/v1/satellites/25544"
-        )
-          .then((res) => res.json())
+        // 3. Fetch ISS Tracker — via moon api server (cached 10s)
+        const issPromise = request('GET', '/api/external/iss')
           .catch(() => null)
 
-        // 4. Fetch NASA Space Weather (DONKI CME for last 30 days)
+        // 4. Fetch NASA Space Weather DONKI CME — via moon api server (cached 30m)
         const date = new Date()
         date.setDate(date.getDate() - 30)
         const startDate = date.toISOString().split("T")[0]
-        const nasaPromise = fetch(
-          `https://api.nasa.gov/DONKI/CME?startDate=${startDate}&api_key=DEMO_KEY`
-        )
-          .then((res) => res.json())
+        const nasaPromise = request('GET', `/api/external/nasa/donki/cme?startDate=${startDate}`)
           .catch(() => [])
 
-        // 5. Fetch OpenSky Flights
-        const openskyPromise = fetch(
-          "https://opensky-network.org/api/states/all?lamin=35&lomin=-10&lamax=60&lomax=30"
-        )
-          .then((res) => res.json())
-          .then((data) => {
+        // 5. Fetch OpenSky Flights — via moon api server (cached 1m, fixed EU bbox)
+        const openskyPromise = request('GET', '/api/external/opensky')
+          .then((data: any) => {
             if (!data.states) return []
             return data.states
               .slice(0, 150)
@@ -174,10 +164,38 @@ export function useGlobalMonitoring() {
           })
           .catch(() => [])
 
-        // 6. Fetch Humanity Trends (Google Trends via Proxy)
-        const trendsPromise = fetch("/api/trends")
-          .then((res) => res.json())
-          .then((json) => (json.success ? json.data : []))
+        // 6. Fetch Humanity Trends (Google Trends via moon api server)
+        const trendsPromise = request('GET', '/api/external/trends')
+          .then((xmlText: string) => {
+            // Lightweight Regex XML parsing since it's a simple, predictable RSS feed
+            const items = []
+            const itemRegex = /<item>([\s\S]*?)<\/item>/g
+            let match
+
+            while ((match = itemRegex.exec(xmlText)) !== null) {
+              const itemContent = match[1]
+              if (!itemContent) continue
+
+              const titleMatch = /<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>/.exec(
+                itemContent
+              )
+              const trafficMatch =
+                /<ht:approx_traffic>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/ht:approx_traffic>/.exec(
+                  itemContent
+                )
+              const pubDateMatch = /<pubDate>(.*?)<\/pubDate>/.exec(itemContent)
+
+              if (titleMatch) {
+                items.push({
+                  title: titleMatch[1] || "Unknown",
+                  traffic: (trafficMatch && trafficMatch[1]) ? trafficMatch[1] : "Unknown",
+                  pubDate: (pubDateMatch && pubDateMatch[1]) ? pubDateMatch[1] : "",
+                })
+              }
+            }
+
+            return items.slice(0, 10)
+          })
           .catch(() => [])
 
         const [
@@ -217,10 +235,7 @@ export function useGlobalMonitoring() {
 
     const issInterval = setInterval(async () => {
       try {
-        const res = await fetch(
-          "https://api.wheretheiss.at/v1/satellites/25544"
-        )
-        const issData = await res.json()
+        const issData = await request('GET', '/api/external/iss')
         if (isMounted && issData && !issData.error) setIssPosition(issData)
       } catch (e) {}
     }, 10000)

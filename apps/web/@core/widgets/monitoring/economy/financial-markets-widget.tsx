@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from "react"
 import { TrendingUp, TrendingDown, DollarSign, Activity } from "lucide-react"
 
+import { useMoonStore } from "@core/store/moon-store"
+
 type CryptoAsset = {
   symbol: string
   name: string
@@ -21,6 +23,7 @@ const ASSETS = [
 export function FinancialMarketsWidget() {
   const [markets, setMarkets] = useState<CryptoAsset[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const { request } = useMoonStore()
 
   useEffect(() => {
     let isMounted = true
@@ -28,11 +31,8 @@ export function FinancialMarketsWidget() {
     const fetchMarkets = async () => {
       try {
         const promises = ASSETS.map(async (asset) => {
-          const res = await fetch(
-            `https://api.binance.com/api/v3/ticker/24hr?symbol=${asset.symbol}`
-          )
-          if (!res.ok) throw new Error("Failed to fetch")
-          const data = await res.json()
+          // Use moon api server proxy with caching (30s)
+          const data = await request('GET', `/api/external/binance/ticker?symbol=${asset.symbol}`)
           return {
             symbol: asset.symbol,
             name: asset.name,
@@ -58,7 +58,7 @@ export function FinancialMarketsWidget() {
       isMounted = false
       clearInterval(interval)
     }
-  }, [])
+  }, [request])
 
   return (
     <div className="bg-space flex h-full flex-col rounded-xl border border-yellow-500/30 p-4 lg:col-span-12 xl:col-span-4">

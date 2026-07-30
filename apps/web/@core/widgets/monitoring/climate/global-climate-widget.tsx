@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react"
 import { CloudRain, Wind, Thermometer, CloudLightning } from "lucide-react"
+import { useMoonStore } from "@core/store/moon-store"
 
 type CityWeather = {
   name: string
@@ -21,6 +22,7 @@ const CITIES = [
 ]
 
 export function GlobalClimateWidget() {
+  const { request } = useMoonStore()
   const [weatherData, setWeatherData] = useState<CityWeather[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -29,40 +31,40 @@ export function GlobalClimateWidget() {
 
     const fetchWeather = async () => {
       try {
-        const promises = CITIES.map(async (city) => {
-          const res = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lng}&current_weather=true`
-          )
-          if (!res.ok) throw new Error("Failed to fetch")
-          const data = await res.json()
-          return {
-            name: city.name,
-            lat: city.lat,
-            lng: city.lng,
-            temp: data.current_weather.temperature,
-            windSpeed: data.current_weather.windspeed,
-            weatherCode: data.current_weather.weathercode,
-          }
-        })
-
-        const results = await Promise.all(promises)
+        const results = await Promise.all(
+          CITIES.map(async (city) => {
+            const data = await request(
+              'GET',
+              `/api/external/weather?latitude=${city.lat}&longitude=${city.lng}&current_weather=true`
+            )
+            return {
+              name: city.name,
+              lat: city.lat,
+              lng: city.lng,
+              temp: data.current_weather.temperature,
+              windSpeed: data.current_weather.windspeed,
+              weatherCode: data.current_weather.weathercode,
+            }
+          })
+        )
         if (isMounted) {
           setWeatherData(results)
           setIsLoading(false)
         }
       } catch (e) {
         console.error("Failed to fetch weather", e)
+        if (isMounted) setIsLoading(false)
       }
     }
 
     fetchWeather()
-    const interval = setInterval(fetchWeather, 600000) // update every 10 min
+    const interval = setInterval(fetchWeather, 600000)
 
     return () => {
       isMounted = false
       clearInterval(interval)
     }
-  }, [])
+  }, [request])
 
   return (
     <div className="bg-space flex h-full flex-col rounded-xl border border-sky-500/30 p-4 lg:col-span-12 xl:col-span-4">

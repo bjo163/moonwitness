@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useMoonStore } from "@core/store/moon-store"
 import {
   Activity,
   Wind,
@@ -51,25 +52,20 @@ const Overlay = dynamic(
 )
 
 export function AtmosphericRadarView() {
+  const { request } = useMoonStore()
   const [mounted, setMounted] = useState(false)
   const [rainTimestamp, setRainTimestamp] = useState<number>(0)
 
   useEffect(() => {
     setMounted(true)
-    fetch("https://api.rainviewer.com/public/weather-maps.json")
-      .then((res) => res.json())
-      .then((data) => {
-        if (
-          data &&
-          data.radar &&
-          data.radar.past &&
-          data.radar.past.length > 0
-        ) {
+    request('GET', '/api/external/rainviewer')
+      .then((data: any) => {
+        if (data?.radar?.past?.length > 0) {
           setRainTimestamp(data.radar.past[data.radar.past.length - 1].time)
         }
       })
-      .catch((err) => console.error("RainViewer API failed:", err))
-  }, [])
+      .catch((err: any) => console.error("RainViewer API failed:", err))
+  }, [request])
 
   if (!mounted)
     return (
