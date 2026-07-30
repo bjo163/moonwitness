@@ -11,8 +11,9 @@ RUN pnpm install --frozen-lockfile=false
 # Build API and its dependencies
 RUN pnpm run build --filter=api...
 
-# Expose API port
-EXPOSE 4000
+# Default API port
+ENV API_PORT=4000
+EXPOSE ${API_PORT}
 
 # Start API
 CMD ["pnpm", "--filter", "api", "run", "start"]

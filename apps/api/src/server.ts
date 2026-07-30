@@ -6,7 +6,7 @@ import baseAddons, { seedBaseData, loadBaseData } from '@moon/base';
 const server = new NativeServer({
   database: process.env.DATABASE_URL || 'postgres://localhost/moonwitness',
   jwtSecret: process.env.JWT_SECRET || 'secret',
-  port: Number(process.env.PORT) || 4000,
+  port: Number(process.env.API_PORT || process.env.PORT) || 4000,
   addons: baseAddons.models,
   onBoot: async () => {
     await seedBaseData();

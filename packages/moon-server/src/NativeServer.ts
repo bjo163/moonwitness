@@ -212,7 +212,7 @@ export class NativeServer {
 
       const server = http.createServer((req, res) => this.handleRequest(req, res));
 
-      const port = this.config.port || Number(process.env.PORT) || 4000;
+      const port = this.config.port || Number(process.env.API_PORT || process.env.PORT) || 4000;
       const host = this.config.host || '0.0.0.0';
       server.listen(port, host, () => {
         logger.info('moon.core', `Native Engine running at http://${host}:${port}`);

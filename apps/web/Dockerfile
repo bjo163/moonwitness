@@ -20,10 +20,10 @@ RUN pnpm run build --filter=web...
 # but it requires public/ and .next/static/ copied over.
 # For simplicity with Turbo and Standalone, we just run the server.js in standalone
 
-EXPOSE 3000
-
+ENV WEB_PORT=3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+EXPOSE 3000
 
 # Start Next.js standalone server
 CMD ["node", "apps/web/.next/standalone/apps/web/server.js"]
