@@ -211,7 +211,7 @@ export function useGlobalMonitoring() {
         id: Math.random().toString(36).substr(2, 9),
         source: [randomLat(), randomLng()],
         target: [randomLat(), randomLng()],
-        type: types[Math.floor(Math.random() * types.length)],
+        type: types[Math.floor(Math.random() * types.length)] || "DDoS",
         timestamp: Date.now()
       }
       
