@@ -1,0 +1,198 @@
+import { getModel } from '@moon/orm'
+import bcrypt from 'bcryptjs'
+import {
+  DEFAULT_COUNTRY_CODE,
+  DEFAULT_CURRENCY_CODE,
+  PARTNER_SEED_DATA,
+  COUNTRY_SEED_DATA,
+  CURRENCY_SEED_DATA
+} from './index.js'
+import { createCtx, SUPERUSER_ID, getDb } from '@moon/orm'
+
+const BCRYPT_ROUNDS = 10
+
+function isBcryptHash(value: string): boolean {
+  return /^\$2[aby]\$\d{2}\$/.test(value)
+}
+
+export async function loadBaseData() {
+  const Country = getModel('vx.zone')
+  const Currency = getModel('vx.coin')
+  const Partner = getModel('vx.node')
+  const Company = getModel('vx.org')
+  const User = getModel('vx.user')
+  const Groups = getModel('vx.role')
+  const MxModel = getModel('mx.model')
+  const MxGrant = getModel('mx.grant')
+  const Lang = getModel('ix.lang')
+
+  if (!Country || !Currency || !Partner || !Company || !User || !Groups || !MxModel || !MxGrant || !Lang) {
+    return
+  }
+
+  const env = createCtx(SUPERUSER_ID, {}, getModel)
+  const db = getDb()
+  const conn = env.trx || db
+
+  // 1. Seed Groups
+  let adminGroupId: number
+  const groupRows = await Groups.fetch(Groups, env, [['name', '=', 'Admin']])
+  if (!groupRows.length) {
+    const row = await Groups.spawn(Groups, env, { name: 'Admin' })
+    adminGroupId = row.id as number
+  } else {
+    adminGroupId = groupRows[0].id as number
+  }
+
+  // 2. Seed IrModels
+  const coreModels = ['vx.user', 'vx.role', 'vx.node', 'vx.org', 'vx.zone', 'vx.coin']
+  const modelIds: Record<string, number> = {}
+  for (const m of coreModels) {
+    const mRows = await MxModel.fetch(MxModel, env, [['model', '=', m]])
+    if (!mRows.length) {
+      const row = await MxModel.spawn(MxModel, env, { model: m, name: m })
+      modelIds[m] = row.id as number
+    } else {
+      modelIds[m] = mRows[0].id as number
+    }
+  }
+
+  // 3. Seed MxGrant (Admin gets full access)
+  for (const m of coreModels) {
+    const mId = modelIds[m]
+    const accRows = await MxGrant.fetch(MxGrant, env, [['modelId', '=', mId], ['groupId', '=', adminGroupId]])
+    if (!accRows.length) {
+      await MxGrant.spawn(MxGrant, env, {
+        name: `${m} admin access`,
+        modelId: mId,
+        groupId: adminGroupId,
+        permRead: true,
+        permWrite: true,
+        permCreate: true,
+        permUnlink: true
+      })
+    }
+  }
+
+  // 4. Seed Languages
+  const langs = [
+    { code: 'en_US', name: 'English (US)', isoCode: 'en', urlCode: 'en', direction: 'ltr' },
+    { code: 'id_ID', name: 'Indonesian', isoCode: 'id', urlCode: 'id', direction: 'ltr' }
+  ]
+  for (const l of langs) {
+    const lRows = await Lang.fetch(Lang, env, [['code', '=', l.code]])
+    if (!lRows.length) {
+      await Lang.spawn(Lang, env, l)
+    }
+  }
+
+  const countryCache = new Map<string, number>()
+  const currencyCache = new Map<string, number>()
+
+  for (const item of COUNTRY_SEED_DATA) {
+    const rows = await Country.fetch(Country, env, [['code', '=', item.code]])
+    if (!rows.length) {
+      const row = await Country.spawn(Country, env, item)
+      countryCache.set(item.code, row.id as number)
+    } else {
+      countryCache.set(item.code, rows[0].id as number)
+    }
+  }
+
+  for (const item of CURRENCY_SEED_DATA) {
+    const rows = await Currency.fetch(Currency, env, [['code', '=', item.code]])
+    if (!rows.length) {
+      const row = await Currency.spawn(Currency, env, item)
+      currencyCache.set(item.code, row.id as number)
+    } else {
+      currencyCache.set(item.code, rows[0].id as number)
+    }
+  }
+
+  const defaultCountryId = countryCache.get(DEFAULT_COUNTRY_CODE)
+  const defaultCurrencyId = currencyCache.get(DEFAULT_CURRENCY_CODE)
+
+  let companyPartnerId: number | undefined
+  {
+    const rows = await Partner.fetch(Partner, env, [['name', '=', PARTNER_SEED_DATA.company.name], ['isCompany', '=', true]])
+    if (!rows.length) {
+      const vals: Record<string, unknown> = {
+        name: PARTNER_SEED_DATA.company.name,
+        isCompany: true
+      }
+      if (defaultCountryId) vals.countryId = defaultCountryId
+      const row = await Partner.spawn(Partner, env, vals)
+      companyPartnerId = row.id as number
+    } else {
+      companyPartnerId = rows[0].id as number
+    }
+  }
+
+  let actualCompanyId: number | undefined
+
+  if (companyPartnerId) {
+    const companyRows = await Company.fetch(Company, env, [['partnerId', '=', companyPartnerId]])
+    if (!companyRows.length) {
+      const vals: Record<string, unknown> = {
+        partnerId: companyPartnerId,
+        name: PARTNER_SEED_DATA.company.name
+      }
+      if (defaultCurrencyId) vals.currencyId = defaultCurrencyId
+      const compRow = await Company.spawn(Company, env, vals)
+      actualCompanyId = compRow.id as number
+    } else {
+      actualCompanyId = companyRows[0].id as number
+    }
+  }
+
+  if (actualCompanyId) {
+    for (const u of PARTNER_SEED_DATA.users) {
+      const partnerRows = await Partner.fetch(Partner, env, [['name', '=', u.name], ['isCompany', '=', u.isCompany]])
+      let partnerId: number | undefined
+      if (!partnerRows.length) {
+        const vals: Record<string, unknown> = {
+          name: u.name,
+          isCompany: u.isCompany
+        }
+        if (defaultCountryId) vals.countryId = defaultCountryId
+        vals.companyId = actualCompanyId
+        const row = await Partner.spawn(Partner, env, vals)
+        partnerId = row.id as number
+      } else {
+        partnerId = partnerRows[0].id as number
+      }
+
+      if (partnerId) {
+        const userRows = await User.fetch(User, env, [['email', '=', u.email]])
+        const hashedPassword = await bcrypt.hash(u.password, BCRYPT_ROUNDS)
+        let userId: number
+        if (!userRows.length) {
+          const uRow = await User.spawn(User, env, {
+            name: u.name,
+            email: u.email,
+            password: hashedPassword,
+            partnerId // Note: companyId is not mapped in original code but partnerId is
+          })
+          userId = uRow.id as number
+        } else {
+          const existingUser = userRows[0] as { id: number; password: string }
+          userId = existingUser.id
+          if (!isBcryptHash(existingUser.password)) {
+            await User.morph(User, env, existingUser.id, { password: hashedPassword })
+          }
+        }
+
+        // Add user to admin group
+        const exists = await conn('vx_user_vx_role_rel')
+          .where({ vx_user_id: userId, vx_role_id: adminGroupId })
+          .first()
+        if (!exists) {
+          await conn('vx_user_vx_role_rel').insert({
+            vx_user_id: userId,
+            vx_role_id: adminGroupId
+          })
+        }
+      }
+    }
+  }
+}

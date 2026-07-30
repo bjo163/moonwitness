@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import type { SurahMeta, SurahDetail, Ayah, Scripture, ScriptureSection, ScriptureVerse } from "../types/index";
+import type { SurahMeta, SurahDetail, Ayah, DivineScripture, ScriptureBook, ScriptureVerse } from "../types/index";
 
 const DEFAULT_SUPABASE_URL = "https://ixclyaugedwwptbqsozv.supabase.co";
 const DEFAULT_SUPABASE_KEY = "sb_publishable_pqogdf6i4z_UtWM7bswrOg_IINAj6bk";
@@ -155,47 +155,89 @@ export async function searchAyahsFromSupabase(keyword: string, limit: number = 5
 
 /* === Universal Scriptures API Helper Functions === */
 
-export async function getScripturesFromSupabase(client?: SupabaseClient): Promise<Scripture[]> {
+export async function getDivineScripturesFromSupabase(client?: SupabaseClient): Promise<DivineScripture[]> {
   const sb = client || getSupabaseClient();
   try {
-    const { data, error } = await sb.from("scriptures").select("*");
+    const { data, error } = await sb.from("divine_scriptures").select("*");
     if (error || !data) return [];
 
     return data.map((s: any) => ({
       id: s.id,
-      titleId: s.title_id,
-      titleArabic: s.title_ar,
-      titleOriginal: s.title_original,
-      messengerId: s.messenger_id,
-      languageOriginal: s.language_original,
-      status: s.status,
-      totalSections: s.total_sections,
+      name: s.name,
+      originalName: s.original_name,
+      religion: s.religion,
+      type: s.type,
+      booksCount: s.books_count,
+      chaptersCount: s.chapters_count,
+      versesCount: s.verses_count,
+      authenticityStatus: s.authenticity_status,
+      revelationEra: s.revelation_era,
+      prophet: s.prophet,
+      description: s.description,
+      coverImageUrl: s.cover_image_url,
+      themeColor: s.theme_color,
     }));
   } catch (error: any) {return [];
   }
 }
 
-export async function getScriptureVersesFromSupabase(scriptureId: string, sectionNumber: number = 1, client?: SupabaseClient): Promise<ScriptureVerse[]> {
+export async function getScriptureBooksFromSupabase(scriptureId: string, client?: SupabaseClient): Promise<ScriptureBook[]> {
   const sb = client || getSupabaseClient();
   try {
     const { data, error } = await sb
+      .from("scripture_books")
+      .select("*")
+      .eq("scripture_id", scriptureId)
+      .order("book_number", { ascending: true });
+
+    if (error || !data) return [];
+
+    return data.map((b: any) => ({
+      id: b.id,
+      scriptureId: b.scripture_id,
+      bookNumber: b.book_number,
+      name: b.name,
+      originalName: b.original_name,
+      chaptersCount: b.chapters_count,
+      description: b.description,
+      summary: b.summary,
+      audioUrl: b.audio_url,
+    }));
+  } catch (error: any) {return [];
+  }
+}
+
+export async function getScriptureVersesFromSupabase(scriptureId: string, bookId?: number, chapterNumber: number = 1, client?: SupabaseClient): Promise<ScriptureVerse[]> {
+  const sb = client || getSupabaseClient();
+  try {
+    let query = sb
       .from("scripture_verses")
       .select("*")
       .eq("scripture_id", scriptureId)
-      .eq("section_number", sectionNumber)
-      .order("verse_number", { ascending: true });
+      .eq("chapter_number", chapterNumber);
+      
+    if (bookId !== undefined) {
+      query = query.eq("book_id", bookId);
+    }
+    
+    const { data, error } = await query.order("verse_number", { ascending: true });
 
     if (error || !data || data.length === 0) return [];
 
     return data.map((v: any) => ({
       id: v.id,
       scriptureId: v.scripture_id,
-      sectionNumber: v.section_number,
+      bookId: v.book_id,
+      chapterNumber: v.chapter_number,
       verseNumber: v.verse_number,
       textOriginal: v.text_original,
+      textTranslated: v.text_translated,
+      tafsir: v.tafsir,
+      audioUrl: v.audio_url,
+      footnote: v.footnote,
+      crossReferences: v.cross_references,
       textTransliteration: v.text_transliteration,
-      translationId: v.translation_id,
-      notes: v.notes,
+      topicTags: v.topic_tags,
     }));
   } catch (error: any) {return [];
   }

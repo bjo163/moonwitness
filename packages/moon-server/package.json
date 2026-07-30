@@ -1,0 +1,28 @@
+{
+  "name": "@moon/server",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "bin": {
+    "moon": "./bin/moon.js"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@moon/orm": "workspace:*",
+    "@moon/base": "workspace:*",
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.0.0",
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^20.19.41",
+    "typescript": "^5.5.4"
+  }
+}

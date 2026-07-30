@@ -743,11 +743,8 @@ export function OSKnowledgeTrend() {
           {/* AI Insight by Khidra */}
           <div className="bg-space flex items-center gap-4 rounded-xl border-2 border-emerald-500/30 p-4 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
             <div className="bg-space relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-emerald-500/50">
-              <Image
+              <img
                 alt="Media"
-                unoptimized
-                width={120}
-                height={120}
                 src="/assets/mod_khidra.png"
                 className="h-full w-full object-cover mix-blend-screen"
               />

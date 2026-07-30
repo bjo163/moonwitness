@@ -12,6 +12,7 @@ type ShareCardProps = {
   textArabic: string
   textLatin: string
   translationId: string
+  asIcon?: boolean
 }
 
 export function ShareCardGeneratorModal({
@@ -21,6 +22,7 @@ export function ShareCardGeneratorModal({
   textArabic,
   textLatin,
   translationId,
+  asIcon = false,
 }: ShareCardProps) {
   const [mounted, setMounted] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -39,13 +41,23 @@ export function ShareCardGeneratorModal({
 
   return (
     <>
-      <ModalTrigger
-        icon={Share2}
-        label="[ EXPORT SHARE CARD ]"
-        onClick={() => setIsOpen(true)}
-        title="Buat Kartu Infografis Transmisi Harian"
-        color="cyan"
-      />
+      {asIcon ? (
+        <button
+          onClick={() => setIsOpen(true)}
+          title="Export Infographic Share Card"
+          className="flex h-6 w-6 items-center justify-center rounded bg-white/5 text-[10px] text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 transition-colors"
+        >
+          <Share2 className="w-3 h-3" />
+        </button>
+      ) : (
+        <ModalTrigger
+          icon={Share2}
+          label="[ EXPORT SHARE CARD ]"
+          onClick={() => setIsOpen(true)}
+          title="Buat Kartu Infografis Transmisi Harian"
+          color="cyan"
+        />
+      )}
 
       <Modal
         isOpen={isOpen && mounted}

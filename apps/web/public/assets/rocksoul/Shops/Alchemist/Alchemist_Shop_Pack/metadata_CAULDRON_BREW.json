@@ -1,0 +1,9 @@
+{
+  "name": "Alchemist_Shop_Pack_CAULDRON_BREW",
+  "frameWidth": 128,
+  "frameHeight": 128,
+  "frameCount": 8,
+  "columns": 4,
+  "fps": 4,
+  "loop": true
+}

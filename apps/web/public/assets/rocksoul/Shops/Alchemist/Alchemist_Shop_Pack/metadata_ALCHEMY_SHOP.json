@@ -1,0 +1,9 @@
+{
+  "name": "Alchemist_Shop_Pack_ALCHEMY_SHOP",
+  "frameWidth": 128,
+  "frameHeight": 128,
+  "frameCount": 8,
+  "columns": 4,
+  "fps": 4,
+  "loop": true
+}

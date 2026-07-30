@@ -9,12 +9,14 @@ export function ModalTrigger({
   icon: Icon = Maximize2,
   title,
   color,
+  hideLabelOnMobile = false,
 }: {
   onClick: () => void
   label?: string
   icon?: React.ElementType
   title?: string
   color?: string
+  hideLabelOnMobile?: boolean
 }) {
   return (
     <button
@@ -24,7 +26,7 @@ export function ModalTrigger({
       className="tag-clip flex items-center gap-1.5 border border-primary/30 bg-primary/10 px-2 py-1 text-primary transition-colors hover:bg-primary/20 hover:text-white"
     >
       <Icon className="h-3 w-3" />
-      <span className="font-mono text-[9px] font-bold tracking-widest uppercase">
+      <span className={`font-mono text-[9px] font-bold tracking-widest uppercase ${hideLabelOnMobile ? 'hidden sm:inline-block' : ''}`}>
         {label}
       </span>
     </button>

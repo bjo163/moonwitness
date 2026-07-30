@@ -37,36 +37,49 @@ export interface Reciter {
 }
 
 /* === Universal Divine Scriptures Interfaces === */
-export interface Scripture {
+export interface DivineScripture {
   id: string; // 'quran', 'taurat', 'zabur', 'injil'
-  titleId: string;
-  titleArabic?: string;
-  titleOriginal?: string;
-  messengerId: string;
-  languageOriginal: string;
-  status: string;
-  totalSections: number;
+  name: string;
+  originalName?: string;
+  religion?: string;
+  type?: string;
+  booksCount?: number;
+  chaptersCount?: number;
+  versesCount?: number;
+  authenticityStatus?: string;
+  revelationEra?: string;
+  prophet?: string;
+  description?: string;
+  coverImageUrl?: string;
+  themeColor?: string;
 }
 
-export interface ScriptureSection {
+export interface ScriptureBook {
   id: number;
   scriptureId: string;
-  sectionNumber: number;
-  titleLatin: string;
-  titleOriginal?: string;
-  translationId: string;
-  totalVerses: number;
+  bookNumber: number;
+  name: string;
+  originalName?: string;
+  chaptersCount?: number;
+  description?: string;
+  summary?: string;
+  audioUrl?: string;
 }
 
 export interface ScriptureVerse {
   id: number;
   scriptureId: string;
-  sectionNumber: number;
+  bookId?: number;
+  chapterNumber: number;
   verseNumber: number;
   textOriginal: string; // Teks Asli (Hebrew / Aramaic / Arabic)
+  textTranslated: string; // Terjemahan
+  tafsir?: string;
+  audioUrl?: string;
+  footnote?: string;
+  crossReferences?: any;
   textTransliteration?: string; // Transliterasi / Cara Membaca
-  translationId: string; // Terjemahan Indonesia
-  notes?: string; // Catatan Sejarah & Otentisitas Teks
+  topicTags?: any;
 }
 
 export interface ApiResponse<T> {

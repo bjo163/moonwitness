@@ -5,7 +5,8 @@ import {
   getSurahDetailFromSupabase, 
   getJuzFromSupabase, 
   searchAyahsFromSupabase,
-  getHadithsFromSupabase
+  getHadithsFromSupabase,
+  getScriptureVersesFromSupabase
 } from "../supabase/client";
 
 const QURAN_COM_BASE_URL = "https://api.quran.com/api/v4";
@@ -103,7 +104,16 @@ export async function searchAyahs(keyword: string, limit: number = 50): Promise<
 /**
  * Mengambil Teks Ayat Lengkap untuk Taurat (Torah), Zabur (Psalms), & Injil (Gospels)
  */
-export async function getScriptureChapterVerses(scriptureId: string, bookCode: string, chapterNum: number = 1): Promise<ScriptureVerse[]> {
+export async function getScriptureChapterVerses(scriptureId: string, bookCode: string, chapterNum: number = 1, bookId?: number): Promise<ScriptureVerse[]> {
+  // 1. Try local Supabase if bookId is known
+  if (bookId !== undefined) {
+    const sbVerses = await getScriptureVersesFromSupabase(scriptureId, bookId, chapterNum);
+    if (sbVerses && sbVerses.length > 0) {
+      return sbVerses;
+    }
+  }
+
+  // 2. Fallback to API
   try {
     const res = await fetch(`https://bible-api.com/data/web/${bookCode}/${chapterNum}`);
     if (res.ok) {
@@ -112,12 +122,13 @@ export async function getScriptureChapterVerses(scriptureId: string, bookCode: s
         return json.verses.map((v: any) => ({
           id: v.verse,
           scriptureId,
-          sectionNumber: chapterNum,
+          bookId,
+          chapterNumber: chapterNum,
           verseNumber: v.verse,
           textOriginal: v.text.trim(),
+          textTranslated: v.text.trim(),
           textTransliteration: "",
-          translationId: v.text.trim(),
-          notes: `${json.translation?.name || "World English Text"} &middot; ${json.reference || ""}`,
+          footnote: `${json.translation?.name || "World English Text"} &middot; ${json.reference || ""}`,
         }));
       }
     }

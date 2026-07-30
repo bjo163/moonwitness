@@ -153,4 +153,15 @@
   body {
     @apply bg-background text-foreground;
     }
+}/* Tajweed Colors */
+.tajweed-container {
 }
+tajweed.madda_normal, tajweed.madda_permissible, tajweed.madda_necessery { color: #f43f5e; /* rose-500 */ }
+tajweed.madda_obligatory { color: #e11d48; /* rose-600 */ }
+tajweed.qalaqah { color: #3b82f6; /* blue-500 */ }
+tajweed.idgham_shafawi, tajweed.idgham_mutajanisayn, tajweed.idgham_mutamaathilayn, tajweed.idgham_bighunnah { color: #10b981; /* emerald-500 */ }
+tajweed.idgham_bilaghunnah { color: #84cc16; /* lime-500 */ }
+tajweed.ghunnah { color: #14b8a6; /* teal-500 */ }
+tajweed.ikhafa, tajweed.ikhfa, tajweed.ikhfa_shafawi { color: #d946ef; /* fuchsia-500 */ }
+tajweed.iqlab { color: #0ea5e9; /* sky-500 */ }
+tajweed.ham_wasl, tajweed.laam_shamsiyah, tajweed.slnt { color: #64748b; /* slate-500 */ }

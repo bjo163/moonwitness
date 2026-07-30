@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS surahs (
   number_of_ayahs INT NOT NULL,
   revelation_type TEXT NOT NULL,
   audio_full TEXT,
+  emblem_url TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <filter id="glow-44" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Outer Glow -->
+  <g filter="url(#glow-44)">
+    <circle cx="256" cy="256" r="200" fill="none" stroke="#FFB800" stroke-width="4" opacity="0.8" />
+                <circle cx="256" cy="256" r="220" fill="none" stroke="#FFB800" stroke-width="1" opacity="0.3" stroke-dasharray="20, 10" />
+    
+    <circle cx="256" cy="256" r="150" fill="none" stroke="#FFB800" stroke-width="1" opacity="0.5" stroke-dasharray="14, 9" />
+    <circle cx="256" cy="256" r="140" fill="none" stroke="#FFB800" stroke-width="2" opacity="0.2" />
+    <circle cx="256" cy="256" r="100" fill="none" stroke="#FFB800" stroke-width="1" opacity="0.6" stroke-dasharray="2, 6" />
+  
+    
+    <circle cx="128.7927855765361" cy="176.51211036501928" r="4" fill="#FFB800" />
+    <circle cx="159.8738304061681" cy="228.4362644183001" r="3" fill="#fff" opacity="0.8" />
+  
+    
+    <line x1="256" y1="20" x2="256" y2="40" stroke="#FFB800" stroke-width="2" opacity="0.7" />
+    <line x1="256" y1="472" x2="256" y2="492" stroke="#FFB800" stroke-width="2" opacity="0.7" />
+    <line x1="20" y1="256" x2="40" y2="256" stroke="#FFB800" stroke-width="2" opacity="0.7" />
+    <line x1="472" y1="256" x2="492" y2="256" stroke="#FFB800" stroke-width="2" opacity="0.7" />
+  
+  </g>
+
+  <!-- Number -->
+  <text x="256" y="271" font-family="monospace, sans-serif" font-size="64" font-weight="900" fill="#ffffff" text-anchor="middle" opacity="0.9">
+    44
+  </text>
+  <text x="256" y="216" font-family="monospace, sans-serif" font-size="12" font-weight="bold" fill="#FFB800" text-anchor="middle" letter-spacing="4">
+    SURAH
+  </text>
+  <text x="256" y="311" font-family="monospace, sans-serif" font-size="10" fill="#FFB800" text-anchor="middle" opacity="0.7" letter-spacing="2">
+    TRANSMISSION
+  </text>
+</svg>

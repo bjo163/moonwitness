@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <filter id="glow-76" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Outer Glow -->
+  <g filter="url(#glow-76)">
+    <polygon points="440.7759065022574,332.53668647301794 332.536686473018,440.7759065022574 179.46331352698206,440.7759065022574 71.22409349774264,332.536686473018 71.22409349774264,179.46331352698206 179.46331352698195,71.2240934977427 332.536686473018,71.22409349774267 440.77590650225727,179.46331352698192" fill="none" stroke="#00F0FF" stroke-width="4" opacity="0.8" />
+                <polygon points="459.2534971524831,340.19035512031974 340.19035512031974,459.2534971524831 171.80964487968026,459.2534971524831 52.74650284751692,340.1903551203198 52.746502847516894,171.80964487968026 171.80964487968012,52.74650284751698 340.1903551203198,52.74650284751695 459.253497152483,171.8096448796801" fill="none" stroke="#00F0FF" stroke-width="1" opacity="0.3" stroke-dasharray="15, 10" />
+    
+    <circle cx="256" cy="256" r="150" fill="none" stroke="#00F0FF" stroke-width="1" opacity="0.5" stroke-dasharray="26, 6" />
+    <circle cx="256" cy="256" r="140" fill="none" stroke="#00F0FF" stroke-width="2" opacity="0.2" />
+    <circle cx="256" cy="256" r="100" fill="none" stroke="#00F0FF" stroke-width="1" opacity="0.6" stroke-dasharray="2, 6" />
+  
+    
+    <circle cx="250.76507549462474" cy="106.09137594713565" r="4" fill="#00F0FF" />
+    <circle cx="327.9339800338651" cy="325.4658370458997" r="3" fill="#fff" opacity="0.8" />
+  
+    
+    <line x1="256" y1="20" x2="256" y2="40" stroke="#00F0FF" stroke-width="2" opacity="0.7" />
+    <line x1="256" y1="472" x2="256" y2="492" stroke="#00F0FF" stroke-width="2" opacity="0.7" />
+    <line x1="20" y1="256" x2="40" y2="256" stroke="#00F0FF" stroke-width="2" opacity="0.7" />
+    <line x1="472" y1="256" x2="492" y2="256" stroke="#00F0FF" stroke-width="2" opacity="0.7" />
+  
+  </g>
+
+  <!-- Number -->
+  <text x="256" y="271" font-family="monospace, sans-serif" font-size="64" font-weight="900" fill="#ffffff" text-anchor="middle" opacity="0.9">
+    76
+  </text>
+  <text x="256" y="216" font-family="monospace, sans-serif" font-size="12" font-weight="bold" fill="#00F0FF" text-anchor="middle" letter-spacing="4">
+    SURAH
+  </text>
+  <text x="256" y="311" font-family="monospace, sans-serif" font-size="10" fill="#00F0FF" text-anchor="middle" opacity="0.7" letter-spacing="2">
+    TRANSMISSION
+  </text>
+</svg>

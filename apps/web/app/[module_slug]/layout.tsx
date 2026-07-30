@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { getModule } from "@modules/index"
 import { ErpSidebar, ErpNavbar } from "@core/shell-erp"
 import { Navbar } from "@core/shell/navbar"
+import { AutoBreadcrumb } from "@core/ui/breadcrumb"
 
 export default async function ModuleLayout({
   children,
@@ -43,6 +44,9 @@ export default async function ModuleLayout({
     <>
       <Suspense fallback={null}><Navbar /></Suspense>
       <main className="flex min-h-screen flex-col pt-16">
+        <Suspense fallback={<div className="h-6"></div>}>
+          <AutoBreadcrumb className="px-6 pt-6 pb-2" />
+        </Suspense>
         {children}
       </main>
     </>

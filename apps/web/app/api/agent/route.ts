@@ -62,7 +62,7 @@ export async function POST(req: Request) {
     const previousInteractionId =
       messages.length > 1 ? interactionCache.get(sessionId) : undefined
 
-    const modelName = process.env.GEMINI_MODEL_ID || "gemini-flash-latest"
+    const modelName = process.env.GEMINI_MODEL_ID || "gemini-2.5-flash"
 
     for (let i = 0; i < shuffledKeys.length; i++) {
       const currentKey = shuffledKeys[i]!

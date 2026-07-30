@@ -31,6 +31,7 @@ export function AsbabunNuzulModal({
         onClick={() => setIsOpen(true)}
         title="Lihat Asbabun Nuzul & Tafsir Kontekstual"
         color="cyan"
+        hideLabelOnMobile={true}
       />
 
       <Modal

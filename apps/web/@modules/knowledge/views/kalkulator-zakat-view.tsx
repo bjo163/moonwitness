@@ -1,190 +1,150 @@
 "use client"
 
 import { useState } from "react"
-import { useLanguage } from "@core/contexts"
-import { Scale, Download } from "lucide-react"
-import { ContextBlock, Panel, PanelHeader, Button } from "@core/ui"
+import { Calculator, Coins, TrendingUp, ShieldCheck } from "lucide-react"
+import { ContextBlock } from "@core/ui"
+
+// Simulasi harga emas global (real-time API can be hooked here)
+const MOCK_GOLD_PRICE_PER_GRAM = 1350000 // Rupiah
+const NISAB_GOLD_GRAMS = 85
+const NISAB_VALUE = MOCK_GOLD_PRICE_PER_GRAM * NISAB_GOLD_GRAMS
+const ZAKAT_RATE = 0.025 // 2.5%
 
 export function KalkulatorZakatView() {
-  const { t } = useLanguage()
-  const [totalWealth, setTotalWealth] = useState<number>(100000000)
-  const [goldPrice, setGoldPrice] = useState<number>(1400000)
-  const [isCalculated, setIsCalculated] = useState(false)
+  const [savings, setSavings] = useState<number>(0)
+  const [investments, setInvestments] = useState<number>(0)
+  const [goldSilver, setGoldSilver] = useState<number>(0)
+  
+  const totalWealth = savings + investments + goldSilver
+  const isEligible = totalWealth >= NISAB_VALUE
+  const zakatAmount = isEligible ? totalWealth * ZAKAT_RATE : 0
 
-  const nisabGoldValue = 85 * goldPrice
-  const isObligatory = totalWealth >= nisabGoldValue
-  const zakatAmount = isObligatory ? totalWealth * 0.025 : 0
-
-  function handleCalculate() {
-    setIsCalculated(true)
-  }
-
-  function handleDownloadReceipt() {
-    const canvas = document.createElement("canvas")
-    canvas.width = 800
-    canvas.height = 500
-    const ctx = canvas.getContext("2d")
-    if (ctx) {
-      ctx.fillStyle = "#05070A"
-      ctx.fillRect(0, 0, 800, 500)
-      ctx.strokeStyle = "#00FF66"
-      ctx.lineWidth = 4
-      ctx.strokeRect(20, 20, 760, 460)
-
-      ctx.fillStyle = "#00FF66"
-      ctx.font = "bold 18px Orbitron, sans-serif"
-      ctx.fillText("MOONWITNESS OS V6.5 // KALKULASI ZAKAT REAL-TIME", 40, 60)
-
-      ctx.fillStyle = "#F5F5F5"
-      ctx.font = "bold 24px sans-serif"
-      ctx.fillText(
-        `TOTAL HARTA / ASET: Rp ${totalWealth.toLocaleString("id-ID")}`,
-        40,
-        140
-      )
-
-      ctx.fillStyle = "#FFE600"
-      ctx.font = "bold 18px monospace"
-      ctx.fillText(
-        `NISAB EMAS (85 gram): Rp ${nisabGoldValue.toLocaleString("id-ID")}`,
-        40,
-        200
-      )
-
-      ctx.fillStyle = isObligatory ? "#00FF66" : "#8B9BB0"
-      ctx.font = "bold 28px Orbitron, sans-serif"
-      ctx.fillText(
-        isObligatory
-          ? `ZAKAT MAAL WAJIB DIBAYAR (2.5%): Rp ${zakatAmount.toLocaleString("id-ID")}`
-          : "BELUM MENCAPAI NISAB (TIDAK WAJIB ZAKAT)",
-        40,
-        290
-      )
-
-      const link = document.createElement("a")
-      link.download = `zakat-receipt-${Date.now()}.png`
-      link.href = canvas.toDataURL("image/png")
-      link.click()
-    }
+  const formatCurrency = (val: number) => {
+    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val)
   }
 
   return (
-    <div
-      className="theme-grid-bg min-h-screen py-8 font-mono text-foreground"
-      suppressHydrationWarning
-    >
-      <div className="mx-auto max-w-5xl space-y-6 px-4 sm:px-6">
-        {/* System Breadcrumb */}
+    <>
+      <ContextBlock
+        title="MESIN BAITUL MAL (KALKULATOR ZAKAT)"
+        subtitle="Modul analitik ekonomi untuk mengkalkulasi kewajiban zakat mal secara real-time berdasarkan simulasi fluktuasi harga emas global. Sistem ini bersifat read-only (tidak menyimpan data finansial pengguna)."
+        operation="WEALTH-DISTRIBUTION"
+        status="ONLINE"
+        accentColor="success"
+      />
 
-        {/* Tactical Context Block */}
-        <ContextBlock
-          title={t("ZAKAT MAAL CALCULATOR", "KALKULATOR ZAKAT MAAL REAL-TIME")}
-          subtitle={t(
-            "Atomic Zakat calculator based on 85g gold Nisab standard (Bayt Al-Mal telemetry).",
-            "Kalkulator Zakat Maal & Fitrah presisi berdasarkan nisab emas 85 gram."
-          )}
-          operation="BAYT-AL-MAL-CALCULATOR"
-          status="ONLINE"
-          accentColor="success"
-        />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Input Panel */}
+        <div className="lg:col-span-2 panel-box bg-space border-2 border-primary/50 shadow-[0_0_30px_rgba(0,240,255,0.1)] p-6">
+          <div className="flex items-center gap-3 border-b border-primary/20 pb-4 mb-6">
+            <Calculator className="w-5 h-5 text-primary" />
+            <h2 className="text-sm font-bold text-primary tracking-widest">INPUT ASET KEKAYAAN (HAUL 1 TAHUN)</h2>
+          </div>
 
-        {/* Calculator Form & Results Panel */}
-        <Panel level="level2" accentColor="success">
-          <PanelHeader
-            title="// ZAKAT MAAL COMPUTATION FORM"
-            status="ACTIVE"
-            icon={Scale}
-            accentColor="success"
-            subtitle="Calculate obligatory 2.5% Zakat Maal based on current gold prices."
-          />
-
-          <div className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2">
-            <div className="space-y-4">
-              <div>
-                <label className="mb-1 block text-xs font-bold text-primary">
-                  TOTAL HARTA / ASET SAVINGS (IDR):
-                </label>
-                <input
+          <div className="space-y-6">
+            <div>
+              <label className="block text-xs font-bold text-primary/70 mb-2">TABUNGAN & UANG TUNAI</label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-primary font-bold">Rp</span>
+                <input 
                   type="number"
-                  value={totalWealth}
-                  onChange={(e) => setTotalWealth(Number(e.target.value))}
-                  className="bg-space border-success/40 text-success tag-clip focus:border-success w-full border p-3 text-sm font-bold focus:outline-none"
+                  min="0"
+                  className="w-full bg-black/50 border border-primary/30 rounded-none p-3 pl-12 text-foreground focus:outline-none focus:border-primary font-mono"
+                  placeholder="0"
+                  onChange={(e) => setSavings(Number(e.target.value) || 0)}
                 />
               </div>
-
-              <div>
-                <label className="mb-1 block text-xs font-bold text-primary">
-                  HARGA EMAS PER GRAM (IDR):
-                </label>
-                <input
-                  type="number"
-                  value={goldPrice}
-                  onChange={(e) => setGoldPrice(Number(e.target.value))}
-                  className="bg-space border-success/40 tag-clip w-full border p-3 text-sm font-bold text-accent focus:border-accent focus:outline-none"
-                />
-              </div>
-
-              <Button
-                variant="primary"
-                accentColor="success"
-                onClick={handleCalculate}
-                className="w-full py-3"
-              >
-                HITUNG KALKULASI ZAKAT →
-              </Button>
             </div>
 
-            <div className="bg-space border-success/30 tag-clip flex flex-col justify-between space-y-4 border p-5">
-              <div>
-                <p className="text-[9px] font-bold text-primary uppercase">
-                  {/* HASIL KALKULASI ZAKAT: */}
-                </p>
-                <div className="mt-2 space-y-2">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-primary">Nisab Emas (85g):</span>
-                    <span className="font-bold text-accent">
-                      Rp {nisabGoldValue.toLocaleString("id-ID")}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-primary">Status Wajib:</span>
-                    <span
-                      className={
-                        isObligatory
-                          ? "text-success font-bold"
-                          : "text-danger font-bold"
-                      }
-                    >
-                      {isObligatory ? "WAJIB ZAKAT (WAJIB)" : "BELUM NISHAB"}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="border-success/20 mt-4 border-t pt-3">
-                  <span className="block text-[10px] text-primary">
-                    ZAKAT 2.5% YANG HARUS DIBAYAR:
-                  </span>
-                  <span className="text-success text-2xl font-black">
-                    Rp {zakatAmount.toLocaleString("id-ID")}
-                  </span>
-                </div>
+            <div>
+              <label className="block text-xs font-bold text-primary/70 mb-2">SAHAM, REKSADANA, ATAU INVESTASI LAIN</label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-primary font-bold">Rp</span>
+                <input 
+                  type="number"
+                  min="0"
+                  className="w-full bg-black/50 border border-primary/30 rounded-none p-3 pl-12 text-foreground focus:outline-none focus:border-primary font-mono"
+                  placeholder="0"
+                  onChange={(e) => setInvestments(Number(e.target.value) || 0)}
+                />
               </div>
+            </div>
 
-              {isCalculated && (
-                <Button
-                  variant="console"
-                  accentColor="success"
-                  onClick={handleDownloadReceipt}
-                  className="w-full text-xs"
-                >
-                  <Download className="mr-1 h-4 w-4" /> UNDUH TANDA TERIMA PNG
-                </Button>
-              )}
+            <div>
+              <label className="block text-xs font-bold text-primary/70 mb-2">NILAI EMAS/PERAK SIMPANAN (BUKAN PERHIASAN DIPAKAI)</label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-primary font-bold">Rp</span>
+                <input 
+                  type="number"
+                  min="0"
+                  className="w-full bg-black/50 border border-primary/30 rounded-none p-3 pl-12 text-foreground focus:outline-none focus:border-primary font-mono"
+                  placeholder="0"
+                  onChange={(e) => setGoldSilver(Number(e.target.value) || 0)}
+                />
+              </div>
             </div>
           </div>
-        </Panel>
+        </div>
+
+        {/* Output/Telemetry Panel */}
+        <div className="space-y-6">
+          
+          {/* Global Market Data */}
+          <div className="panel-box bg-panel border border-primary/30 p-6">
+            <div className="flex items-center gap-2 mb-4 text-xs font-bold text-primary/70">
+              <TrendingUp className="w-4 h-4 text-warning" />
+              GLOBAL GOLD INDEX
+            </div>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center border-b border-primary/10 pb-2">
+                <span className="text-[10px] text-primary/50">HARGA EMAS / GRAM</span>
+                <span className="font-mono text-xs text-foreground font-bold">{formatCurrency(MOCK_GOLD_PRICE_PER_GRAM)}</span>
+              </div>
+              <div className="flex justify-between items-center border-b border-primary/10 pb-2">
+                <span className="text-[10px] text-primary/50">BATAS NISAB (85 GRAM)</span>
+                <span className="font-mono text-xs text-warning font-bold">{formatCurrency(NISAB_VALUE)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Calculation Result */}
+          <div className={`panel-box border-2 p-6 transition-all duration-500 ${isEligible ? 'bg-success/10 border-success shadow-[0_0_30px_rgba(0,255,102,0.2)]' : 'bg-black/50 border-primary/30'}`}>
+            <div className="text-center mb-6">
+              <div className="text-[10px] font-bold text-primary/50 tracking-widest mb-2">TOTAL AKUMULASI HARTA</div>
+              <div className="text-2xl font-mono font-black text-white">{formatCurrency(totalWealth)}</div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-primary/70">STATUS WAJIB ZAKAT</span>
+                {isEligible ? (
+                  <span className="tag-clip bg-success text-black px-2 py-1 text-[10px] font-bold flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3" /> WAJIB (MELEBIHI NISAB)
+                  </span>
+                ) : (
+                  <span className="tag-clip bg-primary/20 text-primary px-2 py-1 text-[10px] font-bold">
+                    BELUM MENCAPAI NISAB
+                  </span>
+                )}
+              </div>
+
+              <div className="pt-4 border-t border-primary/20">
+                <div className="text-[10px] font-bold text-primary/50 tracking-widest mb-1 text-center">ZAKAT YANG HARUS DIKELUARKAN (2.5%)</div>
+                <div className={`text-3xl font-mono font-black text-center ${isEligible ? 'text-success' : 'text-primary/30'}`}>
+                  {formatCurrency(zakatAmount)}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-[9px] text-primary/50 text-center leading-relaxed">
+            <Coins className="w-3 h-3 inline-block mr-1 opacity-50" />
+            Catatan: Sistem ini murni alat bantu hitung (Read-Only). Kami tidak mengumpulkan, menyimpan, atau mengirimkan data finansial Anda ke peladen mana pun. Privasi harta umat terjamin.
+          </div>
+
+        </div>
       </div>
-    </div>
+    </>
   )
 }
-

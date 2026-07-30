@@ -73,24 +73,6 @@ export function DailyTransmissionView() {
 
   return (
     <div className="space-y-12">
-      {/* Page Header */}
-      <div className="animate-in space-y-4 duration-700 fill-mode-both fade-in slide-in-from-top-8">
-        <div className="flex items-center gap-3 text-cyan-400">
-          <span className="flex h-10 w-10 items-center justify-center rounded-full border border-cyan-500/30 bg-cyan-500/10 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-cyan-400 shadow-[0_0_8px_#00F0FF]" />
-          </span>
-          <div>
-            <h1 className="text-2xl font-light tracking-[0.3em] uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] sm:text-3xl">
-              Divine Observatory
-            </h1>
-            <p className="mt-1 text-[10px] font-medium tracking-[0.2em] text-primary uppercase">
-              Global Transmission Monitoring Center
-            </p>
-          </div>
-        </div>
-        <div className="h-px w-full bg-gradient-to-r from-cyan-500/50 via-transparent to-transparent opacity-50" />
-      </div>
-
       {/* Live Today's Transmission */}
       <div
         className="animate-in space-y-4 duration-700 fill-mode-both fade-in slide-in-from-top-8"

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import Image from "next/image"
 /* eslint-disable-next-line no-restricted-imports -- Standard icons for global intelligence dashboard */
 import {
@@ -11,70 +11,80 @@ import {
   CheckCircle2,
   Hexagon,
   MessageSquare,
+  Plane,
+  Sun,
+  Users,
+  ShieldAlert,
+  Wifi,
+  Anchor,
+  Cloud,
+  DollarSign
 } from "lucide-react"
 
 import { useOSStore } from "@core/store/os-store"
 
-// Monitoring Widgets
+// Monitoring Widgets (Categorized)
 import { GlobalStatusWidget } from "@core/widgets/monitoring/global-status-widget"
-import { LiveWorldMapWidget } from "@core/widgets/monitoring/live-world-map-widget"
-import { GlobalIssuesWidget } from "@core/widgets/monitoring/global-issues-widget"
 import { RootCauseWidget } from "@core/widgets/monitoring/root-cause-widget"
+import { LiveWorldMapWidget } from "@core/widgets/monitoring/map/live-world-map-widget"
+import { PlanetarySeismicWidget } from "@core/widgets/monitoring/seismic/planetary-seismic-widget"
+import { AviationTrafficWidget } from "@core/widgets/monitoring/aviation/aviation-traffic-widget"
+import { SpaceWeatherWidget } from "@core/widgets/monitoring/space-weather/space-weather-widget"
+import { GlobalPrayerNetworkWidget } from "@core/widgets/monitoring/spiritual/global-prayer-network-widget"
+import { MaritimeTrafficWidget } from "@core/widgets/monitoring/maritime/maritime-traffic-widget"
+import { GlobalClimateWidget } from "@core/widgets/monitoring/climate/global-climate-widget"
+import { FinancialMarketsWidget } from "@core/widgets/monitoring/economy/financial-markets-widget"
 
-// Intelligence Widgets
-import { KnowledgeSignalsWidget } from "@core/widgets/intelligence/knowledge-signals-widget"
-import { MissionAlertsWidget } from "@core/widgets/intelligence/mission-alerts-widget"
-import { LiveEventsWidget } from "@core/widgets/intelligence/live-events-widget"
-import { RecommendationEngineWidget } from "@core/widgets/intelligence/recommendation-engine-widget"
+// Humanity & Cyber Widgets
+import { GlobalPopulationWidget } from "@core/widgets/monitoring/demographic/global-population-widget"
+import { DigitalConsciousnessWidget } from "@core/widgets/monitoring/internet/digital-consciousness-widget"
+import { TrendingTopicsWidget } from "@core/widgets/monitoring/internet/trending-topics-widget"
+import { SocialMediaTrendsWidget } from "@core/widgets/monitoring/internet/social-media-trends-widget"
+import { CyberThreatMonitorWidget } from "@core/widgets/monitoring/cyber/cyber-threat-monitor-widget"
 
 // Management Widgets
 import { ActionCenterWidget } from "@core/widgets/management/action-center-widget"
 import { ProjectPortfolioWidget } from "@core/widgets/management/project-portfolio-widget"
 import { TaskCenterWidget } from "@core/widgets/management/task-center-widget"
 import { MissionCommandWidget } from "@core/widgets/management/mission-command-widget"
+import { RecommendationEngineWidget } from "@core/widgets/intelligence/recommendation-engine-widget"
+import { KhidraCommandWidget } from "@core/widgets/intelligence/khidra-command-widget"
+import { IntelBriefingWidget } from "@core/widgets/intelligence/intel-briefing-widget"
+
 const PROGRESS_SEGMENTS = 20
 
-function SystemStatusIndicator({ systemStatus }: { systemStatus: string }) {
-  return (
-    <div className="flex items-center gap-3">
-      <div>
-        <div className="mb-0.5 text-[9px] font-black tracking-widest text-primary uppercase">
-          SYSTEM STATUS
-        </div>
-        <div className="text-success flex items-center gap-1.5 text-[10px] font-black">
-          <span className="bg-success h-1.5 w-1.5 animate-pulse rounded-full" />{" "}
-          {systemStatus}
-        </div>
-      </div>
-      <div className="border-success/30 relative flex h-10 w-10 items-center justify-center rounded-full border">
-        <Globe2 className="text-success/50 h-5 w-5" />
-        <div
-          className="animate-spin-slow border-success/50 absolute inset-0 rounded-full border"
-          style={{ clipPath: "polygon(0 0, 100% 0, 100% 50%, 0 50%)" }}
-        />
-      </div>
-    </div>
-  )
-}
+type MonitoringCategory = "ALL" | "SEISMIC" | "AVIATION" | "MARITIME" | "SPACE_WEATHER" | "CLIMATE" | "SPIRITUAL" | "DEMOGRAPHIC" | "INTERNET" | "CYBER" | "ECONOMY"
+
+import { useGlobalMonitoring } from "@core/api/hooks/use-global-monitoring"
 
 export function GlobalMonitoringView() {
-  const { clockWIB, tickClock, systemStatus } = useOSStore()
+  const [clockWIB, setClockWIB] = useState("00:00:00")
+  const [activeCategory, setActiveCategory] = useState<MonitoringCategory>("ALL")
+  const { earthquakes, globalPrayers, issPosition, spaceWeather, flights, trends, cyberAttacks, ships, isLoading } = useGlobalMonitoring()
+  const { tickClock, systemStatus } = useOSStore()
 
   // Centralized clock ticking logic synced to the store
   useEffect(() => {
     const tick = () => {
       const now = new Date()
-      tickClock(
-        now.toLocaleTimeString("en-US", {
+      const timeString = now.toLocaleTimeString("en-US", {
           hour12: false,
           timeZone: "Asia/Jakarta",
-        }) + " WIB"
-      )
+      }) + " WIB"
+      setClockWIB(timeString)
+      tickClock(timeString)
     }
     tick()
     const id = setInterval(tick, 1000)
     return () => clearInterval(id)
   }, [tickClock])
+
+  // Filter map data based on category
+  const mapEarthquakes = (activeCategory === "ALL" || activeCategory === "SEISMIC") ? earthquakes : []
+  const mapFlights = (activeCategory === "ALL" || activeCategory === "AVIATION") ? flights : []
+  const mapIss = (activeCategory === "ALL" || activeCategory === "SPACE_WEATHER") ? issPosition : null
+  const mapCyber = (activeCategory === "ALL" || activeCategory === "CYBER") ? cyberAttacks : []
+  const mapShips = (activeCategory === "ALL" || activeCategory === "MARITIME") ? ships : []
 
   return (
     <section
@@ -88,7 +98,7 @@ export function GlobalMonitoringView() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1600px] space-y-4 px-4">
-        {/* ═══ TOP HEADER (Blueprint 12) ══════════════════════════════════════ */}
+        {/* ═══ TOP HEADER ═════════════════════════════════════════════════════ */}
         <div className="flex flex-col items-center justify-between gap-4 border-b border-white/10 pb-4 xl:flex-row">
           <div className="flex items-center gap-4">
             <div className="bg-space inline-flex items-center gap-3 rounded-sm border-2 border-primary/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)]">
@@ -102,113 +112,177 @@ export function GlobalMonitoringView() {
             </h2>
           </div>
 
-          <div className="hidden items-center gap-6 px-8 text-[9px] font-bold tracking-widest text-primary uppercase xl:flex">
-            <span className="flex cursor-pointer flex-col items-center gap-1 transition-colors hover:text-white">
-              <span className="rounded bg-white/5 p-1.5">
-                <Globe2 className="h-3.5 w-3.5" />
-              </span>{" "}
-              HOME
-            </span>
-            <span className="flex cursor-pointer flex-col items-center gap-1 transition-colors hover:text-white">
-              <span className="rounded bg-white/5 p-1.5">
-                <Moon className="h-3.5 w-3.5" />
-              </span>{" "}
-              OBSERVATORY
-            </span>
-            <span className="flex flex-col items-center gap-1 border-b-2 border-primary pb-1 text-primary">
-              <span className="rounded border border-primary/50 bg-primary/10 p-1.5">
-                <Activity className="h-3.5 w-3.5" />
-              </span>{" "}
-              GLOBAL INTELLIGENCE
-            </span>
-            <span className="flex cursor-pointer flex-col items-center gap-1 transition-colors hover:text-white">
-              <span className="rounded bg-white/5 p-1.5">
-                <Bot className="h-3.5 w-3.5" />
-              </span>{" "}
-              KHIDRA AI
-            </span>
-          </div>
-
           <div className="flex shrink-0 items-center gap-6">
             <div className="text-right">
               <div className="font-mono text-xl font-black tracking-widest text-white drop-shadow-[0_0_8px_#FFF]">
                 {clockWIB}
               </div>
               <div className="mt-0.5 text-[9px] font-bold text-primary uppercase">
-                26 MAY 2025 // MONDAY
+                {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase()}
               </div>
             </div>
-            <div className="h-10 w-px bg-white/10" />
-            <SystemStatusIndicator systemStatus={systemStatus} />
+            <div className="border-l border-white/10 pl-6">
+              <div className="text-[9px] font-bold text-white/50 uppercase">
+                STATUS
+              </div>
+              {isLoading ? (
+                <div className="mt-1 flex items-center gap-2 text-[10px] font-black text-warning">
+                  <div className="h-2 w-2 animate-pulse rounded-full bg-warning shadow-[0_0_10px_#FF9900]" />
+                  SYNCHRONIZING APIs...
+                </div>
+              ) : (
+                <div className="mt-1 flex items-center gap-2 text-[10px] font-black text-success">
+                  <div className="h-2 w-2 animate-pulse rounded-full bg-success shadow-[0_0_10px_#00FF66]" />
+                  API SYNCED
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* ═══ LAYER 2: TOP ROW (Status + Map + Alerts) ═══════════════════════ */}
+        {/* ═══ CATEGORY SELECTOR ═════════════════════════════════════════════ */}
+        <div className="flex flex-wrap items-center gap-2 py-2">
+          {[
+            { id: "ALL", label: "ALL SYSTEMS", icon: Globe2 },
+            { id: "SEISMIC", label: "SEISMIC", icon: Activity },
+            { id: "AVIATION", label: "AVIATION", icon: Plane },
+            { id: "MARITIME", label: "MARITIME", icon: Anchor },
+            { id: "SPACE_WEATHER", label: "SPACE WEATHER", icon: Sun },
+            { id: "CLIMATE", label: "CLIMATE", icon: Cloud },
+            { id: "SPIRITUAL", label: "SPIRITUAL", icon: Moon },
+            { id: "DEMOGRAPHIC", label: "DEMOGRAPHIC", icon: Users },
+            { id: "INTERNET", label: "INTERNET", icon: Wifi },
+            { id: "CYBER", label: "CYBER THREATS", icon: ShieldAlert },
+            { id: "ECONOMY", label: "ECONOMY", icon: DollarSign }
+          ].map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.id as MonitoringCategory)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-sm border text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${
+                activeCategory === cat.id 
+                  ? "bg-primary/20 border-primary text-primary shadow-[0_0_15px_rgba(0,240,255,0.2)]" 
+                  : "bg-space border-white/10 text-white/50 hover:bg-white/5 hover:text-white"
+              }`}
+            >
+              <cat.icon className={`h-3 w-3 ${activeCategory === cat.id ? "animate-pulse" : ""}`} />
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
+        {/* ═══ LAYER 2: DYNAMIC WIDGETS based on Category ════════════════════ */}
         <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-12">
+          {/* Always show Global Status */}
           <div className="flex flex-col gap-4 lg:col-span-3 xl:col-span-2">
             <GlobalStatusWidget />
           </div>
-          <LiveWorldMapWidget />
-          <KnowledgeSignalsWidget />
-          <MissionAlertsWidget />
+
+          {(activeCategory === "DEMOGRAPHIC") && (
+            <div className="lg:col-span-9 xl:col-span-10 grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <GlobalPopulationWidget />
+            </div>
+          )}
+          
+          {(activeCategory === "INTERNET") && (
+            <div className="lg:col-span-9 xl:col-span-10 grid grid-cols-1 lg:grid-cols-12 gap-4">
+              {/* Force the layout to adapt for internet tab */}
+              <div className="lg:col-span-8 xl:col-span-8 flex flex-col gap-4">
+                <SocialMediaTrendsWidget />
+                <DigitalConsciousnessWidget />
+              </div>
+              <div className="lg:col-span-4 xl:col-span-4">
+                <TrendingTopicsWidget trends={trends} />
+              </div>
+            </div>
+          )}
+
+          {(activeCategory === "MARITIME") && (
+            <div className="lg:col-span-9 xl:col-span-10">
+              <MaritimeTrafficWidget ships={ships} />
+            </div>
+          )}
+
+          {(activeCategory === "CLIMATE") && (
+            <div className="lg:col-span-9 xl:col-span-10">
+              <GlobalClimateWidget />
+            </div>
+          )}
+
+          {(activeCategory === "ECONOMY") && (
+            <div className="lg:col-span-9 xl:col-span-10">
+              <FinancialMarketsWidget />
+            </div>
+          )}
+
+          {/* Map is kept in the DOM to prevent Leaflet appendChild crashes on unmount, hidden via CSS when not needed */}
+          <div className={`${(activeCategory === "DEMOGRAPHIC" || activeCategory === "INTERNET" || activeCategory === "CLIMATE" || activeCategory === "ECONOMY") ? "hidden" : "block"} lg:col-span-9 xl:col-span-10`}>
+            <LiveWorldMapWidget earthquakes={mapEarthquakes} issPosition={mapIss} flights={mapFlights} cyberAttacks={mapCyber} ships={mapShips} />
+          </div>
+
+          {/* Conditional Widgets based on category */}
+          {(activeCategory !== "DEMOGRAPHIC" && activeCategory !== "INTERNET" && activeCategory !== "CYBER" && activeCategory !== "MARITIME" && activeCategory !== "CLIMATE" && activeCategory !== "ECONOMY") && (
+            <div className="flex flex-col gap-4 lg:col-span-3 xl:col-span-2">
+              {(activeCategory === "ALL" || activeCategory === "SPACE_WEATHER") && (
+                <SpaceWeatherWidget spaceWeather={spaceWeather} />
+              )}
+              {(activeCategory === "ALL" || activeCategory === "SPIRITUAL") && (
+                <GlobalPrayerNetworkWidget globalPrayers={globalPrayers} />
+              )}
+            </div>
+          )}
         </div>
 
-        {/* ═══ LAYER 3: MIDDLE ROW (Feed + Issues + Root Cause) ═══════════════ */}
+        {/* ═══ LAYER 3: SECONDARY WIDGETS ════════════════════════════════════ */}
         <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-12">
-          <LiveEventsWidget />
-          <GlobalIssuesWidget />
-          <RootCauseWidget />
+          {(activeCategory === "ALL" || activeCategory === "AVIATION") && (
+            <AviationTrafficWidget flights={flights} />
+          )}
+          {(activeCategory === "ALL" || activeCategory === "SEISMIC") && (
+            <PlanetarySeismicWidget earthquakes={earthquakes} />
+          )}
+          {(activeCategory === "ALL" || activeCategory === "CYBER") && (
+            <CyberThreatMonitorWidget cyberAttacks={cyberAttacks} />
+          )}
+          {(activeCategory === "ALL") && (
+            <>
+              <GlobalPopulationWidget />
+              <SocialMediaTrendsWidget />
+              <DigitalConsciousnessWidget />
+              <TrendingTopicsWidget trends={trends} />
+              <GlobalClimateWidget />
+              <FinancialMarketsWidget />
+              <MaritimeTrafficWidget ships={ships} />
+            </>
+          )}
+          {activeCategory === "ALL" && (
+            <RootCauseWidget />
+          )}
         </div>
 
         {/* ═══ LAYER 4: BOTTOM ROW (Actions + Projects + Tasks) ═══════════════ */}
-        <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-12">
-          <RecommendationEngineWidget />
-          <ActionCenterWidget />
-          <ProjectPortfolioWidget />
-          <TaskCenterWidget />
-        </div>
-
-        {/* ═══ LAYER 5: LOWEST COMMAND ROW ════════════════════════════════════ */}
-        <div className="grid grid-cols-1 items-stretch gap-4 pt-2 lg:grid-cols-12">
-          {/* AI Advisor Khidra */}
-          <div className="bg-space border-success/30 flex items-center gap-4 rounded-xl border-2 p-4 shadow-[0_0_20px_rgba(0,255,102,0.1)] lg:col-span-5">
-            <div className="bg-space border-success/50 relative h-24 w-24 shrink-0 overflow-hidden rounded-lg border">
-              <Image
-                alt="Media"
-                unoptimized
-                width={120}
-                height={120}
-                src="/assets/mod_khidra.png"
-                className="h-full w-full object-cover opacity-90 mix-blend-screen"
-              />
-              <div className="from-space absolute inset-0 bg-gradient-to-t to-transparent opacity-50" />
-            </div>
-
-            <div className="flex-1">
-              <div className="mb-1 text-[10px] font-black tracking-widest text-white uppercase">
-                AI ADVISOR <span className="text-success">KHIDRA</span>
-              </div>
-              <div className="text-success/70 mb-2 text-[8px] uppercase">
-                Your Knowledge Intelligence Companion
-              </div>
-
-              <div className="mb-3 font-sans text-[9px] leading-relaxed text-white/80">
-                Based on current data analysis, I recommend prioritizing{" "}
-                <span className="text-success font-bold">
-                  Moon Observation Coverage
-                </span>{" "}
-                in West Indonesia. The impact will be significant for upcoming
-                hilal confirmation.
-              </div>
-
-              <button className="border-success/50 text-success hover:bg-success/20 flex items-center gap-1.5 rounded border px-3 py-1.5 text-[9px] font-bold tracking-widest uppercase transition-colors">
-                <MessageSquare className="h-3 w-3" /> ASK KHIDRA
-              </button>
-            </div>
+        {activeCategory === "ALL" && (
+          <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-12">
+            <RecommendationEngineWidget />
+            <ActionCenterWidget />
+            <ProjectPortfolioWidget />
+            <TaskCenterWidget />
           </div>
+        )}
 
-          <MissionCommandWidget />
-        </div>
+        {/* ═══ LAYER 5: INTEL BRIEFING ROW ════════════════════════════════════ */}
+        {activeCategory === "ALL" && (
+          <div className="pt-2">
+            <IntelBriefingWidget />
+          </div>
+        )}
+
+        {/* ═══ LAYER 6: LOWEST COMMAND ROW ════════════════════════════════════ */}
+        {activeCategory === "ALL" && (
+          <div className="grid grid-cols-1 items-stretch gap-4 pt-2 lg:grid-cols-12">
+            <KhidraCommandWidget />
+            <MissionCommandWidget />
+          </div>
+        )}
 
         {/* ═══ FOOTER ═════════════════════════════════════════════════════════ */}
         <div className="mt-6 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-4 font-mono text-[9px] text-primary md:flex-row">

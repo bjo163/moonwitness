@@ -1,0 +1,151 @@
+{
+  "compressionlevel": -1,
+  "height": 20,
+  "infinite": false,
+  "layers": [
+    {
+      "data": [
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+      ],
+      "height": 20,
+      "id": 1,
+      "name": "Tile Layer 1",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 20,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "draworder": "topdown",
+      "id": 2,
+      "name": "Object Layer 1",
+      "objects": [
+        {
+          "height": 32,
+          "id": 1,
+          "name": "Elder",
+          "properties": [
+            {
+              "name": "dialogueId",
+              "type": "string",
+              "value": "dialogue_intro"
+            },
+            {
+              "name": "sprite",
+              "type": "string",
+              "value": "npc_elder"
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "value": "npc"
+            }
+          ],
+          "rotation": 0,
+          "type": "",
+          "visible": true,
+          "width": 32,
+          "x": 320,
+          "y": 320
+        },
+        {
+          "height": 32,
+          "id": 2,
+          "name": "SpawnPoint",
+          "properties": [
+            {
+              "name": "type",
+              "type": "string",
+              "value": "spawn"
+            }
+          ],
+          "rotation": 0,
+          "type": "",
+          "visible": true,
+          "width": 32,
+          "x": 400,
+          "y": 320
+        },
+        {
+          "height": 32,
+          "id": 3,
+          "name": "ToForest",
+          "properties": [
+            {
+              "name": "targetMapId",
+              "type": "string",
+              "value": "forest"
+            },
+            {
+              "name": "targetSpawnId",
+              "type": "string",
+              "value": "SpawnPoint"
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "value": "portal"
+            }
+          ],
+          "rotation": 0,
+          "type": "",
+          "visible": true,
+          "width": 32,
+          "x": 600,
+          "y": 320
+        }
+      ],
+      "opacity": 1,
+      "type": "objectgroup",
+      "visible": true,
+      "x": 0,
+      "y": 0
+    }
+  ],
+  "nextlayerid": 3,
+  "nextobjectid": 4,
+  "orientation": "orthogonal",
+  "renderorder": "right-down",
+  "tiledversion": "1.10.2",
+  "tileheight": 32,
+  "tilesets": [
+    {
+      "columns": 8,
+      "firstgid": 1,
+      "image": "tileset.png",
+      "imageheight": 256,
+      "imagewidth": 256,
+      "margin": 0,
+      "name": "tileset",
+      "spacing": 0,
+      "tilecount": 64,
+      "tileheight": 32,
+      "tilewidth": 32
+    }
+  ],
+  "tilewidth": 32,
+  "type": "map",
+  "version": "1.10",
+  "width": 20
+}

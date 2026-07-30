@@ -37,6 +37,7 @@ export function HifzTrainerModal({
         onClick={() => setIsOpen(true)}
         title="Buka Asisten Menghafal Ayat (Hifz Trainer)"
         color="purple"
+        hideLabelOnMobile={true}
       />
 
       <Modal

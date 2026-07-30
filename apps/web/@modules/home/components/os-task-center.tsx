@@ -164,11 +164,8 @@ export function OSTaskCenter() {
 
               <div className="relative z-10 flex gap-3">
                 <div className="bg-space h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-primary/50">
-                  <Image
+                  <img
                     alt="Media"
-                    unoptimized
-                    width={120}
-                    height={120}
                     src="/assets/mod_khidra.png"
                     className="h-full w-full object-cover opacity-90 mix-blend-screen"
                   />

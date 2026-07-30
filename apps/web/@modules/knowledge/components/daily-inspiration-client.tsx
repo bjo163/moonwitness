@@ -4,12 +4,12 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useLanguage } from "@core/contexts"
 import { useGlobalAudio } from "@core/contexts"
-import { InspirationCommentsClient } from "./inspiration-comments-client"
-import { ShareCardGeneratorModal } from "@core/widgets/modals/share-card-generator-modal"
 import { AsbabunNuzulModal } from "./modals/asbabun-nuzul-modal"
 import { WordByWordModal } from "./modals/word-by-word-modal"
 import { AudioWaveformVisualizer } from "@core/ui"
 import { HifzTrainerModal } from "./modals/hifz-trainer-modal"
+import { toPng } from "html-to-image"
+import { Share2, Loader2, Play, Pause, Moon, Link as LinkIcon, MessageSquare, Palette } from "lucide-react"
 
 const SURAH_TRANSLATIONS_EN: Record<number, string> = {
   1: "The Opening",
@@ -299,6 +299,7 @@ export function DailyInspirationClient() {
   const [data, setData] = useState<DailyData | null>(null)
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)
+  const [copiedPrompt, setCopiedPrompt] = useState(false)
   const [expandHadith, setExpandHadith] = useState(false)
   const [isPlayingAudio, setIsPlayingAudio] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -307,7 +308,28 @@ export function DailyInspirationClient() {
   const [nextPrayer, setNextPrayer] = useState<{
     name: string
     formattedCountdown: string
+    percentage: number
   } | null>(null)
+  
+  const [isExporting, setIsExporting] = useState(false)
+
+  async function exportDashboardPNG() {
+    const node = document.getElementById("whatsapp-share-card")
+    if (!node || !data) return
+    
+    setIsExporting(true)
+    try {
+      const dataUrl = await toPng(node, { cacheBust: true, pixelRatio: 2 })
+      const link = document.createElement("a")
+      link.download = `MoonWitness_Transmission_${data.dateStr}.png`
+      link.href = dataUrl
+      link.click()
+    } catch (err) {
+      console.error("Failed to export dashboard:", err)
+    } finally {
+      setIsExporting(false)
+    }
+  }
 
   useEffect(() => {
     setTimeout(() => setMounted(true), 0)
@@ -341,13 +363,14 @@ export function DailyInspirationClient() {
         `${hours}:${minutes}:${seconds} ${lang === "en" ? "UTC+7" : "WIB"}`
       )
 
-      if (!data?.nextPeriod) return
+      if (!data?.prayerPeriod) return
 
       const periodStartMap: Record<
         string,
         { h: number; m: number; labelEn: string; labelId: string }
       > = {
         subuh: { h: 4, m: 35, labelEn: "DAWN / SUBUH", labelId: "SUBUH" },
+        dhuha: { h: 6, m: 0, labelEn: "MORNING / DHUHA", labelId: "DHUHA" },
         zuhur: { h: 12, m: 5, labelEn: "NOON / ZUHUR", labelId: "ZUHUR" },
         asar: { h: 15, m: 25, labelEn: "AFTERNOON / ASAR", labelId: "ASAR" },
         maghrib: {
@@ -359,11 +382,23 @@ export function DailyInspirationClient() {
         isya: { h: 19, m: 15, labelEn: "NIGHT / ISYA", labelId: "ISYA" },
       }
 
-      const targetInfo = periodStartMap[data.nextPeriod.code] || {
-        h: 18,
-        m: 0,
-        labelEn: data.nextPeriod.name.toUpperCase(),
-        labelId: data.nextPeriod.name.toUpperCase(),
+      const nextMap: Record<string, string> = {
+        subuh: "dhuha",
+        dhuha: "zuhur",
+        zuhur: "asar",
+        asar: "maghrib",
+        maghrib: "isya",
+        isya: "subuh",
+      }
+
+      const currentCode = data.prayerPeriod.code
+      const nextCode = nextMap[currentCode] || "subuh"
+
+      const targetInfo = periodStartMap[nextCode] || {
+        h: 4,
+        m: 35,
+        labelEn: "DAWN / SUBUH",
+        labelId: "SUBUH",
       }
 
       const target = new Date()
@@ -381,9 +416,13 @@ export function DailyInspirationClient() {
         const labelName =
           lang === "en" ? targetInfo.labelEn : targetInfo.labelId
         const formatted = `${diffHrs > 0 ? `${diffHrs}H ` : ""}${diffMins}M ${diffSecs}S`
+        const totalMs = 4 * 60 * 60 * 1000 // roughly 4 hours
+        const percentage = Math.max(0, Math.min(100, (diffMs / totalMs) * 100))
+        
         setNextPrayer({
           name: labelName,
           formattedCountdown: formatted,
+          percentage: percentage
         })
       }
     }
@@ -495,13 +534,14 @@ export function DailyInspirationClient() {
     setTimeout(() => setCopiedUrl(false), 2500)
   }
 
-  function copyVerseForWhatsApp() {
-    if (!data) return
+  function buildTransmissionText(): string {
+    if (!data) return ""
     const dynamicUrl = getCoolShareUrl()
     const currentTranslation =
       lang === "en"
         ? data.ayah.translationEn || data.ayah.translationId
         : data.ayah.translationId
+    
     let textToCopy = `✦ MOONWITNESS — ANCIENT SCRIPTURE & COSMIC LORE TRANSMISSION\n`
     textToCopy += `◈ ${data.prayerPeriod?.name || "Prayer Period"} (${formatBilingualDate(data.dateStr, data.formattedDate)} • ${liveTime || "UTC+7"})\n`
     textToCopy += `-------------------------------------------\n\n`
@@ -514,9 +554,17 @@ export function DailyInspirationClient() {
 
     textToCopy += `✦ Divine Tafsir & Lore Notes: \n"${getCustomTafsirNote()}"\n\n`
 
+    const asmaulSurahMeaning = lang === "en" && data.asmaulSurah
+      ? ASMAUL_HUSNA_EN[data.asmaulSurah.number] || data.asmaulSurah.translationId
+      : data.asmaulSurah?.translationId
+
     if (data.asmaulSurah) {
       textToCopy += `✨ Surah Pair Runic (#${data.asmaulSurah.number}): ${data.asmaulSurah.nameLatin} (${data.asmaulSurah.nameArabic}) — "${asmaulSurahMeaning}"\n`
     }
+
+    const asmaulAyahMeaning = lang === "en" && data.asmaulAyah
+      ? ASMAUL_HUSNA_EN[data.asmaulAyah.number] || data.asmaulAyah.translationId
+      : data.asmaulAyah?.translationId
 
     if (data.asmaulAyah) {
       textToCopy += `✨ Ayah Pair Runic (#${data.asmaulAyah.number}): ${data.asmaulAyah.nameLatin} (${data.asmaulAyah.nameArabic}) — "${asmaulAyahMeaning}"\n`
@@ -545,10 +593,90 @@ export function DailyInspirationClient() {
     textToCopy += `\n-------------------------------------------\n`
     textToCopy += `⌗ Official Link: ${dynamicUrl}\n`
     textToCopy += `◈ MoonWitness Platform: When the Moon Witness, We Share Messages.`
+    
+    return textToCopy
+  }
 
+  function copyVerseForWhatsApp() {
+    if (!data) return
+    const textToCopy = buildTransmissionText()
     navigator.clipboard.writeText(textToCopy)
     setCopied(true)
     setTimeout(() => setCopied(false), 2500)
+  }
+
+  // ──── GEN-Z TITLE GENERATOR ────
+  const GEN_Z_TITLES: Record<number, string> = {
+    1: "DIVINE UNLOCK", 2: "SACRED GRIND", 3: "FAITH BUFF",
+    4: "QUEEN ENERGY", 5: "HALAL FEAST", 6: "BEAST ORIGIN",
+    7: "PEAK ASCEND", 8: "LOOT DROP", 9: "NO CAP REPENT",
+    10: "JONAH ARC", 11: "SIGMA FAITH", 12: "GOAT STORY",
+    13: "THUNDER BUFF", 14: "RIZZ LEGACY", 15: "ROCKY PATH",
+    16: "BEE PROTOCOL", 17: "NIGHT QUEST", 18: "CAVE LORE",
+    19: "BLESSED SPAWN", 20: "MAIN QUEST", 21: "PROPHET META",
+    22: "PILGRIM GRIND", 23: "BASED BELIEF", 24: "LIGHT BEAM",
+    25: "TRUTH CHECK", 26: "POET STANCE", 27: "ANT RAID",
+    28: "EPIC LORE", 29: "SPIDER WEB", 30: "ROMAN ERA",
+    31: "WISE SAGE", 32: "BOW DOWN", 33: "SQUAD GOALS",
+    34: "SHEBA DRIP", 35: "ORIGIN STORY", 36: "CORE WISDOM",
+    37: "RANK CHECK", 38: "SIGMA LETTER", 39: "TROOP RALLY",
+    40: "MERCY DROP", 41: "DEEP LORE", 42: "COUNCIL CHAT",
+    43: "GOLD FLEX", 44: "SMOKE SIGNAL", 45: "KNEEL CHECK",
+    46: "SAND DRIFT", 47: "GOAT PATH", 48: "W SECURED",
+    49: "CRIB RULES", 50: "LETTER DROP", 51: "WIND FORCE",
+    52: "MOUNT BUFF", 53: "STAR PULL", 54: "MOON SPLIT",
+    55: "MERCY RAIN", 56: "FINAL BOSS", 57: "IRON WILL",
+    58: "HEARD THAT", 59: "EXILE MODE", 60: "VIBE CHECK",
+    61: "RANK UP", 62: "SQUAD MEET", 63: "FAKE DETECT",
+    64: "REAL TALK", 65: "SPLIT PATH", 66: "BAN HAMMER",
+    67: "KING ENERGY", 68: "PEN GAME", 69: "CLUTCH MOMENT",
+    70: "STAIR CLIMB", 71: "NOAH BUILT", 72: "JINN REVEAL",
+    73: "COZY GRIND", 74: "CLOAK MODE", 75: "RESPAWN DAY",
+    76: "HUMAN PATCH", 77: "SENT FORTH", 78: "NEWS FLASH",
+    79: "DRAG FORCE", 80: "HUMBLE PIE", 81: "FLIP RESET",
+    82: "CRACK OPEN", 83: "SCAM ALERT", 84: "SPLIT OPEN",
+    85: "STAR HOUSE", 86: "DAWN STAR", 87: "TOP TIER",
+    88: "OVERWHELMED", 89: "DAWN RAID", 90: "CITY WALK",
+    91: "SUN OATH", 92: "NIGHT SHIFT", 93: "MORNING GLOW",
+    94: "RELIEF ERA", 95: "FIG SEASON", 96: "FIRST READ",
+    97: "POWER NIGHT", 98: "PROOF CHECK", 99: "EARTH SHAKE",
+    100: "SPEED RUN", 101: "CHAOS MODE", 102: "FLEX TRAP",
+    103: "TIME DIFF", 104: "ROAST MODE", 105: "ELEPHANT W",
+    106: "TRIBE LORE", 107: "SMALL WINS", 108: "ABUNDANCE W",
+    109: "NO DEBATE", 110: "DIVINE BUFF", 111: "L RATIO",
+    112: "ONE TRUTH", 113: "DAWN SHIELD", 114: "FINAL GUARD",
+  }
+
+  function copyImagePrompt() {
+    if (!data) return
+
+    const transmissionText = buildTransmissionText()
+
+    const prompt = `Buatkan konsep dan langsung generate gambar Komik/Poster/Infografis bergaya Gen-Z, absurd, lucu, keren, dan bernuansa gamers. 
+[PENTING: Gunakan orientasi vertikal/portrait (aspect ratio 9:16) dengan art style: Manga cover art, vibrant neon colors, cyberpunk lighting, cosmic background, dan retro gaming UI.]
+
+Instruksi Elemen Gambar:
+1. JUDUL: Buat judul besar di atas dengan format "GOD PROMISE - [1-2 Kata Bahasa Inggris]". Kata tambahannya harus bergaya Gen-Z/Keren/Gamers (dinamis menyesuaikan konteks ayat).
+2. KARAKTER: 
+   - "Rocksoul" (Tokoh utama, divisualisasikan mirip Crayon Shinchan dengan hoodie/pakaian gamer).
+   - "Guru/Master" (Divisualisasikan mirip Master Muthen Roshi).
+   - Karakter Ekstra (opsional jika muat): Karakter mirip Arale.
+3. VISUALISASI KONTRAS: Gunakan layout Split-Screen (Atas vs Bawah). Bagian satu menampilkan "Keadaan Sebenarnya" (makna metafisik/spiritual dari ayat), bagian lainnya menampilkan "Realitas Saat Ini" (sindiran kelakuan manusia zaman now).
+4. TEKS DOA (Dalam Gambar): Buatkan speech-bubble berisi doa absurd/lucu maksimal 1-2 kalimat.
+   - Wajib diawali kata "Biiznillah,".
+   - Wajib menyebutkan Asmaul Husna yang terlampir di bawah (pilih salah satu/keduanya).
+   - Target doa harus spesifik menyindir/mendoakan manusia zaman now sesuai konteks ayatnya.
+5. FOOTER: Buatkan 1 kalimat footer di bawah gambar yang absurd/lucu, tapi tetap punya hikmah.
+(PASTIKAN PENULISAN TEKS DI DALAM GAMBAR AKURAT DAN JELAS TANPA TYPO)
+
+Gunakan data konteks di bawah ini sebagai bahan racikanmu, lalu silakan langsung generate gambarnya:
+
+=== KONTEKS TRANSMISSION LENGKAP ===
+${transmissionText}`
+
+    navigator.clipboard.writeText(prompt)
+    setCopiedPrompt(true)
+    setTimeout(() => setCopiedPrompt(false), 3000)
   }
 
   function formatBilingualDate(dateStr?: string, defaultFormatted?: string) {
@@ -650,398 +778,357 @@ export function DailyInspirationClient() {
 
   return (
     <section className="my-8 font-sans">
-      {/* ──── TOP HUD TRANSMISSION BAR ──── */}
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-col gap-3">
-          <div className="mb-1 flex flex-wrap items-center gap-2 text-[9px] font-medium tracking-widest text-primary uppercase">
-            <span className="flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-emerald-400">
-              <span className="font-bold">⊕</span>
-              <span>100% GLOBAL UNIFORM</span>
-            </span>
-
-            {data.globalStats && (
-              <Link
-                href="/observatory"
-                title="Click to view full unlocked verse archives"
-                className="flex items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1 text-amber-400 transition-all hover:bg-amber-500/20"
-              >
-                <span className="font-black">⬡</span>
-                <span>
-                  {t("ROTATION", "ROTASI")}{" "}
-                  {data.globalStats.seenAyahsCount.toLocaleString("en-US")} /{" "}
-                  {data.globalStats.totalAyahs.toLocaleString("en-US")} (
-                  {rotationPercentFormatted}%)
-                </span>
-                <span className="opacity-50">&rarr; {t("LOG", "RIWAYAT")}</span>
-              </Link>
-            )}
-
-            <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1">
-              {periodLabel} {liveTime && `• ${liveTime}`}
-            </span>
-
-            {nextPrayer && (
-              <span className="flex items-center gap-1.5 rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-3 py-1 text-fuchsia-400">
-                <span className="font-bold">◷</span>
-                <span>
-                  {nextPrayer.name} ({nextPrayer.formattedCountdown}{" "}
-                  {t("REMAINING", "LAGI")})
-                </span>
-              </span>
-            )}
+      {/* ──── TOP HUD (Sleek Dashboard Header) ──── */}
+      <div className="mb-4 flex flex-wrap items-center justify-between border-b border-white/10 pb-3 text-[9px] tracking-widest text-white/70 uppercase">
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_rgba(34,211,238,0.8)]"></span>
+            GLOBAL SIGNAL <span className="text-cyan-400 font-bold">ONLINE</span>
           </div>
-
-          <h2 className="text-xl font-light tracking-[0.2em] text-foreground uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] sm:text-2xl">
-            {t(
-              "CELESTIAL CONTEMPLATION & PRIMORDIAL WISDOM",
-              "KONTEMPLASI ANGKASA & KHAZANAH PRIMORDIAL"
-            )}
-          </h2>
+          <div className="flex items-center gap-2 text-blue-300">
+            <Moon className="w-3 h-3" />
+            {data.prayerPeriod?.name?.toUpperCase() || "NIGHT CYCLE"} <span className="text-cyan-400 font-medium">{liveTime}</span>
+          </div>
         </div>
+        
+        {data.globalStats && (
+          <div className="flex items-center gap-4">
+            {/* Minimalist Action Buttons */}
+            <div className="flex items-center gap-1.5 border-r border-white/10 pr-4">
+              <button
+                onClick={copyDynamicShareUrl}
+                title={copiedUrl ? t("COPIED", "TERSALIN") : t("COPY LINK", "SALIN TAUTAN")}
+                className="flex h-6 w-6 items-center justify-center rounded bg-white/5 text-[10px] text-cyan-400 hover:bg-cyan-500/20 hover:text-cyan-300 transition-colors"
+              >
+                <LinkIcon className="w-3 h-3" />
+              </button>
+              <button
+                onClick={copyVerseForWhatsApp}
+                title={copied ? t("COPIED", "TERSALIN") : t("SHARE TRANSMISSION", "BAGIKAN HIKMAH")}
+                className="flex h-6 w-6 items-center justify-center rounded bg-white/5 text-[10px] text-emerald-400 hover:bg-emerald-500/20 hover:text-emerald-300 transition-colors"
+              >
+                <MessageSquare className="w-3 h-3" />
+              </button>
+              <button
+                onClick={copyImagePrompt}
+                title={copiedPrompt ? t("PROMPT COPIED!", "PROMPT TERSALIN!") : t("SHARE PROMPT", "SHARE PROMPT")}
+                className="flex h-6 w-6 items-center justify-center rounded bg-white/5 text-[10px] text-fuchsia-400 hover:bg-fuchsia-500/20 hover:text-fuchsia-300 transition-colors"
+              >
+                <Palette className="w-3 h-3" />
+              </button>
+              <button
+                onClick={exportDashboardPNG}
+                disabled={isExporting}
+                title={isExporting ? t("EXPORTING...", "MENGEKSPOR...") : t("EXPORT FULL DASHBOARD", "EKSPOR INFOGRAFIS")}
+                className="flex h-6 w-6 items-center justify-center rounded bg-white/5 text-[10px] text-indigo-400 hover:bg-indigo-500/20 hover:text-indigo-300 transition-colors disabled:opacity-50"
+              >
+                {isExporting ? <Loader2 className="w-3 h-3 animate-spin" /> : <Share2 className="w-3 h-3" />}
+              </button>
+            </div>
 
-        <div className="flex items-center gap-3">
-          <button
-            onClick={copyDynamicShareUrl}
-            className="flex items-center gap-2 rounded border border-primary/30 bg-cyan-500/5 px-5 py-2.5 text-[10px] font-medium tracking-widest text-primary uppercase backdrop-blur-md transition-all duration-300 hover:border-primary hover:bg-cyan-500/15"
-          >
-            <span className="font-bold">⌗</span>
-            <span>
-              {copiedUrl
-                ? t("COPIED", "TERSALIN")
-                : t("COPY LINK", "SALIN TAUTAN")}
-            </span>
-          </button>
-
-          <button
-            onClick={copyVerseForWhatsApp}
-            className="flex items-center gap-2 rounded border border-emerald-500/30 bg-emerald-500/10 px-6 py-2.5 text-[10px] font-medium tracking-widest text-emerald-400 uppercase backdrop-blur-md transition-all duration-300 hover:border-emerald-400 hover:bg-emerald-500/20"
-          >
-            <span className="font-bold">◈</span>
-            <span>
-              {copied
-                ? t("COPIED", "TERSALIN")
-                : t("SHARE TRANSMISSION", "BAGIKAN HIKMAH")}
-            </span>
-          </button>
-        </div>
+            <div className="flex items-center gap-3">
+              <div className="text-right flex flex-col">
+                <span className="text-[8px] text-amber-400/80 uppercase">
+                  ROTATION {data.globalStats.seenAyahsCount.toLocaleString("en-US")} / {data.globalStats.totalAyahs.toLocaleString("en-US")}
+                </span>
+                <span>GLOBAL PROGRESS</span>
+              </div>
+              <span className="text-lg font-bold text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]">
+                {rotationPercentFormatted}%
+              </span>
+              {/* Mini Waveform visualization */}
+              <div className="flex items-end gap-[2px] h-4">
+                {[40, 70, 45, 90, 65, 80, 50, 100, 60, 30].map((h, i) => (
+                  <div key={i} className="w-[2px] bg-cyan-500/50 rounded-t" style={{ height: `${h}%` }}></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* ──── XP PROGRESS BAR ──── */}
-      {data.globalStats && (
-        <div className="mt-4 mb-6 flex items-center gap-3 rounded border border-white/5 bg-black/40 px-4 py-2 text-[10px] backdrop-blur-md">
-          <span className="font-light tracking-[0.2em] text-primary uppercase">
-            GLOBAL ROTATION
-          </span>
-          <div className="relative h-1 flex-1 overflow-hidden rounded-full bg-white/5">
-            <div
-              className="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-emerald-400 shadow-[0_0_10px_#00F0FF] transition-all duration-1000"
-              style={{ width: `${Math.max(0.1, rotationPercentRaw)}%` }}
-            />
-          </div>
-          <span className="font-mono font-bold tracking-wider text-primary">
-            {rotationPercentFormatted}%
-          </span>
-        </div>
-      )}
-
-      {/* ═══ TACTICAL MISSION SCREEN CONTAINER ═══ */}
+      {/* ═══ TACTICAL MISSION SCREEN CONTAINER (The Premium Glow Card) ═══ */}
       <div
         id="whatsapp-share-card"
-        className="bg-space/80 relative space-y-8 overflow-hidden rounded-2xl border border-cyan-500/10 p-6 shadow-[0_15px_50px_rgba(0,0,0,0.6)] backdrop-blur-2xl sm:p-10"
+        className="relative w-full overflow-hidden rounded-[2rem] border border-white/5 bg-[#0a0f1d]/60 p-6 shadow-[0_20px_60px_rgba(0,10,30,0.8)] backdrop-blur-2xl sm:p-10 font-sans text-white"
       >
+        {/* Cosmic Background Image with Mask Transparency (Matching Home Page) */}
+        <div 
+          className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
+          style={{
+            maskImage: "linear-gradient(to right, transparent 0%, black 60%, black 100%)",
+            WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 60%, black 100%)"
+          }}
+        >
+          <div 
+            className="absolute inset-0 bg-cover bg-[center_right] bg-no-repeat opacity-100"
+            style={{ backgroundImage: "url('/blueprint/BG-HERO-01.png')" }} 
+          />
+        </div>
+        
+        {/* Subtle radial overlay to ensure text readability on the left */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#030614] via-[#030614]/80 to-transparent pointer-events-none z-0" />
+        
         {/* Hologram Bar Effect */}
-        <div className="absolute top-0 left-0 h-[1px] w-full bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent opacity-50" />
+        <div className="absolute top-0 left-0 h-[1px] w-full bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent opacity-50" />
 
         {/* ──── HEADER BRANDING ──── */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/5 pb-6">
+        <div className="relative z-10 flex flex-wrap items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/20 bg-cyan-500/5 text-lg text-primary shadow-[0_0_15px_rgba(0,240,255,0.1)]">
-              ◐
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/10 border border-blue-500/30 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+              <Moon className="h-6 w-6 text-blue-300 drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]" />
             </div>
             <div>
-              <h3 className="font-sans text-sm font-light tracking-[0.3em] text-primary uppercase">
+              <h3 className="text-sm font-medium tracking-[0.3em] text-blue-50 uppercase drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">
                 MOONWITNESS MISSION TERMINAL
               </h3>
-              <p className="mt-1 text-[10px] font-medium tracking-[0.2em] text-primary/70 uppercase">
+              <p className="mt-1 text-[10px] font-medium tracking-[0.2em] text-blue-300/70 uppercase">
                 DIVINE SCRIPTURES &amp; SACRED LORE REPOSITORY
               </p>
             </div>
           </div>
-
-          <div className="flex items-center gap-2 text-[10px] font-medium tracking-widest text-primary uppercase">
-            <span>{periodLabel}</span>
-            <span className="mx-2 opacity-30">•</span>
-            <span>{headerFormattedDate}</span>
-          </div>
         </div>
 
-        {/* ──── 1. ANCIENT SCRIPTURE TRANSMISSION (AYAH) ──── */}
-        <div className="space-y-6 rounded-xl border border-white/5 bg-black/40 p-6 backdrop-blur-xl sm:p-8">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/5 pb-4">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-[10px] font-medium tracking-widest text-emerald-400 uppercase">
-                <span className="font-bold">⬡</span>
-                <span>{surahLabelText}</span>
-              </span>
+        {/* ──── MAIN GRID ──── */}
+        <div className="relative z-10 flex flex-col gap-6">
+          
+          {/* ROW 1: Current Cycle (Left) + Ayah Panel (Right) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            {/* Left: Current Cycle Timer */}
+            <div className="lg:col-span-3 flex flex-col items-center justify-center rounded-3xl border border-white/5 bg-[#0a0f1d]/40 p-8 backdrop-blur-xl relative overflow-hidden">
+               <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-blue-900/10 to-transparent pointer-events-none" />
+               
+               {/* Mosque Background Silhouette (Subtle) */}
+               <div className="absolute bottom-0 right-0 w-full h-32 opacity-10 bg-[url('https://www.svgrepo.com/show/305267/mosque.svg')] bg-no-repeat bg-right-bottom bg-contain mix-blend-screen pointer-events-none" />
 
-              {/* Compact Integrated Audio Player & Phase 5/6 Modals */}
-              <div className="flex flex-wrap items-center gap-2">
-                {data.ayah.audioUrl && (
-                  <div className="flex items-center gap-2">
-                    <audio
-                      id="daily-ayah-audio"
-                      src={data.ayah.audioUrl}
-                      onEnded={() => setIsPlayingAudio(false)}
-                    />
-                    <button
-                      onClick={toggleAudio}
-                      className="flex items-center gap-1.5 rounded-full border border-primary/30 bg-cyan-500/5 px-3 py-1.5 text-[10px] font-medium tracking-widest text-primary uppercase transition-all duration-300 hover:border-primary hover:bg-cyan-500/15"
-                      title="Play Audio Recitation"
-                    >
-                      <span className="font-bold">
-                        {isPlayingAudio ? "⏸" : "▶"}
-                      </span>
-                      <span>
-                        {isPlayingAudio
-                          ? t("PAUSE TELEMETRY", "JEDA TELEMETRI")
-                          : t("PLAY MUROTTAL", "STREAM AUDIO")}
-                      </span>
-                    </button>
-                    <AudioWaveformVisualizer isPlaying={isPlayingAudio} />
-                  </div>
-                )}
+               <span className="text-[9px] font-bold tracking-widest text-amber-500 uppercase">CURRENT <span className="text-blue-300">CYCLE</span></span>
+               <h2 className="mt-2 text-2xl md:text-4xl font-light tracking-widest text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] uppercase text-center">{data.prayerPeriod?.name || "ISYA'"}</h2>
+               <p className="mt-2 text-[10px] tracking-widest text-gray-400">19:25 - 20:40 WIB</p>
+               <p className="text-[10px] tracking-widest text-gray-500">Jakarta, Indonesia</p>
+               
+               {/* Functional SVG Circular Timer */}
+               <div className="mt-8 relative flex h-40 w-40 items-center justify-center rounded-full shadow-[0_0_30px_rgba(79,70,229,0.2)]">
+                 <svg className="absolute inset-0 h-full w-full -rotate-90 transform drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]" viewBox="0 0 100 100">
+                   {/* Background track */}
+                   <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/10" />
+                   {/* Progress track */}
+                   <circle 
+                     cx="50" cy="50" r="46" fill="none" stroke="currentColor" strokeWidth="3" 
+                     className="text-cyan-400 transition-all duration-1000 ease-linear" 
+                     strokeDasharray="289" 
+                     strokeDashoffset={289 - (289 * (nextPrayer?.percentage || 0)) / 100} 
+                   />
+                 </svg>
+                 {/* Spinning inner dashed ring for tech vibe */}
+                 <div className="absolute inset-2 rounded-full border border-dashed border-blue-500/30 animate-[spin_15s_linear_infinite]" />
+                 <div className="absolute inset-4 rounded-full border border-indigo-500/20 animate-[spin_10s_linear_infinite_reverse]" />
+                 
+                 <div className="text-center z-10">
+                   <div className="text-xl font-bold text-white tracking-widest">{nextPrayer?.formattedCountdown || "00:00:00"}</div>
+                   <div className="text-[8px] tracking-widest text-blue-400 mt-1 uppercase">REMAINING</div>
+                 </div>
+               </div>
+               
+               <div className="mt-6 text-[10px] tracking-widest text-blue-300/70 uppercase">
+                 NEXT: {nextPrayer?.name || "SUBUH"}
+               </div>
+            </div>
 
-                <AsbabunNuzulModal
-                  surahName={data.ayah.surahName}
-                  surahNumber={data.ayah.surahNumber}
-                  ayahNumber={data.ayah.ayahNumber}
-                />
-
-                <WordByWordModal
-                  surahName={data.ayah.surahName}
-                  surahNumber={data.ayah.surahNumber}
-                  ayahNumber={data.ayah.ayahNumber}
-                />
-
-                <HifzTrainerModal
-                  surahName={data.ayah.surahName}
-                  surahNumber={data.ayah.surahNumber}
-                  ayahNumber={data.ayah.ayahNumber}
-                  textArabic={data.ayah.textArabic}
-                  translationId={activeAyahTranslation}
-                />
-
-                <ShareCardGeneratorModal
-                  surahName={data.ayah.surahName}
-                  surahNumber={data.ayah.surahNumber}
-                  ayahNumber={data.ayah.ayahNumber}
-                  textArabic={data.ayah.textArabic}
-                  textLatin={data.ayah.textLatin || ""}
-                  translationId={activeAyahTranslation}
+            {/* Right: Ayah Panel (No outer borders, floating freely) */}
+            <div className="lg:col-span-9 relative z-10 flex flex-col justify-center min-h-[400px]">
+              
+              {/* Giant SVG Watermark */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] opacity-[0.03] pointer-events-none z-0 mix-blend-screen flex items-center justify-center">
+                <img 
+                  src={`/assets/surah-emblems/surah-${data.ayah.surahNumber}.svg`} 
+                  alt="" 
+                  className="w-full h-full object-contain animate-[spin_180s_linear_infinite]" 
                 />
               </div>
-            </div>
-
-            <div className="flex items-center gap-2 text-[9px] font-medium tracking-widest text-primary uppercase">
-              <span className="animate-pulse text-primary">
-                📡 AUDIO FEED: ONLINE
-              </span>
-              <span className="opacity-30">•</span>
-              <span>MISYARI RASYID</span>
-              <span className="opacity-30">•</span>
-              <span>FREQ: 114.30 MHz</span>
-            </div>
-          </div>
-
-          {/* Calligraphy Arabic */}
-          <div
-            className="arabic-text py-2 text-right text-2xl leading-[2.3] font-bold text-foreground sm:text-4xl"
-            style={{ textShadow: "0 0 15px rgba(255,255,255,0.1)" }}
-          >
-            {data.ayah.textArabic}
-          </div>
-
-          {/* Transliteration */}
-          {data.ayah.textLatin && (
-            <p
-              className="font-serif text-xs font-medium text-emerald-400 italic sm:text-sm"
-              style={{ textShadow: "0 0 10px rgba(16,185,129,0.2)" }}
-            >
-              &ldquo;{data.ayah.textLatin}&rdquo;
-            </p>
-          )}
-
-          {/* Translation */}
-          <div className="mt-4 rounded-xl border border-white/5 bg-black/30 p-5">
-            <div className="mb-2 text-[9px] font-medium tracking-[0.2em] text-primary uppercase">
-              {t("TRANSLATION RECORD", "REKAMAN TERJEMAHAN")}
-            </div>
-            <p className="text-sm leading-relaxed font-light text-foreground">
-              &ldquo;{activeAyahTranslation}&rdquo;
-            </p>
-          </div>
-
-          {/* Catatan Tafsir & Hikmah */}
-          <div className="mt-4 rounded-xl border border-amber-500/10 bg-amber-500/5 p-5">
-            <div className="mb-2 flex items-center justify-between">
-              <span className="text-[10px] font-medium tracking-[0.2em] text-amber-500 uppercase">
-                DIVINE TAFSIR &amp; LORE NOTES:
-              </span>
-              <span className="rounded-full border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-[8px] text-amber-500">
-                SYNC
-              </span>
-            </div>
-            <p className="text-sm leading-relaxed font-light text-foreground italic">
-              &ldquo;{getCustomTafsirNote()}&rdquo;
-            </p>
-          </div>
-        </div>
-
-        {/* ──── 2. DIVINE ATTRIBUTE RUNES (ASMAUL HUSNA) ──── */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {data.asmaulSurah && (
-            <div className="flex items-center justify-between gap-4 rounded-xl border border-primary/20 bg-cyan-500/5 p-5 backdrop-blur-xl">
-              <div className="flex items-center gap-4">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-primary/30 bg-cyan-500/10 text-xs font-medium text-primary shadow-[0_0_15px_rgba(0,240,255,0.1)]">
-                  #{data.asmaulSurah.number}
-                </span>
-                <div>
-                  <span className="mb-1 block text-[9px] font-medium tracking-widest text-primary/70 uppercase">
-                    SURAH PAIR RUNIC #{data.ayah.surahNumber}
+              
+              <div className="relative z-10 w-full h-full flex flex-col">
+              
+              {/* Header with Minimalist Action Icons & Surah Details */}
+              <div className="flex flex-wrap items-center justify-between border-b border-white/10 pb-4 mb-8">
+                
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 items-start">
+                  <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-1.5 text-[10px] font-medium tracking-widest text-cyan-400 uppercase">
+                    Q.S {data.ayah.surahName.toUpperCase()} {data.ayah.surahNumber}:{data.ayah.ayahNumber}
                   </span>
-                  <h4 className="text-sm font-medium text-foreground">
-                    {data.asmaulSurah.nameLatin}
-                  </h4>
-                  <p className="mt-0.5 text-[10px] text-primary">
-                    &ldquo;{asmaulSurahMeaning}&rdquo;
-                  </p>
-                </div>
-              </div>
-              <div className="shrink-0 text-right font-serif text-2xl font-bold text-primary opacity-90 drop-shadow-[0_0_10px_rgba(0,240,255,0.3)]">
-                {data.asmaulSurah.nameArabic}
-              </div>
-            </div>
-          )}
-
-          {data.asmaulAyah && (
-            <div className="flex items-center justify-between gap-4 rounded-xl border border-fuchsia-500/20 bg-fuchsia-500/5 p-5 backdrop-blur-xl">
-              <div className="flex items-center gap-4">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-fuchsia-500/30 bg-fuchsia-500/10 text-xs font-medium text-fuchsia-400 shadow-[0_0_15px_rgba(217,70,239,0.1)]">
-                  #{data.asmaulAyah.number}
-                </span>
-                <div>
-                  <span className="mb-1 block text-[9px] font-medium tracking-widest text-fuchsia-500/70 uppercase">
-                    AYAH PAIR RUNIC #{data.ayah.ayahNumber}
-                  </span>
-                  <h4 className="text-sm font-medium text-foreground">
-                    {data.asmaulAyah.nameLatin}
-                  </h4>
-                  <p className="mt-0.5 text-[10px] text-primary">
-                    &ldquo;{asmaulAyahMeaning}&rdquo;
-                  </p>
-                </div>
-              </div>
-              <div className="shrink-0 text-right font-serif text-2xl font-bold text-fuchsia-400 opacity-90 drop-shadow-[0_0_10px_rgba(217,70,239,0.3)]">
-                {data.asmaulAyah.nameArabic}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* ──── 3. HADITS & WISDOM ARCHIVES (RPG ITEM RARITY CARDS) ──── */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {data.hadith && (
-            <div className="flex flex-col justify-between space-y-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 p-6 shadow-[0_0_30px_rgba(245,158,11,0.05)] backdrop-blur-xl">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1 text-[9px] font-medium tracking-[0.2em] text-amber-500 uppercase">
-                    {t("LEGENDARY LORE CHANNEL", "KODE TRANSMISI LEGENDARIS")}
-                  </span>
-                  <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold tracking-widest text-emerald-400">
-                    {hadithGradeText.toUpperCase()}
+                  <span className="text-[10px] tracking-[0.2em] text-cyan-300/60 uppercase italic ml-2 sm:ml-0">
+                    "{SURAH_TRANSLATIONS_EN[data.ayah.surahNumber] || "The Surah"}"
                   </span>
                 </div>
 
-                <h4 className="text-sm font-light tracking-[0.1em] text-amber-500 uppercase">
-                  {data.hadith.bookName}{" "}
-                  <span className="mx-2 opacity-50">•</span> RECORD_NO.{" "}
-                  {data.hadith.number}
-                </h4>
-
-                <div className="relative">
-                  <p className="rounded-xl border border-white/5 bg-black/40 p-4 text-sm leading-relaxed font-light text-foreground italic">
-                    &ldquo;
-                    {lang === "en"
-                      ? data.hadith.textEn || data.hadith.textId
-                      : data.hadith.textId}
-                    &rdquo;
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {data.wisdom && (
-            <div className="flex flex-col justify-between space-y-4 rounded-2xl border border-primary/20 bg-cyan-500/5 p-6 shadow-[0_0_30px_rgba(6,182,212,0.05)] backdrop-blur-xl">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="rounded-full border border-primary/20 bg-cyan-500/10 px-3 py-1 text-[9px] font-medium tracking-[0.2em] text-primary uppercase">
-                    {t("EPIC TRANSMISSION MATRIX", "MATRIKS REFLEKSI EPIK")}
-                  </span>
-                  <span className="text-[9px] font-medium tracking-widest text-primary/60 uppercase">
-                    CORE_LORE_SEAL
-                  </span>
-                </div>
-
-                <h4 className="text-sm font-light tracking-[0.1em] text-primary uppercase">
-                  {t(
-                    "Sacred Scripture Reflection",
-                    data.wisdom.title || "Perenungan Khazanah Kitab Suci"
+                <div className="flex flex-wrap items-center gap-2">
+                  {data.ayah.audioUrl && (
+                    <div className="flex items-center gap-3">
+                      <audio
+                        id="daily-ayah-audio"
+                        src={data.ayah.audioUrl}
+                        onEnded={() => setIsPlayingAudio(false)}
+                      />
+                      <button
+                        onClick={toggleAudio}
+                        className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest text-white hover:text-cyan-400 transition-colors"
+                        title="Play Audio Recitation"
+                      >
+                        {isPlayingAudio ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                        <span>PLAY</span>
+                      </button>
+                      <AudioWaveformVisualizer isPlaying={isPlayingAudio} />
+                      <span className="text-white/20 mx-1">|</span>
+                    </div>
                   )}
-                </h4>
+                  {/* The Modals - they render as buttons internally, but we can override or keep them minimalist in CSS later. For now, they fit fine. */}
+                  <div className="flex items-center gap-2 opacity-70 hover:opacity-100 transition-opacity">
+                    <AsbabunNuzulModal surahName={data.ayah.surahName} surahNumber={data.ayah.surahNumber} ayahNumber={data.ayah.ayahNumber} />
+                    <WordByWordModal surahName={data.ayah.surahName} surahNumber={data.ayah.surahNumber} ayahNumber={data.ayah.ayahNumber} />
+                    <HifzTrainerModal surahName={data.ayah.surahName} surahNumber={data.ayah.surahNumber} ayahNumber={data.ayah.ayahNumber} textArabic={data.ayah.textArabic} translationId={activeAyahTranslation} />
+                  </div>
+                </div>
+              </div>
 
-                <p className="rounded-xl border border-white/5 bg-black/40 p-4 text-sm leading-relaxed font-light text-foreground italic">
-                  &ldquo;
-                  {lang === "en"
-                    ? data.wisdom.quoteEn || data.wisdom.quote
-                    : data.wisdom.quote}
-                  &rdquo;
+              {/* Arabic & Number Marker */}
+              <div className="mb-4 flex items-start justify-end gap-6">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/20 bg-[#030614]/50 font-serif text-lg text-white">
+                  {data.ayah.ayahNumber.toLocaleString('ar-EG')}
+                </div>
+                <div className="arabic-text text-right text-4xl leading-[2.5] font-bold text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] sm:text-5xl lg:text-6xl max-w-4xl">
+                  {data.ayah.textArabic}
+                </div>
+              </div>
+              
+              {/* Latin */}
+              {data.ayah.textLatin && (
+                <p className="text-right font-serif text-base font-medium text-cyan-400 italic mb-12 drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]">
+                  "{data.ayah.textLatin}"
+                </p>
+              )}
+
+              {/* 3-Column Footer grid for Ayah details */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-white/10 pt-8 mt-auto">
+                <div className="border-r border-white/10 pr-6">
+                  <h4 className="text-[10px] tracking-[0.2em] text-cyan-500 uppercase mb-3">Translation</h4>
+                  <p className="text-sm font-light leading-relaxed text-gray-200">"{activeAyahTranslation}"</p>
+                </div>
+                <div className="border-r border-white/10 pr-6">
+                  <h4 className="text-[10px] tracking-[0.2em] text-cyan-400 uppercase mb-3">Tafsir &amp; Lore Notes</h4>
+                  <p className="text-sm font-light leading-relaxed text-slate-200 italic">"{getCustomTafsirNote()}"</p>
+                </div>
+                <div>
+                  <h4 className="text-[10px] tracking-[0.2em] text-cyan-400 uppercase mb-3">Source</h4>
+                  <p className="text-sm font-light leading-relaxed text-slate-300">Tafsir As-Sa'di | Tafsir Ibnu Katsir<br/>Sahih International Translation</p>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          {/* ROW 2: 2 Cards (Next Verse Pair & Ayah Pair) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mt-4">
+            
+            {/* 1. Next Verse Pair */}
+            <div className={`rounded-2xl border border-emerald-500/20 bg-[#0a0f1d]/40 p-6 backdrop-blur-xl flex flex-col justify-between hover:border-emerald-500/40 transition-colors ${!data.asmaulSurah ? 'opacity-50' : ''}`}>
+              <div className="flex justify-between items-start mb-4">
+                <h4 className="text-[10px] tracking-[0.2em] text-emerald-400 uppercase">Next Verse Pair</h4>
+                {data.asmaulSurah && <span className="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 text-[9px] text-emerald-300">#{data.asmaulSurah.number}</span>}
+              </div>
+              <div className="flex justify-between items-end">
+                <div>
+                  <h3 className="text-xl font-medium text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">{data.asmaulSurah?.nameLatin || "—"}</h3>
+                  <p className="text-[11px] text-emerald-300 mt-1">{data.asmaulSurah ? asmaulSurahMeaning : "No pair"}</p>
+                </div>
+                <div className="font-serif text-3xl font-bold text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.4)]">{data.asmaulSurah?.nameArabic || ""}</div>
+              </div>
+              {/* Mini subtle wave at bottom */}
+              <div className="h-4 mt-2 border-b border-emerald-500/10 w-full relative overflow-hidden">
+                 <div className="absolute bottom-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent"></div>
+              </div>
+            </div>
+
+            {/* 2. Ayah Pair */}
+            <div className={`rounded-2xl border border-fuchsia-500/20 bg-[#0a0f1d]/40 p-6 backdrop-blur-xl flex flex-col justify-between hover:border-fuchsia-500/40 transition-colors ${!data.asmaulAyah ? 'opacity-50' : ''}`}>
+              <div className="flex justify-between items-start mb-4">
+                <h4 className="text-[10px] tracking-[0.2em] text-fuchsia-400 uppercase">Ayah Pair</h4>
+                {data.asmaulAyah && <span className="rounded-full bg-fuchsia-500/10 border border-fuchsia-500/20 px-3 py-1 text-[9px] text-fuchsia-300">#{data.asmaulAyah.number}</span>}
+              </div>
+              <div className="flex justify-between items-end">
+                <div>
+                  <h3 className="text-xl font-medium text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">{data.asmaulAyah?.nameLatin || "—"}</h3>
+                  <p className="text-[11px] text-fuchsia-300 mt-1">{data.asmaulAyah ? asmaulAyahMeaning : "No pair"}</p>
+                </div>
+                <div className="font-serif text-3xl font-bold text-fuchsia-400 drop-shadow-[0_0_10px_rgba(217,70,239,0.4)]">{data.asmaulAyah?.nameArabic || ""}</div>
+              </div>
+              <div className="h-4 mt-2 border-b border-fuchsia-500/10 w-full relative overflow-hidden">
+                 <div className="absolute bottom-0 w-full h-[1px] bg-gradient-to-r from-transparent via-fuchsia-500/50 to-transparent"></div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* ROW 3: Lore & Wisdom */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
+            {data.hadith ? (
+              <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-[#0a0f1d]/60 to-[#040816]/80 p-8 backdrop-blur-xl shadow-lg hover:border-amber-500/40 transition-colors">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <span className="text-amber-500 text-base">👑</span>
+                    <h4 className="text-[11px] tracking-[0.2em] text-amber-400 uppercase">Legendary Lore Channel</h4>
+                  </div>
+                  <span className="rounded bg-amber-500/10 border border-amber-500/20 px-3 py-1 text-[9px] text-amber-300 tracking-widest">{hadithGradeText.toUpperCase()}</span>
+                </div>
+                <h3 className="text-[12px] font-medium tracking-[0.1em] text-amber-300 uppercase mb-6 drop-shadow-[0_0_8px_rgba(251,191,36,0.4)]">
+                  {data.hadith.bookName} • RECORD_NO. {data.hadith.number}
+                </h3>
+                <div className="flex gap-6">
+                  <div className="text-4xl opacity-30 mt-1">📖</div>
+                  <p className="text-sm font-light leading-relaxed text-slate-200 italic">
+                    "{lang === "en" ? data.hadith.textEn || data.hadith.textId : data.hadith.textId}"
+                  </p>
+                </div>
+              </div>
+            ) : (
+               <div className="rounded-2xl border border-white/5 bg-[#0a0f1d]/20 p-8 backdrop-blur-xl flex items-center justify-center text-white/20 text-xs">NO LORE DETECTED</div>
+            )}
+
+            {data.wisdom ? (
+              <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-[#0a0f1d]/60 to-[#040816]/80 p-8 backdrop-blur-xl shadow-lg relative overflow-hidden hover:border-cyan-500/40 transition-colors">
+                <div className="absolute right-[-10%] top-[10%] h-40 w-40 rounded-full border border-cyan-500/10 bg-cyan-500/10 blur-2xl pointer-events-none" />
+                <div className="flex items-center gap-3 mb-8 relative z-10">
+                  <span className="text-cyan-500 text-base">🪐</span>
+                  <h4 className="text-[11px] tracking-[0.2em] text-cyan-400 uppercase">Sacred Scripture Reflection</h4>
+                </div>
+                <div className="relative z-10 rounded-xl border border-cyan-500/10 bg-black/40 p-6 mb-6">
+                  <p className="text-base font-light leading-relaxed text-white italic drop-shadow-md">
+                    "{lang === "en" ? data.wisdom.quoteEn || data.wisdom.quote : data.wisdom.quote}"
+                  </p>
+                </div>
+                <p className="relative z-10 text-[9px] tracking-[0.2em] text-cyan-300 uppercase">
+                  SOURCE KEY: {lang === "en" ? data.wisdom.sourceEn || data.wisdom.source : data.wisdom.source}
                 </p>
               </div>
-
-              <p className="flex items-center justify-between border-t border-cyan-500/10 pt-4 text-[10px] font-medium tracking-[0.2em] text-primary/80 uppercase">
-                <span>— SOURCE DECODED</span>
-                <span>
-                  {lang === "en"
-                    ? data.wisdom.sourceEn || data.wisdom.source
-                    : data.wisdom.source}
-                </span>
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* ──── COMMENTS TERMINAL ──── */}
-        <InspirationCommentsClient
-          periodCode={data.prayerPeriod?.code || "zuhur"}
-          dateStr={data.dateStr || "2026-07-26"}
-          itemId={data.ayah.id}
-          itemTitle={`Surah ${data.ayah.surahName} (${data.ayah.surahNumber}:${data.ayah.ayahNumber})`}
-        />
-
-        {/* ──── FOOTER WATERMARK ──── */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/5 pt-6 text-[10px] font-medium tracking-widest text-primary uppercase">
-          <div className="flex items-center gap-3">
-            <span>◈ MOONWITNESS PLATFORM</span>
-            <span className="opacity-30">•</span>
-            <span className="font-light italic opacity-70">
-              &ldquo;WHEN THE MOON WITNESS, WE SHARE MESSAGES.&rdquo;
-            </span>
+            ) : (
+               <div className="rounded-2xl border border-white/5 bg-[#0a0f1d]/20 p-8 backdrop-blur-xl flex items-center justify-center text-white/20 text-xs">NO SCRIPTURE DETECTED</div>
+            )}
           </div>
 
-          <span className="text-primary">MOONWITNESS.COM</span>
+        </div>
+
+        {/* ──── FOOTER WATERMARK ──── */}
+        <div className="relative z-10 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-8 mt-10 text-[10px] font-medium tracking-[0.2em] text-white/40 uppercase">
+          <div className="flex items-center gap-3">
+            <span>+ MOONWITNESS PLATFORM</span>
+            <span className="opacity-30">•</span>
+            <span className="font-light italic hidden sm:inline">
+              "WHEN THE MOON WITNESSES, WE SHARE MESSAGES."
+            </span>
+          </div>
+          <span className="tracking-[0.3em]">MOONWITNESS.COM</span>
         </div>
       </div>
     </section>
   )
+
 }

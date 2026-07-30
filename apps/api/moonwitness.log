@@ -1,0 +1,46 @@
+[2026-07-30T10:57:10.638Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T10:57:10.644Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T10:57:10.662Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T10:57:10.666Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T10:57:10.671Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T10:57:14.825Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-07-30T10:57:25.287Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T10:57:51.827Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T10:57:52.153Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-07-30T10:58:12.329Z] [INFO] odoo.http: GET /db/status 200 (1ms)
+[2026-07-30T11:08:13.220Z] [INFO] moon.schema: Schema sync: 38 applied, 0 pending
+[2026-07-30T11:08:13.551Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-07-30T11:09:30.597Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T11:09:30.948Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-07-30T11:10:28.027Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T11:11:47.860Z] [INFO] moon.schema: Schema sync: 38 applied, 0 pending
+[2026-07-30T11:11:48.174Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-07-30T11:12:07.107Z] [INFO] odoo.http: GET /db/status 200 (1ms)
+[2026-07-30T11:23:09.737Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T11:23:09.739Z] [ERROR] moon.core: Failed to start: {}
+[2026-07-30T11:25:02.644Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T11:25:02.646Z] [ERROR] moon.core: Failed to start: {}
+[2026-07-30T11:25:04.417Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T11:25:05.016Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-07-30T11:25:06.725Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T11:25:07.274Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-07-30T11:30:10.794Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T11:30:11.293Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-07-30T11:30:59.929Z] [INFO] moon.http: GET /db/status 200 (1ms)
+[2026-07-30T11:40:23.454Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T11:40:23.854Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-07-30T11:40:57.228Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T11:40:57.576Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-07-30T11:42:18.114Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T11:42:18.940Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T11:42:19.383Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-07-30T11:42:19.984Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T11:42:20.344Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-07-30T11:43:07.873Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T11:43:08.220Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-07-30T11:44:46.115Z] [INFO] moon.http: GET /api/moon/meta/models 404 (0ms)
+[2026-07-30T11:44:46.140Z] [INFO] moon.http: GET /favicon.ico 404 (0ms)
+[2026-07-30T11:44:53.584Z] [INFO] moon.http: GET /api/moon/meta/models 404 (0ms)
+[2026-07-30T11:44:56.743Z] [INFO] moon.http: GET /api/moon/meta/models 404 (0ms)
+[2026-07-30T11:49:21.038Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T11:49:21.591Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
