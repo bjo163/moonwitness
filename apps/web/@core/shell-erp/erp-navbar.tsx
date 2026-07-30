@@ -9,9 +9,10 @@ import { useMoonStore } from "@core/store/moon-store"
 
 type UserProfile = {
   name?: string
+  email?: string
   title?: string
   role?: string
-  avatar?: string
+  avatarUrl?: string
 }
 
 export function ErpNavbar() {

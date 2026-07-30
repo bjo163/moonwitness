@@ -20,7 +20,7 @@ type UserProfileData = {
   name?: string
   role?: string
   email?: string
-  avatar_url?: string
+  avatarUrl?: string
 }
 
 const MAX_NAME_DISPLAY_LENGTH = 12

@@ -23,7 +23,7 @@ export function ProfileCard({ profileData, isOwnProfile = true }: { profileData?
           <div className="absolute -inset-4 rounded-full border border-cyan-500/20 animate-[spin_10s_linear_infinite]" />
           <div className="absolute -inset-2 rounded-full border border-dashed border-cyan-400/40 animate-[spin_15s_linear_infinite_reverse]" />
           <div className="relative h-28 w-28 rounded-full border-2 border-cyan-400 overflow-hidden bg-black flex items-center justify-center">
-            <AutoAvatar name={displayName} size={112} className="h-full w-full object-cover" />
+            <AutoAvatar seed={displayName} size={112} className="h-full w-full object-cover" />
           </div>
           {isOwnProfile && (
             <button className="absolute bottom-0 right-0 rounded-full border border-cyan-500/50 bg-black p-1.5 text-cyan-400 hover:bg-cyan-500/20">

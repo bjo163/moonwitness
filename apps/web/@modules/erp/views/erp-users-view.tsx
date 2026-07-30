@@ -249,7 +249,7 @@ export function ErpUsersView() {
         subtitle="Manage system users, roles, and access permissions across the global ERP system."
         operation="USER-MGMT"
         status="ONLINE"
-        accentColor="cyan"
+        accentColor="system"
       />
 
       <MoonDataTable 
