@@ -1,0 +1,30 @@
+{
+  "name": "api",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "lint": "eslint",
+    "format": "prettier --write \"**/*.{ts,js,json}\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastify/cors": "^10.0.2",
+    "@fastify/jwt": "^9.0.1",
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^16.4.5",
+    "fastify": "^5.2.0",
+    "knex": "^3.0.0",
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "tsx": "^4.7.0",
+    "typescript": "^5"
+  }
+}

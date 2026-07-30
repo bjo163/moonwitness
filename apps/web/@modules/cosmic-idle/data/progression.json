@@ -1,0 +1,95 @@
+{
+  "expCurve": {
+    "base": 100,
+    "multiplier": 1.5,
+    "maxLevel": 100
+  },
+  "classes": {
+    "c_novice": {
+      "id": "c_novice",
+      "name": "Novice",
+      "description": "A beginner adventurer.",
+      "baseStats": {
+        "hp": 100,
+        "mp": 20,
+        "atk": 10,
+        "def": 10,
+        "mag": 10,
+        "mdef": 10,
+        "spd": 10,
+        "luk": 5
+      },
+      "statGrowth": {
+        "hp": 10,
+        "mp": 2,
+        "atk": 2,
+        "def": 2,
+        "mag": 2,
+        "mdef": 2,
+        "spd": 2,
+        "luk": 1
+      }
+    },
+    "c_knight": {
+      "id": "c_knight",
+      "name": "Knight",
+      "description": "A resilient warrior.",
+      "baseStats": {
+        "hp": 150,
+        "mp": 10,
+        "atk": 15,
+        "def": 15,
+        "mag": 5,
+        "mdef": 10,
+        "spd": 8,
+        "luk": 5
+      },
+      "statGrowth": {
+        "hp": 20,
+        "mp": 1,
+        "atk": 3,
+        "def": 4,
+        "mag": 1,
+        "mdef": 2,
+        "spd": 1,
+        "luk": 1
+      }
+    }
+  },
+  "titles": {
+    "t_slayer": {
+      "id": "t_slayer",
+      "name": "Monster Slayer",
+      "description": "Awarded for killing 100 monsters.",
+      "bonuses": {
+        "atk": 10
+      }
+    },
+    "t_rich": {
+      "id": "t_rich",
+      "name": "Wealthy",
+      "description": "Awarded for collecting 10,000 NUR.",
+      "bonuses": {
+        "luk": 5
+      }
+    }
+  },
+  "achievements": {
+    "a_kill_100": {
+      "id": "a_kill_100",
+      "name": "First Blood... And 99 Others",
+      "description": "Kill 100 monsters.",
+      "type": "KILL_MONSTERS",
+      "targetAmount": 100,
+      "rewardTitleId": "t_slayer"
+    },
+    "a_nur_10k": {
+      "id": "a_nur_10k",
+      "name": "Money Maker",
+      "description": "Collect 10,000 NUR.",
+      "type": "COLLECT_NUR",
+      "targetAmount": 10000,
+      "rewardTitleId": "t_rich"
+    }
+  }
+}

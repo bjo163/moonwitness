@@ -1,0 +1,31 @@
+export const ANIMATION_TOKENS = {
+  duration: {
+    fast: "150ms",
+    normal: "300ms",
+    slow: "500ms",
+    verySlow: "1000ms",
+  },
+  easing: {
+    default: "cubic-bezier(0.4, 0, 0.2, 1)",
+    in: "cubic-bezier(0.4, 0, 1, 1)",
+    out: "cubic-bezier(0, 0, 0.2, 1)",
+    inOut: "cubic-bezier(0.4, 0, 0.2, 1)",
+    bounce: "cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+  },
+  classes: {
+    fade: "animate-in fade-in duration-300",
+    slideUp: "animate-in slide-in-from-bottom-4 duration-300",
+    slideDown: "animate-in slide-in-from-top-4 duration-300",
+    slideLeft: "animate-in slide-in-from-right-4 duration-300",
+    slideRight: "animate-in slide-in-from-left-4 duration-300",
+    zoomIn: "animate-in zoom-in-95 duration-300",
+    zoomOut: "animate-out zoom-out-95 duration-300",
+    pulse: "animate-pulse",
+    bounce: "animate-bounce",
+    spin: "animate-spin",
+    ping: "animate-ping",
+    scanline: "animate-[scanline_8s_linear_infinite]",
+    radarSweep: "animate-[radar_4s_linear_infinite]",
+    typing: "animate-[typing_2s_steps(40,end)]",
+  },
+} as const

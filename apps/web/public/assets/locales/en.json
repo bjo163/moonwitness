@@ -1,0 +1,29 @@
+{
+  "system": {
+    "loading": "Loading Cosmic Idle...",
+    "error": "An error occurred."
+  },
+  "menu": {
+    "new_game": "New Game",
+    "continue": "Continue",
+    "options": "Settings",
+    "quit": "Quit"
+  },
+  "quest": {
+    "slay_slimes": {
+      "title": "Slime Pest Control",
+      "description": "Mayor Thomas wants you to get rid of the slimes outside the town."
+    }
+  },
+  "dialogue": {
+    "mayor_intro": {
+      "greeting": "Welcome to our humble town, traveler. Watch out for those slimes!"
+    }
+  },
+  "items": {
+    "wpn_001": {
+      "name": "Rusty Sword",
+      "description": "An old, chipped sword. Better than nothing."
+    }
+  }
+}

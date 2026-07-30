@@ -1,0 +1,62 @@
+{
+  "m_001": {
+    "id": "m_001",
+    "name": "Slime",
+    "description": "A jiggly green slime.",
+    "level": 1,
+    "element": "NORMAL",
+    "baseStats": {
+      "hp": 50,
+      "mp": 10,
+      "atk": 5,
+      "def": 2,
+      "mag": 1,
+      "mdef": 1,
+      "spd": 3
+    },
+    "hpGrowth": 5,
+    "mpGrowth": 1,
+    "atkGrowth": 1,
+    "defGrowth": 1,
+    "magGrowth": 0.5,
+    "mdefGrowth": 0.5,
+    "spdGrowth": 1,
+    "skills": ["attack", "bounce"],
+    "spriteKey": "spr_slime",
+    "evolutions": [
+      {
+        "levelReq": 10,
+        "targetId": "m_002"
+      }
+    ]
+  },
+  "m_002": {
+    "id": "m_002",
+    "name": "King Slime",
+    "description": "The ruler of all slimes.",
+    "level": 10,
+    "element": "WATER",
+    "baseStats": {
+      "hp": 200,
+      "mp": 50,
+      "atk": 20,
+      "def": 15,
+      "mag": 10,
+      "mdef": 10,
+      "spd": 8
+    },
+    "hpGrowth": 15,
+    "mpGrowth": 5,
+    "atkGrowth": 3,
+    "defGrowth": 3,
+    "magGrowth": 2,
+    "mdefGrowth": 2,
+    "spdGrowth": 2,
+    "skills": ["attack", "water_gun", "heal"],
+    "spriteKey": "spr_king_slime",
+    "affinities": {
+      "FIRE": 0.5,
+      "ELECTRIC": 2.0
+    }
+  }
+}

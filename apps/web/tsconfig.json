@@ -1,0 +1,40 @@
+{
+  "extends": "@workspace/typescript-config/nextjs.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./*"],
+      "@core/*": ["./@core/*"],
+      "@layouts/*": ["./@core/layouts/*"],
+      "@contexts/*": ["./@core/contexts/*"],
+      "@shell/*": ["./@core/shell/*"],
+      "@tokens/*": ["./@core/tokens/*"],
+      "@ui/*": ["./@core/ui/*"],
+      "@modules/*": ["./@modules/*"],
+      "@views/*": ["./views/*"],
+      "@configs/*": ["./configs/*"],
+      "@navigation/*": ["./navigation/*"],
+      "@workspace/types/*": ["../../packages/types/src/*"],
+      "@workspace/ui/*": ["../../packages/ui/src/*"],
+      "@/lib/language-context": ["./@core/contexts/language-context"],
+      "@/lib/audio-context": ["./@core/contexts/audio-context"],
+      "@/lib/sound-feedback": ["./lib/sound-feedback"],
+      "@/components/ambient-soundscape": ["./@core/shell/ambient-soundscape"],
+      "@/components/global-live-audio-translator": ["./@core/shell/global-live-audio-translator"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    "next.config.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.mts",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
+}

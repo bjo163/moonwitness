@@ -1,0 +1,29 @@
+export * from "./modal"
+export * from "./section"
+export * from "./audio-visualizer"
+export * from "./breadcrumb"
+export * from "./context-block"
+export * from "./panel"
+export * from "./button"
+export * from "./states"
+export * from "./tabs"
+export * from "./progress"
+export * from "./tooltip"
+export * from "./command-palette-trigger"
+export * from "./modal-trigger"
+export * from "./card"
+export * from "./badge"
+export * from "./alert"
+export * from "./typography"
+export * from "./stat"
+
+// Backward-compatible exports for components extracted from primitives
+export { Table } from "../table"
+export { Sidebar } from "../sidebar"
+export { Chart } from "../chart"
+export {
+  AIStreamTerminal as HUDTerminal,
+  AIConsolePanel as HUDAIPanel,
+} from "../chat"
+export { CommandPaletteTrigger as HUDCommandPaletteTrigger } from "./command-palette-trigger"
+export { SkeletonCard as HUDSkeletonCard } from "./states"
