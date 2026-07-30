@@ -133,6 +133,15 @@ export class NativeServer {
       return this.sendJson(res, 204, null);
     }
     
+    if (req.method === 'GET' && (req.url === '/favicon.ico' || req.url === '/favicon.png')) {
+      res.writeHead(200, { 'Content-Type': 'image/x-icon', 'Access-Control-Allow-Origin': '*' });
+      return res.end();
+    }
+
+    if (req.method === 'GET' && (req.url === '/' || req.url === '')) {
+      return this.sendJson(res, 200, { name: 'Moonwitness API Server', status: 'online', version: '0.0.1' });
+    }
+    
     if (req.method === 'POST' && req.url === '/auth/login') {
       return this.handleAuth(req, res);
     }

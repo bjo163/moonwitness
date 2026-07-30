@@ -49,3 +49,6 @@
 [2026-07-30T12:24:40.430Z] [ERROR] moon.core: Failed to start: {"length":71,"name":"error","severity":"FATAL","code":"28P01"}
 [2026-07-30T12:27:42.607Z] [INFO] moon.schema: Schema sync: 38 applied, 0 pending
 [2026-07-30T12:27:54.253Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-07-30T13:54:49.128Z] [INFO] moon.http: GET / 404 (1ms)
+[2026-07-30T13:55:18.723Z] [INFO] moon.schema: Schema sync: 26 applied, 0 pending
+[2026-07-30T13:55:30.384Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
