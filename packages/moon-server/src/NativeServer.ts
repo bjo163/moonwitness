@@ -36,12 +36,16 @@ export class NativeServer {
     }
   }
 
-  private sendJson(res: http.ServerResponse, statusCode: number, data: any) {
+  private sendJson(res: http.ServerResponse, statusCode: number, data: any, req?: http.IncomingMessage) {
+    const origin = (req?.headers.origin as string) || '*';
+    const reqHeaders = (req?.headers['access-control-request-headers'] as string) || 'Content-Type, Authorization, X-Requested-With, Accept, Origin, Cache-Control, Last-Event-ID';
+    
     res.writeHead(statusCode, {
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'OPTIONS, POST, GET',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+      'Access-Control-Allow-Origin': origin,
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Methods': 'OPTIONS, POST, GET, PUT, DELETE, PATCH',
+      'Access-Control-Allow-Headers': reqHeaders
     });
     res.end(JSON.stringify(data));
   }
@@ -400,7 +404,16 @@ export class NativeServer {
     } as any
     
     if (req.method === 'OPTIONS') {
-      return this.sendJson(res, 204, null);
+      const origin = (req.headers.origin as string) || '*';
+      const reqHeaders = (req.headers['access-control-request-headers'] as string) || 'Content-Type, Authorization, X-Requested-With, Accept, Origin, Cache-Control, Last-Event-ID';
+      res.writeHead(204, {
+        'Access-Control-Allow-Origin': origin,
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Allow-Methods': 'OPTIONS, POST, GET, PUT, DELETE, PATCH',
+        'Access-Control-Allow-Headers': reqHeaders,
+        'Access-Control-Max-Age': '86400'
+      });
+      return res.end();
     }
     
     if (req.method === 'GET' && (req.url === '/favicon.ico' || req.url === '/favicon.png')) {
@@ -640,11 +653,13 @@ export class NativeServer {
 
     // SSE
     if (req.method === 'GET' && req.url && req.url.startsWith('/live')) {
+      const origin = (req.headers.origin as string) || '*';
       res.writeHead(200, {
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
         'Connection': 'keep-alive',
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': origin,
+        'Access-Control-Allow-Credentials': 'true'
       });
       const clientId = Math.random().toString(36).substring(2, 11);
       
