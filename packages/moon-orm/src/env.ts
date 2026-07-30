@@ -2,6 +2,7 @@ import type { Vertex } from './base.js'
 import { getDb } from './config.js'
 
 export const SUPERUSER_ID = 1
+export const ANONYMOUS_ID = 0
 
 export interface Ctx {
   uid: number

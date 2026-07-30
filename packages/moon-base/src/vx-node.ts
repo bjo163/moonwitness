@@ -4,9 +4,10 @@ import { fields } from '@moon/orm'
 export default class VxNode extends Vertex {
   static _name = 'vx.node'
   static _description = 'Partner'
+  static _softDelete = true
 
-  name = fields.Char({ required: true, size: 120 })
-  email = fields.Char({ unique: true })
+  name = fields.Char({ required: true, size: 120, min: 3, pattern: /^[A-Za-z0-9 ]+$/ })
+  email = fields.Char({ unique: true, validate: (val: any) => typeof val === 'string' && val.includes('@') ? true : 'Invalid email format' })
   phone = fields.Char({ size: 40 })
   mobile = fields.Char({ size: 40 })
   street = fields.Char({ size: 120 })

@@ -9,6 +9,11 @@ export async function checkAccessRights(
 ): Promise<void> {
   // bypass for superuser or if model is security itself
   if (env.uid === 1) return;
+  if (env.uid === 0) {
+    if (modelClass._public && operation === 'permRead') return;
+    throw new Error(`Unauthorized: Token required to ${operation.replace('perm', '').toLowerCase()} ${modelClass._name}`);
+  }
+  
   if (modelClass._name.startsWith('ir.')) return; 
   if (modelClass._name === 'vx.user' || modelClass._name === 'vx.role') return; // let's bypass base users for now to prevent deadlock during auth
 

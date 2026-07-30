@@ -1,4 +1,4 @@
-export { NativeServer } from './NativeServer.js'
+export { NativeServer, publish } from './NativeServer.js'
 export { Controller, Get, Post, Put, Delete, registerController } from './router.js'
 export { logger } from './logger.js'
 

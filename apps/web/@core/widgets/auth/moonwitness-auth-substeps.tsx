@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import { useState, useEffect } from "react"
 import {
   ShieldCheck,
   User,
@@ -10,7 +11,10 @@ import {
   Globe,
   ArrowRight,
   Shield,
+  Lock,
+  ArrowLeft,
 } from "lucide-react"
+import { useMoonStore } from "@core/store/moon-store"
 
 export type AuthState =
   | "WELCOME"
@@ -268,9 +272,16 @@ export function TwoFactorStep({
 
 export function Forgot1Step({
   onStateChange,
+  onSuccess
 }: {
   onStateChange: (state: AuthState) => void
+  onSuccess?: (email: string) => void
 }) {
+  const [email, setEmail] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState("")
+  const { forgotPassword } = useMoonStore()
+
   return (
     <div className="w-full max-w-[420px] animate-in rounded-2xl border border-cyan-500/20 bg-slate-950/80 p-8 text-center shadow-[0_0_40px_rgba(0,150,255,0.1)] backdrop-blur-xl duration-500 slide-in-from-right">
       <h2 className="mb-2 font-sans text-2xl font-bold tracking-wider text-white uppercase">
@@ -280,22 +291,43 @@ export function Forgot1Step({
         Enter your email or username and we&apos;ll send you reset instructions
       </p>
 
+      {message ? (
+        <div className="border-success/30 bg-success/10 text-success mb-6 rounded-lg border p-3 text-center text-xs font-semibold">
+          {message}
+        </div>
+      ) : null}
+
       <div className="mb-8 space-y-1.5 text-left">
         <label className="font-sans text-xs font-medium text-primary/80">
           Email or Username
         </label>
         <input
           type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="w-full rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none"
           placeholder="johnny@moonwitness.org"
         />
       </div>
 
       <button
-        onClick={() => onStateChange("FORGOT_2")}
-        className="mb-8 w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)]"
+        disabled={loading || !email}
+        onClick={async () => {
+          setLoading(true)
+          try {
+            const res = await forgotPassword(email)
+            setMessage(res?.message || "Password reset instruction sent.")
+            if (onSuccess) onSuccess(email)
+            setTimeout(() => onStateChange("FORGOT_2"), 1500)
+          } catch (e: any) {
+            setMessage(e.message || "Failed to reset password")
+          } finally {
+            setLoading(false)
+          }
+        }}
+        className="mb-8 w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] disabled:opacity-50"
       >
-        SEND RESET LINK
+        {loading ? "SENDING..." : "SEND RESET LINK"}
       </button>
 
       <p className="text-xs text-primary/60">
@@ -312,25 +344,44 @@ export function Forgot1Step({
 }
 
 export function Forgot2Step({
+  email,
   onStateChange,
+  onSuccess
 }: {
+  email?: string
   onStateChange: (state: AuthState) => void
+  onSuccess?: (code: string) => void
 }) {
+  const [code, setCode] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [errorMsg, setErrorMsg] = useState("")
+  const { verifyOtp } = useMoonStore()
+
   return (
     <div className="w-full max-w-[420px] animate-in rounded-2xl border border-cyan-500/20 bg-slate-950/80 p-8 text-center shadow-[0_0_40px_rgba(0,150,255,0.1)] backdrop-blur-xl duration-500 slide-in-from-right">
       <h2 className="mb-2 font-sans text-2xl font-bold tracking-wider text-white uppercase">
         CHECK YOUR EMAIL
       </h2>
       <p className="mb-8 font-sans text-xs text-primary/60">
-        We&apos;ve sent a password reset link to
+        We&apos;ve sent a password reset code to
         <br />
-        <span className="text-white">johnny@moonwitness.org</span>
+        <span className="text-white">{email || "your email"}</span>
       </p>
 
-      <div className="mb-8 flex justify-center">
-        <div className="flex h-20 w-20 items-center justify-center rounded-full border border-cyan-500/30 bg-cyan-500/10 shadow-[0_0_20px_rgba(0,240,255,0.1)]">
-          <Mail className="h-10 w-10 text-cyan-400" />
+      {errorMsg ? (
+        <div className="border-danger/30 bg-danger/10 text-danger mb-4 rounded-lg border p-3 text-center text-xs font-semibold">
+          {errorMsg}
         </div>
+      ) : null}
+
+      <div className="mb-8 flex justify-center">
+        <input
+          type="text"
+          value={code}
+          onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+          className="w-full text-center tracking-[1em] text-2xl font-bold rounded-xl border border-cyan-500/30 bg-black/60 px-4 py-4 text-white shadow-inner focus:border-cyan-400 focus:outline-none"
+          placeholder="000000"
+        />
       </div>
 
       <p className="mb-4 text-xs text-primary/60">
@@ -340,10 +391,23 @@ export function Forgot2Step({
       </p>
 
       <button
-        onClick={() => onStateChange("RESET_3")}
-        className="mb-8 w-full rounded-xl border border-cyan-500/30 bg-black/40 py-3.5 font-sans text-sm font-bold text-cyan-400 transition-all hover:border-cyan-400 hover:bg-cyan-500/10"
+        disabled={loading || code.length < 6}
+        onClick={async () => {
+          setLoading(true)
+          setErrorMsg("")
+          try {
+            await verifyOtp(email || "", code)
+            if (onSuccess) onSuccess(code)
+            onStateChange("RESET_3")
+          } catch (e: any) {
+            setErrorMsg(e.message || "Invalid code")
+          } finally {
+            setLoading(false)
+          }
+        }}
+        className="mb-8 w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] disabled:opacity-50"
       >
-        RESEND EMAIL
+        {loading ? "VERIFYING..." : "VERIFY CODE"}
       </button>
 
       <button
@@ -357,10 +421,20 @@ export function Forgot2Step({
 }
 
 export function Reset3Step({
+  email,
+  code,
   onStateChange,
 }: {
+  email?: string
+  code?: string
   onStateChange: (state: AuthState) => void
 }) {
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [errorMsg, setErrorMsg] = useState("")
+  const { resetPassword } = useMoonStore()
+
   return (
     <div className="w-full max-w-[420px] animate-in rounded-2xl border border-cyan-500/20 bg-slate-950/80 p-8 text-center shadow-[0_0_40px_rgba(0,150,255,0.1)] backdrop-blur-xl duration-500 slide-in-from-right">
       <h2 className="mb-2 font-sans text-2xl font-bold tracking-wider text-white uppercase">
@@ -370,14 +444,20 @@ export function Reset3Step({
         Enter your new password
       </p>
 
+      {errorMsg ? (
+        <div className="border-danger/30 bg-danger/10 text-danger mb-4 rounded-lg border p-3 text-center text-xs font-semibold">
+          {errorMsg}
+        </div>
+      ) : null}
+
       <div className="mb-2 space-y-1.5 text-left">
         <label className="font-sans text-xs font-medium text-primary/80">
           New Password
         </label>
         <input
           type="password"
-          value="••••••••••••••••"
-          readOnly
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           className="w-full rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none"
         />
       </div>
@@ -397,17 +477,29 @@ export function Reset3Step({
         </label>
         <input
           type="password"
-          value="••••••••••••••••"
-          readOnly
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           className="w-full rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none"
         />
       </div>
 
       <button
-        onClick={() => onStateChange("LOGIN")}
-        className="w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)]"
+        disabled={loading || !password || password !== confirmPassword}
+        onClick={async () => {
+          setLoading(true)
+          setErrorMsg("")
+          try {
+            await resetPassword(email || "", code || "", password)
+            onStateChange("LOGIN")
+          } catch (e: any) {
+            setErrorMsg(e.message || "Failed to reset password")
+          } finally {
+            setLoading(false)
+          }
+        }}
+        className="w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] disabled:opacity-50"
       >
-        RESET PASSWORD
+        {loading ? "SAVING..." : "RESET PASSWORD"}
       </button>
     </div>
   )

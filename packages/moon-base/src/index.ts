@@ -16,10 +16,12 @@ import { FxMsg, FxTrack } from './fx-msg.js'
 import VxNode from './vx-node.js'
 import VxOrg from './vx-org.js'
 import VxCoin from './vx-coin.js'
+import MxMetric from './mx-metric.js'
+import FxSession from './fx-session.js'
 
 export { loadModels } from '@moon/orm'
 
-export { seedBaseData, loadBaseData, VxZone, VxRole, MxModel, MxGrant, MxRule, VxUser, VxNode, VxOrg, VxCoin, IxLang, IxDict, FxMsg, FxTrack }
+export { seedBaseData, loadBaseData, VxZone, VxRole, MxModel, MxGrant, MxRule, VxUser, VxNode, VxOrg, VxCoin, IxLang, IxDict, FxMsg, FxTrack, MxMetric, FxSession }
 
 export const SYSTEM_MODE = 'system'
 export const BOT_MODE = 'bot'
@@ -66,6 +68,13 @@ export const PARTNER_SEED_DATA = {
       email: 'bot@local',
       password: 'bot',
       isCompany: false
+    },
+    {
+      mode: 'admin',
+      name: 'Rocksoul Tech',
+      email: 'rocksoultech@gmail.com',
+      password: 'password123',
+      isCompany: false
     }
   ]
 }
@@ -87,6 +96,8 @@ export default {
     IxLang,
     IxDict,
     FxMsg,
-    FxTrack
+    FxTrack,
+    MxMetric,
+    FxSession
   ]
 }

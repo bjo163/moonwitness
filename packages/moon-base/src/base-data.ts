@@ -171,7 +171,8 @@ export async function loadBaseData() {
             name: u.name,
             email: u.email,
             password: hashedPassword,
-            partnerId // Note: companyId is not mapped in original code but partnerId is
+            partnerId,
+            companyId: actualCompanyId
           })
           userId = uRow.id as number
         } else {

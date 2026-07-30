@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { apiClient } from "@core/api/client"
+import { useMoonStore } from "@core/store/moon-store"
 import {
   AuthState,
   WelcomeStep,
@@ -26,6 +26,11 @@ export function MoonwitnessAuthFlow() {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState("")
+  const [registerName, setRegisterName] = useState("")
+  const [forgotEmail, setForgotEmail] = useState("")
+  const [forgotCode, setForgotCode] = useState("")
+
+  const { login, register, forgotPassword } = useMoonStore()
 
   const handleWorkspaceSelect = (path: string) => {
     setCurrentState("SUCCESS")
@@ -50,19 +55,7 @@ export function MoonwitnessAuthFlow() {
           setLoading(true)
           setErrorMsg("")
           try {
-            const { data } = await apiClient.post("/api/users/profile", {
-              action: "login",
-              email,
-              password,
-            })
-            if (data.error) throw new Error(data.error)
-            if (data.profile) {
-              localStorage.setItem(
-                "mw_user_profile",
-                JSON.stringify(data.profile)
-              )
-              window.dispatchEvent(new Event("storage"))
-            }
+            await login(email, password)
             setTimeout(
               () => setCurrentState("WORKSPACE"),
               LOGIN_SUCCESS_DELAY_MS
@@ -160,11 +153,25 @@ export function MoonwitnessAuthFlow() {
 
       <form
         className="space-y-4"
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault()
-          setCurrentState("VERIFICATION")
+          setLoading(true)
+          setErrorMsg("")
+          try {
+            await register(email, password, registerName)
+            setCurrentState("VERIFICATION")
+          } catch (err: any) {
+            setErrorMsg(err.message || "Registration failed")
+          } finally {
+            setLoading(false)
+          }
         }}
       >
+        {errorMsg ? (
+          <div className="border-danger/30 bg-danger/10 text-danger mb-4 rounded-lg border p-3 text-center text-xs font-semibold">
+            {errorMsg}
+          </div>
+        ) : null}
         <div className="space-y-1.5">
           <label className="font-sans text-xs font-medium text-primary/80">
             Full Name
@@ -172,6 +179,8 @@ export function MoonwitnessAuthFlow() {
           <input
             type="text"
             required
+            value={registerName}
+            onChange={(e) => setRegisterName(e.target.value)}
             className="w-full rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none"
             placeholder="Johnny Rocksoul"
           />
@@ -183,6 +192,8 @@ export function MoonwitnessAuthFlow() {
           <input
             type="email"
             required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none"
             placeholder="johnny@moonwitness.org"
           />
@@ -194,6 +205,8 @@ export function MoonwitnessAuthFlow() {
           <input
             type="password"
             required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none"
             placeholder="••••••••••••••••"
           />
@@ -230,9 +243,10 @@ export function MoonwitnessAuthFlow() {
 
         <button
           type="submit"
-          className="mt-6 w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)]"
+          disabled={loading}
+          className="mt-6 w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] disabled:opacity-50"
         >
-          CREATE ACCOUNT
+          {loading ? "CREATING ACCOUNT..." : "CREATE ACCOUNT"}
         </button>
       </form>
 
@@ -262,13 +276,24 @@ export function MoonwitnessAuthFlow() {
         <WorkspaceStep onSelectWorkspace={handleWorkspaceSelect} />
       ) : null}
       {currentState === "FORGOT_1" ? (
-        <Forgot1Step onStateChange={setCurrentState} />
+        <Forgot1Step 
+          onStateChange={setCurrentState} 
+          onSuccess={(email) => setForgotEmail(email)} 
+        />
       ) : null}
       {currentState === "FORGOT_2" ? (
-        <Forgot2Step onStateChange={setCurrentState} />
+        <Forgot2Step 
+          email={forgotEmail} 
+          onStateChange={setCurrentState} 
+          onSuccess={(code) => setForgotCode(code)}
+        />
       ) : null}
       {currentState === "RESET_3" ? (
-        <Reset3Step onStateChange={setCurrentState} />
+        <Reset3Step 
+          email={forgotEmail}
+          code={forgotCode}
+          onStateChange={setCurrentState} 
+        />
       ) : null}
       {currentState === "VERIFICATION" ? (
         <VerificationStep onStateChange={setCurrentState} />

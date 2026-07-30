@@ -1,10 +1,11 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import { Search, Bell } from "lucide-react"
+import { Search, Bell, LogOut, Settings, User } from "lucide-react"
 import { Button } from "@core/ui/button"
 import { usePathname } from "next/navigation"
 import { AutoAvatar } from "@workspace/auto-avatar"
+import { useMoonStore } from "@core/store/moon-store"
 
 type UserProfile = {
   name?: string
@@ -16,21 +17,20 @@ type UserProfile = {
 export function ErpNavbar() {
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const pathname = usePathname()
+  const { user } = useMoonStore()
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const stored = localStorage.getItem("mw_user_profile")
-      if (stored) {
-        try {
-          setProfile(JSON.parse(stored) as UserProfile)
-        } catch (err) {
-          console.error("Failed parsing stored user profile:", err)
-        }
-      }
-    }, 0)
-
-    return () => clearTimeout(timer)
-  }, [])
+    if (user) {
+      setProfile({
+        name: user.name || (user.email ? user.email.split('@')[0] : "User"),
+        email: user.email || "",
+        role: "user",
+        avatarUrl: ""
+      })
+    } else {
+      setProfile(null)
+    }
+  }, [user])
 
   // Auto-generate title from pathname
   const pageTitle =

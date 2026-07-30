@@ -33,13 +33,20 @@ interface DeferredM2M {
   modelName: string
 }
 
-export async function forge(): Promise<{
+export interface MigrationCommand {
+  up: string
+  down: string
+}
+
+export async function forge(options: { dryRun?: boolean } = {}): Promise<{
   applied: PendingChange[]
   pending: PendingChange[]
+  migrations: MigrationCommand[]
 }> {
   const { getRegistry } = await import('./registry.js')
   const registry = getRegistry()
   const applied: PendingChange[] = []
+  const migrations: MigrationCommand[] = []
   lastPending = []
 
   // Initialize pgvector
@@ -93,7 +100,7 @@ export async function forge(): Promise<{
 
     const exists = await tableExists(table)
     if (!exists) {
-      await createTable(table, physicalFields)
+      await createTable(table, physicalFields, options.dryRun, migrations)
       applied.push({
         model: name,
         type: 'create_table',
@@ -113,7 +120,7 @@ export async function forge(): Promise<{
       const colType = mapFieldType(fieldDef)
 
       if (!existingColNames.has(colName)) {
-        await addColumn(table, colName, colType)
+        await addColumn(table, colName, colType, options.dryRun, migrations)
         applied.push({
           model: name,
           type: 'add_column',
@@ -130,7 +137,9 @@ export async function forge(): Promise<{
         await alterColumn(
           table,
           colName,
-          colType
+          colType,
+          options.dryRun,
+          migrations
         )
         applied.push({
           model: name,
@@ -151,7 +160,7 @@ export async function forge(): Promise<{
     const exists = await hasForeignKey(fk.table, fk.colName, refTable)
     if (!exists) {
       try {
-        await addForeignKey(fk.table, fk.colName, refTable)
+        await addForeignKey(fk.table, fk.colName, refTable, options.dryRun, migrations)
         applied.push({
           model: fk.modelName,
           type: 'add_fk',
@@ -168,7 +177,7 @@ export async function forge(): Promise<{
   for (const m2m of deferredM2m) {
     const exists = await tableExists(m2m.relTable)
     if (!exists) {
-      await createM2MTable(m2m.relTable, m2m.table1, m2m.table2)
+      await createM2MTable(m2m.relTable, m2m.table1, m2m.table2, options.dryRun, migrations)
       applied.push({
         model: m2m.modelName,
         type: 'create_m2m',
@@ -184,7 +193,7 @@ export async function forge(): Promise<{
     const exists = await hasIndex(idxName)
     if (!exists) {
       try {
-        await createIndex(idx.table, idx.colName, idxName)
+        await createIndex(idx.table, idx.colName, idxName, options.dryRun, migrations)
         applied.push({
           model: idx.modelName,
           type: 'add_column',
@@ -197,7 +206,7 @@ export async function forge(): Promise<{
     }
   }
 
-  return { applied, pending: lastPending }
+  return { applied, pending: lastPending, migrations }
 }
 
 async function hasIndex(indexName: string): Promise<boolean> {
@@ -209,9 +218,14 @@ async function hasIndex(indexName: string): Promise<boolean> {
   return rows.length > 0
 }
 
-async function createIndex(table: string, colName: string, indexName: string) {
+async function createIndex(table: string, colName: string, indexName: string, dryRun: boolean = false, migrations: MigrationCommand[] = []) {
   const db = getDb()
-  await db.raw(`CREATE INDEX ${sqlIdentifier(indexName)} ON ${sqlIdentifier(table)} (${sqlIdentifier(colName)})`)
+  const sql = `CREATE INDEX ${sqlIdentifier(indexName)} ON ${sqlIdentifier(table)} (${sqlIdentifier(colName)})`
+  if (dryRun) {
+    migrations.push({ up: sql, down: `DROP INDEX IF EXISTS ${sqlIdentifier(indexName)}` })
+  } else {
+    await db.raw(sql)
+  }
 }
 
 export function getLastPending(): PendingChange[] {
@@ -259,7 +273,9 @@ async function getColumns(table: string): Promise<ColumnInfo[]> {
 
 async function createTable(
   table: string,
-  fieldDefs: Record<string, FieldDef>
+  fieldDefs: Record<string, FieldDef>,
+  dryRun: boolean = false,
+  migrations: MigrationCommand[] = []
 ) {
   const cols: string[] = ['id SERIAL PRIMARY KEY']
   for (const [fieldName, fieldDef] of Object.entries(
@@ -276,50 +292,73 @@ async function createTable(
   }
   const db = getDb()
   const sql = `CREATE TABLE ${sqlIdentifier(table)} (${cols.join(', ')})`
-  await db.raw(sql)
+  if (dryRun) {
+    migrations.push({ up: sql, down: `DROP TABLE IF EXISTS ${sqlIdentifier(table)} CASCADE` })
+  } else {
+    await db.raw(sql)
+  }
 }
 
 async function addColumn(
   table: string,
   colName: string,
-  colType: string
+  colType: string,
+  dryRun: boolean = false,
+  migrations: MigrationCommand[] = []
 ) {
   const db = getDb()
-  await db.raw(
-    `ALTER TABLE ${sqlIdentifier(table)} ADD COLUMN ${colName} ${colType}`
-  )
+  const sql = `ALTER TABLE ${sqlIdentifier(table)} ADD COLUMN ${colName} ${colType}`
+  if (dryRun) {
+    migrations.push({ up: sql, down: `ALTER TABLE ${sqlIdentifier(table)} DROP COLUMN ${colName}` })
+  } else {
+    await db.raw(sql)
+  }
 }
 
 async function alterColumn(
   table: string,
   colName: string,
-  colType: string
+  colType: string,
+  dryRun: boolean = false,
+  migrations: MigrationCommand[] = []
 ) {
   const db = getDb()
-  await db.raw(
-    `ALTER TABLE ${sqlIdentifier(table)} ALTER COLUMN ${colName} TYPE ${colType}`
-  )
+  const sql = `ALTER TABLE ${sqlIdentifier(table)} ALTER COLUMN ${colName} TYPE ${colType}`
+  if (dryRun) {
+    migrations.push({ up: sql, down: `-- Manual intervention required to down-migrate column type alteration for ${table}.${colName}` })
+  } else {
+    await db.raw(sql)
+  }
 }
 
-async function addForeignKey(table: string, colName: string, refTable: string) {
+async function addForeignKey(table: string, colName: string, refTable: string, dryRun: boolean = false, migrations: MigrationCommand[] = []) {
   const db = getDb()
-  // We use ON DELETE SET NULL as a safe default for many2one
-  await db.raw(`
+  const sql = `
     ALTER TABLE ${sqlIdentifier(table)}
     ADD CONSTRAINT ${sqlIdentifier(`${table}_${colName}_fkey`)}
     FOREIGN KEY (${sqlIdentifier(colName)}) REFERENCES ${sqlIdentifier(refTable)}(id) ON DELETE SET NULL
-  `)
+  `
+  if (dryRun) {
+    migrations.push({ up: sql, down: `ALTER TABLE ${sqlIdentifier(table)} DROP CONSTRAINT ${sqlIdentifier(`${table}_${colName}_fkey`)}` })
+  } else {
+    await db.raw(sql)
+  }
 }
 
-async function createM2MTable(relTable: string, table1: string, table2: string) {
+async function createM2MTable(relTable: string, table1: string, table2: string, dryRun: boolean = false, migrations: MigrationCommand[] = []) {
   const db = getDb()
-  await db.raw(`
+  const sql = `
     CREATE TABLE ${sqlIdentifier(relTable)} (
       ${sqlIdentifier(table1 + '_id')} INTEGER REFERENCES ${sqlIdentifier(table1)}(id) ON DELETE CASCADE,
       ${sqlIdentifier(table2 + '_id')} INTEGER REFERENCES ${sqlIdentifier(table2)}(id) ON DELETE CASCADE,
       PRIMARY KEY (${sqlIdentifier(table1 + '_id')}, ${sqlIdentifier(table2 + '_id')})
     )
-  `)
+  `
+  if (dryRun) {
+    migrations.push({ up: sql, down: `DROP TABLE IF EXISTS ${sqlIdentifier(relTable)} CASCADE` })
+  } else {
+    await db.raw(sql)
+  }
 }
 
 function mapFieldType(field: FieldDef): string {

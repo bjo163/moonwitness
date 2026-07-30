@@ -1,0 +1,78 @@
+"use client"
+
+import React from "react"
+import { Moon, BookOpen, FileText, Share2, Star } from "lucide-react"
+
+export function AchievementsList() {
+  const achievements = [
+    {
+      title: "Moon Observer",
+      description: "Submitted 10 moon observations",
+      date: "24 May 2025",
+      icon: Moon,
+      color: "text-blue-400 border-blue-400/30",
+    },
+    {
+      title: "Qur'an Explorer",
+      description: "Completed 50 verses with notes",
+      date: "18 May 2025",
+      icon: BookOpen,
+      color: "text-emerald-400 border-emerald-400/30",
+    },
+    {
+      title: "Research Contributor",
+      description: "Published 5 research papers",
+      date: "10 May 2025",
+      icon: FileText,
+      color: "text-cyan-400 border-cyan-400/30",
+    },
+    {
+      title: "Knowledge Sharer",
+      description: "Helped 10 community members",
+      date: "5 May 2025",
+      icon: Share2,
+      color: "text-amber-400 border-amber-400/30",
+    },
+    {
+      title: "Early Mission Supporter",
+      description: "Joined in the early days",
+      date: "26 Apr 2025",
+      icon: Star,
+      color: "text-fuchsia-400 border-fuchsia-400/30",
+    },
+  ]
+
+  return (
+    <div className="rounded-xl border border-cyan-500/20 bg-black/40 p-6 backdrop-blur-md">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
+          Achievements
+        </h3>
+        <button className="font-sans text-[9px] text-cyan-500 hover:text-cyan-400 transition-colors">
+          View All
+        </button>
+      </div>
+      
+      <div className="space-y-4">
+        {achievements.map((ach, i) => (
+          <div key={i} className="flex items-start gap-4 group cursor-default">
+            <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border bg-black/50 ${ach.color} transition-transform group-hover:scale-110 shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]`}>
+              <ach.icon className="h-5 w-5" />
+            </div>
+            <div className="flex-1">
+              <h4 className="font-sans text-sm font-semibold text-slate-200 group-hover:text-white transition-colors">
+                {ach.title}
+              </h4>
+              <p className="font-sans text-[10px] text-slate-400">
+                {ach.description}
+              </p>
+            </div>
+            <div className="font-mono text-[9px] text-slate-500 pt-1">
+              {ach.date}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}

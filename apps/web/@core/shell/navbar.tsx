@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   Terminal,
 } from "lucide-react"
+import { useMoonStore } from "@core/store/moon-store"
 import { buildGlobalNavigation } from "@modules/index"
 import { AutoAvatar } from "@workspace/auto-avatar"
 
@@ -37,25 +38,20 @@ export function Navbar() {
   const router = useRouter()
 
   const [activeSection, setActiveSection] = useState<string>("home")
+  const { user, logout } = useMoonStore()
 
   useEffect(() => {
-    const checkProfile = () => {
-      const stored = localStorage.getItem("mw_user_profile")
-      if (stored) {
-        try {
-          setUserProfile(JSON.parse(stored) as UserProfileData)
-        } catch {
-          /* ignore parsing errors */
-        }
-      } else {
-        setUserProfile(null)
-      }
+    if (user) {
+      setUserProfile({
+        name: user.name || (user.email ? user.email.split('@')[0] : "User"),
+        email: user.email || "",
+        role: "user",
+        avatarUrl: ""
+      })
+    } else {
+      setUserProfile(null)
     }
-
-    checkProfile()
-    window.addEventListener("storage", checkProfile)
-    return () => window.removeEventListener("storage", checkProfile)
-  }, [])
+  }, [user])
 
   // ScrollSpy effect for /home page
   useEffect(() => {
@@ -105,10 +101,9 @@ export function Navbar() {
   }
 
   const handleLogout = () => {
-    localStorage.removeItem("mw_user_profile")
+    logout()
     setUserProfile(null)
     setProfileDropdownOpen(false)
-    window.dispatchEvent(new Event("storage"))
     router.push("/auth/login")
   }
 

@@ -1,0 +1,97 @@
+"use client"
+
+import React, { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
+import { useMoonStore } from "@core/store/moon-store"
+import { ProfileCard } from "./profile/profile-card"
+import { MissionStats } from "./profile/mission-stats"
+import { MissionSummary } from "./profile/mission-summary"
+import { ExpertiseBadges } from "./profile/expertise-badges"
+import { CurrentFocus } from "./profile/current-focus"
+import { AchievementsList } from "./profile/achievements-list"
+import { RecentActivity } from "./profile/recent-activity"
+import { MissionBadges } from "./profile/mission-badges"
+import { QuickActions } from "./profile/quick-actions"
+
+export function ErpProfileView() {
+  const searchParams = useSearchParams()
+  const targetId = searchParams.get("id")
+  const { user } = useMoonStore()
+
+  // Determine if viewing own profile or someone else's
+  const isOwnProfile = !targetId || targetId === String(user?.id)
+
+  // In the future, if !isOwnProfile, we will fetch target user data here.
+  // For now, we simulate profile data based on targetId presence.
+  const profileData = isOwnProfile ? user : {
+    name: "Guest Explorer " + targetId,
+    email: "guest_" + targetId + "@moonwitness.org",
+    role: "Knowledge Explorer",
+  }
+
+  return (
+    <div className="w-full max-w-[1600px] mx-auto pb-12 animate-in fade-in duration-700 px-4 sm:px-6 lg:px-8">
+      {/* Optional: Banner if viewing someone else */}
+      {!isOwnProfile && (
+        <div className="mb-6 rounded-lg bg-blue-500/10 border border-blue-500/20 px-4 py-3 text-sm text-blue-400 font-sans flex items-center gap-2">
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          Viewing {profileData.name}'s profile in Read-Only mode.
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        {/* Left Column (Profile Card & Summary) */}
+        <div className="lg:col-span-4 xl:col-span-3 space-y-6">
+          <ProfileCard profileData={profileData} isOwnProfile={isOwnProfile} />
+          <MissionSummary />
+          <div className="rounded-xl border border-cyan-500/20 bg-black/40 p-4 backdrop-blur-md">
+            <h3 className="mb-4 font-sans text-[10px] font-bold tracking-widest text-cyan-500 uppercase">
+              System Status
+            </h3>
+            <div className="relative flex flex-col items-center justify-center p-8">
+              <div className="absolute h-32 w-32 rounded-full border border-cyan-500/30 animate-[spin_8s_linear_infinite]" />
+              <div className="absolute h-24 w-24 rounded-full border-t border-r border-fuchsia-500/50 animate-[spin_4s_linear_infinite_reverse]" />
+              <div className="absolute h-16 w-16 rounded-full border-b border-l border-cyan-400/80 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite]" />
+              <div className="z-10 text-center">
+                <span className="block font-sans text-xs text-emerald-400">All Systems Operational</span>
+                <span className="font-mono text-[9px] text-slate-500">Uptime: 134d 21h 43m</span>
+              </div>
+            </div>
+            <button className="mt-4 w-full rounded-md border border-cyan-500/30 px-3 py-2 font-sans text-[10px] text-cyan-400 transition-colors hover:bg-cyan-500/10">
+              View System Health &rarr;
+            </button>
+          </div>
+        </div>
+
+        {/* Right Column (Everything Else) */}
+        <div className="lg:col-span-8 xl:col-span-9 space-y-6">
+          <MissionStats />
+          
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <div className="space-y-6">
+              <ExpertiseBadges />
+              <CurrentFocus />
+            </div>
+            <AchievementsList />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className={`col-span-1 ${!isOwnProfile ? 'xl:col-span-2' : ''}`}>
+              <RecentActivity />
+            </div>
+            <div className="col-span-1">
+              <MissionBadges />
+            </div>
+            {isOwnProfile && (
+              <div className="col-span-1">
+                <QuickActions />
+              </div>
+            )}
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  )
+}

@@ -16,6 +16,11 @@ export interface FieldDef<T extends string = string> {
   index?: boolean
   tracking?: boolean
   dim?: number
+  min?: number
+  max?: number
+  pattern?: RegExp
+  validate?: (val: any) => string | boolean
+  inverse?: string
 }
 
 const FIELD_TYPES = new Set([
@@ -60,6 +65,10 @@ export const fields = {
     depends?: string[]
     translate?: boolean
     index?: boolean
+    min?: number
+    max?: number
+    pattern?: RegExp
+    validate?: (val: any) => string | boolean
   } = {}): FieldDef<'char'> => makeField('char', opts),
   
   Text: (opts: {
@@ -70,6 +79,10 @@ export const fields = {
     depends?: string[]
     translate?: boolean
     index?: boolean
+    min?: number
+    max?: number
+    pattern?: RegExp
+    validate?: (val: any) => string | boolean
   } = {}): FieldDef<'text'> => makeField('text', opts),
   
   Integer: (opts: {
@@ -79,6 +92,9 @@ export const fields = {
     store?: boolean
     depends?: string[]
     index?: boolean
+    min?: number
+    max?: number
+    validate?: (val: any) => string | boolean
   } = {}): FieldDef<'integer'> => makeField('integer', opts),
   
   Float: (opts: {
@@ -88,6 +104,9 @@ export const fields = {
     store?: boolean
     depends?: string[]
     index?: boolean
+    min?: number
+    max?: number
+    validate?: (val: any) => string | boolean
   } = {}): FieldDef<'float'> => makeField('float', opts),
   
   Boolean: (opts: {

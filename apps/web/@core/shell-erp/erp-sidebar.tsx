@@ -3,6 +3,7 @@
 import React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useMoonStore } from "@core/store/moon-store"
 import {
   ShieldCheck,
   LayoutDashboard,
@@ -18,21 +19,27 @@ import {
   FolderKanban,
   CheckSquare,
   Globe,
+  Settings,
+  Bell,
+  CreditCard,
+  User,
   FlaskConical,
   Activity,
 } from "lucide-react"
-import { ERP_QUICK_LAUNCH } from "@modules/erp"
 import { buildNavigation } from "@modules/index"
+import { ERP_QUICK_LAUNCH, ERP_NAVIGATION } from "@modules/erp"
 
-const getIcon = (iconName?: string) => {
-  const props = { className: "h-5 w-5" }
-  switch (iconName) {
+function getIcon(name?: string) {
+  const props = { className: "w-4 h-4" }
+  switch (name) {
     case "LayoutDashboard":
       return <LayoutDashboard {...props} />
     case "Target":
       return <Target {...props} />
     case "Telescope":
       return <Telescope {...props} />
+    case "BookOpen":
+      return <BookOpen {...props} />
     case "Clock":
       return <Clock {...props} />
     case "Network":
@@ -51,8 +58,18 @@ const getIcon = (iconName?: string) => {
       return <Globe {...props} />
     case "FlaskConical":
       return <FlaskConical {...props} />
-    case "BookOpen":
-      return <BookOpen {...props} />
+    case "Activity":
+      return <Activity {...props} />
+    case "Settings":
+      return <Settings {...props} />
+    case "ShieldCheck":
+      return <ShieldCheck {...props} />
+    case "Bell":
+      return <Bell {...props} />
+    case "CreditCard":
+      return <CreditCard {...props} />
+    case "User":
+      return <User {...props} />
     default:
       return <LayoutDashboard {...props} />
   }
@@ -60,10 +77,10 @@ const getIcon = (iconName?: string) => {
 
 export function ErpSidebar() {
   const pathname = usePathname()
+  const { logout } = useMoonStore()
 
   const handleLogout = () => {
-    localStorage.removeItem("mw_user_profile")
-    window.dispatchEvent(new Event("storage"))
+    logout()
     window.location.href = "/auth/login"
   }
 
@@ -85,21 +102,21 @@ export function ErpSidebar() {
       {/* Navigation Links */}
       <nav className="scrollbar-hide flex-1 overflow-y-auto">
         <div className="px-4 py-4">
-          <p className="mb-2 px-2 font-mono text-[10px] tracking-[0.2em] text-primary/50 uppercase">
+          <p className="mb-2 px-2 font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
             Navigation
           </p>
           <ul className="space-y-1">
-            {buildNavigation("ERP_SIDEBAR").map((item) => {
+            {ERP_NAVIGATION.map((item) => {
               const isActive =
                 pathname === item.href || pathname?.startsWith(`${item.href}/`)
               return (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`flex items-center gap-3 rounded-lg px-3 py-2.5 font-mono text-xs transition-colors ${
+                    className={`flex items-center gap-3 rounded-lg px-3 py-2 font-sans text-xs transition-colors ${
                       isActive
-                        ? "border border-cyan-500/20 bg-cyan-500/10 text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.1)]"
-                        : "text-primary/70 hover:bg-black/40 hover:text-white"
+                        ? "bg-cyan-500/10 text-cyan-400"
+                        : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
                     }`}
                   >
                     {getIcon(item.icon)}
@@ -112,21 +129,28 @@ export function ErpSidebar() {
         </div>
 
         <div className="px-4 py-2">
-          <p className="mb-2 px-2 font-mono text-[10px] tracking-[0.2em] text-primary/50 uppercase">
-            Quick Launch
+          <p className="mb-2 px-2 font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
+            Account
           </p>
           <ul className="space-y-1">
-            {ERP_QUICK_LAUNCH.map((item) => {
+            {[
+              { label: "My Profile", href: "/erp/profile", icon: "User" },
+              { label: "Settings", href: "/erp/settings", icon: "Settings" },
+              { label: "Security Center", href: "/erp/security", icon: "ShieldCheck" },
+              { label: "Notifications", href: "/erp/notifications", icon: "Bell" },
+              { label: "Organizations", href: "/erp/orgs", icon: "Users" },
+              { label: "Billing", href: "/erp/billing", icon: "CreditCard" },
+            ].map((item) => {
               const isActive =
                 pathname === item.href || pathname?.startsWith(`${item.href}/`)
               return (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`flex items-center gap-3 rounded-lg px-3 py-2.5 font-mono text-xs transition-colors ${
+                    className={`flex items-center gap-3 rounded-lg px-3 py-2 font-sans text-xs transition-colors ${
                       isActive
-                        ? "border border-cyan-500/20 bg-cyan-500/10 text-cyan-400"
-                        : "text-primary/70 hover:bg-black/40 hover:text-white"
+                        ? "border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.1)]"
+                        : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
                     }`}
                   >
                     {getIcon(item.icon)}
@@ -137,35 +161,40 @@ export function ErpSidebar() {
             })}
           </ul>
         </div>
-
-        {/* System Status Widget */}
-        <div className="px-4 py-4">
-          <p className="mb-2 px-2 font-mono text-[10px] tracking-[0.2em] text-primary/50 uppercase">
-            System Status
-          </p>
-          <div className="rounded-lg border border-cyan-500/20 bg-black/40 p-4">
-            <div className="mb-2 flex items-center justify-center">
-              <Activity className="h-8 w-8 animate-pulse text-cyan-400" />
-            </div>
-            <p className="text-center font-mono text-[10px] text-primary/70">
-              All Systems Operational
-            </p>
-            <div className="mt-2 flex items-center justify-between font-mono text-[9px] text-cyan-400/70">
-              <span>Uptime: 13d 21h 43m</span>
-              <span>100%</span>
-            </div>
-          </div>
-        </div>
       </nav>
 
-      {/* Footer / System Action */}
+      {/* System Status Footer */}
+      <div className="mt-auto border-t border-cyan-500/20 bg-black/40 p-4">
+        <p className="mb-2 font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
+          System Status
+        </p>
+        <div className="flex items-center gap-3">
+          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-cyan-500/30 bg-cyan-500/10">
+            <Target className="h-5 w-5 text-cyan-400 opacity-50" />
+            <div className="absolute inset-0 rounded-full border border-cyan-400 border-t-transparent animate-[spin_4s_linear_infinite]" />
+            <div className="absolute inset-1 rounded-full border border-cyan-500/50 border-b-transparent animate-[spin_3s_linear_infinite_reverse]" />
+          </div>
+          <div className="flex flex-col">
+            <span className="font-sans text-xs font-semibold text-emerald-400">
+              All Systems Operational
+            </span>
+            <span className="font-mono text-[9px] text-slate-500">
+              Uptime: 134d 21h 43m
+            </span>
+          </div>
+        </div>
+        <button className="mt-3 w-full rounded-md border border-cyan-500/30 px-3 py-1.5 font-sans text-[10px] text-cyan-400 transition-colors hover:bg-cyan-500/10 flex items-center justify-center gap-2">
+          View System Health &rarr;
+        </button>
+      </div>
+
       <div className="border-t border-cyan-500/20 p-4">
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-3 rounded-lg px-4 py-3 font-mono text-xs text-red-400 transition-colors hover:bg-red-500/10"
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 font-sans text-xs text-red-400 transition-colors hover:bg-red-500/10 hover:text-red-300"
         >
-          <LogOut className="h-5 w-5" />
-          SYSTEM LOGOUT
+          <LogOut className="h-4 w-4" />
+          Disconnect
         </button>
       </div>
     </aside>

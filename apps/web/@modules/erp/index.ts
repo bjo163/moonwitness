@@ -4,6 +4,7 @@ import { ErpAnalyticsView } from "./views/erp-analytics-view"
 import { ErpHadithsView } from "./views/erp-hadiths-view"
 import { ErpScripturesView } from "./views/erp-scriptures-view"
 import { ErpUsersView } from "./views/erp-users-view"
+import { ErpProfileView } from "./views/erp-profile-view" // Hot reload trigger
 
 /**
  * ERP Module — MoonWitness OS
@@ -49,6 +50,12 @@ export default defineModule({
       icon: "Activity",
       component: ErpAnalyticsView,
     },
+    {
+      slug: "profile",
+      label: "My Profile",
+      icon: "User",
+      component: ErpProfileView,
+    },
   ],
 })
 
@@ -63,7 +70,7 @@ export const ERP_NAVIGATION = [
   { label: "Projects", href: "/erp/projects", icon: "FolderKanban" },
   { label: "Tasks", href: "/erp/tasks", icon: "CheckSquare" },
   { label: "Reports", href: "/erp/reports", icon: "BarChart3" },
-  { label: "Community", href: "/erp/community", icon: "Users" },
+  { label: "User Access", href: "/erp/users", icon: "Users" },
   {
     label: "Global Intelligence",
     href: "/erp/global-intelligence",

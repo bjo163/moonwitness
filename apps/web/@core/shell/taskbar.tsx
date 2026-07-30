@@ -6,12 +6,14 @@ import { calculateLunarPhase, LunarPhaseInfo } from "@core/utils/lunar-phase"
 import { useLanguage } from "@core/contexts"
 import { useGlobalAudio } from "@core/contexts"
 import { GlobalLiveAudioTranslator } from "./global-live-audio-translator"
-import { Play, Pause, SkipForward, SkipBack, Music } from "lucide-react"
+import { Play, Pause, SkipForward, SkipBack, Music, Users, Activity, Compass } from "lucide-react"
+import { useMoonStore } from "@core/store/moon-store"
 
 export function Taskbar() {
   const pathname = usePathname()
   const { lang } = useLanguage()
   const { isPlaying, currentSurah, togglePlay } = useGlobalAudio()
+  const { activeConnections } = useMoonStore()
   const [mounted, setMounted] = useState(false)
   const [timeStr, setTimeStr] = useState("")
   const [lunarInfo, setLunarInfo] = useState<LunarPhaseInfo | null>(null)
@@ -57,39 +59,45 @@ export function Taskbar() {
         {/* ── LEFT: System Status ────────────────────────────────── */}
         <div className="flex shrink-0 items-center gap-4 text-primary sm:gap-6">
           {/* SYS ONLINE indicator */}
-          <span className="flex items-center gap-1.5 font-bold text-emerald-400">
+          <span className="flex items-center gap-1.5 font-bold text-emerald-400" title="System Online">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_8px_#10B981]" />
-            <span className="hidden sm:inline">SYS ONLINE</span>
+            <span className="hidden sm:inline">SYS</span>
+          </span>
+
+          <span className="hidden h-3 w-px bg-white/10 sm:block" />
+
+          {/* Active Connections */}
+          <span className="hidden items-center gap-1.5 sm:flex text-emerald-400/80" title="Active Connections">
+            <Users className="h-3 w-3 text-emerald-400" />
+            <strong className="font-black text-emerald-400">{activeConnections}</strong>
           </span>
 
           <span className="hidden h-3 w-px bg-white/10 sm:block" />
 
           {/* Latency */}
-          <span className="hidden items-center gap-1.5 sm:flex">
-            LATENCY: <strong className="font-black text-cyan-400">12MS</strong>
+          <span className="hidden items-center gap-1.5 sm:flex" title="Network Latency">
+            <Activity className="h-3 w-3 text-cyan-400" />
+            <strong className="font-black text-cyan-400">12MS</strong>
           </span>
 
           <span className="hidden h-3 w-px bg-white/10 md:block" />
 
           {/* Qibla */}
-          <span className="hidden items-center gap-1.5 md:flex">
-            QIBLA:{" "}
-            <strong className="font-black text-cyan-400">295.14° NNE</strong>
+          <span className="hidden items-center gap-1.5 md:flex" title="Qibla Direction">
+            <Compass className="h-3 w-3 text-cyan-400" />
+            <strong className="font-black text-cyan-400">295.14°</strong>
           </span>
 
           <span className="hidden h-3 w-px bg-white/10 lg:block" />
 
           {/* Lunar Phase */}
           {lunarInfo && (
-            <span className="hidden items-center gap-1.5 lg:flex">
+            <span className="hidden items-center gap-1.5 lg:flex" title={lunarInfo.phaseName}>
               <span className="text-amber-400">◐</span>
               <span>
                 <strong className="font-black text-amber-400">
-                  {lunarInfo.phaseName}
+                  {lunarInfo.illuminationPercent}%
                 </strong>
-                <span className="ml-1.5 text-white/40">
-                  ({lunarInfo.illuminationPercent}%)
-                </span>
               </span>
             </span>
           )}

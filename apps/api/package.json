@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@moon/base": "workspace:*",
+    "@moon/client": "workspace:*",
     "@moon/orm": "workspace:*",
     "@moon/server": "workspace:*",
     "dotenv": "^16.4.5",
@@ -20,9 +21,11 @@
     "pg": "^8.13.0"
   },
   "devDependencies": {
+    "@types/eventsource": "^3.0.0",
     "@types/node": "^26.1.2",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
+    "eventsource": "^4.1.0",
     "tsx": "^4.7.0",
     "typescript": "^5.5.4"
   }

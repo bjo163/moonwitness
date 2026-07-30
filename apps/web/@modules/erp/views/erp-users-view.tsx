@@ -1,479 +1,271 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@workspace/ui/components/card"
-import { Badge } from "@workspace/ui/components/badge"
-import { Button } from "@workspace/ui/components/button"
-import { Input } from "@workspace/ui/components/input"
-import { Label } from "@workspace/ui/components/label"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@workspace/ui/components/dialog"
+import React, { useState } from "react"
 import { ContextBlock } from "@core/ui"
+import { MoonDataTable, CrudColumn } from "@core/widgets/crud"
+import { Users, Shield, Clock, MonitorPlay, LogIn, Share2, Download } from "lucide-react"
 
-type UserProfileItem = {
-  id: string
-  email: string
-  name: string
-  role: "public" | "admin"
-  avatar_url: string
-  created_at: string
+// Dummy data for rendering nice looking badges
+const generateRandomStatus = (id: number) => {
+  if (id % 7 === 0) return { label: "Pending", color: "text-amber-500", dot: "bg-amber-500", bg: "bg-amber-500/10 border-amber-500/20" }
+  if (id % 12 === 0) return { label: "Disabled", color: "text-red-500", dot: "bg-red-500", bg: "bg-red-500/10 border-red-500/20" }
+  return { label: "Active", color: "text-emerald-500", dot: "bg-emerald-500", bg: "bg-emerald-500/10 border-emerald-500/20" }
 }
 
-const INITIAL_USERS: UserProfileItem[] = [
-  {
-    id: "1",
-    email: "rocksoul@moonwitness.com",
-    name: "Admin Rocksoul",
-    role: "admin",
-    avatar_url: "👑",
-    created_at: "2026-07-26",
-  },
-  {
-    id: "2",
-    email: "ahmad.jamaah@gmail.com",
-    name: "Ahmad Jamaah",
-    role: "public",
-    avatar_url: "🌙",
-    created_at: "2026-07-26",
-  },
-  {
-    id: "3",
-    email: "hamba.allah@gmail.com",
-    name: "Hamba Allah",
-    role: "public",
-    avatar_url: "✨",
-    created_at: "2026-07-26",
-  },
-]
+const generateRandomRole = (id: number) => {
+  if (id === 1) return { label: "Administrator", color: "text-purple-400" }
+  if (id % 15 === 0) return { label: "Editor", color: "text-blue-400" }
+  if (id % 8 === 0) return { label: "Moderator", color: "text-amber-400" }
+  return { label: "Member", color: "text-emerald-400" }
+}
+
+const generateRandomTeam = (id: number) => {
+  if (id === 1) return "Core Team"
+  if (id % 5 === 0) return "Content Team"
+  if (id % 8 === 0) return "Community"
+  return "Jamaah Team"
+}
 
 export function ErpUsersView() {
-  const [users, setUsers] = useState<UserProfileItem[]>(INITIAL_USERS)
-  const [editingId, setEditingId] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState("all")
 
-  // Edit Inline Form State
-  const [editName, setEditName] = useState("")
-  const [editEmail, setEditEmail] = useState("")
-  const [editRole, setEditRole] = useState<"public" | "admin">("public")
-
-  // Add User State
-  const [isAddOpen, setIsAddOpen] = useState(false)
-  const [addEmail, setAddEmail] = useState("")
-  const [addName, setAddName] = useState("")
-  const [addRole, setAddRole] = useState<"public" | "admin">("public")
-
-  const [notification, setNotification] = useState("")
-
-  // Load from localStorage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem("mw_erp_users_data")
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved)
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setTimeout(() => setUsers(parsed), 0)
-        }
-      } catch (e) {
-        console.error("Failed to load ERP users state:", e)
-      }
-    }
-  }, [])
-
-  // Save users state to localStorage
-  const saveUsersState = (newUsers: UserProfileItem[]) => {
-    setUsers(newUsers)
-    localStorage.setItem("mw_erp_users_data", JSON.stringify(newUsers))
-  }
-
-  const showNotify = (msg: string) => {
-    setNotification(msg)
-    setTimeout(() => setNotification(""), 3500)
-  }
-
-  // Start Inline Editing
-  const startEdit = (u: UserProfileItem) => {
-    setEditingId(u.id)
-    setEditName(u.name)
-    setEditEmail(u.email)
-    setEditRole(u.role)
-  }
-
-  // Save Inline Edit
-  const saveInlineEdit = (id: string) => {
-    if (!editName.trim() || !editEmail.trim()) return
-
-    const updated = users.map((u) => {
-      if (u.id === id) {
-        return {
-          ...u,
-          name: editName.trim(),
-          email: editEmail.trim().toLowerCase(),
-          role: editRole,
-          avatar_url: editRole === "admin" ? "👑" : "🌙",
-        }
-      }
-      return u
-    })
-
-    saveUsersState(updated)
-    setEditingId(null)
-    showNotify(`✅ Akun ${editName} berhasil diperbarui & disimpan permanen!`)
-  }
-
-  // Quick Toggle Role
-  const toggleRole = (id: string) => {
-    const updated = users.map((u) => {
-      if (u.id === id) {
-        const nextRole: "public" | "admin" =
-          u.role === "admin" ? "public" : "admin"
-        showNotify(`Peran ${u.name} diubah menjadi ${nextRole.toUpperCase()}`)
-        return {
-          ...u,
-          role: nextRole,
-          avatar_url: nextRole === "admin" ? "👑" : "🌙",
-        }
-      }
-      return u
-    })
-    saveUsersState(updated)
-  }
-
-  // Add User
-  const handleAddUser = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!addEmail.trim() || !addName.trim()) return
-
-    const newUser: UserProfileItem = {
-      id: Date.now().toString(),
-      email: addEmail.trim().toLowerCase(),
-      name: addName.trim(),
-      role: addRole,
-      avatar_url: addRole === "admin" ? "👑" : "🌙",
-      created_at: new Date().toISOString().split("T")[0] || "",
-    }
-
-    const updated = [newUser, ...users]
-    saveUsersState(updated)
-    setIsAddOpen(false)
-    setAddEmail("")
-    setAddName("")
-    showNotify(`✅ User ${newUser.name} berhasil ditambahkan!`)
-  }
-
-  // Delete User
-  const handleDeleteUser = (id: string, name: string) => {
-    if (!confirm(`Apakah Anda yakin ingin menghapus akun ${name}?`)) return
-    const updated = users.filter((u) => u.id !== id)
-    saveUsersState(updated)
-    showNotify(`🗑️ Akun ${name} telah dihapus.`)
-  }
-
-  return (
-    <>
-      <div className="space-y-6">
-        <ContextBlock
-          title="MANAJEMEN AKUN JAMAAH"
-          subtitle="Kelola akses, profil jamaah, dan berikan hak istimewa Admin."
-          operation="USER-ACCOUNT-MGMT"
-          status="ONLINE"
-          accentColor="system"
-        />
-
-        <div className="flex justify-end">
-          <Button
-            onClick={() => setIsAddOpen(true)}
-            className="shrink-0 rounded-xl bg-purple-600 px-4 py-2 text-xs font-bold text-white shadow-md hover:bg-purple-700"
-          >
-            ➕ Tambah Pengguna Baru
-          </Button>
-        </div>
-
-        {notification && (
-          <div className="flex animate-in items-center gap-2 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-xs font-bold text-emerald-600 fade-in dark:text-emerald-400">
-            <span>{notification}</span>
+  const userColumns: CrudColumn[] = [
+    { 
+      name: "name", 
+      label: "User", 
+      type: "text", 
+      required: true,
+      render: (val, row) => (
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-cyan-900/50 border border-cyan-500/30 overflow-hidden flex items-center justify-center">
+            <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${row.name}&backgroundColor=0f172a`} alt="Avatar" className="w-full h-full object-cover" />
           </div>
-        )}
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <Card>
-            <CardHeader className="p-4 pb-2">
-              <CardDescription>Total Pengguna</CardDescription>
-              <CardTitle className="text-2xl font-black">
-                {users.length} Akun
-              </CardTitle>
-            </CardHeader>
-          </Card>
-
-          <Card>
-            <CardHeader className="p-4 pb-2">
-              <CardDescription>Administrator</CardDescription>
-              <CardTitle className="text-2xl font-black text-purple-600 dark:text-purple-400">
-                {users.filter((u) => u.role === "admin").length} Admin
-              </CardTitle>
-            </CardHeader>
-          </Card>
-
-          <Card>
-            <CardHeader className="p-4 pb-2">
-              <CardDescription>Status Keamanan</CardDescription>
-              <CardTitle className="text-base font-black text-emerald-600 dark:text-emerald-400">
-                🔒 SHA-256 Active
-              </CardTitle>
-            </CardHeader>
-          </Card>
+          <div className="flex flex-col">
+            <span className="font-semibold text-slate-200 text-xs">{row.name}</span>
+            <span className="text-[10px] text-slate-500">{row.email}</span>
+          </div>
         </div>
+      )
+    },
+    { name: "email", label: "Email Address", type: "email", required: true, hideInTable: true },
+    { name: "password", label: "Password", type: "password", required: true, hideInTable: true },
+    { 
+      name: "role", 
+      label: "Role",
+      hideInForm: true,
+      render: (_, row) => {
+        const role = generateRandomRole(row.id)
+        return <span className={`text-xs font-medium ${role.color}`}>{role.label}</span>
+      }
+    },
+    { 
+      name: "team", 
+      label: "Team",
+      hideInForm: true,
+      render: (_, row) => (
+        <span className="text-xs text-slate-400">{generateRandomTeam(row.id)}</span>
+      )
+    },
+    { 
+      name: "status", 
+      label: "Status",
+      hideInForm: true,
+      render: (_, row) => {
+        const status = generateRandomStatus(row.id)
+        return (
+          <div className="flex items-center gap-2">
+            <span className={`w-1.5 h-1.5 rounded-full ${status.dot} shadow-[0_0_5px_currentColor]`} />
+            <span className={`text-xs ${status.color}`}>{status.label}</span>
+          </div>
+        )
+      }
+    },
+    { 
+      name: "last_active", 
+      label: "Last Active",
+      hideInForm: true,
+      render: (_, row) => {
+        const status = generateRandomStatus(row.id)
+        if (status.label !== "Active") return <span className="text-xs text-slate-600">-</span>
+        return <span className="text-xs text-slate-400">{Math.floor(Math.random() * 59) + 1} mins ago</span>
+      }
+    }
+  ]
 
-        {/* Users Table */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle>Daftar Pengguna Active</CardTitle>
-              <CardDescription>
-                Klik Edit untuk mengubah Nama/Email atau klik Badge Role untuk
-                ubah Hak Akses
-              </CardDescription>
-            </div>
-            <Badge variant="outline" className="text-[10px]">
-              {users.length} Records
-            </Badge>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {users.map((u) => {
-              const isEditing = editingId === u.id
-
-              return (
-                <div
-                  key={u.id}
-                  className="space-y-3 rounded-2xl border border-border/40 bg-card p-4 transition-all hover:bg-muted/20"
-                >
-                  {isEditing ? (
-                    /* EDITING INLINE FORM */
-                    <div className="space-y-3 rounded-xl border border-purple-500/30 bg-muted/40 p-4">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-purple-600 dark:text-purple-400">
-                          ✏️ Edit Akun #{u.id}
-                        </span>
-                        <Badge variant="outline" className="text-[10px]">
-                          Inline Mode
-                        </Badge>
-                      </div>
-
-                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                        <div>
-                          <Label className="mb-1 block text-[11px]">
-                            Nama Lengkap
-                          </Label>
-                          <Input
-                            type="text"
-                            value={editName}
-                            onChange={(e) => setEditName(e.target.value)}
-                            required
-                          />
-                        </div>
-
-                        <div>
-                          <Label className="mb-1 block text-[11px]">
-                            Alamat Email
-                          </Label>
-                          <Input
-                            type="email"
-                            value={editEmail}
-                            onChange={(e) => setEditEmail(e.target.value)}
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between pt-2">
-                        <div className="flex items-center gap-2">
-                          <Label className="text-[11px]">Peran:</Label>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setEditRole(
-                                editRole === "admin" ? "public" : "admin"
-                              )
-                            }
-                            className={`rounded-lg border px-3 py-1 text-xs font-bold transition-all ${
-                              editRole === "admin"
-                                ? "border-purple-600 bg-purple-600 text-white"
-                                : "border-border bg-background text-foreground"
-                            }`}
-                          >
-                            {editRole === "admin"
-                              ? "👑 Admin ERP"
-                              : "👥 Jamaah (Public)"}
-                          </button>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="outline"
-                            onClick={() => setEditingId(null)}
-                            className="h-8 rounded-xl px-3 text-xs font-bold"
-                          >
-                            Batal
-                          </Button>
-                          <Button
-                            onClick={() => saveInlineEdit(u.id)}
-                            className="h-8 rounded-xl bg-purple-600 px-4 text-xs font-bold text-white hover:bg-purple-700"
-                          >
-                            💾 Simpan Perubahan
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    /* NORMAL VIEW */
-                    <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-                      <div className="flex items-center gap-3">
-                        <span className="text-2xl">{u.avatar_url}</span>
-                        <div>
-                          <div className="flex flex-wrap items-center gap-2">
-                            <span className="text-xs font-bold text-foreground">
-                              {u.name}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => toggleRole(u.id)}
-                              title="Klik untuk mengubah peran Admin/Public secara instan"
-                            >
-                              <Badge
-                                variant={
-                                  u.role === "admin" ? "secondary" : "outline"
-                                }
-                                className={`cursor-pointer transition-all hover:opacity-80 ${
-                                  u.role === "admin"
-                                    ? "bg-purple-600 text-white"
-                                    : ""
-                                }`}
-                              >
-                                {u.role === "admin" ? "👑 ADMIN" : "👥 PUBLIC"}
-                              </Badge>
-                            </button>
-                          </div>
-                          <p className="text-xs text-muted-foreground">
-                            {u.email}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2 self-end sm:self-center">
-                        <Button
-                          variant="outline"
-                          onClick={() => startEdit(u)}
-                          className="h-8 rounded-xl px-3 text-xs font-bold"
-                        >
-                          ✏️ Edit Profil
-                        </Button>
-
-                        <Button
-                          variant="destructive"
-                          onClick={() => handleDeleteUser(u.id, u.name)}
-                          className="h-8 rounded-xl px-3 text-xs font-bold"
-                        >
-                          🗑️ Hapus
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-          </CardContent>
-        </Card>
+  const topWidgets = (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="rounded-xl border border-cyan-900/30 bg-black/40 backdrop-blur-md p-4 flex flex-col gap-2 relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-4 opacity-10">
+          <Users className="w-16 h-16 text-cyan-500" />
+        </div>
+        <div className="flex items-center gap-2 text-cyan-500">
+          <Users className="w-4 h-4" />
+          <span className="text-xs font-bold uppercase tracking-wider">Total Users</span>
+        </div>
+        <div className="text-2xl font-bold text-white">1,248</div>
+        <div className="text-[10px] text-emerald-400">↑ 12.5% vs last month</div>
+      </div>
+      
+      <div className="rounded-xl border border-emerald-900/30 bg-black/40 backdrop-blur-md p-4 flex flex-col gap-2 relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-4 opacity-10">
+          <MonitorPlay className="w-16 h-16 text-emerald-500" />
+        </div>
+        <div className="flex items-center gap-2 text-emerald-500">
+          <MonitorPlay className="w-4 h-4" />
+          <span className="text-xs font-bold uppercase tracking-wider">Active Users</span>
+        </div>
+        <div className="text-2xl font-bold text-white">982</div>
+        <div className="text-[10px] text-emerald-500">78.7% of total users</div>
       </div>
 
-      {/* ADD USER MODAL */}
-      <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-        <DialogContent className="max-w-md rounded-3xl p-6">
-          <DialogHeader>
-            <DialogTitle>➕ Tambah Akun Pengguna Baru</DialogTitle>
-            <DialogDescription>
-              Daftarkan akun pengguna atau admin ke sistem ERP
-            </DialogDescription>
-          </DialogHeader>
+      <div className="rounded-xl border border-purple-900/30 bg-black/40 backdrop-blur-md p-4 flex flex-col gap-2 relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-4 opacity-10">
+          <Shield className="w-16 h-16 text-purple-500" />
+        </div>
+        <div className="flex items-center gap-2 text-purple-500">
+          <Shield className="w-4 h-4" />
+          <span className="text-xs font-bold uppercase tracking-wider">Admins</span>
+        </div>
+        <div className="text-2xl font-bold text-white">18</div>
+        <div className="text-[10px] text-purple-400">1.4% of total users</div>
+      </div>
 
-          <form onSubmit={handleAddUser} className="space-y-4">
-            <div>
-              <Label className="mb-1 block">Alamat Email *</Label>
-              <Input
-                type="email"
-                placeholder="contoh: ustadz@moonwitness.com"
-                value={addEmail}
-                onChange={(e) => setAddEmail(e.target.value)}
-                required
-              />
-            </div>
+      <div className="rounded-xl border border-amber-900/30 bg-black/40 backdrop-blur-md p-4 flex flex-col gap-2 relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-4 opacity-10">
+          <Clock className="w-16 h-16 text-amber-500" />
+        </div>
+        <div className="flex items-center gap-2 text-amber-500">
+          <Clock className="w-4 h-4" />
+          <span className="text-xs font-bold uppercase tracking-wider">Pending Approval</span>
+        </div>
+        <div className="text-2xl font-bold text-white">27</div>
+        <div className="text-[10px] text-amber-400">Awaiting review</div>
+      </div>
+    </div>
+  )
 
-            <div>
-              <Label className="mb-1 block">Nama Lengkap *</Label>
-              <Input
-                type="text"
-                placeholder="contoh: Ustadz Abdullah"
-                value={addName}
-                onChange={(e) => setAddName(e.target.value)}
-                required
-              />
+  const sideWidgets = (
+    <>
+      <div className="rounded-xl border border-cyan-900/30 bg-black/40 backdrop-blur-md p-4 flex flex-col gap-4">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-500 flex items-center gap-2">
+          <Share2 className="w-4 h-4" /> User Distribution
+        </h3>
+        
+        <div className="flex flex-col gap-3">
+          <div className="w-32 h-32 rounded-full border-8 border-cyan-900/30 mx-auto relative flex items-center justify-center">
+            <div className="absolute inset-0 rounded-full border-8 border-emerald-500/50 border-t-transparent border-r-transparent transform -rotate-45" />
+            <div className="absolute inset-0 rounded-full border-8 border-purple-500 border-l-transparent border-b-transparent border-r-transparent transform rotate-12" />
+            <div className="flex flex-col items-center">
+              <span className="text-lg font-bold text-white">1,248</span>
+              <span className="text-[9px] text-slate-500">Total Users</span>
             </div>
+          </div>
 
-            <div>
-              <Label className="mb-1 block">Peran (Role)</Label>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setAddRole("public")}
-                  className={`rounded-xl border p-2.5 text-xs font-bold transition-all ${
-                    addRole === "public"
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-border text-muted-foreground"
-                  }`}
-                >
-                  👥 Jamaah (Public)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAddRole("admin")}
-                  className={`rounded-xl border p-2.5 text-xs font-bold transition-all ${
-                    addRole === "admin"
-                      ? "border-purple-500 bg-purple-500/10 text-purple-600"
-                      : "border-border text-muted-foreground"
-                  }`}
-                >
-                  👑 Admin ERP
-                </button>
-              </div>
+          <div className="flex flex-col gap-2 mt-2">
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-purple-500" /> <span className="text-slate-400">Administrators</span></div>
+              <span className="text-slate-200">1.4%</span>
             </div>
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-blue-500" /> <span className="text-slate-400">Editors</span></div>
+              <span className="text-slate-200">8.2%</span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-emerald-500" /> <span className="text-slate-400">Members</span></div>
+              <span className="text-slate-200">87.3%</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-            <div className="flex justify-end gap-2 pt-2">
-              <Button
-                variant="outline"
-                type="button"
-                onClick={() => setIsAddOpen(false)}
-              >
-                Batal
-              </Button>
-              <Button
-                type="submit"
-                className="bg-purple-600 font-bold text-white hover:bg-purple-700"
-              >
-                Simpan Akun
-              </Button>
+      <div className="rounded-xl border border-cyan-900/30 bg-black/40 backdrop-blur-md p-4 flex flex-col gap-4">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-500 flex items-center gap-2">
+          <LogIn className="w-4 h-4" /> Recent Login Activity
+        </h3>
+        
+        <div className="flex flex-col gap-4">
+          {[
+            { name: "Rezza Fahlevi", loc: "Jakarta", os: "Windows 11", time: "2 min ago" },
+            { name: "Aisyah Rahma", loc: "Bandung", os: "MacOS", time: "15 min ago" },
+            { name: "Fadly Maulana", loc: "Surabaya", os: "Android 14", time: "1 hour ago" },
+          ].map((log, i) => (
+            <div key={i} className="flex gap-3 items-center">
+               <div className="w-8 h-8 rounded-full bg-cyan-900/30 flex-shrink-0 border border-cyan-500/20 overflow-hidden">
+                <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${log.name}&backgroundColor=0f172a`} alt="Avatar" className="w-full h-full object-cover" />
+               </div>
+               <div className="flex flex-col flex-1">
+                 <div className="flex justify-between items-center">
+                    <span className="text-xs font-semibold text-slate-200">{log.name}</span>
+                    <span className="text-[10px] text-emerald-400">Success</span>
+                 </div>
+                 <span className="text-[10px] text-slate-500">{log.loc} • {log.os}</span>
+               </div>
             </div>
-          </form>
-        </DialogContent>
-      </Dialog>
+          ))}
+        </div>
+        <button className="text-[10px] text-cyan-500 hover:text-cyan-400 uppercase tracking-widest text-center mt-2">View All Logs</button>
+      </div>
     </>
+  )
+
+  const tabs = [
+    { id: "all", label: "All Users" },
+    { id: "admins", label: "Admins" },
+    { id: "active", label: "Active" },
+    { id: "pending", label: "Pending" },
+    { id: "disabled", label: "Disabled" },
+  ]
+
+  const customActions = (
+    <button className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-semibold text-slate-400 hover:text-slate-200 border border-cyan-900/50 rounded h-8 px-3 bg-black/40 hover:bg-cyan-900/30 transition-colors">
+      <Download className="w-3.5 h-3.5" /> Export
+    </button>
+  )
+
+  const filterWidgets = (
+    <>
+      <select className="h-8 bg-black/50 border border-cyan-900/50 rounded px-2 text-xs text-slate-400 focus:outline-none focus:border-cyan-500/50">
+        <option>All Roles</option>
+        <option>Administrator</option>
+        <option>Editor</option>
+      </select>
+      <select className="h-8 bg-black/50 border border-cyan-900/50 rounded px-2 text-xs text-slate-400 focus:outline-none focus:border-cyan-500/50">
+        <option>All Status</option>
+        <option>Active</option>
+        <option>Pending</option>
+      </select>
+      <select className="h-8 bg-black/50 border border-cyan-900/50 rounded px-2 text-xs text-slate-400 focus:outline-none focus:border-cyan-500/50">
+        <option>All Teams</option>
+        <option>Core Team</option>
+        <option>Content Team</option>
+      </select>
+    </>
+  )
+
+  return (
+    <div className="space-y-6">
+      <ContextBlock
+        title="USER MANAGEMENT"
+        subtitle="Manage system users, roles, and access permissions across the global ERP system."
+        operation="USER-MGMT"
+        status="ONLINE"
+        accentColor="cyan"
+      />
+
+      <MoonDataTable 
+        modelName="vx.user"
+        title="User Management"
+        description="Comprehensive list of all registered users."
+        columns={userColumns}
+        icon={<Users className="h-5 w-5" />}
+        topWidgets={topWidgets}
+        sideWidgets={sideWidgets}
+        tabs={tabs}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        filterWidgets={filterWidgets}
+        customActions={customActions}
+      />
+    </div>
   )
 }

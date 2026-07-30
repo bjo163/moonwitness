@@ -1,25 +1,29 @@
 import { getDb } from './config.js'
+import { QueryBuilder } from './query.js'
 import type { FieldDef, InferFieldType } from './fields.js'
 import { isFieldDef as isFieldDefFn, fields } from './fields.js'
 import type { Ctx } from './env.js'
+import { createCtx } from './env.js'
 import { checkAccessRights, getRecordRulesDomain } from './security.js'
 
 export type ModelFields<M extends typeof Vertex> = {
   [K in keyof InstanceType<M> as InstanceType<M>[K] extends FieldDef<any> ? K : never]: InferFieldType<InstanceType<M>[K]>
 }
+export type PopulatedRelations<W extends string> = {
+  [K in W as `$${K}`]: any;
+}
+export type ModelRecord<M extends typeof Vertex, W extends string = never> = ModelFields<M> & { id: number } & PopulatedRelations<W>
 
-export type ModelRecord<M extends typeof Vertex> = ModelFields<M> & { id: number }
-
-export interface Recordset<M extends typeof Vertex> {
-  [index: number]: ModelRecord<M>;
+export interface Recordset<M extends typeof Vertex, W extends string = never> {
+  [index: number]: ModelRecord<M, W>;
 }
 
-export class Recordset<M extends typeof Vertex> {
+export class Recordset<M extends typeof Vertex, W extends string = never> {
   modelClass: M
   env: Ctx
-  records: ModelRecord<M>[]
+  records: ModelRecord<M, W>[]
 
-  constructor(modelClass: M, env: Ctx, records: ModelRecord<M>[]) {
+  constructor(modelClass: M, env: Ctx, records: ModelRecord<M, W>[]) {
     this.modelClass = modelClass
     this.env = env
     this.records = records
@@ -54,7 +58,27 @@ export class Recordset<M extends typeof Vertex> {
     return this.records.length
   }
 
-  mapped<K extends keyof ModelRecord<M>>(field: K): ModelRecord<M>[K][] {
+  toJSON() {
+    return this.records.map((r: any) => {
+      const proxy = new Proxy(r, {
+        get(rowTarget, rowProp) {
+          if (typeof rowProp === 'string') {
+            if (rowProp in rowTarget) return rowTarget[rowProp]
+            const snake = rowProp.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`)
+            if (snake in rowTarget) return rowTarget[snake]
+          }
+          return rowTarget[rowProp]
+        }
+      });
+      // JSON.stringify doesn't trigger Proxy getters for non-existent keys.
+      // We must explicitly build an object.
+      // Actually, since this is an ORM, returning the raw record is usually sufficient
+      // if the frontend handles snake_case, OR we can just return r.
+      // But let's return r for now as it contains the raw DB fields.
+      return r;
+    })
+  }
+  mapped<K extends keyof ModelRecord<M, W>>(field: K): ModelRecord<M, W>[K][] {
     return this.records.map(r => r[field])
   }
 
@@ -78,6 +102,29 @@ export class Recordset<M extends typeof Vertex> {
 }
 
 export class Vertex {
+  static _public?: boolean;
+  
+  // Lifecycle hooks
+  static async beforeSave?(modelClass: typeof Vertex, env: Ctx, vals: Record<string, unknown>, id?: number): Promise<void>
+  static async afterSave?(modelClass: typeof Vertex, env: Ctx, id: number, vals: Record<string, unknown>): Promise<void>
+  static async beforeDelete?(modelClass: typeof Vertex, env: Ctx, id: number): Promise<void>
+  static async afterDelete?(modelClass: typeof Vertex, env: Ctx, id: number): Promise<void>
+
+  static query<M extends typeof Vertex>(this: M, env: Ctx): QueryBuilder<M> {
+    return new QueryBuilder(this, env)
+  }
+
+  static async transaction<T>(env: Ctx, callback: (txEnv: Ctx) => Promise<T>): Promise<T> {
+    if (env.trx) {
+      return await callback(env)
+    }
+    const db = getDb()
+    return await db.transaction(async (trx) => {
+      const txEnv = createCtx(env.uid, env.context, env.getModel, trx)
+      return await callback(txEnv)
+    })
+  }
+
   private static emitEvent(event: string, payload: any) {
     // @ts-ignore
     if (globalThis.moonEmitter) {
@@ -92,6 +139,7 @@ export class Vertex {
   static _abstract = false
   static _inherits?: Record<string, string>
   static _onchanges?: Record<string, string[]>
+  static _softDelete = false
 
   // internal metadata
   private static _fieldsCache: Record<string, FieldDef> | null = null
@@ -111,6 +159,11 @@ export class Vertex {
         defs[key] = value
       }
     }
+
+    if ((modelClass as any)._softDelete && !defs.deletedAt) {
+      defs.deletedAt = fields.DateTime({ index: true })
+    }
+
     return defs
   }
 
@@ -120,6 +173,56 @@ export class Vertex {
       .toLowerCase()
       .replace(/\./g, '_')
       .replace(/^_/, '')
+  }
+
+  static validateData(modelClass: typeof Vertex, vals: Record<string, unknown>) {
+    console.log(`[VALIDATE] Validating ${modelClass._name}:`, vals)
+    const fieldDefs = this.getFieldDefs(modelClass)
+    for (const [k, v] of Object.entries(vals)) {
+      const snakeKey = toSnakeCase(k)
+      const camelKey = Object.keys(fieldDefs).find(f => f === k || toSnakeCase(f) === snakeKey)
+      if (!camelKey) continue
+      
+      const def = fieldDefs[camelKey]
+      if (!def) continue
+      
+      if (v === null || v === undefined) {
+        if (def.required) {
+          throw new Error(`Validation Error: Field '${camelKey}' on '${modelClass._name}' is required.`)
+        }
+        continue
+      }
+      
+      if (def.type === 'char' || def.type === 'text') {
+        const strVal = String(v)
+        if (def.min !== undefined && strVal.length < def.min) {
+          throw new Error(`Validation Error: Field '${camelKey}' on '${modelClass._name}' must be at least ${def.min} characters.`)
+        }
+        if (def.max !== undefined && strVal.length > def.max) {
+          throw new Error(`Validation Error: Field '${camelKey}' on '${modelClass._name}' must be at most ${def.max} characters.`)
+        }
+        if (def.pattern && !def.pattern.test(strVal)) {
+          throw new Error(`Validation Error: Field '${camelKey}' on '${modelClass._name}' does not match required format.`)
+        }
+      }
+      
+      if (def.type === 'integer' || def.type === 'float') {
+        const numVal = Number(v)
+        if (def.min !== undefined && numVal < def.min) {
+          throw new Error(`Validation Error: Field '${camelKey}' on '${modelClass._name}' must be at least ${def.min}.`)
+        }
+        if (def.max !== undefined && numVal > def.max) {
+          throw new Error(`Validation Error: Field '${camelKey}' on '${modelClass._name}' must be at most ${def.max}.`)
+        }
+      }
+      
+      if (def.validate) {
+        const res = def.validate(v)
+        if (res !== true) {
+          throw new Error(`Validation Error: ${typeof res === 'string' ? res : `Field '${camelKey}' is invalid.`}`)
+        }
+      }
+    }
   }
 
   static splitVals(modelClass: typeof Vertex, vals: Record<string, unknown>) {
@@ -248,6 +351,21 @@ export class Vertex {
         }
       }
     }
+    const defaultFieldDefs = this.getFieldDefs(modelClass)
+    for (const [key, def] of Object.entries(defaultFieldDefs)) {
+      if (clonedVals[key] === undefined && def.default !== undefined) {
+        clonedVals[key] = typeof def.default === 'function' ? def.default() : def.default
+      }
+    }
+
+    if (clonedVals.createdAt === undefined) clonedVals.createdAt = new Date().toISOString()
+    if (clonedVals.updatedAt === undefined) clonedVals.updatedAt = new Date().toISOString()
+
+    this.validateData(modelClass, clonedVals)
+
+    if ((modelClass as any).beforeSave) {
+      await (modelClass as any).beforeSave(modelClass, env, clonedVals)
+    }
 
     // Delegation inheritance (_inherits)
     if (modelClass._inherits && env.getModel) {
@@ -261,7 +379,10 @@ export class Vertex {
             const camelKey = Object.keys(parentFieldDefs).find(f => f === k || toSnakeCase(f) === snake)
             if (camelKey && camelKey !== 'id') {
               parentVals[k] = v
-              delete clonedVals[k]
+              // Do not delete common fields inherited by both (createdAt, updatedAt, isActive, parentPath, companyId)
+              if (!['createdAt', 'updatedAt', 'isActive', 'parentPath', 'companyId'].includes(camelKey)) {
+                delete clonedVals[k]
+              }
             }
           }
           if (Object.keys(parentVals).length > 0) {
@@ -362,6 +483,9 @@ export class Vertex {
       }
 
       await this.processRelationalTuples(modelClass, env, row.id, relationalUpdates)
+      if ((modelClass as any).afterSave) {
+        await (modelClass as any).afterSave(modelClass, env, row.id, clonedVals)
+      }
       this.emitEvent('spawn', { model: modelClass._name, id: row.id, vals: clonedVals })
     }
     return row
@@ -378,8 +502,19 @@ export class Vertex {
     
     await checkAccessRights(modelClass, env, 'permWrite')
     
-    // Delegation inheritance (_inherits)
     const clonedVals = { ...vals }
+
+    if (clonedVals.updatedAt === undefined) clonedVals.updatedAt = new Date().toISOString()
+
+    this.validateData(modelClass, clonedVals)
+
+    if ((modelClass as any).beforeSave) {
+      for (const id of idArray) {
+        await (modelClass as any).beforeSave(modelClass, env, clonedVals, id)
+      }
+    }
+
+    // Delegation inheritance (_inherits)
     if (modelClass._inherits && env.getModel) {
       for (const [parentModelName, fkField] of Object.entries(modelClass._inherits)) {
         const ParentModel = env.getModel(parentModelName)
@@ -391,7 +526,10 @@ export class Vertex {
             const camelKey = Object.keys(parentFieldDefs).find(f => f === k || toSnakeCase(f) === snake)
             if (camelKey && camelKey !== 'id') {
               parentVals[k] = v
-              delete clonedVals[k]
+              // Do not delete common fields inherited by both (createdAt, updatedAt, isActive, parentPath, companyId)
+              if (!['createdAt', 'updatedAt', 'isActive', 'parentPath', 'companyId'].includes(camelKey)) {
+                delete clonedVals[k]
+              }
             }
           }
           if (Object.keys(parentVals).length > 0) {
@@ -526,6 +664,9 @@ export class Vertex {
     
     for (const id of idArray) {
       await this.processRelationalTuples(modelClass, env, id, relationalUpdates)
+      if ((modelClass as any).afterSave) {
+        await (modelClass as any).afterSave(modelClass, env, id, clonedVals)
+      }
     }
     return true
   }
@@ -617,7 +758,7 @@ export class Vertex {
     env: Ctx,
     domain: unknown[] = [],
     fields?: string[],
-    options?: { limit?: number; offset?: number; order?: string; asOf?: Date | string }
+    options?: { limit?: number; offset?: number; order?: string; asOf?: Date | string; with?: string[] }
   ) {
     await checkAccessRights(modelClass, env, 'permRead')
     const fieldDefs = this.getFieldDefs(modelClass)
@@ -630,6 +771,17 @@ export class Vertex {
           baseDomain = ['&', ...baseDomain, ['isActive', '=', true]]
         } else {
           baseDomain = [['isActive', '=', true]]
+        }
+      }
+    }
+
+    if ((modelClass as any)._softDelete && env.context?.with_deleted !== true) {
+      const strDomain = JSON.stringify(baseDomain)
+      if (!strDomain.includes('"deletedAt"') && !strDomain.includes('"deleted_at"')) {
+        if (baseDomain.length > 0) {
+          baseDomain = ['&', ...baseDomain, ['deletedAt', '=', null]]
+        } else {
+          baseDomain = [['deletedAt', '=', null]]
         }
       }
     }
@@ -668,6 +820,14 @@ export class Vertex {
     applyDomain(query, finalDomain, table, parentTables)
     
     let selectFields = fields ? [...fields] : Object.keys(fieldDefs)
+    
+    // Auto-include parent fields if none explicitly requested
+    if (!fields && Object.keys(parentTables).length > 0) {
+      for (const pFields of Object.values(parentTables)) {
+        selectFields.push(...pFields)
+      }
+    }
+
     selectFields = selectFields.filter(f => {
       const def = fieldDefs[f] || fieldDefs[f.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase())]
       if (def?.type === 'many2many' || def?.type === 'one2many') return false
@@ -734,6 +894,60 @@ export class Vertex {
     // Cache the rows
     for (const row of rows) {
        env.cache?.set(`${table}_${row.id}`, row)
+    }
+
+    // Eager Loading (.with)
+    if (options?.with && options.with.length > 0 && env.getModel) {
+      for (const relation of options.with) {
+        const camelRel = Object.keys(fieldDefs).find(f => f === relation || toSnakeCase(f) === toSnakeCase(relation))
+        if (!camelRel) continue
+        const def = fieldDefs[camelRel]
+        if (!def || !def.comodel) continue
+
+        const Comodel = env.getModel(def.comodel)
+        if (!Comodel) continue
+
+        if (def.type === 'many2one') {
+          const colName = toSnakeCase(camelRel)
+          const idsToFetch = new Set<number>()
+          for (const row of rows) {
+            if (row[colName]) {
+               const val = Array.isArray(row[colName]) ? row[colName][0] : row[colName]
+               if (val) idsToFetch.add(val)
+            }
+          }
+          if (idsToFetch.size > 0) {
+            // Note: we fetch as proxies using scan/QueryBuilder internally? No, fetch returns proxies directly!
+            // Wait, fetch returns raw rows, and the proxy is wrapped at the very end in query.ts or base.ts fetch?
+            // Actually, fetch returns raw rows in Moon ORM, and Recordset proxy wraps them!
+            const relatedRows = await Comodel.fetch(Comodel, env, [['id', 'in', Array.from(idsToFetch)]])
+            const relatedMap = new Map(relatedRows.map((r: any) => [r.id, r]))
+            for (const row of rows) {
+               const val = row[colName]
+               const id = Array.isArray(val) ? val[0] : val
+               if (id && relatedMap.has(id)) {
+                 row[`$${camelRel}`] = relatedMap.get(id)
+               } else {
+                 row[`$${camelRel}`] = null
+               }
+            }
+          }
+        }
+        else if (def.type === 'one2many' && def.inverse) {
+          const ids = rows.map((r: any) => r.id)
+          const inverseCol = toSnakeCase(def.inverse)
+          const relatedRows = await Comodel.fetch(Comodel, env, [[def.inverse, 'in', ids]])
+          const grouped = new Map<number, any[]>()
+          for (const r of relatedRows as any[]) {
+            const pid = Array.isArray(r[inverseCol]) ? r[inverseCol][0] : (r[def.inverse] || r[inverseCol])
+            if (!grouped.has(pid)) grouped.set(pid, [])
+            grouped.get(pid)!.push(r)
+          }
+          for (const row of rows) {
+             row[`$${camelRel}`] = grouped.get(row.id) || []
+          }
+        }
+      }
     }
 
     // Auto-Hydration for many2one fields
@@ -912,14 +1126,25 @@ export class Vertex {
 
     await checkAccessRights(modelClass, env, 'permUnlink')
     
+    if ((modelClass as any).beforeDelete) {
+      for (const id of idArray) {
+        await (modelClass as any).beforeDelete(modelClass, env, id)
+      }
+    }
+    
+    // We fetch parent ids before deleting the child so we can delete them later
+    const parentPurges: { ParentModel: any, pIds: number[] }[] = []
     if (modelClass._inherits && env.getModel) {
       for (const [parentModelName, fkField] of Object.entries(modelClass._inherits)) {
         const ParentModel = env.getModel(parentModelName)
         if (ParentModel) {
           const childRecs = await this.fetch(modelClass, env, [['id', 'in', idArray]])
-          const pIds = childRecs.map((rec: any) => rec[fkField.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`)] || rec[fkField]).filter(Boolean) as number[]
+          const pIds = childRecs.map((rec: any) => {
+            const val = rec[fkField.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`)] || rec[fkField]
+            return Array.isArray(val) ? val[0] : val
+          }).filter(Boolean) as number[]
           if (pIds.length > 0) {
-            await ParentModel.purge(ParentModel, env, pIds)
+            parentPurges.push({ ParentModel, pIds })
           }
         }
       }
@@ -929,8 +1154,24 @@ export class Vertex {
     const table = this.tableName(modelClass)
     const conn = env.trx || db
     
-    // Note: The parent purge happens above, but we also emit the event for the child
-    await conn(table).whereIn('id', idArray).delete()
+    // Delete child first
+    if ((modelClass as any)._softDelete) {
+      await conn(table).whereIn('id', idArray).update({ deleted_at: new Date() })
+    } else {
+      await conn(table).whereIn('id', idArray).delete()
+    }
+    
+    // Now delete parents
+    for (const { ParentModel, pIds } of parentPurges) {
+      await ParentModel.purge(ParentModel, env, pIds)
+    }
+    
+    if ((modelClass as any).afterDelete) {
+      for (const id of idArray) {
+        await (modelClass as any).afterDelete(modelClass, env, id)
+      }
+    }
+
     this.emitEvent('purge', { model: modelClass._name, ids: idArray })
     return true
   }
@@ -951,6 +1192,17 @@ export class Vertex {
           baseDomain = ['&', ...baseDomain, ['isActive', '=', true]]
         } else {
           baseDomain = [['isActive', '=', true]]
+        }
+      }
+    }
+
+    if ((modelClass as any)._softDelete && env.context?.with_deleted !== true) {
+      const strDomain = JSON.stringify(baseDomain)
+      if (!strDomain.includes('"deletedAt"') && !strDomain.includes('"deleted_at"')) {
+        if (baseDomain.length > 0) {
+          baseDomain = ['&', ...baseDomain, ['deletedAt', '=', null]]
+        } else {
+          baseDomain = [['deletedAt', '=', null]]
         }
       }
     }
@@ -998,6 +1250,17 @@ export class Vertex {
       }
     }
 
+    if ((modelClass as any)._softDelete && env.context?.with_deleted !== true) {
+      const strDomain = JSON.stringify(baseDomain)
+      if (!strDomain.includes('"deletedAt"') && !strDomain.includes('"deleted_at"')) {
+        if (baseDomain.length > 0) {
+          baseDomain = ['&', ...baseDomain, ['deletedAt', '=', null]]
+        } else {
+          baseDomain = [['deletedAt', '=', null]]
+        }
+      }
+    }
+
     const ruleDomain = await getRecordRulesDomain(modelClass, env)
     let finalDomain = baseDomain
     if (ruleDomain.length > 0) {
@@ -1023,19 +1286,40 @@ export class Vertex {
 
     for (const f of fields) {
       if (f.includes(':')) {
-        const [col, agg] = f.split(':')
+        const parts = f.split(':')
+        const col = parts[0]
+        const agg = parts[1]
+        const alias = parts[2] || col
+        
         if (!col || !agg) continue
         const snake = toSnakeCase(col)
-        if (agg === 'sum') selectArgs.push(conn.raw(`sum(??) as ??`, [snake, snake]))
-        else if (agg === 'avg') selectArgs.push(conn.raw(`avg(??) as ??`, [snake, snake]))
-        else if (agg === 'min') selectArgs.push(conn.raw(`min(??) as ??`, [snake, snake]))
-        else if (agg === 'max') selectArgs.push(conn.raw(`max(??) as ??`, [snake, snake]))
+        
+        // Count behaves differently, count(id) or count(*)
+        if (agg === 'count') selectArgs.push(conn.raw(`count(??) as ??`, [snake, alias]))
+        else if (agg === 'sum') selectArgs.push(conn.raw(`sum(??) as ??`, [snake, alias]))
+        else if (agg === 'avg') selectArgs.push(conn.raw(`avg(??) as ??`, [snake, alias]))
+        else if (agg === 'min') selectArgs.push(conn.raw(`min(??) as ??`, [snake, alias]))
+        else if (agg === 'max') selectArgs.push(conn.raw(`max(??) as ??`, [snake, alias]))
       }
     }
 
     query.select(selectArgs)
     const rows = await query
-    return rows
+    
+    // Map snake_case keys back to camelCase based on aliases and groupbys
+    return rows.map((row: any) => {
+      const result: Record<string, any> = {}
+      for (const [key, val] of Object.entries(row)) {
+        // Find if this key is a groupBy field and convert to camelCase
+        const isGroupField = groupby.find(g => toSnakeCase(g) === key)
+        if (isGroupField) {
+          result[isGroupField] = val
+        } else {
+          result[key] = val
+        }
+      }
+      return result
+    })
   }
 }
 

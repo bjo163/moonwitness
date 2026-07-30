@@ -1,28 +1,31 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { useMoonStore } from "@core/store/moon-store"
 
 export default function RootRedirectPage() {
   const router = useRouter()
+  const { user } = useMoonStore()
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    const profileStr = localStorage.getItem("mw_user_profile")
-    if (profileStr) {
-      try {
-        const profile = JSON.parse(profileStr)
-        if (profile.role === "admin") {
-          router.replace("/erp/dashboard")
-        } else {
-          router.replace("/home")
-        }
-      } catch {
-        router.replace("/auth/login")
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+    
+    if (user) {
+      if (user.partner_id) { // User has a partner profile (simulating role checks for now)
+        router.replace("/home")
+      } else {
+        router.replace("/home")
       }
     } else {
       router.replace("/auth/login")
     }
-  }, [router])
+  }, [router, user, mounted])
 
   return (
     <div className="bg-space flex min-h-screen items-center justify-center font-mono text-cyan-500">
