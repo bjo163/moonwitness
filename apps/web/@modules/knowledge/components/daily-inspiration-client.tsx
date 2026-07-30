@@ -652,24 +652,44 @@ export function DailyInspirationClient() {
 
     const transmissionText = buildTransmissionText()
 
-    const prompt = `Buatkan konsep dan langsung generate gambar Komik/Poster/Infografis bergaya Gen-Z, absurd, lucu, keren, dan bernuansa gamers. 
-[PENTING: Gunakan orientasi vertikal/portrait (aspect ratio 9:16) dengan art style: Manga cover art, vibrant neon colors, cyberpunk lighting, cosmic background, dan retro gaming UI.]
+    const prompt = `Bertindaklah sebagai Creative Director yang sangat imajinatif, absurd, dan sangat paham kultur Gen-Z & Gamers. Buatkan konsep dan langsung generate gambar berdasarkan konteks ayat yang dilampirkan.
 
-Instruksi Elemen Gambar:
-1. JUDUL: Buat judul besar di atas dengan format "GOD PROMISE - [1-2 Kata Bahasa Inggris]". Kata tambahannya harus bergaya Gen-Z/Keren/Gamers (dinamis menyesuaikan konteks ayat).
-2. KARAKTER: 
-   - "Rocksoul" (Tokoh utama, divisualisasikan mirip Crayon Shinchan dengan hoodie/pakaian gamer).
-   - "Guru/Master" (Divisualisasikan mirip Master Muthen Roshi).
-   - Karakter Ekstra (opsional jika muat): Karakter mirip Arale.
-3. VISUALISASI KONTRAS: Gunakan layout Split-Screen (Atas vs Bawah). Bagian satu menampilkan "Keadaan Sebenarnya" (makna metafisik/spiritual dari ayat), bagian lainnya menampilkan "Realitas Saat Ini" (sindiran kelakuan manusia zaman now).
-4. TEKS DOA (Dalam Gambar): Buatkan speech-bubble berisi doa absurd/lucu maksimal 1-2 kalimat.
-   - Wajib diawali kata "Biiznillah,".
-   - Wajib menyebutkan Asmaul Husna yang terlampir di bawah (pilih salah satu/keduanya).
-   - Target doa harus spesifik menyindir/mendoakan manusia zaman now sesuai konteks ayatnya.
-5. FOOTER: Buatkan 1 kalimat footer di bawah gambar yang absurd/lucu, tapi tetap punya hikmah.
-(PASTIKAN PENULISAN TEKS DI DALAM GAMBAR AKURAT DAN JELAS TANPA TYPO)
+[PENTING: Gunakan orientasi vertikal (aspect ratio 9:16). Sebelum membuat gambar, ACAK secara otomatis 3 elemen di bawah ini agar hasil gambarnya selalu unik, bervariasi, dan futuristik!]
 
-Gunakan data konteks di bawah ini sebagai bahan racikanmu, lalu silakan langsung generate gambarnya:
+**1. ACAK FORMAT/MEDIUM GAMBAR (Pilih 1 secara acak):**
+- Cinematic Game Poster (Gaya cover game AAA/film fiksi ilmiah dengan teks dramatis).
+- Manga/Comic Book Panel (Terdapat panel komik terpisah, garis aksi cepat, dan efek suara komik).
+- RPG Game UI Screen (Gambar seolah-olah screenshot dari game, lengkap dengan Bar HP, Inventory, dan kotak dialog).
+- Holographic Infographic (Banyak elemen grafis sci-fi, statistik absurd, peta digital, dan data fiksi).
+- Rare Trading Card (Desain seperti kartu TCG Yu-Gi-Oh!/Pokemon, tapi bernuansa cyber, lengkap dengan bintang/status card).
+
+**2. ACAK GAYA VISUAL (Pilih 1 secara acak):**
+- Cyberpunk 2077 Street-art (Neon terang, distopia, jalanan kotor tapi futuristik)
+- Y2K Retro-Futurism (Gaya estetika tahun 2000-an, material krom, warna pop cerah)
+- Mecha / Sci-Fi Anime (Gaya mecha Jepang, dramatis, kosmik, ledakan energi)
+- Vaporwave / Synthwave (Warna ungu/pink neon, estetika 80-an retro-modern)
+
+**3. ACAK KOMPOSISI KONTRAS (Pilih 1 secara acak untuk membedakan "Makna Spiritual" vs "Kelakuan Manusia Zaman Now"):**
+- Diagonal Split-Screen (Terpotong miring secara tajam dan dramatis).
+- Hologram Projection (Satu adegan adalah dunia nyata, adegan lain diproyeksikan dari kacamata VR/layar raksasa).
+- Mirror/Puddle Reflection (Karakter melihat ke cermin/genangan air, tapi bayangan yang dipantulkan adalah realitas yang berbeda).
+- Glitch Portal (Gambar setengah tersedot ke portal dimensi atau layar error).
+
+**Instruksi Elemen Tetap (Wajib Ada di semua format):**
+1. **JUDUL BESAR**: "GOD PROMISE - [1-2 Kata Bahasa Inggris]". Kata tambahannya harus bergaya hype/slang/gamers menyesuaikan ayat. Gunakan font ala Cyberpunk/Game.
+2. **KARAKTER UTAMA**: 
+   - **"Rocksoul"**: Visualisasikan mirip Crayon Shinchan tapi memakai hoodie techwear/gamer, kacamata futuristik/headset RGB, ekspresi tengil & absurd.
+   - **"Master"**: Visualisasikan mirip Master Muthen Roshi tapi bergaya cyborg/cyberpunk.
+   - **Karakter Ekstra (Opsional/Acak)**: Robot kecil lucu bergaya Arale.
+3. **TEKS DOA (Dalam Gambar)**: Buatkan kotak teks/balon dialog berisi doa absurd/lucu maksimal 1-2 kalimat.
+   - Wajib diawali kata: "Biiznillah,".
+   - Wajib menyebutkan Asmaul Husna yang terlampir di data konteks.
+   - Doanya harus spesifik, tajam, dan menyindir kelakuan "NPC/manusia zaman now" sesuai konteks ayat.
+4. **FOOTER/QUOTES BAWAH**: 1 kalimat penutup di bawah gambar yang absurd, bergaya bahasa Gen-Z, tapi menyimpan pukulan hikmah yang dalam.
+
+*(SANGAT KRITIKAL: Pastikan penulisan teks di dalam gambar dieja dengan bahasa Indonesia/Inggris yang sangat akurat tanpa typo!)*
+
+Gunakan data konteks di bawah ini sebagai bahan racikanmu, pilih racikan elemen yang paling epik, lalu silakan langsung generate gambarnya:
 
 === KONTEKS TRANSMISSION LENGKAP ===
 ${transmissionText}`
