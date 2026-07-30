@@ -12,7 +12,6 @@ const withSerwist = withSerwistInit({
 })
 
 const nextConfig: NextConfig = {
-  output: "standalone",
   transpilePackages: ["@workspace/ui", "@workspace/quran-core"],
   images: {
     formats: ["image/avif", "image/webp"],
