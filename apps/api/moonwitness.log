@@ -2325,3 +2325,50 @@
 [2026-07-30T18:51:13.884Z] [INFO] moon.rest: GET, POST      /api/fx.session
 [2026-07-30T18:51:13.884Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
 [2026-07-30T18:51:13.887Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-07-30T19:27:13.183Z] [INFO] moon.schema: Schema sync: 36 applied, 0 pending
+[2026-07-30T19:27:13.184Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-07-30T19:27:13.185Z] [INFO] moon.rest: POST           /auth/login
+[2026-07-30T19:27:13.185Z] [INFO] moon.rest: POST           /auth/register
+[2026-07-30T19:27:13.185Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-07-30T19:27:13.185Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-07-30T19:27:13.186Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-07-30T19:27:13.186Z] [INFO] moon.rest: POST           /rpc
+[2026-07-30T19:27:13.186Z] [INFO] moon.rest: GET            /db/status
+[2026-07-30T19:27:13.186Z] [INFO] moon.rest: GET            /meta/models
+[2026-07-30T19:27:13.186Z] [INFO] moon.rest: GET            /live
+[2026-07-30T19:27:13.187Z] [INFO] moon.rest: GET            /openapi.json
+[2026-07-30T19:27:13.187Z] [INFO] moon.rest: GET            /docs
+[2026-07-30T19:27:13.187Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-07-30T19:27:13.187Z] [INFO] moon.rest: POST           /test-publish
+[2026-07-30T19:27:13.187Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-07-30T19:27:13.188Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-07-30T19:27:13.188Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-07-30T19:27:13.188Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-07-30T19:27:13.188Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-07-30T19:27:13.188Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-07-30T19:27:13.188Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-07-30T19:27:13.189Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-07-30T19:27:13.189Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-07-30T19:27:13.189Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-07-30T19:27:13.189Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-07-30T19:27:13.189Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-07-30T19:27:13.190Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-07-30T19:27:13.190Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-07-30T19:27:13.190Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-07-30T19:27:13.190Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-07-30T19:27:13.190Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-07-30T19:27:13.190Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-07-30T19:27:13.191Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-07-30T19:27:13.191Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-07-30T19:27:13.191Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-07-30T19:27:13.191Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-07-30T19:27:13.191Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-07-30T19:27:13.192Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-07-30T19:27:13.192Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-07-30T19:27:13.192Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-07-30T19:27:13.192Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-07-30T19:27:13.192Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-07-30T19:27:13.193Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-07-30T19:27:13.193Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-07-30T19:27:13.193Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-07-30T19:27:13.196Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000

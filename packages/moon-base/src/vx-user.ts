@@ -20,7 +20,7 @@ export default class VxUser extends Vertex {
     if (vals.password) {
       // Basic check if it's already a bcrypt hash ($2a$, $2b$, $2y$)
       if (!vals.password.startsWith('$2') || vals.password.length !== 60) {
-        const bcrypt = await import('bcrypt')
+        const bcrypt = await import('bcryptjs')
         vals.password = await bcrypt.hash(vals.password, 10)
       }
     }
