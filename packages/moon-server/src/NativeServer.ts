@@ -518,6 +518,27 @@ export class NativeServer {
       return res.end();
     }
 
+    // Check custom/global routes FIRST (before REST regex)
+    const urlPath = (req.url || '').split('?')[0];
+    const customRoute = globalRoutes.find(r => r.method === req.method && r.path === urlPath);
+    if (customRoute) {
+      return customRoute.handler(req, res);
+    }
+
+    const paramRoute = globalRoutes.find(r => {
+      if (r.method !== req.method) return false
+      if (!r.path.includes(':')) return false
+      return this.matchParamRoute(req, r) !== null
+    })
+    if (paramRoute) {
+      const matched = this.matchParamRoute(req, paramRoute)
+      if (matched) {
+        ;(req as any).params = matched.params
+        return matched.handler(req, res)
+      }
+    }
+
+    // Now check REST routes
     const restMatch = req.url?.match(/^\/api\/([a-z0-9.-]+)(?:\/(\d+))?(?:\?.*)?$/);
     if (restMatch) {
       return await this.handleRest(req, res, restMatch);
@@ -843,24 +864,6 @@ export class NativeServer {
           }
         });
       }, req, res)
-    }
-
-    const customRoute = globalRoutes.find(r => r.method === req.method && r.path === req.url);
-    if (customRoute) {
-      return customRoute.handler(req, res);
-    }
-
-    const paramRoute = globalRoutes.find(r => {
-      if (r.method !== req.method) return false
-      if (!r.path.includes(':')) return false
-      return this.matchParamRoute(req, r) !== null
-    })
-    if (paramRoute) {
-      const matched = this.matchParamRoute(req, paramRoute)
-      if (matched) {
-        ;(req as any).params = matched.params
-        return matched.handler(req, res)
-      }
     }
 
     this.sendJson(res, 404, { error: 'Not Found' });
