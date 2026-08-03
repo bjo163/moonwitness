@@ -41,6 +41,9 @@ importers:
       '@moon/orm':
         specifier: workspace:*
         version: link:../../packages/moon-orm
+      '@moon/performance':
+        specifier: workspace:*
+        version: link:../../packages/moon-performance
       '@moon/server':
         specifier: workspace:*
         version: link:../../packages/moon-server
@@ -74,34 +77,6 @@ importers:
         version: 4.23.1
       typescript:
         specifier: ^5.5.4
-        version: 5.9.3
-
-  apps/my-phaser-game:
-    dependencies:
-      next:
-        specifier: 15.3.1
-        version: 15.3.1(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      phaser:
-        specifier: 4.0.0
-        version: 4.0.0
-      react:
-        specifier: 19.0.0
-        version: 19.0.0
-      react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.0)
-    devDependencies:
-      '@types/node':
-        specifier: ^20
-        version: 20.19.41
-      '@types/react':
-        specifier: ^19
-        version: 19.2.15
-      '@types/react-dom':
-        specifier: ^19
-        version: 19.2.3(@types/react@19.2.15)
-      typescript:
-        specifier: ^5
         version: 5.9.3
 
   apps/rocksoul:
@@ -349,6 +324,22 @@ importers:
         version: 20.19.41
       typescript:
         specifier: ^5.5.4
+        version: 5.9.3
+
+  packages/moon-performance:
+    dependencies:
+      '@moon/base':
+        specifier: workspace:*
+        version: link:../moon-base
+      '@moon/orm':
+        specifier: workspace:*
+        version: link:../moon-orm
+    devDependencies:
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.19.41
+      typescript:
+        specifier: ^5.0.0
         version: 5.9.3
 
   packages/moon-server:

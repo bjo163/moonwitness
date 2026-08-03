@@ -72,11 +72,25 @@ export function createProxyHandler(opts: ProxyOptions): HttpHandler {
   const cache = new ExternalCache()
 
   return async (req, res) => {
+    // Add CORS headers
+    const corsHeaders = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    }
+
+    // Handle preflight
+    if (req.method === 'OPTIONS') {
+      res.writeHead(204, corsHeaders)
+      res.end()
+      return
+    }
+
     const cacheKey = req.url as string
     if (cacheMs > 0) {
       const cached = cache.get(cacheKey)
       if (cached) {
-        res.writeHead(200, { 'Content-Type': 'application/json', 'X-Cache': 'HIT' })
+        res.writeHead(200, { 'Content-Type': 'application/json', 'X-Cache': 'HIT', ...corsHeaders })
         res.end(JSON.stringify(cached))
         return
       }
@@ -97,19 +111,19 @@ export function createProxyHandler(opts: ProxyOptions): HttpHandler {
         if (cacheMs > 0) {
           const stale = cache.getStale(cacheKey)
           if (stale) {
-            res.writeHead(200, { 'Content-Type': 'application/json', 'X-Cache': 'STALE' })
+            res.writeHead(200, { 'Content-Type': 'application/json', 'X-Cache': 'STALE', ...corsHeaders })
             res.end(JSON.stringify(stale))
             return
           }
         }
-        res.writeHead(429, { 'Content-Type': 'application/json' })
+        res.writeHead(429, { 'Content-Type': 'application/json', ...corsHeaders })
         res.end(JSON.stringify({ error: 'Upstream rate limited', upstreamStatus: 429 }))
         return
       }
 
       if (!upstream.ok) {
         const text = await upstream.text()
-        res.writeHead(upstream.status, { 'Content-Type': 'application/json' })
+        res.writeHead(upstream.status, { 'Content-Type': 'application/json', ...corsHeaders })
         res.end(JSON.stringify({ error: 'Upstream error', status: upstream.status, body: text }))
         return
       }
@@ -118,18 +132,18 @@ export function createProxyHandler(opts: ProxyOptions): HttpHandler {
       if (cacheMs > 0) {
         cache.set(cacheKey, data, cacheMs)
       }
-      res.writeHead(200, { 'Content-Type': 'application/json', 'X-Cache': 'MISS' })
+      res.writeHead(200, { 'Content-Type': 'application/json', 'X-Cache': 'MISS', ...corsHeaders })
       res.end(JSON.stringify(data))
     } catch (err: any) {
       if (cacheMs > 0) {
         const stale = cache.getStale(cacheKey)
         if (stale) {
-          res.writeHead(200, { 'Content-Type': 'application/json', 'X-Cache': 'STALE' })
+          res.writeHead(200, { 'Content-Type': 'application/json', 'X-Cache': 'STALE', ...corsHeaders })
           res.end(JSON.stringify(stale))
           return
         }
       }
-      res.writeHead(502, { 'Content-Type': 'application/json' })
+      res.writeHead(502, { 'Content-Type': 'application/json', ...corsHeaders })
       res.end(JSON.stringify({ error: 'Proxy fetch failed', message: err.message }))
     }
   }

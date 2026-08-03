@@ -1,8 +1,11 @@
 import 'dotenv/config';
 import { NativeServer } from '@moon/server';
 import baseAddons, { seedBaseData, loadBaseData } from '@moon/base';
+import performanceAddons, { performanceMiddleware } from '@moon/performance';
 import { globalRoutes } from '@moon/server/dist/router.js';
 import { publish } from '@moon/server';
+import { trackSystem } from '@moon/performance';
+import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm';
 
 globalRoutes.push({
   method: 'POST',
@@ -14,12 +17,80 @@ globalRoutes.push({
   }
 });
 
+// Performance stats endpoint
+globalRoutes.push({
+  method: 'GET',
+  path: '/api/external/performance/stats',
+  handler: async (req, res) => {
+    try {
+      const env = createCtx(SUPERUSER_ID, {}, getModel as any)
+      
+      // Get recent request stats
+      const PxRequest = getModel('px.request')
+      const recentRequests = PxRequest 
+        ? await (PxRequest as any).search(PxRequest, env, [], { limit: 100, order: 'timestamp DESC' })
+        : []
+      
+      // Get cache stats
+      const PxCache = getModel('px.cache')
+      const cacheStats = PxCache
+        ? await (PxCache as any).search(PxCache, env, [], { limit: 50, order: 'lastAccess DESC' })
+        : []
+      
+      // Get slow queries
+      const PxQuery = getModel('px.query')
+      const slowQueries = PxQuery
+        ? await (PxQuery as any).search(PxQuery, env, [['isSlow', '=', true]], { limit: 20, order: 'timestamp DESC' })
+        : []
+      
+      // Get latest system metrics
+      const PxSystem = getModel('px.system')
+      const systemMetrics = PxSystem
+        ? await (PxSystem as any).search(PxSystem, env, [], { limit: 1, order: 'timestamp DESC' })
+        : []
+      
+      res.writeHead(200, { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      })
+      res.end(JSON.stringify({
+        requests: recentRequests,
+        cache: cacheStats,
+        slowQueries,
+        system: systemMetrics[0] || null,
+        summary: {
+          totalRequests: recentRequests.length,
+          avgLatency: recentRequests.length > 0 
+            ? recentRequests.reduce((sum: number, r: any) => sum + r.latencyMs, 0) / recentRequests.length 
+            : 0,
+          cacheHitRate: cacheStats.length > 0 
+            ? cacheStats.reduce((sum: number, c: any) => sum + (c.hitRate || 0), 0) / cacheStats.length
+            : 0,
+          slowQueryCount: slowQueries.length
+        }
+      }))
+    } catch (err) {
+      res.writeHead(500, { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      })
+      res.end(JSON.stringify({ error: String(err) }))
+    }
+  }
+});
+
 const server = new NativeServer({
   database: process.env.DATABASE_URL || 'postgres://localhost/moonwitness',
   jwtSecret: process.env.JWT_SECRET || 'secret',
   port: Number(process.env.API_PORT || process.env.PORT) || 4000,
-  addons: baseAddons.models,
+  addons: [
+    ...baseAddons.models,
+    ...performanceAddons.models
+  ],
 });
+
+// Add performance tracking middleware
+server.use(performanceMiddleware());
 
 // ── NASA ──────────────────────────────────────────────────────────────────────
 server.proxy('GET', '/api/external/nasa/neo', 'https://api.nasa.gov/neo/rest/v1/feed', {
@@ -96,6 +167,20 @@ server.start().then(async () => {
     await seedBaseData();
     await loadBaseData();
     console.log('[App] Programmatic boot executed and data seeded!');
+    
+    // Start system metrics collection (every 60 seconds)
+    setInterval(async () => {
+      const activeClients = (globalThis as any).moonActiveClients
+      const memUsage = process.memoryUsage()
+      
+      await trackSystem({
+        memoryUsedMb: memUsage.heapUsed / 1024 / 1024,
+        memoryTotalMb: memUsage.heapTotal / 1024 / 1024,
+        uptimeSeconds: Math.floor(process.uptime()),
+        activeConnections: activeClients ? activeClients.size : 0,
+      })
+    }, 60000)
+    
   } catch (err) {
     console.error('[App] Failed to seed data:', err);
   }

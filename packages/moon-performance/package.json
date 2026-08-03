@@ -1,0 +1,36 @@
+{
+  "name": "@moon/performance",
+  "version": "0.1.0",
+  "description": "Performance monitoring addon for Moonwitness",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "moonwitness",
+    "performance",
+    "monitoring",
+    "metrics",
+    "tracking",
+    "orm-addon"
+  ],
+  "dependencies": {
+    "@moon/orm": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@moon/base": "workspace:*"
+  }
+}

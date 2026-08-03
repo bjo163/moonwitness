@@ -9,7 +9,6 @@ import {
   MaritimeShip,
 } from "@core/api/hooks/use-global-monitoring"
 
-// Dynamically import LeafletMap with SSR disabled since it uses the window object
 const LeafletMap = dynamic(() => import("./leaflet-map"), {
   ssr: false,
   loading: () => (
@@ -23,6 +22,33 @@ const LeafletMap = dynamic(() => import("./leaflet-map"), {
     </div>
   ),
 })
+
+class MapErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean}> {
+  constructor(props: {children: React.ReactNode}) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError(error: any) {
+    return { hasError: true };
+  }
+  componentDidCatch(error: any, errorInfo: any) {
+    console.warn("Map System Error Caught (Auto-Recovering):", error);
+    // Auto recover after 3 seconds
+    setTimeout(() => this.setState({ hasError: false }), 3000);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="flex h-full w-full items-center justify-center bg-black/50 border border-red-500/30">
+          <div className="text-xs font-bold text-red-500 animate-pulse tracking-widest">
+            SATELLITE LINK REESTABLISHING...
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 export function LiveWorldMapWidget({
   earthquakes = [],
@@ -61,13 +87,15 @@ export function LiveWorldMapWidget({
 
       {/* Map Interactive Simulation */}
       <div className="relative z-10 mt-4 min-h-[300px] flex-1">
-        <LeafletMap
-          earthquakes={earthquakes}
-          issPosition={issPosition}
-          flights={flights}
-          cyberAttacks={cyberAttacks}
-          ships={ships}
-        />
+        <MapErrorBoundary>
+          <LeafletMap
+            earthquakes={earthquakes}
+            issPosition={issPosition}
+            flights={flights}
+            cyberAttacks={cyberAttacks}
+            ships={ships}
+          />
+        </MapErrorBoundary>
       </div>
 
       {/* Map Legends */}

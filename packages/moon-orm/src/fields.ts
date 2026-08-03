@@ -21,6 +21,7 @@ export interface FieldDef<T extends string = string> {
   pattern?: RegExp
   validate?: (val: any) => string | boolean
   inverse?: string
+  help?: string
 }
 
 const FIELD_TYPES = new Set([
@@ -69,6 +70,7 @@ export const fields = {
     max?: number
     pattern?: RegExp
     validate?: (val: any) => string | boolean
+    help?: string
   } = {}): FieldDef<'char'> => makeField('char', opts),
   
   Text: (opts: {
@@ -83,6 +85,7 @@ export const fields = {
     max?: number
     pattern?: RegExp
     validate?: (val: any) => string | boolean
+    help?: string
   } = {}): FieldDef<'text'> => makeField('text', opts),
   
   Integer: (opts: {
@@ -95,6 +98,7 @@ export const fields = {
     min?: number
     max?: number
     validate?: (val: any) => string | boolean
+    help?: string
   } = {}): FieldDef<'integer'> => makeField('integer', opts),
   
   Float: (opts: {
@@ -107,6 +111,7 @@ export const fields = {
     min?: number
     max?: number
     validate?: (val: any) => string | boolean
+    help?: string
   } = {}): FieldDef<'float'> => makeField('float', opts),
   
   Boolean: (opts: {
@@ -116,12 +121,14 @@ export const fields = {
     store?: boolean
     depends?: string[]
     index?: boolean
+    help?: string
   } = {}): FieldDef<'boolean'> => makeField('boolean', opts),
   
   Date: (opts: {
     required?: boolean
     default?: string
     index?: boolean
+    help?: string
   } = {}): FieldDef<'date'> => makeField('date', opts),
   
   DateTime: (opts: {
@@ -130,6 +137,7 @@ export const fields = {
     autoNow?: boolean
     default?: string
     index?: boolean
+    help?: string
   } = {}): FieldDef<'datetime'> => makeField('datetime', opts),
   
   Selection: (opts: {
@@ -137,6 +145,7 @@ export const fields = {
     required?: boolean
     default?: string
     index?: boolean
+    help?: string
   }): FieldDef<'selection'> => makeField('selection', opts),
   
   Many2one: (opts: {
@@ -144,19 +153,26 @@ export const fields = {
     required?: boolean
     default?: number
     index?: boolean
+    help?: string
   }): FieldDef<'many2one'> => makeField('many2one', opts),
   
-  One2many: (opts: { comodel: string; inverse: string }): FieldDef<'one2many'> =>
+  One2many: (opts: { 
+    comodel: string
+    inverse: string
+    help?: string
+  }): FieldDef<'one2many'> =>
     makeField('one2many', opts),
     
   Many2many: (opts: {
     comodel: string
     relation?: string
+    help?: string
   }): FieldDef<'many2many'> => makeField('many2many', opts),
 
   Vector: (opts: {
     dim: number
     required?: boolean
+    help?: string
   }): FieldDef<'vector'> => makeField('vector', opts)
 }
 
