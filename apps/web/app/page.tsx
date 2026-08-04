@@ -17,13 +17,14 @@ export default function RootRedirectPage() {
     if (!mounted) return
     
     if (user) {
-      if (user.partner_id) { // User has a partner profile (simulating role checks for now)
+      if (user.partner_id) { // User has a partner profile
         router.replace("/home")
       } else {
         router.replace("/home")
       }
     } else {
-      router.replace("/auth/login")
+      // Allow guests to explore the system by default
+      router.replace("/home")
     }
   }, [router, user, mounted])
 
