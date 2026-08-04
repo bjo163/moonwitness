@@ -14,6 +14,10 @@ import {
   PenTool,
   Image as ImageIcon,
 } from "lucide-react"
+import { PrayerTimesWidget } from "./prayer-times-widget"
+import { HijriCalendarWidget } from "./hijri-calendar-widget"
+import { AsmaulHusnaWidget } from "./asmaul-husna-widget"
+import { TacticalSettingsWidget } from "./tactical-settings-widget"
 
 type GlobalMonitorItem = { name: string; value: string; status: string }
 type MissionStatus = {
@@ -227,9 +231,13 @@ export function ErpRightSidebar({
   return (
     <div className="space-y-4">
       <MoonPhaseWidget moon={moon} />
+      <HijriCalendarWidget />
+      <AsmaulHusnaWidget />
+      <PrayerTimesWidget />
       <GlobalMonitoringWidget monitoring={monitoring} />
       <MissionStatusWidget status={status} />
       <QuickActionsWidget />
+      <TacticalSettingsWidget />
     </div>
   )
 }

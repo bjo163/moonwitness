@@ -11,6 +11,10 @@ import { ErpDailyMetrics } from "@core/widgets/erp/erp-daily-metrics"
 import { ErpKnowledgeFeed } from "@core/widgets/erp/erp-knowledge-feed"
 import { ErpProjectsTasks } from "@core/widgets/erp/erp-projects-tasks"
 import { ErpRightSidebar } from "@core/widgets/erp/erp-right-sidebar"
+import { ZakatCalculatorWidget } from "@core/widgets/erp/zakat-calculator-widget"
+import { InfaqTrackerWidget } from "@core/widgets/erp/infaq-tracker-widget"
+import { MutabaahWidget } from "@core/widgets/erp/mutabaah-widget"
+import { MosqueRadarWidget } from "@core/widgets/erp/mosque-radar-widget"
 
 type DashboardData = any
 
@@ -82,6 +86,13 @@ export function ERPDashboardView() {
                 tasks={data.tasksOverview}
               />
             </div>
+          </div>
+          {/* Row 4: Finance & Devotion */}
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
+            <MutabaahWidget />
+            <ZakatCalculatorWidget />
+            <InfaqTrackerWidget />
+            <MosqueRadarWidget />
           </div>
         </main>
 

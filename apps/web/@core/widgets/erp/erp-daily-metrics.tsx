@@ -10,6 +10,7 @@ import {
   History,
   Moon,
 } from "lucide-react"
+import { IntelBriefingWidget } from "./intel-briefing-widget"
 
 // Types
 type Mission = {
@@ -263,7 +264,7 @@ export function ErpDailyMetrics({
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
       <MissionCard missions={missions} />
       <PrayerCard prayers={prayers} />
-      <AIBriefingCard briefings={briefings} />
+      <IntelBriefingWidget />
       <MoonObservatoryCard moon={moon} />
     </div>
   )

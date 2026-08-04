@@ -17,6 +17,7 @@ import {
   Cloudy,
   Target,
 } from "lucide-react"
+import { QiblaRadarWidget } from "@core/widgets/erp/qibla-radar-widget"
 
 export function OSDivineAstronomy() {
   const [clockWIB, setClockWIB] = useState("06:50:16 WIB")
@@ -337,23 +338,7 @@ export function OSDivineAstronomy() {
                 </div>
 
                 {/* QIBLA DIRECTION (CENTER BOTTOM) */}
-                <div className="bg-space/90 pointer-events-auto flex w-48 items-center gap-3 rounded-xl border-2 border-emerald-500/60 p-3 shadow-[0_0_30px_rgba(16,185,129,0.3)] backdrop-blur">
-                  <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-emerald-400/50 bg-black">
-                    <Compass className="h-6 w-6 animate-pulse text-emerald-400" />
-                    <div className="absolute inset-0 scale-110 rounded-full border border-emerald-500/30" />
-                  </div>
-                  <div>
-                    <div className="mb-0.5 text-[9px] font-black tracking-wider text-emerald-400 uppercase">
-                      QIBLA DIRECTION
-                    </div>
-                    <div className="font-mono text-lg leading-none font-black text-white">
-                      295.6° <span className="text-xs">NW</span>
-                    </div>
-                    <div className="mt-1 text-[8px] text-emerald-300">
-                      Distance: 6,865 KM
-                    </div>
-                  </div>
-                </div>
+                <QiblaRadarWidget />
 
                 {/* CONSTELLATIONS PANEL */}
                 <div className="pointer-events-auto text-right">
