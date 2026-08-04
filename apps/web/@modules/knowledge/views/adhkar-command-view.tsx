@@ -88,7 +88,7 @@ export function AdhkarCommandView() {
       </div>
 
       {/* Category Tabs */}
-      <div className="mb-8 flex flex-wrap justify-center gap-3">
+      <div className="mb-8 flex overflow-x-auto pb-4 hide-scrollbar justify-start sm:justify-center gap-3 snap-x">
         {categories.map(cat => {
           const Icon = cat.icon
           const isActive = activeCategory === cat.id
@@ -96,7 +96,7 @@ export function AdhkarCommandView() {
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`flex items-center gap-2 rounded-full border px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all ${
+              className={`flex shrink-0 snap-center items-center gap-2 rounded-full border px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all ${
                 isActive 
                   ? "border-cyan-400 bg-cyan-500/20 text-cyan-300 shadow-[0_0_15px_rgba(0,240,255,0.2)]" 
                   : "border-white/10 bg-black/40 text-slate-400 hover:border-cyan-500/30 hover:text-cyan-400"
@@ -111,8 +111,8 @@ export function AdhkarCommandView() {
 
       {/* Dzikir Counter Modal (Active State) */}
       {activeDzikir && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in zoom-in duration-300">
-          <div className="relative w-full max-w-2xl rounded-3xl border border-cyan-500/30 bg-space/95 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-2 sm:p-4 animate-in fade-in zoom-in duration-300">
+          <div className="relative w-full max-w-2xl max-h-[95vh] overflow-y-auto hide-scrollbar rounded-3xl border border-cyan-500/30 bg-space/95 p-6 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
             <button 
               onClick={() => { setActiveDzikir(null); setCount(0); }}
               className="absolute right-6 top-6 text-slate-400 hover:text-white transition-colors"
@@ -142,13 +142,14 @@ export function AdhkarCommandView() {
                 onClick={handleTap}
                 className={`relative flex h-32 w-32 items-center justify-center rounded-full border-4 transition-all active:scale-95 ${
                   count >= targetCount 
-                    ? "border-emerald-500 bg-emerald-500/20 text-emerald-400 shadow-[0_0_30px_rgba(16,185,129,0.3)]" 
-                    : "border-cyan-500 bg-cyan-500/10 text-cyan-400 shadow-[0_0_30px_rgba(0,240,255,0.2)]"
+                    ? "border-emerald-500 bg-emerald-500/20 text-emerald-400 shadow-[0_0_40px_rgba(16,185,129,0.4)]" 
+                    : "border-cyan-500 bg-cyan-500/10 text-cyan-400 shadow-[0_0_40px_rgba(0,240,255,0.3)] hover:shadow-[0_0_60px_rgba(0,240,255,0.5)]"
                 }`}
               >
                 <span className="font-sans text-5xl font-black">{count}</span>
                 
-                {/* Ripple Effect SVG Filter could go here for tactical look */}
+                {/* Ripple glow effect */}
+                <div className="absolute inset-0 rounded-full bg-cyan-500/20 animate-ping opacity-0 active:opacity-100 transition-opacity duration-300" />
               </button>
               
               <div className="mt-6 h-2 w-64 overflow-hidden rounded-full bg-white/10">

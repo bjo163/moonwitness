@@ -44,9 +44,9 @@ export function HomeCelestialFeedWidget() {
         </div>
       </div>
 
-      <div className="my-auto grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="my-auto flex overflow-x-auto snap-x hide-scrollbar gap-3 pb-2 sm:grid sm:grid-cols-4 sm:overflow-x-visible sm:pb-0">
         {/* Cam 1: LUNAR OPTICS */}
-        <div className="group relative flex flex-col items-center justify-between overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] p-2.5 shadow-inner backdrop-blur-md transition-all hover:border-primary">
+        <div className="group relative flex w-[160px] shrink-0 snap-center flex-col items-center justify-between overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] p-2.5 shadow-inner backdrop-blur-md transition-all hover:border-primary sm:w-auto">
           <div className="absolute top-1 right-1 z-10 flex items-center gap-1 rounded bg-black/60 px-1 backdrop-blur">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
             <span className="font-mono text-[6px] text-emerald-400">TRACKING</span>
@@ -67,7 +67,7 @@ export function HomeCelestialFeedWidget() {
         </div>
 
         {/* Cam 2: Live Earth View (NOAA GOES-19) */}
-        <div className="group relative flex flex-col items-center justify-between overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] p-2.5 shadow-inner backdrop-blur-md transition-all hover:border-primary">
+        <div className="group relative flex w-[160px] shrink-0 snap-center flex-col items-center justify-between overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] p-2.5 shadow-inner backdrop-blur-md transition-all hover:border-primary sm:w-auto">
           <div className="absolute top-1 right-1 z-10 flex items-center gap-1 rounded bg-black/60 px-1 backdrop-blur">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500" />
             <span className="text-danger font-mono text-[6px]">LIVE</span>
@@ -89,7 +89,7 @@ export function HomeCelestialFeedWidget() {
         </div>
 
         {/* Cam 3: NASA APOD / Deep Sky */}
-        <div className="group relative flex flex-col items-center justify-between overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] p-2.5 shadow-inner backdrop-blur-md transition-all hover:border-fuchsia-400">
+        <div className="group relative flex w-[160px] shrink-0 snap-center flex-col items-center justify-between overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] p-2.5 shadow-inner backdrop-blur-md transition-all hover:border-fuchsia-400 sm:w-auto">
           <div className="absolute top-1 right-1 z-10 flex items-center gap-1 rounded bg-black/60 px-1 backdrop-blur">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
             <span className="font-mono text-[6px] text-emerald-400">TRACKING</span>
@@ -111,7 +111,7 @@ export function HomeCelestialFeedWidget() {
         </div>
 
         {/* Cam 4: SDO AIA-304 (Sun) */}
-        <div className="group relative flex flex-col items-center justify-between overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] p-2.5 shadow-inner backdrop-blur-md transition-all hover:border-orange-500">
+        <div className="group relative flex w-[160px] shrink-0 snap-center flex-col items-center justify-between overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] p-2.5 shadow-inner backdrop-blur-md transition-all hover:border-orange-500 sm:w-auto">
           <div className="absolute top-1 right-1 z-10 flex items-center gap-1 rounded bg-black/60 px-1 backdrop-blur">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500" />
             <span className="text-danger font-mono text-[6px]">LIVE</span>

@@ -52,10 +52,10 @@ export function Taskbar() {
 
   return (
     <div
-      className="fixed right-0 bottom-0 left-0 z-[50] border-t border-white/10 bg-black/20 font-mono backdrop-blur-md select-none"
-      style={{ height: "34px" }}
+      className="fixed right-0 bottom-0 left-0 z-[50] border-t border-cyan-500/20 bg-black/50 font-mono backdrop-blur-xl shadow-[0_-10px_30px_rgba(0,240,255,0.05)] select-none"
+      style={{ height: "44px" }}
     >
-      <div className="flex h-full items-center justify-between gap-2 px-3 text-[10px] tracking-widest uppercase sm:px-6">
+      <div className="flex h-full items-center justify-between gap-1 sm:gap-2 px-2 sm:px-6 text-[10px] tracking-widest uppercase">
         {/* ── LEFT: System Status ────────────────────────────────── */}
         <div className="flex shrink-0 items-center gap-4 text-primary sm:gap-6">
           {/* SYS ONLINE indicator */}
@@ -112,14 +112,14 @@ export function Taskbar() {
         {/* ── RIGHT: Audio Player + Version ──────────────────────── */}
         <div className="flex shrink-0 items-center gap-4 text-primary sm:gap-6">
           {/* Audio Player — compact inline */}
-          <div className="hidden items-center gap-2 sm:flex">
-            <Music className="h-3 w-3 animate-pulse text-cyan-400" />
-            <span className="max-w-[120px] truncate font-bold text-cyan-400">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <Music className="hidden sm:block h-3 w-3 animate-pulse text-cyan-400" />
+            <span className="hidden sm:inline-block max-w-[120px] truncate font-bold text-cyan-400">
               #{currentSurah.number} {currentSurah.name}
             </span>
 
             {/* Transport controls */}
-            <div className="ml-2 flex items-center gap-1">
+            <div className="flex items-center gap-1 sm:ml-2">
               <button
                 aria-label="Previous"
                 className="flex items-center justify-center p-1 transition-colors hover:text-cyan-400"
@@ -146,7 +146,7 @@ export function Taskbar() {
             </div>
             
             {/* Speed & Loop Controls */}
-            <div className="ml-2 flex items-center gap-2">
+            <div className="hidden sm:flex items-center gap-2 sm:ml-2">
               <button
                 onClick={toggleLoop}
                 aria-label="Toggle Loop"

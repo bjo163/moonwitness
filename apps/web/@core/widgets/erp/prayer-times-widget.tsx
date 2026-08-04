@@ -177,7 +177,7 @@ export function PrayerTimesWidget() {
               key={p.id}
               className={`flex items-center justify-between rounded-lg p-2.5 transition-all ${
                 isNext
-                  ? "bg-cyan-500/20 border border-cyan-500/50 shadow-[0_0_15px_rgba(0,240,255,0.2)]"
+                  ? "bg-cyan-500/20 border border-cyan-500/50 shadow-[0_0_20px_rgba(0,240,255,0.3)] animate-pulse-slow"
                   : "bg-black/20 hover:bg-black/40 border border-transparent"
               }`}
             >
@@ -187,7 +187,7 @@ export function PrayerTimesWidget() {
                   {p.id}
                 </span>
               </div>
-              <span className={`font-mono text-xs font-bold tabular-nums ${isNext ? "text-cyan-400 drop-shadow-[0_0_5px_rgba(0,240,255,0.5)]" : "text-white"}`}>
+              <span className={`font-mono text-xs font-bold tabular-nums ${isNext ? "text-cyan-400 drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]" : "text-white"}`}>
                 {formatTime(p.time)}
               </span>
             </div>

@@ -7,7 +7,7 @@ export default function AdminAnalyticsPage() {
       <div className="mx-auto max-w-6xl space-y-6">
         <div className="flex items-center justify-between border-b border-primary/20 pb-4">
           <div>
-            <h1 className="font-orbitron text-2xl font-bold tracking-widest text-primary uppercase">
+            <h1 className="font-orbitron text-2xl font-bold tracking-widest text-cyan-400 uppercase drop-shadow-[0_0_8px_rgba(0,240,255,0.3)]">
               Global Command Center
             </h1>
             <p className="font-mono text-xs text-primary/60">
@@ -29,13 +29,13 @@ export default function AdminAnalyticsPage() {
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Mock Chart Area */}
-          <div className="bg-space/60 rounded-2xl border border-primary/20 p-5 backdrop-blur-xl h-80 flex flex-col">
-            <h3 className="font-sans text-xs font-bold tracking-wider text-primary uppercase mb-4">
+          <div className="bg-[#040C1A]/80 rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl h-80 flex flex-col shadow-[0_0_20px_rgba(0,240,255,0.05)] hover:border-cyan-500/40 transition-colors">
+            <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase mb-4">
               Engagement Matrix
             </h3>
             <div className="flex-1 flex items-end gap-2 justify-between mt-auto">
               {[40, 70, 45, 90, 65, 80, 100].map((h, i) => (
-                <div key={i} className="w-full bg-cyan-500/20 hover:bg-cyan-500/50 transition-colors rounded-t" style={{ height: `${h}%` }}></div>
+                <div key={i} className="w-full bg-cyan-500/20 hover:bg-cyan-400 hover:shadow-[0_0_15px_rgba(0,240,255,0.5)] transition-all rounded-t cursor-pointer" style={{ height: `${h}%` }}></div>
               ))}
             </div>
             <div className="flex justify-between mt-2 font-mono text-[9px] text-primary/50">
@@ -49,8 +49,8 @@ export default function AdminAnalyticsPage() {
             </div>
           </div>
           
-          <div className="bg-space/60 rounded-2xl border border-primary/20 p-5 backdrop-blur-xl">
-            <h3 className="font-sans text-xs font-bold tracking-wider text-primary uppercase mb-4">
+          <div className="bg-[#040C1A]/80 rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl shadow-[0_0_20px_rgba(0,240,255,0.05)] hover:border-cyan-500/40 transition-colors">
+            <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase mb-4">
               Recent System Events
             </h3>
             <div className="space-y-4">
@@ -59,9 +59,9 @@ export default function AdminAnalyticsPage() {
                 { time: "09:15 AM", ev: "New Guild Created: 'Seekers'" },
                 { time: "08:00 AM", ev: "Global Backup Completed" },
               ].map((e, i) => (
-                <div key={i} className="flex items-center gap-4 border-b border-primary/10 pb-2">
-                  <span className="font-mono text-xs text-primary/50 w-16">{e.time}</span>
-                  <span className="font-sans text-sm text-white">{e.ev}</span>
+                <div key={i} className="flex items-center gap-4 border-b border-white/5 pb-3">
+                  <span className="font-mono text-xs text-cyan-500/50 w-16">{e.time}</span>
+                  <span className="font-sans text-sm text-white/90">{e.ev}</span>
                 </div>
               ))}
             </div>
@@ -75,18 +75,19 @@ export default function AdminAnalyticsPage() {
 function StatCard({ title, value, change, icon }: { title: string, value: string, change: string, icon: React.ReactNode }) {
   const isPos = change.startsWith("+")
   return (
-    <div className="bg-space/60 rounded-2xl border border-primary/20 p-5 backdrop-blur-xl relative overflow-hidden group">
-      <div className="absolute -right-4 -top-4 opacity-10 group-hover:scale-150 transition-transform duration-500">
+    <div className="bg-[#040C1A]/80 rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl relative overflow-hidden group hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all cursor-pointer">
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+      <div className="absolute -right-4 -top-4 opacity-10 group-hover:scale-150 group-hover:opacity-20 transition-all duration-500">
         {icon}
       </div>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-sans text-xs font-bold tracking-wider text-primary/70 uppercase">
+      <div className="flex items-center justify-between mb-4 relative z-10">
+        <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400/80 uppercase">
           {title}
         </h3>
         {icon}
       </div>
-      <div className="flex items-end justify-between">
-        <span className="font-mono text-3xl font-black text-white">{value}</span>
+      <div className="flex items-end justify-between relative z-10">
+        <span className="font-mono text-3xl font-black text-white drop-shadow-[0_2px_10px_rgba(255,255,255,0.2)] group-hover:text-cyan-50 transition-colors">{value}</span>
         <span className={`font-mono text-[10px] font-bold ${isPos ? "text-emerald-400" : "text-red-400"}`}>
           {change}
         </span>

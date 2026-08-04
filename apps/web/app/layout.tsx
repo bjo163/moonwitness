@@ -50,7 +50,7 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#05070A" />
       </head>
-      <body className="bg-space relative min-h-screen pb-[34px]">
+      <body className="bg-space relative min-h-screen pb-[44px]">
         <Cosmic3DBackground />
 
         {/* Accessible Skip Navigation */}
