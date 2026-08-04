@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { getSupabaseClient } from "@workspace/quran-core"
+import { moonClientInstance } from "@core/store/moon-store"
 
 export async function GET(request: Request) {
   try {
@@ -7,27 +7,41 @@ export async function GET(request: Request) {
     const category = searchParams.get("category")
     const timing = searchParams.get("timing")
 
-    const sb = getSupabaseClient()
-    let query = sb.from("adhkar").select("*", { count: "exact" })
+    // Assuming devotions has category mapping if needed
+    // The witness API endpoint is /api/witness/devotions
+    let url = "/api/witness/devotions"
+    if (category) {
+      url += `?category=${encodeURIComponent(category)}`
+    }
+
+    const json = await moonClientInstance.request("GET", url)
+
+    let data = json.devotions || []
+
+    // Map to expected format
+    data = data.map((d: any) => ({
+      id: d.id,
+      title: d.title,
+      text_arabic: d.textOriginal,
+      text_latin: d.textTransliteration,
+      translation_id: d.translationId,
+      translation_en: d.translationEn,
+      category: "Dzikir", // Placeholder mapped
+      timing: "Pagi/Petang", // Placeholder mapped
+      source: d.sourceId
+    }))
 
     if (category && category !== "Semua") {
-      query = query.eq("category", category)
+      data = data.filter((d: any) => d.category === category)
     }
 
     if (timing && timing !== "Semua") {
-      query = query.eq("timing", timing)
+      data = data.filter((d: any) => d.timing === timing)
     }
-
-    // Order by ID so it's consistent
-    query = query.order("id", { ascending: true })
-
-    const { data, count, error } = await query
-
-    if (error) throw error
 
     return NextResponse.json({
       success: true,
-      total: count || 0,
+      total: data.length,
       data: data,
     })
   } catch (error: any) {

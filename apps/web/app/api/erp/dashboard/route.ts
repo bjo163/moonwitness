@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { MOCK_ERP_DASHBOARD } from "@core/db/data/erp-dashboard.db"
-import { getSupabaseClient, getDailyPrayerTimes } from "@workspace/quran-core"
+import { moonClientInstance } from "@core/store/moon-store"
+import { getDailyPrayerTimes } from "@moon/witness/dist/astronomy/prayer-times.js"
 
 const JAKARTA_LAT = -6.2088
 const JAKARTA_LNG = 106.8456
@@ -9,7 +10,7 @@ export async function GET(req: NextRequest) {
   const dashboardData = { ...MOCK_ERP_DASHBOARD }
 
   try {
-    // 1. Real Prayer Times from Internal Math Engine (quran-core)
+    // 1. Real Prayer Times from Internal Math Engine (@moon/witness)
     const now = new Date()
     const todayPrayers = getDailyPrayerTimes(JAKARTA_LAT, JAKARTA_LNG, now)
 
@@ -31,7 +32,6 @@ export async function GET(req: NextRequest) {
       const pmins = getMins(p.timeObj)
       let status = "pending"
       if (currentMins >= pmins) status = "done"
-      // Simplistic check for 'next'
       if (
         status === "pending" &&
         prayerSchedule.find((x) => getMins(x.timeObj) > currentMins)?.name ===
@@ -47,46 +47,41 @@ export async function GET(req: NextRequest) {
       }
     })
 
-    // 2. Real Knowledge Feed from Supabase DB (Internal API)
-    const sb = getSupabaseClient()
-
-    // Fetch a real Ayah for the knowledge feed
-    const randomAyahId = Math.floor(Math.random() * 6236) + 1
-    const { data: ayahData } = await sb
-      .from("quran_verses")
-      .select(
-        "surah_id, verse_number, text_uthmani, translation_id, surahs(name_latin)"
-      )
-      .eq("id", randomAyahId)
-      .single()
-
-    if (ayahData) {
-      // Replace the first mock feed with real Ayah
-      dashboardData.knowledgeFeed[0] = {
-        id: "kf1",
-        category: "Qur'an",
-        title: ayahData.text_uthmani,
-        subtitle: `Surah ${(ayahData.surahs as any)?.name_latin} (${ayahData.surah_id}:${ayahData.verse_number})`,
-        time: "Just Now",
+    // 2. Real Knowledge Feed from Witness API
+    try {
+      const randomSurah = Math.floor(Math.random() * 114) + 1
+      const surahJson = await moonClientInstance.request("GET", `/api/witness/quran/surah?number=${randomSurah}`)
+      const ayahs = surahJson.ayahs || []
+      if (ayahs.length > 0) {
+        const randomAyah = ayahs[Math.floor(Math.random() * ayahs.length)]
+        dashboardData.knowledgeFeed[0] = {
+          id: "kf1",
+          category: "Qur'an",
+          title: randomAyah.textArabic,
+          subtitle: `Surah ${surahJson.surah.name} (${surahJson.surah.number}:${randomAyah.number})`,
+          time: "Just Now",
+        }
       }
+    } catch (e) {
+      console.error("Failed to fetch random surah", e)
     }
 
-    // Fetch a real Hadith
-    const { data: hadithData } = await sb
-      .from("hadiths")
-      .select("book_slug, number, text_en, hadith_books(name)")
-      .eq("id", Math.floor(Math.random() * 30000) + 1)
-      .single()
-
-    if (hadithData && hadithData.text_en) {
-      // Replace the second mock feed with real Hadith
-      dashboardData.knowledgeFeed[1] = {
-        id: "kf2",
-        category: "Hadith",
-        title: hadithData.text_en.substring(0, 100) + "...",
-        subtitle: `${(hadithData.hadith_books as any)?.name || hadithData.book_slug} ${hadithData.number}`,
-        time: "Just Now",
+    try {
+      const randomPage = Math.floor(Math.random() * 500) + 1
+      const hadithJson = await moonClientInstance.request("GET", `/api/witness/hadith?slug=bukhari&page=${randomPage}&limit=1`)
+      const hadiths = hadithJson.hadiths || []
+      if (hadiths.length > 0) {
+        const h = hadiths[0]
+        dashboardData.knowledgeFeed[1] = {
+          id: "kf2",
+          category: "Hadith",
+          title: (h.textId || h.textEn || "").substring(0, 100) + "...",
+          subtitle: `Bukhari ${h.number}`,
+          time: "Just Now",
+        }
       }
+    } catch (e) {
+      console.error("Failed to fetch random hadith", e)
     }
   } catch (error) {
     console.error("Failed to fetch real data for ERP Dashboard:", error)

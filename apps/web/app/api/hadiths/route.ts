@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { getSupabaseClient } from "@workspace/quran-core"
+import { moonClientInstance } from "@core/store/moon-store"
 
 function extractMatan(text: string) {
   if (!text) return ""
@@ -35,27 +35,25 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get("page") || "1")
     const limit = parseInt(searchParams.get("limit") || "20")
-    const offset = (page - 1) * limit
+    
+    // By default the old API just fetched random hadiths from a single table
+    // For Witness API we will fetch bukhari or allow slug param
+    const slug = searchParams.get("slug") || "bukhari"
 
-    const sb = getSupabaseClient()
+    const json = await moonClientInstance.request("GET", `/api/witness/hadith?slug=${slug}&page=${page}&limit=${limit}`)
 
-    const { data, count, error } = await sb
-      .from("hadiths")
-      .select("*", { count: "exact" })
-      .range(offset, offset + limit - 1)
-
-    if (error) {
-      throw error
-    }
-
-    const processedData = data.map((item) => ({
-      ...item,
-      matan_id: extractMatan(item.text_id || item.text_en || ""),
+    const processedData = json.hadiths.map((item: any) => ({
+      id: item.number,
+      number: item.number,
+      text_arabic: item.textArabic,
+      text_id: item.textId,
+      text_en: item.textEn,
+      matan_id: extractMatan(item.textId || item.textEn || ""),
     }))
 
     return NextResponse.json({
       success: true,
-      total: count || 0,
+      total: json.total || 0,
       data: processedData,
     })
   } catch (error: any) {

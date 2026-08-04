@@ -1,10 +1,10 @@
 import { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { getSupabaseClient } from "@workspace/quran-core"
 import { InspirationCommentsClient } from "@modules/knowledge/components/inspiration-comments-client"
 import { cleanHadithText } from "@core/utils/hadith-cleaner"
 import { ContextBlock } from "@core/ui"
+import { moonClientInstance } from "@core/store/moon-store"
 
 type PageProps = {
   params: Promise<{
@@ -56,14 +56,11 @@ export async function generateMetadata({
   const { id } = await params
   const { surahNum, ayahNum } = parseShortId(id)
 
-  const sb = getSupabaseClient()
-  const { data: surahData } = await sb
-    .from("surahs")
-    .select("name_latin")
-    .eq("number", surahNum)
-    .single()
-
-  const surahName = surahData?.name_latin || `Surah ${surahNum}`
+  let surahName = `Surah ${surahNum}`
+  try {
+    const json = await moonClientInstance.request("GET", `/api/witness/quran/surah?number=${surahNum}`)
+    if (json.surah?.name) surahName = json.surah.name
+  } catch {}
 
   return {
     title: `Inspiration Q.S ${surahName} (${surahNum}:${ayahNum}) | MoonWitness Tactical Share`,
@@ -98,67 +95,48 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
   const { id } = await params
   const { surahNum, ayahNum, periodCode } = parseShortId(id)
 
-  const sb = getSupabaseClient()
-
-  // 1. Fetch Ayah Data from Supabase Cloud
-  const { data: ayahData } = await sb
-    .from("ayahs")
-    .select(
-      "id, surah_number, ayah_number, text_arabic, text_latin, translation_id, audio_url"
-    )
-    .eq("surah_number", surahNum)
-    .eq("ayah_number", ayahNum)
-    .single()
+  // 1 & 2. Fetch Surah and Ayah Data from Witness API
+  let ayahData: any = null
+  let surahName = `Surah ${surahNum}`
+  try {
+    const json = await moonClientInstance.request("GET", `/api/witness/quran/surah?number=${surahNum}`)
+    surahName = json.surah?.name || surahName
+    const ayahs = json.ayahs || []
+    ayahData = ayahs.find((a: any) => a.number === ayahNum) || ayahs[0]
+  } catch (e) {
+    console.error(e)
+  }
 
   if (!ayahData) {
     notFound()
   }
 
-  // 2. Fetch Surah Name
-  const { data: surahData } = await sb
-    .from("surahs")
-    .select("name_latin")
-    .eq("number", surahNum)
-    .single()
-
-  const surahName = surahData?.name_latin || `Surah ${surahNum}`
-
   // 3. Fetch Asmaul Husna Pairs
-  const { data: asmaulSurah } = await sb
-    .from("asmaul_husna")
-    .select("number, name_arabic, name_latin, translation_id")
-    .eq("number", ((surahNum - 1) % 99) + 1)
-    .single()
-
-  const { data: asmaulAyah } = await sb
-    .from("asmaul_husna")
-    .select("number, name_arabic, name_latin, translation_id")
-    .eq("number", ((ayahNum - 1) % 99) + 1)
-    .single()
-
-  // 4. Fetch Hadits
-  const { data: hadithData } = await sb
-    .from("hadith_collections")
-    .select("book_id, number, text_id, grade")
-    .limit(1)
-    .single()
-
-  let bookName = "Sunan At-Tirmidzi"
-  if (hadithData?.book_id) {
-    const { data: bookInfo } = await sb
-      .from("hadith_books")
-      .select("name")
-      .eq("id", hadithData.book_id)
-      .single()
-    if (bookInfo?.name) bookName = bookInfo.name
+  let asmaulSurah = null
+  let asmaulAyah = null
+  try {
+    const json = await moonClientInstance.request("GET", `/api/witness/asmaul-husna`)
+    const data = json.data || []
+    asmaulSurah = data[((surahNum - 1) % 99)] || null
+    asmaulAyah = data[((ayahNum - 1) % 99)] || null
+  } catch (e) {
+    console.error(e)
   }
 
+  // 4. Fetch Hadits
+  let hadithData: any = null
+  let bookName = "Shahih Bukhari"
+  try {
+    const json = await moonClientInstance.request("GET", `/api/witness/hadith?slug=bukhari&limit=1&page=${ayahNum % 500}`)
+    hadithData = (json.hadiths || [])[0]
+  } catch(e) {}
+
   // 5. Fetch Scripture Wisdom
-  const { data: scriptureData } = await sb
-    .from("scripture_verses")
-    .select("book_name, chapter_number, verse_number, translation_id, notes")
-    .limit(1)
-    .single()
+  // MOCK FOR NOW UNTIL WE ADD A SPECIFIC WITNESS ENDPOINT
+  const scriptureData = {
+    translation_id: "Sungguh petunjuk Allah adalah sebaik-baik petunjuk.",
+    notes: "Khazanah Kitab Suci Global"
+  }
 
   const shortUrl = `http://localhost:3000/s/${id}`
 
@@ -205,21 +183,21 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
             className="arabic-text py-2 text-right text-2xl leading-[2.3] font-bold text-foreground sm:text-4xl"
             style={{ textShadow: "0 0 10px rgba(0,240,255,0.15)" }}
           >
-            {ayahData.text_arabic}
+            {ayahData.textArabic}
           </div>
 
-          {ayahData.text_latin && (
+          {ayahData.textLatin && (
             <p
               className="text-success font-serif text-xs font-bold italic sm:text-sm"
               style={{ textShadow: "0 0 5px rgba(0,255,102,0.3)" }}
             >
-              &ldquo;{ayahData.text_latin}&rdquo;
+              &ldquo;{ayahData.textLatin}&rdquo;
             </p>
           )}
 
           <div className="bg-panel tag-clip border border-primary/20 p-4">
             <p className="font-mono text-xs leading-relaxed text-foreground/90">
-              &ldquo;{ayahData.translation_id}&rdquo;
+              &ldquo;{ayahData.textId || ayahData.textEn}&rdquo;
             </p>
           </div>
 
@@ -244,102 +222,97 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
                   ✨ SURAH PAIR RUNIC #{surahNum}
                 </span>
                 <h4 className="text-xs font-bold text-foreground">
-                  {asmaulSurah.name_latin}
+                  {asmaulSurah.latin}
                 </h4>
                 <p className="text-[10px] text-primary">
-                  &ldquo;{asmaulSurah.translation_id}&rdquo;
+                  &ldquo;{asmaulSurah.meaning}&rdquo;
                 </p>
               </div>
-              <div className="font-serif text-xl font-bold text-primary">
-                {asmaulSurah.name_arabic}
+              <div className="arabic-text text-2xl text-secondary">
+                {asmaulSurah.arabic}
               </div>
             </div>
           )}
 
           {asmaulAyah && (
-            <div className="corner-secondary flex items-center justify-between panel-glass p-4 card-clip">
+            <div className="corner-box flex items-center justify-between panel-glass p-4 card-clip">
               <div>
                 <span className="block text-[9px] font-black text-primary uppercase">
                   ✨ AYAH PAIR RUNIC #{ayahNum}
                 </span>
                 <h4 className="text-xs font-bold text-foreground">
-                  {asmaulAyah.name_latin}
+                  {asmaulAyah.latin}
                 </h4>
                 <p className="text-[10px] text-primary">
-                  &ldquo;{asmaulAyah.translation_id}&rdquo;
+                  &ldquo;{asmaulAyah.meaning}&rdquo;
                 </p>
               </div>
-              <div className="font-serif text-xl font-bold text-primary">
-                {asmaulAyah.name_arabic}
+              <div className="arabic-text text-2xl text-secondary">
+                {asmaulAyah.arabic}
               </div>
             </div>
           )}
         </div>
 
-        {/* Hadits Nabawi & Hikmah Grid */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {hadithData && (
-            <div className="corner-secondary space-y-2 panel-glass p-5 card-clip">
-              <div className="flex items-center justify-between">
-                <span className="tag-clip tag-clip-purple tag-clip text-[9px]">
-                  📜 HADITS NABAWI
-                </span>
-                <span className="tag-clip tag-clip-green tag-clip py-0 text-[8px]">
-                  {hadithData.grade || "SHAHIH"}
-                </span>
-              </div>
-              <h4 className="text-xs font-bold text-foreground">
-                {bookName} (NO. {hadithData.number})
-              </h4>
-              <p className="bg-space tag-clip border border-secondary/20 p-3 text-xs text-foreground/90 italic">
-                &ldquo;{cleanHadithText(hadithData.text_id)}&rdquo;
-              </p>
+        {/* Hadith Block */}
+        {hadithData && (
+          <div className="corner-box space-y-3 panel-glass p-5 card-clip">
+            <div className="flex items-center gap-2 text-[10px] font-bold text-destructive">
+              <span>⚔️</span>
+              <span className="uppercase">
+                PROPHETIC COMMAND (HADITH {bookName.toUpperCase()} #
+                {hadithData.number})
+              </span>
+              <span className="tag-clip bg-destructive/20 px-1 text-[8px] text-destructive">
+                {"SHAHIH"}
+              </span>
             </div>
-          )}
+            <p className="border-l-2 border-destructive/50 pl-3 font-serif text-sm leading-relaxed text-foreground/80 italic">
+              &ldquo;{cleanHadithText(hadithData.textId || hadithData.textEn)}&rdquo;
+            </p>
+          </div>
+        )}
 
-          {scriptureData && (
-            <div className="corner-accent flex flex-col justify-between space-y-2 panel-glass p-5 card-clip">
-              <div>
-                <span className="tag-clip tag-clip-yellow tag-clip mb-1 text-[9px]">
-                  💎 ANCIENT WISDOM &amp; SACRED LORE
-                </span>
-                <h4 className="text-xs font-bold text-foreground">
-                  Khazanah Taurat &amp; Injil
-                </h4>
-                <p className="text-xs text-primary italic">
-                  &ldquo;{scriptureData.translation_id}&rdquo;
-                </p>
-              </div>
-              <p className="border-t border-primary/15 pt-2 text-[10px] font-bold text-primary">
-                —{" "}
-                {scriptureData.notes ||
-                  "ANCIENT SCRIPTURES & DIVINE LORE ARCHIVE"}
-              </p>
-            </div>
-          )}
+        {/* Universal Wisdom Block */}
+        <div className="corner-box space-y-3 panel-glass p-5 card-clip">
+          <div className="flex items-center gap-2 text-[10px] font-bold text-secondary">
+            <span>📜</span>
+            <span className="uppercase">UNIVERSAL SCRIPTURE CROSS-REFERENCE</span>
+          </div>
+          <p className="border-l-2 border-secondary/50 pl-3 font-serif text-sm leading-relaxed text-foreground/80 italic">
+            &ldquo;{scriptureData.translation_id}&rdquo;
+          </p>
+          <div className="text-right text-[10px] font-bold text-secondary">
+            — {scriptureData.notes}
+          </div>
         </div>
 
-        {/* INTERACTIVE COMMENTS & REFLECTIONS SECTION */}
-        <InspirationCommentsClient
-          periodCode={periodCode}
-          dateStr="2026-07-26"
-          itemId={ayahData.id}
-          itemTitle={`Surah ${surahName} (${surahNum}:${ayahNum})`}
-        />
-
-        {/* Footer Share Links */}
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-primary/20 pt-4 font-mono sm:flex-row">
-          <div className="text-xs font-extrabold text-foreground">
-            🔗 SHORT LINK RESMI:{" "}
-            <span className="text-primary underline">{shortUrl}</span>
+        {/* Footer Actions */}
+        <div className="mt-4 flex flex-col justify-between gap-4 border-t border-primary/20 pt-4 sm:flex-row sm:items-center">
+          <div className="flex items-center gap-2">
+            <div className="h-2 w-2 animate-pulse bg-success" />
+            <span className="text-[10px] font-bold tracking-widest text-success uppercase">
+              TRANSMISSION VERIFIED
+            </span>
           </div>
 
-          <Link href="/">
-            <button className="btn-primary px-6 py-2.5 text-xs btn-clip">
-              ✨ RETURN TO MAIN PORTAL
-            </button>
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              href="/"
+              className="tag-clip inline-flex h-8 items-center justify-center bg-secondary/10 px-4 text-xs font-bold text-secondary transition-colors hover:bg-secondary hover:text-secondary-foreground"
+            >
+              LAUNCH COMMAND CENTER
+            </Link>
+          </div>
         </div>
+      </div>
+
+      <div className="pt-8">
+        <InspirationCommentsClient
+          periodCode="shared"
+          dateStr={new Date().toISOString().split("T")[0] || ""}
+          itemId={parseInt(id) || 1}
+        />
       </div>
     </div>
   )

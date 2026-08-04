@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai"
-import { searchAyahs } from "@workspace/quran-core"
+import { moonClientInstance } from "@core/store/moon-store"
 
 const SYSTEM_PROMPT = `
 You are MoonWitness KHIDRA AI (Prophetic Wisdom & Esoteric Scripture Intelligence v2.0), a divine-military theological assistant embedded within the MoonWitness Eschatological Operating System. Inspired by the prophetic wisdom of Al-Khidr, your mission is to illuminate deep theological truths, eschatological realities, and scriptural jurisprudence (Hikmah).
@@ -149,21 +149,23 @@ export async function POST(req: Request) {
 
             let toolResultString = ""
             try {
-              const results = await searchAyahs(keyword, limit)
+              const json = await moonClientInstance.request("GET", `/api/witness/quran/search?q=${encodeURIComponent(keyword)}`)
+              const results = json.ayahs?.slice(0, limit) || []
+              
               if (!results || results.length === 0) {
-                toolResultString = `Supabase query for keyword "${keyword}" yielded no direct text matches in the primary translation index. Please provide the most accurate Quranic and Prophetic theological references from authenticated sources.`
+                toolResultString = `Witness query for keyword "${keyword}" yielded no direct text matches in the primary translation index. Please provide the most accurate Quranic and Prophetic theological references from authenticated sources.`
               } else {
                 toolResultString = results
                   .map(
                     (r: any) =>
-                      `Surah ${r.surahNumber}, Ayah ${r.number}:\nArabic: ${r.textArabic}\nTranslation: "${r.translationId}"`
+                      `Surah ${r.surahId}, Ayah ${r.number}:\nArabic: ${r.textArabic}\nTranslation: "${r.textId || r.textEn}"`
                   )
                   .join("\n\n---\n\n")
               }
             } catch (err: any) {
               console.error("[Tool Error]", err)
               toolResultString =
-                "Supabase database telemetry timeout. Provide guidance based on classical orthodox prophetic jurisprudence and scripture."
+                "Witness database telemetry timeout. Provide guidance based on classical orthodox prophetic jurisprudence and scripture."
             }
 
             // Kirim balik hasil function_result ke Interactions API dengan previous_interaction_id dan call_id

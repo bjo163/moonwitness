@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getSupabaseClient, getDailyPrayerTimes } from "@workspace/quran-core"
+import { getDailyPrayerTimes } from "@moon/witness/dist/astronomy/prayer-times.js"
 import { cleanHadithText } from "@core/utils/hadith-cleaner"
+import { moonClientInstance } from "@core/store/moon-store"
 
-/**
- * Deterministic Hash Function for a Global Seed String
- */
 function getSeedHash(seedStr: string): number {
   let hash = 0
   for (let i = 0; i < seedStr.length; i++) {
@@ -23,19 +21,7 @@ type PrayerPeriodInfo = {
   periodIndex: number
 }
 
-function parseMins(timeStr: string): number {
-  if (!timeStr) return 0
-  const [h, m] = timeStr.split(":").map(Number)
-  return (h || 0) * 60 + (m || 0)
-}
-
-/**
- * Dynamic Calculation of Current Prayer Period based on quran-core math
- */
-function calculateDynamicPrayerPeriod(
-  currentMins: number,
-  todayPrayers: any
-): PrayerPeriodInfo {
+function calculateDynamicPrayerPeriod(currentMins: number, todayPrayers: any): PrayerPeriodInfo {
   const formatTime = (d: Date) =>
     `${d.getHours().toString().padStart(2, "0")}.${d.getMinutes().toString().padStart(2, "0")}`
   const getMins = (d: Date) => d.getHours() * 60 + d.getMinutes()
@@ -98,14 +84,10 @@ function calculateDynamicPrayerPeriod(
   }
 }
 
-// Canonical Global Coordinates (Jakarta, Indonesia)
 const JAKARTA_LAT = -6.2088
 const JAKARTA_LNG = 106.8456
 
 export async function GET(req: NextRequest) {
-  const sb = getSupabaseClient()
-
-  // Universal Global Date & Time (Asia/Jakarta WIB - Canonical Timezone)
   const now = new Date()
   const jakartaParts = new Intl.DateTimeFormat("en-US", {
     timeZone: "Asia/Jakarta",
@@ -122,13 +104,10 @@ export async function GET(req: NextRequest) {
   const minute = parseInt(pObj.minute || "0", 10)
   const currentMins = hour * 60 + minute
 
-  // Fetch Live Prayer Timings dynamically using our internal quran-core Math Engine
   const todayPrayers = getDailyPrayerTimes(JAKARTA_LAT, JAKARTA_LNG, now)
   const prayerPeriod = calculateDynamicPrayerPeriod(currentMins, todayPrayers)
 
-  // Subuh (Fajr) threshold check: Before Subuh (~04:35 AM), we are still in yesterday's Isya cycle!
-  const fajrMins =
-    todayPrayers.fajr.getHours() * 60 + todayPrayers.fajr.getMinutes()
+  const fajrMins = todayPrayers.fajr.getHours() * 60 + todayPrayers.fajr.getMinutes()
 
   let targetYear = pObj.year || "2026"
   let targetMonth = pObj.month || "07"
@@ -148,251 +127,119 @@ export async function GET(req: NextRequest) {
   }
 
   const dateStr = `${targetYear}-${targetMonth}-${targetDay}`
-
-  // GLOBAL UNIVERSAL SEED
   const globalSeedStr = `global_mw_${dateStr}_${prayerPeriod.code}`
   const dailySeed = getSeedHash(globalSeedStr)
 
-  // Calculate Global Progress starting from Official Launch Date (July 26, 2026)
   const launchDateOnly = new Date("2026-07-26T00:00:00Z")
   const prayerDateOnly = new Date(`${dateStr}T00:00:00Z`)
 
-  const elapsedDays = Math.max(
-    0,
-    Math.floor(
-      (prayerDateOnly.getTime() - launchDateOnly.getTime()) / (24 * 3600 * 1000)
-    )
-  )
+  const elapsedDays = Math.max(0, Math.floor((prayerDateOnly.getTime() - launchDateOnly.getTime()) / (24 * 3600 * 1000)))
   const elapsedPeriods = elapsedDays * 6 + prayerPeriod.periodIndex
   const totalAyahCount = 6236
   const globalSeenCount = Math.min(totalAyahCount, Math.max(1, elapsedPeriods))
   const remainingCount = Math.max(0, totalAyahCount - globalSeenCount)
 
   try {
-    // 1. Universal Global Ayah from Supabase Cloud
-    const todayAyahId = (dailySeed % totalAyahCount) + 1
+    const baseUrl = "http://localhost:4000/api/witness"
+    let ayahData: any = null
+    let asmaulSurahData: any = null
+    let asmaulAyahData: any = null
+    let hadithData: any = null
 
-    const { data: ayahData } = await sb
-      .from("ayahs")
-      .select(
-        "id, surah_number, ayah_number, text_arabic, text_latin, translation_id, translation_en, audio_url"
-      )
-      .eq("id", todayAyahId)
-      .single()
-
-    let surahName = ""
-    let surahTranslationId = ""
-    let surahTranslationEn = ""
-    if (ayahData) {
-      const { data: surahData } = await sb
-        .from("surahs")
-        .select("name_latin, translation_id, translation_en")
-        .eq("number", ayahData.surah_number)
-        .single()
-      if (surahData) {
-        surahName = surahData.name_latin
-        surahTranslationId = surahData.translation_id
-        surahTranslationEn = surahData.translation_en
+    try {
+      const todayAyahId = (dailySeed % totalAyahCount) + 1
+      
+      const approxSurah = Math.max(1, Math.min(114, Math.floor(todayAyahId / 54) + 1))
+      const json = await moonClientInstance.request("GET", `/api/witness/quran/surah?number=${approxSurah}`)
+      if (json.ayahs && json.ayahs.length > 0) {
+         const idx = (todayAyahId - 1) % json.ayahs.length
+         const a = json.ayahs[idx]
+         ayahData = {
+            surah_number: approxSurah,
+            surah_name_latin: json.surah.name,
+            ayah_number: a.number,
+            text_arabic: a.textArabic,
+            text_latin: a.textLatin,
+            translation_id: a.textId,
+            translation_en: a.textEn
+         }
       }
-
-      await sb.from("user_daily_history").upsert(
-        {
-          session_id: "global-launch-history",
-          item_type: "AYAH",
-          item_id: ayahData.id,
-        },
-        { onConflict: "session_id,item_type,item_id" }
-      )
+    } catch (e) {
+      console.warn("Failed to fetch daily ayah", e)
     }
 
-    const surahNum = ayahData?.surah_number || 1
-    const ayahNum = ayahData?.ayah_number || 1
-
-    // Dynamic Ayah Translation Fetch & Auto-Save to DB if missing
-    let ayahTranslationEn = ayahData?.translation_en || ""
-    if (!ayahTranslationEn && ayahData) {
-      try {
-        const apiRes = await fetch(
-          `https://api.alquran.cloud/v1/ayah/${surahNum}:${ayahNum}/en.sahih`
-        )
-        if (apiRes.ok) {
-          const apiJson = await apiRes.json()
-          if (apiJson?.data?.text) {
-            ayahTranslationEn = apiJson.data.text
-            // Auto-cache into Supabase DB asynchronously
-            sb.from("ayahs")
-              .update({ translation_en: ayahTranslationEn })
-              .eq("id", ayahData.id)
-              .then(() => {})
-          }
-        }
-      } catch (e) {
-        console.warn("Failed to fetch dynamic Ayah English translation:", e)
+    try {
+      const json = await moonClientInstance.request("GET", "/api/witness/asmaul-husna")
+      const asmaul = json.data || []
+      if (asmaul.length > 0) {
+         const surahNum = ayahData?.surah_number || 1
+         const ayahNum = ayahData?.ayah_number || 1
+         asmaulSurahData = asmaul[(surahNum - 1) % 99] || asmaul[0]
+         asmaulAyahData = asmaul[(ayahNum - 1) % 99] || asmaul[1]
       }
+    } catch (e) {
+      console.warn("Failed to fetch daily asmaul husna", e)
     }
 
-    // 2. Fetch Asmaul Husna Pair 1 (Based on Surah Number)
-    const asmaulSurahNum = ((surahNum - 1) % 99) + 1
-    const { data: asmaulSurahData } = await sb
-      .from("asmaul_husna")
-      .select(
-        "number, name_arabic, name_latin, translation_id, quran_reference"
-      )
-      .eq("number", asmaulSurahNum)
-      .single()
-
-    // 3. Fetch Asmaul Husna Pair 2 (Based on Ayah Number)
-    const asmaulAyahNum = ((ayahNum - 1) % 99) + 1
-    const { data: asmaulAyahData } = await sb
-      .from("asmaul_husna")
-      .select(
-        "number, name_arabic, name_latin, translation_id, quran_reference"
-      )
-      .eq("number", asmaulAyahNum)
-      .single()
-
-    // 4. Universal Global Hadith from Supabase Cloud
-    const totalHadithCount = 30800
-    const todayHadithId = ((dailySeed * 7 + 13) % totalHadithCount) + 1
-
-    const { data: hadithData } = await sb
-      .from("hadiths")
-      .select("id, book_slug, number, text_id, text_en, grade")
-      .eq("id", todayHadithId)
-      .single()
-
-    let bookName = ""
-    if (hadithData) {
-      const { data: bookData } = await sb
-        .from("hadith_books")
-        .select("name")
-        .eq("slug", hadithData.book_slug)
-        .single()
-      if (bookData) bookName = bookData.name
-    }
-
-    // Dynamic Hadith Text Fetch & Auto-Save to DB if missing
-    let hadithTextEn = hadithData?.text_en || ""
-    if (!hadithTextEn && hadithData) {
-      try {
-        const bookSlugMap: Record<string, string> = {
-          bukhari: "eng-bukhari",
-          muslim: "eng-muslim",
-          abudawud: "eng-abudawud",
-          tirmidzi: "eng-tirmidhi",
-          nasai: "eng-nasai",
-          ibnumajah: "eng-ibnmajah",
-          darimi: "eng-darimi",
-          ahmad: "eng-ahmad",
-          malik: "eng-malik",
-        }
-        const apiEdition = bookSlugMap[hadithData.book_slug] || "eng-bukhari"
-        const apiRes = await fetch(
-          `https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/${apiEdition}/${hadithData.number}.json`
-        )
-        if (apiRes.ok) {
-          const apiJson = await apiRes.json()
-          const fetchedText = apiJson?.hadiths?.[0]?.text || apiJson?.text
-          if (fetchedText) {
-            hadithTextEn = fetchedText
-            // Auto-cache into Supabase DB asynchronously
-            sb.from("hadiths")
-              .update({ text_en: hadithTextEn })
-              .eq("id", hadithData.id)
-              .then(() => {})
-          }
-        }
-      } catch (e) {
-        console.warn("Failed to fetch dynamic Hadith English text:", e)
+    try {
+      const randomPage = Math.max(1, (dailySeed * 7) % 500)
+      const json = await moonClientInstance.request("GET", `/api/witness/hadith?slug=bukhari&page=${randomPage}&limit=1`)
+      if (json.hadiths && json.hadiths.length > 0) {
+         hadithData = json.hadiths[0]
       }
+    } catch (e) {
+      console.warn("Failed to fetch daily hadith", e)
     }
-
-    // 5. Universal Global Scripture Wisdom from Supabase Cloud
-    const totalVerseCount = 15
-    const todayVerseId = ((dailySeed * 13 + 29) % totalVerseCount) + 1
-
-    const { data: scriptureData } = await sb
-      .from("scripture_verses")
-      .select(
-        "id, scripture_id, text_original, text_transliteration, translation_id, translation_en, notes, notes_en"
-      )
-      .eq("id", todayVerseId)
-      .single()
-
-    const scriptureQuoteEn = scriptureData?.translation_en || ""
-    const scriptureSourceEn = scriptureData?.notes_en || ""
 
     return NextResponse.json({
       formattedDate: new Intl.DateTimeFormat("id-ID", {
         dateStyle: "full",
         timeZone: "Asia/Jakarta",
       }).format(now),
-
       dateStr,
-
       prayerPeriod,
-
       globalStats: {
         totalAyahs: totalAyahCount,
         seenAyahsCount: globalSeenCount,
         remainingAyahsCount: remainingCount,
       },
-
       ayah: {
-        id: ayahData?.id || 1,
-        surahNumber: surahNum,
-        surahName: surahName || "Al-Fatihah",
-        surahTranslationId: surahTranslationId || "",
-        surahTranslationEn: surahTranslationEn || "",
-        ayahNumber: ayahNum,
-        textArabic:
-          ayahData?.text_arabic || "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+        id: dailySeed % totalAyahCount,
+        surahNumber: ayahData?.surah_number || 1,
+        surahName: ayahData?.surah_name_latin || "Al-Fatihah",
+        ayahNumber: ayahData?.ayah_number || 1,
+        textArabic: ayahData?.text_arabic || "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
         textLatin: ayahData?.text_latin || "Bismillāhir-raḥmānir-raḥīm",
-        translationId:
-          ayahData?.translation_id ||
-          "Dengan nama Allah Yang Maha Pengasih, Maha Penyayang.",
-        translationEn: ayahTranslationEn,
-        audioUrl: ayahData?.audio_url || undefined,
+        translationId: ayahData?.translation_id || "Dengan nama Allah Yang Maha Pengasih, Maha Penyayang.",
+        translationEn: ayahData?.translation_en || "In the name of Allah, the Entirely Merciful, the Especially Merciful.",
       },
-
-      asmaulSurah: asmaulSurahData
-        ? {
-            number: asmaulSurahData.number,
-            nameArabic: asmaulSurahData.name_arabic,
-            nameLatin: asmaulSurahData.name_latin,
-            translationId: asmaulSurahData.translation_id,
-          }
-        : undefined,
-
-      asmaulAyah: asmaulAyahData
-        ? {
-            number: asmaulAyahData.number,
-            nameArabic: asmaulAyahData.name_arabic,
-            nameLatin: asmaulAyahData.name_latin,
-            translationId: asmaulAyahData.translation_id,
-          }
-        : undefined,
-
+      asmaulSurah: asmaulSurahData ? {
+        number: asmaulSurahData.number || 1,
+        nameArabic: asmaulSurahData.arabic || "",
+        nameLatin: asmaulSurahData.latin || "",
+        translationId: asmaulSurahData.translationId || "",
+      } : undefined,
+      asmaulAyah: asmaulAyahData ? {
+        number: asmaulAyahData.number || 2,
+        nameArabic: asmaulAyahData.arabic || "",
+        nameLatin: asmaulAyahData.latin || "",
+        translationId: asmaulAyahData.translationId || "",
+      } : undefined,
       hadith: {
-        id: hadithData?.id || 1,
-        bookName: bookName || "Shahih Bukhari",
+        id: hadithData?.number || 1,
+        bookName: "Shahih Bukhari",
         number: hadithData?.number || 1,
-        textId: cleanHadithText(
-          hadithData?.text_id || "Sesungguhnya amalan itu tergantung niatnya."
-        ),
-        textEn: hadithTextEn,
-        levelBadge: hadithData?.grade || "Shahih",
+        textId: cleanHadithText(hadithData?.textId || "Sesungguhnya amalan itu tergantung niatnya."),
+        textEn: hadithData?.textEn || "Actions are judged by intentions.",
+        levelBadge: "Shahih",
       },
-
       wisdom: {
-        id: scriptureData?.id || 1,
+        id: 1,
         title: "Perenungan Khazanah Kitab Suci",
-        quote:
-          scriptureData?.translation_id ||
-          "Sungguh petunjuk Allah adalah sebaik-baik petunjuk.",
-        quoteEn: scriptureQuoteEn,
-        source: scriptureData?.notes || "Khazanah Kitab Suci Global",
-        sourceEn: scriptureSourceEn,
+        quote: "Sungguh petunjuk Allah adalah sebaik-baik petunjuk.",
+        quoteEn: "Indeed, the guidance of Allah is the best guidance.",
+        source: "Khazanah Kitab Suci Global",
+        sourceEn: "Global Scripture Treasury",
       },
     })
   } catch (err: any) {

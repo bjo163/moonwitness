@@ -1,24 +1,16 @@
 import { NextResponse } from "next/server"
-import { getSupabaseClient } from "@workspace/quran-core"
+import { moonClientInstance } from "@core/store/moon-store"
 
 export async function GET(request: Request) {
   try {
-    const sb = getSupabaseClient()
+    // Fetch all scriptures from the Witness API Gateway
+    const json = await moonClientInstance.request("GET", "/api/witness/scriptures")
 
-    // Fetch all scriptures ordered by id
-    const { data: scriptures, error } = await sb
-      .from("divine_scriptures")
-      .select("*")
-      .order("id", { ascending: true })
-
-    if (error) throw error
-
-    // Optionally we can also aggregate total books, chapters, verses here or just use the pre-computed ones
-
+    // Map new API shape to what the frontend expects
     return NextResponse.json({
       success: true,
-      total: scriptures?.length || 0,
-      data: scriptures,
+      total: json.scriptures?.length || 0,
+      data: json.scriptures,
     })
   } catch (error: any) {
     console.error("Error fetching universal scriptures:", error)

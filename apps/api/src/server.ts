@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { NativeServer } from '@moon/server';
 import baseAddons, { seedBaseData, loadBaseData } from '@moon/base';
 import performanceAddons, { performanceMiddleware } from '@moon/performance';
+import witnessAddons, { registerWitnessRoutes } from '@moon/witness';
 import { globalRoutes } from '@moon/server/dist/router.js';
 import { publish } from '@moon/server';
 import { trackSystem } from '@moon/performance';
@@ -85,12 +86,16 @@ const server = new NativeServer({
   port: Number(process.env.API_PORT || process.env.PORT) || 4000,
   addons: [
     ...baseAddons.models,
-    ...performanceAddons.models
+    ...performanceAddons.models,
+    ...witnessAddons.models
   ],
 });
 
 // Add performance tracking middleware
 server.use(performanceMiddleware());
+
+// Register witness custom endpoints
+registerWitnessRoutes();
 
 // ── NASA ──────────────────────────────────────────────────────────────────────
 server.proxy('GET', '/api/external/nasa/neo', 'https://api.nasa.gov/neo/rest/v1/feed', {

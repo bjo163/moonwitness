@@ -17,6 +17,7 @@
     "@moon/orm": "workspace:*",
     "@moon/performance": "workspace:*",
     "@moon/server": "workspace:*",
+    "@moon/witness": "workspace:*",
     "dotenv": "^16.4.5",
     "knex": "^3.0.0",
     "pg": "^8.13.0"

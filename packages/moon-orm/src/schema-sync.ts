@@ -286,8 +286,9 @@ async function createTable(
     const nullable = fieldDef.required
       ? 'NOT NULL'
       : ''
+    const unique = fieldDef.unique ? 'UNIQUE' : ''
     cols.push(
-      `${colName} ${colType} ${nullable}`.trim()
+      `${colName} ${colType} ${nullable} ${unique}`.trim()
     )
   }
   const db = getDb()

@@ -12,7 +12,7 @@ const withSerwist = withSerwistInit({
 })
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@workspace/ui", "@workspace/quran-core"],
+  transpilePackages: ["@workspace/ui", "@moon/witness"],
   images: {
     formats: ["image/avif", "image/webp"],
   },

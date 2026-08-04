@@ -1,7 +1,8 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { getMoonData, getIslamicData, PrayerData } from "@workspace/quran-core"
+import { getMoonData } from "@moon/witness/dist/astronomy/moon-phase.js"
+import { getIslamicData, PrayerData } from "@moon/witness/dist/astronomy/prayer-times.js"
 
 const SECONDS_PER_MINUTE = 60
 const MINUTES_PER_HOUR = 60

@@ -91,6 +91,7 @@ export const fields = {
   Integer: (opts: {
     required?: boolean
     default?: number
+    unique?: boolean
     compute?: (record: any) => number
     store?: boolean
     depends?: string[]
@@ -104,6 +105,7 @@ export const fields = {
   Float: (opts: {
     required?: boolean
     default?: number
+    unique?: boolean
     compute?: (record: any) => number
     store?: boolean
     depends?: string[]
