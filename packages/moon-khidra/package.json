@@ -1,0 +1,28 @@
+{
+  "name": "@moon/khidra",
+  "version": "0.1.0",
+  "description": "Prophetic AI Engine for Moon framework",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@google/genai": "^2.15.0",
+    "@moon/orm": "workspace:*",
+    "@moon/witness": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@moon/base": "workspace:*"
+  }
+}

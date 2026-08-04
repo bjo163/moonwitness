@@ -21,6 +21,11 @@ const nextConfig: NextConfig = {
   experimental: {
     viewTransition: true,
   },
+  serverExternalPackages: ["knex", "@moon/orm", "@moon/server", "@moon/khidra", "better-sqlite3", "pg", "oracledb", "mariadb"],
+  webpack: (config) => {
+    config.externals.push("knex", "@moon/orm", "@moon/server", "@moon/khidra", "oracledb", "mariadb/callback")
+    return config
+  },
   turbopack: {},
 }
 

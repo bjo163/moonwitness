@@ -18,6 +18,8 @@
     "@serwist/next": "^9.5.12",
     "@supabase/supabase-js": "^2.110.8",
     "@workspace/auto-avatar": "workspace:*",
+    "@moon/khidra": "workspace:*",
+    "@moon/server": "workspace:*",
     "@moon/witness": "workspace:*",
     "@workspace/types": "workspace:*",
     "@workspace/ui": "workspace:*",

@@ -3,6 +3,7 @@ import { NativeServer } from '@moon/server';
 import baseAddons, { seedBaseData, loadBaseData } from '@moon/base';
 import performanceAddons, { performanceMiddleware } from '@moon/performance';
 import witnessAddons, { registerWitnessRoutes } from '@moon/witness';
+import khidraAddons from '@moon/khidra';
 import { globalRoutes } from '@moon/server/dist/router.js';
 import { publish } from '@moon/server';
 import { trackSystem } from '@moon/performance';
@@ -87,7 +88,8 @@ const server = new NativeServer({
   addons: [
     ...baseAddons.models,
     ...performanceAddons.models,
-    ...witnessAddons.models
+    ...witnessAddons.models,
+    ...khidraAddons.models
   ],
 });
 
