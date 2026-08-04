@@ -11,6 +11,7 @@ import {
 import { Input } from "@workspace/ui/components/input"
 import { Label } from "@workspace/ui/components/label"
 import { Button } from "@workspace/ui/components/button"
+import { useUserProfile } from "@core/hooks"
 
 export type UserProfile = {
   email: string
@@ -32,6 +33,7 @@ export function UserProfileModal({
   onClose,
   onSaveProfile,
 }: UserProfileModalProps) {
+  const { profile, saveProfile } = useUserProfile()
   const [activeTab, setActiveTab] = useState<"login" | "register">("register")
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
@@ -43,21 +45,13 @@ export function UserProfileModal({
   const [successMsg, setSuccessMsg] = useState("")
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("mw_user_profile")
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved)
-          setTimeout(() => setEmail(parsed.email || ""), 0)
-          setName(parsed.name || "")
-          setRole(parsed.role || "public")
-          setAvatar(parsed.avatar || "🌙")
-        } catch (e) {
-          console.warn("Failed to parse saved user profile:", e)
-        }
-      }
+    if (profile) {
+      setTimeout(() => setEmail(profile.email || ""), 0)
+      setName(profile.name || "")
+      setRole(profile.role || "public")
+      setAvatar(profile.avatar || "🌙")
     }
-  }, [isOpen])
+  }, [profile, isOpen])
 
   if (!isOpen) return null
 
@@ -98,8 +92,7 @@ export function UserProfileModal({
           role: data.profile.role as "public" | "admin",
           avatar: data.profile.avatar || "🌙",
         }
-        localStorage.setItem("mw_user_profile", JSON.stringify(fullProfile))
-        window.dispatchEvent(new Event("storage"))
+        saveProfile(fullProfile)
         onSaveProfile(fullProfile)
         setTimeout(() => onClose(), 800)
       }

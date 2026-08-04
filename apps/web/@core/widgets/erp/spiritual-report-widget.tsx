@@ -1,4 +1,5 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import React, { useState, useEffect } from "react"
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts"
@@ -15,13 +16,10 @@ const MOCK_REPORT_DATA = [
 ]
 
 export function SpiritualReportWidget() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const [activeMetric, setActiveMetric] = useState<"prayer" | "quran" | "dzikir">("prayer")
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
+  
   if (!mounted) return null
 
   const getMetricColor = () => {

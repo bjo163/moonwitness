@@ -1,4 +1,5 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import React, { useState, useEffect } from "react"
 import { Settings, Shield, Bell, MapPin, Power, Moon, Sun } from "lucide-react"
@@ -9,12 +10,9 @@ export function TacticalSettingsWidget() {
   const [notifs, setNotifs] = useState(false)
   const [spoofLoc, setSpoofLoc] = useState(false)
   const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
+  
   return (
     <div className="bg-space/60 rounded-2xl border border-blue-500/20 p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">

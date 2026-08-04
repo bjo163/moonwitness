@@ -1,4 +1,5 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import { useState, useEffect } from "react"
 import { Orbit, Sun, Moon, Globe } from "lucide-react"
@@ -37,11 +38,10 @@ function OrbitingEarthAndMoon({ rotation }: { rotation: number }) {
 }
 
 export function OrbitOrreryWidget() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const [rotation, setRotation] = useState(0)
 
   useEffect(() => {
-    setTimeout(() => setMounted(true), 0)
     const interval = setInterval(() => {
       setRotation((prev) => (prev + ROTATION_STEP) % FULL_CIRCLE_DEGREES)
     }, ORBIT_ANIMATION_INTERVAL_MS)

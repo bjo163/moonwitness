@@ -3,14 +3,14 @@
 import React, { useEffect, useState } from "react"
 import { useMoonStore } from "@core/store/moon-store"
 import { Globe2, Quote } from "lucide-react"
+import { internalApi } from "@core/api/internal-api"
 
 export function GlobalTickerWidget() {
   const [messages, setMessages] = useState<any[]>([])
   
   useEffect(() => {
     // Initial fetch of recent comments
-    fetch("/api/comments?all=true")
-      .then(res => res.json())
+    internalApi<any>("/api/comments?all=true")
       .then(data => {
         if (data.comments) {
           // Get the last 10 comments

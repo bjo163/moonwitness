@@ -3,6 +3,7 @@
 import React, { useState, useRef } from "react"
 import { Radio, Loader2, X, Download, Camera } from "lucide-react"
 import { toPng } from "html-to-image"
+import { internalApi } from "@core/api/internal-api"
 
 export function IntelBriefingWidget() {
   const [isOpen, setIsOpen] = useState(false)
@@ -35,9 +36,7 @@ export function IntelBriefingWidget() {
     setImageUrl(null)
 
     try {
-      const res = await fetch("/api/intel/briefing", { method: "POST" })
-      if (!res.ok) throw new Error("Failed to generate briefing")
-      const data = await res.json()
+      const data = await internalApi<any>("/api/intel/briefing", { method: "POST" })
       setBriefing(data.briefing)
       if (data.imageUrl) setImageUrl(data.imageUrl)
     } catch (e: any) {

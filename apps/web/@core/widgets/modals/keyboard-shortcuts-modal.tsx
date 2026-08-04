@@ -1,4 +1,5 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import { useState, useEffect } from "react"
 import { Keyboard } from "lucide-react"
@@ -50,11 +51,10 @@ const SHORTCUTS_LIST: ShortcutItem[] = [
 ]
 
 export function KeyboardShortcutsModal() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    setTimeout(() => setMounted(true), 0)
 
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "?" && !isOpen) {

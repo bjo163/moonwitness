@@ -1,4 +1,5 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
@@ -14,14 +15,13 @@ export function Taskbar() {
   const { lang } = useLanguage()
   const { isPlaying, currentSurah, togglePlay, playbackRate, setPlaybackRate, isLooping, toggleLoop } = useGlobalAudio()
   const { activeConnections } = useMoonStore()
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const [timeStr, setTimeStr] = useState("")
   const [lunarInfo, setLunarInfo] = useState<LunarPhaseInfo | null>(null)
 
   useEffect(() => {
     setTimeout(() => {
-      setMounted(true)
-      setLunarInfo(calculateLunarPhase(new Date(), lang))
+      setLunarInfo(calculateLunarPhase(new Date(), lang === "id" ? "id" : "en"))
     }, 0)
 
     const timer = setInterval(() => {

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useMoonStore } from './moon-store'
+import { useMoonStore } from '../store/moon-store'
 
 export function useMoonModel<T = any>(modelName: string) {
   const { client, request } = useMoonStore()

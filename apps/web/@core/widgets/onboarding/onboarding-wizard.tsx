@@ -1,4 +1,5 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import React, { useState, useEffect } from "react"
 import { useMoonStore } from "@core/store/moon-store"
@@ -32,15 +33,12 @@ const STEPS = [
 ]
 
 export function OnboardingWizard() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const [step, setStep] = useState(0)
   const hasCompletedOnboarding = useMoonStore(s => s.hasCompletedOnboarding)
   const completeOnboarding = useMoonStore(s => s.completeOnboarding)
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
+  
   if (!mounted || hasCompletedOnboarding) return null
 
   const handleNext = () => {
@@ -52,8 +50,8 @@ export function OnboardingWizard() {
   }
 
   const current = STEPS[step]
+  if (!current) return null
   const Icon = current.icon
-
   return (
     <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 p-4 backdrop-blur-md">
       <div className="panel-clip relative w-full max-w-2xl border border-cyan-500/30 bg-space/95 p-8 shadow-[0_0_50px_rgba(0,240,255,0.15)] animate-in fade-in zoom-in duration-500">

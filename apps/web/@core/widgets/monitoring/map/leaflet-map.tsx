@@ -1,4 +1,5 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import React, { useEffect, useState } from "react"
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from "react-leaflet"
@@ -80,12 +81,9 @@ export default function LeafletMap({
   cyberAttacks?: CyberAttack[]
   ships?: MaritimeShip[]
 }) {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
+  
   if (!mounted) return null
 
   return (

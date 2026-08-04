@@ -17,7 +17,7 @@ import {
   Cloudy,
   Target,
 } from "lucide-react"
-import { QiblaRadarWidget } from "@core/widgets/erp/qibla-radar-widget"
+import { QiblaRadarWidget } from "@core/widgets"
 
 export function OSDivineAstronomy() {
   const [clockWIB, setClockWIB] = useState("06:50:16 WIB")

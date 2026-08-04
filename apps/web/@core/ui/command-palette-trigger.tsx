@@ -1,4 +1,5 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import React, { useEffect, useState } from "react"
 import { Command } from "lucide-react"
@@ -11,13 +12,10 @@ export function CommandPaletteTrigger({
   accentColor?: ThemeAccentColor
   onClick?: () => void
 }) {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const colorHex = THEME_TOKENS.colors[accentColor]
 
-  useEffect(() => {
-    setTimeout(() => setMounted(true), 0)
-  }, [])
-
+  
   return (
     <button
       onClick={onClick}

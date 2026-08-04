@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react"
 import { Sparkles, Loader2, Volume2 } from "lucide-react"
+import { internalApi } from "@core/api/internal-api"
 
 type AsmaulHusna = {
   number: number
@@ -18,15 +19,12 @@ export function AsmaulHusnaWidget() {
   useEffect(() => {
     async function fetchNames() {
       try {
-        const res = await fetch("/api/witness/asmaul-husna")
-        if (res.ok) {
-          const json = await res.json()
-          if (json.names && json.names.length > 0) {
-            setData(json.names)
+        const json = await internalApi<{ names: AsmaulHusna[] }>("/api/witness/asmaul-husna")
+        if (json.names && json.names.length > 0) {
+          setData(json.names)
             // Pick a random one for today based on day of year, or just random
-            const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24)
-            setCurrentIndex(dayOfYear % json.names.length)
-          }
+          const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24)
+          setCurrentIndex(dayOfYear % json.names.length)
         }
       } catch (err) {
         console.error(err)

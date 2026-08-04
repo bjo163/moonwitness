@@ -1,4 +1,5 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import { useState, useEffect } from "react"
 import { Bot, X, Sparkles, Database, Minimize2, Cpu } from "lucide-react"
@@ -7,17 +8,14 @@ import { createPortal } from "react-dom"
 import { usePathname } from "next/navigation"
 
 export function FlyingPropheticAIWidget() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
 
   // Jika sedang berada langsung di halaman /diagnostik-hikmah (yang sudah fullscreen), kita sembunyikan widget terbangnya agar tidak duplikatif
   const isOnDedicatedPage = pathname === "/diagnostik-hikmah"
 
-  useEffect(() => {
-    setTimeout(() => setMounted(true), 0)
-  }, [])
-
+  
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {

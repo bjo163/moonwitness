@@ -1,4 +1,5 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
@@ -169,13 +170,12 @@ const STATIC_SEARCH_DATA: SearchResultItem[] = [
 ]
 
 export function GlobalSearchModal() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState("")
   const inputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
-    setTimeout(() => setMounted(true), 0)
 
     function handleKeyDown(e: KeyboardEvent) {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {

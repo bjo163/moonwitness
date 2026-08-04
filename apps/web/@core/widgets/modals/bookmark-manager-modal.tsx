@@ -1,4 +1,5 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
@@ -7,12 +8,12 @@ import {
   getBookmarks,
   toggleBookmark,
   TacticalBookmarkItem,
-} from "@core/utils/bookmark-store"
+} from "@core/store/bookmark-store"
 import { Modal } from "@core/ui/modal"
 import { ModalTrigger } from "@core/ui"
 
 export function BookmarkManagerModal() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const [isOpen, setIsOpen] = useState(false)
   const [bookmarks, setBookmarks] = useState<TacticalBookmarkItem[]>([])
 
@@ -21,7 +22,6 @@ export function BookmarkManagerModal() {
   }
 
   useEffect(() => {
-    setTimeout(() => setMounted(true), 0)
     // eslint-disable-next-line react-hooks/set-state-in-effect -- Client-side hydration requires fetching data in effect
     loadBookmarks()
 

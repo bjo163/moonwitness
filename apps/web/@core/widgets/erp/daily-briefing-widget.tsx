@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react"
 import { ShieldAlert, Terminal, Radio, BookOpen } from "lucide-react"
+import { internalApi } from "@core/api/internal-api"
 
 type BriefingData = {
   ayah: any
@@ -9,7 +10,7 @@ type BriefingData = {
   cme: any // Coronal Mass Ejection (Space Weather)
 }
 
-export function IntelBriefingWidget() {
+export function DailyBriefingWidget() {
   const [data, setData] = useState<BriefingData | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -18,16 +19,10 @@ export function IntelBriefingWidget() {
       try {
         setLoading(true)
         // Parallel fetch
-        const [resQ, resH, resCME] = await Promise.all([
-          fetch("/api/witness/quran/surah?number=2"), // Al-Baqarah for mock
-          fetch("/api/witness/hadith?slug=bukhari&page=1&limit=1"),
-          fetch("/api/external/nasa/donki/cme")
-        ])
-        
         const [quran, hadith, cme] = await Promise.all([
-          resQ.json().catch(() => null),
-          resH.json().catch(() => null),
-          resCME.json().catch(() => null)
+          internalApi<any>("/api/witness/quran/surah?number=2").catch(() => null),
+          internalApi<any>("/api/witness/hadith?slug=bukhari&page=1&limit=1").catch(() => null),
+          internalApi<any>("/api/external/nasa/donki/cme").catch(() => null)
         ])
 
         setData({

@@ -1,4 +1,5 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import { useState, useEffect } from "react"
 import { Share2, Copy, Check, Sparkles, Moon, Download } from "lucide-react"
@@ -24,14 +25,11 @@ export function ShareCardGeneratorModal({
   translationId,
   asIcon = false,
 }: ShareCardProps) {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const [isOpen, setIsOpen] = useState(false)
   const [copied, setCopied] = useState(false)
 
-  useEffect(() => {
-    setTimeout(() => setMounted(true), 0)
-  }, [])
-
+  
   function handleCopyCardText() {
     const cardText = `◈ MOONWITNESS TRANSMISSION CARD ◈\nQ.S ${surahName} (${surahNumber}:${ayahNumber})\n\n${textArabic}\n\n"${translationId}"\n\n- Transmitted via MoonWitness Observatory (https://moonwitness.com)`
     navigator.clipboard.writeText(cardText)

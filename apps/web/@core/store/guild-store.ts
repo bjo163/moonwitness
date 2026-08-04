@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { persist } from "zustand/middleware"
+import { persist, createJSONStorage } from "zustand/middleware"
 
 export type Guild = {
   id: string
@@ -43,6 +43,11 @@ export const useGuildStore = create<GuildState>()(
     }),
     {
       name: "moon-guild-storage",
+      storage: createJSONStorage(() => (typeof window !== 'undefined' ? localStorage : {
+        getItem: () => null,
+        setItem: () => {},
+        removeItem: () => {},
+      })),
     }
   )
 )

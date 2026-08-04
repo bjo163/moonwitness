@@ -15,7 +15,7 @@ import {
 import { useMoonStore } from "@core/store/moon-store"
 import { buildGlobalNavigation } from "@modules/index"
 import { AutoAvatar } from "@workspace/auto-avatar"
-import { NotificationBell } from "@core/widgets"
+import { NotificationBell, GlobalSearchModal } from "@core/widgets"
 
 type UserProfileData = {
   name?: string

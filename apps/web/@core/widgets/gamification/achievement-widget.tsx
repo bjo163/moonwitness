@@ -1,4 +1,5 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import React, { useEffect, useState } from "react"
 import { Award, Star, Terminal, Shield, Music, Zap } from "lucide-react"
@@ -12,14 +13,11 @@ const ICON_MAP: Record<string, React.ElementType> = {
 }
 
 export function AchievementWidget() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const points = useAchievementStore((s) => s.points)
   const unlockedIds = useAchievementStore((s) => s.unlockedIds)
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
+  
   if (!mounted) return null
 
   // Calculate Level based on points (e.g. 100 points = 1 level)
@@ -71,6 +69,7 @@ export function AchievementWidget() {
           </div>
         ) : (
           recentAchievements.map(ach => {
+            if (!ach) return null
             const Icon = ICON_MAP[ach.icon] || Award
             return (
               <div key={ach.id} className="flex items-center gap-3 rounded bg-white/5 p-2 transition-colors hover:bg-white/10">

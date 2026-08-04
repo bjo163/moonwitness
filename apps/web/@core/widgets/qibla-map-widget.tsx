@@ -1,15 +1,17 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import { useState, useEffect } from "react"
 import { Globe } from "lucide-react"
+import { SYSTEM_CONSTANTS } from "@core/tokens/constants"
 
-const DEFAULT_LAT = -6.2088
-const DEFAULT_LNG = 106.8456
+const DEFAULT_LAT = SYSTEM_CONSTANTS.JAKARTA_LAT
+const DEFAULT_LNG = SYSTEM_CONSTANTS.JAKARTA_LNG
 const DEFAULT_DISTANCE_KM = 7914
 const COORD_DECIMAL_DIGITS = 4
 
 export function QiblaMapWidget() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const [userCoords, setUserCoords] = useState<{ lat: number; lng: number }>({
     lat: DEFAULT_LAT,
     lng: DEFAULT_LNG,
@@ -17,7 +19,6 @@ export function QiblaMapWidget() {
   const [distanceKm, _setDistanceKm] = useState(DEFAULT_DISTANCE_KM)
 
   useEffect(() => {
-    setTimeout(() => setMounted(true), 0)
     if (typeof navigator !== "undefined" && "geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {

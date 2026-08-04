@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react"
 import {
   UserProfileModal,
-  UserProfile,
-} from "@modules/auth/components/modals/user-profile-modal"
+  type UserProfile,
+} from "../../auth/components/modals/user-profile-modal"
 import { useLanguage } from "@core/contexts"
 import { useMoonStore } from "@core/store/moon-store"
 import { queueOfflineSync } from "@core/utils/offline-sync"
+import { useUserProfile } from "@core/hooks"
 
 type CommentItem = {
   id: string
@@ -40,8 +41,7 @@ export function InspirationCommentsClient({
   const { t } = useLanguage()
   const [comments, setComments] = useState<CommentItem[]>([])
   const [loading, setLoading] = useState(true)
-
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
+  const { profile: userProfile, saveProfile } = useUserProfile()
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const [commentText, setCommentText] = useState("")
@@ -68,16 +68,6 @@ export function InspirationCommentsClient({
   }
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("mw_user_profile")
-      if (saved) {
-        try {
-          setTimeout(() => setUserProfile(JSON.parse(saved)), 0)
-        } catch (e) {
-          console.warn("Failed to parse user profile:", e)
-        }
-      }
-    }
     fetchComments()
     
     // Set up real-time listener via MoonStore
@@ -155,9 +145,7 @@ export function InspirationCommentsClient({
   }
 
   function handleSaveProfile(newProfile: UserProfile) {
-    setUserProfile(newProfile)
-    localStorage.setItem("mw_user_profile", JSON.stringify(newProfile))
-    window.dispatchEvent(new Event("storage"))
+    saveProfile(newProfile)
   }
 
   return (

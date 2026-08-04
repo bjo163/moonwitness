@@ -1,16 +1,16 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import React, { useEffect, useState } from "react"
 import { useQuestStore } from "@core/store/quest-store"
 import { Target, CheckCircle2, Circle } from "lucide-react"
 
 export function QuestWidget() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const { quests, refreshQuests, completeQuest } = useQuestStore()
 
   useEffect(() => {
     refreshQuests()
-    setMounted(true)
   }, [refreshQuests])
 
   if (!mounted) return null

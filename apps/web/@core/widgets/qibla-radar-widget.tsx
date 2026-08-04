@@ -1,4 +1,6 @@
 "use client"
+import { SYSTEM_CONSTANTS } from "@core/tokens/constants"
+import { useMounted } from "@core/hooks"
 
 import { useState, useEffect } from "react"
 import { Compass, Clock, Navigation, Loader2 } from "lucide-react"
@@ -18,9 +20,9 @@ type PrayerTimingThreshold = {
   mins: number
 }
 
-const DEFAULT_JAKARTA_QIBLA_DEG = 295.14
-const DEFAULT_JAKARTA_LAT = -6.2088
-const DEFAULT_JAKARTA_LNG = 106.8456
+const DEFAULT_JAKARTA_QIBLA_DEG = SYSTEM_CONSTANTS.QIBLA_BEARING
+const DEFAULT_JAKARTA_LAT = SYSTEM_CONSTANTS.JAKARTA_LAT
+const DEFAULT_JAKARTA_LNG = SYSTEM_CONSTANTS.JAKARTA_LNG
 const MINUTES_PER_HOUR = 60
 const SECONDS_PER_MINUTE = 60
 const DHUHA_OFFSET_MINUTES = 20
@@ -28,7 +30,7 @@ const HOURS_PER_DAY = 24
 const SECONDS_PER_HOUR = 3600
 
 export function QiblaRadarWidget() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const [countdownText, setCountdownText] = useState("00:00:00")
   const [nextPrayerName, setNextPrayerName] = useState("...")
   const [radarDegrees, setRadarDegrees] = useState(DEFAULT_JAKARTA_QIBLA_DEG) // Default Jakarta Qibla
@@ -40,7 +42,6 @@ export function QiblaRadarWidget() {
   const [schedule, setSchedule] = useState<PrayerTimingThreshold[]>([])
 
   useEffect(() => {
-    setTimeout(() => setMounted(true), 0)
 
     const fetchTelemetry = async (
       lat: number,

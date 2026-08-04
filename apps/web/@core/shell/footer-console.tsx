@@ -1,14 +1,14 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import React, { useState, useEffect } from "react"
 import { ShieldCheck } from "lucide-react"
 
 export function OSFooterConsole() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const [currentTime, setCurrentTime] = useState("")
 
   useEffect(() => {
-    setTimeout(() => setMounted(true), 0)
     const tick = () => {
       setCurrentTime(
         new Date().toLocaleTimeString("id-ID", { timeZone: "Asia/Jakarta" }) +

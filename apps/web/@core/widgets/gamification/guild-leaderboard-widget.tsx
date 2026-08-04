@@ -1,17 +1,15 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import React, { useEffect, useState } from "react"
 import { useGuildStore } from "@core/store/guild-store"
 import { Users, Crown, ShieldAlert } from "lucide-react"
 
 export function GuildLeaderboardWidget() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const { guilds, currentGuildId, joinGuild, leaveGuild } = useGuildStore()
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
+  
   if (!mounted) return null
 
   const sortedGuilds = [...guilds].sort((a, b) => b.xp - a.xp)

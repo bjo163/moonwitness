@@ -1,4 +1,5 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import React, { useState, useEffect } from "react"
 import { Moon, Sun, Clock, Star, Flame } from "lucide-react"
@@ -7,12 +8,11 @@ import { Moon, Sun, Clock, Star, Flame } from "lucide-react"
 const IS_RAMADAN = true
 
 export function RamadanModeWidget() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 })
   const [target, setTarget] = useState<"Iftar" | "Imsak">("Iftar")
 
   useEffect(() => {
-    setMounted(true)
     const timer = setInterval(() => {
       const now = new Date()
       // Mock countdown logic: Target 18:00 for Iftar, 04:30 for Imsak

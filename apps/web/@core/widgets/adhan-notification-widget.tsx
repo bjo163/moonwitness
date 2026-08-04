@@ -1,15 +1,15 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import { useState, useEffect } from "react"
 import { Volume2, VolumeX } from "lucide-react"
 
 export function AdhanNotificationWidget() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const [adhanEnabled, setAdhanEnabled] = useState(true)
 
   useEffect(() => {
     setTimeout(() => {
-      setMounted(true)
       const saved = localStorage.getItem("mw_adhan_enabled")
       if (saved !== null) {
         setAdhanEnabled(saved === "true")

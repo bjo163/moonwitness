@@ -1,4 +1,5 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import React, { useState, useEffect } from "react"
 import { getMoonData } from "@moon/witness/dist/astronomy/moon-phase.js"
@@ -11,7 +12,7 @@ const MS_PER_MIN = MS_PER_SEC * SECONDS_PER_MINUTE
 const MS_PER_HOUR = MS_PER_MIN * MINUTES_PER_HOUR
 
 export function HomeTelemetrySidebarWidget() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const [clockWIB, setClockWIB] = useState("06:50:16 WIB")
   const [currentDate, setCurrentDate] = useState("25 MAY 2025")
   const [countdown, setCountdown] = useState("02:14:36")
@@ -24,7 +25,6 @@ export function HomeTelemetrySidebarWidget() {
   }>({ phaseName: "ACQUIRING...", illumination: 0, distance: 0 })
 
   useEffect(() => {
-    setTimeout(() => setMounted(true), 0)
 
     const timer = setInterval(() => {
       const now = new Date()

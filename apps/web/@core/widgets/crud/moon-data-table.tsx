@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { useMoonModel } from "@core/store/use-moon-model"
+import { useMoonModel } from "@core/hooks/use-moon-model"
 import {
   Card,
   CardHeader,

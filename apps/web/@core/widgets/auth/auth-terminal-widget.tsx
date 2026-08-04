@@ -4,11 +4,13 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { ShieldCheck, User, Terminal, Fingerprint, Lock } from "lucide-react"
 import { apiClient } from "@core/api/client"
+import { useUserProfile } from "@core/hooks"
 
 const REDIRECT_DELAY_MS = 800
 
 export function AuthTerminalWidget() {
   const router = useRouter()
+  const { saveProfile } = useUserProfile()
   const [activeTab, setActiveTab] = useState<"login" | "register">("login")
 
   const [email, setEmail] = useState("")
@@ -49,8 +51,7 @@ export function AuthTerminalWidget() {
       setSuccessMsg(data.message || "Berhasil masuk ke akun Anda!")
 
       if (data.profile) {
-        localStorage.setItem("mw_user_profile", JSON.stringify(data.profile))
-        window.dispatchEvent(new Event("storage"))
+        saveProfile(data.profile)
       }
 
       setTimeout(() => {

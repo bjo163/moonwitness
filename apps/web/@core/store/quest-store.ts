@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { persist } from "zustand/middleware"
+import { persist, createJSONStorage } from "zustand/middleware"
 
 export type Quest = {
   id: string
@@ -42,6 +42,11 @@ export const useQuestStore = create<QuestState>()(
     }),
     {
       name: "moon-quest-storage",
+      storage: createJSONStorage(() => (typeof window !== 'undefined' ? localStorage : {
+        getItem: () => null,
+        setItem: () => {},
+        removeItem: () => {},
+      })),
     }
   )
 )

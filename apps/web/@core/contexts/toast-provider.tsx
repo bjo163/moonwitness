@@ -1,4 +1,5 @@
 "use client"
+import { useMounted } from "@core/hooks"
 
 import React, {
   createContext,
@@ -170,12 +171,9 @@ function ToastItem({
 // ── Provider ──────────────────────────────────────────────────────────────
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([])
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
 
-  useEffect(() => {
-    setTimeout(() => setMounted(true), 0)
-  }, [])
-
+  
   const dismiss = useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id))
   }, [])

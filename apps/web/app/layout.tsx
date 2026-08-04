@@ -61,8 +61,8 @@ export default function RootLayout({
           Skip to content
         </a>
         <LanguageProvider>
-          <AudioProvider>
-            <ToastProvider>
+          <ToastProvider>
+            <AudioProvider>
               <Suspense fallback={null}>
                 <GlobalTickerWidget />
               </Suspense>
@@ -79,8 +79,8 @@ export default function RootLayout({
                 <OnboardingWizard />
               </Suspense>
               <PwaRegister />
-            </ToastProvider>
-          </AudioProvider>
+            </AudioProvider>
+          </ToastProvider>
         </LanguageProvider>
       </body>
     </html>
