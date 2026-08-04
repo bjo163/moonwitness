@@ -12,6 +12,7 @@ import { TasbihView } from "./views/tasbih-view"
 import { TauhidPortalView } from "./views/tauhid-view"
 import { KamusAkarKataView } from "./views/kamus-akar-kata-view"
 import { KalkulatorZakatView } from "./views/kalkulator-zakat-view"
+import { AdhkarCommandView } from "./views/adhkar-command-view"
 
 /**
  * Knowledge Module — MoonWitness OS
@@ -99,6 +100,12 @@ export default defineModule({
       label: "Kalkulator Zakat",
       icon: "Calculator",
       component: KalkulatorZakatView,
+    },
+    {
+      slug: "adhkar",
+      label: "Adhkar Command Center",
+      icon: "Shield",
+      component: AdhkarCommandView,
     },
   ],
 })

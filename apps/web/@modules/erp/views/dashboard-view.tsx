@@ -15,6 +15,7 @@ import { ZakatCalculatorWidget } from "@core/widgets/erp/zakat-calculator-widget
 import { InfaqTrackerWidget } from "@core/widgets/erp/infaq-tracker-widget"
 import { MutabaahWidget } from "@core/widgets/erp/mutabaah-widget"
 import { MosqueRadarWidget } from "@core/widgets/erp/mosque-radar-widget"
+import { SpiritualReportWidget } from "@core/widgets/erp/spiritual-report-widget"
 
 type DashboardData = any
 
@@ -93,6 +94,10 @@ export function ERPDashboardView() {
             <ZakatCalculatorWidget />
             <InfaqTrackerWidget />
             <MosqueRadarWidget />
+          </div>
+          {/* Row 5: Spiritual Report */}
+          <div className="grid grid-cols-1 gap-6">
+            <SpiritualReportWidget />
           </div>
         </main>
 

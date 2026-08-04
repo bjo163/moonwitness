@@ -6,6 +6,7 @@ import {
   UserProfile,
 } from "@modules/auth/components/modals/user-profile-modal"
 import { useLanguage } from "@core/contexts"
+import { useMoonStore } from "@core/store/moon-store"
 
 type CommentItem = {
   id: string
@@ -77,6 +78,16 @@ export function InspirationCommentsClient({
       }
     }
     fetchComments()
+    
+    // Set up real-time listener via MoonStore
+    const unsubscribe = useMoonStore.getState().subscribe('fx.msg', (msgData) => {
+      // Refresh comments when a new message is broadcasted
+      fetchComments()
+    })
+
+    return () => {
+      unsubscribe()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [periodCode, dateStr])
 

@@ -4,7 +4,7 @@ import { Orbitron, JetBrains_Mono, Geist, Amiri } from "next/font/google"
 import "@workspace/ui/globals.css"
 import { Taskbar, PwaRegister, Cosmic3DBackground } from "@core/shell"
 import { LanguageProvider, AudioProvider, ToastProvider } from "@core/contexts"
-import { FlyingPropheticAIWidget } from "@core/widgets"
+import { FlyingPropheticAIWidget, OnboardingWizard } from "@core/widgets"
 import { cn } from "@workspace/ui/lib/utils"
 
 const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" })
@@ -71,6 +71,9 @@ export default function RootLayout({
               </Suspense>
               <Suspense fallback={null}>
                 <FlyingPropheticAIWidget />
+              </Suspense>
+              <Suspense fallback={null}>
+                <OnboardingWizard />
               </Suspense>
               <PwaRegister />
             </ToastProvider>

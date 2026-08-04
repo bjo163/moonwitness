@@ -18,6 +18,7 @@ import { PrayerTimesWidget } from "./prayer-times-widget"
 import { HijriCalendarWidget } from "./hijri-calendar-widget"
 import { AsmaulHusnaWidget } from "./asmaul-husna-widget"
 import { TacticalSettingsWidget } from "./tactical-settings-widget"
+import { AchievementWidget, RamadanModeWidget } from "@core/widgets"
 
 type GlobalMonitorItem = { name: string; value: string; status: string }
 type MissionStatus = {
@@ -230,12 +231,14 @@ export function ErpRightSidebar({
 }: RightSidebarProps) {
   return (
     <div className="space-y-4">
+      <RamadanModeWidget />
       <MoonPhaseWidget moon={moon} />
       <HijriCalendarWidget />
       <AsmaulHusnaWidget />
       <PrayerTimesWidget />
       <GlobalMonitoringWidget monitoring={monitoring} />
       <MissionStatusWidget status={status} />
+      <AchievementWidget />
       <QuickActionsWidget />
       <TacticalSettingsWidget />
     </div>

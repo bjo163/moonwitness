@@ -19,12 +19,14 @@ interface MoonState {
   isConnected: boolean;
   user: any | null;
   activeConnections: number;
+  hasCompletedOnboarding: boolean;
   login: (email: string, pass: string) => Promise<void>;
   register: (email: string, pass: string, name?: string) => Promise<void>;
   forgotPassword: (email: string) => Promise<any>;
   verifyOtp: (email: string, code: string) => Promise<any>;
   resetPassword: (email: string, code: string, newPassword: string) => Promise<any>;
   logout: () => void;
+  completeOnboarding: () => void;
   request: (method: string, path: string, data?: any) => Promise<any>;
   subscribe: (topic: string, callback: (data: any) => void) => () => void;
 }
@@ -45,6 +47,11 @@ export const useMoonStore = create<MoonState>()(
         isConnected: true,
         user: null,
         activeConnections: 0,
+        hasCompletedOnboarding: false,
+
+    completeOnboarding: () => {
+      set({ hasCompletedOnboarding: true })
+    },
 
     login: async (email, pass) => {
       try {
@@ -130,7 +137,7 @@ export const useMoonStore = create<MoonState>()(
     setItem: () => {},
     removeItem: () => {},
   })),
-  partialize: (state) => ({ user: state.user }), // only persist the user (which includes token)
+  partialize: (state) => ({ user: state.user, hasCompletedOnboarding: state.hasCompletedOnboarding }), // persist user and onboarding
 }
 ))
 

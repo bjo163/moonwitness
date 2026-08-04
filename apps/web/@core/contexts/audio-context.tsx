@@ -1,12 +1,17 @@
 "use client"
 
-import React, { createContext, useContext, useState } from "react"
+import React, { createContext, useContext, useState, useEffect, useRef } from "react"
+import { Howl } from "howler"
+import { useToast } from "./toast-provider"
+import { useAchievementStore } from "@core/store/achievement-store"
 
 type AudioContextState = {
   isPlaying: boolean
   currentSurah: { number: number; name: string }
   play: (surah: { number: number; name: string }) => void
   togglePlay: () => void
+  volume: number
+  setVolume: (val: number) => void
 }
 
 const AudioContext = createContext<AudioContextState | undefined>(undefined)
@@ -17,19 +22,75 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     number: 1,
     name: "Al-Fatihah",
   })
+  const [volume, setVolume] = useState(0.5)
+  const soundRef = useRef<Howl | null>(null)
+  const { toast } = useToast()
+  const unlockAchievement = useAchievementStore(s => s.unlockAchievement)
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (soundRef.current) {
+        soundRef.current.unload()
+      }
+    }
+  }, [])
+
+  // Sync volume
+  useEffect(() => {
+    if (soundRef.current) {
+      soundRef.current.volume(volume)
+    }
+  }, [volume])
 
   const play = (surah: { number: number; name: string }) => {
     setCurrentSurah(surah)
     setIsPlaying(true)
+    
+    // Unlock Explorer Achievement
+    unlockAchievement("quran_explorer", toast)
+
+    if (soundRef.current) {
+      soundRef.current.unload()
+    }
+
+    const paddedNumber = String(surah.number).padStart(3, '0')
+    const url = `https://everyayah.com/data/Alafasy_128kbps/${paddedNumber}001.mp3` // Only playing the first Ayah for demo
+
+    soundRef.current = new Howl({
+      src: [url],
+      html5: true,
+      volume,
+      onplay: () => setIsPlaying(true),
+      onpause: () => setIsPlaying(false),
+      onend: () => setIsPlaying(false),
+      onloaderror: () => {
+        setIsPlaying(false)
+      },
+      onplayerror: () => {
+        setIsPlaying(false)
+      }
+    })
+
+    soundRef.current.play()
   }
 
   const togglePlay = () => {
-    setIsPlaying((prev) => !prev)
+    if (soundRef.current) {
+      if (isPlaying) {
+        soundRef.current.pause()
+      } else {
+        soundRef.current.play()
+      }
+    } else {
+      // If no sound loaded, load default
+      play(currentSurah)
+    }
   }
 
   return (
     <AudioContext.Provider
-      value={{ isPlaying, currentSurah, play, togglePlay }}
+      value={{ isPlaying, currentSurah, play, togglePlay, volume, setVolume }}
     >
       {children}
     </AudioContext.Provider>

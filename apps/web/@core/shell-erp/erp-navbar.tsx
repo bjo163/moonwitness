@@ -6,6 +6,7 @@ import { Button } from "@core/ui/button"
 import { usePathname } from "next/navigation"
 import { AutoAvatar } from "@workspace/auto-avatar"
 import { useMoonStore } from "@core/store/moon-store"
+import { NotificationBell, GlobalSearchModal } from "@core/widgets"
 
 type UserProfile = {
   name?: string
@@ -49,20 +50,12 @@ export function ErpNavbar() {
       {/* Right Actions */}
       <div className="flex items-center gap-6">
         {/* Search */}
-        <div className="hidden items-center gap-2 rounded-full border border-cyan-500/30 bg-black/40 px-4 py-2 sm:flex">
-          <Search className="h-4 w-4 text-primary/50" />
-          <input
-            type="text"
-            placeholder="Search ERP Data..."
-            className="bg-transparent font-mono text-xs text-white placeholder-primary/50 outline-none"
-          />
+        <div className="hidden sm:block">
+          <GlobalSearchModal />
         </div>
 
         {/* Notifications */}
-        <button className="relative flex items-center justify-center text-primary/70 transition-colors hover:text-cyan-400">
-          <Bell className="h-5 w-5" />
-          <span className="absolute top-0 right-0 flex h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_5px_rgba(251,191,36,0.8)]" />
-        </button>
+        <NotificationBell />
 
         {/* User Profile */}
         <div className="flex items-center gap-3 border-l border-cyan-500/30 pl-6">

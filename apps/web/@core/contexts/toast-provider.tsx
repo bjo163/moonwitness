@@ -10,6 +10,7 @@ import React, {
 } from "react"
 import { createPortal } from "react-dom"
 import { CheckCircle, XCircle, AlertTriangle, Info, X } from "lucide-react"
+import { useNotificationStore, NotificationType } from "@core/store/notification-store"
 
 // ── Types ─────────────────────────────────────────────────────────────────
 const DEFAULT_TOAST_DURATION_MS = 4000
@@ -185,6 +186,18 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       // Max 4 toasts at once
       const trimmed = prev.length >= MAX_TOASTS_COUNT ? prev.slice(1) : prev
       return [...trimmed, { ...opts, id }]
+    })
+    
+    // Save to persistent store
+    let type: NotificationType = "info"
+    if (opts.variant === "success") type = "success"
+    if (opts.variant === "error") type = "error"
+    if (opts.variant === "warning") type = "warning"
+    
+    useNotificationStore.getState().addNotification({
+      type,
+      title: opts.title,
+      message: opts.description || "",
     })
   }, [])
 

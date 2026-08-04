@@ -15,6 +15,7 @@ import {
 import { useMoonStore } from "@core/store/moon-store"
 import { buildGlobalNavigation } from "@modules/index"
 import { AutoAvatar } from "@workspace/auto-avatar"
+import { NotificationBell } from "@core/widgets"
 
 type UserProfileData = {
   name?: string
@@ -227,7 +228,11 @@ export function Navbar() {
         </nav>
 
         {/* RIGHT: MISSION STATUS & AUDIO WAVEFORM (Blueprint 01) */}
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-4">
+          <div className="hidden md:block">
+            <GlobalSearchModal />
+          </div>
+          <NotificationBell />
           <div className="bg-space/80 relative flex items-center gap-4 rounded-full border border-cyan-500/20 px-4 py-1.5 shadow-[0_0_15px_rgba(0,240,255,0.05)] backdrop-blur-md">
             {userProfile ? (
               <>
