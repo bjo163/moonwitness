@@ -7,6 +7,7 @@ import {
 } from "@modules/auth/components/modals/user-profile-modal"
 import { useLanguage } from "@core/contexts"
 import { useMoonStore } from "@core/store/moon-store"
+import { queueOfflineSync } from "@core/utils/offline-sync"
 
 type CommentItem = {
   id: string
@@ -105,20 +106,31 @@ export function InspirationCommentsClient({
     setSubmittedMessage("")
 
     try {
+      const payload = {
+        period_code: periodCode,
+        date_str: dateStr,
+        item_type: "AYAH",
+        item_id: itemId,
+        user_email: userProfile.email,
+        user_name: userProfile.name,
+        user_role: userProfile.role,
+        user_avatar: userProfile.avatar,
+        comment_text: commentText.trim(),
+      }
+
+      if (!navigator.onLine) {
+        queueOfflineSync("/api/comments", "POST", payload)
+        setCommentText("")
+        setSubmittedMessage(t("📡 SAVED OFFLINE. WILL SYNC LATER.", "📡 TERSIMPAN OFFLINE. AKAN DISINKRON SAAT ONLINE."))
+        setTimeout(() => setSubmittedMessage(""), 4000)
+        setSubmitting(false)
+        return
+      }
+
       const res = await fetch("/api/comments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          period_code: periodCode,
-          date_str: dateStr,
-          item_type: "AYAH",
-          item_id: itemId,
-          user_email: userProfile.email,
-          user_name: userProfile.name,
-          user_role: userProfile.role,
-          user_avatar: userProfile.avatar,
-          comment_text: commentText.trim(),
-        }),
+        body: JSON.stringify(payload),
       })
 
       if (res.ok) {

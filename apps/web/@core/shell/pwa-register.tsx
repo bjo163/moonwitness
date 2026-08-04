@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { flushOfflineQueue } from "@core/utils/offline-sync"
 
 export function PwaRegister() {
   const [isOffline, setIsOffline] = useState(false)
@@ -27,7 +28,10 @@ export function PwaRegister() {
           // Registration failed
         })
 
-      const handleOnline = () => setIsOffline(false)
+      const handleOnline = () => {
+        setIsOffline(false)
+        flushOfflineQueue()
+      }
       const handleOffline = () => setIsOffline(true)
 
       const handleBeforeInstallPrompt = (e: any) => {

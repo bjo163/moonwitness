@@ -6,13 +6,13 @@ import { calculateLunarPhase, LunarPhaseInfo } from "@core/utils/lunar-phase"
 import { useLanguage } from "@core/contexts"
 import { useGlobalAudio } from "@core/contexts"
 import { GlobalLiveAudioTranslator } from "./global-live-audio-translator"
-import { Play, Pause, SkipForward, SkipBack, Music, Users, Activity, Compass } from "lucide-react"
+import { Play, Pause, SkipForward, SkipBack, Music, Users, Activity, Compass, Repeat, Gauge } from "lucide-react"
 import { useMoonStore } from "@core/store/moon-store"
 
 export function Taskbar() {
   const pathname = usePathname()
   const { lang } = useLanguage()
-  const { isPlaying, currentSurah, togglePlay } = useGlobalAudio()
+  const { isPlaying, currentSurah, togglePlay, playbackRate, setPlaybackRate, isLooping, toggleLoop } = useGlobalAudio()
   const { activeConnections } = useMoonStore()
   const [mounted, setMounted] = useState(false)
   const [timeStr, setTimeStr] = useState("")
@@ -142,6 +142,25 @@ export function Taskbar() {
                 className="flex items-center justify-center p-1 transition-colors hover:text-cyan-400"
               >
                 <SkipForward className="h-3 w-3" />
+              </button>
+            </div>
+            
+            {/* Speed & Loop Controls */}
+            <div className="ml-2 flex items-center gap-2">
+              <button
+                onClick={toggleLoop}
+                aria-label="Toggle Loop"
+                className={`flex items-center justify-center p-1 transition-colors ${isLooping ? 'text-fuchsia-400' : 'text-cyan-400/50 hover:text-cyan-400'}`}
+              >
+                <Repeat className="h-3 w-3" />
+              </button>
+              <button
+                onClick={() => setPlaybackRate(playbackRate === 1 ? 1.5 : playbackRate === 1.5 ? 2 : 1)}
+                aria-label="Toggle Speed"
+                className="flex items-center gap-1 p-1 text-[9px] font-bold text-cyan-400/80 transition-colors hover:text-cyan-400"
+              >
+                <Gauge className="h-3 w-3" />
+                {playbackRate}x
               </button>
             </div>
           </div>

@@ -1,7 +1,8 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import { Target, Clock, AlertTriangle, Moon, Sun } from "lucide-react"
+import { Target, Clock, AlertTriangle, Moon, Sun, MapPin } from "lucide-react"
+import { useGeolocation } from "@core/hooks/use-geolocation"
 
 type PrayerTimesResponse = {
   date: string
@@ -23,19 +24,24 @@ export function PrayerTimesWidget() {
   const [error, setError] = useState("")
   const [currentTime, setCurrentTime] = useState(new Date())
 
+  const geo = useGeolocation()
+  
   // Refresh clock every second
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
     return () => clearInterval(timer)
   }, [])
 
-  // Fetch data on mount
+  // Fetch data when geolocation is ready
   useEffect(() => {
+    if (geo.loading) return
+
     const fetchPrayerTimes = async () => {
       try {
         setLoading(true)
-        // Optionally pass lat/lng from user config
-        const res = await fetch("/api/witness/astronomy/prayer-times?lat=-6.2&lng=106.8")
+        const lat = geo.lat || -6.2
+        const lng = geo.lng || 106.8
+        const res = await fetch(`/api/witness/astronomy/prayer-times?lat=${lat}&lng=${lng}`)
         if (!res.ok) throw new Error("Failed to fetch prayer times")
         const json = await res.json()
         setData(json)
@@ -46,7 +52,11 @@ export function PrayerTimesWidget() {
       }
     }
     fetchPrayerTimes()
-  }, [])
+    
+    // Auto-refresh every hour
+    const interval = setInterval(fetchPrayerTimes, 1000 * 60 * 60)
+    return () => clearInterval(interval)
+  }, [geo.lat, geo.lng, geo.loading])
 
   // Calculate next prayer and countdown
   let nextPrayerName = "FAJR"
@@ -126,9 +136,15 @@ export function PrayerTimesWidget() {
   return (
     <div className="bg-space/60 rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
-          Adhan Command
-        </h3>
+        <div>
+          <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
+            Adhan Command
+          </h3>
+          <p className="flex items-center gap-1 font-mono text-[9px] text-primary/70 uppercase tracking-widest mt-0.5">
+            <MapPin className="h-2.5 w-2.5" />
+            {geo.loading ? "LOCATING..." : geo.lat ? `${geo.lat.toFixed(2)}, ${geo.lng?.toFixed(2)}` : "DEFAULT LOC (JKT)"}
+          </p>
+        </div>
         <Target className="h-4 w-4 text-primary/50" />
       </div>
 

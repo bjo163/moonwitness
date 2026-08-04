@@ -12,6 +12,10 @@ type AudioContextState = {
   togglePlay: () => void
   volume: number
   setVolume: (val: number) => void
+  playbackRate: number
+  setPlaybackRate: (rate: number) => void
+  isLooping: boolean
+  toggleLoop: () => void
 }
 
 const AudioContext = createContext<AudioContextState | undefined>(undefined)
@@ -23,6 +27,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     name: "Al-Fatihah",
   })
   const [volume, setVolume] = useState(0.5)
+  const [playbackRate, setPlaybackRateState] = useState(1)
+  const [isLooping, setIsLooping] = useState(false)
   const soundRef = useRef<Howl | null>(null)
   const { toast } = useToast()
   const unlockAchievement = useAchievementStore(s => s.unlockAchievement)
@@ -36,12 +42,22 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  // Sync volume
+  // Sync volume & rate & loop
   useEffect(() => {
     if (soundRef.current) {
       soundRef.current.volume(volume)
+      soundRef.current.rate(playbackRate)
+      soundRef.current.loop(isLooping)
     }
-  }, [volume])
+  }, [volume, playbackRate, isLooping])
+
+  const setPlaybackRate = (rate: number) => {
+    setPlaybackRateState(rate)
+  }
+
+  const toggleLoop = () => {
+    setIsLooping(prev => !prev)
+  }
 
   const play = (surah: { number: number; name: string }) => {
     setCurrentSurah(surah)
@@ -61,6 +77,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       src: [url],
       html5: true,
       volume,
+      rate: playbackRate,
+      loop: isLooping,
       onplay: () => setIsPlaying(true),
       onpause: () => setIsPlaying(false),
       onend: () => setIsPlaying(false),
@@ -90,7 +108,12 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AudioContext.Provider
-      value={{ isPlaying, currentSurah, play, togglePlay, volume, setVolume }}
+      value={{ 
+        isPlaying, currentSurah, play, togglePlay, 
+        volume, setVolume, 
+        playbackRate, setPlaybackRate, 
+        isLooping, toggleLoop 
+      }}
     >
       {children}
     </AudioContext.Provider>

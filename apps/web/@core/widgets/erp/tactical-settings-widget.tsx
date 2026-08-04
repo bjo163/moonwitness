@@ -1,12 +1,19 @@
 "use client"
 
-import React, { useState } from "react"
-import { Settings, Shield, Bell, MapPin, Power } from "lucide-react"
+import React, { useState, useEffect } from "react"
+import { Settings, Shield, Bell, MapPin, Power, Moon, Sun } from "lucide-react"
+import { useTheme } from "next-themes"
 
 export function TacticalSettingsWidget() {
   const [stealth, setStealth] = useState(true)
   const [notifs, setNotifs] = useState(false)
   const [spoofLoc, setSpoofLoc] = useState(false)
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   return (
     <div className="bg-space/60 rounded-2xl border border-blue-500/20 p-5 backdrop-blur-xl">
@@ -68,6 +75,29 @@ export function TacticalSettingsWidget() {
             <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-white transition-transform ${spoofLoc ? 'left-4.5' : 'left-0.5'}`}></div>
           </button>
         </div>
+
+        {/* Theme Switcher */}
+        {mounted && (
+          <div className="flex items-center justify-between p-2 rounded-lg bg-black/20 hover:bg-black/40 transition-colors">
+            <div className="flex items-center gap-3">
+              {theme === "dark" ? (
+                <Moon className="h-4 w-4 text-cyan-400" />
+              ) : (
+                <Sun className="h-4 w-4 text-amber-400" />
+              )}
+              <div>
+                <div className="font-sans text-xs font-bold text-white">Visual Mode</div>
+                <div className="font-mono text-[9px] text-primary/60">Toggle Night/Day optics</div>
+              </div>
+            </div>
+            <button 
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className={`w-8 h-4 rounded-full transition-colors relative ${theme === 'dark' ? 'bg-cyan-500' : 'bg-amber-500'}`}
+            >
+              <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-white transition-transform ${theme === 'dark' ? 'left-4.5' : 'left-0.5'}`}></div>
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="mt-4 pt-4 border-t border-blue-500/20">

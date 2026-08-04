@@ -18,7 +18,7 @@ import { PrayerTimesWidget } from "./prayer-times-widget"
 import { HijriCalendarWidget } from "./hijri-calendar-widget"
 import { AsmaulHusnaWidget } from "./asmaul-husna-widget"
 import { TacticalSettingsWidget } from "./tactical-settings-widget"
-import { AchievementWidget, RamadanModeWidget } from "@core/widgets"
+import { AchievementWidget, RamadanModeWidget, GuildLeaderboardWidget, QuestWidget } from "@core/widgets"
 
 type GlobalMonitorItem = { name: string; value: string; status: string }
 type MissionStatus = {
@@ -238,7 +238,9 @@ export function ErpRightSidebar({
       <PrayerTimesWidget />
       <GlobalMonitoringWidget monitoring={monitoring} />
       <MissionStatusWidget status={status} />
+      <QuestWidget />
       <AchievementWidget />
+      <GuildLeaderboardWidget />
       <QuickActionsWidget />
       <TacticalSettingsWidget />
     </div>

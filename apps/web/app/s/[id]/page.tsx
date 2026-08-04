@@ -5,6 +5,7 @@ import { InspirationCommentsClient } from "@modules/knowledge/components/inspira
 import { cleanHadithText } from "@core/utils/hadith-cleaner"
 import { ContextBlock } from "@core/ui"
 import { moonClientInstance } from "@core/store/moon-store"
+import { VerseInsightTooltip } from "@core/widgets"
 
 type PageProps = {
   params: Promise<{
@@ -178,40 +179,42 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
         </div>
 
         {/* Ayah Card */}
-        <div className="bg-space/90 space-y-4 panel-glass p-6 card-clip">
-          <div
-            className="arabic-text py-2 text-right text-2xl leading-[2.3] font-bold text-foreground sm:text-4xl"
-            style={{ textShadow: "0 0 10px rgba(0,240,255,0.15)" }}
-          >
-            {ayahData.textArabic}
-          </div>
+          <VerseInsightTooltip verseKey={`${surahNum}-${ayahNum}`} arabicText={ayahData.textArabic} translation={ayahData.textId || ayahData.textEn}>
+            <div className="bg-space/90 space-y-4 panel-glass p-6 card-clip">
+              <div
+                className="arabic-text py-2 text-right text-2xl leading-[2.3] font-bold text-foreground sm:text-4xl"
+                style={{ textShadow: "0 0 10px rgba(0,240,255,0.15)" }}
+              >
+                {ayahData.textArabic}
+              </div>
 
-          {ayahData.textLatin && (
-            <p
-              className="text-success font-serif text-xs font-bold italic sm:text-sm"
-              style={{ textShadow: "0 0 5px rgba(0,255,102,0.3)" }}
-            >
-              &ldquo;{ayahData.textLatin}&rdquo;
-            </p>
-          )}
+              {ayahData.textLatin && (
+                <p
+                  className="text-success font-serif text-xs font-bold italic sm:text-sm"
+                  style={{ textShadow: "0 0 5px rgba(0,255,102,0.3)" }}
+                >
+                  &ldquo;{ayahData.textLatin}&rdquo;
+                </p>
+              )}
 
-          <div className="bg-panel tag-clip border border-primary/20 p-4">
-            <p className="font-mono text-xs leading-relaxed text-foreground/90">
-              &ldquo;{ayahData.textId || ayahData.textEn}&rdquo;
-            </p>
-          </div>
+              <div className="bg-panel tag-clip border border-primary/20 p-4">
+                <p className="font-mono text-xs leading-relaxed text-foreground/90">
+                  &ldquo;{ayahData.textId || ayahData.textEn}&rdquo;
+                </p>
+              </div>
 
-          <div className="tag-clip border border-accent/30 bg-accent/5 p-4 text-xs">
-            <div className="mb-1 flex items-center gap-2 font-bold text-accent">
-              <span>💡</span>
-              <span>DIVINE TAFSIR & LORE NOTES:</span>
+              <div className="tag-clip border border-accent/30 bg-accent/5 p-4 text-xs">
+                <div className="mb-1 flex items-center gap-2 font-bold text-accent">
+                  <span>💡</span>
+                  <span>DIVINE TAFSIR & LORE NOTES:</span>
+                </div>
+                <p className="text-foreground/90 italic">
+                  &ldquo;Tadabbur tentang ketaatan semesta alam kepada Sang Maha
+                  Pencipta dan keagungan tauhid.&rdquo;
+                </p>
+              </div>
             </div>
-            <p className="text-foreground/90 italic">
-              &ldquo;Tadabbur tentang ketaatan semesta alam kepada Sang Maha
-              Pencipta dan keagungan tauhid.&rdquo;
-            </p>
-          </div>
-        </div>
+          </VerseInsightTooltip>
 
         {/* Asmaul Husna Pairs */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
