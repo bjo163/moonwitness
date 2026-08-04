@@ -119,11 +119,17 @@ export function useGlobalMonitoring() {
                 `/api/prayer-times?city=${encodeURIComponent(c.city)}&country=${encodeURIComponent(c.country)}`
               )
               const json = await res.json()
-              if (!json.data || !json.data.timings) return null
+              if (!json || !json.schedule) return null
               return {
                 city: c.city,
                 country: c.country,
-                prayerTimes: json.data.timings,
+                prayerTimes: {
+                  Fajr: json.schedule.subuh,
+                  Dhuhr: json.schedule.dzuhur,
+                  Asr: json.schedule.ashar,
+                  Maghrib: json.schedule.maghrib,
+                  Isha: json.schedule.isya
+                },
                 currentPrayer: "Checking...",
                 nextPrayer: "Checking...",
               }

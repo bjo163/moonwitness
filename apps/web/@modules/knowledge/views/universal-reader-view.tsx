@@ -17,6 +17,7 @@ import {
 import Link from "next/link"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useGlobalAudio } from "@core/contexts/audio-context"
+import { useMoonStore } from "@core/store/moon-store"
 
 function ReaderContent({ id }: { id: string }) {
   const [data, setData] = useState<any>(null)
@@ -31,6 +32,8 @@ function ReaderContent({ id }: { id: string }) {
   const currentBook = searchParams.get("book") || "1"
   const currentChapterStr = searchParams.get("chapter") || "1"
 
+  const { client: moonClient, user } = useMoonStore()
+
   useEffect(() => {
     setIsLoading(true)
     fetch(
@@ -41,12 +44,20 @@ function ReaderContent({ id }: { id: string }) {
         setData(json.data)
         setIsLoading(false)
         window.scrollTo(0, 0)
+        
+        // Auto-save history if logged in
+        if (user && json.data.book?.id) {
+           moonClient.model('wx.history').create({
+             userId: user.id,
+             bookId: json.data.book.id
+           }).catch(console.error)
+        }
       })
       .catch((err) => {
         console.error(err)
         setIsLoading(false)
       })
-  }, [id, currentBook, currentChapterStr])
+  }, [id, currentBook, currentChapterStr, user, moonClient])
 
   if (isLoading) {
     return (
@@ -271,8 +282,17 @@ function ReaderContent({ id }: { id: string }) {
                       : "Listen Audio"}
                   </button>
                 )}
-                <button className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 transition-colors hover:bg-white/10">
-                  <Bookmark className="h-4 w-4 text-white/60" />
+                <button 
+                  onClick={() => {
+                    if (!user) return alert("Please login to save bookmarks")
+                    moonClient.model('wx.bookmark').create({
+                      userId: user.id,
+                      bookId: book.id
+                    }).then(() => alert("Bookmark saved!"))
+                      .catch((err) => alert("Failed to save bookmark: " + err.message))
+                  }}
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 transition-colors hover:bg-white/10 hover:text-blue-400 group relative">
+                  <Bookmark className="h-4 w-4 text-white/60 group-hover:text-blue-400 transition-colors" />
                 </button>
               </div>
             </div>

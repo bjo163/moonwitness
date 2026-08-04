@@ -5,7 +5,7 @@ export default class WxBookmark extends Vertex {
   static _description = 'User Bookmark for Scripture Verses'
 
   userId = fields.Many2one({ comodel: 'vx.user', required: true, index: true })
-  surahId = fields.Many2one({ comodel: 'wx.surah', index: true })
-  ayahNumber = fields.Integer()
+  bookId = fields.Many2one({ comodel: 'wx.scripture.book', index: true })
+  verseId = fields.Many2one({ comodel: 'wx.scripture.verse', index: true })
   note = fields.Text()
 }

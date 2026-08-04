@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai"
 import { NextRequest, NextResponse } from "next/server"
+import { moonClientInstance } from "@core/store/moon-store"
 
 const SYSTEM_PROMPT = `
 You are MoonWitness KHIDRA AI (Prophetic Wisdom & Esoteric Scripture Intelligence). 
@@ -35,17 +36,16 @@ export async function POST(request: NextRequest) {
     const currentKey = keys[Math.floor(Math.random() * keys.length)]
     const ai = new GoogleGenAI({ apiKey: currentKey })
 
-    // 1. Fetch live data via moon api server (server-to-server, benefits from caching)
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"
+    // 1. Fetch live data via moonClientInstance (server-to-server)
     const [jktRes, nyRes, btcRes] = await Promise.all([
-      fetch(`${apiBase}/api/external/weather?latitude=-6.2088&longitude=106.8456&current_weather=true`),
-      fetch(`${apiBase}/api/external/weather?latitude=40.7128&longitude=-74.0060&current_weather=true`),
-      fetch(`${apiBase}/api/external/binance/ticker?symbol=BTCUSDT`),
+      moonClientInstance.request("GET", "/api/external/weather?latitude=-6.2088&longitude=106.8456&current_weather=true"),
+      moonClientInstance.request("GET", "/api/external/weather?latitude=40.7128&longitude=-74.0060&current_weather=true"),
+      moonClientInstance.request("GET", "/api/external/binance/ticker?symbol=BTCUSDT"),
     ])
 
-    const jktData = jktRes.ok ? await jktRes.json() : null
-    const nyData = nyRes.ok ? await nyRes.json() : null
-    const btcData = btcRes.ok ? await btcRes.json() : null
+    const jktData = jktRes.data || null
+    const nyData = nyRes.data || null
+    const btcData = btcRes.data || null
 
     const dataContext = `
 RAW INTELLIGENCE DATA FOR TODAY:

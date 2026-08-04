@@ -1,17 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
-
-const SUPABASE_URL =
-  process.env.SUPABASE_URL || "https://ixclyaugedwwptbqsozv.supabase.co"
-const SUPABASE_SECRET_KEY =
-  process.env.SUPABASE_SECRET_KEY || "sb_secret_qEdkK1vRFn3KDzxX5kkg4w_UnrZnKdT"
-
-function getAdminSupabaseClient() {
-  return createClient(SUPABASE_URL, SUPABASE_SECRET_KEY)
-}
+import { moonClientInstance } from "@core/store/moon-store"
 
 export async function GET(req: NextRequest) {
-  const sb = getAdminSupabaseClient()
   const { searchParams } = new URL(req.url)
 
   const fetchAll = searchParams.get("all") === "true"
@@ -19,23 +9,59 @@ export async function GET(req: NextRequest) {
   const dateStr = searchParams.get("date_str") || "2026-07-26"
 
   try {
-    let query = sb.from("inspiration_comments").select("*")
-
-    if (!fetchAll) {
-      query = query.eq("date_str", dateStr).eq("period_code", periodCode)
-    }
-
-    const { data: comments, error } = await query.order("created_at", {
-      ascending: false,
+    // Determine the resModel mapped string. Currently mapping to "wx.scripture.verse"
+    const resModel = "wx.scripture.verse" 
+    
+    // We map dateStr and periodCode to search filters.
+    // However, since fx.msg doesn't have periodCode and dateStr native fields,
+    // we assume the body is a stringified JSON containing these fields or we rely on 
+    // the target resModel. For simplicity, we just fetch all comments and filter in JS 
+    // if this is a small list, or better yet, MoonWitness might need a dedicated search
+    // But since the user allowed keeping mocks if it's too complex, let's keep it simple.
+    // Actually, we can just use `moonClientInstance.request` to search `fx.msg`.
+    
+    let domain: any[] = [["resModel", "=", resModel]]
+    
+    const json = await moonClientInstance.request("GET", `/api/fx.msg?domain=${encodeURIComponent(JSON.stringify(domain))}`)
+    if (json.error) throw new Error(json.error)
+      
+    let comments = json.data || []
+    
+    // Convert fx.msg format back to the frontend shape
+    let formattedComments = comments.map((msg: any) => {
+      let meta: any = {}
+      try {
+        meta = JSON.parse(msg.body)
+      } catch (e) {
+        meta = { comment_text: msg.body }
+      }
+      return {
+        id: msg.id,
+        period_code: meta.period_code || "zuhur",
+        date_str: meta.date_str || "2026-07-26",
+        item_type: "AYAH",
+        item_id: msg.resId,
+        user_email: meta.user_email || "anonymous@moon.io",
+        user_name: meta.user_name || "Anonymous",
+        user_role: meta.user_role || "public",
+        user_avatar: meta.user_avatar || "🌙",
+        comment_text: meta.comment_text || msg.body,
+        likes_count: meta.likes_count || 0,
+        created_at: msg.createdAt,
+      }
     })
 
-    if (error) throw error
+    if (!fetchAll) {
+      formattedComments = formattedComments.filter(
+        (c: any) => c.date_str === dateStr && c.period_code === periodCode
+      )
+    }
 
     return NextResponse.json({
       period_code: fetchAll ? "ALL" : periodCode,
       date_str: fetchAll ? "ALL" : dateStr,
-      count: comments ? comments.length : 0,
-      comments: comments || [],
+      count: formattedComments.length,
+      comments: formattedComments,
     })
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 })
@@ -43,8 +69,6 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const sb = getAdminSupabaseClient()
-
   try {
     const body = await req.json()
     const {
@@ -73,11 +97,10 @@ export async function POST(req: NextRequest) {
         ? "admin"
         : "public")
 
-    const newComment = {
+    const newCommentMeta = {
       period_code: period_code || "zuhur",
       date_str: date_str || new Date().toISOString().split("T")[0],
       item_type: item_type || "AYAH",
-      item_id: item_id || 1,
       user_email: cleanEmail,
       user_name: user_name.trim(),
       user_role: role,
@@ -86,46 +109,23 @@ export async function POST(req: NextRequest) {
       likes_count: 0,
     }
 
-    const { data, error } = await sb
-      .from("inspiration_comments")
-      .insert([newComment])
-      .select()
-      .single()
-
-    if (error) {
-      // Fallback response if user_email or user_role column cache is pending
-      const fallbackComment = {
-        period_code: period_code || "zuhur",
-        date_str: date_str || new Date().toISOString().split("T")[0],
-        item_type: item_type || "AYAH",
-        item_id: item_id || 1,
-        user_name: user_name.trim(),
-        user_avatar: user_avatar || (role === "admin" ? "👑" : "🌙"),
-        comment_text: comment_text.trim(),
-        likes_count: 0,
-      }
-
-      const { data: fbData, error: fbErr } = await sb
-        .from("inspiration_comments")
-        .insert([fallbackComment])
-        .select()
-        .single()
-
-      if (fbErr) throw fbErr
-      return NextResponse.json({
-        success: true,
-        comment: { ...fbData, user_email: cleanEmail, user_role: role },
-      })
+    const fxMsgPayload = {
+      resModel: "wx.scripture.verse",
+      resId: item_id || 1,
+      messageType: "comment",
+      body: JSON.stringify(newCommentMeta)
     }
 
-    return NextResponse.json({ success: true, comment: data })
+    const json = await moonClientInstance.request("POST", "/api/fx.msg", fxMsgPayload)
+    if (json.error) throw new Error(json.error)
+
+    return NextResponse.json({ success: true, comment: { ...newCommentMeta, id: json.data?.id, item_id: fxMsgPayload.resId } })
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }
 
 export async function DELETE(req: NextRequest) {
-  const sb = getAdminSupabaseClient()
   const { searchParams } = new URL(req.url)
   const id = searchParams.get("id")
 
@@ -137,12 +137,8 @@ export async function DELETE(req: NextRequest) {
   }
 
   try {
-    const { error } = await sb
-      .from("inspiration_comments")
-      .delete()
-      .eq("id", id)
-
-    if (error) throw error
+    const json = await moonClientInstance.request("DELETE", `/api/fx.msg/${id}`)
+    if (json.error) throw new Error(json.error)
 
     return NextResponse.json({
       success: true,

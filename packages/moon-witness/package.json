@@ -25,6 +25,7 @@
     "orm-addon"
   ],
   "dependencies": {
+    "@moon/cache": "workspace:*",
     "@moon/orm": "workspace:*",
     "@moon/server": "workspace:*",
     "adhan": "^4.4.4",

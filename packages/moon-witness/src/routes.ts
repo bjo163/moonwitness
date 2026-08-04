@@ -8,6 +8,7 @@ import { globalRoutes } from '@moon/server/dist/router.js'
 import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm'
 import { getMoonData } from './astronomy/moon-phase.js'
 import { getIslamicData, getDailyPrayerTimes } from './astronomy/prayer-times.js'
+import { cache } from '@moon/cache'
 
 const CORS = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
 
@@ -329,6 +330,166 @@ globalRoutes.push({
   }
 })
 
+// ═══════════════════════════════════════════
+// 🌍 EXTERNAL DATA PROXIES (MOCK / REAL)
+// ═══════════════════════════════════════════
+
+globalRoutes.push({
+  method: 'GET',
+  path: '/api/external/usgs/earthquakes',
+  handler: async (_req: any, res: any) => {
+    try {
+      const resp = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson')
+      const data = await resp.json()
+      ok(res, data)
+    } catch (e: any) { err(res, 500, e.message) }
+  }
+})
+
+globalRoutes.push({
+  method: 'GET',
+  path: '/api/external/iss',
+  handler: async (_req: any, res: any) => {
+    try {
+      const resp = await fetch('http://api.open-notify.org/iss-now.json')
+      const data = await resp.json()
+      ok(res, data)
+    } catch (e: any) { err(res, 500, e.message) }
+  }
+})
+
+globalRoutes.push({
+  method: 'GET',
+  path: '/api/external/trends',
+  handler: async (_req: any, res: any) => {
+    try {
+      const resp = await fetch("https://trends.google.com/trending/rss?geo=US&t=" + Date.now(), {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        }
+      })
+      const xmlText = await resp.text()
+      const items = []
+      const itemRegex = /<item>([\s\S]*?)<\/item>/g
+      let match
+      while ((match = itemRegex.exec(xmlText)) !== null) {
+        const itemContent = match[1]
+        if (!itemContent) continue
+        const titleMatch = /<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>/.exec(itemContent)
+        const trafficMatch = /<ht:approx_traffic>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/ht:approx_traffic>/.exec(itemContent)
+        const pubDateMatch = /<pubDate>(.*?)<\/pubDate>/.exec(itemContent)
+        if (titleMatch) {
+          items.push({
+            title: titleMatch[1],
+            traffic: trafficMatch ? trafficMatch[1] : "Unknown",
+            pubDate: pubDateMatch ? pubDateMatch[1] : "",
+          })
+        }
+      }
+      ok(res, items.slice(0, 10))
+    } catch (e: any) { err(res, 500, e.message) }
+  }
+})
+
+globalRoutes.push({
+  method: 'GET',
+  path: '/api/external/nasa/donki/cme',
+  handler: async (req: any, res: any) => {
+    try {
+      const query = parseQuery(req.url)
+      const startDate = query.startDate || new Date().toISOString().split('T')[0]
+      const data = await cache.remember(`nasa-cme-${startDate}`, 3600, async () => {
+        const resp = await fetch(`https://api.nasa.gov/DONKI/CME?startDate=${startDate}&api_key=DEMO_KEY`)
+        return await resp.json()
+      })
+      ok(res, data)
+    } catch (e: any) { err(res, 500, e.message) }
+  }
+})
+
+globalRoutes.push({
+  method: 'GET',
+  path: '/api/external/opensky',
+  handler: async (_req: any, res: any) => {
+    try {
+      const data = await cache.remember('opensky-europe', 300, async () => {
+        const resp = await fetch('https://opensky-network.org/api/states/all?lamin=45.8389&lomin=5.9962&lamax=47.8229&lomax=10.4921')
+        return await resp.json()
+      })
+      ok(res, data)
+    } catch (e: any) { err(res, 500, e.message) }
+  }
+})
+
+globalRoutes.push({
+  method: 'GET',
+  path: '/api/external/weather',
+  handler: async (req: any, res: any) => {
+    try {
+      const query = parseQuery(req.url)
+      const lat = query.latitude || '-6.2'
+      const lng = query.longitude || '106.8'
+      const data = await cache.remember(`weather-${lat}-${lng}`, 1800, async () => {
+        const resp = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`)
+        return await resp.json()
+      })
+      ok(res, data)
+    } catch (e: any) { err(res, 500, e.message) }
+  }
+})
+
+globalRoutes.push({
+  method: 'GET',
+  path: '/api/external/binance/ticker',
+  handler: async (req: any, res: any) => {
+    try {
+      const query = parseQuery(req.url)
+      const symbol = query.symbol || 'BTCUSDT'
+      const data = await cache.remember(`binance-${symbol}`, 60, async () => {
+        const resp = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`)
+        return await resp.json()
+      })
+      ok(res, data)
+    } catch (e: any) { err(res, 500, e.message) }
+  }
+})
+
+globalRoutes.push({
+  method: 'GET',
+  path: '/api/witness/bookmarks',
+  handler: async (req: any, res: any) => {
+    try {
+      const query = parseQuery(req.url)
+      const userId = parseInt(query.userId || '0')
+      if (!userId) return err(res, 401, 'User ID required')
+
+      const Bookmark = getModel('wx.bookmark')
+      if (!Bookmark) return err(res, 500, 'Model not found')
+      
+      const results = await (Bookmark as any).fetch(Bookmark, env(), [['userId', '=', userId]], undefined, { with: ['bookId', 'verseId'] })
+      ok(res, results)
+    } catch (e: any) { err(res, 500, e.message) }
+  }
+})
+
+globalRoutes.push({
+  method: 'GET',
+  path: '/api/witness/history',
+  handler: async (req: any, res: any) => {
+    try {
+      const query = parseQuery(req.url)
+      const userId = parseInt(query.userId || '0')
+      if (!userId) return err(res, 401, 'User ID required')
+
+      const History = getModel('wx.history')
+      if (!History) return err(res, 500, 'Model not found')
+      
+      const results = await (History as any).fetch(History, env(), [['userId', '=', userId]], undefined, { with: ['bookId', 'lastVerseId'], order: 'updatedAt DESC' })
+      ok(res, results)
+    } catch (e: any) { err(res, 500, e.message) }
+  }
+})
+
 export function registerWitnessRoutes() {
-  console.log('[moon-witness] 11 custom API routes registered')
+  console.log('[moon-witness] custom API routes registered')
 }

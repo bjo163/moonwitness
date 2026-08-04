@@ -51,6 +51,9 @@ export const useMoonStore = create<MoonState>()(
         const res = await moonClientInstance.login(email, pass)
         // Store user details in state
         set({ user: { ...res.user, token: res.token } })
+        if (typeof document !== 'undefined') {
+          document.cookie = `moon_token=${res.token}; path=/; max-age=86400`
+        }
       } catch (err) {
         console.error("MoonStore Login Failed:", err)
         throw err
@@ -98,6 +101,9 @@ export const useMoonStore = create<MoonState>()(
     logout: () => {
       moonClientInstance.setToken('')
       set({ user: null })
+      if (typeof document !== 'undefined') {
+        document.cookie = 'moon_token=; path=/; max-age=0'
+      }
       if (typeof window !== 'undefined') {
         localStorage.removeItem('moon_token')
       }

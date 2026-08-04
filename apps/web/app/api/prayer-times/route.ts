@@ -1,31 +1,37 @@
 import { NextRequest, NextResponse } from "next/server"
+import { getDailyPrayerTimes } from "@moon/witness/dist/astronomy/prayer-times.js"
+
+const CITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
+  "Makkah, Saudi Arabia": { lat: 21.3891, lng: 39.8579 },
+  "Jakarta, Indonesia": { lat: -6.2088, lng: 106.8456 },
+  "London, United Kingdom": { lat: 51.5074, lng: -0.1278 },
+  "New York, United States": { lat: 40.7128, lng: -74.0060 },
+  "Tokyo, Japan": { lat: 35.6762, lng: 139.6503 },
+}
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const city = searchParams.get("city") || "Jakarta"
   const country = searchParams.get("country") || "Indonesia"
+  const locationKey = `${city}, ${country}`
 
   try {
-    // 1. Fetch accurate live prayer timings from Aladhan API (Kemenag Indonesia method = 20)
-    const res = await fetch(
-      `https://api.aladhan.com/v1/timingsByCity?city=${encodeURIComponent(city)}&country=${encodeURIComponent(country)}&method=20`
-    )
+    const coords = CITY_COORDINATES[locationKey] || CITY_COORDINATES["Jakarta, Indonesia"]!
+    
+    // 1. Compute locally using the MoonWitness Astronomy Engine
+    const dailyTimes = getDailyPrayerTimes(coords.lat, coords.lng, new Date())
+    
+    const formatTime = (d: Date) =>
+      `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`
 
     let timings = {
-      Fajr: "04:35",
-      Sunrise: "05:50",
-      Dhuhr: "12:00",
-      Asr: "15:20",
-      Sunset: "17:55",
-      Maghrib: "17:55",
-      Isha: "19:05",
-    }
-
-    if (res.ok) {
-      const json = await res.json()
-      if (json && json.data && json.data.timings) {
-        timings = json.data.timings
-      }
+      Fajr: formatTime(dailyTimes.fajr),
+      Sunrise: formatTime(dailyTimes.sunrise),
+      Dhuhr: formatTime(dailyTimes.dhuhr),
+      Asr: formatTime(dailyTimes.asr),
+      Sunset: formatTime(dailyTimes.maghrib),
+      Maghrib: formatTime(dailyTimes.maghrib),
+      Isha: formatTime(dailyTimes.isha),
     }
 
     const prayerSchedule = {
@@ -107,7 +113,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       city: `${city}, ${country}`,
-      source: "Aladhan Official API (Kemenag Indonesia Method)",
+      source: "MoonWitness Astronomy Engine (Internal)",
       schedule: prayerSchedule,
       nextPrayer: {
         name: nextPrayer.name,

@@ -7,7 +7,7 @@ import { ContextBlock } from "@core/ui"
 type Node = {
   id: string
   label: string
-  type: "person" | "place" | "event" | "concept"
+  type: "person" | "place" | "event" | "concept" | "book"
   x: number
   y: number
   vx: number
@@ -216,9 +216,39 @@ const KNOWLEDGE_EDGES: Edge[] = [
   { source: "n17", target: "n3", strength: 0.6 },
 ]
 
+import { useMoonStore } from "@core/store/moon-store"
+
 export function IntelligenceGraphView() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [hoveredNode, setHoveredNode] = useState<Node | null>(null)
+  const { client } = useMoonStore()
+  
+  const [nodes, setNodes] = useState<Node[]>(KNOWLEDGE_NODES)
+  const [edges, setEdges] = useState<Edge[]>(KNOWLEDGE_EDGES)
+
+  useEffect(() => {
+    client.model('wx.scripture.book').fetch().then((books: any[]) => {
+      const bookNodes: Node[] = books.map((b, i) => ({
+        id: `book_${b.id}`,
+        label: b.name,
+        type: "book",
+        x: Math.random() * 800,
+        y: Math.random() * 600,
+        vx: (Math.random() - 0.5) * 1,
+        vy: (Math.random() - 0.5) * 1,
+        radius: 28,
+      }))
+      
+      const bookEdges: Edge[] = books.map((b) => ({
+        source: "n12", // Connecting to Makkah/Madinah conceptually
+        target: `book_${b.id}`,
+        strength: 0.6
+      }))
+
+      setNodes([...KNOWLEDGE_NODES, ...bookNodes])
+      setEdges([...KNOWLEDGE_EDGES, ...bookEdges])
+    }).catch(console.error)
+  }, [client])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -238,8 +268,8 @@ export function IntelligenceGraphView() {
     resizeCanvas()
     window.addEventListener("resize", resizeCanvas)
 
-    // Initialize random positions
-    KNOWLEDGE_NODES.forEach((n) => {
+    // Initialize random positions for all active nodes
+    nodes.forEach((n) => {
       n.x = Math.random() * canvas.width
       n.y = Math.random() * canvas.height
       n.vx = (Math.random() - 0.5) * 1
@@ -260,6 +290,7 @@ export function IntelligenceGraphView() {
       if (type === "person") return "#00f0ff" // cyan
       if (type === "place") return "#00ff66" // green
       if (type === "event") return "#ff3366" // red
+      if (type === "book") return "#b829ff" // purple
       return "#ffaa00" // warning (concept)
     }
 
@@ -270,7 +301,7 @@ export function IntelligenceGraphView() {
       let currentlyHovered: Node | null = null
 
       // Physics and movement
-      KNOWLEDGE_NODES.forEach((n) => {
+      nodes.forEach((n) => {
         n.x += n.vx
         n.y += n.vy
 
@@ -288,9 +319,9 @@ export function IntelligenceGraphView() {
       setHoveredNode(currentlyHovered)
 
       // Draw Edges
-      KNOWLEDGE_EDGES.forEach((edge) => {
-        const source = KNOWLEDGE_NODES.find((n) => n.id === edge.source)
-        const target = KNOWLEDGE_NODES.find((n) => n.id === edge.target)
+      edges.forEach((edge) => {
+        const source = nodes.find((n) => n.id === edge.source)
+        const target = nodes.find((n) => n.id === edge.target)
         if (!source || !target) return
 
         const isHighlighted =
@@ -317,7 +348,7 @@ export function IntelligenceGraphView() {
 
       // Draw Nodes
       ctx.shadowBlur = 0
-      KNOWLEDGE_NODES.forEach((n) => {
+      nodes.forEach((n) => {
         const isHovered = currentlyHovered?.id === n.id
         const color = getColor(n.type)
 
@@ -352,7 +383,7 @@ export function IntelligenceGraphView() {
       canvas.removeEventListener("mousemove", handleMouseMove)
       cancelAnimationFrame(animationFrameId)
     }
-  }, [])
+  }, [nodes, edges])
 
   return (
     <>
@@ -392,6 +423,9 @@ export function IntelligenceGraphView() {
             </span>
             <span className="flex items-center gap-1">
               <span className="h-2 w-2 rounded-full bg-[#ffaa00]" /> KONSEP
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="h-2 w-2 rounded-full bg-[#b829ff]" /> KITAB/SUMBER
             </span>
           </div>
         </div>

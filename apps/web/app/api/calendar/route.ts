@@ -4,28 +4,32 @@ import { PROPHETIC_EVENTS } from "../../../@core/db/data/prophetic-events.db"
 export async function GET() {
   try {
     const today = new Date()
-    const month = today.getMonth() + 1 // 1-12
+    const month = today.getMonth()
     const year = today.getFullYear()
+    const numDays = new Date(year, month + 1, 0).getDate()
+    const daysArray = Array.from({ length: numDays }, (_, i) => new Date(year, month, i + 1))
 
-    // Fetch Aladhan Gregorian to Hijri calendar for this month
-    const res = await fetch(
-      `http://api.aladhan.com/v1/gToHCalendar/${month}/${year}`
-    )
+    const hijriFormatter = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {
+      day: 'numeric', month: 'numeric', year: 'numeric'
+    })
+    const hijriMonthFormatter = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {
+      month: 'long'
+    })
+    const gregMonthFormatter = new Intl.DateTimeFormat('en', { month: 'long' })
 
-    if (!res.ok) {
-      throw new Error(`Aladhan API Error: ${res.status}`)
-    }
+    const formattedDays = daysArray.map(date => {
+      const hijriParts = hijriFormatter.formatToParts(date).reduce((acc, part) => {
+        acc[part.type] = part.value
+        return acc
+      }, {} as any)
+      
+      const hijriMonthName = hijriMonthFormatter.format(date).split(" ")[0]
 
-    const json = await res.json()
-    const data = json.data
+      const hijriDay = parseInt(hijriParts.day || "1", 10)
+      const hijriMonthNumber = parseInt(hijriParts.month || "1", 10)
+      const isAyyamulBidh = hijriDay === 13 || hijriDay === 14 || hijriDay === 15
 
-    const formattedDays = data.map((item: any) => {
-      const hijriDay = parseInt(item.hijri.day, 10)
-      const hijriMonthNumber = item.hijri.month.number
-      const isAyyamulBidh =
-        hijriDay === 13 || hijriDay === 14 || hijriDay === 15
-
-      // Calculate Phase Approximations (since Aladhan doesn't provide phases)
+      // Calculate Phase Approximations
       let phaseName = "Waxing Crescent"
       let illumination = Math.min(100, Math.round((hijriDay / 15) * 100))
       let icon = "🌒"
@@ -69,19 +73,18 @@ export async function GET() {
 
       return {
         hijriDay,
-        hijriMonthName: item.hijri.month.en,
-        hijriYear: item.hijri.year,
-        gregorianDate: item.gregorian.date, // DD-MM-YYYY
-        gregorianDay: parseInt(item.gregorian.day, 10),
-        gregorianMonthName: item.gregorian.month.en,
-        gregorianYear: item.gregorian.year,
+        hijriMonthName,
+        hijriYear: hijriParts.year,
+        gregorianDate: `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`,
+        gregorianDay: date.getDate(),
+        gregorianMonthName: gregMonthFormatter.format(date),
+        gregorianYear: date.getFullYear(),
         phaseName,
         illumination,
         isAyyamulBidh,
         icon,
-        holidays: item.hijri.holidays || [],
-        propheticEvents:
-          propheticEvents.length > 0 ? propheticEvents : undefined,
+        holidays: [],
+        propheticEvents: propheticEvents.length > 0 ? propheticEvents : undefined,
         moonrise: `${String((18 + Math.floor(hijriDay * 0.8)) % 24).padStart(2, "0")}:15 WIB`,
         moonset: `${String((5 + Math.floor(hijriDay * 0.8)) % 24).padStart(2, "0")}:45 WIB`,
       }

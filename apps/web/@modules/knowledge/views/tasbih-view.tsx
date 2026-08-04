@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useLanguage } from "@core/contexts"
 import { playClickSound } from "@core/utils/sound-feedback"
 import { Target, Award, RotateCcw } from "lucide-react"
 import { ContextBlock } from "@core/ui"
+import { useMoonStore } from "@core/store/moon-store"
 
 type ZikrPreset = {
   id: string
@@ -42,18 +43,54 @@ const ZIKR_PRESETS: ZikrPreset[] = [
 
 export function TasbihView() {
   const { t } = useLanguage()
+  const { user, client: moonClient } = useMoonStore()
 
   const [activeZikr, setActiveZikr] = useState<ZikrPreset>(ZIKR_PRESETS[0]!)
   const [count, setCount] = useState(0)
   const [targetCount, setTargetCount] = useState(33)
   const [completedLoops, setCompletedLoops] = useState(0)
+  const [devotionId, setDevotionId] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (user) {
+      moonClient.model('wx.devotion')
+        .where('userId', user.id)
+        .where('devotionType', 'dhikr')
+        .fetch()
+        .then((res: any) => {
+          if (res && res.length > 0) {
+            setDevotionId(res[0].id)
+            setCompletedLoops(res[0].count || 0)
+          }
+        })
+        .catch(console.error)
+    }
+  }, [user, moonClient])
+
+  function saveDevotion(loops: number) {
+    if (!user) return
+    if (devotionId) {
+      moonClient.model('wx.devotion').update(devotionId, { count: loops }).catch(console.error)
+    } else {
+      moonClient.model('wx.devotion').create({
+        userId: user.id,
+        devotionType: 'dhikr',
+        count: loops,
+        notes: activeZikr.latin
+      }).then((res: any) => {
+        if (res?.id) setDevotionId(res.id)
+      }).catch(console.error)
+    }
+  }
 
   function handleIncrement() {
     playClickSound()
     const nextCount = count + 1
     if (nextCount >= targetCount) {
       setCount(0)
-      setCompletedLoops((prev) => prev + 1)
+      const newLoops = completedLoops + 1
+      setCompletedLoops(newLoops)
+      saveDevotion(newLoops)
     } else {
       setCount(nextCount)
     }
@@ -63,6 +100,9 @@ export function TasbihView() {
     playClickSound()
     setCount(0)
     setCompletedLoops(0)
+    if (devotionId) {
+      moonClient.model('wx.devotion').update(devotionId, { count: 0 }).catch(console.error)
+    }
   }
 
   return (
