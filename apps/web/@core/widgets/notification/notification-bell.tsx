@@ -13,6 +13,11 @@ export function NotificationBell() {
   const markAllAsRead = useNotificationStore((s) => s.markAllAsRead)
   const clearAll = useNotificationStore((s) => s.clearAll)
   const panelRef = useRef<HTMLDivElement>(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -42,7 +47,7 @@ export function NotificationBell() {
         className="relative flex h-9 w-9 items-center justify-center rounded-full border border-cyan-500/30 bg-black/40 text-cyan-400 transition-colors hover:border-cyan-400 hover:bg-cyan-950/50 hover:text-cyan-300"
       >
         <Bell className="h-4 w-4" />
-        {unreadCount > 0 && (
+        {mounted && unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white shadow-[0_0_8px_#EF4444]">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
