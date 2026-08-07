@@ -11,6 +11,7 @@ import WxHistory from './models/wx-history.js'
 // Astronomy (pure compute — no DB)
 export { getMoonData, type MoonData } from './astronomy/moon-phase.js'
 export { getIslamicData, getDailyPrayerTimes, type PrayerData, type DailyPrayerTimes } from './astronomy/prayer-times.js'
+export { getSunPosition, getDuhaTime, type SunPositionData, type DuhaTimeData, type DuhaStatus } from './astronomy/sun-position.js'
 
 // Routes
 export { registerWitnessRoutes } from './routes.js'

@@ -1,12 +1,17 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useMounted, useKonami } from "@core/hooks"
 import { flushOfflineQueue } from "@core/utils/offline-sync"
 
 export function PwaRegister() {
   const [isOffline, setIsOffline] = useState(false)
   const [installPromptEvent, setInstallPromptEvent] = useState<any>(null)
   const [showInstallBanner, setShowInstallBanner] = useState(false)
+  const mounted = useMounted()
+  
+  // Enable Easter egg globally
+  useKonami()
 
   useEffect(() => {
     if (typeof window !== "undefined" && "serviceWorker" in navigator) {

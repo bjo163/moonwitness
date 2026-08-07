@@ -60,7 +60,7 @@ export function ZakatCalculatorWidget() {
                 value={cash || ""}
                 onChange={(e) => setCash(Number(e.target.value))}
                 placeholder="0"
-                className="w-full bg-black/40 border border-amber-500/20 rounded-lg pl-10 pr-3 py-2 text-sm text-white font-mono focus:outline-none focus:border-amber-500/50 transition-colors"
+                className="w-full bg-black/40 border border-amber-500/20 rounded-lg pl-10 pr-3 py-2 text-base text-white font-mono focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all"
               />
             </div>
           </div>
@@ -74,7 +74,7 @@ export function ZakatCalculatorWidget() {
                   value={gold || ""}
                   onChange={(e) => setGold(Number(e.target.value))}
                   placeholder="0"
-                  className="w-full bg-black/40 border border-amber-500/20 rounded-lg pl-9 pr-2 py-2 text-sm text-white font-mono focus:outline-none focus:border-amber-500/50 transition-colors"
+                  className="w-full bg-black/40 border border-amber-500/20 rounded-lg pl-9 pr-2 py-2 text-base text-white font-mono focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all"
                 />
               </div>
             </div>
@@ -87,7 +87,7 @@ export function ZakatCalculatorWidget() {
                   value={silver || ""}
                   onChange={(e) => setSilver(Number(e.target.value))}
                   placeholder="0"
-                  className="w-full bg-black/40 border border-amber-500/20 rounded-lg pl-9 pr-2 py-2 text-sm text-white font-mono focus:outline-none focus:border-amber-500/50 transition-colors"
+                  className="w-full bg-black/40 border border-amber-500/20 rounded-lg pl-9 pr-2 py-2 text-base text-white font-mono focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all"
                 />
               </div>
             </div>

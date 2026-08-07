@@ -304,50 +304,55 @@ export function InspirationCommentsClient({
           )}
         </p>
       ) : (
-        <div className="space-y-2.5">
-          {comments.map((c) => {
-            const isAdmin = c.user_role === "admin" || c.user_avatar === "👑"
-
-            return (
-              <div
-                key={c.id}
-                className={`space-y-1.5 panel-glass p-3.5 card-clip ${
-                  isAdmin
-                    ? "border-secondary/40 bg-secondary/10"
-                    : "bg-panel border-primary/20"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="badge-clip flex h-6 w-6 shrink-0 items-center justify-center bg-primary/20 text-xs">
-                      {c.user_avatar || (isAdmin ? "👑" : "🌙")}
-                    </span>
-                    <span className="text-xs font-bold text-foreground">
-                      {c.user_name}
-                    </span>
-
-                    {isAdmin && (
-                      <span className="tag-clip tag-clip-purple tag-clip py-0 text-[8px]">
-                        👑 ADMIN
+        <div className="relative mt-2">
+          {/* Holographic fade at the bottom */}
+          <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-12 bg-gradient-to-t from-[#040C1A] to-transparent" />
+          
+          <div className="space-y-2.5 max-h-[400px] overflow-y-auto hide-scrollbar pb-12" style={{ maskImage: "linear-gradient(to bottom, black 85%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, black 85%, transparent 100%)" }}>
+            {comments.map((c) => {
+              const isAdmin = c.user_role === "admin" || c.user_avatar === "👑"
+  
+              return (
+                <div
+                  key={c.id}
+                  className={`space-y-1.5 panel-glass p-3.5 card-clip ${
+                    isAdmin
+                      ? "border-secondary/40 bg-secondary/10"
+                      : "bg-panel border-primary/20"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="badge-clip flex h-6 w-6 shrink-0 items-center justify-center bg-primary/20 text-xs">
+                        {c.user_avatar || (isAdmin ? "👑" : "🌙")}
                       </span>
-                    )}
+                      <span className="text-xs font-bold text-foreground">
+                        {c.user_name}
+                      </span>
+  
+                      {isAdmin && (
+                        <span className="tag-clip tag-clip-purple tag-clip py-0 text-[8px]">
+                          👑 ADMIN
+                        </span>
+                      )}
+                    </div>
+  
+                    <span className="text-[9px] text-primary">
+                      {new Date(c.created_at).toLocaleTimeString("id-ID", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}{" "}
+                      WIB
+                    </span>
                   </div>
-
-                  <span className="text-[9px] text-primary">
-                    {new Date(c.created_at).toLocaleTimeString("id-ID", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}{" "}
-                    WIB
-                  </span>
+  
+                  <p className="pl-8 font-mono text-xs leading-relaxed text-foreground/90">
+                    "{c.comment_text}"
+                  </p>
                 </div>
-
-                <p className="pl-8 font-mono text-xs leading-relaxed text-foreground/90">
-                  "{c.comment_text}"
-                </p>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
       )}
     </div>

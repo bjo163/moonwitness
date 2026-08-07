@@ -1,6 +1,7 @@
 import { defineModule } from "@modules/define-module"
 import { CelestialEventsView } from "./views/celestial-events-view"
 import { DivineAstronomyView } from "./views/divine-astronomy-view"
+import { SunPositionView } from "./views/sun-position-view"
 
 /**
  * Astronomy Module — MoonWitness OS
@@ -28,5 +29,12 @@ export default defineModule({
       icon: "Orbit",
       component: DivineAstronomyView,
     },
+    {
+      slug: "sun-position",
+      label: "Sun Position & Duha",
+      icon: "Sun",
+      component: SunPositionView,
+    },
   ],
 })
+

@@ -1,11 +1,13 @@
+import dynamic from "next/dynamic"
 import { defineModule } from "@modules/define-module"
-import { DailyTransmissionView } from "./views/daily-transmission-view"
-import { GlobalMonitoringView } from "./views/global-monitoring-view"
-import { LunarCalendarView } from "./views/lunar-calendar-view"
-import { EclipseTrackerView } from "./views/eclipse-tracker-view"
-import { QiblaArView } from "./views/qibla-ar-view"
-import { AtmosphericRadarView } from "./views/atmospheric-radar-view"
-import { CelestialStarMapView } from "./views/celestial-star-map-view"
+
+const DailyTransmissionView = dynamic(() => import("./views/daily-transmission-view").then(m => m.DailyTransmissionView))
+const GlobalMonitoringView = dynamic(() => import("./views/global-monitoring-view").then(m => m.GlobalMonitoringView))
+const LunarCalendarView = dynamic(() => import("./views/lunar-calendar-view").then(m => m.LunarCalendarView))
+const EclipseTrackerView = dynamic(() => import("./views/eclipse-tracker-view").then(m => m.EclipseTrackerView))
+const QiblaArView = dynamic(() => import("./views/qibla-ar-view").then(m => m.QiblaArView))
+const AtmosphericRadarView = dynamic(() => import("./views/atmospheric-radar-view").then(m => m.AtmosphericRadarView))
+const CelestialStarMapView = dynamic(() => import("./views/celestial-star-map-view").then(m => m.CelestialStarMapView))
 
 /**
  * Observatory Module — MoonWitness OS

@@ -15,6 +15,10 @@ function env() {
 export class KhidraEngine {
   private apiKeys: string[]
   private modelId: string
+  private rateLimitMap: Map<string, { count: number, resetAt: number }> = new Map()
+  
+  // Prep limit: 10 requests per minute
+  private MAX_REQUESTS_PER_MINUTE = 10
 
   constructor(config: KhidraConfig) {
     this.apiKeys = config.apiKeys
@@ -51,7 +55,26 @@ export class KhidraEngine {
     }])
   }
 
+  private checkRateLimit(key: string) {
+    const now = Date.now()
+    const record = this.rateLimitMap.get(key)
+    
+    if (!record || now > record.resetAt) {
+      this.rateLimitMap.set(key, { count: 1, resetAt: now + 60000 })
+      return
+    }
+    
+    if (record.count >= this.MAX_REQUESTS_PER_MINUTE) {
+      throw new Error(`Rate limit exceeded for Khidra AI. Please wait before sending more messages.`)
+    }
+    
+    record.count++
+  }
+
   async *chat(sessionId: string, userMessage: string, userId?: number): AsyncGenerator<string> {
+    const rateKey = userId ? `user_${userId}` : `session_${sessionId}`
+    this.checkRateLimit(rateKey)
+    
     const conv = await this.getOrCreateConversation(sessionId, userId)
     await this.saveMessage(conv.id, 'user', userMessage)
 

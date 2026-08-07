@@ -177,15 +177,19 @@ server.start().then(async () => {
     
     // Start system metrics collection (every 60 seconds)
     setInterval(async () => {
-      const activeClients = (globalThis as any).moonActiveClients
-      const memUsage = process.memoryUsage()
-      
-      await trackSystem({
-        memoryUsedMb: memUsage.heapUsed / 1024 / 1024,
-        memoryTotalMb: memUsage.heapTotal / 1024 / 1024,
-        uptimeSeconds: Math.floor(process.uptime()),
-        activeConnections: activeClients ? activeClients.size : 0,
-      })
+      try {
+        const activeClients = (globalThis as any).moonActiveClients
+        const memUsage = process.memoryUsage()
+        
+        await trackSystem({
+          memoryUsedMb: memUsage.heapUsed / 1024 / 1024,
+          memoryTotalMb: memUsage.heapTotal / 1024 / 1024,
+          uptimeSeconds: Math.floor(process.uptime()),
+          activeConnections: activeClients ? activeClients.size : 0,
+        })
+      } catch (err) {
+        console.warn('[Telemetry] Safe boundary caught error:', err)
+      }
     }, 60000)
     
   } catch (err) {

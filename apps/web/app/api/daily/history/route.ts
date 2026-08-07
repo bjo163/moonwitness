@@ -66,41 +66,59 @@ export async function GET(req: NextRequest) {
     // For Witness API history, we mock enriched data based on generic formulas since we don't have batch endpoints
     const asmaulMap = new Map()
     try {
-      const json = await moonClientInstance.request("GET", "/api/witness/asmaul-husna")
+      const json = await moonClientInstance.request("GET", "/api/wx.asmaul.husna?limit=100")
       for (const item of (json.data || [])) {
         asmaulMap.set(item.number || item.id, item)
       }
-    } catch(e) {}
+    } catch(e) {
+      console.error("Failed to fetch asmaul husna", e)
+    }
 
-    const enrichedHistory = historyItems.map((item) => {
-      const surahNum = Math.max(1, Math.floor(item.ayahId / 54) + 1)
-      const ayahNum = item.ayahId % 54 || 1
-      const asmaulSurahNum = ((surahNum - 1) % 99) + 1
+    const recentHistory = historyItems.slice(0, 15)
+
+    const fetchAyah = async (id: number) => {
+      try {
+        const res = await moonClientInstance.request("GET", `/api/wx.scripture.verse/${id}`)
+        return res.data
+      } catch (e) {
+        return null
+      }
+    }
+
+    const ayahsData = await Promise.all(recentHistory.map(h => fetchAyah(h.ayahId)))
+
+    const enrichedHistory = recentHistory.map((item, idx) => {
+      const dbAyah = ayahsData[idx]
+      // ORM returns snake_case. book_id = [surahNum, "SurahName"]
+      const bookId = dbAyah && Array.isArray(dbAyah.book_id) ? dbAyah.book_id[0] : Math.max(1, Math.floor(item.ayahId / 54) + 1)
+      const bookName = dbAyah && Array.isArray(dbAyah.book_id) ? dbAyah.book_id[1] : ("Surah " + bookId)
+      const ayahNum = dbAyah ? dbAyah.verse_number : (item.ayahId % 54 || 1)
+      const asmaulSurahNum = ((bookId - 1) % 99) + 1
       const asmaulAyahNum = ((ayahNum - 1) % 99) + 1
 
       return {
         ...item,
         ayah: {
           id: item.ayahId,
-          surahNumber: surahNum,
-          surahName: "Surah " + surahNum,
+          surahNumber: bookId,
+          surahName: bookName,
           ayahNumber: ayahNum,
-          textArabic: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
-          textLatin: "Bismillāhir-raḥmānir-raḥīm",
-          translationId: "Ayah history from witness.",
-          audioUrl: `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${item.ayahId}.mp3`,
+          textArabic: dbAyah ? dbAyah.text_original : "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+          textLatin: dbAyah ? dbAyah.text_transliteration || "" : "Bismillāhir-raḥmānir-raḥīm",
+          translationId: dbAyah ? dbAyah.translation_id : "Ayah history from witness.",
+          audioUrl: dbAyah?.audio_url || `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${item.ayahId}.mp3`,
         },
         asmaulSurah: asmaulMap.get(asmaulSurahNum) ? {
           number: asmaulSurahNum,
-          nameArabic: asmaulMap.get(asmaulSurahNum).arabic,
-          nameLatin: asmaulMap.get(asmaulSurahNum).latin,
-          translationId: asmaulMap.get(asmaulSurahNum).meaning
+          name_arabic: asmaulMap.get(asmaulSurahNum).name_arabic,
+          name_latin: asmaulMap.get(asmaulSurahNum).name_latin,
+          translation_id: asmaulMap.get(asmaulSurahNum).translation_id
         } : null,
         asmaulAyah: asmaulMap.get(asmaulAyahNum) ? {
           number: asmaulAyahNum,
-          nameArabic: asmaulMap.get(asmaulAyahNum).arabic,
-          nameLatin: asmaulMap.get(asmaulAyahNum).latin,
-          translationId: asmaulMap.get(asmaulAyahNum).meaning
+          name_arabic: asmaulMap.get(asmaulAyahNum).name_arabic,
+          name_latin: asmaulMap.get(asmaulAyahNum).name_latin,
+          translation_id: asmaulMap.get(asmaulAyahNum).translation_id
         } : null,
       }
     })

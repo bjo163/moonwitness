@@ -81,6 +81,9 @@ export class MoonClient {
   public config: MoonClientConfig
   private eventSource?: EventSource
   private listeners: Map<string, Set<Function>> = new Map()
+  private reconnectAttempt = 0
+  private maxReconnectAttempts = 7
+  private reconnectTimeout: ReturnType<typeof setTimeout> | null = null
 
   constructor(config: MoonClientConfig) {
     this.config = {
@@ -155,6 +158,57 @@ export class MoonClient {
     return await this.request('POST', '/auth/reset-password', { email, code, newPassword })
   }
 
+  private connectEventSource() {
+    if (this.eventSource) {
+      this.eventSource.close()
+    }
+    
+    this.eventSource = new EventSource(`${this.config.baseUrl}/live`)
+    
+    this.eventSource.onopen = () => {
+      console.log('[MoonClient] Realtime connection established.')
+      this.reconnectAttempt = 0 // Reset backoff on success
+      if (this.reconnectTimeout) {
+        clearTimeout(this.reconnectTimeout)
+        this.reconnectTimeout = null
+      }
+    }
+    
+    this.eventSource.onerror = (err) => {
+      console.warn('[MoonClient] Realtime connection interrupted.', err)
+      this.eventSource?.close()
+      
+      if (this.reconnectAttempt < this.maxReconnectAttempts) {
+        const timeout = Math.pow(2, this.reconnectAttempt) * 1000 // Exponential backoff: 1s, 2s, 4s, 8s...
+        console.log(`[MoonClient] Reconnecting in ${timeout}ms (Attempt ${this.reconnectAttempt + 1})`)
+        
+        if (this.reconnectTimeout) clearTimeout(this.reconnectTimeout)
+        this.reconnectTimeout = setTimeout(() => {
+          this.reconnectAttempt++
+          this.connectEventSource()
+        }, timeout)
+      } else {
+        console.error('[MoonClient] Max reconnect attempts reached. Please refresh.')
+      }
+    }
+    
+    this.eventSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data)
+        if (data.topic && this.listeners.has(data.topic)) {
+          const topicListeners = this.listeners.get(data.topic)
+          if (topicListeners) {
+            for (const listener of topicListeners) {
+              listener(data.payload)
+            }
+          }
+        }
+      } catch (e) {
+        // ignore malformed events
+      }
+    }
+  }
+
   // Pub/Sub Realtime
   subscribe<T = any>(topic: string, callback: (payload: T) => void) {
     if (typeof window === 'undefined') {
@@ -162,27 +216,8 @@ export class MoonClient {
       return () => {};
     }
 
-    if (!this.eventSource) {
-      this.eventSource = new EventSource(`${this.config.baseUrl}/live`)
-      
-      this.eventSource.onerror = (err) => {
-        console.warn('[MoonClient] Realtime connection interrupted. Reconnecting...', err)
-      }
-      this.eventSource.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data)
-          if (data.topic && this.listeners.has(data.topic)) {
-            const topicListeners = this.listeners.get(data.topic)
-            if (topicListeners) {
-              for (const listener of topicListeners) {
-                listener(data.payload)
-              }
-            }
-          }
-        } catch (e) {
-          // ignore malformed events
-        }
-      }
+    if (!this.eventSource && this.reconnectAttempt === 0) {
+      this.connectEventSource()
     }
 
     if (!this.listeners.has(topic)) {

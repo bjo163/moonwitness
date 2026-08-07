@@ -6807,3 +6807,1297 @@
 [2026-08-04T12:53:08.423Z] [INFO] moon.rest: GET, POST      /api/kh.message
 [2026-08-04T12:53:08.424Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
 [2026-08-04T12:53:08.429Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-08-04T22:01:33.177Z] [INFO] moon.schema: Schema sync: 73 applied, 0 pending
+[2026-08-04T22:01:33.178Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-08-04T22:01:33.179Z] [INFO] moon.rest: POST           /auth/login
+[2026-08-04T22:01:33.179Z] [INFO] moon.rest: POST           /auth/register
+[2026-08-04T22:01:33.179Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-08-04T22:01:33.179Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-08-04T22:01:33.180Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-08-04T22:01:33.180Z] [INFO] moon.rest: POST           /rpc
+[2026-08-04T22:01:33.180Z] [INFO] moon.rest: GET            /db/status
+[2026-08-04T22:01:33.180Z] [INFO] moon.rest: GET            /meta/models
+[2026-08-04T22:01:33.181Z] [INFO] moon.rest: GET            /live
+[2026-08-04T22:01:33.181Z] [INFO] moon.rest: GET            /openapi.json
+[2026-08-04T22:01:33.181Z] [INFO] moon.rest: GET            /docs
+[2026-08-04T22:01:33.181Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-08-04T22:01:33.181Z] [INFO] moon.rest: GET            /api/witness/scriptures
+[2026-08-04T22:01:33.182Z] [INFO] moon.rest: GET            /api/witness/quran/surahs
+[2026-08-04T22:01:33.182Z] [INFO] moon.rest: GET            /api/witness/quran/surah
+[2026-08-04T22:01:33.182Z] [INFO] moon.rest: GET            /api/witness/quran/search
+[2026-08-04T22:01:33.182Z] [INFO] moon.rest: GET            /api/witness/hadith/books
+[2026-08-04T22:01:33.183Z] [INFO] moon.rest: GET            /api/witness/hadith
+[2026-08-04T22:01:33.183Z] [INFO] moon.rest: GET            /api/witness/traditions
+[2026-08-04T22:01:33.183Z] [INFO] moon.rest: GET            /api/witness/asmaul-husna
+[2026-08-04T22:01:33.183Z] [INFO] moon.rest: GET            /api/witness/devotions
+[2026-08-04T22:01:33.183Z] [INFO] moon.rest: GET            /api/witness/astronomy/moon-phase
+[2026-08-04T22:01:33.184Z] [INFO] moon.rest: GET            /api/witness/astronomy/prayer-times
+[2026-08-04T22:01:33.184Z] [INFO] moon.rest: POST           /test-publish
+[2026-08-04T22:01:33.184Z] [INFO] moon.rest: GET            /api/external/performance/stats
+[2026-08-04T22:01:33.185Z] [INFO] moon.rest: GET            /api/external/nasa/neo
+[2026-08-04T22:01:33.185Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-04T22:01:33.185Z] [INFO] moon.rest: GET            /api/external/nasa/apod
+[2026-08-04T22:01:33.185Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-04T22:01:33.186Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-04T22:01:33.186Z] [INFO] moon.rest: GET            /api/external/noaa/kp-index
+[2026-08-04T22:01:33.186Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-04T22:01:33.186Z] [INFO] moon.rest: GET            /api/external/rainviewer
+[2026-08-04T22:01:33.186Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-04T22:01:33.187Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-04T22:01:33.187Z] [INFO] moon.rest: GET            /api/external/db/status
+[2026-08-04T22:01:33.188Z] [INFO] moon.rest: GET            /api/external/meta/models
+[2026-08-04T22:01:33.189Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-04T22:01:33.189Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-08-04T22:01:33.189Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-08-04T22:01:33.189Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-08-04T22:01:33.190Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-08-04T22:01:33.190Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-08-04T22:01:33.190Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-08-04T22:01:33.190Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-08-04T22:01:33.191Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-08-04T22:01:33.191Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-08-04T22:01:33.191Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-08-04T22:01:33.191Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-08-04T22:01:33.191Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-08-04T22:01:33.192Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-08-04T22:01:33.192Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-08-04T22:01:33.192Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-08-04T22:01:33.192Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-08-04T22:01:33.193Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-08-04T22:01:33.193Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-08-04T22:01:33.193Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-08-04T22:01:33.193Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-08-04T22:01:33.193Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-08-04T22:01:33.194Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-08-04T22:01:33.194Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-08-04T22:01:33.194Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-08-04T22:01:33.194Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-08-04T22:01:33.195Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-08-04T22:01:33.195Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-08-04T22:01:33.195Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-08-04T22:01:33.195Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-08-04T22:01:33.195Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-08-04T22:01:33.196Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-08-04T22:01:33.196Z] [INFO] moon.rest: GET, POST      /api/px.request
+[2026-08-04T22:01:33.196Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.request/:id
+[2026-08-04T22:01:33.196Z] [INFO] moon.rest: GET, POST      /api/px.cache
+[2026-08-04T22:01:33.197Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.cache/:id
+[2026-08-04T22:01:33.197Z] [INFO] moon.rest: GET, POST      /api/px.query
+[2026-08-04T22:01:33.197Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.query/:id
+[2026-08-04T22:01:33.197Z] [INFO] moon.rest: GET, POST      /api/px.system
+[2026-08-04T22:01:33.197Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.system/:id
+[2026-08-04T22:01:33.198Z] [INFO] moon.rest: GET, POST      /api/wx.scripture
+[2026-08-04T22:01:33.198Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture/:id
+[2026-08-04T22:01:33.198Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.book
+[2026-08-04T22:01:33.198Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.book/:id
+[2026-08-04T22:01:33.199Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.verse
+[2026-08-04T22:01:33.199Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.verse/:id
+[2026-08-04T22:01:33.199Z] [INFO] moon.rest: GET, POST      /api/wx.tradition
+[2026-08-04T22:01:33.200Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition/:id
+[2026-08-04T22:01:33.200Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.item
+[2026-08-04T22:01:33.204Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.item/:id
+[2026-08-04T22:01:33.204Z] [INFO] moon.rest: GET, POST      /api/wx.devotion
+[2026-08-04T22:01:33.205Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.devotion/:id
+[2026-08-04T22:01:33.205Z] [INFO] moon.rest: GET, POST      /api/wx.asmaul.husna
+[2026-08-04T22:01:33.205Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.asmaul.husna/:id
+[2026-08-04T22:01:33.206Z] [INFO] moon.rest: GET, POST      /api/wx.bookmark
+[2026-08-04T22:01:33.206Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.bookmark/:id
+[2026-08-04T22:01:33.207Z] [INFO] moon.rest: GET, POST      /api/wx.history
+[2026-08-04T22:01:33.209Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.history/:id
+[2026-08-04T22:01:33.210Z] [INFO] moon.rest: GET, POST      /api/kh.conversation
+[2026-08-04T22:01:33.212Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.conversation/:id
+[2026-08-04T22:01:33.213Z] [INFO] moon.rest: GET, POST      /api/kh.message
+[2026-08-04T22:01:33.213Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
+[2026-08-04T22:01:33.221Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-08-04T22:01:33.401Z] [INFO] moon.http: OPTIONS /api/external/usgs/earthquakes 204 (1ms)
+[2026-08-04T22:01:33.403Z] [INFO] moon.http: OPTIONS /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 204 (0ms)
+[2026-08-04T22:01:33.404Z] [INFO] moon.http: OPTIONS /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 204 (0ms)
+[2026-08-04T22:01:33.404Z] [INFO] moon.http: OPTIONS /api/external/nasa/apod 204 (0ms)
+[2026-08-04T22:01:33.405Z] [INFO] moon.http: OPTIONS /api/external/nasa/apod 204 (0ms)
+[2026-08-04T22:01:33.405Z] [INFO] moon.http: OPTIONS /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 204 (0ms)
+[2026-08-04T22:01:33.406Z] [INFO] moon.http: OPTIONS /api/external/usgs/earthquakes 204 (0ms)
+[2026-08-04T22:01:33.407Z] [INFO] moon.http: OPTIONS /api/external/noaa/kp-index 204 (0ms)
+[2026-08-04T22:01:33.408Z] [INFO] moon.http: OPTIONS /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 204 (0ms)
+[2026-08-04T22:01:33.409Z] [INFO] moon.http: OPTIONS /api/external/noaa/kp-index 204 (0ms)
+[2026-08-04T22:01:33.830Z] [INFO] moon.schema: Schema sync: 73 applied, 0 pending
+[2026-08-04T22:01:33.831Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-08-04T22:01:33.832Z] [INFO] moon.rest: POST           /auth/login
+[2026-08-04T22:01:33.832Z] [INFO] moon.rest: POST           /auth/register
+[2026-08-04T22:01:33.832Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-08-04T22:01:33.833Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-08-04T22:01:33.833Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-08-04T22:01:33.833Z] [INFO] moon.rest: POST           /rpc
+[2026-08-04T22:01:33.834Z] [INFO] moon.rest: GET            /db/status
+[2026-08-04T22:01:33.834Z] [INFO] moon.rest: GET            /meta/models
+[2026-08-04T22:01:33.834Z] [INFO] moon.rest: GET            /live
+[2026-08-04T22:01:33.835Z] [INFO] moon.rest: GET            /openapi.json
+[2026-08-04T22:01:33.835Z] [INFO] moon.rest: GET            /docs
+[2026-08-04T22:01:33.835Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-08-04T22:01:33.835Z] [INFO] moon.rest: GET            /api/witness/scriptures
+[2026-08-04T22:01:33.836Z] [INFO] moon.rest: GET            /api/witness/quran/surahs
+[2026-08-04T22:01:33.836Z] [INFO] moon.rest: GET            /api/witness/quran/surah
+[2026-08-04T22:01:33.836Z] [INFO] moon.rest: GET            /api/witness/quran/search
+[2026-08-04T22:01:33.837Z] [INFO] moon.rest: GET            /api/witness/hadith/books
+[2026-08-04T22:01:33.837Z] [INFO] moon.rest: GET            /api/witness/hadith
+[2026-08-04T22:01:33.837Z] [INFO] moon.rest: GET            /api/witness/traditions
+[2026-08-04T22:01:33.838Z] [INFO] moon.rest: GET            /api/witness/asmaul-husna
+[2026-08-04T22:01:33.838Z] [INFO] moon.rest: GET            /api/witness/devotions
+[2026-08-04T22:01:33.838Z] [INFO] moon.rest: GET            /api/witness/astronomy/moon-phase
+[2026-08-04T22:01:33.839Z] [INFO] moon.rest: GET            /api/witness/astronomy/prayer-times
+[2026-08-04T22:01:33.839Z] [INFO] moon.rest: POST           /test-publish
+[2026-08-04T22:01:33.839Z] [INFO] moon.rest: GET            /api/external/performance/stats
+[2026-08-04T22:01:33.840Z] [INFO] moon.rest: GET            /api/external/nasa/neo
+[2026-08-04T22:01:33.840Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-04T22:01:33.840Z] [INFO] moon.rest: GET            /api/external/nasa/apod
+[2026-08-04T22:01:33.841Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-04T22:01:33.841Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-04T22:01:33.842Z] [INFO] moon.rest: GET            /api/external/noaa/kp-index
+[2026-08-04T22:01:33.842Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-04T22:01:33.842Z] [INFO] moon.rest: GET            /api/external/rainviewer
+[2026-08-04T22:01:33.843Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-04T22:01:33.843Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-04T22:01:33.844Z] [INFO] moon.rest: GET            /api/external/db/status
+[2026-08-04T22:01:33.844Z] [INFO] moon.rest: GET            /api/external/meta/models
+[2026-08-04T22:01:33.845Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-04T22:01:33.846Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-08-04T22:01:33.846Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-08-04T22:01:33.847Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-08-04T22:01:33.848Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-08-04T22:01:33.848Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-08-04T22:01:33.849Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-08-04T22:01:33.849Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-08-04T22:01:33.850Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-08-04T22:01:33.850Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-08-04T22:01:33.851Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-08-04T22:01:33.851Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-08-04T22:01:33.852Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-08-04T22:01:33.852Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-08-04T22:01:33.852Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-08-04T22:01:33.852Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-08-04T22:01:33.853Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-08-04T22:01:33.853Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-08-04T22:01:33.853Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-08-04T22:01:33.854Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-08-04T22:01:33.854Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-08-04T22:01:33.854Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-08-04T22:01:33.855Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-08-04T22:01:33.855Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-08-04T22:01:33.855Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-08-04T22:01:33.856Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-08-04T22:01:33.856Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-08-04T22:01:33.857Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-08-04T22:01:33.857Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-08-04T22:01:33.857Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-08-04T22:01:33.858Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-08-04T22:01:33.858Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-08-04T22:01:33.858Z] [INFO] moon.rest: GET, POST      /api/px.request
+[2026-08-04T22:01:33.859Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.request/:id
+[2026-08-04T22:01:33.859Z] [INFO] moon.rest: GET, POST      /api/px.cache
+[2026-08-04T22:01:33.859Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.cache/:id
+[2026-08-04T22:01:33.860Z] [INFO] moon.rest: GET, POST      /api/px.query
+[2026-08-04T22:01:33.860Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.query/:id
+[2026-08-04T22:01:33.860Z] [INFO] moon.rest: GET, POST      /api/px.system
+[2026-08-04T22:01:33.860Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.system/:id
+[2026-08-04T22:01:33.861Z] [INFO] moon.rest: GET, POST      /api/wx.scripture
+[2026-08-04T22:01:33.861Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture/:id
+[2026-08-04T22:01:33.861Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.book
+[2026-08-04T22:01:33.862Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.book/:id
+[2026-08-04T22:01:33.862Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.verse
+[2026-08-04T22:01:33.862Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.verse/:id
+[2026-08-04T22:01:33.863Z] [INFO] moon.rest: GET, POST      /api/wx.tradition
+[2026-08-04T22:01:33.863Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition/:id
+[2026-08-04T22:01:33.863Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.item
+[2026-08-04T22:01:33.863Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.item/:id
+[2026-08-04T22:01:33.864Z] [INFO] moon.rest: GET, POST      /api/wx.devotion
+[2026-08-04T22:01:33.864Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.devotion/:id
+[2026-08-04T22:01:33.864Z] [INFO] moon.rest: GET, POST      /api/wx.asmaul.husna
+[2026-08-04T22:01:33.865Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.asmaul.husna/:id
+[2026-08-04T22:01:33.865Z] [INFO] moon.rest: GET, POST      /api/wx.bookmark
+[2026-08-04T22:01:33.865Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.bookmark/:id
+[2026-08-04T22:01:33.866Z] [INFO] moon.rest: GET, POST      /api/wx.history
+[2026-08-04T22:01:33.866Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.history/:id
+[2026-08-04T22:01:33.866Z] [INFO] moon.rest: GET, POST      /api/kh.conversation
+[2026-08-04T22:01:33.867Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.conversation/:id
+[2026-08-04T22:01:33.867Z] [INFO] moon.rest: GET, POST      /api/kh.message
+[2026-08-04T22:01:33.867Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
+[2026-08-04T22:01:33.942Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (533ms)
+[2026-08-04T22:01:33.970Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (547ms)
+[2026-08-04T22:01:34.176Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (756ms)
+[2026-08-04T22:01:34.390Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (968ms)
+[2026-08-04T22:01:34.419Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (0ms)
+[2026-08-04T22:01:34.439Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:01:34.471Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (1050ms)
+[2026-08-04T22:01:34.485Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:01:34.498Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:01:34.800Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:01:58.665Z] [INFO] moon.schema: Schema sync: 73 applied, 0 pending
+[2026-08-04T22:01:58.666Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-08-04T22:01:58.666Z] [INFO] moon.rest: POST           /auth/login
+[2026-08-04T22:01:58.666Z] [INFO] moon.rest: POST           /auth/register
+[2026-08-04T22:01:58.667Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-08-04T22:01:58.667Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-08-04T22:01:58.667Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-08-04T22:01:58.668Z] [INFO] moon.rest: POST           /rpc
+[2026-08-04T22:01:58.668Z] [INFO] moon.rest: GET            /db/status
+[2026-08-04T22:01:58.668Z] [INFO] moon.rest: GET            /meta/models
+[2026-08-04T22:01:58.668Z] [INFO] moon.rest: GET            /live
+[2026-08-04T22:01:58.669Z] [INFO] moon.rest: GET            /openapi.json
+[2026-08-04T22:01:58.669Z] [INFO] moon.rest: GET            /docs
+[2026-08-04T22:01:58.669Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-08-04T22:01:58.669Z] [INFO] moon.rest: GET            /api/witness/scriptures
+[2026-08-04T22:01:58.670Z] [INFO] moon.rest: GET            /api/witness/quran/surahs
+[2026-08-04T22:01:58.670Z] [INFO] moon.rest: GET            /api/witness/quran/surah
+[2026-08-04T22:01:58.670Z] [INFO] moon.rest: GET            /api/witness/quran/search
+[2026-08-04T22:01:58.670Z] [INFO] moon.rest: GET            /api/witness/hadith/books
+[2026-08-04T22:01:58.671Z] [INFO] moon.rest: GET            /api/witness/hadith
+[2026-08-04T22:01:58.671Z] [INFO] moon.rest: GET            /api/witness/traditions
+[2026-08-04T22:01:58.671Z] [INFO] moon.rest: GET            /api/witness/asmaul-husna
+[2026-08-04T22:01:58.672Z] [INFO] moon.rest: GET            /api/witness/devotions
+[2026-08-04T22:01:58.672Z] [INFO] moon.rest: GET            /api/witness/astronomy/moon-phase
+[2026-08-04T22:01:58.672Z] [INFO] moon.rest: GET            /api/witness/astronomy/prayer-times
+[2026-08-04T22:01:58.672Z] [INFO] moon.rest: POST           /test-publish
+[2026-08-04T22:01:58.673Z] [INFO] moon.rest: GET            /api/external/performance/stats
+[2026-08-04T22:01:58.673Z] [INFO] moon.rest: GET            /api/external/nasa/neo
+[2026-08-04T22:01:58.673Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-04T22:01:58.673Z] [INFO] moon.rest: GET            /api/external/nasa/apod
+[2026-08-04T22:01:58.674Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-04T22:01:58.674Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-04T22:01:58.674Z] [INFO] moon.rest: GET            /api/external/noaa/kp-index
+[2026-08-04T22:01:58.675Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-04T22:01:58.675Z] [INFO] moon.rest: GET            /api/external/rainviewer
+[2026-08-04T22:01:58.675Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-04T22:01:58.675Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-04T22:01:58.676Z] [INFO] moon.rest: GET            /api/external/db/status
+[2026-08-04T22:01:58.676Z] [INFO] moon.rest: GET            /api/external/meta/models
+[2026-08-04T22:01:58.676Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-04T22:01:58.676Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-08-04T22:01:58.677Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-08-04T22:01:58.677Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-08-04T22:01:58.677Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-08-04T22:01:58.677Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-08-04T22:01:58.678Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-08-04T22:01:58.678Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-08-04T22:01:58.678Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-08-04T22:01:58.679Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-08-04T22:01:58.679Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-08-04T22:01:58.679Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-08-04T22:01:58.680Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-08-04T22:01:58.680Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-08-04T22:01:58.680Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-08-04T22:01:58.681Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-08-04T22:01:58.681Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-08-04T22:01:58.681Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-08-04T22:01:58.682Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-08-04T22:01:58.682Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-08-04T22:01:58.682Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-08-04T22:01:58.683Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-08-04T22:01:58.683Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-08-04T22:01:58.683Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-08-04T22:01:58.684Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-08-04T22:01:58.684Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-08-04T22:01:58.684Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-08-04T22:01:58.684Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-08-04T22:01:58.685Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-08-04T22:01:58.685Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-08-04T22:01:58.686Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-08-04T22:01:58.686Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-08-04T22:01:58.687Z] [INFO] moon.rest: GET, POST      /api/px.request
+[2026-08-04T22:01:58.687Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.request/:id
+[2026-08-04T22:01:58.687Z] [INFO] moon.rest: GET, POST      /api/px.cache
+[2026-08-04T22:01:58.688Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.cache/:id
+[2026-08-04T22:01:58.688Z] [INFO] moon.rest: GET, POST      /api/px.query
+[2026-08-04T22:01:58.688Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.query/:id
+[2026-08-04T22:01:58.689Z] [INFO] moon.rest: GET, POST      /api/px.system
+[2026-08-04T22:01:58.689Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.system/:id
+[2026-08-04T22:01:58.689Z] [INFO] moon.rest: GET, POST      /api/wx.scripture
+[2026-08-04T22:01:58.689Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture/:id
+[2026-08-04T22:01:58.690Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.book
+[2026-08-04T22:01:58.690Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.book/:id
+[2026-08-04T22:01:58.690Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.verse
+[2026-08-04T22:01:58.691Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.verse/:id
+[2026-08-04T22:01:58.691Z] [INFO] moon.rest: GET, POST      /api/wx.tradition
+[2026-08-04T22:01:58.691Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition/:id
+[2026-08-04T22:01:58.692Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.item
+[2026-08-04T22:01:58.692Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.item/:id
+[2026-08-04T22:01:58.692Z] [INFO] moon.rest: GET, POST      /api/wx.devotion
+[2026-08-04T22:01:58.693Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.devotion/:id
+[2026-08-04T22:01:58.693Z] [INFO] moon.rest: GET, POST      /api/wx.asmaul.husna
+[2026-08-04T22:01:58.693Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.asmaul.husna/:id
+[2026-08-04T22:01:58.694Z] [INFO] moon.rest: GET, POST      /api/wx.bookmark
+[2026-08-04T22:01:58.694Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.bookmark/:id
+[2026-08-04T22:01:58.694Z] [INFO] moon.rest: GET, POST      /api/wx.history
+[2026-08-04T22:01:58.695Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.history/:id
+[2026-08-04T22:01:58.695Z] [INFO] moon.rest: GET, POST      /api/kh.conversation
+[2026-08-04T22:01:58.695Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.conversation/:id
+[2026-08-04T22:01:58.696Z] [INFO] moon.rest: GET, POST      /api/kh.message
+[2026-08-04T22:01:58.696Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
+[2026-08-04T22:01:58.701Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-08-04T22:01:58.746Z] [INFO] moon.schema: Schema sync: 73 applied, 0 pending
+[2026-08-04T22:01:58.747Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-08-04T22:01:58.747Z] [INFO] moon.rest: POST           /auth/login
+[2026-08-04T22:01:58.748Z] [INFO] moon.rest: POST           /auth/register
+[2026-08-04T22:01:58.748Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-08-04T22:01:58.748Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-08-04T22:01:58.748Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-08-04T22:01:58.749Z] [INFO] moon.rest: POST           /rpc
+[2026-08-04T22:01:58.749Z] [INFO] moon.rest: GET            /db/status
+[2026-08-04T22:01:58.749Z] [INFO] moon.rest: GET            /meta/models
+[2026-08-04T22:01:58.749Z] [INFO] moon.rest: GET            /live
+[2026-08-04T22:01:58.749Z] [INFO] moon.rest: GET            /openapi.json
+[2026-08-04T22:01:58.750Z] [INFO] moon.rest: GET            /docs
+[2026-08-04T22:01:58.750Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-08-04T22:01:58.750Z] [INFO] moon.rest: GET            /api/witness/scriptures
+[2026-08-04T22:01:58.750Z] [INFO] moon.rest: GET            /api/witness/quran/surahs
+[2026-08-04T22:01:58.751Z] [INFO] moon.rest: GET            /api/witness/quran/surah
+[2026-08-04T22:01:58.751Z] [INFO] moon.rest: GET            /api/witness/quran/search
+[2026-08-04T22:01:58.751Z] [INFO] moon.rest: GET            /api/witness/hadith/books
+[2026-08-04T22:01:58.751Z] [INFO] moon.rest: GET            /api/witness/hadith
+[2026-08-04T22:01:58.751Z] [INFO] moon.rest: GET            /api/witness/traditions
+[2026-08-04T22:01:58.751Z] [INFO] moon.rest: GET            /api/witness/asmaul-husna
+[2026-08-04T22:01:58.752Z] [INFO] moon.rest: GET            /api/witness/devotions
+[2026-08-04T22:01:58.752Z] [INFO] moon.rest: GET            /api/witness/astronomy/moon-phase
+[2026-08-04T22:01:58.752Z] [INFO] moon.rest: GET            /api/witness/astronomy/prayer-times
+[2026-08-04T22:01:58.752Z] [INFO] moon.rest: POST           /test-publish
+[2026-08-04T22:01:58.752Z] [INFO] moon.rest: GET            /api/external/performance/stats
+[2026-08-04T22:01:58.753Z] [INFO] moon.rest: GET            /api/external/nasa/neo
+[2026-08-04T22:01:58.753Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-04T22:01:58.753Z] [INFO] moon.rest: GET            /api/external/nasa/apod
+[2026-08-04T22:01:58.753Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-04T22:01:58.753Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-04T22:01:58.754Z] [INFO] moon.rest: GET            /api/external/noaa/kp-index
+[2026-08-04T22:01:58.754Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-04T22:01:58.754Z] [INFO] moon.rest: GET            /api/external/rainviewer
+[2026-08-04T22:01:58.754Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-04T22:01:58.754Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-04T22:01:58.755Z] [INFO] moon.rest: GET            /api/external/db/status
+[2026-08-04T22:01:58.755Z] [INFO] moon.rest: GET            /api/external/meta/models
+[2026-08-04T22:01:58.755Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-04T22:01:58.755Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-08-04T22:01:58.756Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-08-04T22:01:58.756Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-08-04T22:01:58.757Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-08-04T22:01:58.757Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-08-04T22:01:58.758Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-08-04T22:01:58.758Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-08-04T22:01:58.758Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-08-04T22:01:58.759Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-08-04T22:01:58.759Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-08-04T22:01:58.760Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-08-04T22:01:58.760Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-08-04T22:01:58.761Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-08-04T22:01:58.762Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-08-04T22:01:58.762Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-08-04T22:01:58.762Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-08-04T22:01:58.763Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-08-04T22:01:58.763Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-08-04T22:01:58.763Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-08-04T22:01:58.763Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-08-04T22:01:58.764Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-08-04T22:01:58.764Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-08-04T22:01:58.764Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-08-04T22:01:58.764Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-08-04T22:01:58.765Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-08-04T22:01:58.765Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-08-04T22:01:58.765Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-08-04T22:01:58.765Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-08-04T22:01:58.765Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-08-04T22:01:58.766Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-08-04T22:01:58.766Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-08-04T22:01:58.766Z] [INFO] moon.rest: GET, POST      /api/px.request
+[2026-08-04T22:01:58.766Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.request/:id
+[2026-08-04T22:01:58.766Z] [INFO] moon.rest: GET, POST      /api/px.cache
+[2026-08-04T22:01:58.767Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.cache/:id
+[2026-08-04T22:01:58.767Z] [INFO] moon.rest: GET, POST      /api/px.query
+[2026-08-04T22:01:58.767Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.query/:id
+[2026-08-04T22:01:58.767Z] [INFO] moon.rest: GET, POST      /api/px.system
+[2026-08-04T22:01:58.767Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.system/:id
+[2026-08-04T22:01:58.768Z] [INFO] moon.rest: GET, POST      /api/wx.scripture
+[2026-08-04T22:01:58.768Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture/:id
+[2026-08-04T22:01:58.768Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.book
+[2026-08-04T22:01:58.768Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.book/:id
+[2026-08-04T22:01:58.769Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.verse
+[2026-08-04T22:01:58.769Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.verse/:id
+[2026-08-04T22:01:58.769Z] [INFO] moon.rest: GET, POST      /api/wx.tradition
+[2026-08-04T22:01:58.769Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition/:id
+[2026-08-04T22:01:58.769Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.item
+[2026-08-04T22:01:58.770Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.item/:id
+[2026-08-04T22:01:58.770Z] [INFO] moon.rest: GET, POST      /api/wx.devotion
+[2026-08-04T22:01:58.770Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.devotion/:id
+[2026-08-04T22:01:58.770Z] [INFO] moon.rest: GET, POST      /api/wx.asmaul.husna
+[2026-08-04T22:01:58.770Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.asmaul.husna/:id
+[2026-08-04T22:01:58.771Z] [INFO] moon.rest: GET, POST      /api/wx.bookmark
+[2026-08-04T22:01:58.771Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.bookmark/:id
+[2026-08-04T22:01:58.771Z] [INFO] moon.rest: GET, POST      /api/wx.history
+[2026-08-04T22:01:58.771Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.history/:id
+[2026-08-04T22:01:58.772Z] [INFO] moon.rest: GET, POST      /api/kh.conversation
+[2026-08-04T22:01:58.772Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.conversation/:id
+[2026-08-04T22:01:58.772Z] [INFO] moon.rest: GET, POST      /api/kh.message
+[2026-08-04T22:01:58.772Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
+[2026-08-04T22:05:15.776Z] [INFO] moon.http: GET /api/fx.msg?domain=%5B%5B%22resModel%22%2C%22%3D%22%2C%22wx.scripture.verse%22%5D%5D 500 (1ms)
+[2026-08-04T22:05:16.768Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (790ms)
+[2026-08-04T22:05:16.872Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (100ms)
+[2026-08-04T22:05:16.941Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (702ms)
+[2026-08-04T22:05:16.944Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (1ms)
+[2026-08-04T22:05:17.005Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (765ms)
+[2026-08-04T22:05:17.007Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:05:17.111Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (870ms)
+[2026-08-04T22:05:17.112Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:05:17.171Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (971ms)
+[2026-08-04T22:05:17.173Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:05:17.280Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (1043ms)
+[2026-08-04T22:05:17.282Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:05:17.356Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (478ms)
+[2026-08-04T22:05:31.192Z] [INFO] moon.http: GET /api/fx.msg?domain=%5B%5B%22resModel%22%2C%22%3D%22%2C%22wx.scripture.verse%22%5D%5D 500 (0ms)
+[2026-08-04T22:05:31.377Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (1ms)
+[2026-08-04T22:05:31.378Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:05:31.380Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (0ms)
+[2026-08-04T22:05:31.381Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:05:31.383Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (1ms)
+[2026-08-04T22:05:31.384Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:05:31.385Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:05:31.387Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (0ms)
+[2026-08-04T22:05:31.389Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:05:31.390Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:05:31.958Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (842ms)
+[2026-08-04T22:05:32.076Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (99ms)
+[2026-08-04T22:05:32.364Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (280ms)
+[2026-08-04T22:06:01.240Z] [INFO] moon.http: GET /api/fx.msg?domain=%5B%5B%22resModel%22%2C%22%3D%22%2C%22wx.scripture.verse%22%5D%5D 500 (0ms)
+[2026-08-04T22:06:01.449Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:06:01.451Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:06:01.452Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:06:01.454Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (0ms)
+[2026-08-04T22:06:01.456Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:06:01.458Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:06:01.460Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:06:01.462Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:06:01.464Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (0ms)
+[2026-08-04T22:06:01.466Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:06:01.909Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (752ms)
+[2026-08-04T22:06:02.026Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (99ms)
+[2026-08-04T22:06:02.318Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (282ms)
+[2026-08-04T22:06:06.436Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (95ms)
+[2026-08-04T22:06:06.796Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (749ms)
+[2026-08-04T22:06:06.912Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (98ms)
+[2026-08-04T22:06:07.200Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (279ms)
+[2026-08-04T22:06:12.865Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:06:12.867Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:06:12.869Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (1ms)
+[2026-08-04T22:06:12.871Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (1ms)
+[2026-08-04T22:06:12.876Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (1ms)
+[2026-08-04T22:06:12.881Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:06:12.883Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:06:12.885Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:06:12.887Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (0ms)
+[2026-08-04T22:06:12.890Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (1ms)
+[2026-08-04T22:06:13.323Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (753ms)
+[2026-08-04T22:06:13.424Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (97ms)
+[2026-08-04T22:06:13.718Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (278ms)
+[2026-08-04T22:06:17.679Z] [INFO] moon.http: GET /api/fx.msg?domain=%5B%5B%22resModel%22%2C%22%3D%22%2C%22wx.scripture.verse%22%5D%5D 500 (1ms)
+[2026-08-04T22:06:30.444Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:06:30.446Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:06:30.448Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (1ms)
+[2026-08-04T22:06:30.450Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:06:30.451Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:06:30.453Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:06:30.456Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (1ms)
+[2026-08-04T22:06:30.457Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:06:30.459Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:06:30.461Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:06:30.986Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (792ms)
+[2026-08-04T22:06:31.083Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (93ms)
+[2026-08-04T22:06:31.354Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (267ms)
+[2026-08-04T22:09:11.219Z] [INFO] moon.http: GET /api/fx.msg?domain=%5B%5B%22resModel%22%2C%22%3D%22%2C%22wx.scripture.verse%22%5D%5D 500 (1ms)
+[2026-08-04T22:09:11.662Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:09:11.664Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:09:11.666Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (0ms)
+[2026-08-04T22:09:11.667Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:09:11.669Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:09:11.670Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:09:11.671Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:09:11.672Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (0ms)
+[2026-08-04T22:09:11.674Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:09:11.675Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:09:12.486Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (1069ms)
+[2026-08-04T22:09:12.583Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (93ms)
+[2026-08-04T22:09:12.869Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (264ms)
+[2026-08-04T22:09:37.730Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:09:37.732Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:09:37.733Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:09:37.734Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (0ms)
+[2026-08-04T22:09:37.736Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:09:37.737Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:09:37.738Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:09:37.740Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:09:37.741Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (0ms)
+[2026-08-04T22:09:37.742Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:09:37.786Z] [INFO] moon.http: GET /api/fx.msg?domain=%5B%5B%22resModel%22%2C%22%3D%22%2C%22wx.scripture.verse%22%5D%5D 500 (0ms)
+[2026-08-04T22:09:38.270Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (782ms)
+[2026-08-04T22:09:38.365Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (91ms)
+[2026-08-04T22:09:38.636Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (264ms)
+[2026-08-04T22:10:38.248Z] [INFO] moon.http: GET /api/fx.msg?domain=%5B%5B%22resModel%22%2C%22%3D%22%2C%22wx.scripture.verse%22%5D%5D 500 (1ms)
+[2026-08-04T22:10:38.677Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:10:38.695Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:10:38.697Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:10:38.700Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:10:38.701Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:10:38.702Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:10:39.196Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (502ms)
+[2026-08-04T22:10:39.198Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (0ms)
+[2026-08-04T22:10:39.391Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (934ms)
+[2026-08-04T22:10:39.494Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (90ms)
+[2026-08-04T22:10:39.688Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (1009ms)
+[2026-08-04T22:10:39.690Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:10:39.771Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (261ms)
+[2026-08-04T22:12:47.089Z] [INFO] moon.http: GET /api/fx.msg?domain=%5B%5B%22resModel%22%2C%22%3D%22%2C%22wx.scripture.verse%22%5D%5D 500 (1ms)
+[2026-08-04T22:12:47.509Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:12:47.510Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:12:47.512Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (1ms)
+[2026-08-04T22:12:47.513Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:12:47.514Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:12:47.515Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:12:47.516Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:12:47.518Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (1ms)
+[2026-08-04T22:12:47.519Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:12:47.520Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:12:48.357Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (1068ms)
+[2026-08-04T22:12:48.456Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (95ms)
+[2026-08-04T22:12:48.736Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (276ms)
+[2026-08-04T22:12:58.008Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:12:58.010Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:12:58.012Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:12:58.014Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (0ms)
+[2026-08-04T22:12:58.016Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:12:58.020Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (1ms)
+[2026-08-04T22:12:58.024Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:12:58.029Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (1ms)
+[2026-08-04T22:12:58.031Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:12:58.032Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:12:58.384Z] [INFO] moon.http: GET /api/fx.msg?domain=%5B%5B%22resModel%22%2C%22%3D%22%2C%22wx.scripture.verse%22%5D%5D 500 (0ms)
+[2026-08-04T22:12:58.809Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (720ms)
+[2026-08-04T22:12:58.915Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (95ms)
+[2026-08-04T22:12:59.202Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (273ms)
+[2026-08-04T22:15:03.966Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:15:03.967Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:15:03.968Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:15:03.970Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (0ms)
+[2026-08-04T22:15:03.971Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:15:03.972Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:15:03.974Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:15:03.975Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:15:03.976Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (0ms)
+[2026-08-04T22:15:03.978Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:15:04.788Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (1025ms)
+[2026-08-04T22:15:04.886Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (92ms)
+[2026-08-04T22:15:05.161Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (263ms)
+[2026-08-04T22:16:54.279Z] [INFO] moon.http: GET /api/fx.msg?domain=%5B%5B%22resModel%22%2C%22%3D%22%2C%22wx.scripture.verse%22%5D%5D 500 (1ms)
+[2026-08-04T22:16:54.326Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:16:54.328Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (0ms)
+[2026-08-04T22:16:54.751Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (714ms)
+[2026-08-04T22:16:54.848Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (92ms)
+[2026-08-04T22:16:54.986Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (656ms)
+[2026-08-04T22:16:54.988Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (0ms)
+[2026-08-04T22:16:55.072Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (741ms)
+[2026-08-04T22:16:55.073Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-04T22:16:55.127Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (263ms)
+[2026-08-04T22:16:55.172Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (840ms)
+[2026-08-04T22:16:55.174Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-04T22:16:55.384Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (1055ms)
+[2026-08-04T22:16:55.386Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-04&end_date=2026-08-04 200 (0ms)
+[2026-08-04T22:17:07.946Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (99ms)
+[2026-08-04T22:17:08.506Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (714ms)
+[2026-08-04T22:17:08.620Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (95ms)
+[2026-08-04T22:17:08.897Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (262ms)
+[2026-08-04T22:18:02.303Z] [INFO] moon.schema: Schema sync: 73 applied, 0 pending
+[2026-08-04T22:18:02.304Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-08-04T22:18:02.304Z] [INFO] moon.rest: POST           /auth/login
+[2026-08-04T22:18:02.304Z] [INFO] moon.rest: POST           /auth/register
+[2026-08-04T22:18:02.304Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-08-04T22:18:02.305Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-08-04T22:18:02.305Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-08-04T22:18:02.305Z] [INFO] moon.rest: POST           /rpc
+[2026-08-04T22:18:02.306Z] [INFO] moon.rest: GET            /db/status
+[2026-08-04T22:18:02.306Z] [INFO] moon.rest: GET            /meta/models
+[2026-08-04T22:18:02.306Z] [INFO] moon.rest: GET            /live
+[2026-08-04T22:18:02.306Z] [INFO] moon.rest: GET            /openapi.json
+[2026-08-04T22:18:02.307Z] [INFO] moon.rest: GET            /docs
+[2026-08-04T22:18:02.307Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-08-04T22:18:02.307Z] [INFO] moon.rest: GET            /api/witness/scriptures
+[2026-08-04T22:18:02.307Z] [INFO] moon.rest: GET            /api/witness/quran/surahs
+[2026-08-04T22:18:02.308Z] [INFO] moon.rest: GET            /api/witness/quran/surah
+[2026-08-04T22:18:02.308Z] [INFO] moon.rest: GET            /api/witness/quran/search
+[2026-08-04T22:18:02.308Z] [INFO] moon.rest: GET            /api/witness/hadith/books
+[2026-08-04T22:18:02.308Z] [INFO] moon.rest: GET            /api/witness/hadith
+[2026-08-04T22:18:02.309Z] [INFO] moon.rest: GET            /api/witness/traditions
+[2026-08-04T22:18:02.309Z] [INFO] moon.rest: GET            /api/witness/asmaul-husna
+[2026-08-04T22:18:02.309Z] [INFO] moon.rest: GET            /api/witness/devotions
+[2026-08-04T22:18:02.310Z] [INFO] moon.rest: GET            /api/witness/astronomy/moon-phase
+[2026-08-04T22:18:02.310Z] [INFO] moon.rest: GET            /api/witness/astronomy/prayer-times
+[2026-08-04T22:18:02.310Z] [INFO] moon.rest: POST           /test-publish
+[2026-08-04T22:18:02.310Z] [INFO] moon.rest: GET            /api/external/performance/stats
+[2026-08-04T22:18:02.311Z] [INFO] moon.rest: GET            /api/external/nasa/neo
+[2026-08-04T22:18:02.311Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-04T22:18:02.311Z] [INFO] moon.rest: GET            /api/external/nasa/apod
+[2026-08-04T22:18:02.311Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-04T22:18:02.311Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-04T22:18:02.312Z] [INFO] moon.rest: GET            /api/external/noaa/kp-index
+[2026-08-04T22:18:02.312Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-04T22:18:02.312Z] [INFO] moon.rest: GET            /api/external/rainviewer
+[2026-08-04T22:18:02.312Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-04T22:18:02.313Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-04T22:18:02.313Z] [INFO] moon.rest: GET            /api/external/db/status
+[2026-08-04T22:18:02.313Z] [INFO] moon.rest: GET            /api/external/meta/models
+[2026-08-04T22:18:02.313Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-04T22:18:02.314Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-08-04T22:18:02.314Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-08-04T22:18:02.314Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-08-04T22:18:02.314Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-08-04T22:18:02.315Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-08-04T22:18:02.315Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-08-04T22:18:02.315Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-08-04T22:18:02.315Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-08-04T22:18:02.316Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-08-04T22:18:02.316Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-08-04T22:18:02.316Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-08-04T22:18:02.317Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-08-04T22:18:02.317Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-08-04T22:18:02.317Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-08-04T22:18:02.317Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-08-04T22:18:02.318Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-08-04T22:18:02.318Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-08-04T22:18:02.318Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-08-04T22:18:02.318Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-08-04T22:18:02.319Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-08-04T22:18:02.319Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-08-04T22:18:02.319Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-08-04T22:18:02.319Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-08-04T22:18:02.320Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-08-04T22:18:02.320Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-08-04T22:18:02.320Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-08-04T22:18:02.320Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-08-04T22:18:02.321Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-08-04T22:18:02.321Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-08-04T22:18:02.321Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-08-04T22:18:02.321Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-08-04T22:18:02.322Z] [INFO] moon.rest: GET, POST      /api/px.request
+[2026-08-04T22:18:02.322Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.request/:id
+[2026-08-04T22:18:02.322Z] [INFO] moon.rest: GET, POST      /api/px.cache
+[2026-08-04T22:18:02.323Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.cache/:id
+[2026-08-04T22:18:02.323Z] [INFO] moon.rest: GET, POST      /api/px.query
+[2026-08-04T22:18:02.323Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.query/:id
+[2026-08-04T22:18:02.324Z] [INFO] moon.rest: GET, POST      /api/px.system
+[2026-08-04T22:18:02.324Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.system/:id
+[2026-08-04T22:18:02.324Z] [INFO] moon.rest: GET, POST      /api/wx.scripture
+[2026-08-04T22:18:02.325Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture/:id
+[2026-08-04T22:18:02.325Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.book
+[2026-08-04T22:18:02.325Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.book/:id
+[2026-08-04T22:18:02.326Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.verse
+[2026-08-04T22:18:02.326Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.verse/:id
+[2026-08-04T22:18:02.326Z] [INFO] moon.rest: GET, POST      /api/wx.tradition
+[2026-08-04T22:18:02.326Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition/:id
+[2026-08-04T22:18:02.327Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.item
+[2026-08-04T22:18:02.327Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.item/:id
+[2026-08-04T22:18:02.327Z] [INFO] moon.rest: GET, POST      /api/wx.devotion
+[2026-08-04T22:18:02.327Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.devotion/:id
+[2026-08-04T22:18:02.328Z] [INFO] moon.rest: GET, POST      /api/wx.asmaul.husna
+[2026-08-04T22:18:02.328Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.asmaul.husna/:id
+[2026-08-04T22:18:02.328Z] [INFO] moon.rest: GET, POST      /api/wx.bookmark
+[2026-08-04T22:18:02.328Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.bookmark/:id
+[2026-08-04T22:18:02.329Z] [INFO] moon.rest: GET, POST      /api/wx.history
+[2026-08-04T22:18:02.329Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.history/:id
+[2026-08-04T22:18:02.329Z] [INFO] moon.rest: GET, POST      /api/kh.conversation
+[2026-08-04T22:18:02.330Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.conversation/:id
+[2026-08-04T22:18:02.330Z] [INFO] moon.rest: GET, POST      /api/kh.message
+[2026-08-04T22:18:02.330Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
+[2026-08-04T22:18:02.335Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-08-04T22:18:02.929Z] [INFO] moon.schema: Schema sync: 73 applied, 0 pending
+[2026-08-04T22:18:02.929Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-08-04T22:18:02.930Z] [INFO] moon.rest: POST           /auth/login
+[2026-08-04T22:18:02.930Z] [INFO] moon.rest: POST           /auth/register
+[2026-08-04T22:18:02.930Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-08-04T22:18:02.930Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-08-04T22:18:02.931Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-08-04T22:18:02.931Z] [INFO] moon.rest: POST           /rpc
+[2026-08-04T22:18:02.931Z] [INFO] moon.rest: GET            /db/status
+[2026-08-04T22:18:02.931Z] [INFO] moon.rest: GET            /meta/models
+[2026-08-04T22:18:02.931Z] [INFO] moon.rest: GET            /live
+[2026-08-04T22:18:02.932Z] [INFO] moon.rest: GET            /openapi.json
+[2026-08-04T22:18:02.932Z] [INFO] moon.rest: GET            /docs
+[2026-08-04T22:18:02.932Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-08-04T22:18:02.932Z] [INFO] moon.rest: GET            /api/witness/scriptures
+[2026-08-04T22:18:02.932Z] [INFO] moon.rest: GET            /api/witness/quran/surahs
+[2026-08-04T22:18:02.932Z] [INFO] moon.rest: GET            /api/witness/quran/surah
+[2026-08-04T22:18:02.933Z] [INFO] moon.rest: GET            /api/witness/quran/search
+[2026-08-04T22:18:02.933Z] [INFO] moon.rest: GET            /api/witness/hadith/books
+[2026-08-04T22:18:02.933Z] [INFO] moon.rest: GET            /api/witness/hadith
+[2026-08-04T22:18:02.933Z] [INFO] moon.rest: GET            /api/witness/traditions
+[2026-08-04T22:18:02.933Z] [INFO] moon.rest: GET            /api/witness/asmaul-husna
+[2026-08-04T22:18:02.934Z] [INFO] moon.rest: GET            /api/witness/devotions
+[2026-08-04T22:18:02.934Z] [INFO] moon.rest: GET            /api/witness/astronomy/moon-phase
+[2026-08-04T22:18:02.934Z] [INFO] moon.rest: GET            /api/witness/astronomy/prayer-times
+[2026-08-04T22:18:02.934Z] [INFO] moon.rest: POST           /test-publish
+[2026-08-04T22:18:02.934Z] [INFO] moon.rest: GET            /api/external/performance/stats
+[2026-08-04T22:18:02.934Z] [INFO] moon.rest: GET            /api/external/nasa/neo
+[2026-08-04T22:18:02.935Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-04T22:18:02.935Z] [INFO] moon.rest: GET            /api/external/nasa/apod
+[2026-08-04T22:18:02.935Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-04T22:18:02.935Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-04T22:18:02.935Z] [INFO] moon.rest: GET            /api/external/noaa/kp-index
+[2026-08-04T22:18:02.936Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-04T22:18:02.936Z] [INFO] moon.rest: GET            /api/external/rainviewer
+[2026-08-04T22:18:02.936Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-04T22:18:02.936Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-04T22:18:02.936Z] [INFO] moon.rest: GET            /api/external/db/status
+[2026-08-04T22:18:02.936Z] [INFO] moon.rest: GET            /api/external/meta/models
+[2026-08-04T22:18:02.937Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-04T22:18:02.937Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-08-04T22:18:02.937Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-08-04T22:18:02.937Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-08-04T22:18:02.937Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-08-04T22:18:02.938Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-08-04T22:18:02.938Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-08-04T22:18:02.938Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-08-04T22:18:02.938Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-08-04T22:18:02.938Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-08-04T22:18:02.938Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-08-04T22:18:02.939Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-08-04T22:18:02.939Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-08-04T22:18:02.939Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-08-04T22:18:02.939Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-08-04T22:18:02.939Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-08-04T22:18:02.940Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-08-04T22:18:02.940Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-08-04T22:18:02.940Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-08-04T22:18:02.940Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-08-04T22:18:02.940Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-08-04T22:18:02.941Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-08-04T22:18:02.941Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-08-04T22:18:02.941Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-08-04T22:18:02.941Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-08-04T22:18:02.941Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-08-04T22:18:02.941Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-08-04T22:18:02.942Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-08-04T22:18:02.942Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-08-04T22:18:02.942Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-08-04T22:18:02.942Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-08-04T22:18:02.942Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-08-04T22:18:02.943Z] [INFO] moon.rest: GET, POST      /api/px.request
+[2026-08-04T22:18:02.943Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.request/:id
+[2026-08-04T22:18:02.943Z] [INFO] moon.rest: GET, POST      /api/px.cache
+[2026-08-04T22:18:02.943Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.cache/:id
+[2026-08-04T22:18:02.943Z] [INFO] moon.rest: GET, POST      /api/px.query
+[2026-08-04T22:18:02.944Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.query/:id
+[2026-08-04T22:18:02.944Z] [INFO] moon.rest: GET, POST      /api/px.system
+[2026-08-04T22:18:02.944Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.system/:id
+[2026-08-04T22:18:02.944Z] [INFO] moon.rest: GET, POST      /api/wx.scripture
+[2026-08-04T22:18:02.944Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture/:id
+[2026-08-04T22:18:02.945Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.book
+[2026-08-04T22:18:02.945Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.book/:id
+[2026-08-04T22:18:02.945Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.verse
+[2026-08-04T22:18:02.945Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.verse/:id
+[2026-08-04T22:18:02.945Z] [INFO] moon.rest: GET, POST      /api/wx.tradition
+[2026-08-04T22:18:02.946Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition/:id
+[2026-08-04T22:18:02.946Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.item
+[2026-08-04T22:18:02.946Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.item/:id
+[2026-08-04T22:18:02.946Z] [INFO] moon.rest: GET, POST      /api/wx.devotion
+[2026-08-04T22:18:02.946Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.devotion/:id
+[2026-08-04T22:18:02.946Z] [INFO] moon.rest: GET, POST      /api/wx.asmaul.husna
+[2026-08-04T22:18:02.947Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.asmaul.husna/:id
+[2026-08-04T22:18:02.947Z] [INFO] moon.rest: GET, POST      /api/wx.bookmark
+[2026-08-04T22:18:02.947Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.bookmark/:id
+[2026-08-04T22:18:02.947Z] [INFO] moon.rest: GET, POST      /api/wx.history
+[2026-08-04T22:18:02.947Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.history/:id
+[2026-08-04T22:18:02.948Z] [INFO] moon.rest: GET, POST      /api/kh.conversation
+[2026-08-04T22:18:02.948Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.conversation/:id
+[2026-08-04T22:18:02.948Z] [INFO] moon.rest: GET, POST      /api/kh.message
+[2026-08-04T22:18:02.948Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
+[2026-08-04T22:18:21.203Z] [INFO] moon.http: GET /api/fx.msg 200 (361ms)
+[2026-08-04T22:18:33.057Z] [INFO] moon.http: GET /api/fx.msg 200 (357ms)
+[2026-08-04T22:19:13.378Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (105ms)
+[2026-08-04T22:19:13.570Z] [INFO] moon.http: GET /api/fx.msg?domain=%5B%5B%22resModel%22%2C%22%3D%22%2C%22wx.scripture.verse%22%5D%5D 500 (287ms)
+[2026-08-04T22:19:14.095Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (836ms)
+[2026-08-04T22:19:14.206Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (94ms)
+[2026-08-04T22:19:14.480Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (270ms)
+[2026-08-04T22:20:14.192Z] [INFO] moon.http: GET /api/fx.msg 200 (358ms)
+[2026-08-04T22:20:34.289Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (210ms)
+[2026-08-04T22:20:34.394Z] [INFO] moon.http: GET /api/fx.msg?domain=%5B%5B%22resModel%22%2C%22%3D%22%2C%22wx.scripture.verse%22%5D%5D 500 (258ms)
+[2026-08-04T22:20:34.867Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (857ms)
+[2026-08-04T22:20:34.977Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (95ms)
+[2026-08-04T22:20:35.261Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (273ms)
+[2026-08-04T22:21:05.645Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (113ms)
+[2026-08-04T22:21:05.817Z] [INFO] moon.http: GET /api/fx.msg?domain=%5B%5B%22resModel%22%2C%22%3D%22%2C%22wx.scripture.verse%22%5D%5D 500 (285ms)
+[2026-08-04T22:21:06.296Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (765ms)
+[2026-08-04T22:21:06.394Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (95ms)
+[2026-08-04T22:21:06.684Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (272ms)
+[2026-08-04T22:22:10.368Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (96ms)
+[2026-08-04T22:22:10.719Z] [INFO] moon.http: GET /api/fx.msg?resModel=wx.scripture.verse 200 (436ms)
+[2026-08-04T22:22:10.914Z] [INFO] moon.http: GET /api/witness/quran/surah?number=10 200 (748ms)
+[2026-08-04T22:22:11.013Z] [INFO] moon.http: GET /api/witness/asmaul-husna 200 (94ms)
+[2026-08-04T22:22:11.289Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (267ms)
+[2026-08-04T22:26:04.165Z] [INFO] moon.http: GET /api/wx.scripture.verse/517 200 (456ms)
+[2026-08-04T22:26:04.177Z] [INFO] moon.http: GET /api/wx.asmaul.husna?limit=100 200 (467ms)
+[2026-08-04T22:26:04.240Z] [INFO] moon.http: GET /api/fx.msg?resModel=wx.scripture.verse 200 (530ms)
+[2026-08-04T22:26:04.941Z] [INFO] moon.http: GET /api/wx.scripture.verse/517 200 (752ms)
+[2026-08-04T22:26:04.950Z] [INFO] moon.http: GET /api/wx.asmaul.husna?limit=100 200 (780ms)
+[2026-08-04T22:26:04.999Z] [INFO] moon.http: GET /api/wx.scripture.verse/2507 200 (810ms)
+[2026-08-04T22:26:05.004Z] [INFO] moon.http: GET /api/wx.scripture.verse/771 200 (815ms)
+[2026-08-04T22:26:05.005Z] [INFO] moon.http: GET /api/wx.scripture.verse/1811 200 (815ms)
+[2026-08-04T22:26:05.006Z] [INFO] moon.http: GET /api/wx.scripture.verse/4594 200 (816ms)
+[2026-08-04T22:26:05.008Z] [INFO] moon.http: GET /api/wx.scripture.verse/2182 200 (817ms)
+[2026-08-04T22:26:05.016Z] [INFO] moon.http: GET /api/wx.scripture.verse/4356 200 (825ms)
+[2026-08-04T22:26:05.035Z] [INFO] moon.http: GET /api/wx.scripture.verse/522 200 (844ms)
+[2026-08-04T22:26:05.045Z] [INFO] moon.http: GET /api/wx.scripture.verse/4026 200 (853ms)
+[2026-08-04T22:26:05.045Z] [INFO] moon.http: GET /api/wx.scripture.verse/4269 200 (854ms)
+[2026-08-04T22:26:05.086Z] [INFO] moon.http: GET /api/wx.scripture.verse/5650 200 (895ms)
+[2026-08-04T22:26:05.091Z] [INFO] moon.http: GET /api/wx.scripture.verse/3093 200 (899ms)
+[2026-08-04T22:26:05.093Z] [INFO] moon.http: GET /api/wx.scripture.verse/1959 200 (901ms)
+[2026-08-04T22:26:05.093Z] [INFO] moon.http: GET /api/wx.scripture.verse/1857 200 (901ms)
+[2026-08-04T22:26:05.129Z] [INFO] moon.http: GET /api/wx.scripture.verse/187 200 (939ms)
+[2026-08-04T22:26:05.279Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (323ms)
+[2026-08-04T22:27:10.117Z] [INFO] moon.http: GET /api/wx.scripture.verse/100 200 (362ms)
+[2026-08-04T22:27:20.717Z] [INFO] moon.http: GET /api/wx.asmaul.husna?limit=5 200 (361ms)
+[2026-08-04T22:28:07.717Z] [INFO] moon.http: GET /api/wx.scripture.verse/517 200 (347ms)
+[2026-08-04T22:28:08.068Z] [INFO] moon.http: GET /api/wx.asmaul.husna?limit=100 200 (348ms)
+[2026-08-04T22:28:08.334Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (260ms)
+[2026-08-04T22:28:58.397Z] [INFO] moon.http: GET /api/wx.scripture.book?limit=5 200 (429ms)
+[2026-08-04T22:30:09.075Z] [INFO] moon.http: GET /api/wx.scripture.verse/517 200 (341ms)
+[2026-08-04T22:30:09.426Z] [INFO] moon.http: GET /api/wx.asmaul.husna?limit=100 200 (347ms)
+[2026-08-04T22:30:09.691Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (256ms)
+[2026-08-04T22:33:17.975Z] [INFO] moon.http: GET /api/wx.scripture.verse/517 200 (444ms)
+[2026-08-04T22:33:17.999Z] [INFO] moon.http: GET /api/wx.asmaul.husna?limit=100 200 (467ms)
+[2026-08-04T22:33:18.063Z] [INFO] moon.http: GET /api/fx.msg?resModel=wx.scripture.verse 200 (531ms)
+[2026-08-04T22:33:18.726Z] [INFO] moon.http: GET /api/wx.asmaul.husna?limit=100 200 (748ms)
+[2026-08-04T22:33:18.728Z] [INFO] moon.http: GET /api/wx.scripture.verse/517 200 (716ms)
+[2026-08-04T22:33:18.729Z] [INFO] moon.http: GET /api/wx.scripture.verse/2507 200 (717ms)
+[2026-08-04T22:33:18.745Z] [INFO] moon.http: GET /api/wx.scripture.verse/4594 200 (732ms)
+[2026-08-04T22:33:18.746Z] [INFO] moon.http: GET /api/wx.scripture.verse/771 200 (734ms)
+[2026-08-04T22:33:18.783Z] [INFO] moon.http: GET /api/wx.scripture.verse/1811 200 (770ms)
+[2026-08-04T22:33:18.797Z] [INFO] moon.http: GET /api/wx.scripture.verse/4356 200 (784ms)
+[2026-08-04T22:33:18.798Z] [INFO] moon.http: GET /api/wx.scripture.verse/187 200 (785ms)
+[2026-08-04T22:33:18.799Z] [INFO] moon.http: GET /api/wx.scripture.verse/522 200 (785ms)
+[2026-08-04T22:33:18.803Z] [INFO] moon.http: GET /api/wx.scripture.verse/4269 200 (789ms)
+[2026-08-04T22:33:18.812Z] [INFO] moon.http: GET /api/wx.scripture.verse/2182 200 (799ms)
+[2026-08-04T22:33:18.813Z] [INFO] moon.http: GET /api/wx.scripture.verse/5650 200 (799ms)
+[2026-08-04T22:33:18.815Z] [INFO] moon.http: GET /api/wx.scripture.verse/4026 200 (801ms)
+[2026-08-04T22:33:18.830Z] [INFO] moon.http: GET /api/wx.scripture.verse/1959 200 (816ms)
+[2026-08-04T22:33:18.834Z] [INFO] moon.http: GET /api/wx.scripture.verse/1857 200 (820ms)
+[2026-08-04T22:33:18.868Z] [INFO] moon.http: GET /api/wx.scripture.verse/3093 200 (854ms)
+[2026-08-04T22:33:19.073Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=280&limit=1 200 (341ms)
+[2026-08-05T09:12:18.341Z] [INFO] moon.http: GET /api/wx.scripture.verse/4919 200 (380ms)
+[2026-08-05T09:12:18.778Z] [INFO] moon.http: GET /api/wx.asmaul.husna?limit=100 200 (423ms)
+[2026-08-05T09:12:19.116Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=490&limit=1 200 (325ms)
+[2026-08-05T09:12:31.143Z] [INFO] moon.http: GET /api/wx.asmaul.husna?limit=100 200 (342ms)
+[2026-08-05T09:12:31.927Z] [INFO] moon.http: GET /api/wx.scripture.verse/4919 200 (774ms)
+[2026-08-05T09:12:31.941Z] [INFO] moon.http: GET /api/wx.scripture.verse/2507 200 (787ms)
+[2026-08-05T09:12:31.941Z] [INFO] moon.http: GET /api/wx.scripture.verse/4208 200 (788ms)
+[2026-08-05T09:12:31.942Z] [INFO] moon.http: GET /api/wx.scripture.verse/517 200 (788ms)
+[2026-08-05T09:12:31.968Z] [INFO] moon.http: GET /api/wx.scripture.verse/2584 200 (815ms)
+[2026-08-05T09:12:31.994Z] [INFO] moon.http: GET /api/wx.scripture.verse/4594 200 (840ms)
+[2026-08-05T09:12:31.995Z] [INFO] moon.http: GET /api/wx.scripture.verse/771 200 (841ms)
+[2026-08-05T09:12:31.996Z] [INFO] moon.http: GET /api/wx.scripture.verse/4356 200 (841ms)
+[2026-08-05T09:12:31.998Z] [INFO] moon.http: GET /api/wx.scripture.verse/187 200 (843ms)
+[2026-08-05T09:12:31.998Z] [INFO] moon.http: GET /api/wx.scripture.verse/1811 200 (843ms)
+[2026-08-05T09:12:32.013Z] [INFO] moon.http: GET /api/wx.scripture.verse/2182 200 (858ms)
+[2026-08-05T09:12:32.028Z] [INFO] moon.http: GET /api/wx.scripture.verse/5650 200 (873ms)
+[2026-08-05T09:12:32.030Z] [INFO] moon.http: GET /api/wx.scripture.verse/4269 200 (875ms)
+[2026-08-05T09:12:32.030Z] [INFO] moon.http: GET /api/wx.scripture.verse/4026 200 (875ms)
+[2026-08-05T09:12:32.058Z] [INFO] moon.http: GET /api/wx.scripture.verse/522 200 (903ms)
+[2026-08-05T09:16:31.220Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=1&limit=1 200 (281ms)
+[2026-08-05T09:16:40.808Z] [INFO] moon.http: GET /api/wx.tradition.item?limit=3 200 (471ms)
+[2026-08-05T09:17:04.957Z] [INFO] moon.http: GET /api/wx.tradition?limit=5 200 (450ms)
+[2026-08-05T09:21:37.202Z] [INFO] moon.http: GET /api/wx.tradition.item?collectionId=1&limit=2 200 (362ms)
+[2026-08-05T09:21:50.115Z] [INFO] moon.http: GET /api/wx.tradition.item?collection_id=1&limit=2 200 (360ms)
+[2026-08-05T09:22:18.109Z] [INFO] moon.http: GET /api/wx.tradition.item?limit=2 200 (452ms)
+[2026-08-06T11:49:32.557Z] [INFO] moon.schema: Schema sync: 73 applied, 0 pending
+[2026-08-06T11:49:32.558Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-08-06T11:49:32.558Z] [INFO] moon.rest: POST           /auth/login
+[2026-08-06T11:49:32.559Z] [INFO] moon.rest: POST           /auth/register
+[2026-08-06T11:49:32.559Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-08-06T11:49:32.559Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-08-06T11:49:32.559Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-08-06T11:49:32.559Z] [INFO] moon.rest: POST           /rpc
+[2026-08-06T11:49:32.560Z] [INFO] moon.rest: GET            /db/status
+[2026-08-06T11:49:32.560Z] [INFO] moon.rest: GET            /meta/models
+[2026-08-06T11:49:32.560Z] [INFO] moon.rest: GET            /live
+[2026-08-06T11:49:32.560Z] [INFO] moon.rest: GET            /openapi.json
+[2026-08-06T11:49:32.561Z] [INFO] moon.rest: GET            /docs
+[2026-08-06T11:49:32.561Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-08-06T11:49:32.561Z] [INFO] moon.rest: GET            /api/witness/scriptures
+[2026-08-06T11:49:32.561Z] [INFO] moon.rest: GET            /api/witness/quran/surahs
+[2026-08-06T11:49:32.561Z] [INFO] moon.rest: GET            /api/witness/quran/surah
+[2026-08-06T11:49:32.561Z] [INFO] moon.rest: GET            /api/witness/quran/search
+[2026-08-06T11:49:32.562Z] [INFO] moon.rest: GET            /api/witness/hadith/books
+[2026-08-06T11:49:32.562Z] [INFO] moon.rest: GET            /api/witness/hadith
+[2026-08-06T11:49:32.562Z] [INFO] moon.rest: GET            /api/witness/traditions
+[2026-08-06T11:49:32.562Z] [INFO] moon.rest: GET            /api/witness/asmaul-husna
+[2026-08-06T11:49:32.562Z] [INFO] moon.rest: GET            /api/witness/devotions
+[2026-08-06T11:49:32.563Z] [INFO] moon.rest: GET            /api/witness/astronomy/moon-phase
+[2026-08-06T11:49:32.563Z] [INFO] moon.rest: GET            /api/witness/astronomy/prayer-times
+[2026-08-06T11:49:32.563Z] [INFO] moon.rest: POST           /test-publish
+[2026-08-06T11:49:32.563Z] [INFO] moon.rest: GET            /api/external/performance/stats
+[2026-08-06T11:49:32.563Z] [INFO] moon.rest: GET            /api/external/nasa/neo
+[2026-08-06T11:49:32.563Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-06T11:49:32.564Z] [INFO] moon.rest: GET            /api/external/nasa/apod
+[2026-08-06T11:49:32.564Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-06T11:49:32.564Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-06T11:49:32.564Z] [INFO] moon.rest: GET            /api/external/noaa/kp-index
+[2026-08-06T11:49:32.564Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-06T11:49:32.565Z] [INFO] moon.rest: GET            /api/external/rainviewer
+[2026-08-06T11:49:32.565Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-06T11:49:32.565Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-06T11:49:32.565Z] [INFO] moon.rest: GET            /api/external/db/status
+[2026-08-06T11:49:32.565Z] [INFO] moon.rest: GET            /api/external/meta/models
+[2026-08-06T11:49:32.566Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-06T11:49:32.566Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-08-06T11:49:32.566Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-08-06T11:49:32.566Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-08-06T11:49:32.566Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-08-06T11:49:32.566Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-08-06T11:49:32.567Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-08-06T11:49:32.567Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-08-06T11:49:32.567Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-08-06T11:49:32.567Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-08-06T11:49:32.567Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-08-06T11:49:32.567Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-08-06T11:49:32.568Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-08-06T11:49:32.568Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-08-06T11:49:32.568Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-08-06T11:49:32.568Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-08-06T11:49:32.568Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-08-06T11:49:32.569Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-08-06T11:49:32.569Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-08-06T11:49:32.569Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-08-06T11:49:32.569Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-08-06T11:49:32.569Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-08-06T11:49:32.570Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-08-06T11:49:32.570Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-08-06T11:49:32.570Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-08-06T11:49:32.570Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-08-06T11:49:32.570Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-08-06T11:49:32.570Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-08-06T11:49:32.571Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-08-06T11:49:32.571Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-08-06T11:49:32.571Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-08-06T11:49:32.571Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-08-06T11:49:32.571Z] [INFO] moon.rest: GET, POST      /api/px.request
+[2026-08-06T11:49:32.571Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.request/:id
+[2026-08-06T11:49:32.572Z] [INFO] moon.rest: GET, POST      /api/px.cache
+[2026-08-06T11:49:32.572Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.cache/:id
+[2026-08-06T11:49:32.572Z] [INFO] moon.rest: GET, POST      /api/px.query
+[2026-08-06T11:49:32.572Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.query/:id
+[2026-08-06T11:49:32.572Z] [INFO] moon.rest: GET, POST      /api/px.system
+[2026-08-06T11:49:32.573Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.system/:id
+[2026-08-06T11:49:32.573Z] [INFO] moon.rest: GET, POST      /api/wx.scripture
+[2026-08-06T11:49:32.573Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture/:id
+[2026-08-06T11:49:32.573Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.book
+[2026-08-06T11:49:32.573Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.book/:id
+[2026-08-06T11:49:32.573Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.verse
+[2026-08-06T11:49:32.574Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.verse/:id
+[2026-08-06T11:49:32.574Z] [INFO] moon.rest: GET, POST      /api/wx.tradition
+[2026-08-06T11:49:32.574Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition/:id
+[2026-08-06T11:49:32.574Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.item
+[2026-08-06T11:49:32.574Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.item/:id
+[2026-08-06T11:49:32.574Z] [INFO] moon.rest: GET, POST      /api/wx.devotion
+[2026-08-06T11:49:32.575Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.devotion/:id
+[2026-08-06T11:49:32.575Z] [INFO] moon.rest: GET, POST      /api/wx.asmaul.husna
+[2026-08-06T11:49:32.575Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.asmaul.husna/:id
+[2026-08-06T11:49:32.575Z] [INFO] moon.rest: GET, POST      /api/wx.bookmark
+[2026-08-06T11:49:32.575Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.bookmark/:id
+[2026-08-06T11:49:32.576Z] [INFO] moon.rest: GET, POST      /api/wx.history
+[2026-08-06T11:49:32.576Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.history/:id
+[2026-08-06T11:49:32.576Z] [INFO] moon.rest: GET, POST      /api/kh.conversation
+[2026-08-06T11:49:32.576Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.conversation/:id
+[2026-08-06T11:49:32.576Z] [INFO] moon.rest: GET, POST      /api/kh.message
+[2026-08-06T11:49:32.576Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
+[2026-08-06T11:49:32.579Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-08-06T11:50:32.100Z] [INFO] moon.schema: Schema sync: 73 applied, 0 pending
+[2026-08-06T11:50:32.101Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-08-06T11:50:32.101Z] [INFO] moon.rest: POST           /auth/login
+[2026-08-06T11:50:32.101Z] [INFO] moon.rest: POST           /auth/register
+[2026-08-06T11:50:32.102Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-08-06T11:50:32.102Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-08-06T11:50:32.102Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-08-06T11:50:32.102Z] [INFO] moon.rest: POST           /rpc
+[2026-08-06T11:50:32.102Z] [INFO] moon.rest: GET            /db/status
+[2026-08-06T11:50:32.103Z] [INFO] moon.rest: GET            /meta/models
+[2026-08-06T11:50:32.103Z] [INFO] moon.rest: GET            /live
+[2026-08-06T11:50:32.103Z] [INFO] moon.rest: GET            /openapi.json
+[2026-08-06T11:50:32.103Z] [INFO] moon.rest: GET            /docs
+[2026-08-06T11:50:32.103Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-08-06T11:50:32.104Z] [INFO] moon.rest: GET            /api/witness/scriptures
+[2026-08-06T11:50:32.104Z] [INFO] moon.rest: GET            /api/witness/quran/surahs
+[2026-08-06T11:50:32.104Z] [INFO] moon.rest: GET            /api/witness/quran/surah
+[2026-08-06T11:50:32.104Z] [INFO] moon.rest: GET            /api/witness/quran/search
+[2026-08-06T11:50:32.104Z] [INFO] moon.rest: GET            /api/witness/hadith/books
+[2026-08-06T11:50:32.105Z] [INFO] moon.rest: GET            /api/witness/hadith
+[2026-08-06T11:50:32.105Z] [INFO] moon.rest: GET            /api/witness/traditions
+[2026-08-06T11:50:32.105Z] [INFO] moon.rest: GET            /api/witness/asmaul-husna
+[2026-08-06T11:50:32.105Z] [INFO] moon.rest: GET            /api/witness/devotions
+[2026-08-06T11:50:32.105Z] [INFO] moon.rest: GET            /api/witness/astronomy/moon-phase
+[2026-08-06T11:50:32.106Z] [INFO] moon.rest: GET            /api/witness/astronomy/prayer-times
+[2026-08-06T11:50:32.106Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-06T11:50:32.106Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-06T11:50:32.106Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-06T11:50:32.107Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-06T11:50:32.107Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-06T11:50:32.107Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-06T11:50:32.107Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-06T11:50:32.107Z] [INFO] moon.rest: GET            /api/witness/bookmarks
+[2026-08-06T11:50:32.108Z] [INFO] moon.rest: GET            /api/witness/history
+[2026-08-06T11:50:32.108Z] [INFO] moon.rest: POST           /test-publish
+[2026-08-06T11:50:32.108Z] [INFO] moon.rest: GET            /api/external/performance/stats
+[2026-08-06T11:50:32.108Z] [INFO] moon.rest: GET            /api/external/nasa/neo
+[2026-08-06T11:50:32.109Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-06T11:50:32.109Z] [INFO] moon.rest: GET            /api/external/nasa/apod
+[2026-08-06T11:50:32.109Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-06T11:50:32.109Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-06T11:50:32.109Z] [INFO] moon.rest: GET            /api/external/noaa/kp-index
+[2026-08-06T11:50:32.110Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-06T11:50:32.110Z] [INFO] moon.rest: GET            /api/external/rainviewer
+[2026-08-06T11:50:32.110Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-06T11:50:32.110Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-06T11:50:32.111Z] [INFO] moon.rest: GET            /api/external/db/status
+[2026-08-06T11:50:32.111Z] [INFO] moon.rest: GET            /api/external/meta/models
+[2026-08-06T11:50:32.111Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-06T11:50:32.111Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-08-06T11:50:32.111Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-08-06T11:50:32.112Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-08-06T11:50:32.112Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-08-06T11:50:32.112Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-08-06T11:50:32.112Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-08-06T11:50:32.113Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-08-06T11:50:32.113Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-08-06T11:50:32.113Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-08-06T11:50:32.113Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-08-06T11:50:32.113Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-08-06T11:50:32.114Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-08-06T11:50:32.114Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-08-06T11:50:32.114Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-08-06T11:50:32.114Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-08-06T11:50:32.114Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-08-06T11:50:32.115Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-08-06T11:50:32.115Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-08-06T11:50:32.115Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-08-06T11:50:32.115Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-08-06T11:50:32.115Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-08-06T11:50:32.116Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-08-06T11:50:32.116Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-08-06T11:50:32.116Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-08-06T11:50:32.116Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-08-06T11:50:32.116Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-08-06T11:50:32.117Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-08-06T11:50:32.117Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-08-06T11:50:32.117Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-08-06T11:50:32.117Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-08-06T11:50:32.117Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-08-06T11:50:32.118Z] [INFO] moon.rest: GET, POST      /api/px.request
+[2026-08-06T11:50:32.118Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.request/:id
+[2026-08-06T11:50:32.118Z] [INFO] moon.rest: GET, POST      /api/px.cache
+[2026-08-06T11:50:32.118Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.cache/:id
+[2026-08-06T11:50:32.118Z] [INFO] moon.rest: GET, POST      /api/px.query
+[2026-08-06T11:50:32.118Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.query/:id
+[2026-08-06T11:50:32.119Z] [INFO] moon.rest: GET, POST      /api/px.system
+[2026-08-06T11:50:32.119Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.system/:id
+[2026-08-06T11:50:32.119Z] [INFO] moon.rest: GET, POST      /api/wx.scripture
+[2026-08-06T11:50:32.119Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture/:id
+[2026-08-06T11:50:32.119Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.book
+[2026-08-06T11:50:32.119Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.book/:id
+[2026-08-06T11:50:32.120Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.verse
+[2026-08-06T11:50:32.120Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.verse/:id
+[2026-08-06T11:50:32.120Z] [INFO] moon.rest: GET, POST      /api/wx.tradition
+[2026-08-06T11:50:32.120Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition/:id
+[2026-08-06T11:50:32.120Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.item
+[2026-08-06T11:50:32.121Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.item/:id
+[2026-08-06T11:50:32.121Z] [INFO] moon.rest: GET, POST      /api/wx.devotion
+[2026-08-06T11:50:32.121Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.devotion/:id
+[2026-08-06T11:50:32.121Z] [INFO] moon.rest: GET, POST      /api/wx.asmaul.husna
+[2026-08-06T11:50:32.122Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.asmaul.husna/:id
+[2026-08-06T11:50:32.122Z] [INFO] moon.rest: GET, POST      /api/wx.bookmark
+[2026-08-06T11:50:32.122Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.bookmark/:id
+[2026-08-06T11:50:32.122Z] [INFO] moon.rest: GET, POST      /api/wx.history
+[2026-08-06T11:50:32.122Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.history/:id
+[2026-08-06T11:50:32.122Z] [INFO] moon.rest: GET, POST      /api/kh.conversation
+[2026-08-06T11:50:32.123Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.conversation/:id
+[2026-08-06T11:50:32.123Z] [INFO] moon.rest: GET, POST      /api/kh.message
+[2026-08-06T11:50:32.123Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
+[2026-08-06T11:50:32.126Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-08-06T11:52:01.857Z] [INFO] moon.http: GET /api/fx.msg?resModel=wx.scripture.verse 200 (379ms)
+[2026-08-06T11:52:02.071Z] [INFO] moon.http: OPTIONS /api/external/nasa/apod 204 (0ms)
+[2026-08-06T11:52:02.077Z] [INFO] moon.http: OPTIONS /api/external/nasa/neo?start_date=2026-08-06&end_date=2026-08-06 204 (0ms)
+[2026-08-06T11:52:02.079Z] [INFO] moon.http: OPTIONS /api/external/usgs/earthquakes 204 (0ms)
+[2026-08-06T11:52:02.081Z] [INFO] moon.http: OPTIONS /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 204 (0ms)
+[2026-08-06T11:52:02.083Z] [INFO] moon.http: OPTIONS /api/external/noaa/kp-index 204 (0ms)
+[2026-08-06T11:52:02.087Z] [INFO] moon.http: OPTIONS /api/external/nasa/apod 204 (1ms)
+[2026-08-06T11:52:02.088Z] [INFO] moon.http: OPTIONS /api/external/nasa/neo?start_date=2026-08-06&end_date=2026-08-06 204 (0ms)
+[2026-08-06T11:52:02.094Z] [INFO] moon.http: OPTIONS /api/external/usgs/earthquakes 204 (0ms)
+[2026-08-06T11:52:02.096Z] [INFO] moon.http: OPTIONS /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 204 (0ms)
+[2026-08-06T11:52:02.109Z] [INFO] moon.http: OPTIONS /api/external/noaa/kp-index 204 (0ms)
+[2026-08-06T11:52:02.528Z] [INFO] moon.http: GET /api/wx.scripture.verse/4633 200 (368ms)
+[2026-08-06T11:52:02.691Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (579ms)
+[2026-08-06T11:52:02.694Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-06T11:52:02.803Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (692ms)
+[2026-08-06T11:52:03.018Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (214ms)
+[2026-08-06T11:52:03.174Z] [INFO] moon.http: GET /api/wx.asmaul.husna?limit=100 200 (642ms)
+[2026-08-06T11:52:03.276Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (1169ms)
+[2026-08-06T11:52:03.277Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-06T11:52:03.320Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-06&end_date=2026-08-06 200 (1222ms)
+[2026-08-06T11:52:03.322Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-06&end_date=2026-08-06 200 (0ms)
+[2026-08-06T11:52:03.464Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=324&limit=1 200 (275ms)
+[2026-08-06T11:52:11.757Z] [INFO] moon.http: GET /api/external/nasa/apod 503 (9647ms)
+[2026-08-06T11:52:11.879Z] [INFO] moon.http: GET /api/wx.scripture.verse/4633 200 (349ms)
+[2026-08-06T11:52:11.918Z] [INFO] moon.http: GET /api/wx.asmaul.husna?limit=100 200 (352ms)
+[2026-08-06T11:52:12.642Z] [INFO] moon.http: GET /api/wx.asmaul.husna?limit=100 200 (759ms)
+[2026-08-06T11:52:12.646Z] [INFO] moon.http: GET /api/wx.scripture.verse/5244 200 (713ms)
+[2026-08-06T11:52:12.647Z] [INFO] moon.http: GET /api/wx.scripture.verse/4633 200 (714ms)
+[2026-08-06T11:52:12.650Z] [INFO] moon.http: GET /api/wx.scripture.verse/4621 200 (716ms)
+[2026-08-06T11:52:12.679Z] [INFO] moon.http: GET /api/wx.scripture.verse/2997 200 (746ms)
+[2026-08-06T11:52:12.700Z] [INFO] moon.http: GET /api/wx.scripture.verse/452 200 (766ms)
+[2026-08-06T11:52:12.715Z] [INFO] moon.http: GET /api/wx.scripture.verse/2832 200 (781ms)
+[2026-08-06T11:52:12.716Z] [INFO] moon.http: GET /api/wx.scripture.verse/5218 200 (781ms)
+[2026-08-06T11:52:12.717Z] [INFO] moon.http: GET /api/wx.scripture.verse/4919 200 (782ms)
+[2026-08-06T11:52:12.720Z] [INFO] moon.http: GET /api/wx.scripture.verse/2584 200 (784ms)
+[2026-08-06T11:52:12.727Z] [INFO] moon.http: GET /api/wx.scripture.verse/4208 200 (792ms)
+[2026-08-06T11:52:12.732Z] [INFO] moon.http: GET /api/wx.scripture.verse/517 200 (796ms)
+[2026-08-06T11:52:12.734Z] [INFO] moon.http: GET /api/wx.scripture.verse/2507 200 (798ms)
+[2026-08-06T11:52:12.735Z] [INFO] moon.http: GET /api/wx.scripture.verse/771 200 (799ms)
+[2026-08-06T11:52:12.766Z] [INFO] moon.http: GET /api/wx.scripture.verse/4594 200 (830ms)
+[2026-08-06T11:52:12.786Z] [INFO] moon.http: GET /api/wx.scripture.verse/1811 200 (850ms)
+[2026-08-06T11:52:12.977Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=324&limit=1 200 (331ms)
+[2026-08-06T11:52:17.774Z] [INFO] moon.http: GET /api/external/nasa/apod 503 (6014ms)
+[2026-08-07T00:34:49.573Z] [INFO] moon.schema: Schema sync: 73 applied, 0 pending
+[2026-08-07T00:34:49.574Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-08-07T00:34:49.574Z] [INFO] moon.rest: POST           /auth/login
+[2026-08-07T00:34:49.574Z] [INFO] moon.rest: POST           /auth/register
+[2026-08-07T00:34:49.574Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-08-07T00:34:49.575Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-08-07T00:34:49.575Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-08-07T00:34:49.575Z] [INFO] moon.rest: POST           /rpc
+[2026-08-07T00:34:49.575Z] [INFO] moon.rest: GET            /db/status
+[2026-08-07T00:34:49.576Z] [INFO] moon.rest: GET            /meta/models
+[2026-08-07T00:34:49.576Z] [INFO] moon.rest: GET            /live
+[2026-08-07T00:34:49.576Z] [INFO] moon.rest: GET            /openapi.json
+[2026-08-07T00:34:49.576Z] [INFO] moon.rest: GET            /docs
+[2026-08-07T00:34:49.576Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-08-07T00:34:49.577Z] [INFO] moon.rest: GET            /api/witness/scriptures
+[2026-08-07T00:34:49.577Z] [INFO] moon.rest: GET            /api/witness/quran/surahs
+[2026-08-07T00:34:49.577Z] [INFO] moon.rest: GET            /api/witness/quran/surah
+[2026-08-07T00:34:49.577Z] [INFO] moon.rest: GET            /api/witness/quran/search
+[2026-08-07T00:34:49.578Z] [INFO] moon.rest: GET            /api/witness/hadith/books
+[2026-08-07T00:34:49.578Z] [INFO] moon.rest: GET            /api/witness/hadith
+[2026-08-07T00:34:49.578Z] [INFO] moon.rest: GET            /api/witness/traditions
+[2026-08-07T00:34:49.578Z] [INFO] moon.rest: GET            /api/witness/asmaul-husna
+[2026-08-07T00:34:49.579Z] [INFO] moon.rest: GET            /api/witness/devotions
+[2026-08-07T00:34:49.579Z] [INFO] moon.rest: GET            /api/witness/astronomy/moon-phase
+[2026-08-07T00:34:49.579Z] [INFO] moon.rest: GET            /api/witness/astronomy/prayer-times
+[2026-08-07T00:34:49.579Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-07T00:34:49.580Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-07T00:34:49.580Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-07T00:34:49.580Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-07T00:34:49.580Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-07T00:34:49.581Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-07T00:34:49.581Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-07T00:34:49.581Z] [INFO] moon.rest: GET            /api/witness/bookmarks
+[2026-08-07T00:34:49.581Z] [INFO] moon.rest: GET            /api/witness/history
+[2026-08-07T00:34:49.581Z] [INFO] moon.rest: POST           /test-publish
+[2026-08-07T00:34:49.582Z] [INFO] moon.rest: GET            /api/external/performance/stats
+[2026-08-07T00:34:49.582Z] [INFO] moon.rest: GET            /api/external/nasa/neo
+[2026-08-07T00:34:49.582Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-07T00:34:49.582Z] [INFO] moon.rest: GET            /api/external/nasa/apod
+[2026-08-07T00:34:49.583Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-07T00:34:49.583Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-07T00:34:49.583Z] [INFO] moon.rest: GET            /api/external/noaa/kp-index
+[2026-08-07T00:34:49.584Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-07T00:34:49.584Z] [INFO] moon.rest: GET            /api/external/rainviewer
+[2026-08-07T00:34:49.584Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-07T00:34:49.584Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-07T00:34:49.585Z] [INFO] moon.rest: GET            /api/external/db/status
+[2026-08-07T00:34:49.585Z] [INFO] moon.rest: GET            /api/external/meta/models
+[2026-08-07T00:34:49.585Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-07T00:34:49.585Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-08-07T00:34:49.586Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-08-07T00:34:49.586Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-08-07T00:34:49.586Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-08-07T00:34:49.586Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-08-07T00:34:49.587Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-08-07T00:34:49.587Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-08-07T00:34:49.587Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-08-07T00:34:49.587Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-08-07T00:34:49.588Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-08-07T00:34:49.588Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-08-07T00:34:49.588Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-08-07T00:34:49.588Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-08-07T00:34:49.589Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-08-07T00:34:49.589Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-08-07T00:34:49.589Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-08-07T00:34:49.589Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-08-07T00:34:49.589Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-08-07T00:34:49.590Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-08-07T00:34:49.590Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-08-07T00:34:49.590Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-08-07T00:34:49.590Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-08-07T00:34:49.591Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-08-07T00:34:49.591Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-08-07T00:34:49.591Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-08-07T00:34:49.591Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-08-07T00:34:49.592Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-08-07T00:34:49.592Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-08-07T00:34:49.592Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-08-07T00:34:49.592Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-08-07T00:34:49.592Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-08-07T00:34:49.593Z] [INFO] moon.rest: GET, POST      /api/px.request
+[2026-08-07T00:34:49.593Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.request/:id
+[2026-08-07T00:34:49.593Z] [INFO] moon.rest: GET, POST      /api/px.cache
+[2026-08-07T00:34:49.594Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.cache/:id
+[2026-08-07T00:34:49.594Z] [INFO] moon.rest: GET, POST      /api/px.query
+[2026-08-07T00:34:49.594Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.query/:id
+[2026-08-07T00:34:49.594Z] [INFO] moon.rest: GET, POST      /api/px.system
+[2026-08-07T00:34:49.595Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.system/:id
+[2026-08-07T00:34:49.595Z] [INFO] moon.rest: GET, POST      /api/wx.scripture
+[2026-08-07T00:34:49.595Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture/:id
+[2026-08-07T00:34:49.595Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.book
+[2026-08-07T00:34:49.596Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.book/:id
+[2026-08-07T00:34:49.596Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.verse
+[2026-08-07T00:34:49.596Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.verse/:id
+[2026-08-07T00:34:49.596Z] [INFO] moon.rest: GET, POST      /api/wx.tradition
+[2026-08-07T00:34:49.597Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition/:id
+[2026-08-07T00:34:49.597Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.item
+[2026-08-07T00:34:49.597Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.item/:id
+[2026-08-07T00:34:49.597Z] [INFO] moon.rest: GET, POST      /api/wx.devotion
+[2026-08-07T00:34:49.598Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.devotion/:id
+[2026-08-07T00:34:49.598Z] [INFO] moon.rest: GET, POST      /api/wx.asmaul.husna
+[2026-08-07T00:34:49.598Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.asmaul.husna/:id
+[2026-08-07T00:34:49.598Z] [INFO] moon.rest: GET, POST      /api/wx.bookmark
+[2026-08-07T00:34:49.599Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.bookmark/:id
+[2026-08-07T00:34:49.599Z] [INFO] moon.rest: GET, POST      /api/wx.history
+[2026-08-07T00:34:49.599Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.history/:id
+[2026-08-07T00:34:49.599Z] [INFO] moon.rest: GET, POST      /api/kh.conversation
+[2026-08-07T00:34:49.600Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.conversation/:id
+[2026-08-07T00:34:49.600Z] [INFO] moon.rest: GET, POST      /api/kh.message
+[2026-08-07T00:34:49.600Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
+[2026-08-07T00:34:49.604Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-08-07T00:55:18.231Z] [INFO] moon.http: GET /api/fx.msg?resModel=wx.scripture.verse 200 (380ms)
+[2026-08-07T00:55:18.297Z] [INFO] moon.http: OPTIONS /api/external/nasa/apod 204 (0ms)
+[2026-08-07T00:55:18.301Z] [INFO] moon.http: OPTIONS /api/external/nasa/neo?start_date=2026-08-07&end_date=2026-08-07 204 (0ms)
+[2026-08-07T00:55:18.301Z] [INFO] moon.http: OPTIONS /api/external/usgs/earthquakes 204 (0ms)
+[2026-08-07T00:55:18.302Z] [INFO] moon.http: OPTIONS /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 204 (0ms)
+[2026-08-07T00:55:18.303Z] [INFO] moon.http: OPTIONS /api/external/noaa/kp-index 204 (0ms)
+[2026-08-07T00:55:18.304Z] [INFO] moon.http: OPTIONS /api/external/nasa/apod 204 (0ms)
+[2026-08-07T00:55:18.305Z] [INFO] moon.http: OPTIONS /api/external/nasa/neo?start_date=2026-08-07&end_date=2026-08-07 204 (0ms)
+[2026-08-07T00:55:18.306Z] [INFO] moon.http: OPTIONS /api/external/usgs/earthquakes 204 (0ms)
+[2026-08-07T00:55:18.307Z] [INFO] moon.http: OPTIONS /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 204 (0ms)
+[2026-08-07T00:55:18.318Z] [INFO] moon.http: OPTIONS /api/external/noaa/kp-index 204 (0ms)
+[2026-08-07T00:55:18.798Z] [INFO] moon.http: GET /api/wx.scripture.verse/2224 200 (405ms)
+[2026-08-07T00:55:18.901Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (577ms)
+[2026-08-07T00:55:18.904Z] [INFO] moon.http: GET /api/external/noaa/kp-index 200 (0ms)
+[2026-08-07T00:55:18.916Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (595ms)
+[2026-08-07T00:55:19.095Z] [INFO] moon.http: GET /api/external/usgs/earthquakes 200 (177ms)
+[2026-08-07T00:55:19.110Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (787ms)
+[2026-08-07T00:55:19.111Z] [INFO] moon.http: GET /api/external/weather?latitude=21.4225&longitude=39.8262&current_weather=true 200 (0ms)
+[2026-08-07T00:55:19.355Z] [INFO] moon.http: GET /api/wx.asmaul.husna?limit=100 200 (552ms)
+[2026-08-07T00:55:19.361Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-07&end_date=2026-08-07 200 (1042ms)
+[2026-08-07T00:55:19.363Z] [INFO] moon.http: GET /api/external/nasa/neo?start_date=2026-08-07&end_date=2026-08-07 200 (0ms)
+[2026-08-07T00:55:19.653Z] [INFO] moon.http: GET /api/witness/hadith?slug=bukhari&page=1&limit=1 200 (287ms)
+[2026-08-07T00:55:40.496Z] [INFO] moon.http: GET /api/external/nasa/apod 503 (22188ms)
+[2026-08-07T00:55:40.889Z] [INFO] moon.http: GET /api/external/nasa/apod 200 (2567ms)
+[2026-08-07T00:58:35.485Z] [INFO] moon.http: GET /api/fx.msg?resModel=wx.scripture.verse 200 (343ms)
+[2026-08-07T01:02:54.026Z] [INFO] moon.http: GET /api/fx.msg?resModel=wx.scripture.verse 200 (341ms)
+[2026-08-07T01:08:29.298Z] [INFO] moon.http: GET /api/fx.msg?resModel=wx.scripture.verse 200 (347ms)

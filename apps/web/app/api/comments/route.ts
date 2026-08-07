@@ -20,9 +20,7 @@ export async function GET(req: NextRequest) {
     // But since the user allowed keeping mocks if it's too complex, let's keep it simple.
     // Actually, we can just use `moonClientInstance.request` to search `fx.msg`.
     
-    let domain: any[] = [["resModel", "=", resModel]]
-    
-    const json = await moonClientInstance.request("GET", `/api/fx.msg?domain=${encodeURIComponent(JSON.stringify(domain))}`)
+    const json = await moonClientInstance.request("GET", `/api/fx.msg?resModel=${resModel}`)
     if (json.error) throw new Error(json.error)
       
     let comments = json.data || []

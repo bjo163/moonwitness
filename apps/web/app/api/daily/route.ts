@@ -149,19 +149,22 @@ export async function GET(req: NextRequest) {
     try {
       const todayAyahId = (dailySeed % totalAyahCount) + 1
       
-      const approxSurah = Math.max(1, Math.min(114, Math.floor(todayAyahId / 54) + 1))
-      const json = await moonClientInstance.request("GET", `/api/witness/quran/surah?number=${approxSurah}`)
-      if (json.ayahs && json.ayahs.length > 0) {
-         const idx = (todayAyahId - 1) % json.ayahs.length
-         const a = json.ayahs[idx]
+      const json = await moonClientInstance.request("GET", `/api/wx.scripture.verse/${todayAyahId}`)
+      if (json.data) {
+         const a = json.data
+         // ORM returns snake_case fields. book_id is a [id, name] tuple.
+         // book_id[0] = surah number (1-114), book_id[1] = surah name
+         const bookId = Array.isArray(a.book_id) ? a.book_id[0] : 1
+         const bookName = Array.isArray(a.book_id) ? a.book_id[1] : (a.book_id || "")
          ayahData = {
-            surah_number: approxSurah,
-            surah_name_latin: json.surah.name,
-            ayah_number: a.number,
-            text_arabic: a.textArabic,
-            text_latin: a.textLatin,
-            translation_id: a.textId,
-            translation_en: a.textEn
+            surah_number: bookId,
+            surah_name_latin: bookName || ("Surah " + bookId),
+            ayah_number: a.verse_number || 1,
+            text_arabic: a.text_original || "",
+            text_latin: a.text_transliteration || "",
+            translation_id: a.translation_id || "",
+            translation_en: a.translation_en || "",
+            audio_url: a.audio_url || ""
          }
       }
     } catch (e) {
@@ -169,7 +172,7 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-      const json = await moonClientInstance.request("GET", "/api/witness/asmaul-husna")
+      const json = await moonClientInstance.request("GET", "/api/wx.asmaul.husna?limit=100")
       const asmaul = json.data || []
       if (asmaul.length > 0) {
          const surahNum = ayahData?.surah_number || 1
@@ -212,18 +215,19 @@ export async function GET(req: NextRequest) {
         textLatin: ayahData?.text_latin || "Bismillāhir-raḥmānir-raḥīm",
         translationId: ayahData?.translation_id || "Dengan nama Allah Yang Maha Pengasih, Maha Penyayang.",
         translationEn: ayahData?.translation_en || "In the name of Allah, the Entirely Merciful, the Especially Merciful.",
+        audioUrl: ayahData?.audio_url || "",
       },
       asmaulSurah: asmaulSurahData ? {
         number: asmaulSurahData.number || 1,
-        nameArabic: asmaulSurahData.arabic || "",
-        nameLatin: asmaulSurahData.latin || "",
-        translationId: asmaulSurahData.translationId || "",
+        nameArabic: asmaulSurahData.name_arabic || "",
+        nameLatin: asmaulSurahData.name_latin || "",
+        translationId: asmaulSurahData.translation_id || "",
       } : undefined,
       asmaulAyah: asmaulAyahData ? {
         number: asmaulAyahData.number || 2,
-        nameArabic: asmaulAyahData.arabic || "",
-        nameLatin: asmaulAyahData.latin || "",
-        translationId: asmaulAyahData.translationId || "",
+        nameArabic: asmaulAyahData.name_arabic || "",
+        nameLatin: asmaulAyahData.name_latin || "",
+        translationId: asmaulAyahData.translation_id || "",
       } : undefined,
       hadith: {
         id: hadithData?.number || 1,

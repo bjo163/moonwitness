@@ -89,15 +89,15 @@ export function HomePlanetaryTelemetryWidget() {
           {metrics.map((row) => (
             <div
               key={row.label}
-              className="group -mx-2 flex items-center justify-between rounded border-b border-white/[0.02] px-2 py-1.5 transition-colors last:border-0 hover:bg-white/[0.02]"
+              className="group -mx-2 flex flex-wrap sm:flex-nowrap items-center justify-between rounded border-b border-white/[0.02] px-2 py-2 sm:py-1.5 transition-colors last:border-0 hover:bg-white/[0.02]"
             >
-              <span className="w-[35%] truncate pr-2 tracking-widest text-primary uppercase">
+              <span className="w-1/2 sm:w-[35%] truncate pr-2 tracking-widest text-primary uppercase">
                 {row.label}
               </span>
-              <span className="w-[40%] font-mono font-bold tracking-wide text-primary">
+              <span className="w-1/2 sm:w-[40%] text-right sm:text-left font-mono font-bold tracking-wide text-primary">
                 {row.stat}
               </span>
-              <span className={`w-[25%] text-right text-[9px] font-bold tracking-wider ${row.trendColor}`}>
+              <span className={`w-full sm:w-[25%] mt-1 sm:mt-0 text-right text-[9px] font-bold tracking-wider ${row.trendColor}`}>
                 {row.trend}
               </span>
             </div>

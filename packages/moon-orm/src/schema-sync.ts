@@ -49,6 +49,12 @@ export async function forge(options: { dryRun?: boolean } = {}): Promise<{
   const migrations: MigrationCommand[] = []
   lastPending = []
 
+  // PRODUCTION SAFETY GUARD
+  if (process.env.NODE_ENV === 'production' && !options.dryRun) {
+    console.warn("⚠️ [DANGER] Schema sync aborted! Auto-sync is strictly prohibited in production.")
+    return { applied, pending: [], migrations }
+  }
+
   // Initialize pgvector
   try {
     const db = getDb()

@@ -1,13 +1,14 @@
 "use client"
 import { useMounted } from "@core/hooks"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
 import { calculateLunarPhase, LunarPhaseInfo } from "@core/utils/lunar-phase"
+import { calculateSunInfo, SunInfo } from "@core/utils/sun-position"
 import { useLanguage } from "@core/contexts"
 import { useGlobalAudio } from "@core/contexts"
 import { GlobalLiveAudioTranslator } from "./global-live-audio-translator"
-import { Play, Pause, SkipForward, SkipBack, Music, Users, Activity, Compass, Repeat, Gauge } from "lucide-react"
+import { Play, Pause, SkipForward, SkipBack, Music, Users, Activity, Compass, Repeat, Gauge, Sun } from "lucide-react"
 import { useMoonStore } from "@core/store/moon-store"
 
 export function Taskbar() {
@@ -18,6 +19,42 @@ export function Taskbar() {
   const mounted = useMounted()
   const [timeStr, setTimeStr] = useState("")
   const [lunarInfo, setLunarInfo] = useState<LunarPhaseInfo | null>(null)
+  const [sunInfo, setSunInfo] = useState<SunInfo | null>(null)
+  const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(null)
+  const prevDuhaStatus = useRef<string | null>(null)
+
+  // Get geolocation once
+  useEffect(() => {
+    // Try cache first
+    const cached = localStorage.getItem("mw_last_location")
+    if (cached) {
+      try {
+        const { lat, lng, timestamp } = JSON.parse(cached)
+        if (Date.now() - timestamp < 86400000) {
+          setUserCoords({ lat, lng })
+        }
+      } catch {}
+    }
+
+    if (typeof navigator !== "undefined" && "geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude
+          const lng = pos.coords.longitude
+          localStorage.setItem("mw_last_location", JSON.stringify({ lat, lng, timestamp: Date.now() }))
+          setUserCoords({ lat, lng })
+        },
+        () => {
+          // Fallback to Jakarta if denied
+          if (!userCoords) setUserCoords({ lat: -6.2088, lng: 106.8456 })
+        },
+        { timeout: 5000, enableHighAccuracy: false, maximumAge: 3600000 }
+      )
+    } else if (!userCoords) {
+      setUserCoords({ lat: -6.2088, lng: 106.8456 })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     setTimeout(() => {
@@ -34,10 +71,68 @@ export function Taskbar() {
           hour12: false,
         })
       )
+
+      // Update sun info every tick
+      if (userCoords) {
+        setSunInfo(calculateSunInfo(userCoords.lat, userCoords.lng, now))
+      }
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [lang])
+  }, [lang, userCoords])
+
+  const playDuhaChime = (isAfdhal: boolean) => {
+    try {
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext
+      if (AudioContextClass) {
+        const ctx = new AudioContextClass()
+        
+        const playTone = (freq1: number, freq2: number, startTime: number) => {
+          const osc = ctx.createOscillator()
+          const gain = ctx.createGain()
+          osc.connect(gain)
+          gain.connect(ctx.destination)
+
+          osc.type = "sine"
+          osc.frequency.setValueAtTime(freq1, startTime)
+          osc.frequency.exponentialRampToValueAtTime(freq2, startTime + 1.2)
+
+          // Volume lebih kencang (peak di 1.0)
+          gain.gain.setValueAtTime(0, startTime)
+          gain.gain.linearRampToValueAtTime(1.0, startTime + 0.05)
+          gain.gain.exponentialRampToValueAtTime(0.01, startTime + 1.2)
+
+          osc.start(startTime)
+          osc.stop(startTime + 1.2)
+        }
+
+        if (isAfdhal) {
+           // Double chime tinggi untuk Afdhal
+           playTone(880, 440, ctx.currentTime)
+           playTone(1046.50, 523.25, ctx.currentTime + 0.4) // C6
+        } else {
+           // Double chime standar untuk Duha
+           playTone(523.25, 261.63, ctx.currentTime) // C5
+           playTone(659.25, 329.63, ctx.currentTime + 0.4) // E5
+        }
+      }
+    } catch (e) {
+      console.error("Failed to play alarm chime", e)
+    }
+  }
+
+  // Play alarm sound when Duha status changes
+  useEffect(() => {
+    if (!sunInfo) return
+
+    if (prevDuhaStatus.current && prevDuhaStatus.current !== sunInfo.duhaStatus) {
+      if (sunInfo.duhaStatus === "AFDHAL" || sunInfo.duhaStatus === "ACTIVE") {
+        playDuhaChime(sunInfo.duhaStatus === "AFDHAL")
+      }
+    }
+
+    prevDuhaStatus.current = sunInfo.duhaStatus
+  }, [sunInfo])
 
   // Hide global taskbar on dedicated system portals
   if (
@@ -99,6 +194,39 @@ export function Taskbar() {
                   {lunarInfo.illuminationPercent}%
                 </strong>
               </span>
+            </span>
+          )}
+
+          <span className="hidden h-3 w-px bg-white/10 lg:block" />
+
+          {/* Sun Position & Duha Status */}
+          {sunInfo && (
+            <span
+              onClick={() => playDuhaChime(sunInfo.duhaStatus === 'AFDHAL')}
+              className="hidden items-center gap-1.5 lg:flex cursor-pointer hover:opacity-80 transition-opacity"
+              title={`Solar Altitude: ${sunInfo.altitude}° — ${sunInfo.duhaLabel || sunInfo.label}`}
+            >
+              <Sun className={`h-3 w-3 ${
+                sunInfo.duhaStatus === 'AFDHAL' ? 'text-amber-400 animate-pulse' :
+                sunInfo.duhaStatus === 'ACTIVE' ? 'text-amber-400' :
+                sunInfo.altitude > 0 ? 'text-amber-400/60' : 'text-zinc-600'
+              }`} />
+              <strong className={`font-black ${
+                sunInfo.duhaStatus === 'AFDHAL' ? 'text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.6)]' :
+                sunInfo.duhaStatus === 'ACTIVE' ? 'text-amber-400' :
+                sunInfo.altitude > 0 ? 'text-amber-400/70' : 'text-zinc-500'
+              }`}>
+                {sunInfo.altitude}°
+              </strong>
+              {sunInfo.duhaLabel && (
+                <span className={`text-[9px] font-bold ${
+                  sunInfo.duhaStatus === 'AFDHAL'
+                    ? 'text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.6)]'
+                    : 'text-emerald-400/70'
+                }`}>
+                  {sunInfo.duhaLabel}
+                </span>
+              )}
             </span>
           )}
         </div>

@@ -109,15 +109,15 @@ export function AnalyticsTelemetryView() {
           <div className="font-mono text-4xl font-black text-white">{systemStatus.uptime}h</div>
         </div>
 
-        <div className="rounded-2xl border border-purple-500/20 bg-black/40 p-6 backdrop-blur-xl transition-all hover:border-purple-500/50">
-          <div className="mb-4 flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-purple-400 uppercase">
+        <div className="rounded-2xl border border-blue-500/20 bg-black/40 p-6 backdrop-blur-xl transition-all hover:border-blue-500/50">
+          <div className="mb-4 flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-blue-400 uppercase">
             <Server className="h-4 w-4" /> Database
           </div>
           <div className="font-mono text-3xl font-black text-white uppercase">{systemStatus.db}</div>
         </div>
 
-        <div className="rounded-2xl border border-pink-500/20 bg-black/40 p-6 backdrop-blur-xl transition-all hover:border-pink-500/50">
-          <div className="mb-4 flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-pink-400 uppercase">
+        <div className="rounded-2xl border border-emerald-500/20 bg-black/40 p-6 backdrop-blur-xl transition-all hover:border-emerald-500/50">
+          <div className="mb-4 flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-emerald-400 uppercase">
             <BarChart3 className="h-4 w-4" /> Models Loaded
           </div>
           <div className="font-mono text-4xl font-black text-white">{systemStatus.models}</div>
@@ -126,9 +126,9 @@ export function AnalyticsTelemetryView() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {/* Chart Section */}
-        <div className="lg:col-span-2 rounded-2xl border border-slate-700/50 bg-black/40 p-6 backdrop-blur-xl flex flex-col min-h-[400px]">
+        <div className="lg:col-span-2 rounded-2xl border border-cyan-500/20 bg-black/40 p-6 backdrop-blur-xl flex flex-col min-h-[250px] md:min-h-[400px]">
           <h2 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-indigo-400" />
+            <TrendingUp className="h-5 w-5 text-cyan-400" />
             Historical Traffic (mx.metric)
           </h2>
           
@@ -168,12 +168,12 @@ export function AnalyticsTelemetryView() {
         </div>
 
         {/* Live Logs Section */}
-        <div className="rounded-2xl border border-slate-700/50 bg-black/40 p-6 backdrop-blur-xl flex flex-col h-[400px]">
+        <div className="rounded-2xl border border-cyan-500/20 bg-black/40 p-6 backdrop-blur-xl flex flex-col h-[300px] md:h-[400px]">
           <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <TerminalSquare className="h-5 w-5 text-slate-400" />
+            <TerminalSquare className="h-5 w-5 text-cyan-400" />
             Live Engine Logs
           </h2>
-          <div className="flex-1 bg-black/60 rounded-xl border border-slate-800 p-4 overflow-y-auto font-mono text-xs">
+          <div className="flex-1 bg-black/60 rounded-xl border border-cyan-500/10 p-4 overflow-y-auto font-mono text-xs">
             <ul className="space-y-2">
               {logs.length === 0 && (
                 <li className="text-slate-600 italic">Listening to system events...</li>

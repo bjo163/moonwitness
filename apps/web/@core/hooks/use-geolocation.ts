@@ -33,6 +33,9 @@ export function useGeolocation() {
       } catch (e) {}
     }
 
+    const JAKARTA_LAT = -6.2088
+    const JAKARTA_LNG = 106.8456
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const lat = position.coords.latitude
@@ -41,9 +44,10 @@ export function useGeolocation() {
         setState({ lat, lng, loading: false, error: null })
       },
       (error) => {
-        setState((prev) => ({ ...prev, loading: false, error: error.message }))
+        // Fallback to Jakarta if denied or timeout
+        setState({ lat: JAKARTA_LAT, lng: JAKARTA_LNG, loading: false, error: error.message })
       },
-      { timeout: 10000, enableHighAccuracy: false, maximumAge: 1000 * 60 * 60 }
+      { timeout: 5000, enableHighAccuracy: false, maximumAge: 1000 * 60 * 60 }
     )
   }, [])
 

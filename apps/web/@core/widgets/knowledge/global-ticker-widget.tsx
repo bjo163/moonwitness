@@ -50,7 +50,7 @@ export function GlobalTickerWidget() {
       <div className="flex h-10 items-center">
         <div className="z-10 flex h-full shrink-0 items-center gap-2 bg-cyan-950 px-4 border-r border-cyan-500/50 shadow-[4px_0_15px_rgba(0,240,255,0.2)] relative">
           <Globe2 className="h-4 w-4 text-cyan-400 animate-pulse" />
-          <span className="font-sans text-[10px] font-black tracking-widest text-cyan-400 uppercase">
+          <span className="font-sans text-[10px] font-black tracking-widest text-cyan-400 uppercase hidden md:inline-block">
             Global Reflections
           </span>
           {/* Gradient fade edge */}
@@ -74,8 +74,8 @@ export function GlobalTickerWidget() {
       </div>
       <style>{`
         @keyframes ticker {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          0% { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
         }
       `}</style>
     </div>
