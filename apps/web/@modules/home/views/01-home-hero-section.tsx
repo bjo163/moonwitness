@@ -60,29 +60,34 @@ const MatrixLayer = ({ words, delay, colorClass, shadowColor, colCount, speedMul
     >
       {Array.from({ length: colCount }).map((_, i) => {
         const isUp = i % 2 === 0
-        const duration = (4 + Math.random() * 8) * speedMult
-        const offsetDelay = Math.random() * 20 // Huge random offset for organic timing
-        const itemCount = 8 + Math.floor(Math.random() * 6) // Randomize item count per column
-        const randomGap = [8, 12, 16, 20, 24][Math.floor(Math.random() * 5)]
-        const randomSize = sizeClasses[Math.floor(Math.random() * sizeClasses.length)]
+        const duration = (6 + Math.random() * 8) * speedMult
+        const offsetDelay = Math.random() * 20
+        const itemCount = 3 + Math.floor(Math.random() * 3) // Optimized for performance
+        const randomGap = [16, 24, 32][Math.floor(Math.random() * 3)]
+        
+        // Shuffle words so each column is unique
+        const shuffledWords = [...words].sort(() => Math.random() - 0.5)
         
         return (
           <div
             key={i}
-            className={`absolute flex flex-col font-bold ${randomSize} ${colorClass} mix-blend-screen opacity-90 ${isUp ? 'animate-[matrixUp_var(--dur)_linear_infinite]' : 'animate-[matrixDown_var(--dur)_linear_infinite]'}`}
+            className={`absolute flex flex-col font-bold ${colorClass} opacity-70 will-change-transform ${isUp ? 'animate-[matrixUp_var(--dur)_linear_infinite]' : 'animate-[matrixDown_var(--dur)_linear_infinite]'}`}
             style={{
               left: `${(i / colCount) * 100}%`,
               gap: `${randomGap * 0.25}rem`,
               '--dur': `${duration}s`,
               animationDelay: `-${offsetDelay}s`,
-              textShadow: `0 0 20px ${shadowColor}`
+              filter: `drop-shadow(0 0 8px ${shadowColor})`
             } as React.CSSProperties}
           >
-             {Array.from({ length: itemCount }).map((_, j) => (
-               <div key={j} style={{ opacity: 0.3 + Math.random() * 0.7 }}>
-                  {words[Math.floor(Math.random() * words.length)]}
-               </div>
-             ))}
+             {Array.from({ length: itemCount }).map((_, j) => {
+               const randomSize = sizeClasses[Math.floor(Math.random() * sizeClasses.length)]
+               return (
+                 <div key={j} className={randomSize} style={{ opacity: 0.4 + Math.random() * 0.6 }}>
+                    {shuffledWords[j % shuffledWords.length]}
+                 </div>
+               )
+             })}
           </div>
         )
       })}
@@ -94,21 +99,21 @@ const DivineMatrixRain = ({ active }: { active: boolean }) => {
   if (!active) return null
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[850] overflow-hidden">
-      {/* Phase 0: History / Deja Vu (Starts at 0s, fast, mysterious gray, LATIN) */}
-      <MatrixLayer words={HISTORY_EVENTS} delay={0} colorClass="text-gray-400/50 font-mono tracking-tight" shadowColor="rgba(255, 255, 255, 0.2)" colCount={12} speedMult={0.6} sizeClasses={["text-lg", "text-xl", "text-2xl"]} />
+    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      {/* Phase 0: History / Deja Vu (Starts at 0s, fast, mysterious indigo) */}
+      <MatrixLayer words={HISTORY_EVENTS} delay={0} colorClass="text-indigo-900/40 font-mono tracking-tight" shadowColor="rgba(49, 46, 129, 0.2)" colCount={6} speedMult={0.8} sizeClasses={["text-lg", "text-xl"]} />
       
-      {/* Phase 1: Good Traits & Asmaul Husna (Starts at 4s, slow, gentle green, LATIN) */}
-      <MatrixLayer words={TRAITS} delay={4} colorClass="text-emerald-300/60 font-sans tracking-widest" shadowColor="rgba(52, 211, 153, 0.5)" colCount={8} speedMult={1.8} sizeClasses={["text-2xl", "text-3xl", "text-4xl"]} />
+      {/* Phase 1: Good Traits (Starts at 3s, slow, purple) */}
+      <MatrixLayer words={TRAITS} delay={3} colorClass="text-purple-400/50 font-sans tracking-widest" shadowColor="rgba(192, 132, 252, 0.5)" colCount={5} speedMult={1.5} sizeClasses={["text-xl", "text-2xl"]} />
       
-      {/* Phase 2: Ayah Words (Starts at 10s, medium speed, glowing cyan, LATIN) */}
-      <MatrixLayer words={AYAH_WORDS} delay={10} colorClass="text-cyan-300/80 font-mono tracking-widest" shadowColor="rgba(34, 211, 238, 0.8)" colCount={12} speedMult={1.2} sizeClasses={["text-2xl", "text-3xl", "text-4xl", "text-5xl"]} />
+      {/* Phase 2: Ayah Words (Starts at 6s, medium speed, glowing cyan) */}
+      <MatrixLayer words={AYAH_WORDS} delay={6} colorClass="text-cyan-400/60 font-mono tracking-widest" shadowColor="rgba(34, 211, 238, 0.8)" colCount={6} speedMult={1.2} sizeClasses={["text-2xl", "text-3xl"]} />
       
-      {/* Phase 3: Prophets (Starts at 20s, faster, intense blue, ARABIC) */}
-      <MatrixLayer words={PROPHETS} delay={20} colorClass="text-blue-300 font-arabic" shadowColor="rgba(96, 165, 250, 1)" colCount={16} speedMult={0.8} sizeClasses={["text-4xl", "text-5xl", "text-6xl"]} />
+      {/* Phase 3: Prophets (Starts at 10s, intense emerald) */}
+      <MatrixLayer words={PROPHETS} delay={10} colorClass="text-emerald-400/80 font-arabic" shadowColor="rgba(52, 211, 153, 1)" colCount={8} speedMult={0.8} sizeClasses={["text-3xl", "text-4xl"]} />
       
-      {/* Phase 4: Names of ALLAH - Absolute Climax (Starts at 30s, super fast, blazing yellow/gold, ARABIC) */}
-      <MatrixLayer words={NAMES_OF_ALLAH} delay={30} colorClass="text-yellow-300 font-arabic" shadowColor="rgba(250, 204, 21, 1)" colCount={22} speedMult={0.4} sizeClasses={["text-6xl", "text-7xl", "text-8xl", "text-9xl"]} />
+      {/* Phase 4: Names of ALLAH - Absolute Climax (Starts at 15s) */}
+      <MatrixLayer words={NAMES_OF_ALLAH} delay={15} colorClass="text-cyan-200 font-arabic" shadowColor="rgba(165, 243, 252, 1)" colCount={10} speedMult={0.5} sizeClasses={["text-4xl", "text-5xl", "text-6xl"]} />
     </div>
   )
 }
@@ -502,8 +507,6 @@ export function HomeHeroSection() {
         isShaking ? "animate-[heroShake_1.2s_ease-in-out]" : ""
       }`}
     >
-      <DivineMatrixRain active={isShaking} />
-
       {isShaking && (
         <div className="pointer-events-none fixed inset-0 z-[800] overflow-hidden flex items-center justify-center">
           <div className="absolute inset-0 overflow-hidden mix-blend-screen opacity-50">
@@ -538,17 +541,21 @@ export function HomeHeroSection() {
           className="fixed inset-0 z-[900] flex flex-col items-center justify-center bg-black/90 px-4 text-center backdrop-blur-md animate-in fade-in duration-1000"
           onClick={handleReset}
         >
+          {/* Matrix Rain will play as long as the modal is open */}
+          <DivineMatrixRain active={true} />
+          
+          {/* Audio Recitation (Al-Fatihah) */}
+          <audio src="https://server8.mp3quran.net/afs/001.mp3" autoPlay loop className="hidden" />
+
           {extraDivineData && (
             <>
               <div 
-                className="pointer-events-none absolute left-4 md:left-12 top-1/2 -translate-y-1/2 font-arabic text-6xl text-cyan-500/20 mix-blend-screen animate-pulse"
-                style={{ writingMode: 'vertical-rl', textOrientation: 'upright' }}
+                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 -rotate-90 whitespace-nowrap font-arabic text-4xl text-cyan-500/30 animate-pulse md:left-12 md:text-6xl"
               >
                 {extraDivineData.asmaulLeft}
               </div>
               <div 
-                className="pointer-events-none absolute right-4 md:right-12 top-1/2 -translate-y-1/2 font-arabic text-6xl text-cyan-500/20 mix-blend-screen animate-pulse"
-                style={{ writingMode: 'vertical-rl', textOrientation: 'upright' }}
+                className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 rotate-90 whitespace-nowrap font-arabic text-4xl text-cyan-500/30 animate-pulse md:right-12 md:text-6xl"
               >
                 {extraDivineData.asmaulRight}
               </div>

@@ -23,6 +23,11 @@ import {
   Target,
   FileText,
   BookOpen,
+  Terminal,
+  Radio,
+  Power,
+  RefreshCw,
+  Shield,
 } from "lucide-react"
 
 type EclipseData = {
@@ -36,8 +41,8 @@ type EclipseData = {
   coverage: string
 }
 
-const UPCOMING_ECLIPSES: EclipseData[] = [
-  {
+const UPCOMING_ECLIPSES: Record<string, EclipseData> = {
+  SOLAR: {
     id: "ecl-1",
     date: "AUGUST 12, 2026",
     type: "TOTAL",
@@ -47,17 +52,45 @@ const UPCOMING_ECLIPSES: EclipseData[] = [
     magnitude: "1.044",
     coverage: "100%",
   },
-]
+  LUNAR: {
+    id: "ecl-2",
+    date: "MARCH 3, 2026",
+    type: "TOTAL",
+    location: "Americas, Europe, Africa, Asia",
+    duration: "58m 19s",
+    timestamp: new Date("2026-03-03T11:34:00Z").getTime(),
+    magnitude: "1.15",
+    coverage: "100%",
+  }
+}
 
 export function EclipseTrackerView() {
   const [dailyData, setDailyData] = useState<any>(null)
   const [now, setNow] = useState(0)
   const [isMounted, setIsMounted] = useState(false)
+  const [activeTab, setActiveTab] = useState<"SOLAR" | "LUNAR">("SOLAR")
+  
+  const [astroData, setAstroData] = useState({
+    flux: 143,
+    kp: 1.33,
+    sunspot: 78,
+    speed: 402,
+    bz: -1.8,
+  })
 
   useEffect(() => {
     setIsMounted(true)
     setNow(Date.now())
-    const interval = setInterval(() => setNow(Date.now()), 1000)
+    const interval = setInterval(() => {
+      setNow(Date.now())
+      setAstroData(prev => ({
+        flux: prev.flux + (Math.random() > 0.5 ? 1 : -1) * Math.floor(Math.random() * 3),
+        kp: +(prev.kp + (Math.random() > 0.5 ? 0.02 : -0.02)).toFixed(2),
+        sunspot: Math.max(0, prev.sunspot + (Math.random() > 0.8 ? 1 : (Math.random() < 0.2 ? -1 : 0))),
+        speed: prev.speed + (Math.random() > 0.5 ? 1 : -1) * Math.floor(Math.random() * 4),
+        bz: +(prev.bz + (Math.random() > 0.5 ? 0.1 : -0.1)).toFixed(1),
+      }))
+    }, 1000)
 
     const fetchDaily = async () => {
       try {
@@ -80,7 +113,7 @@ export function EclipseTrackerView() {
       </div>
     )
 
-  const nextEclipse = UPCOMING_ECLIPSES[0]!
+  const nextEclipse = UPCOMING_ECLIPSES[activeTab]!
   const timeDiff = Math.max(0, nextEclipse.timestamp - now)
   const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24))
   const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24)
@@ -100,10 +133,10 @@ export function EclipseTrackerView() {
               <h1 className="text-lg font-bold tracking-widest text-white uppercase">
                 ECLIPSE TRACKER (KUSUF/KHUSUF RADAR)
               </h1>
-              <p className="mt-1 text-[10px] text-[#8F9FB3]">
-                Sistem pemantauan gerhana matahari dan bulan berbasis data NASA.
-                Modul ini mendeteksi anomali cahaya bintang dan memberikan
-                rekomendasi waktu shalat gerhana (Kusuf/Khusuf).
+              <p className="mt-1 max-w-xl text-[10px] leading-relaxed text-[#8F9FB3]">
+                NASA-backed solar and lunar eclipse monitoring system. 
+                This module detects stellar light anomalies and provides 
+                real-time recommendations for Eclipse Prayers (Kusuf/Khusuf).
               </p>
             </div>
           </div>
@@ -156,9 +189,9 @@ export function EclipseTrackerView() {
                     }}
                   />
                 </div>
-                <div className="relative z-20">
-                  <div className="mb-2 w-max rounded border border-indigo-500/30 bg-indigo-600/20 px-2 py-0.5 text-[8px] font-bold tracking-widest text-indigo-300 uppercase">
-                    TOTAL SOLAR ECLIPSE
+                <div className="relative z-20 transition-all duration-500">
+                  <div className={`mb-2 w-max rounded border ${activeTab === 'SOLAR' ? 'border-indigo-500/30 bg-indigo-600/20 text-indigo-300' : 'border-rose-500/30 bg-rose-600/20 text-rose-300'} px-2 py-0.5 text-[8px] font-bold tracking-widest uppercase transition-colors`}>
+                    TOTAL {activeTab} ECLIPSE
                   </div>
                   <h2 className="text-2xl leading-tight font-black tracking-wider text-white">
                     {nextEclipse.date}
@@ -233,13 +266,10 @@ export function EclipseTrackerView() {
 
               <div className="relative z-10 mt-auto rounded border border-indigo-500/30 bg-indigo-900/20 p-3">
                 <div className="mb-1 flex items-center gap-2 text-[9px] font-bold tracking-widest text-white uppercase">
-                  <ShieldAlert className="h-3 w-3 text-indigo-400" /> PERSIAPAN
-                  SHALAT KUSUF (GERHANA)
+                  <ShieldAlert className="h-3 w-3 text-indigo-400" /> KUSUF PRAYER PROTOCOL
                 </div>
                 <p className="text-[9px] leading-relaxed text-indigo-200/70">
-                  Gerhana matahari total akan segera melintasi area yang
-                  ditentukan. Anjuran kuat untuk melaksanakan shalat gerhana dan
-                  memperbanyak istighfar saat fenomena berlangsung.
+                  Total solar eclipse trajectory confirmed. Strong recommendation to establish Eclipse Prayers (Shalat al-Kusuf) and increase repentance (Istighfar) during the celestial phenomenon.
                 </p>
               </div>
             </div>
@@ -250,10 +280,16 @@ export function EclipseTrackerView() {
                 <Activity className="h-3 w-3 text-indigo-400" /> ECLIPSE TYPE
                 COMPARISON
               </div>
-              <button className="flex-1 border-b-2 border-indigo-500 py-2 text-center text-indigo-400">
+              <button 
+                onClick={() => setActiveTab("SOLAR")}
+                className={`flex-1 border-b-2 py-2 text-center transition-colors ${activeTab === "SOLAR" ? "border-indigo-500 text-indigo-400" : "border-transparent text-[#8F9FB3] hover:text-white"}`}
+              >
                 SOLAR ECLIPSE
               </button>
-              <button className="flex-1 border-b-2 border-transparent py-2 text-center text-[#8F9FB3] transition-colors hover:text-white">
+              <button 
+                onClick={() => setActiveTab("LUNAR")}
+                className={`flex-1 border-b-2 py-2 text-center transition-colors ${activeTab === "LUNAR" ? "border-rose-500 text-rose-400" : "border-transparent text-[#8F9FB3] hover:text-white"}`}
+              >
                 LUNAR ECLIPSE
               </button>
             </div>
@@ -480,13 +516,13 @@ export function EclipseTrackerView() {
 
             <div className="rounded-xl border border-white/5 bg-[#040C1A] p-5">
               <div className="mb-4 border-b border-white/10 pb-3 text-[9px] font-bold tracking-widest text-white uppercase">
-                SHALAT KUSUF GUIDE
+                ECLIPSE PRAYER (KUSUF) TIMELINE
               </div>
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-[8px] font-bold tracking-widest uppercase">
                   <div className="flex items-center gap-2 text-amber-500">
                     <div className="h-1.5 w-1.5 rounded-full bg-amber-500" />{" "}
-                    Mulai Gerhana (P1)
+                    Eclipse Starts (P1)
                   </div>
                   <div className="font-mono text-[9px] text-white">
                     16:43 UTC
@@ -494,17 +530,17 @@ export function EclipseTrackerView() {
                 </div>
                 <div className="flex items-center justify-between rounded border border-indigo-500/20 bg-indigo-500/10 p-2 text-[8px] font-bold tracking-widest uppercase">
                   <div className="flex items-center gap-2 text-indigo-300">
-                    <div className="h-1.5 w-1.5 rounded-full bg-indigo-400" />{" "}
-                    Disarankan Mulai Shalat
+                    <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-indigo-400" />{" "}
+                    Recommended Prayer Start
                   </div>
-                  <div className="font-mono text-[9px] text-white">
+                  <div className="font-mono text-[9px] font-bold text-white">
                     18:30 UTC
                   </div>
                 </div>
                 <div className="flex items-center justify-between text-[8px] font-bold tracking-widest uppercase">
                   <div className="flex items-center gap-2 text-purple-400">
-                    <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-purple-400" />{" "}
-                    Puncak Gerhana (MAX)
+                    <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-purple-400 shadow-[0_0_8px_rgba(168,85,247,0.8)]" />{" "}
+                    Maximum Eclipse (MAX)
                   </div>
                   <div className="font-mono text-[9px] text-white">
                     18:47 UTC
@@ -513,7 +549,7 @@ export function EclipseTrackerView() {
                 <div className="flex items-center justify-between text-[8px] font-bold tracking-widest uppercase">
                   <div className="flex items-center gap-2 text-emerald-400">
                     <div className="h-1.5 w-1.5 rounded-full bg-emerald-400" />{" "}
-                    Akhir Totalitas (U4)
+                    Totality Ends (U4)
                   </div>
                   <div className="font-mono text-[9px] text-white">
                     18:48 UTC
@@ -522,15 +558,15 @@ export function EclipseTrackerView() {
                 <div className="flex items-center justify-between text-[8px] font-bold tracking-widest uppercase">
                   <div className="flex items-center gap-2 text-[#8F9FB3]">
                     <div className="h-1.5 w-1.5 rounded-full bg-[#8F9FB3]" />{" "}
-                    Akhir Gerhana (P4)
+                    Eclipse Ends (P4)
                   </div>
                   <div className="font-mono text-[9px] text-white">
                     20:49 UTC
                   </div>
                 </div>
               </div>
-              <button className="mt-5 flex w-full items-center justify-center gap-2 rounded border border-white/10 py-2 text-[7px] tracking-widest text-indigo-300 uppercase transition-colors hover:bg-white/5">
-                <BookOpen className="h-3 w-3" /> LIHAT PANDUAN LENGKAP
+              <button className="mt-5 flex w-full items-center justify-center gap-2 rounded border border-indigo-500/30 py-2 text-[7px] font-bold tracking-widest text-indigo-400 uppercase transition-colors hover:bg-indigo-500/10 hover:text-white">
+                <BookOpen className="h-3 w-3" /> VIEW FULL PRAYER GUIDE
               </button>
             </div>
           </div>
@@ -600,7 +636,7 @@ export function EclipseTrackerView() {
               ))}
             </div>
             <button className="mt-4 flex w-full items-center justify-center gap-1 border-t border-white/5 pt-4 text-[7px] tracking-widest text-indigo-400 uppercase transition-colors hover:text-white">
-              LIHAT PROYEKSI 10 TAHUN LENGKAP <ArrowRight className="h-3 w-3" />
+              VIEW 10-YEAR PROJECTION LOG <ArrowRight className="h-3 w-3" />
             </button>
           </div>
 
@@ -612,11 +648,11 @@ export function EclipseTrackerView() {
             </div>
             <div className="flex-1 space-y-4">
               {[
-                { l: "Solar Flux (F10.7)", v: "143 sfu", i: Sun },
-                { l: "Kp Index", v: "1.33 (Quiet)", i: Activity },
-                { l: "Sunspot Number", v: "78", i: Circle },
-                { l: "Solar Wind Speed", v: "402 km/s", i: ArrowRight },
-                { l: "IMF Bz", v: "-1.8 nT", i: Compass },
+                { l: "Solar Flux (F10.7)", v: `${astroData.flux} sfu`, i: Sun },
+                { l: "Kp Index", v: `${astroData.kp.toFixed(2)} (Quiet)`, i: Activity },
+                { l: "Sunspot Number", v: `${astroData.sunspot}`, i: Circle },
+                { l: "Solar Wind Speed", v: `${astroData.speed} km/s`, i: ArrowRight },
+                { l: "IMF Bz", v: `${astroData.bz.toFixed(1)} nT`, i: Compass },
                 { l: "Geomagnetic Field", v: "Stable", i: Globe },
               ].map((x, i) => (
                 <div
@@ -636,15 +672,15 @@ export function EclipseTrackerView() {
           <div className="flex flex-col rounded-xl border border-white/5 bg-[#040C1A] p-5 md:col-span-3">
             <div className="mb-5 flex items-center gap-2 text-[9px] font-bold tracking-widest text-white uppercase">
               <ShieldAlert className="h-3.5 w-3.5 text-emerald-400" />{" "}
-              RECOMMENDED ACTIONS
+              OBSERVATION PROTOCOLS
             </div>
             <div className="flex-1 space-y-3">
               {[
-                { text: "Gunakan kacamata khusus gerhana", checked: true },
-                { text: "Hindari melihat matahari langsung", checked: true },
-                { text: "Siapkan tempat shalat yang nyaman", checked: true },
-                { text: "Perbanyak dzikir & istighfar", checked: true },
-                { text: "Catat pengamatan & dokumentasikan", checked: false },
+                { text: "Use certified solar eclipse glasses", checked: true },
+                { text: "Avoid direct naked-eye observation", checked: true },
+                { text: "Prepare prayer (Kusuf) station", checked: true },
+                { text: "Increase Dhikr & Repentance", checked: true },
+                { text: "Log observational telemetry data", checked: false },
               ].map((x, i) => (
                 <div
                   key={i}
@@ -668,7 +704,7 @@ export function EclipseTrackerView() {
               ))}
             </div>
             <button className="mt-4 flex w-full items-center justify-center gap-2 rounded border border-white/10 py-2 text-[7px] tracking-widest text-white uppercase transition-colors hover:bg-white/5">
-              <Download className="h-3 w-3" /> DOWNLOAD CHECKLIST
+              <Download className="h-3 w-3" /> DOWNLOAD SAFETY CHECKLIST
             </button>
           </div>
 
@@ -678,13 +714,10 @@ export function EclipseTrackerView() {
               <Info className="h-3.5 w-3.5 text-indigo-400" /> SCIENCE & INSIGHT
             </div>
             <p className="relative z-10 text-[9px] leading-relaxed text-[#8F9FB3]">
-              Gerhana matahari total terjadi ketika bulan berada di antara bumi
-              dan matahari, menutupi seluruh permukaan matahari. Fenomena ini
-              menjadi momen berharga untuk mempelajari korona matahari dan
-              dinamika tata surya.
+              A total solar eclipse occurs when the Moon passes exactly between the Earth and the Sun, completely obscuring the solar disk. This phenomenon presents a rare scientific opportunity to study the solar corona and validate celestial mechanics.
             </p>
             <button className="relative z-10 mt-auto flex w-max items-center gap-1 text-[7px] tracking-widest text-indigo-400 uppercase transition-colors hover:text-white">
-              PELAJARI LEBIH LANJUT <ArrowRight className="h-3 w-3" />
+              ACCESS DEEP RESEARCH <ArrowRight className="h-3 w-3" />
             </button>
             <div className="pointer-events-none absolute -right-8 -bottom-8 z-0 h-40 w-40 opacity-40 mix-blend-screen">
               <img
@@ -702,12 +735,102 @@ export function EclipseTrackerView() {
           </div>
         </div>
 
+        {/* ═══ SENSORS & DIAGNOSTICS ROW ═══ */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-12 mb-4">
+          
+          {/* Spectroscopy */}
+          <div className="flex flex-col rounded-xl border border-white/5 bg-[#040C1A] p-5 md:col-span-4">
+            <div className="mb-4 flex items-center justify-between text-[9px] font-bold tracking-widest text-white uppercase">
+              <div className="flex items-center gap-2">
+                <Activity className="h-3.5 w-3.5 text-indigo-400" /> SPECTROSCOPY
+              </div>
+              <span className="text-emerald-400 animate-pulse">NOMINAL</span>
+            </div>
+            <div className="flex-1 space-y-4">
+              {[
+                { lbl: "Hydrogen (Hα)", val: 87, color: "bg-rose-500" },
+                { lbl: "Helium (He I)", val: 42, color: "bg-amber-500" },
+                { lbl: "Iron (Fe XIV)", val: 65, color: "bg-emerald-500" },
+                { lbl: "Calcium (Ca K)", val: 28, color: "bg-indigo-500" },
+              ].map((s, i) => (
+                <div key={i} className="space-y-1 text-[8px]">
+                  <div className="flex justify-between text-[#8F9FB3]">
+                    <span>{s.lbl}</span>
+                    <span className="font-mono text-white">{s.val}%</span>
+                  </div>
+                  <div className="h-1 w-full overflow-hidden rounded-full bg-black/50">
+                    <div className={`h-full ${s.color} transition-all duration-1000`} style={{ width: `${s.val + (astroData.kp > 1.33 ? 3 : -3)}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* System Logs */}
+          <div className="flex flex-col rounded-xl border border-white/5 bg-[#040C1A] p-5 md:col-span-4 relative overflow-hidden">
+            <div className="mb-4 flex items-center gap-2 text-[9px] font-bold tracking-widest text-white uppercase">
+              <Terminal className="h-3.5 w-3.5 text-indigo-400" /> LIVE SENSOR LOGS
+            </div>
+            <div className="flex-1 font-mono text-[8px] leading-relaxed text-indigo-300/70 space-y-1 overflow-hidden">
+              <div className="animate-pulse text-emerald-400">[SYS] Telemetry stream active... OK</div>
+              <div>[RADAR] Acquiring limb profile... {astroData.flux}sfu</div>
+              <div>[DATA] Solar wind density: 4.2 p/cm³</div>
+              <div className="text-emerald-400">[SYNC] JPL Uplink connected</div>
+              <div className="opacity-70">[SYS] Adjusting tracking rate...</div>
+              {astroData.bz < -1.75 && <div className="text-amber-400">[WARN] Minor Bz fluctuation detected</div>}
+              {astroData.speed > 403 && <div className="text-rose-400">[ERR] Thermal variance in Sector 4</div>}
+              <div className="opacity-50">[SYS] Compensating focus array... OK</div>
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#040C1A] to-transparent pointer-events-none" />
+          </div>
+
+          {/* Command Uplink */}
+          <div className="flex flex-col rounded-xl border border-white/5 bg-[#040C1A] p-5 md:col-span-4">
+            <div className="mb-4 flex items-center gap-2 text-[9px] font-bold tracking-widest text-white uppercase">
+              <Radio className="h-3.5 w-3.5 text-indigo-400" /> COMMAND UPLINK
+            </div>
+            <div className="grid grid-cols-2 gap-3 flex-1">
+              <button className="group relative flex flex-col items-center justify-center gap-2 overflow-hidden rounded-lg border border-indigo-500/30 bg-indigo-500/10 p-3 text-indigo-300 transition-all hover:border-indigo-400 hover:bg-indigo-500/20 hover:shadow-[0_0_15px_rgba(99,102,241,0.5)]">
+                <div className="absolute top-1.5 left-2 font-mono text-[5px] text-indigo-500 opacity-70">[SEQ_01]</div>
+                <div className="absolute inset-0 -translate-x-[150%] skew-x-[30deg] bg-gradient-to-r from-transparent via-indigo-400/20 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[150%]" />
+                <Power className="h-5 w-5 transition-transform group-hover:scale-110" />
+                <span className="font-mono text-[8px] font-bold tracking-[0.15em]">REBOOT SUN CORE</span>
+              </button>
+              
+              <button className="group relative flex flex-col items-center justify-center gap-2 overflow-hidden rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3 text-emerald-300 transition-all hover:border-emerald-400 hover:bg-emerald-500/20 hover:shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+                <div className="absolute top-1.5 left-2 font-mono text-[5px] text-emerald-500 opacity-70">[SEQ_02]</div>
+                <div className="absolute inset-0 -translate-x-[150%] skew-x-[30deg] bg-gradient-to-r from-transparent via-emerald-400/20 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[150%]" />
+                <RefreshCw className="h-5 w-5 transition-transform group-hover:scale-110 group-hover:animate-spin" />
+                <span className="font-mono text-[8px] font-bold tracking-[0.15em]">SYNC GRAVITY FIELD</span>
+              </button>
+              
+              <button className="group relative flex flex-col items-center justify-center gap-2 overflow-hidden rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-amber-300 transition-all hover:border-amber-400 hover:bg-amber-500/20 hover:shadow-[0_0_15px_rgba(245,158,11,0.5)]">
+                <div className="absolute top-1.5 left-2 font-mono text-[5px] text-amber-500 opacity-70">[SEQ_03]</div>
+                <div className="absolute inset-0 -translate-x-[150%] skew-x-[30deg] bg-gradient-to-r from-transparent via-amber-400/20 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[150%]" />
+                <Shield className="h-5 w-5 transition-transform group-hover:scale-110" />
+                <span className="font-mono text-[8px] font-bold tracking-[0.15em]">DEPLOY LUNAR SHIELD</span>
+              </button>
+              
+              <button className="group relative flex flex-col items-center justify-center gap-2 overflow-hidden rounded-lg border border-rose-500/40 bg-rose-500/10 p-3 text-rose-300 transition-all hover:border-rose-400 hover:bg-rose-600/30 hover:shadow-[0_0_20px_rgba(225,29,72,0.8)]">
+                <div className="absolute inset-0 bg-rose-500/10 animate-pulse" />
+                <div className="absolute top-1.5 right-2 flex items-center gap-1">
+                  <div className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-ping" />
+                </div>
+                <div className="absolute top-1.5 left-2 font-mono text-[5px] text-rose-500 opacity-70">[CRITICAL]</div>
+                <div className="absolute inset-0 -translate-x-[150%] skew-x-[30deg] bg-gradient-to-r from-transparent via-rose-400/20 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[150%]" />
+                <AlertTriangle className="h-5 w-5 transition-transform group-hover:scale-110 relative z-10" />
+                <span className="font-mono text-[8px] font-bold tracking-[0.15em] relative z-10 text-rose-200">ORBITAL OVERRIDE</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* ═══ BOTTOM ROW: SCRIPTURES & COMMUNITY ═══ */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
           {/* Ayat */}
           <div className="flex flex-col rounded-xl border border-white/5 bg-[#040C1A] p-5 md:col-span-3">
             <div className="mb-4 flex items-center gap-2 text-[9px] font-bold tracking-widest text-white uppercase">
-              <Moon className="h-3.5 w-3.5 text-indigo-400" /> AYAT TERKAIT
+              <Moon className="h-3.5 w-3.5 text-indigo-400" /> DIVINE SCRIPTURE (QURAN)
             </div>
             <div
               className="font-arabic mb-3 text-right text-xl leading-[1.8] text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]"
@@ -719,34 +842,34 @@ export function EclipseTrackerView() {
             <div className="mb-2 text-[8px] leading-relaxed text-[#8F9FB3] italic">
               "
               {dailyData?.ayah?.translationId ||
-                "Demi matahari dan sinarnya pada pagi hari, dan demi bulan apabila mengiringinya."}
+                "By the sun and its brightness, and by the moon when it follows it."}
               "
             </div>
             <div className="mb-4 text-[7px] font-bold tracking-widest text-emerald-400 uppercase">
-              (QS. {dailyData?.ayah?.surahName || "Asy-Syams"}:{" "}
+              (QS. {dailyData?.ayah?.surahName || "Ash-Shams"}:{" "}
               {dailyData?.ayah?.ayahNumber || "1-2"})
             </div>
             <button className="mt-auto flex items-center justify-center gap-1 border-t border-white/5 pt-4 text-[7px] tracking-widest text-indigo-400 uppercase transition-colors hover:text-white">
-              <BookOpen className="h-3 w-3" /> LIHAT SEMUA AYAT
+              <BookOpen className="h-3 w-3" /> READ FULL CHAPTER
             </button>
           </div>
 
           {/* Hadis */}
           <div className="flex flex-col rounded-xl border border-white/5 bg-[#040C1A] p-5 md:col-span-3">
             <div className="mb-4 flex items-center gap-2 text-[9px] font-bold tracking-widest text-white uppercase">
-              <FileText className="h-3.5 w-3.5 text-indigo-400" /> HADIS TERKAIT
+              <FileText className="h-3.5 w-3.5 text-indigo-400" /> PROPHETIC TRADITION (HADITH)
             </div>
             <div className="mb-3 text-[8px] leading-relaxed text-white italic">
               "
               {dailyData?.hadith?.textId ||
-                "Sesungguhnya matahari dan bulan adalah dua tanda di antara tanda-tanda (kebesaran) Allah. Keduanya tidak mengalami gerhana karena kematian atau kelahiran seseorang. Maka apabila kamu melihat gerhana, berdoalah kepada Allah, bertakbir, shalat, dan bersedekahlah."}
+                "The sun and the moon are two signs among the signs of Allah. They do not eclipse because of the death or life of anyone. So when you see them, invoke Allah and pray till the eclipse is clear."}
               "
             </div>
             <div className="mb-4 text-[7px] tracking-widest text-[#8F9FB3] uppercase">
-              ({dailyData?.hadith?.bookName || "HR. Bukhari & Muslim"})
+              ({dailyData?.hadith?.bookName || "Sahih al-Bukhari"})
             </div>
             <button className="mt-auto flex items-center justify-center gap-1 border-t border-white/5 pt-4 text-[7px] tracking-widest text-indigo-400 uppercase transition-colors hover:text-white">
-              <BookOpen className="h-3 w-3" /> LIHAT SEMUA HADIS
+              <BookOpen className="h-3 w-3" /> VIEW SOURCE DB
             </button>
           </div>
 
@@ -768,12 +891,14 @@ export function EclipseTrackerView() {
                   <img
                     src="/assets/eclipse_total.png"
                     alt="Gallery"
-                    className="h-full w-full scale-125 object-cover opacity-70 mix-blend-screen"
+                    className="h-full w-full scale-125 object-cover opacity-70 mix-blend-screen transition-transform duration-700 group-hover:scale-150 group-hover:opacity-100"
                     style={{
                       maskImage:
                         "radial-gradient(circle, black 50%, transparent 75%)",
                       WebkitMaskImage:
                         "radial-gradient(circle, black 50%, transparent 75%)",
+                      filter: `hue-rotate(${i * 45}deg) contrast(1.2)`,
+                      transform: `rotate(${i * 72}deg) scale(1.25)`
                     }}
                   />
                 </div>
@@ -783,15 +908,15 @@ export function EclipseTrackerView() {
               </div>
             </div>
             <button className="mt-4 flex items-center justify-center gap-1 border-t border-white/5 pt-4 text-[7px] tracking-widest text-indigo-400 uppercase transition-colors hover:text-white">
-              <Camera className="h-3 w-3" /> LIHAT GALERI LENGKAP
+              <Camera className="h-3 w-3" /> OPEN VISUAL ARCHIVE
             </button>
           </div>
 
           {/* Community */}
           <div className="flex flex-col rounded-xl border border-white/5 bg-[#040C1A] p-5 md:col-span-3">
             <div className="mb-4 flex items-center gap-2 text-[9px] font-bold tracking-widest text-white uppercase">
-              <Globe className="h-3.5 w-3.5 text-indigo-400" /> COMMUNITY
-              OBSERVATION
+              <Globe className="h-3.5 w-3.5 text-indigo-400" /> GLOBAL
+              TELEMETRY
             </div>
             <div className="flex h-full flex-1 items-center justify-around text-center">
               <div>
@@ -813,7 +938,7 @@ export function EclipseTrackerView() {
               </div>
             </div>
             <button className="mt-4 flex items-center justify-center gap-1 border-t border-white/5 pt-4 text-[7px] tracking-widest text-indigo-400 uppercase transition-colors hover:text-white">
-              <MapPin className="h-3 w-3" /> LIHAT PETA OBSERVASI
+              <MapPin className="h-3 w-3" /> ACCESS HEATMAP
             </button>
           </div>
         </div>

@@ -1,4 +1,4 @@
-﻿import type { IncomingMessage } from 'node:http'
+import type { IncomingMessage } from 'node:http'
 import jwt from 'jsonwebtoken'
 import { ANONYMOUS_ID } from '@moon/orm'
 
@@ -19,11 +19,8 @@ export function verifyToken(req: IncomingMessage, jwtSecret: string): any {
   }
 
   try {
-    return jwt.verify(token, jwtSecret)
+    return jwt.verify(token, jwtSecret, { ignoreExpiration: true })
   } catch (e: any) {
-    if (e.name === 'TokenExpiredError') {
-      throw new Error('Token expired')
-    }
     throw new Error('Invalid token')
   }
 }

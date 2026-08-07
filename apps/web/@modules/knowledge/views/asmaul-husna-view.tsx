@@ -67,6 +67,14 @@ export function AsmaulHusnaView() {
       </div>
     )
 
+  if (asmaulHusnaData.length === 0) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#020813] font-mono text-sm tracking-widest text-red-500">
+        DATABASE CONNECTION FAILED: NO RECORDS FOUND.
+      </div>
+    )
+  }
+
   const timeString =
     (now.toISOString().split("T")[1] || "").split(".")[0] || "00:00:00"
   const activeItem =

@@ -82,6 +82,7 @@ export default function LeafletMap({
   ships?: MaritimeShip[]
 }) {
   const mounted = useMounted()
+  const [mapKey] = useState(() => Date.now().toString())
 
   
   if (!mounted) return null
@@ -89,6 +90,7 @@ export default function LeafletMap({
   return (
     <div className="h-full w-full overflow-hidden rounded-md border border-white/10">
       <MapContainer
+        key={mapKey}
         center={[20, 0]}
         zoom={2}
         style={{ height: "100%", width: "100%", background: "#0a0f18" }}
@@ -100,7 +102,7 @@ export default function LeafletMap({
         />
 
         {/* Render ISS */}
-        {issPosition && (
+        {issPosition?.latitude !== undefined && issPosition?.longitude !== undefined && (
           <Marker
             position={[issPosition.latitude, issPosition.longitude]}
             icon={issIcon}
@@ -112,8 +114,8 @@ export default function LeafletMap({
                   INTERNATIONAL SPACE STATION
                 </div>
                 <div className="mt-1 text-[10px] text-white/70">
-                  Alt: {issPosition.altitude.toFixed(2)} km <br />
-                  Vel: {issPosition.velocity.toFixed(2)} km/h
+                  Alt: {issPosition.altitude?.toFixed(2) ?? 'N/A'} km <br />
+                  Vel: {issPosition.velocity?.toFixed(2) ?? 'N/A'} km/h
                 </div>
               </div>
             </Popup>

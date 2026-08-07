@@ -1,4 +1,4 @@
-﻿import type { IncomingMessage, ServerResponse } from 'node:http'
+import type { IncomingMessage, ServerResponse } from 'node:http'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import nodemailer from 'nodemailer'
@@ -132,12 +132,12 @@ export async function handleRegister(
 
     // Create user
     const user = await VxUser.transaction(env, async (txEnv: any) => {
+      const sanitizedName = (name || email.split('@')[0]).replace(/[^A-Za-z0-9 ]/g, ' ')
       return await VxUser.spawn(VxUser as any, txEnv, {
-        name: name || email.split('@')[0],
+        name: sanitizedName,
         email,
         password: hashedPassword,
-        companyId: defaultCompanyId,
-        isActive: true
+        companyId: defaultCompanyId
       })
     })
 

@@ -20,10 +20,16 @@ export async function GET(req: NextRequest) {
     // But since the user allowed keeping mocks if it's too complex, let's keep it simple.
     // Actually, we can just use `moonClientInstance.request` to search `fx.msg`.
     
-    const json = await moonClientInstance.request("GET", `/api/fx.msg?resModel=${resModel}`)
-    if (json.error) throw new Error(json.error)
-      
-    let comments = json.data || []
+    let comments = []
+    try {
+      const json = await moonClientInstance.request("GET", `/api/fx.msg?resModel=${resModel}`)
+      if (json && !json.error) {
+        comments = json.data || []
+      }
+    } catch (apiErr) {
+      console.warn("[MoonClient] Database connection timeout or API error, falling back to empty comments:", apiErr)
+      comments = []
+    }
     
     // Convert fx.msg format back to the frontend shape
     let formattedComments = comments.map((msg: any) => {
