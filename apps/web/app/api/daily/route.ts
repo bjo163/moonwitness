@@ -156,6 +156,24 @@ export async function GET(req: NextRequest) {
          // book_id[0] = surah number (1-114), book_id[1] = surah name
          const bookId = Array.isArray(a.book_id) ? a.book_id[0] : 1
          const bookName = Array.isArray(a.book_id) ? a.book_id[1] : (a.book_id || "")
+         
+         let englishTranslation = a.translation_en || ""
+
+         // Fallback to online API if english translation is missing
+         if (!englishTranslation) {
+           try {
+             const fallbackRes = await fetch(`http://api.alquran.cloud/v1/ayah/${bookId}:${a.verse_number || 1}/en.sahih`)
+             if (fallbackRes.ok) {
+               const fallbackJson = await fallbackRes.json()
+               if (fallbackJson.data && fallbackJson.data.text) {
+                 englishTranslation = fallbackJson.data.text
+               }
+             }
+           } catch (e) {
+             console.warn("Failed to fetch fallback english translation", e)
+           }
+         }
+
          ayahData = {
             surah_number: bookId,
             surah_name_latin: bookName || ("Surah " + bookId),
@@ -163,7 +181,7 @@ export async function GET(req: NextRequest) {
             text_arabic: a.text_original || "",
             text_latin: a.text_transliteration || "",
             translation_id: a.translation_id || "",
-            translation_en: a.translation_en || "",
+            translation_en: englishTranslation,
             audio_url: a.audio_url || ""
          }
       }
@@ -187,8 +205,8 @@ export async function GET(req: NextRequest) {
     try {
       const randomPage = Math.max(1, (dailySeed * 7) % 500)
       const json = await moonClientInstance.request("GET", `/api/witness/hadith?slug=bukhari&page=${randomPage}&limit=1`)
-      if (json.hadiths && json.hadiths.length > 0) {
-         hadithData = json.hadiths[0]
+      if (json.items && json.items.length > 0) {
+         hadithData = json.items[0]
       }
     } catch (e) {
       console.warn("Failed to fetch daily hadith", e)
@@ -206,16 +224,26 @@ export async function GET(req: NextRequest) {
         seenAyahsCount: globalSeenCount,
         remainingAyahsCount: remainingCount,
       },
-      ayah: {
+      ayah: ayahData ? {
         id: dailySeed % totalAyahCount,
-        surahNumber: ayahData?.surah_number || 1,
-        surahName: ayahData?.surah_name_latin || "Al-Fatihah",
-        ayahNumber: ayahData?.ayah_number || 1,
-        textArabic: ayahData?.text_arabic || "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
-        textLatin: ayahData?.text_latin || "Bismillāhir-raḥmānir-raḥīm",
-        translationId: ayahData?.translation_id || "Dengan nama Allah Yang Maha Pengasih, Maha Penyayang.",
-        translationEn: ayahData?.translation_en || "In the name of Allah, the Entirely Merciful, the Especially Merciful.",
-        audioUrl: ayahData?.audio_url || "",
+        surahNumber: ayahData.surah_number,
+        surahName: ayahData.surah_name_latin,
+        ayahNumber: ayahData.ayah_number,
+        textArabic: ayahData.text_arabic,
+        textLatin: ayahData.text_latin,
+        translationId: ayahData.translation_id,
+        translationEn: ayahData.translation_en,
+        audioUrl: ayahData.audio_url,
+      } : {
+        id: dailySeed % totalAyahCount,
+        surahNumber: 1,
+        surahName: "Al-Fatihah",
+        ayahNumber: 1,
+        textArabic: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+        textLatin: "Bismillāhir-raḥmānir-raḥīm",
+        translationId: "Dengan nama Allah Yang Maha Pengasih, Maha Penyayang.",
+        translationEn: "In the name of Allah, the Entirely Merciful, the Especially Merciful.",
+        audioUrl: "",
       },
       asmaulSurah: asmaulSurahData ? {
         number: asmaulSurahData.number || 1,
