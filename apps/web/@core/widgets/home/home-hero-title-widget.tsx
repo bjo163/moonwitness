@@ -13,8 +13,30 @@ type DailyData = {
   }
 }
 
-export function HomeHeroTitleWidget({ dailyData }: { dailyData?: DailyData }) {
+export function HomeHeroTitleWidget({ dailyData, onDecodeTransmission }: { dailyData?: DailyData; onDecodeTransmission?: () => void }) {
   const [ctaIndex, setCtaIndex] = useState(0)
+  const [isDecoding, setIsDecoding] = useState(false)
+  const [scrambleText, setScrambleText] = useState("SYSTEM OVERRIDE... INTERCEPTING...")
+
+  useEffect(() => {
+    if (!isDecoding) return
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+<>?[]{}|/\\~"
+    const original = "GOD LEVEL OVERRIDE... INTERCEPTING..."
+    let iterations = 0
+    const interval = setInterval(() => {
+      setScrambleText(
+        original
+          .split("")
+          .map((char, index) => {
+            if (index < iterations) return char
+            return chars[Math.floor(Math.random() * chars.length)]
+          })
+          .join("")
+      )
+      iterations += 1 / 4 // Controls scramble speed
+    }, 30)
+    return () => clearInterval(interval)
+  }, [isDecoding])
   const ctaPhrases = [
     "DECODE TRANSMISSION",
     "INTERCEPT SIGNAL",
@@ -65,19 +87,33 @@ export function HomeHeroTitleWidget({ dailyData }: { dailyData?: DailyData }) {
             .&quot;
           </h2>
 
-          <Link
-            href="/observatory/daily-transmission"
-            className="group relative mt-6 inline-flex origin-bottom-left -rotate-2 animate-in cursor-pointer items-center gap-3 overflow-hidden border-y border-r border-l-4 border-cyan-500/40 border-l-cyan-400 bg-cyan-500/10 px-5 py-2.5 shadow-[20px_20px_40px_rgba(0,0,0,0.5),_0_0_20px_rgba(0,240,255,0.15)] backdrop-blur-md transition-all delay-500 duration-300 duration-1000 fill-mode-both fade-in slide-in-from-top-12 hover:rotate-0 hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] xl:absolute xl:-bottom-3 xl:left-[450px] xl:mt-0"
+          <button
+            onClick={(e) => {
+              e.preventDefault()
+              if (isDecoding) return
+              setIsDecoding(true)
+              if (onDecodeTransmission) onDecodeTransmission()
+              setTimeout(() => setIsDecoding(false), 41500)
+            }}
+            className={`group relative mt-6 inline-flex origin-bottom-left -rotate-2 animate-in cursor-pointer items-center gap-3 overflow-hidden border-y border-r border-l-4 px-5 py-2.5 backdrop-blur-md transition-all delay-500 duration-300 duration-1000 fill-mode-both fade-in slide-in-from-top-12 xl:absolute xl:-bottom-3 xl:left-[450px] xl:mt-0 ${
+              isDecoding
+                ? "border-red-500 bg-red-900/50 text-white shadow-[0_0_100px_rgba(255,0,0,1)] animate-[buttonGlitch_0.5s_infinite,godExplode_41s_forwards]"
+                : "border-cyan-500/40 border-l-cyan-400 bg-cyan-500/10 shadow-[20px_20px_40px_rgba(0,0,0,0.5),_0_0_20px_rgba(0,240,255,0.15)] hover:rotate-0 hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_30px_rgba(0,240,255,0.5)]"
+            }`}
             title="Decode Today's Transmission"
           >
-            <span className="absolute inset-0 h-full w-full -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:animate-[shimmer_1s_infinite]" />
+            <span className={`absolute inset-0 h-full w-full -translate-x-full bg-gradient-to-r from-transparent to-transparent ${isDecoding ? "via-red-500/80 animate-[shimmer_0.1s_infinite]" : "via-white/30 group-hover:animate-[shimmer_1s_infinite]"}`} />
             <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75 group-hover:bg-black" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400 group-hover:bg-black" />
+              <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${isDecoding ? "bg-white animate-[ping_0.1s_infinite]" : "bg-cyan-400 group-hover:bg-black"}`} />
+              <span className={`relative inline-flex h-2 w-2 rounded-full ${isDecoding ? "bg-white" : "bg-cyan-400 group-hover:bg-black"}`} />
             </span>
             <div className="flex flex-col items-start leading-tight">
-              <span className="w-[180px] text-[11px] font-bold tracking-[0.2em] text-primary uppercase drop-shadow-[0_0_8px_rgba(0,240,255,0.4)] transition-all group-hover:text-black group-hover:drop-shadow-none sm:w-[220px] sm:text-[12px]">
-                {ctaPhrases[ctaIndex]}
+              <span className={`w-[180px] text-[11px] font-bold tracking-[0.2em] uppercase transition-all sm:w-[220px] sm:text-[12px] ${
+                isDecoding 
+                  ? "text-white drop-shadow-[0_0_20px_rgba(255,255,255,1)] animate-[textGlitch_0.2s_infinite]" 
+                  : "text-primary drop-shadow-[0_0_8px_rgba(0,240,255,0.4)] group-hover:text-black group-hover:drop-shadow-none"
+              }`}>
+                {isDecoding ? scrambleText : ctaPhrases[ctaIndex]}
               </span>
               {Boolean(dailyData && dailyData.ayah) && (
                 <span className="mt-0.5 text-[9px] font-medium tracking-[0.3em] text-primary group-hover:text-black/70">
@@ -89,7 +125,7 @@ export function HomeHeroTitleWidget({ dailyData }: { dailyData?: DailyData }) {
             <span className="ml-2 transform text-lg font-black text-primary transition-transform duration-300 group-hover:translate-x-2 group-hover:text-black">
               &rarr;
             </span>
-          </Link>
+          </button>
         </div>
       </div>
 
