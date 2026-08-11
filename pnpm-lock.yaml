@@ -44,6 +44,9 @@ importers:
       '@moon/khidra':
         specifier: workspace:*
         version: link:../../packages/moon-khidra
+      '@moon/mizan':
+        specifier: workspace:*
+        version: link:../../packages/moon-mizan
       '@moon/orm':
         specifier: workspace:*
         version: link:../../packages/moon-orm
@@ -355,6 +358,25 @@ importers:
       typescript:
         specifier: ^5.0.0
         version: 5.9.3
+
+  packages/moon-mizan:
+    dependencies:
+      '@moon/base':
+        specifier: workspace:*
+        version: link:../moon-base
+      '@moon/orm':
+        specifier: workspace:*
+        version: link:../moon-orm
+      '@moon/witness':
+        specifier: workspace:*
+        version: link:../moon-witness
+    devDependencies:
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.1
+        version: 1.6.1(@types/node@26.1.2)(lightningcss@1.32.0)
 
   packages/moon-orm:
     dependencies:

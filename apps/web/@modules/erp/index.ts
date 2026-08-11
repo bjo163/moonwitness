@@ -5,6 +5,7 @@ import { ErpHadithsView } from "./views/erp-hadiths-view"
 import { ErpScripturesView } from "./views/erp-scriptures-view"
 import { ErpUsersView } from "./views/erp-users-view"
 import { ErpProfileView } from "./views/erp-profile-view" // Hot reload trigger
+import { ErpMizanView } from "./views/erp-mizan-view"
 
 /**
  * ERP Module — MoonWitness OS
@@ -49,6 +50,12 @@ export default defineModule({
       label: "System Analytics",
       icon: "Activity",
       component: ErpAnalyticsView,
+    },
+    {
+      slug: "mizan",
+      label: "Mizan Manager",
+      icon: "Scale",
+      component: ErpMizanView,
     },
     {
       slug: "profile",

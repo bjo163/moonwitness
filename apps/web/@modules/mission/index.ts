@@ -5,6 +5,8 @@ import { PersatuanUmatView } from "./views/persatuan-umat-view"
 import { PiagamPeradabanView } from "./views/piagam-peradaban-view"
 import { SertifikatPiagamView } from "./views/sertifikat-piagam-view"
 import { ToolkitRasulullahView } from "./views/toolkit-rasulullah-view"
+import { LawJusticeView } from "./views/law-justice-view"
+import { GardenBrainstormView } from "./views/garden-brainstorm-view"
 
 /**
  * Mission Module — MoonWitness OS
@@ -55,6 +57,18 @@ export default defineModule({
       label: "Toolkit Rasulullah",
       icon: "Wrench",
       component: ToolkitRasulullahView,
+    },
+    {
+      slug: "law-justice",
+      label: "Law & Justice",
+      icon: "Scale",
+      component: LawJusticeView,
+    },
+    {
+      slug: "garden-brainstorm",
+      label: "Garden Brainstorm",
+      icon: "Sprout",
+      component: GardenBrainstormView,
     },
   ],
 })

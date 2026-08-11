@@ -3,6 +3,7 @@ import { AnalyticsTelemetryView } from "./views/analytics-telemetry-view"
 import { AnalisisTrenView } from "./views/analisis-tren-view"
 import { DiagnostikHikmahView } from "./views/diagnostik-hikmah-view"
 import { PsikologiJiwaView } from "./views/psikologi-jiwa-view"
+import { MizanAssessmentView } from "./views/mizan-assessment-view"
 
 /**
  * Analytics Module — MoonWitness OS
@@ -41,6 +42,12 @@ export default defineModule({
       label: "Psikologi Jiwa",
       icon: "Heart",
       component: PsikologiJiwaView,
+    },
+    {
+      slug: "mizan-assessment",
+      label: "Mizan Assessment",
+      icon: "Scale",
+      component: MizanAssessmentView,
     },
   ],
 })

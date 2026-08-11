@@ -6,6 +6,7 @@ import { toolDeclarations, toolHandlers } from './tools.js'
 export interface KhidraConfig {
   apiKeys: string[]
   model?: string
+  systemPrompt?: string
 }
 
 function env() {
@@ -15,6 +16,7 @@ function env() {
 export class KhidraEngine {
   private apiKeys: string[]
   private modelId: string
+  private systemPrompt: string
   private rateLimitMap: Map<string, { count: number, resetAt: number }> = new Map()
   
   // Prep limit: 10 requests per minute
@@ -23,6 +25,7 @@ export class KhidraEngine {
   constructor(config: KhidraConfig) {
     this.apiKeys = config.apiKeys
     this.modelId = config.model || 'gemini-2.5-flash'
+    this.systemPrompt = config.systemPrompt || SYSTEM_PROMPT
   }
 
   private getClient(): GoogleGenAI {
@@ -99,7 +102,7 @@ export class KhidraEngine {
       model: this.modelId,
       contents,
       config: {
-        systemInstruction: SYSTEM_PROMPT,
+        systemInstruction: this.systemPrompt,
         tools: [{ functionDeclarations: toolDeclarations as any }],
       }
     })
@@ -141,7 +144,7 @@ export class KhidraEngine {
         model: this.modelId,
         contents,
         config: {
-          systemInstruction: SYSTEM_PROMPT,
+          systemInstruction: this.systemPrompt,
           tools: [{ functionDeclarations: toolDeclarations as any }],
         }
       })

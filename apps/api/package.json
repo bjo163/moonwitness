@@ -19,6 +19,7 @@
     "@moon/server": "workspace:*",
     "@moon/witness": "workspace:*",
     "@moon/khidra": "workspace:*",
+    "@moon/mizan": "workspace:*",
     "dotenv": "^16.4.5",
     "knex": "^3.0.0",
     "pg": "^8.13.0"
