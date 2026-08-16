@@ -16,7 +16,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@moon/orm": "workspace:*"
+    "@moon/orm": "workspace:*",
+    "@moon/server": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.0.0",

@@ -1,33 +1,50 @@
 "use client"
 
-import React, { useState } from "react"
-import { ContextBlock, HUDPanel, HUDContextBlock } from "@core/ui"
+import React, { useEffect, useState } from "react"
+import { useMoonStore } from "@core/store/moon-store"
 import { Scale, Activity, ShieldAlert, Cpu, Sparkles } from "lucide-react"
 
-// Because HUDPanel etc is the standard, I will use generic div with HUD classes for now if it doesn't exist, but I know HUD UI is heavily used in Moonwitness. Wait, the actual component names according to AGENTS.md are HUDPanel, HUDContextBlock, HUDButton. But earlier I saw `ContextBlock` in @core/ui. I will use standard tailwind classes that mimic the AGENTS.md rules.
+type MethodDecision = {
+  method: "general" | "general_limited" | "prophetic"
+  limitation?: string
+}
 
 export function MizanAssessmentView() {
   const [generalSufficient, setGeneralSufficient] = useState(false)
   const [balanceSatisfied, setBalanceSatisfied] = useState(false)
   const [internalReferenceVerified, setInternalReferenceVerified] = useState(false)
+  const [decision, setDecision] = useState<MethodDecision | null>(null)
+  const [isResolving, setIsResolving] = useState(true)
+  const { request } = useMoonStore()
 
-  let method = "general_limited"
-  let limitation = ""
-  let accent = "amber"
+  useEffect(() => {
+    let mounted = true
+    const query = new URLSearchParams({
+      generalSufficient: String(generalSufficient),
+      balanceSatisfied: String(balanceSatisfied),
+      internalReferenceVerified: String(internalReferenceVerified)
+    })
 
-  if (generalSufficient) {
-    method = "general"
-    accent = "cyan"
-  } else if (balanceSatisfied && internalReferenceVerified) {
-    method = "prophetic"
-    accent = "purple"
-  } else {
-    method = "general_limited"
-    accent = "amber"
-    limitation = balanceSatisfied 
-      ? 'Internal reference is not verified.' 
-      : 'A material balance condition is not established.'
-  }
+    setIsResolving(true)
+    request("GET", `/api/mizan/decision?${query.toString()}`)
+      .then((data: { decision: MethodDecision }) => {
+        if (mounted) setDecision(data.decision)
+      })
+      .catch(() => {
+        if (mounted) setDecision(null)
+      })
+      .finally(() => {
+        if (mounted) setIsResolving(false)
+      })
+
+    return () => {
+      mounted = false
+    }
+  }, [balanceSatisfied, generalSufficient, internalReferenceVerified, request])
+
+  const method = decision?.method
+  const limitation = decision?.limitation
+  const accent = method === "general" ? "cyan" : method === "prophetic" ? "purple" : "amber"
 
   // Get exact hex for tailwind arbitrary values since dynamic classes like bg-${accent}-500 don't always work in Tailwind JIT unless safelisted.
   const accentColors = {
@@ -70,6 +87,7 @@ export function MizanAssessmentView() {
           <div className="flex flex-col gap-4 mt-2">
             <button 
               onClick={() => setGeneralSufficient(!generalSufficient)}
+              aria-pressed={generalSufficient}
               className={`flex items-center gap-4 p-4 border rounded-lg transition-all duration-300 ${generalSufficient ? 'bg-[#00F0FF]/10 border-[#00F0FF]/50 shadow-[0_0_15px_rgba(0,240,255,0.15)] -translate-y-0.5' : 'bg-black/40 border-slate-800/50 hover:border-[#00F0FF]/50'}`}
             >
               <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${generalSufficient ? 'border-[#00F0FF] bg-[#00F0FF]/20' : 'border-slate-700'}`}>
@@ -83,6 +101,7 @@ export function MizanAssessmentView() {
 
             <button 
               onClick={() => setBalanceSatisfied(!balanceSatisfied)}
+              aria-pressed={balanceSatisfied}
               className={`flex items-center gap-4 p-4 border rounded-lg transition-all duration-300 ${balanceSatisfied ? 'bg-[#A100FF]/10 border-[#A100FF]/50 shadow-[0_0_15px_rgba(161,0,255,0.15)] -translate-y-0.5' : 'bg-black/40 border-slate-800/50 hover:border-[#A100FF]/50'}`}
             >
               <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${balanceSatisfied ? 'border-[#A100FF] bg-[#A100FF]/20' : 'border-slate-700'}`}>
@@ -96,6 +115,7 @@ export function MizanAssessmentView() {
 
             <button 
               onClick={() => setInternalReferenceVerified(!internalReferenceVerified)}
+              aria-pressed={internalReferenceVerified}
               className={`flex items-center gap-4 p-4 border rounded-lg transition-all duration-300 ${internalReferenceVerified ? 'bg-[#00FF66]/10 border-[#00FF66]/50 shadow-[0_0_15px_rgba(0,255,102,0.15)] -translate-y-0.5' : 'bg-black/40 border-slate-800/50 hover:border-[#00FF66]/50'}`}
             >
               <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${internalReferenceVerified ? 'border-[#00FF66] bg-[#00FF66]/20' : 'border-slate-700'}`}>
@@ -128,13 +148,17 @@ export function MizanAssessmentView() {
             
             <h4 className="text-[10px] uppercase tracking-[0.3em] text-[#8B9BB0] mb-2 font-mono">Selected Method</h4>
             <div className={`text-3xl font-black uppercase tracking-wider ${currentAccent.text} font-['Orbitron'] mb-4 text-center transition-colors duration-300`}>
-              {method.replace('_', ' ')}
+              {isResolving ? "resolving" : method?.replace('_', ' ') || "unavailable"}
             </div>
 
             {limitation ? (
               <div className={`mt-4 p-3 border border-[#FFE600]/30 bg-[#FFE600]/10 rounded-lg flex items-start gap-3 text-[#FFE600] text-xs max-w-sm`}>
                 <ShieldAlert className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 <span><strong className="block mb-1">Limitation Applied:</strong> {limitation}</span>
+              </div>
+            ) : isResolving ? (
+              <div className="mt-4 px-6 py-2 border border-slate-700/50 bg-slate-900/50 rounded-full text-slate-400 text-xs font-mono uppercase tracking-widest">
+                Resolving through Mizan engine
               </div>
             ) : (
               <div className="mt-4 px-6 py-2 border border-[#00FF66]/30 bg-[#00FF66]/10 rounded-full text-[#00FF66] text-xs font-mono uppercase tracking-widest flex items-center gap-2">

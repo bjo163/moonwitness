@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useMoonStore } from '../store/moon-store'
 
-export function useMoonModel<T = any>(modelName: string) {
+export function useMoonModel<T = any>(modelName: string, initialParams?: Record<string, any>) {
   const { client, request } = useMoonStore()
   
   const [data, setData] = useState<T[]>([])
@@ -46,26 +46,26 @@ export function useMoonModel<T = any>(modelName: string) {
 
   const create = async (payload: Partial<T>) => {
     const res = await client.model(modelName).create(payload)
-    await fetch() // Refresh data
+    await fetch(initialParams) // Refresh the active filtered view
     return res
   }
 
   const update = async (id: number, payload: Partial<T>) => {
     const res = await client.model(modelName).update(id, payload)
-    await fetch() // Refresh data
+    await fetch(initialParams) // Refresh the active filtered view
     return res
   }
 
   const remove = async (id: number) => {
     const res = await client.model(modelName).delete(id)
-    await fetch() // Refresh data
+    await fetch(initialParams) // Refresh the active filtered view
     return res
   }
 
   // Initial fetch on mount
   useEffect(() => {
-    fetch()
-  }, [fetch])
+    fetch(initialParams)
+  }, [fetch, initialParams])
 
   return {
     data,

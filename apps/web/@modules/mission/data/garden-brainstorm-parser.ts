@@ -27,10 +27,10 @@ function parseTaskBlock(block: string): BrainstormTask | null {
   if (!type || Number.isNaN(score) || score < 0 || score > 99) return null
 
   return {
-    title: titleMatch[1].trim(),
+    title: titleMatch[1]!.trim(),
     type,
     score,
-    goal: goalMatch[1].trim(),
+    goal: goalMatch[1]!.trim(),
   }
 }
 

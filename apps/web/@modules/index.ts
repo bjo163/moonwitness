@@ -10,6 +10,8 @@ import astronomy from "./astronomy"
 import analytics from "./analytics"
 import mission from "./mission"
 import auth from "./auth"
+import seismix from "./seismix"
+import shootgun from "./shootgun"
 
 // ── Daftar Modul Terdaftar ──────────────────────────────────────
 // Tambahkan modul baru di sini. Satu baris per modul.
@@ -25,6 +27,8 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
   analytics,
   mission,
   auth,
+  seismix,
+  shootgun,
 ]
 
 // ── Helper: Cari modul berdasarkan ID ───────────────────────────

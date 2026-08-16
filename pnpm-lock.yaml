@@ -56,6 +56,9 @@ importers:
       '@moon/server':
         specifier: workspace:*
         version: link:../../packages/moon-server
+      '@moon/shootgun':
+        specifier: workspace:*
+        version: link:../../packages/moon-shootgun
       '@moon/witness':
         specifier: workspace:*
         version: link:../../packages/moon-witness
@@ -325,6 +328,25 @@ importers:
         specifier: ^5.5.4
         version: 5.9.3
 
+  packages/moon-cab:
+    dependencies:
+      '@moon/base':
+        specifier: workspace:*
+        version: link:../moon-base
+      '@moon/orm':
+        specifier: workspace:*
+        version: link:../moon-orm
+      '@moon/server':
+        specifier: workspace:*
+        version: link:../moon-server
+    devDependencies:
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.1
+        version: 1.6.1(@types/node@26.1.2)(lightningcss@1.32.0)
+
   packages/moon-cache:
     devDependencies:
       typescript:
@@ -367,6 +389,9 @@ importers:
       '@moon/orm':
         specifier: workspace:*
         version: link:../moon-orm
+      '@moon/server':
+        specifier: workspace:*
+        version: link:../moon-server
       '@moon/witness':
         specifier: workspace:*
         version: link:../moon-witness
@@ -448,6 +473,22 @@ importers:
         version: 8.0.1
       typescript:
         specifier: ^5.5.4
+        version: 5.9.3
+
+  packages/moon-shootgun:
+    dependencies:
+      '@moon/base':
+        specifier: workspace:*
+        version: link:../moon-base
+      '@moon/orm':
+        specifier: workspace:*
+        version: link:../moon-orm
+      '@moon/witness':
+        specifier: workspace:*
+        version: link:../moon-witness
+    devDependencies:
+      typescript:
+        specifier: ^5.0.0
         version: 5.9.3
 
   packages/moon-testing:

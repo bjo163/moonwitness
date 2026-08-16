@@ -6,6 +6,7 @@ import { ErpScripturesView } from "./views/erp-scriptures-view"
 import { ErpUsersView } from "./views/erp-users-view"
 import { ErpProfileView } from "./views/erp-profile-view" // Hot reload trigger
 import { ErpMizanView } from "./views/erp-mizan-view"
+import { ErpShootgunView } from "../shootgun/views/erp-shootgun-view"
 
 /**
  * ERP Module — MoonWitness OS
@@ -56,6 +57,12 @@ export default defineModule({
       label: "Mizan Manager",
       icon: "Scale",
       component: ErpMizanView,
+    },
+    {
+      slug: "shootgun",
+      label: "Shootgun Operations",
+      icon: "Crosshair",
+      component: ErpShootgunView,
     },
     {
       slug: "profile",

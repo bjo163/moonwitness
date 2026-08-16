@@ -1,6 +1,7 @@
 "use client"
 import { Suspense } from "react"
-import { ContextBlock, EmptyState } from "@core/ui"
+import { ContextBlock } from "@core/ui"
+import { EmptyState } from "@core/ui/empty-state"
 
 import { useMoonStore } from "@core/store/moon-store"
 import { LogOut } from "lucide-react"

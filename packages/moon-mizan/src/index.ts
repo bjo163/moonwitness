@@ -3,10 +3,11 @@ import MzAssessment from './models/mz-assessment.js'
 import MzFilter from './models/mz-filter.js'
 import MzReference from './models/mz-reference.js'
 
-import { chooseMethod, PRIMARY_FILTERS } from './engine.js'
+import { chooseMethod, PRIMARY_FILTERS, SECONDARY_FILTERS, validateAssessment } from './engine.js'
+export { registerMizanRoutes } from './routes.js'
 
-export { chooseMethod, PRIMARY_FILTERS }
-export type { AssessmentMethod, MethodDecision, MethodInput } from './engine.js'
+export { chooseMethod, PRIMARY_FILTERS, SECONDARY_FILTERS, validateAssessment }
+export type { AssessmentDecision, AssessmentInput, AssessmentMethod, MethodDecision, MethodInput } from './engine.js'
 export { MzCase, MzAssessment, MzFilter, MzReference }
 
 export default {

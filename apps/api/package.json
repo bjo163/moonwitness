@@ -4,6 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "predev": "pnpm --filter \"@moon/*\" build",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
@@ -20,6 +21,7 @@
     "@moon/witness": "workspace:*",
     "@moon/khidra": "workspace:*",
     "@moon/mizan": "workspace:*",
+    "@moon/shootgun": "workspace:*",
     "dotenv": "^16.4.5",
     "knex": "^3.0.0",
     "pg": "^8.13.0"

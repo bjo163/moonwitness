@@ -4,7 +4,8 @@ import baseAddons, { seedBaseData, loadBaseData } from '@moon/base';
 import performanceAddons, { performanceMiddleware } from '@moon/performance';
 import witnessAddons, { registerWitnessRoutes } from '@moon/witness';
 import khidraAddons from '@moon/khidra';
-import mizanAddons from '@moon/mizan';
+import mizanAddons, { registerMizanRoutes } from '@moon/mizan';
+import shootgunAddons from '@moon/shootgun';
 import { globalRoutes } from '@moon/server/dist/router.js';
 import { publish } from '@moon/server';
 import { trackSystem } from '@moon/performance';
@@ -91,7 +92,8 @@ const server = new NativeServer({
     ...performanceAddons.models,
     ...witnessAddons.models,
     ...khidraAddons.models,
-    ...mizanAddons.models
+    ...mizanAddons.models,
+    ...shootgunAddons.models
   ],
 });
 
@@ -100,6 +102,7 @@ server.use(performanceMiddleware());
 
 // Register witness custom endpoints
 registerWitnessRoutes();
+registerMizanRoutes();
 
 // ── NASA ──────────────────────────────────────────────────────────────────────
 server.proxy('GET', '/api/external/nasa/neo', 'https://api.nasa.gov/neo/rest/v1/feed', {

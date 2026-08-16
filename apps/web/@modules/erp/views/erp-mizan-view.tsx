@@ -1,28 +1,52 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { ContextBlock } from "@core/ui"
 import { MoonDataTable, CrudColumn } from "@core/widgets/crud"
-import { Scale, ShieldAlert, CheckCircle2, History } from "lucide-react"
+import { useMoonStore } from "@core/store/moon-store"
+import { Scale, ShieldAlert, CheckCircle2 } from "lucide-react"
+
+type MizanSummary = {
+  total: number
+  assessed: number
+  needsReference: number
+}
 
 export function ErpMizanView() {
   const [activeTab, setActiveTab] = useState("all")
+  const { request } = useMoonStore()
+  const [summary, setSummary] = useState<MizanSummary | null>(null)
+
+  useEffect(() => {
+    let mounted = true
+
+    request("GET", "/api/mizan/summary")
+      .then((data: MizanSummary) => {
+        if (mounted) setSummary(data)
+      })
+      .catch(() => {
+        if (mounted) setSummary(null)
+      })
+
+    return () => {
+      mounted = false
+    }
+  }, [request])
+
+  const filters = useMemo(
+    () => (activeTab === "all" ? undefined : { status: activeTab }),
+    [activeTab]
+  )
 
   const mizanColumns: CrudColumn[] = [
     { name: "title", label: "Case Title", type: "text", required: true },
-    { name: "caseText", label: "Case Details", type: "textarea", required: true, hideInTable: true },
+    { name: "caseText", label: "Case Details", type: "text", required: true, hideInTable: true },
     { name: "subjectAlias", label: "Subject Alias", type: "text" },
     { name: "subjectAge", label: "Subject Age", type: "number" },
     { 
       name: "status", 
       label: "Status", 
-      type: "select",
-      options: [
-        { label: "Draft", value: "draft" },
-        { label: "Assessed", value: "assessed" },
-        { label: "Needs Internal Reference", value: "needs_reference" },
-        { label: "Archived", value: "archived" }
-      ],
+      type: "text",
       render: (val) => {
         let color = "text-slate-400"
         if (val === "draft") color = "text-amber-400"
@@ -44,7 +68,7 @@ export function ErpMizanView() {
           <Scale className="w-4 h-4" />
           <span className="text-xs font-bold uppercase tracking-wider">Total Cases</span>
         </div>
-        <div className="text-2xl font-bold text-white">42</div>
+        <div className="text-2xl font-bold text-white">{summary?.total ?? "—"}</div>
         <div className="text-[10px] text-cyan-400">Recorded cases in system</div>
       </div>
       
@@ -56,7 +80,7 @@ export function ErpMizanView() {
           <CheckCircle2 className="w-4 h-4" />
           <span className="text-xs font-bold uppercase tracking-wider">Assessed</span>
         </div>
-        <div className="text-2xl font-bold text-white">28</div>
+        <div className="text-2xl font-bold text-white">{summary?.assessed ?? "—"}</div>
         <div className="text-[10px] text-emerald-500">Validated through Mizan</div>
       </div>
 
@@ -68,7 +92,7 @@ export function ErpMizanView() {
           <ShieldAlert className="w-4 h-4" />
           <span className="text-xs font-bold uppercase tracking-wider">Needs Reference</span>
         </div>
-        <div className="text-2xl font-bold text-white">5</div>
+        <div className="text-2xl font-bold text-white">{summary?.needsReference ?? "—"}</div>
         <div className="text-[10px] text-purple-400">Awaiting internal prophetic references</div>
       </div>
     </div>
@@ -88,7 +112,7 @@ export function ErpMizanView() {
         subtitle="Internal Weighted-Assessment and Validation Database."
         operation="MIZAN-OS"
         status="ONLINE"
-        accentColor="cyan"
+        accentColor="system"
       />
 
       <MoonDataTable 
@@ -101,6 +125,7 @@ export function ErpMizanView() {
         tabs={tabs}
         activeTab={activeTab}
         onTabChange={setActiveTab}
+        filters={filters}
       />
     </div>
   )

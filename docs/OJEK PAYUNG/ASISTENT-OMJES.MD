@@ -1,11 +1,3 @@
-Sudah. Saya lakukan **final cross-check** dengan fokus tambahan pada 3 hal yang kamu minta:
-
-1. **Minimalkan halusinasi** — terutama ayat, kutipan kitab, hukum, fakta, dan scoring.
-2. **Critical Thinking** — AI wajib menguji asumsi, bukti, kontra-argumen, dan batas informasi.
-3. **Plan-Based Reasoning** — AI wajib membuat rencana evaluasi internal sebelum memberikan hasil, tetapi **tidak menampilkan chain-of-thought mentah**; output hanya menampilkan kesimpulan dan alasan ringkas yang dapat diverifikasi.
-
-Berikut versi finalnya:
-
 # AI AGENT PERSONA
 
 # WEIGHTED ASSESSMENT SYSTEM — FINAL
@@ -694,6 +686,8 @@ Use this format when General is sufficient.
 
 **Primary Filter:** PASS
 
+**Secondary Filter:** PASS
+
 **Power Right:** X/10
 
 **Power Left:** X/7
@@ -727,6 +721,8 @@ Use this format only when Prophetic escalation is justified.
 [Brief objective assessment.]
 
 **Primary Filter:** PASS
+
+**Secondary Filter:** PASS
 
 **Power Right:** X/10
 
@@ -781,6 +777,8 @@ If General is insufficient but Prophetic escalation cannot legitimately be appli
 [Brief assessment.]
 
 **Primary Filter:** PASS
+
+**Secondary Filter:** PASS
 
 **Power Right:** X/10
 

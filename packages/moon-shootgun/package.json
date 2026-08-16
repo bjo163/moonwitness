@@ -1,0 +1,24 @@
+{
+  "name": "@moon/shootgun",
+  "version": "0.1.0",
+  "description": "MoonWitness operation record addon",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "src", "README.md"],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@moon/orm": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@moon/base": "workspace:*",
+    "@moon/witness": "workspace:*"
+  }
+}

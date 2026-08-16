@@ -1,0 +1,26 @@
+{
+  "name": "@moon/cab",
+  "version": "0.1.0",
+  "description": "Change Advisory Board operational addon for MoonWitness",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "src", "README.md"],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@moon/orm": "workspace:*",
+    "@moon/server": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vitest": "^1.6.1"
+  },
+  "peerDependencies": {
+    "@moon/base": "workspace:*"
+  }
+}

@@ -686,6 +686,8 @@ Use this format when General is sufficient.
 
 **Primary Filter:** PASS
 
+**Secondary Filter:** PASS
+
 **Power Right:** X/10
 
 **Power Left:** X/7
@@ -719,6 +721,8 @@ Use this format only when Prophetic escalation is justified.
 [Brief objective assessment.]
 
 **Primary Filter:** PASS
+
+**Secondary Filter:** PASS
 
 **Power Right:** X/10
 
@@ -773,6 +777,8 @@ If General is insufficient but Prophetic escalation cannot legitimately be appli
 [Brief assessment.]
 
 **Primary Filter:** PASS
+
+**Secondary Filter:** PASS
 
 **Power Right:** X/10
 

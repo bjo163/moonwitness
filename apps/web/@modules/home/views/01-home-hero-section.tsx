@@ -63,7 +63,7 @@ const MatrixLayer = ({ words, delay, colorClass, shadowColor, colCount, speedMul
         const duration = (6 + Math.random() * 8) * speedMult
         const offsetDelay = Math.random() * 20
         const itemCount = 3 + Math.floor(Math.random() * 3) // Optimized for performance
-        const randomGap = [16, 24, 32][Math.floor(Math.random() * 3)]
+        const randomGap = [16, 24, 32][Math.floor(Math.random() * 3)] || 24
         
         // Shuffle words so each column is unique
         const shuffledWords = [...words].sort(() => Math.random() - 0.5)
@@ -337,7 +337,7 @@ export function HomeHeroSection() {
         tear.connect(tearGain)
         tearGain.connect(masterCompressor)
         tear.frequency.setValueAtTime(freq, now + 25)
-        const resolveFreq = [220, 277.18, 329.63, 440, 659.25][index] 
+        const resolveFreq = [220, 277.18, 329.63, 440, 659.25][index] || 440
         tear.frequency.exponentialRampToValueAtTime(resolveFreq, now + 34)
         tearGain.gain.setValueAtTime(0, now + 25)
         tearGain.gain.linearRampToValueAtTime(0.05, now + 30)
@@ -401,10 +401,10 @@ export function HomeHeroSection() {
 
     setTimeout(() => {
       setExtraDivineData({
-        bookQuote: DIVINE_BOOKS_QUOTES[Math.floor(Math.random() * DIVINE_BOOKS_QUOTES.length)],
-        hadith: HADITH_SNIPPETS[Math.floor(Math.random() * HADITH_SNIPPETS.length)],
-        asmaulLeft: NAMES_OF_ALLAH[Math.floor(Math.random() * NAMES_OF_ALLAH.length)],
-        asmaulRight: NAMES_OF_ALLAH[Math.floor(Math.random() * NAMES_OF_ALLAH.length)]
+        bookQuote: DIVINE_BOOKS_QUOTES[Math.floor(Math.random() * DIVINE_BOOKS_QUOTES.length)]!,
+        hadith: HADITH_SNIPPETS[Math.floor(Math.random() * HADITH_SNIPPETS.length)]!,
+        asmaulLeft: NAMES_OF_ALLAH[Math.floor(Math.random() * NAMES_OF_ALLAH.length)]!,
+        asmaulRight: NAMES_OF_ALLAH[Math.floor(Math.random() * NAMES_OF_ALLAH.length)]!
       })
       setIsShaking(false)
       setDataReady(true)

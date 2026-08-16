@@ -45,15 +45,16 @@ export type MoonDataTableProps = {
   tabs?: { id: string, label: string }[]
   activeTab?: string
   onTabChange?: (tabId: string) => void
+  filters?: Record<string, string>
   filterWidgets?: React.ReactNode
   customActions?: React.ReactNode
 }
 
 export function MoonDataTable({ 
   modelName, title, description, columns, icon,
-  topWidgets, sideWidgets, tabs, activeTab, onTabChange, filterWidgets, customActions
+  topWidgets, sideWidgets, tabs, activeTab, onTabChange, filters, filterWidgets, customActions
 }: MoonDataTableProps) {
-  const { data, loading, error, create, update, remove } = useMoonModel(modelName)
+  const { data, loading, error, create, update, remove } = useMoonModel(modelName, filters)
   
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)

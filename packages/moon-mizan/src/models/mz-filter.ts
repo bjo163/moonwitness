@@ -5,6 +5,15 @@ export default class MzFilter extends Vertex {
   static _description = 'Mizan Four-Filter Answer'
 
   assessmentId = fields.Many2one({ comodel: 'mz.assessment', required: true, index: true })
+  stage = fields.Selection({
+    selection: [
+      ['primary', 'Primary Filter'],
+      ['secondary', 'Secondary Filter']
+    ],
+    required: true,
+    default: 'primary',
+    index: true
+  })
   position = fields.Integer({ required: true, min: 1, max: 4 })
   label = fields.Char({ required: true, size: 120 })
   answer = fields.Selection({

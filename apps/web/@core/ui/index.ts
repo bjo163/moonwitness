@@ -17,7 +17,7 @@ export * from "./alert"
 export * from "./typography"
 export * from "./stat"
 export * from "./toast"
-export * from "./empty-state"
+export { EmptyState as HUDEmptyStateAlt } from "./empty-state"
 
 // Backward-compatible exports for components extracted from primitives
 export { Table } from "../table"
