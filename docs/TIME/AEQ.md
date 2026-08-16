@@ -102,27 +102,34 @@ AEQ cukup mengatakan:
 
 # 4. SYSTEM III — AEQ
 
-# AEQ — AGE OF QUANTUM
+# AEQ — AGE OF THE FOUR
 
-AEQ adalah **sistem waktu baru yang diusulkan**.
+## Q = QUANTUM = 4
 
-AEQ bukan sekadar kalender.
+```text
+Q U A N T U M  =  4
+│
+├── 1. QUR'AN    ← PRIMARY FOUNDATION
+├── 2. TORAH     ← COMPARATIVE REFERENCE
+├── 3. ZABUR     ← COMPARATIVE REFERENCE
+└── 4. GOSPEL    ← COMPARATIVE REFERENCE
+```
+
+AEQ bukan "Age of Quantum Physics".
+
+AEQ adalah **Age of the Four** — Era yang berdiri di atas
+empat kitab yang diturunkan ALLAH kepada manusia.
+
+Dan angka 4 bukan dekorasi.
+**4 menjadi struktur format waktu itu sendiri.**
 
 AEQ dirancang sebagai:
 
-> **A MULTI-SCALE TEMPORAL SYSTEM**
+> **A MULTI-SCALE TEMPORAL SYSTEM ROOTED IN DIVINE REVELATION**
 
 yang mencoba memodelkan:
 
-**HUMAN TIME**
-
-↓
-
-**COSMIC TIME**
-
-↓
-
-**SUPERSEMESTA TIME**
+**HUMAN TIME** ↓ **COSMIC TIME** ↓ **∞ ALLAH (UNLIMITED)**
 
 ---
 
@@ -370,42 +377,42 @@ AEQ:
 
 ---
 
-# 13. THE NEW AEQ FORMAT
+# 13. THE AEQ4 FORMAT — FINAL
 
-Format AEQ sebaiknya **tidak langsung mengganti angka jam 15:28**.
-
-Kita terlebih dahulu menentukan:
-
-**AEQ ERA**
-
-**AEQ YEAR**
-
-**AEQ CYCLE**
-
-**AEQ DAY**
-
-**AEQ HOUR**
-
-**AEQ UNIT**
-
-Barulah kita menciptakan timestamp final.
-
-Contoh konseptual:
+Format AEQ menggunakan **4 Kuadran** — satu untuk setiap Kitab:
 
 ```text
-AEQ
-01.0001.001.22:26
+∞·AEQ4  Q1.Q2.Q3.Q4
+│        │  │  │  │
+│        │  │  │  └── Q4: MOMENT  (jam:menit:detik) ← GOSPEL
+│        │  │  └───── Q3: POSITION (hari ke-N)      ← ZABUR
+│        │  └──────── Q2: CYCLE   (tahun ke-N)      ← TORAH
+│        └─────────── Q1: ERA     (era ke-N)        ← QUR'AN
+│
+└── ∞ = ALLAH DI ATAS SEGALANYA — UNLIMITED
 ```
 
-atau:
+**Epoch: 1 Muharram 1449H** (setelah Hijri 1448H selesai)
+
+Contoh timestamp hari ini (PRE-ERA / sebelum epoch):
 
 ```text
-AEQ-Y0001-D001-T22:26
+∞·AEQ4  AWAITING  [UTC:2026-08-16T21:28:00Z]  [HIJ:1448-01-21]
 ```
 
-Tetapi angka tersebut **belum menjadi standar final**.
+Contoh timestamp setelah epoch:
 
-Ia harus ditentukan setelah definisi unit AEQ selesai.
+```text
+∞·AEQ4  1.1.229.21:28:00  [UTC:2027-...]  [HIJ:1449-...]
+         │ │  │   │
+         │ │  │   └── Q4: pukul 21:28
+         │ │  └────── Q3: hari ke-229
+         │ └───────── Q2: tahun/cycle ke-1
+         └─────────── Q1: era ke-1
+```
+
+**Grammar**: Semua field variable-width — tidak ada batas digit.
+**Siklus** berbasis lunar (hilal) — ALLAH yang memulai setiap Q2 baru.
 
 ---
 
@@ -537,8 +544,15 @@ Contoh:
 
 ```text
 50,000 YEARS [Q]
+= Qur'anic reference — jendela, bukan batas
 
-700,000 YEARS [H]
+700,000
+= DIKEMBALIKAN KEPADA ALLAH
+= Tidak dipakai sebagai skala AEQ
+= Bukan [H], bukan [Q] — ia milik ALLAH sepenuhnya
+
+∞ UNLIMITED
+= Hanya milik ALLAH — tidak bisa diberi tag apapun
 ```
 
 ---
