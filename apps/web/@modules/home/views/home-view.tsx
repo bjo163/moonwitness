@@ -11,6 +11,7 @@ import { HomeAnalyticsSection } from "./06-home-analytics-section"
 import { HomeMissionSection } from "./07-home-mission-section"
 import { HomeFooterSection } from "./08-home-footer-section"
 import { HomeCabSection } from "./08b-home-cab-section"
+import { HomeAEQ4Section } from "./09-home-aeq4-section"
 
 export function HomeView() {
   return (
@@ -38,6 +39,9 @@ export function HomeView() {
 
       {/* 8B. CAB GOVERNANCE SECTION */}
       <HomeCabSection />
+
+      {/* 9. AEQ4 TEMPORAL STATION */}
+      <HomeAEQ4Section />
 
       {/* 8. FOOTER SECTION */}
       <HomeFooterSection />

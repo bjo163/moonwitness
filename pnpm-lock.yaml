@@ -142,6 +142,9 @@ importers:
       '@moon/server':
         specifier: workspace:*
         version: link:../../packages/moon-server
+      '@moon/time':
+        specifier: workspace:*
+        version: link:../../packages/moon-time
       '@moon/witness':
         specifier: workspace:*
         version: link:../../packages/moon-witness
@@ -502,6 +505,12 @@ importers:
       vitest:
         specifier: ^1.0.0
         version: 1.6.1(@types/node@26.1.2)(lightningcss@1.32.0)
+
+  packages/moon-time:
+    devDependencies:
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
 
   packages/moon-witness:
     dependencies:

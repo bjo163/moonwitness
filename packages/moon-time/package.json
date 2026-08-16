@@ -1,0 +1,18 @@
+{
+  "name": "@moon/time",
+  "version": "0.1.0",
+  "description": "AEQ4 Temporal System — Pure math, zero external dependencies. Hijri calendar, lunar ephemeris, and AEQ4 countdown engine.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "src", "README.md"],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
