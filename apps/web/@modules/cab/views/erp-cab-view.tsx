@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
+import { WhisperPanel } from "../components/whisper-panel"
 import {
   Infinity,
   Shield,
@@ -292,6 +293,9 @@ function UpgradeCouncilTab() {
                     )
                   })}
                 </div>
+
+                {/* ── WHISPER CHANNEL ── */}
+                <WhisperPanel requestId={req.id} requestTitle={req.title} />
               </div>
             )}
           </div>
