@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useMoonStore } from "@core/store/moon-store"
@@ -25,63 +25,60 @@ import {
   User,
   FlaskConical,
   Activity,
+  Scale,
+  Crosshair,
+  ScrollText,
+  Database,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react"
 import { buildNavigation } from "@modules/index"
-import { ERP_QUICK_LAUNCH, ERP_NAVIGATION } from "@modules/erp"
 
 function getIcon(name?: string) {
-  const props = { className: "w-4 h-4" }
+  const props = { className: "w-4 h-4 shrink-0" }
   switch (name) {
-    case "LayoutDashboard":
-      return <LayoutDashboard {...props} />
-    case "Target":
-      return <Target {...props} />
-    case "Telescope":
-      return <Telescope {...props} />
-    case "BookOpen":
-      return <BookOpen {...props} />
-    case "Clock":
-      return <Clock {...props} />
-    case "Network":
-      return <Network {...props} />
-    case "Brain":
-      return <Brain {...props} />
-    case "FolderKanban":
-      return <FolderKanban {...props} />
-    case "CheckSquare":
-      return <CheckSquare {...props} />
-    case "BarChart3":
-      return <BarChart3 {...props} />
-    case "Users":
-      return <Users {...props} />
-    case "Globe":
-      return <Globe {...props} />
-    case "FlaskConical":
-      return <FlaskConical {...props} />
-    case "Activity":
-      return <Activity {...props} />
-    case "Settings":
-      return <Settings {...props} />
-    case "ShieldCheck":
-      return <ShieldCheck {...props} />
-    case "Bell":
-      return <Bell {...props} />
-    case "CreditCard":
-      return <CreditCard {...props} />
-    case "User":
-      return <User {...props} />
-    default:
-      return <LayoutDashboard {...props} />
+    case "LayoutDashboard": return <LayoutDashboard {...props} />
+    case "Target":          return <Target {...props} />
+    case "Telescope":       return <Telescope {...props} />
+    case "BookOpen":        return <BookOpen {...props} />
+    case "ScrollText":      return <ScrollText {...props} />
+    case "Clock":           return <Clock {...props} />
+    case "Network":         return <Network {...props} />
+    case "Brain":           return <Brain {...props} />
+    case "FolderKanban":    return <FolderKanban {...props} />
+    case "CheckSquare":     return <CheckSquare {...props} />
+    case "BarChart3":       return <BarChart3 {...props} />
+    case "Users":           return <Users {...props} />
+    case "Globe":           return <Globe {...props} />
+    case "FlaskConical":    return <FlaskConical {...props} />
+    case "Activity":        return <Activity {...props} />
+    case "Settings":        return <Settings {...props} />
+    case "ShieldCheck":     return <ShieldCheck {...props} />
+    case "Bell":            return <Bell {...props} />
+    case "CreditCard":      return <CreditCard {...props} />
+    case "User":            return <User {...props} />
+    case "Scale":           return <Scale {...props} />
+    case "Crosshair":       return <Crosshair {...props} />
+    case "Database":        return <Database {...props} />
+    default:                return <LayoutDashboard {...props} />
   }
 }
 
 export function ErpSidebar() {
   const pathname = usePathname()
   const { logout } = useMoonStore()
+  const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({})
 
   const handleLogout = () => {
     logout()
     window.location.href = "/auth/login"
+  }
+
+  // ── Dynamic nav from module registry — reads ALL ERP_SIDEBAR modules ──
+  const erpModules = buildNavigation("ERP_SIDEBAR")
+
+  const toggleModule = (label: string) => {
+    setExpandedModules((prev) => ({ ...prev, [label]: !prev[label] }))
   }
 
   return (
@@ -99,50 +96,97 @@ export function ErpSidebar() {
         </div>
       </div>
 
-      {/* Navigation Links */}
+      {/* Navigation from module registry */}
       <nav className="scrollbar-hide flex-1 overflow-y-auto">
         <div className="px-4 py-4">
           <p className="mb-2 px-2 font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
-            Navigation
+            Modules
           </p>
-          <ul className="space-y-1">
-            {ERP_NAVIGATION.map((item) => {
-              const isActive =
-                pathname === item.href || pathname?.startsWith(`${item.href}/`)
+          <ul className="space-y-0.5">
+            {erpModules.map((mod) => {
+              const isExpanded = expandedModules[mod.label] ?? true
+              const hasSubLinks = mod.subLinks && mod.subLinks.length > 1
+              const modBase = "/" + mod.href.split("/").filter(Boolean)[0]
+              const isModActive = pathname?.startsWith(modBase)
+
               return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={`flex items-center gap-3 rounded-lg px-3 py-2 font-sans text-xs transition-colors ${
-                      isActive
-                        ? "bg-cyan-500/10 text-cyan-400"
-                        : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
-                    }`}
-                  >
-                    {getIcon(item.icon)}
-                    {item.label}
-                  </Link>
+                <li key={mod.href}>
+                  {hasSubLinks ? (
+                    <>
+                      <button
+                        onClick={() => toggleModule(mod.label)}
+                        className={`flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 font-sans text-xs transition-colors ${
+                          isModActive
+                            ? "bg-cyan-500/10 text-cyan-400"
+                            : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+                        }`}
+                      >
+                        <span className="flex items-center gap-2">
+                          {getIcon(mod.icon)}
+                          <span className="font-semibold tracking-wider uppercase text-[10px]">{mod.label}</span>
+                        </span>
+                        {isExpanded
+                          ? <ChevronDown className="w-3 h-3 opacity-50" />
+                          : <ChevronRight className="w-3 h-3 opacity-50" />
+                        }
+                      </button>
+                      {isExpanded && (
+                        <ul className="ml-4 mt-0.5 space-y-0.5 border-l border-cyan-500/10 pl-3">
+                          {mod.subLinks?.map((sub) => {
+                            const isActive = pathname === sub.href || pathname?.startsWith(`${sub.href}/`)
+                            return (
+                              <li key={sub.href}>
+                                <Link
+                                  href={sub.href}
+                                  className={`flex items-center gap-2 rounded-md px-2 py-1.5 font-sans text-xs transition-colors ${
+                                    isActive
+                                      ? "bg-cyan-500/10 text-cyan-400"
+                                      : "text-slate-500 hover:bg-white/5 hover:text-slate-300"
+                                  }`}
+                                >
+                                  {getIcon(sub.icon)}
+                                  {sub.label}
+                                </Link>
+                              </li>
+                            )
+                          })}
+                        </ul>
+                      )}
+                    </>
+                  ) : (
+                    <Link
+                      href={mod.href}
+                      className={`flex items-center gap-2 rounded-lg px-3 py-2 font-sans text-xs transition-colors ${
+                        pathname === mod.href || pathname?.startsWith(mod.href)
+                          ? "bg-cyan-500/10 text-cyan-400"
+                          : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+                      }`}
+                    >
+                      {getIcon(mod.icon)}
+                      {mod.label}
+                    </Link>
+                  )}
                 </li>
               )
             })}
           </ul>
         </div>
 
+        {/* Account section — static */}
         <div className="px-4 py-2">
           <p className="mb-2 px-2 font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
             Account
           </p>
           <ul className="space-y-1">
             {[
-              { label: "My Profile", href: "/erp/profile", icon: "User" },
-              { label: "Settings", href: "/erp/settings", icon: "Settings" },
-              { label: "Security Center", href: "/erp/security", icon: "ShieldCheck" },
-              { label: "Notifications", href: "/erp/notifications", icon: "Bell" },
-              { label: "Organizations", href: "/erp/orgs", icon: "Users" },
-              { label: "Billing", href: "/erp/billing", icon: "CreditCard" },
+              { label: "My Profile",      href: "/erp/profile",       icon: "User" },
+              { label: "Settings",        href: "/erp/settings",      icon: "Settings" },
+              { label: "Security Center", href: "/erp/security",      icon: "ShieldCheck" },
+              { label: "Notifications",   href: "/erp/notifications", icon: "Bell" },
+              { label: "Organizations",   href: "/erp/orgs",          icon: "Users" },
+              { label: "Billing",         href: "/erp/billing",       icon: "CreditCard" },
             ].map((item) => {
-              const isActive =
-                pathname === item.href || pathname?.startsWith(`${item.href}/`)
+              const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`)
               return (
                 <li key={item.href}>
                   <Link
