@@ -38,6 +38,9 @@ importers:
       '@moon/base':
         specifier: workspace:*
         version: link:../../packages/moon-base
+      '@moon/cab':
+        specifier: workspace:*
+        version: link:../../packages/moon-cab
       '@moon/client':
         specifier: workspace:*
         version: link:../../packages/moon-client

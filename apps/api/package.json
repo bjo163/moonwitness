@@ -22,6 +22,7 @@
     "@moon/khidra": "workspace:*",
     "@moon/mizan": "workspace:*",
     "@moon/shootgun": "workspace:*",
+    "@moon/cab": "workspace:*",
     "dotenv": "^16.4.5",
     "knex": "^3.0.0",
     "pg": "^8.13.0"

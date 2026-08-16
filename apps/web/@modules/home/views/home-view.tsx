@@ -10,6 +10,7 @@ import { HomeAstronomySection } from "./05-home-astronomy-section"
 import { HomeAnalyticsSection } from "./06-home-analytics-section"
 import { HomeMissionSection } from "./07-home-mission-section"
 import { HomeFooterSection } from "./08-home-footer-section"
+import { HomeCabSection } from "./08b-home-cab-section"
 
 export function HomeView() {
   return (
@@ -34,6 +35,9 @@ export function HomeView() {
 
       {/* 7. MISSION SECTION */}
       <HomeMissionSection />
+
+      {/* 8B. CAB GOVERNANCE SECTION */}
+      <HomeCabSection />
 
       {/* 8. FOOTER SECTION */}
       <HomeFooterSection />

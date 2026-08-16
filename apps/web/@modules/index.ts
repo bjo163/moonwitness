@@ -12,6 +12,7 @@ import mission from "./mission"
 import auth from "./auth"
 import seismix from "./seismix"
 import shootgun from "./shootgun"
+import cab from "./cab"
 
 // ── Daftar Modul Terdaftar ──────────────────────────────────────
 // Tambahkan modul baru di sini. Satu baris per modul.
@@ -29,6 +30,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
   auth,
   seismix,
   shootgun,
+  cab,
 ]
 
 // ── Helper: Cari modul berdasarkan ID ───────────────────────────
