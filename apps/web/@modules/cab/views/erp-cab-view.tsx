@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { WhisperPanel } from "../components/whisper-panel"
+import { WhisperPanel, MercyButton } from "../components/whisper-panel"
 import {
   Infinity,
   Shield,
@@ -253,6 +253,14 @@ function UpgradeCouncilTab() {
               </div>
               {isOpen ? <ChevronUp className="h-4 w-4 shrink-0 text-white/30 mt-1" /> : <ChevronDown className="h-4 w-4 shrink-0 text-white/30 mt-1" />}
             </button>
+
+            {/* MERCY button — always visible, stops propagation to card toggle */}
+            <div className="flex justify-end border-t border-white/5 px-4 py-2" onClick={(e) => e.stopPropagation()}>
+              <MercyButton
+                requestId={req.id}
+                onMercySent={() => setExpanded(req.id)}
+              />
+            </div>
 
             {/* Expanded detail */}
             {isOpen && (
