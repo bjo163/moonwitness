@@ -64,11 +64,6 @@ function model(name: string, isPublic = false): typeof Vertex {
   return { _name: name, _public: isPublic } as unknown as typeof Vertex
 }
 
-function expectAuthError(error: unknown, code: AuthorizationError['code']) {
-  expect(error).toBeInstanceOf(AuthorizationError)
-  expect((error as AuthorizationError).code).toBe(code)
-}
-
 describe('Moon ORM fail-closed authorization', () => {
   beforeEach(() => {
     mocks.getDb.mockReset()
@@ -82,9 +77,10 @@ describe('Moon ORM fail-closed authorization', () => {
   it('allows anonymous reads only for explicitly public models', async () => {
     await expect(checkAccessRights(model('public.model', true), createCtx(0), 'permRead')).resolves.toBeUndefined()
 
-    await expect(checkAccessRights(model('public.model', true), createCtx(0), 'permWrite')).rejects.toSatisfy((error) => {
-      expectAuthError(error, 'AUTH_REQUIRED')
-      return true
+    await expect(checkAccessRights(model('public.model', true), createCtx(0), 'permWrite')).rejects.toMatchObject({
+      name: 'AuthorizationError',
+      code: 'AUTH_REQUIRED',
+      statusCode: 401,
     })
   })
 
@@ -92,9 +88,8 @@ describe('Moon ORM fail-closed authorization', () => {
     const loginEnv = createCtx(0, authSecurityContext('login'))
 
     await expect(checkAccessRights(model('vx.user'), loginEnv, 'permRead')).resolves.toBeUndefined()
-    await expect(checkAccessRights(model('vx.user'), loginEnv, 'permWrite')).rejects.toSatisfy((error) => {
-      expectAuthError(error, 'AUTH_REQUIRED')
-      return true
+    await expect(checkAccessRights(model('vx.user'), loginEnv, 'permWrite')).rejects.toMatchObject({
+      code: 'AUTH_REQUIRED',
     })
   })
 
@@ -103,9 +98,9 @@ describe('Moon ORM fail-closed authorization', () => {
       vx_user_vx_role_rel: [],
     }))
 
-    await expect(checkAccessRights(model('demo.model'), createCtx(42), 'permRead')).rejects.toSatisfy((error) => {
-      expectAuthError(error, 'ACCESS_DENIED')
-      return true
+    await expect(checkAccessRights(model('demo.model'), createCtx(42), 'permRead')).rejects.toMatchObject({
+      code: 'ACCESS_DENIED',
+      statusCode: 403,
     })
   })
 
@@ -115,9 +110,8 @@ describe('Moon ORM fail-closed authorization', () => {
       mx_model: [],
     }))
 
-    await expect(checkAccessRights(model('demo.model'), createCtx(42), 'permRead')).rejects.toSatisfy((error) => {
-      expectAuthError(error, 'SECURITY_METADATA_MISSING')
-      return true
+    await expect(checkAccessRights(model('demo.model'), createCtx(42), 'permRead')).rejects.toMatchObject({
+      code: 'SECURITY_METADATA_MISSING',
     })
   })
 
@@ -131,9 +125,8 @@ describe('Moon ORM fail-closed authorization', () => {
     const env = createCtx(42)
     await expect(checkAccessRights(model('demo.model'), env, 'permRead')).resolves.toBeUndefined()
 
-    await expect(checkAccessRights(model('demo.model'), env, 'permWrite')).rejects.toSatisfy((error) => {
-      expectAuthError(error, 'ACCESS_DENIED')
-      return true
+    await expect(checkAccessRights(model('demo.model'), env, 'permWrite')).rejects.toMatchObject({
+      code: 'ACCESS_DENIED',
     })
   })
 
@@ -146,9 +139,14 @@ describe('Moon ORM fail-closed authorization', () => {
       vx_user: [{ id: 42, name: 'Operator' }],
     }))
 
-    await expect(getRecordRulesDomain(model('demo.model'), createCtx(42))).rejects.toSatisfy((error) => {
-      expectAuthError(error, 'SECURITY_RULE_INVALID')
-      return true
+    await expect(getRecordRulesDomain(model('demo.model'), createCtx(42))).rejects.toMatchObject({
+      code: 'SECURITY_RULE_INVALID',
     })
+  })
+
+  it('exposes authorization failures as a typed error', () => {
+    const error = new AuthorizationError('ACCESS_DENIED', 'denied')
+    expect(error).toBeInstanceOf(Error)
+    expect(error.statusCode).toBe(403)
   })
 })
