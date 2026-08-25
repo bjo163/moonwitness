@@ -11,7 +11,7 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "lint": "pnpm --filter @workspace/eslint-config exec eslint ../auto-avatar --config ../auto-avatar/eslint.config.js"
+    "lint": "../eslint-config/node_modules/.bin/eslint ."
   },
   "devDependencies": {
     "@dicebear/collection": "^9.4.2",
