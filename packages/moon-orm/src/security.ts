@@ -156,8 +156,8 @@ export async function getRecordRulesDomain(
   modelClass: typeof Vertex,
   env: Ctx
 ): Promise<unknown[]> {
-  if (env.uid === 1) return []
-  if (env.uid === 0 && (modelClass._public || getAuthSecurityScope(env))) return []
+  if (env.uid === 1 || modelClass._public) return []
+  if (env.uid === 0 && getAuthSecurityScope(env)) return []
 
   const groupIds = await getUserRoleIds(env)
   if (groupIds.length === 0) {
