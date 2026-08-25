@@ -8,7 +8,7 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "lint": "eslint",
+    "lint": "pnpm --filter @workspace/eslint-config exec eslint ../../apps/api --config ./base.js",
     "format": "prettier --write \"**/*.{ts,js,json}\"",
     "typecheck": "tsc --noEmit"
   },
