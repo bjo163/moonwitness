@@ -50,13 +50,50 @@ Rules:
 
 ```text
 feature
-  -> test + review
+  -> test + review + CI
   -> dev
-  -> integration + regression + migration verification
+  -> integration + regression + migration verification + CI
   -> main
 ```
 
 Do not skip `dev` for ordinary work.
+
+## CI policy
+
+MoonWitness uses the repository owner's **self-hosted GitHub Actions runner** as the canonical CI execution environment.
+
+The foundation workflow lives at:
+
+```text
+.github/workflows/foundation-ci.yml
+```
+
+It runs for:
+
+- pull requests targeting `dev`
+- pull requests targeting `main`
+- pushes to `dev`
+- pushes to `main`
+- manual workflow dispatch
+
+The initial promotion gate runs:
+
+```text
+pnpm install --frozen-lockfile
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+```
+
+Security rules for the self-hosted runner:
+
+- workflow permissions are read-only unless a future job explicitly requires more
+- fork pull requests must not execute arbitrary code on the self-hosted runner
+- the workflow only accepts pull-request execution when the PR head repository is this same repository
+- repository secrets must not be added to generic validation jobs unless explicitly required and reviewed
+
+A failed required CI check blocks promotion to the next long-lived branch.
 
 ## Change discipline
 
@@ -86,15 +123,17 @@ Avoid mixing large unrelated UI, ORM, migration, and domain changes in one commi
 
 A change is ready to move from `feature` to `dev` when applicable checks pass:
 
-- typecheck
 - lint
+- typecheck
 - unit/integration tests
+- build
 - database migration/schema review
 - security review for access-rule changes
 - transaction test for write-path changes
 - architecture check: no new duplicate persistence path
+- required self-hosted CI status is green
 
-A change is ready for `main` when `dev` is stable and the release/deployment path is verified.
+A change is ready for `main` when `dev` is stable, required self-hosted CI is green, and the release/deployment path is verified.
 
 ## Emergency fixes
 
