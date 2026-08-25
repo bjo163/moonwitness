@@ -2,7 +2,7 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import nodemailer from 'nodemailer'
-import { getModel, createCtx, ANONYMOUS_ID } from '@moon/orm'
+import { getModel, createCtx, ANONYMOUS_ID, authSecurityContext } from '@moon/orm'
 import { logger } from '../logger.js'
 import { parseBody, sendJson } from '../utils/http.js'
 
@@ -48,7 +48,7 @@ export async function handleLogin(
       return sendJson(res, 500, { error: 'User model not found' }, req)
     }
 
-    const env = createCtx(ANONYMOUS_ID, {}, getModel as any)
+    const env = createCtx(ANONYMOUS_ID, authSecurityContext('login'), getModel as any)
     const users = await VxUser.fetch(VxUser as any, env, [['email', '=', email]])
 
     if (users.length === 0) {
@@ -110,7 +110,7 @@ export async function handleRegister(
       return sendJson(res, 500, { error: 'User model not found' }, req)
     }
 
-    const env = createCtx(ANONYMOUS_ID, {}, getModel as any)
+    const env = createCtx(ANONYMOUS_ID, authSecurityContext('register'), getModel as any)
 
     // Check if user exists
     const existing = await VxUser.fetch(VxUser as any, env, [['email', '=', email]])
@@ -152,7 +152,7 @@ export async function handleRegister(
       token, 
       user: { 
         id: user.id, 
-        email: user.email, 
+        email: user.email,
         name: user.name,
         partnerId: user.partner_id
       } 
@@ -184,7 +184,7 @@ export async function handleForgotPassword(
       return sendJson(res, 500, { error: 'User model not found' }, req)
     }
 
-    const env = createCtx(ANONYMOUS_ID, {}, getModel as any)
+    const env = createCtx(ANONYMOUS_ID, authSecurityContext('password-recovery'), getModel as any)
     const users = await VxUser.fetch(VxUser as any, env, [['email', '=', email]])
 
     if (users.length === 0) {
@@ -254,7 +254,7 @@ export async function handleVerifyOtp(
       return sendJson(res, 500, { error: 'User model not found' }, req)
     }
 
-    const env = createCtx(ANONYMOUS_ID, {}, getModel as any)
+    const env = createCtx(ANONYMOUS_ID, authSecurityContext('password-recovery'), getModel as any)
     const users = await VxUser.fetch(VxUser as any, env, [['email', '=', email]])
 
     if (users.length === 0) {
@@ -300,7 +300,7 @@ export async function handleResetPassword(
       return sendJson(res, 500, { error: 'User model not found' }, req)
     }
 
-    const env = createCtx(ANONYMOUS_ID, {}, getModel as any)
+    const env = createCtx(ANONYMOUS_ID, authSecurityContext('password-recovery'), getModel as any)
     const users = await VxUser.fetch(VxUser as any, env, [['email', '=', email]])
 
     if (users.length === 0) {
