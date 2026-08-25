@@ -49,6 +49,9 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Build Moon packages for type resolution
+        run: pnpm --filter "@moon/*" build
+
       - name: Typecheck
         run: pnpm typecheck
 
