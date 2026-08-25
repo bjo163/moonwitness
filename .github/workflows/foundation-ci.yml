@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   validate:
-    name: Typecheck, Test, Build
+    name: Lint, Typecheck, Test, Build
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: self-hosted
     timeout-minutes: 30
@@ -45,6 +45,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
 
       - name: Typecheck
         run: pnpm typecheck
