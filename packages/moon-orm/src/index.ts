@@ -10,6 +10,13 @@ export {
   SUPERUSER_ID,
   ANONYMOUS_ID
 } from './env.js'
+export {
+  AuthorizationError,
+  authSecurityContext,
+  type AuthorizationErrorCode,
+  type AuthSecurityScope,
+  type PermissionOperation,
+} from './security.js'
 export { registry, getModel, loadModels, registerModel } from './registry.js'
 export { forge, getLastPending } from './schema-sync.js'
 export { diff, up, down } from './migrator.js'
