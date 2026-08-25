@@ -1,5 +1,5 @@
 ﻿import type { IncomingMessage, ServerResponse } from 'node:http'
-import { getModel, createCtx, getDb } from '@moon/orm'
+import { getModel, createCtx } from '@moon/orm'
 import { parseBody, sendJson, parseUrl } from '../utils/http.js'
 import { verifyToken } from '../utils/auth.js'
 
@@ -26,9 +26,8 @@ export async function handleRest(
       return sendJson(res, 404, { error: `Model ${model} not found` }, req)
     }
 
-    const db = getDb()
     const { searchParams } = parseUrl(req)
-    const env = createCtx(uid, {}, getModel, db)
+    const env = createCtx(uid, {}, getModel)
 
     // GET /api/:model - List records
     if (req.method === 'GET' && !id) {

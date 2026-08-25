@@ -1,3 +1,4 @@
+import type { Knex } from 'knex'
 import type { Vertex } from './base.js'
 import { getDb } from './config.js'
 
@@ -8,7 +9,7 @@ export interface Ctx {
   uid: number
   context?: Record<string, unknown>
   getModel?: (name: string) => typeof Vertex | undefined
-  trx?: any // Knex.Transaction
+  trx?: Knex.Transaction
   cache?: Map<string, any>
   withContext(context: Record<string, unknown>): Ctx
   transaction<T>(callback: (trxEnv: Ctx) => Promise<T>): Promise<T>
@@ -18,22 +19,23 @@ export function createCtx(
   uid: number,
   context?: Record<string, unknown>,
   getModel?: (name: string) => typeof Vertex | undefined,
-  trx?: any
+  trx?: Knex.Transaction
 ): Ctx {
-  const env: Ctx = { 
-    uid, 
-    context: context || {}, 
-    getModel, 
-    trx, 
+  const env: Ctx = {
+    uid,
+    context: context || {},
+    getModel,
+    trx,
     cache: new Map(),
     withContext(newContext: Record<string, unknown>) {
       return createCtx(this.uid, { ...this.context, ...newContext }, this.getModel, this.trx)
     },
     async transaction<T>(callback: (trxEnv: Ctx) => Promise<T>): Promise<T> {
       if (this.trx) {
-        // Already in a transaction, just reuse it
+        // A transaction already exists: nested work must reuse the same transaction.
         return callback(this)
       }
+
       const db = getDb()
       return await db.transaction(async (trx) => {
         const trxEnv = createCtx(this.uid, this.context, this.getModel, trx)
@@ -41,5 +43,6 @@ export function createCtx(
       })
     }
   }
+
   return env
 }
