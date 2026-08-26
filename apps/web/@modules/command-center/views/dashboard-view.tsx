@@ -2,20 +2,20 @@
 
 import React, { useEffect, useState } from "react"
 import { apiClient } from "@core/api/client"
-/* eslint-disable-next-line no-restricted-imports -- Standard loader icon for ERP dashboard */
+/* eslint-disable-next-line no-restricted-imports -- Standard loader icon for Command Center dashboard */
 import { Loader2 } from "lucide-react"
 
 // Import Widgets
-import { ErpHeroBanner } from "@core/widgets/erp/erp-hero-banner"
-import { ErpDailyMetrics } from "@core/widgets/erp/erp-daily-metrics"
-import { ErpKnowledgeFeed } from "@core/widgets/erp/erp-knowledge-feed"
-import { ErpProjectsTasks } from "@core/widgets/erp/erp-projects-tasks"
-import { ErpRightSidebar } from "@core/widgets/erp/erp-right-sidebar"
-import { ZakatCalculatorWidget } from "@core/widgets/erp/zakat-calculator-widget"
-import { InfaqTrackerWidget } from "@core/widgets/erp/infaq-tracker-widget"
-import { MutabaahWidget } from "@core/widgets/erp/mutabaah-widget"
-import { MosqueRadarWidget } from "@core/widgets/erp/mosque-radar-widget"
-import { SpiritualReportWidget } from "@core/widgets/erp/spiritual-report-widget"
+import { ErpHeroBanner } from "@core/widgets/command-center/command-center-hero-banner"
+import { ErpDailyMetrics } from "@core/widgets/command-center/command-center-daily-metrics"
+import { ErpKnowledgeFeed } from "@core/widgets/command-center/command-center-knowledge-feed"
+import { ErpProjectsTasks } from "@core/widgets/command-center/command-center-projects-tasks"
+import { ErpRightSidebar } from "@core/widgets/command-center/command-center-right-sidebar"
+import { ZakatCalculatorWidget } from "@core/widgets/command-center/zakat-calculator-widget"
+import { InfaqTrackerWidget } from "@core/widgets/command-center/infaq-tracker-widget"
+import { MutabaahWidget } from "@core/widgets/command-center/mutabaah-widget"
+import { MosqueRadarWidget } from "@core/widgets/command-center/mosque-radar-widget"
+import { SpiritualReportWidget } from "@core/widgets/command-center/spiritual-report-widget"
 
 type DashboardData = any
 
@@ -29,12 +29,12 @@ export function ERPDashboardView() {
         const response = await apiClient.get<{
           success: boolean
           data: DashboardData
-        }>("/api/erp/dashboard")
+        }>("/api/command-center/dashboard")
         if (response.data?.success) {
           setData(response.data.data)
         }
       } catch (err) {
-        console.error("Failed to load ERP dashboard data:", err)
+        console.error("Failed to load Command Center dashboard data:", err)
       } finally {
         setLoading(false)
       }

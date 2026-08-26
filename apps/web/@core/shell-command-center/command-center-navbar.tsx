@@ -16,7 +16,7 @@ type UserProfile = {
   avatarUrl?: string
 }
 
-export function ErpNavbar() {
+export function CommandCenterNavbar() {
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const pathname = usePathname()
   const { user } = useMoonStore()

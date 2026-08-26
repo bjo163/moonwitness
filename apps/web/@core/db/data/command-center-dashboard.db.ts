@@ -1,4 +1,4 @@
-export const MOCK_ERP_DASHBOARD = {
+export const MOCK_COMMAND_CENTER_DASHBOARD = {
   missionStatus: {
     title: "Explorer of Truth",
     level: 7,

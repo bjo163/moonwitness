@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
 // Routes that require authentication
-const protectedRoutes = ["/erp", "/console"]
+const protectedRoutes = ["/command-center"]
 
 // Routes that require guest (e.g. login)
 const guestRoutes = ["/login", "/register"]
@@ -25,8 +25,8 @@ export function proxy(request: NextRequest) {
   }
 
   if (isGuest && token) {
-    // Redirect to ERP/dashboard if trying to access login while already logged in
-    return NextResponse.redirect(new URL("/erp/dashboard", request.url))
+    // Redirect to Command Center dashboard if trying to access login while already logged in
+    return NextResponse.redirect(new URL("/command-center/dashboard", request.url))
   }
 
   return NextResponse.next()

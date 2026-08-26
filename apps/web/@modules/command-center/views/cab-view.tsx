@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { WhisperPanel, MercyButton } from "../components/whisper-panel"
+import { WhisperPanel, MercyButton } from "./whisper-panel"
 import {
   Infinity,
   Shield,

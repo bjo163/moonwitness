@@ -169,7 +169,7 @@ export function OSCabGovernance() {
             </p>
           </div>
           <Link
-            href="/erp/cab"
+            href="/command-center/cab"
             className="hud-clip-btn border-cyber-purple text-cyber-purple hover:bg-cyber-purple flex items-center gap-2 border px-4 py-2 text-xs font-bold tracking-widest uppercase transition-all duration-200 hover:text-black"
           >
             [ OPEN CAB ] <ArrowRight className="h-3 w-3" />

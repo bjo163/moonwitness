@@ -144,7 +144,7 @@ export function WorkspaceStep({
         </button>
 
         <button
-          onClick={() => onSelectWorkspace("/erp/dashboard")}
+          onClick={() => onSelectWorkspace("/command-center/dashboard")}
           className="group relative flex w-full items-center justify-between rounded-xl border border-fuchsia-500/30 bg-black/40 p-4 transition-all hover:border-fuchsia-500/50 hover:bg-fuchsia-500/10"
         >
           <div className="flex items-center gap-4">
@@ -153,7 +153,7 @@ export function WorkspaceStep({
             </div>
             <div className="text-left">
               <h3 className="font-sans text-sm font-bold text-white">
-                ERP Dashboard
+                Command Center Dashboard
               </h3>
               <p className="font-sans text-[10px] text-primary/50">
                 Administrative Command Center

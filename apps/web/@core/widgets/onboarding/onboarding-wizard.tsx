@@ -24,7 +24,7 @@ const STEPS = [
     title: "TACTICAL HUD",
     subtitle: "Command & Control",
     description:
-      "Navigate through the ERP dashboard to view live Qibla radar, prayer times, and global monitoring systems. Everything is designed for precision and focus.",
+      "Navigate through the Command Center dashboard to view live Qibla radar, prayer times, and global monitoring systems. Everything is designed for precision and focus.",
     icon: Compass,
   },
   {

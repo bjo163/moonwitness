@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { MOCK_ERP_DASHBOARD } from "@core/db/data/erp-dashboard.db"
+import { MOCK_COMMAND_CENTER_DASHBOARD } from "@core/db/data/command-center-dashboard.db"
 export const dynamic = "force-dynamic"
 import { moonClientInstance } from "@core/store/moon-store"
 import { getDailyPrayerTimes } from "@moon/witness/dist/astronomy/prayer-times.js"
@@ -8,7 +8,7 @@ const JAKARTA_LAT = -6.2088
 const JAKARTA_LNG = 106.8456
 
 export async function GET(req: NextRequest) {
-  const dashboardData = { ...MOCK_ERP_DASHBOARD }
+  const dashboardData = { ...MOCK_COMMAND_CENTER_DASHBOARD }
 
   try {
     // 1. Real Prayer Times from Internal Math Engine (@moon/witness)
@@ -91,7 +91,7 @@ export async function GET(req: NextRequest) {
       console.error("Failed to fetch random hadith", e)
     }
   } catch (error) {
-    console.error("Failed to fetch real data for ERP Dashboard:", error)
+    console.error("Failed to fetch real data for Command Center Dashboard:", error)
   }
 
   return NextResponse.json({

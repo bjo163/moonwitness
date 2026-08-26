@@ -94,8 +94,7 @@ export function Navbar({ navLinks }: { navLinks: NavLinkConfig[] }) {
 
   // Hide global navbar on dedicated system portals
   if (
-    pathname?.startsWith("/erp") ||
-    pathname?.startsWith("/console") ||
+    pathname?.startsWith("/command-center") ||
     pathname?.startsWith("/auth")
   ) {
     return null
@@ -272,19 +271,19 @@ export function Navbar({ navLinks }: { navLinks: NavLinkConfig[] }) {
                       </Link>
 
                       <Link
-                        href="/erp/dashboard"
+                        href="/command-center/dashboard"
                         onClick={() => setProfileDropdownOpen(false)}
                         className="flex items-center gap-3 rounded-lg px-3 py-2 text-[10px] font-bold text-fuchsia-400 transition-colors hover:bg-fuchsia-500/10 hover:text-fuchsia-300"
                       >
-                        <ShieldCheck className="h-4 w-4" /> ENTER ERP
+                        <ShieldCheck className="h-4 w-4" /> COMMAND CENTER
                       </Link>
 
                       <Link
-                        href="/console/terminal"
+                        href="/command-center/terminal"
                         onClick={() => setProfileDropdownOpen(false)}
                         className="flex items-center gap-3 rounded-lg px-3 py-2 text-[10px] font-bold text-emerald-400 transition-colors hover:bg-emerald-500/10 hover:text-emerald-300"
                       >
-                        <Terminal className="h-4 w-4" /> DEVELOPER CONSOLE
+                        <Terminal className="h-4 w-4" /> DEV TERMINAL
                       </Link>
 
                       <button

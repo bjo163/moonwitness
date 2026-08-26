@@ -137,14 +137,14 @@ export function AuthTerminalWidget() {
 
           <div className="grid grid-cols-1 gap-4">
             <button
-              onClick={() => router.push("/erp/dashboard")}
+              onClick={() => router.push("/command-center/dashboard")}
               className="group tag-clip relative flex items-center justify-between border border-fuchsia-500/40 bg-fuchsia-500/10 p-4 transition-all hover:bg-fuchsia-500/20 hover:shadow-[0_0_20px_rgba(217,70,239,0.3)]"
             >
               <div className="flex items-center gap-4">
                 <ShieldCheck className="h-6 w-6 text-fuchsia-400" />
                 <div className="text-left">
                   <h3 className="font-mono text-sm font-black text-fuchsia-400">
-                    ERP DASHBOARD
+                    COMMAND CENTER
                   </h3>
                   <p className="font-mono text-[9px] text-primary/70">
                     ADMINISTRATIVE COMMAND CENTER
@@ -271,7 +271,9 @@ export function AuthTerminalWidget() {
                     }`}
                   >
                     <ShieldCheck className="h-4 w-4" />
-                    <span className="text-[9px] font-bold">ADMIN / ERP</span>
+                    <span className="text-[9px] font-bold">
+                      ADMIN / COMMAND CENTER
+                    </span>
                   </button>
                   <button
                     type="button"

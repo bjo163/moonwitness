@@ -49,8 +49,7 @@ export function AutoBreadcrumb({
     pathname === "/" ||
     pathname === "/home" ||
     pathname.startsWith("/auth") ||
-    pathname.startsWith("/erp") ||
-    pathname.startsWith("/console")
+    pathname.startsWith("/command-center")
   ) {
     return null
   }

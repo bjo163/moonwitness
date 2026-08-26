@@ -31,6 +31,7 @@ import {
   Database,
   ChevronDown,
   ChevronRight,
+  Terminal,
 } from "lucide-react"
 import type { NavLinkConfig } from "@workspace/types"
 
@@ -83,12 +84,18 @@ function getIcon(name?: string) {
       return <Crosshair {...props} />
     case "Database":
       return <Database {...props} />
+    case "Terminal":
+      return <Terminal {...props} />
     default:
       return <LayoutDashboard {...props} />
   }
 }
 
-export function ErpSidebar({ erpModules }: { erpModules: NavLinkConfig[] }) {
+export function CommandCenterSidebar({
+  sidebarModules,
+}: {
+  sidebarModules: NavLinkConfig[]
+}) {
   const pathname = usePathname()
   const { logout } = useMoonStore()
   const [expandedModules, setExpandedModules] = useState<
@@ -100,7 +107,7 @@ export function ErpSidebar({ erpModules }: { erpModules: NavLinkConfig[] }) {
     window.location.href = "/auth/login"
   }
 
-  // ── Dynamic nav from module registry — reads ALL ERP_SIDEBAR modules ──
+  // ── Dynamic nav from module registry — reads ALL command center modules ──
   const toggleModule = (label: string) => {
     setExpandedModules((prev) => ({ ...prev, [label]: !prev[label] }))
   }
@@ -108,11 +115,11 @@ export function ErpSidebar({ erpModules }: { erpModules: NavLinkConfig[] }) {
   return (
     <aside className="fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-cyan-500/20 bg-black/80 backdrop-blur-xl">
       {/* Brand Header */}
-      <div className="flex h-20 items-center gap-3 border-b border-cyan-500/20 px-6">
-        <ShieldCheck className="text-knowledge h-8 w-8 drop-shadow-[0_0_10px_rgba(217,70,239,0.5)]" />
+      <div className="flex h-20 items-center gap-3 border-b border-cyber-purple/20 px-6">
+        <ShieldCheck className="h-8 w-8 text-cyber-purple drop-shadow-[0_0_10px_rgba(161,0,255,0.5)]" />
         <div className="flex flex-col">
-          <span className="text-knowledge font-sans text-sm font-black tracking-widest">
-            ERP CORE
+          <span className="font-sans text-sm font-black tracking-widest text-cyber-purple">
+            COMMAND CENTER
           </span>
           <span className="font-mono text-[9px] text-primary/60">
             SYS-VER 1.0
@@ -123,11 +130,11 @@ export function ErpSidebar({ erpModules }: { erpModules: NavLinkConfig[] }) {
       {/* Navigation from module registry */}
       <nav className="scrollbar-hide flex-1 overflow-y-auto">
         <div className="px-4 py-4">
-          <p className="mb-2 px-2 font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
+          <p className="mb-2 px-2 font-sans text-[10px] font-bold tracking-widest text-cyber-purple/70 uppercase">
             Modules
           </p>
           <ul className="space-y-0.5">
-            {erpModules.map((mod) => {
+            {sidebarModules.map((mod) => {
               const isExpanded = expandedModules[mod.label] ?? true
               const hasSubLinks = mod.subLinks && mod.subLinks.length > 1
               const modBase = "/" + mod.href.split("/").filter(Boolean)[0]
@@ -201,27 +208,18 @@ export function ErpSidebar({ erpModules }: { erpModules: NavLinkConfig[] }) {
           </ul>
         </div>
 
-        {/* Account section — static */}
+        {/* Account section */}
         <div className="px-4 py-2">
-          <p className="mb-2 px-2 font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
+          <p className="mb-2 px-2 font-sans text-[10px] font-bold tracking-widest text-cyber-purple/70 uppercase">
             Account
           </p>
           <ul className="space-y-1">
             {[
-              { label: "My Profile", href: "/erp/profile", icon: "User" },
-              { label: "Settings", href: "/erp/settings", icon: "Settings" },
               {
-                label: "Security Center",
-                href: "/erp/security",
-                icon: "ShieldCheck",
+                label: "My Profile",
+                href: "/command-center/profile",
+                icon: "User",
               },
-              {
-                label: "Notifications",
-                href: "/erp/notifications",
-                icon: "Bell",
-              },
-              { label: "Organizations", href: "/erp/orgs", icon: "Users" },
-              { label: "Billing", href: "/erp/billing", icon: "CreditCard" },
             ].map((item) => {
               const isActive =
                 pathname === item.href || pathname?.startsWith(`${item.href}/`)
@@ -231,7 +229,7 @@ export function ErpSidebar({ erpModules }: { erpModules: NavLinkConfig[] }) {
                     href={item.href}
                     className={`flex items-center gap-3 rounded-lg px-3 py-2 font-sans text-xs transition-colors ${
                       isActive
-                        ? "border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.1)]"
+                        ? "border border-cyber-purple/30 bg-cyber-purple/10 text-cyber-purple shadow-[0_0_15px_rgba(161,0,255,0.1)]"
                         : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
                     }`}
                   >

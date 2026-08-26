@@ -1,36 +1,32 @@
 import type { ModuleDefinition, NavLinkConfig } from "./types"
 import home from "./home"
-import consoleModule from "./console"
 import observatory from "./observatory"
 import knowledge from "./knowledge"
 
 import history from "./history"
-import erp from "./erp"
+import commandCenter from "./command-center"
 import astronomy from "./astronomy"
 import analytics from "./analytics"
 import mission from "./mission"
 import auth from "./auth"
 import seismix from "./seismix"
 import shootgun from "./shootgun"
-import cab from "./cab"
 
 // ── Daftar Modul Terdaftar ──────────────────────────────────────
 // Tambahkan modul baru di sini. Satu baris per modul.
 // Modul yang belum dimigrasikan ke @modules/ bisa ditambahkan setelah Fase 2.
 export const MODULE_REGISTRY: ModuleDefinition[] = [
   home,
-  consoleModule,
   observatory,
   knowledge,
   history,
-  erp,
+  commandCenter,
   astronomy,
   analytics,
   mission,
   auth,
   seismix,
   shootgun,
-  cab,
 ]
 
 // ── Helper: Cari modul berdasarkan ID ───────────────────────────

@@ -346,7 +346,7 @@ export function ErpUsersView() {
     <div className="space-y-6">
       <ContextBlock
         title="USER MANAGEMENT"
-        subtitle="Manage system users, roles, and access permissions across the global ERP system."
+        subtitle="Manage system users, roles, and access permissions across the global Command Center."
         operation="USER-MGMT"
         status="ONLINE"
         accentColor="system"

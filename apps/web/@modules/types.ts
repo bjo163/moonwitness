@@ -23,7 +23,7 @@ export type WidgetConfig = {
   id: string
   label?: string
   component: ComponentType<any>
-  targetDashboard: "HOME" | "ERP" | "CONSOLE" | string
+  targetDashboard: "HOME" | "COMMAND_CENTER" | "CONSOLE" | string
 }
 
 /**
