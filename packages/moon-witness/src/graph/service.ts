@@ -1,7 +1,9 @@
 import type { Ctx } from '@moon/orm'
 import WxEntity from '../models/wx-entity.js'
+import WxProvenance from '../models/wx-provenance.js'
 import WxRelation from '../models/wx-relation.js'
 import WxRelationType from '../models/wx-relation-type.js'
+import WxSource from '../models/wx-source.js'
 import {
   canonicalRelationKey,
   canonicalizeSymmetricEntities,
@@ -70,6 +72,23 @@ export class WitnessGraphService {
     return rows[0] ?? null
   }
 
+  static async provenance(env: Ctx, provenanceId: number): Promise<Loose | null> {
+    const rows = await WxProvenance.fetch(WxProvenance, env, [
+      ['id', '=', provenanceId],
+      ['active', '=', true],
+      ['superseded', '=', false]
+    ])
+    return rows[0] ?? null
+  }
+
+  static async source(env: Ctx, sourceId: number): Promise<Loose | null> {
+    const rows = await WxSource.fetch(WxSource, env, [
+      ['id', '=', sourceId],
+      ['active', '=', true]
+    ])
+    return rows[0] ?? null
+  }
+
   static async createRelation(env: Ctx, input: CreateRelationInput): Promise<Loose> {
     const relationType = await this.relationType(env, input.relationTypeCode)
     if (!relationType) throw new Error(`Unknown or inactive Witness relation type: ${input.relationTypeCode}`)
@@ -77,6 +96,27 @@ export class WitnessGraphService {
     const originalFrom = await this.entity(env, input.fromEntityId)
     const originalTo = await this.entity(env, input.toEntityId)
     if (!originalFrom || !originalTo) throw new Error('Relation endpoints must be accessible active wx.entity records')
+
+    let provenance: Loose | null = null
+    if (input.provenanceId != null) {
+      provenance = await this.provenance(env, input.provenanceId)
+      if (!provenance) throw new Error(`Provenance ${input.provenanceId} does not exist, is superseded, or is inaccessible`)
+    }
+
+    const provenanceSourceId = provenance ? Number(value(provenance, 'sourceId', 'source_id') ?? 0) : 0
+    if (input.sourceId != null && provenanceSourceId && Number(input.sourceId) !== provenanceSourceId) {
+      throw new Error(`sourceId ${input.sourceId} does not match provenance source ${provenanceSourceId}`)
+    }
+    const resolvedSourceId = Number(input.sourceId ?? provenanceSourceId) || 0
+    const source = resolvedSourceId ? await this.source(env, resolvedSourceId) : null
+    if (resolvedSourceId && !source) throw new Error(`Source ${resolvedSourceId} does not exist or is inaccessible`)
+
+    if (input.assertionEntityId != null) {
+      const assertion = await this.entity(env, input.assertionEntityId)
+      if (!assertion || String(value(assertion, 'kind')).toUpperCase() !== 'ASSERTION') {
+        throw new Error(`assertionEntityId ${input.assertionEntityId} must resolve to an accessible ASSERTION entity`)
+      }
+    }
 
     let fromEntityId = input.fromEntityId
     let toEntityId = input.toEntityId
@@ -94,6 +134,11 @@ export class WitnessGraphService {
       toEntity = right.value
     }
 
+    const resolvedSourceRevision = input.sourceRevision
+      ?? (provenance ? value(provenance, 'sourceRevision', 'source_revision') : null)
+      ?? (source ? value(source, 'revision') : null)
+      ?? null
+
     const validation = validateRelationCandidate({
       fromEntityId,
       fromKind: String(value(fromEntity, 'kind') ?? ''),
@@ -109,10 +154,10 @@ export class WitnessGraphService {
       },
       toEntityId,
       toKind: String(value(toEntity, 'kind') ?? ''),
-      sourceRevision: input.sourceRevision,
+      sourceRevision: resolvedSourceRevision,
       validFrom: input.validFrom,
       validTo: input.validTo,
-      provenanceId: input.provenanceId,
+      provenanceId: provenance ? idOf(provenance) : null,
       status: input.operationalStatus ?? 'PROVISIONAL',
       confidenceBp: input.confidenceBp ?? 0
     })
@@ -126,7 +171,7 @@ export class WitnessGraphService {
       relationTypeCode,
       toEntityKey: canonicalKeyOf(toEntity),
       ontologyVersion,
-      sourceRevision: input.sourceRevision,
+      sourceRevision: resolvedSourceRevision,
       validFrom: input.validFrom,
       validTo: input.validTo
     })
@@ -143,16 +188,16 @@ export class WitnessGraphService {
       relationTypeId: idOf(relationType),
       toEntityId,
       assertionEntityId: input.assertionEntityId ?? undefined,
-      provenanceId: input.provenanceId ?? undefined,
-      sourceId: input.sourceId ?? undefined,
-      sourceClass: input.sourceClass ?? 'UNKNOWN',
+      provenanceId: provenance ? idOf(provenance) : undefined,
+      sourceId: source ? idOf(source) : undefined,
+      sourceClass: input.sourceClass ?? (source ? value(source, 'sourceClass', 'source_class') : 'UNKNOWN'),
       epistemicLane: input.epistemicLane ?? 'UNRESOLVED',
       authorityClass: input.authorityClass ?? 'NOT_APPLICABLE',
       operationalStatus: input.operationalStatus ?? 'PROVISIONAL',
       polarity: input.polarity ?? 'AFFIRMED',
       modality: input.modality ?? 'ASSERTED',
       confidenceBp: input.confidenceBp ?? 0,
-      sourceRevision: input.sourceRevision ?? undefined,
+      sourceRevision: resolvedSourceRevision ?? undefined,
       ontologyVersion,
       validFrom: input.validFrom ?? undefined,
       validTo: input.validTo ?? undefined,
