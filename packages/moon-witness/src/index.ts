@@ -39,6 +39,7 @@ import WxAssertion from './models/wx-assertion.js'
 import WxEvidence from './models/wx-evidence.js'
 import WxDivineExpression from './models/wx-divine-expression.js'
 import WxDivineExpressionOccurrence from './models/wx-divine-expression-occurrence.js'
+import WxLegacyMapping from './models/wx-legacy-mapping.js'
 
 // Ingestion Data Plane (#65)
 import WxSourcePolicy from './models/wx-source-policy.js'
@@ -51,6 +52,19 @@ export * from './graph/contracts.js'
 export * from './graph/identity.js'
 export * from './graph/relation-ontology.js'
 export { WitnessGraphService } from './graph/service.js'
+export {
+  findEntities,
+  entityProfile,
+  passageByReference,
+  passageContent,
+  passageTree,
+  figureMentions,
+  DOMAIN_QUERY_LIMITS,
+  type EntityLookup,
+  type EntityProfile,
+  type PassageTree,
+  type FigureMentionResult
+} from './graph/domain-queries.js'
 export { seedWitnessGraphCore } from './seed/graph-core.js'
 
 // Astronomy (pure compute — no DB)
@@ -104,6 +118,26 @@ export {
 
 export { validateAnalyzeResult } from './services/analyze-contract.js'
 export { analyzeWitness } from './services/analyze.js'
+
+export {
+  planLegacyMigration,
+  DEFAULT_ADAPTER_VERSION
+} from './services/legacy-migration.js'
+export {
+  executeLegacyMigration,
+  type LegacyMigrationExecution,
+  type LegacyMigrationExecutionOptions
+} from './services/legacy-migration-executor.js'
+
+export type {
+  LegacyWitnessModel,
+  LegacyRecord,
+  LegacyRecordBatch,
+  LegacyMigrationCursor,
+  LegacyMigrationOperation,
+  LegacyMigrationPlan,
+  MigrationOperationStatus
+} from './types/migration.js'
 
 export {
   registerAdapter,
@@ -186,6 +220,7 @@ export {
   WxEvidence,
   WxDivineExpression,
   WxDivineExpressionOccurrence,
+  WxLegacyMapping,
 
   // Ingestion data plane models (#65)
   WxSourcePolicy,
@@ -263,6 +298,7 @@ export default {
     WxEvidence,
     WxDivineExpression,
     WxDivineExpressionOccurrence,
+    WxLegacyMapping,
 
     // Ingestion data plane (#65)
     WxSourcePolicy,

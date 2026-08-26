@@ -112,7 +112,8 @@ async function main() {
     'wx_assertion',
     'wx_evidence',
     'wx_divine_expression',
-    'wx_divine_expression_occurrence'
+    'wx_divine_expression_occurrence',
+    'wx_legacy_mapping'
   ]
   for (const table of requiredTables) {
     assert.equal(await tableExists(table), true, `forge must create ${table}`)
