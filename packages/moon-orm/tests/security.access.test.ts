@@ -144,6 +144,88 @@ describe('Moon ORM fail-closed authorization', () => {
     })
   })
 
+  it('evaluates declarative record rules and resolves user variables safely', async () => {
+    mocks.getDb.mockReturnValue(makeDb({
+      vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
+      mx_model: [{ id: 11, model: 'demo.model' }],
+      ir_rule_res_groups_rel: [{ vx_role_id: 7, ir_rule_id: 5 }],
+      mx_rule: [{
+        id: 5,
+        model_id: 11,
+        name: 'Owner or company rule',
+        domain_force: '[["owner_id", "=", "$user.id"], ["company_id", "in", "$user.company_ids"]]'
+      }],
+      vx_user: [{ id: 42, name: 'Operator', company_id: 99, company_ids: [99, 100] }],
+    }))
+
+    const domain = await getRecordRulesDomain(model('demo.model'), createCtx(42))
+    expect(domain).toEqual([
+      ['owner_id', '=', 42],
+      ['company_id', 'in', [99, 100]],
+    ])
+  })
+
+  it('combines multiple record rules with OR logic deterministically', async () => {
+    mocks.getDb.mockReturnValue(makeDb({
+      vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
+      mx_model: [{ id: 11, model: 'demo.model' }],
+      ir_rule_res_groups_rel: [
+        { vx_role_id: 7, ir_rule_id: 1 },
+        { vx_role_id: 7, ir_rule_id: 2 }
+      ],
+      mx_rule: [
+        { id: 1, model_id: 11, name: 'Rule 1', domain_force: '[["state", "=", "public"]]' },
+        { id: 2, model_id: 11, name: 'Rule 2', domain_force: '[["owner_id", "=", "$user.id"]]' },
+      ],
+      vx_user: [{ id: 42, name: 'Operator' }],
+    }))
+
+    const domain = await getRecordRulesDomain(model('demo.model'), createCtx(42))
+    expect(domain).toEqual([
+      '|',
+      ['state', '=', 'public'],
+      ['owner_id', '=', 42]
+    ])
+  })
+
+  it('rejects dynamic code injection without executing JavaScript', async () => {
+    mocks.getDb.mockReturnValue(makeDb({
+      vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
+      mx_model: [{ id: 11, model: 'demo.model' }],
+      ir_rule_res_groups_rel: [{ vx_role_id: 7, ir_rule_id: 9 }],
+      mx_rule: [{
+        id: 9,
+        model_id: 11,
+        name: 'Malicious rule',
+        domain_force: 'process.exit(1) || [["a", "=", 1]]'
+      }],
+      vx_user: [{ id: 42, name: 'Operator' }],
+    }))
+
+    await expect(getRecordRulesDomain(model('demo.model'), createCtx(42))).rejects.toMatchObject({
+      code: 'SECURITY_RULE_INVALID',
+    })
+  })
+
+  it('fails closed on unknown user variables', async () => {
+    mocks.getDb.mockReturnValue(makeDb({
+      vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
+      mx_model: [{ id: 11, model: 'demo.model' }],
+      ir_rule_res_groups_rel: [{ vx_role_id: 7, ir_rule_id: 10 }],
+      mx_rule: [{
+        id: 10,
+        model_id: 11,
+        name: 'Unknown var rule',
+        domain_force: '[["secret_field", "=", "$user.nonexistent_field"]]'
+      }],
+      vx_user: [{ id: 42, name: 'Operator' }],
+    }))
+
+    await expect(getRecordRulesDomain(model('demo.model'), createCtx(42))).rejects.toMatchObject({
+      code: 'SECURITY_RULE_INVALID',
+    })
+  })
+
   it('exposes authorization failures as a typed error', () => {
     const error = new AuthorizationError('ACCESS_DENIED', 'denied')
     expect(error).toBeInstanceOf(Error)
