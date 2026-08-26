@@ -5,6 +5,7 @@ import nodemailer from 'nodemailer'
 import { getModel, createCtx, ANONYMOUS_ID, authSecurityContext } from '@moon/orm'
 import { logger } from '../logger.js'
 import { parseBody, sendJson } from '../utils/http.js'
+import { generateSecureOtp, hashOtpToken, OTP_EXPIRY_MS, MAX_OTP_ATTEMPTS } from '../utils/auth.js'
 
 export interface AuthConfig {
   jwtSecret: string
@@ -70,7 +71,7 @@ export async function handleLogin(
     }
 
     const token = jwt.sign(
-      { sub: user.id, email: user.email },
+      { sub: user.id, email: user.email, tokenVersion: user.token_version || user.tokenVersion || 1 },
       config.jwtSecret,
       { expiresIn: '7d' }
     )
@@ -140,12 +141,13 @@ export async function handleRegister(
         name: sanitizedName,
         email,
         password: hashedPassword,
-        companyId: defaultCompanyId
+        companyId: defaultCompanyId,
+        tokenVersion: 1
       })
     })
 
     const token = jwt.sign(
-      { sub: user.id, email: user.email },
+      { sub: user.id, email: user.email, tokenVersion: 1 },
       config.jwtSecret,
       { expiresIn: '7d' }
     )
@@ -155,7 +157,7 @@ export async function handleRegister(
       token, 
       user: { 
         id: user.id, 
-        email: user.email,
+        email: user.email, 
         name: user.name,
         partnerId: user.partner_id
       } 
@@ -183,8 +185,9 @@ export async function handleForgotPassword(
     }
 
     const VxUser = getModel('vx.user')
-    if (!VxUser) {
-      return sendJson(res, 500, { error: 'User model not found' }, req)
+    const VxAuthChallenge = getModel('vx.auth.challenge')
+    if (!VxUser || !VxAuthChallenge) {
+      return sendJson(res, 500, { error: 'Auth models not found' }, req)
     }
 
     const env = createCtx(ANONYMOUS_ID, authSecurityContext('password-recovery'), getModel as any)
@@ -196,11 +199,32 @@ export async function handleForgotPassword(
     }
 
     const user = users[0]
-    const otpCode = Math.floor(100000 + Math.random() * 900000).toString()
-    const otpExpires = new Date(Date.now() + 15 * 60000) // 15 minutes
+    const otpCode = generateSecureOtp()
+    const tokenHash = hashOtpToken(user.id, otpCode)
+    const expiresAt = new Date(Date.now() + OTP_EXPIRY_MS).toISOString()
 
-    await VxUser.transaction(env, async (txEnv: any) => {
-      await VxUser.morph(VxUser as any, txEnv, user.id, { otpCode, otpExpires })
+    await VxAuthChallenge.transaction(env, async (txEnv: any) => {
+      // Invalidate any previous active challenges for this user and purpose
+      const activeChallenges = await VxAuthChallenge.fetch(VxAuthChallenge as any, txEnv, [
+        ['userId', '=', user.id],
+        ['purpose', '=', 'password_recovery'],
+        ['consumedAt', '=', null]
+      ])
+      for (const ch of activeChallenges) {
+        await VxAuthChallenge.morph(VxAuthChallenge as any, txEnv, ch.id, {
+          consumedAt: new Date().toISOString()
+        })
+      }
+
+      // Spawn new secure challenge with hashed token
+      await VxAuthChallenge.spawn(VxAuthChallenge as any, txEnv, {
+        userId: user.id,
+        purpose: 'password_recovery',
+        tokenHash,
+        expiresAt,
+        attempts: 0,
+        maxAttempts: MAX_OTP_ATTEMPTS
+      })
     })
 
     // Send email if mailer is configured
@@ -235,6 +259,7 @@ export async function handleForgotPassword(
 
     return sendJson(res, 200, { message: 'Password reset code has been sent to your email' }, req)
   } catch (err: any) {
+    process.stderr.write(`\n>>> FORGOT ERROR: ${err?.message}\n${err?.stack}\n`)
     logger.error('moon.auth', 'Forgot password error:', err)
     return sendJson(res, 500, { error: 'Internal server error' }, req)
   }
@@ -246,7 +271,7 @@ export async function handleForgotPassword(
 export async function handleVerifyOtp(
   req: IncomingMessage,
   res: ServerResponse,
-  config: AuthConfig
+  _config: AuthConfig
 ): Promise<void> {
   try {
     const body = await parseBody(req)
@@ -257,8 +282,9 @@ export async function handleVerifyOtp(
     }
 
     const VxUser = getModel('vx.user')
-    if (!VxUser) {
-      return sendJson(res, 500, { error: 'User model not found' }, req)
+    const VxAuthChallenge = getModel('vx.auth.challenge')
+    if (!VxUser || !VxAuthChallenge) {
+      return sendJson(res, 500, { error: 'Auth models not found' }, req)
     }
 
     const env = createCtx(ANONYMOUS_ID, authSecurityContext('password-recovery'), getModel as any)
@@ -269,13 +295,50 @@ export async function handleVerifyOtp(
     }
 
     const user = users[0]
+    const tokenHash = hashOtpToken(user.id, String(code).trim())
 
-    if (!user.otp_code || user.otp_code !== code) {
-      return sendJson(res, 400, { error: 'Invalid verification code' }, req)
+    const challenges = await VxAuthChallenge.fetch(
+      VxAuthChallenge as any,
+      env,
+      [
+        ['userId', '=', user.id],
+        ['purpose', '=', 'password_recovery']
+      ],
+      undefined,
+      { order: 'createdAt desc', limit: 1 }
+    )
+
+    if (challenges.length === 0) {
+      return sendJson(res, 400, { error: 'No active verification code found' }, req)
     }
 
-    if (user.otp_expires && new Date(user.otp_expires) < new Date()) {
+    const challenge = challenges[0]
+    const attempts = Number(challenge.attempts || 0)
+    const maxAttempts = Number(challenge.max_attempts || challenge.maxAttempts || MAX_OTP_ATTEMPTS)
+
+    if (challenge.consumed_at || challenge.consumedAt) {
+      return sendJson(res, 400, { error: 'Verification code has already been used' }, req)
+    }
+
+    if (attempts >= maxAttempts) {
+      return sendJson(res, 400, { error: 'Maximum OTP attempts exceeded' }, req)
+    }
+
+    const expiresAt = new Date(challenge.expires_at || challenge.expiresAt)
+    if (Date.now() > expiresAt.getTime()) {
       return sendJson(res, 400, { error: 'Verification code has expired' }, req)
+    }
+
+    const actualHash = challenge.token_hash || challenge.tokenHash
+    if (actualHash !== tokenHash) {
+      const newAttempts = attempts + 1
+      await VxAuthChallenge.morph(VxAuthChallenge as any, env, challenge.id, {
+        attempts: newAttempts
+      })
+      if (newAttempts >= maxAttempts) {
+        return sendJson(res, 400, { error: 'Maximum OTP attempts exceeded' }, req)
+      }
+      return sendJson(res, 400, { error: 'Invalid verification code' }, req)
     }
 
     logger.info('moon.auth', `OTP verified for ${email}`)
@@ -292,7 +355,7 @@ export async function handleVerifyOtp(
 export async function handleResetPassword(
   req: IncomingMessage,
   res: ServerResponse,
-  config: AuthConfig
+  _config: AuthConfig
 ): Promise<void> {
   try {
     const body = await parseBody(req)
@@ -303,8 +366,9 @@ export async function handleResetPassword(
     }
 
     const VxUser = getModel('vx.user')
-    if (!VxUser) {
-      return sendJson(res, 500, { error: 'User model not found' }, req)
+    const VxAuthChallenge = getModel('vx.auth.challenge')
+    if (!VxUser || !VxAuthChallenge) {
+      return sendJson(res, 500, { error: 'Auth models not found' }, req)
     }
 
     const env = createCtx(ANONYMOUS_ID, authSecurityContext('password-recovery'), getModel as any)
@@ -315,27 +379,70 @@ export async function handleResetPassword(
     }
 
     const user = users[0]
+    const tokenHash = hashOtpToken(user.id, String(code).trim())
 
-    if (!user.otp_code || user.otp_code !== code) {
-      return sendJson(res, 400, { error: 'Invalid verification code' }, req)
+    const challenges = await VxAuthChallenge.fetch(
+      VxAuthChallenge as any,
+      env,
+      [
+        ['userId', '=', user.id],
+        ['purpose', '=', 'password_recovery']
+      ],
+      undefined,
+      { order: 'createdAt desc', limit: 1 }
+    )
+
+    if (challenges.length === 0) {
+      return sendJson(res, 400, { error: 'No active verification code found' }, req)
     }
 
-    if (user.otp_expires && new Date(user.otp_expires) < new Date()) {
+    const challenge = challenges[0]
+    const attempts = Number(challenge.attempts || 0)
+    const maxAttempts = Number(challenge.max_attempts || challenge.maxAttempts || MAX_OTP_ATTEMPTS)
+
+    if (challenge.consumed_at || challenge.consumedAt) {
+      return sendJson(res, 400, { error: 'Verification code has already been used' }, req)
+    }
+
+    if (attempts >= maxAttempts) {
+      return sendJson(res, 400, { error: 'Maximum OTP attempts exceeded' }, req)
+    }
+
+    const expiresAt = new Date(challenge.expires_at || challenge.expiresAt)
+    if (Date.now() > expiresAt.getTime()) {
       return sendJson(res, 400, { error: 'Verification code has expired' }, req)
+    }
+
+    const actualHash = challenge.token_hash || challenge.tokenHash
+    if (actualHash !== tokenHash) {
+      const newAttempts = attempts + 1
+      await VxAuthChallenge.morph(VxAuthChallenge as any, env, challenge.id, {
+        attempts: newAttempts
+      })
+      if (newAttempts >= maxAttempts) {
+        return sendJson(res, 400, { error: 'Maximum OTP attempts exceeded' }, req)
+      }
+      return sendJson(res, 400, { error: 'Invalid verification code' }, req)
     }
 
     // Hash new password
     const hashedPassword = await bcrypt.hash(newPassword, 10)
+    const nextTokenVersion = (Number(user.token_version || user.tokenVersion || 1)) + 1
 
     await VxUser.transaction(env, async (txEnv: any) => {
+      // 1. Consume the challenge
+      await VxAuthChallenge.morph(VxAuthChallenge as any, txEnv, challenge.id, {
+        consumedAt: new Date().toISOString()
+      })
+
+      // 2. Update user password and advance tokenVersion
       await VxUser.morph(VxUser as any, txEnv, user.id, {
         password: hashedPassword,
-        otpCode: null,
-        otpExpires: null
+        tokenVersion: nextTokenVersion
       })
     })
 
-    logger.info('moon.auth', `Password reset successfully for ${email}`)
+    logger.info('moon.auth', `Password reset successfully for ${email} (token version advanced to ${nextTokenVersion})`)
     return sendJson(res, 200, { message: 'Password has been reset successfully' }, req)
   } catch (err: any) {
     logger.error('moon.auth', 'Reset password error:', err)

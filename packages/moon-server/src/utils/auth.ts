@@ -1,6 +1,6 @@
 import type { IncomingMessage } from 'node:http'
 import jwt from 'jsonwebtoken'
-import { randomInt } from 'node:crypto'
+import { randomInt, createHash } from 'node:crypto'
 import { ANONYMOUS_ID } from '@moon/orm'
 
 export interface VerifyTokenOptions {
@@ -11,14 +11,29 @@ export interface VerifyTokenOptions {
 export interface OtpChallenge {
   userId: number
   code: string
+  tokenHash?: string
   expiresAt: number
   attempts: number
   maxAttempts: number
   used: boolean
 }
 
-const OTP_EXPIRY_MS = 15 * 60 * 1000 // 15 minutes
-const MAX_OTP_ATTEMPTS = 5
+export const OTP_EXPIRY_MS = 15 * 60 * 1000 // 15 minutes
+export const MAX_OTP_ATTEMPTS = 5
+
+/**
+ * Generate a cryptographically secure 6-digit OTP string
+ */
+export function generateSecureOtp(): string {
+  return randomInt(100000, 999999).toString()
+}
+
+/**
+ * Compute SHA-256 hash for OTP verification bound to user ID
+ */
+export function hashOtpToken(userId: number, code: string): string {
+  return createHash('sha256').update(`${userId}:${code.trim()}`).digest('hex')
+}
 
 /**
  * Generate a single-use OTP challenge with 15-minute expiration

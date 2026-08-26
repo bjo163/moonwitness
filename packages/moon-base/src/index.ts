@@ -16,6 +16,7 @@ import MxModel from './mx-model.js'
 import MxGrant from './mx-grant.js'
 import MxRule from './mx-rule.js'
 import VxUser from './vx-user.js'
+import VxAuthChallenge from './vx-auth-challenge.js'
 import IxLang from './ix-lang.js'
 import IxDict from './ix-dict.js'
 import IxTimezone from './ix-timezone.js'
@@ -44,6 +45,7 @@ export {
   MxGrant,
   MxRule,
   VxUser,
+  VxAuthChallenge,
   VxNode,
   VxOrg,
   VxCoin,
@@ -132,6 +134,7 @@ export default {
   depends: [],
   models: [
     VxUser,
+    VxAuthChallenge,
     VxNode,
     VxOrg,
     VxZone,

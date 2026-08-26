@@ -14,8 +14,7 @@ export default class VxUser extends Vertex {
   nickname = fields.Char({ size: 50 })
   githubUrl = fields.Char({ size: 100 })
   groupsId = fields.Many2many({ comodel: 'vx.role', relation: 'vx_user_vx_role_rel' })
-  otpCode = fields.Char({ size: 10 })
-  otpExpires = fields.DateTime()
+  tokenVersion = fields.Integer({ default: 1 })
 
   static async beforeSave(modelClass: any, env: any, vals: Record<string, any>, id?: number) {
     if (vals.login && typeof vals.login === 'string') {

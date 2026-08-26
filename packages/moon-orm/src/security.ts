@@ -22,6 +22,7 @@ const AUTH_SCOPE_RULES: Record<AuthSecurityScope, Partial<Record<string, Permiss
   },
   'password-recovery': {
     'vx.user': ['permRead', 'permWrite'],
+    'vx.auth.challenge': ['permRead', 'permCreate', 'permWrite'],
   },
 }
 
