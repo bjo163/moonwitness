@@ -12,6 +12,9 @@ export default class WxProvenance extends Vertex {
   static _description = 'Witness Provenance Record'
 
   stableKey = fields.Char({ required: true, unique: true, index: true, size: 220 })
+  // Generic Moon ORM relation hydration expects every referenced record to
+  // expose a display `name`, even when the domain uses a different label.
+  name = fields.Char({ size: 240, index: true })
   sourceId = fields.Many2one({ comodel: 'wx.source', required: true, index: true })
   entityId = fields.Many2one({ comodel: 'wx.entity', index: true })
   sourceReference = fields.Text()

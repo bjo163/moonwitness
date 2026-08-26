@@ -14,7 +14,8 @@ export default class WxRelationType extends Vertex {
   code = fields.Char({ required: true, unique: true, index: true, size: 100 })
   name = fields.Char({ required: true, size: 180, index: true })
   inverseTypeId = fields.Many2one({ comodel: 'wx.relation.type', index: true })
-  symmetric = fields.Boolean({ default: false, index: true })
+  // `symmetric` is reserved by PostgreSQL; use a portable physical name.
+  isSymmetric = fields.Boolean({ default: false, index: true })
   transitive = fields.Boolean({ default: false })
   selfLoopAllowed = fields.Boolean({ default: false })
   provenanceRequired = fields.Boolean({ default: true })

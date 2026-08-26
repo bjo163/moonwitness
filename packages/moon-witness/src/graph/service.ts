@@ -81,14 +81,14 @@ export class WitnessGraphService {
       if (!assertion || String(value(assertion, 'kind')).toUpperCase() !== 'ASSERTION') throw new Error(`assertionEntityId ${input.assertionEntityId} must resolve to an accessible ASSERTION entity`)
     }
     let fromEntityId = input.fromEntityId; let toEntityId = input.toEntityId; let fromEntity = originalFrom; let toEntity = originalTo
-    if (Boolean(value(relationType, 'symmetric'))) {
+    if (Boolean(value(relationType, 'symmetric', 'is_symmetric'))) {
       const [left, right] = canonicalizeSymmetricEntities({ id: fromEntityId, key: canonicalKeyOf(fromEntity), value: fromEntity }, { id: toEntityId, key: canonicalKeyOf(toEntity), value: toEntity })
       fromEntityId = left.id; toEntityId = right.id; fromEntity = left.value; toEntity = right.value
     }
     const resolvedSourceRevision = input.sourceRevision || provenanceRevision || sourceRevision || null
     const validation = validateRelationCandidate({
       fromEntityId, fromKind: String(value(fromEntity, 'kind') ?? ''),
-      relationType: { code: String(value(relationType, 'code') ?? ''), symmetric: Boolean(value(relationType, 'symmetric')), transitive: Boolean(value(relationType, 'transitive')), selfLoopAllowed: Boolean(value(relationType, 'selfLoopAllowed', 'self_loop_allowed')), provenanceRequired: Boolean(value(relationType, 'provenanceRequired', 'provenance_required')), reviewRequired: Boolean(value(relationType, 'reviewRequired', 'review_required')), allowedSourceKinds: value(relationType, 'allowedSourceKinds', 'allowed_source_kinds'), allowedTargetKinds: value(relationType, 'allowedTargetKinds', 'allowed_target_kinds') },
+      relationType: { code: String(value(relationType, 'code') ?? ''), symmetric: Boolean(value(relationType, 'symmetric', 'is_symmetric')), transitive: Boolean(value(relationType, 'transitive')), selfLoopAllowed: Boolean(value(relationType, 'selfLoopAllowed', 'self_loop_allowed')), provenanceRequired: Boolean(value(relationType, 'provenanceRequired', 'provenance_required')), reviewRequired: Boolean(value(relationType, 'reviewRequired', 'review_required')), allowedSourceKinds: value(relationType, 'allowedSourceKinds', 'allowed_source_kinds'), allowedTargetKinds: value(relationType, 'allowedTargetKinds', 'allowed_target_kinds') },
       toEntityId, toKind: String(value(toEntity, 'kind') ?? ''), sourceRevision: resolvedSourceRevision, validFrom: input.validFrom, validTo: input.validTo, provenanceId: provenance ? idOf(provenance) : null, status: input.operationalStatus ?? 'PROVISIONAL', confidenceBp: input.confidenceBp ?? 0
     })
     if (!validation.ok) throw new Error(`Invalid Witness relation: ${validation.issues.join('; ')}`)
