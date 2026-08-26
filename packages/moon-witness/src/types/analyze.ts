@@ -86,6 +86,10 @@ export interface WitnessSemanticObservationV1 {
   diagnostics: string[]
 }
 
+export interface WitnessSemanticProvider {
+  observe(input: WitnessAnalyzeInputV1): Promise<unknown>
+}
+
 export interface SourceGroundingV1 {
   policyId: string
   policyVersion: string

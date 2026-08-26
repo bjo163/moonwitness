@@ -51,6 +51,7 @@ export type {
   SourceGroundingV1,
   WitnessAnalyzeInputV1,
   WitnessAnalyzeResultV1,
+  WitnessSemanticProvider,
   WitnessSemanticObservationV1
 } from './types/analyze.js'
 
@@ -63,6 +64,7 @@ export {
 } from './types/analyze.js'
 
 export { validateAnalyzeResult } from './services/analyze-contract.js'
+export { analyzeWitness } from './services/analyze.js'
 
 export {
   registerAdapter,

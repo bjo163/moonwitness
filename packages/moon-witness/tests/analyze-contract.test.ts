@@ -6,6 +6,7 @@ import {
   WITNESS_SEMANTIC_OBSERVATION_V1
 } from '../src/types/analyze.js'
 import { validateAnalyzeResult } from '../src/services/analyze-contract.js'
+import { analyzeWitness } from '../src/services/analyze.js'
 
 const metadata = {
   provider: 'fixture',
@@ -107,5 +108,38 @@ describe('Witness Analyze contract (#67)', () => {
     }
 
     expect(() => validateAnalyzeResult(result)).toThrow(/must not have a numeric value/)
+  })
+
+  it('does not fabricate a finding when no semantic provider is configured', async () => {
+    const result = await analyzeWitness({
+      protocol: 'WITNESS_ANALYZE_INPUT_V1',
+      text: 'A report without admitted evidence'
+    })
+
+    expect(result.status).toBe('INSUFFICIENT_EVIDENCE')
+    expect(result.findings).toEqual([])
+    expect(result.reviewGate.decision).toBe('REQUIRE_HUMAN_REVIEW')
+  })
+
+  it('keeps available semantic candidates separate from canonical findings', async () => {
+    const result = await analyzeWitness({
+      protocol: 'WITNESS_ANALYZE_INPUT_V1',
+      text: 'Mention Musa'
+    }, {
+      async observe() {
+        return {
+          protocol: WITNESS_SEMANTIC_OBSERVATION_V1,
+          status: 'AVAILABLE',
+          metadata,
+          candidates: [{ label: 'Musa', kind: 'ENTITY' }],
+          intentionSignals: ['UNKNOWN'],
+          diagnostics: []
+        }
+      }
+    })
+
+    expect(result.semanticObservation?.candidates).toHaveLength(1)
+    expect(result.findings).toEqual([])
+    expect(result.status).toBe('INSUFFICIENT_EVIDENCE')
   })
 })
