@@ -21,6 +21,7 @@ export {
 } from './security.js'
 export { registry, getModel, loadModels, registerModel } from './registry.js'
 export { forge, getLastPending } from './schema-sync.js'
-export { diff, up, down } from './migrator.js'
+export { diff, up, down, status, check } from './migrator.js'
+export type { MigrationStatus } from './migrator.js'
 export { setupOrm, getDb, teardownOrm, closeDb } from './config.js'
 export type { DbConfig } from './config.js'

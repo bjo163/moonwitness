@@ -295,6 +295,10 @@ server.proxy(
 )
 
 server.start().then(async () => {
+  if (process.env.MOON_BOOTSTRAP_ON_START !== "true") {
+    console.log("[App] Automatic seed disabled; use pnpm db:install or pnpm db:seed.")
+    return
+  }
   try {
     await seedBaseData()
     await loadBaseData()
