@@ -1,15 +1,17 @@
 /**
- * Master Seed Script — Seeds ALL data into moon-witness tables
- * 
+ * Master Seed Script — Seeds moon-witness data.
+ *
  * Run: pnpm --filter @moon/witness seed
  * Or:  npx tsx packages/moon-witness/scripts/seed-all.ts
- * 
- * Order matters! Scriptures must exist before Quran & Traditions.
+ *
+ * New canonical graph data is seeded first. Legacy flat scripture/tradition
+ * seeds remain temporarily for migration compatibility until #55.
  */
 import { initSeedDb } from './seed-utils.js'
+import { seedWitnessGraphCore } from './seed-graph-core.js'
 import { seedScriptures } from './seed-scriptures.js'
 import { seedQuranSurahsAyahs } from './seed-quran.js'
-import { seedHadithBooks, seedHadiths } from './seed-hadiths.js'
+import { seedHadithBooks } from './seed-hadiths.js'
 import { seedAsmaulHusna } from './seed-asmaul-husna.js'
 import { seedTraditions } from './seed-traditions.js'
 import { seedDevotions } from './seed-devotions.js'
@@ -21,31 +23,29 @@ async function seedAll() {
 
   await initSeedDb()
 
-  // Phase 1: Scripture metadata (Quran, Taurat, Zabur, Injil)
-  console.log('📖 Phase 1: Scriptures Metadata...')
+  // Phase 0: canonical relation ontology with stable external IDs.
+  console.log('🕸️  Phase 0: Witness Graph Core...')
+  const graph = await seedWitnessGraphCore()
+  console.log(`  ✅ ${graph.relationTypeCount} relation types (${graph.ontologyVersion})`)
+
+  // Legacy phases below remain until #51/#53/#54/#55 replace/migrate them.
+  console.log('\n📖 Legacy Phase 1: Scriptures Metadata...')
   await seedScriptures()
 
-  // Phase 2: Quran Surahs & Ayahs (114 surahs, 6236 ayahs)
-  console.log('\n📖 Phase 2: Quran Surahs & Ayahs...')
+  console.log('\n📖 Legacy Phase 2: Quran Surahs & Ayahs...')
   await seedQuranSurahsAyahs()
 
-  // Phase 3: Hadith Collections + Individual Hadiths
-  console.log('\n📜 Phase 3: Hadith Books...')
+  console.log('\n📜 Legacy Phase 3: Hadith Books...')
   await seedHadithBooks()
-  // Note: Full 38K hadiths take ~10-15 min. Run separately if needed:
-  //   npx tsx packages/moon-witness/scripts/seed-hadiths.ts
-  console.log('  ℹ️  To seed full 38K hadiths, run: npx tsx packages/moon-witness/scripts/seed-hadiths.ts')
+  console.log('  ℹ️  Full legacy hadith seeding remains a separate migration source.')
 
-  // Phase 4: 99 Asmaul Husna
-  console.log('\n✨ Phase 4: Asmaul Husna...')
+  console.log('\n✨ Legacy Phase 4: Fixed Asma list (migration fixture only)...')
   await seedAsmaulHusna()
 
-  // Phase 5: Prophetic Traditions (Mishna, Tasbih Daud, Didache)
-  console.log('\n📜 Phase 5: Prophetic Traditions...')
+  console.log('\n📜 Legacy Phase 5: Traditions...')
   await seedTraditions()
 
-  // Phase 6: Devotional Content (Adhkar, Doa)
-  console.log('\n🤲 Phase 6: Adhkar & Doa...')
+  console.log('\n🤲 Legacy Phase 6: Devotional Content...')
   await seedDevotions()
 
   console.log('\n══════════════════════════════════════════════')

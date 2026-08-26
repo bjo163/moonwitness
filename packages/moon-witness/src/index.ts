@@ -1,3 +1,12 @@
+import WxEntity from './models/wx-entity.js'
+import WxEntityAlias from './models/wx-entity-alias.js'
+import WxEntityIdentifier from './models/wx-entity-identifier.js'
+import WxSource from './models/wx-source.js'
+import WxProvenance from './models/wx-provenance.js'
+import WxRelationType from './models/wx-relation-type.js'
+import WxRelation from './models/wx-relation.js'
+import WxReligion from './models/wx-religion.js'
+import WxCommunity from './models/wx-community.js'
 import WxScripture from './models/wx-scripture.js'
 import WxScriptureBook from './models/wx-scripture-book.js'
 import WxScriptureVerse from './models/wx-scripture-verse.js'
@@ -13,6 +22,13 @@ import WxSourcePolicy from './models/wx-source-policy.js'
 import WxSourceManifest from './models/wx-source-manifest.js'
 import WxSourceArtifact from './models/wx-source-artifact.js'
 import WxSourceSnapshot from './models/wx-source-snapshot.js'
+
+// Graph core
+export * from './graph/contracts.js'
+export * from './graph/identity.js'
+export * from './graph/relation-ontology.js'
+export { WitnessGraphService } from './graph/service.js'
+export { seedWitnessGraphCore } from './seed/graph-core.js'
 
 // Astronomy (pure compute — no DB)
 export { getMoonData, type MoonData } from './astronomy/moon-phase.js'
@@ -98,6 +114,15 @@ export { FixtureAdapter, fixtureAdapter } from './adapters/fixture-adapter.js'
 // Models export
 export {
   // Legacy scripture/tradition models
+  WxEntity,
+  WxEntityAlias,
+  WxEntityIdentifier,
+  WxSource,
+  WxProvenance,
+  WxRelationType,
+  WxRelation,
+  WxReligion,
+  WxCommunity,
   WxScripture,
   WxScriptureBook,
   WxScriptureVerse,
@@ -135,6 +160,15 @@ export default {
   depends: ['base'],
   models: [
     // Legacy models
+    WxEntity,
+    WxEntityAlias,
+    WxEntityIdentifier,
+    WxSource,
+    WxProvenance,
+    WxRelationType,
+    WxRelation,
+    WxReligion,
+    WxCommunity,
     WxScripture,
     WxScriptureBook,
     WxScriptureVerse,

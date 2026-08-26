@@ -8,6 +8,7 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
+    "certify:witness-graph-pg": "tsx src/certify-witness-graph-pg.ts",
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{ts,js,json}\"",
     "typecheck": "tsc --noEmit"
