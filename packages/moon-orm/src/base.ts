@@ -288,17 +288,30 @@ export class Vertex {
             await conn(relTable).where({ [col1]: recordId, [col2]: id }).delete();
             await Comodel.purge(Comodel, env, id);
           } else if (cmd === 3) {
+            await this.checkRecordOperationAccess(Comodel, env, id, 'permRead');
             await conn(relTable).where({ [col1]: recordId, [col2]: id }).delete();
           } else if (cmd === 4) {
+            await this.checkRecordOperationAccess(Comodel, env, id, 'permRead');
             const exists = await conn(relTable).where({ [col1]: recordId, [col2]: id }).first();
             if (!exists) {
               await conn(relTable).insert({ [col1]: recordId, [col2]: id });
             }
           } else if (cmd === 5) {
+            const existingLinks = await conn(relTable).where({ [col1]: recordId }).select(col2);
+            const existingIds = (existingLinks || []).map((r: any) => r[col2]).filter(Boolean);
+            if (existingIds.length > 0) {
+              await this.checkRecordOperationAccess(Comodel, env, existingIds, 'permRead');
+            }
             await conn(relTable).where({ [col1]: recordId }).delete();
           } else if (cmd === 6) {
-            await conn(relTable).where({ [col1]: recordId }).delete();
             const ids = Array.isArray(vals) ? vals : [];
+            const existingLinks = await conn(relTable).where({ [col1]: recordId }).select(col2);
+            const existingIds = (existingLinks || []).map((r: any) => r[col2]).filter(Boolean);
+            const allAffectedIds = Array.from(new Set([...existingIds, ...ids]));
+            if (allAffectedIds.length > 0) {
+              await this.checkRecordOperationAccess(Comodel, env, allAffectedIds, 'permRead');
+            }
+            await conn(relTable).where({ [col1]: recordId }).delete();
             const inserts = ids.map((targetId: number) => ({ [col1]: recordId, [col2]: targetId }));
             if (inserts.length > 0) {
               await conn(relTable).insert(inserts);
@@ -352,166 +365,161 @@ export class Vertex {
     env: Ctx,
     vals: Record<string, unknown>
   ) {
-    await checkAccessRights(modelClass, env, 'permCreate')
-    
-    // Default context propagation
-    const clonedVals = { ...vals }
-    if (env.context) {
-      for (const [k, v] of Object.entries(env.context)) {
-        if (k.startsWith('default_')) {
-          const field = k.replace('default_', '')
-          if (clonedVals[field] === undefined) clonedVals[field] = v
+    return env.transaction(async (trxEnv) => {
+      await checkAccessRights(modelClass, trxEnv, 'permCreate')
+      
+      // Default context propagation
+      const clonedVals = { ...vals }
+      if (trxEnv.context) {
+        for (const [k, v] of Object.entries(trxEnv.context)) {
+          if (k.startsWith('default_')) {
+            const field = k.replace('default_', '')
+            if (clonedVals[field] === undefined) clonedVals[field] = v
+          }
         }
       }
-    }
-    const defaultFieldDefs = this.getFieldDefs(modelClass)
-    for (const [key, def] of Object.entries(defaultFieldDefs)) {
-      if (clonedVals[key] === undefined && def.default !== undefined) {
-        clonedVals[key] = typeof def.default === 'function' ? def.default() : def.default
+      const defaultFieldDefs = this.getFieldDefs(modelClass)
+      for (const [key, def] of Object.entries(defaultFieldDefs)) {
+        if (clonedVals[key] === undefined && def.default !== undefined) {
+          clonedVals[key] = typeof def.default === 'function' ? def.default() : def.default
+        }
       }
-    }
 
-    if (clonedVals.createdAt === undefined) clonedVals.createdAt = new Date().toISOString()
-    if (clonedVals.updatedAt === undefined) clonedVals.updatedAt = new Date().toISOString()
+      if (clonedVals.createdAt === undefined) clonedVals.createdAt = new Date().toISOString()
+      if (clonedVals.updatedAt === undefined) clonedVals.updatedAt = new Date().toISOString()
 
-    this.validateData(modelClass, clonedVals)
+      this.validateData(modelClass, clonedVals)
 
-    if ((modelClass as any).beforeSave) {
-      await (modelClass as any).beforeSave(modelClass, env, clonedVals)
-    }
+      if ((modelClass as any).beforeSave) {
+        await (modelClass as any).beforeSave(modelClass, trxEnv, clonedVals)
+      }
 
-    // Delegation inheritance (_inherits)
-    if (modelClass._inherits && env.getModel) {
-      for (const [parentModelName, fkField] of Object.entries(modelClass._inherits)) {
-        const ParentModel = env.getModel(parentModelName)
-        if (ParentModel) {
-          const parentFieldDefs = this.getFieldDefs(ParentModel)
-          const parentVals: Record<string, unknown> = {}
-          for (const [k, v] of Object.entries(clonedVals)) {
-            const snake = toSnakeCase(k)
-            const camelKey = Object.keys(parentFieldDefs).find(f => f === k || toSnakeCase(f) === snake)
-            if (camelKey && camelKey !== 'id') {
-              parentVals[k] = v
-              // Do not delete common fields inherited by both (createdAt, updatedAt, isActive, parentPath, companyId)
-              if (!['createdAt', 'updatedAt', 'isActive', 'parentPath', 'companyId'].includes(camelKey)) {
-                delete clonedVals[k]
+      // Delegation inheritance (_inherits)
+      if (modelClass._inherits && trxEnv.getModel) {
+        for (const [parentModelName, fkField] of Object.entries(modelClass._inherits)) {
+          const ParentModel = trxEnv.getModel(parentModelName)
+          if (ParentModel) {
+            const parentFieldDefs = this.getFieldDefs(ParentModel)
+            const parentVals: Record<string, unknown> = {}
+            for (const [k, v] of Object.entries(clonedVals)) {
+              const snake = toSnakeCase(k)
+              const camelKey = Object.keys(parentFieldDefs).find(f => f === k || toSnakeCase(f) === snake)
+              if (camelKey && camelKey !== 'id') {
+                parentVals[k] = v
+                // Do not delete common fields inherited by both (createdAt, updatedAt, isActive, parentPath, companyId)
+                if (!['createdAt', 'updatedAt', 'isActive', 'parentPath', 'companyId'].includes(camelKey)) {
+                  delete clonedVals[k]
+                }
+              }
+            }
+            if (Object.keys(parentVals).length > 0) {
+               const pRec = await ParentModel.spawn(ParentModel, trxEnv, parentVals)
+               clonedVals[fkField] = pRec.id
+            }
+          }
+        }
+      }
+
+      const table = this.tableName(modelClass)
+      const { sqlVals, relationalUpdates } = this.splitVals(modelClass, clonedVals)
+      
+      // Evaluate stored computed fields
+      const fieldDefs = this.getFieldDefs(modelClass)
+      
+      // Translations (I18N)
+      const lang = (trxEnv.context?.lang as string) || 'en_US'
+      for (const [k, v] of Object.entries(sqlVals)) {
+        const camelKey = Object.keys(fieldDefs).find(f => f === k || toSnakeCase(f) === toSnakeCase(k))
+        if (camelKey && fieldDefs[camelKey]?.translate && typeof v === 'string') {
+           sqlVals[k] = { [lang]: v }
+        }
+      }
+      
+      const storedComputes = Object.entries(fieldDefs).filter(([_, v]) => typeof v.compute === 'function' && v.store)
+      if (storedComputes.length > 0) {
+        const proxyRow = new Proxy(sqlVals, {
+          get(target, prop) {
+            if (typeof prop === 'string') {
+              if (prop in target) return target[prop]
+              const snake = prop.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`)
+              if (snake in target) return target[snake]
+            }
+            return (target as any)[prop]
+          }
+        })
+        for (const [k, v] of storedComputes) {
+          try {
+            sqlVals[k] = v.compute!(proxyRow)
+          } catch(e: any) {
+            console.warn(`Compute store error on create ${k}:`, e.message)
+          }
+        }
+      }
+
+      const snake = Object.fromEntries(
+        Object.entries(sqlVals).map(([k, v]) => [toSnakeCase(k), v])
+      )
+      const db = getDb()
+      const conn = trxEnv.trx || db
+      const [row] = await conn(table).insert(snake).returning('*')
+      if (row && row.id) {
+        if ('parent_id' in snake) {
+           let ppath = `${row.id}/`
+           if (snake.parent_id) {
+              const parentRow = await conn(table).where({ id: snake.parent_id }).first()
+              if (parentRow && parentRow.parent_path) {
+                 ppath = `${parentRow.parent_path}${row.id}/`
+              }
+           }
+           await conn(table).where({ id: row.id }).update({ parent_path: ppath })
+        }
+        
+        const trackedFields = Object.entries(this.getFieldDefs(modelClass)).filter(([_, v]) => v.tracking)
+        if (trackedFields.length > 0 && trxEnv.getModel) {
+          const FxMsg = trxEnv.getModel('fx.msg')
+          const FxTrack = trxEnv.getModel('fx.track')
+          
+          if (FxMsg && FxTrack) {
+            let messageId: number | null = null
+            
+            for (const [k, v] of trackedFields) {
+              const camelKey = k
+              const snakeKey = toSnakeCase(k)
+              const newVal = sqlVals[camelKey] ?? sqlVals[snakeKey]
+              
+              if (newVal !== undefined) {
+                 if (!messageId) {
+                    const msg = await FxMsg.spawn(FxMsg, trxEnv, {
+                       resModel: modelClass._name,
+                       resId: row.id,
+                       messageType: 'notification',
+                       authorId: trxEnv.uid
+                    })
+                    messageId = msg.id
+                 }
+                 
+                 await FxTrack.spawn(FxTrack, trxEnv, {
+                    messageId: messageId,
+                    fieldName: camelKey,
+                    oldValue: '',
+                    newValue: String(newVal)
+                 })
               }
             }
           }
-          if (Object.keys(parentVals).length > 0) {
-             const pRec = await ParentModel.spawn(ParentModel, env, parentVals)
-             clonedVals[fkField] = pRec.id
-          }
         }
-      }
-    }
 
-    const table = this.tableName(modelClass)
-    const { sqlVals, relationalUpdates } = this.splitVals(modelClass, clonedVals)
-    
-    // Evaluate stored computed fields
-    const fieldDefs = this.getFieldDefs(modelClass)
-    
-    // Translations (I18N)
-    const lang = (env.context?.lang as string) || 'en_US'
-    for (const [k, v] of Object.entries(sqlVals)) {
-      const camelKey = Object.keys(fieldDefs).find(f => f === k || toSnakeCase(f) === toSnakeCase(k))
-      if (camelKey && fieldDefs[camelKey]?.translate && typeof v === 'string') {
-         sqlVals[k] = { [lang]: v }
-      }
-    }
-    
-    const storedComputes = Object.entries(fieldDefs).filter(([_, v]) => typeof v.compute === 'function' && v.store)
-    if (storedComputes.length > 0) {
-      const proxyRow = new Proxy(sqlVals, {
-        get(target, prop) {
-          if (typeof prop === 'string') {
-            if (prop in target) return target[prop]
-            const snake = prop.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`)
-            if (snake in target) return target[snake]
-          }
-          return (target as any)[prop]
+        await this.processRelationalTuples(modelClass, trxEnv, row.id, relationalUpdates)
+        if ((modelClass as any).afterSave) {
+          await (modelClass as any).afterSave(modelClass, trxEnv, row.id, clonedVals)
         }
-      })
-      for (const [k, v] of storedComputes) {
-        try {
-          sqlVals[k] = v.compute!(proxyRow)
-        } catch(e: any) {
-          console.warn(`Compute store error on create ${k}:`, e.message)
-        }
-      }
-    }
 
-    const snake = Object.fromEntries(
-      Object.entries(sqlVals).map(([k, v]) => [toSnakeCase(k), v])
-    )
-    const db = getDb()
-    const conn = env.trx || db
-    const [row] = await conn(table).insert(snake).returning('*')
-    if (row && row.id) {
-      if ('parent_id' in snake) {
-         let ppath = `${row.id}/`
-         if (snake.parent_id) {
-            const parentRow = await conn(table).where({ id: snake.parent_id }).first()
-            if (parentRow && parentRow.parent_path) {
-               ppath = `${parentRow.parent_path}${row.id}/`
-            }
-         }
-         await conn(table).where({ id: row.id }).update({ parent_path: ppath })
-      }
-      
-      const trackedFields = Object.entries(this.getFieldDefs(modelClass)).filter(([_, v]) => v.tracking)
-      if (trackedFields.length > 0 && env.getModel) {
-        const FxMsg = env.getModel('fx.msg')
-        const FxTrack = env.getModel('fx.track')
-        
-        if (FxMsg && FxTrack) {
-          let messageId: number | null = null
-          
-          for (const [k, v] of trackedFields) {
-            const camelKey = k
-            const snakeKey = toSnakeCase(k)
-            const newVal = sqlVals[camelKey] ?? sqlVals[snakeKey]
-            
-            if (newVal !== undefined) {
-               if (!messageId) {
-                  const msg = await FxMsg.spawn(FxMsg, env, {
-                     resModel: modelClass._name,
-                     resId: row.id,
-                     messageType: 'notification',
-                     authorId: env.uid
-                  })
-                  messageId = msg.id
-               }
-               
-               await FxTrack.spawn(FxTrack, env, {
-                  messageId: messageId,
-                  fieldName: camelKey,
-                  oldValue: '',
-                  newValue: String(newVal)
-               })
-            }
-          }
-        }
-      }
+        await this.checkRecordOperationAccess(modelClass, trxEnv, row.id, 'permCreate')
 
-      await this.processRelationalTuples(modelClass, env, row.id, relationalUpdates)
-      if ((modelClass as any).afterSave) {
-        await (modelClass as any).afterSave(modelClass, env, row.id, clonedVals)
+        this.emitEvent('spawn', { model: modelClass._name, id: row.id, vals: clonedVals })
       }
-
-      try {
-        await this.checkRecordOperationAccess(modelClass, env, row.id, 'permCreate')
-      } catch (err) {
-        if (!env.trx) {
-          await conn(table).where({ id: row.id }).delete()
-        }
-        throw err
-      }
-
-      this.emitEvent('spawn', { model: modelClass._name, id: row.id, vals: clonedVals })
-    }
-    return row
+      return row
+    })
   }
 
   static async checkRecordOperationAccess(

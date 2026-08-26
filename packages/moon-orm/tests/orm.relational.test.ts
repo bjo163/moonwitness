@@ -56,6 +56,16 @@ function createMockKnex() {
         }
         return count
       },
+      select: (..._cols: string[]) => queryObj,
+      then: (resolve: (rows: any[]) => void) => {
+        const filtered = table.filter((row) => {
+          for (const [k, v] of Object.entries(queryObj._where)) {
+            if (row[k] !== v) return false
+          }
+          return true
+        })
+        resolve(filtered)
+      },
       delete: async () => {
         const beforeLen = table.length
         mockDbTables[tableName] = table.filter((row) => {

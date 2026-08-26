@@ -251,4 +251,23 @@ describe('Moon ORM fail-closed authorization', () => {
       code: 'SECURITY_RULE_INVALID',
     })
   })
+
+  it('fails closed when canonical mx_rule_vx_role_rel relation table is missing', async () => {
+    // Return db mock where querying mx_rule_vx_role_rel throws an error
+    mocks.getDb.mockReturnValue((table: string) => {
+      if (table === 'mx_rule_vx_role_rel') {
+        throw new Error('Table mx_rule_vx_role_rel not found')
+      }
+      return makeDb({
+        vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
+        mx_model: [{ id: 11, model: 'demo.model' }],
+        mx_rule: [{ id: 1, model_id: 11, name: 'Test rule', domain_force: '[["a", "=", 1]]' }],
+        vx_user: [{ id: 42, name: 'Operator' }],
+      })(table)
+    })
+
+    await expect(getRecordRulesDomain(model('demo.model'), createCtx(42))).rejects.toMatchObject({
+      code: 'SECURITY_METADATA_MISSING',
+    })
+  })
 })

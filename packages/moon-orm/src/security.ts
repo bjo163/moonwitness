@@ -344,24 +344,19 @@ export async function getRecordRulesDomain(
 
   if (activeRules.length === 0) return []
 
-  // Find relation links: support canonical mx_rule_vx_role_rel and legacy ir_rule_res_groups_rel
+  // Canonical M2M relation: mx_rule_vx_role_rel
   let relRows: Array<{ rule_id: number; role_id: number }> = []
   try {
     const rows = await conn('mx_rule_vx_role_rel')
-    relRows = rows.map((r: any) => ({
-      rule_id: r.mx_rule_id ?? r.ir_rule_id ?? r.rule_id,
-      role_id: r.vx_role_id ?? r.group_id ?? r.role_id,
+    relRows = (rows || []).map((r: any) => ({
+      rule_id: r.mx_rule_id ?? r.rule_id,
+      role_id: r.vx_role_id ?? r.role_id,
     }))
   } catch {
-    try {
-      const rows = await conn('ir_rule_res_groups_rel')
-      relRows = rows.map((r: any) => ({
-        rule_id: r.ir_rule_id ?? r.mx_rule_id ?? r.rule_id,
-        role_id: r.vx_role_id ?? r.group_id ?? r.role_id,
-      }))
-    } catch {
-      relRows = []
-    }
+    deny(
+      'SECURITY_METADATA_MISSING',
+      `Access Denied: Missing canonical record rule relation table 'mx_rule_vx_role_rel'`
+    )
   }
 
   // Separate Global Rules (no roles linked) and Group Rules (linked to roles)

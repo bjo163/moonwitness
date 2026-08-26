@@ -193,8 +193,35 @@ class FakeDbQuery {
 
 function makeDb(tables: Tables) {
   const dbFn: any = (table: string) => new FakeDbQuery(table, tables)
-  dbFn.raw = (sql: string, bindings?: any[]) => sql
+  dbFn.raw = (sql: string, _bindings?: any[]) => sql
+  dbFn.transaction = async (cb: (trx: any) => Promise<any>) => {
+    // Snapshot tables for transaction rollback
+    const snapshot: Tables = {}
+    for (const [k, v] of Object.entries(tables)) {
+      snapshot[k] = v.map((row) => ({ ...row }))
+    }
+    const trxFn: any = (table: string) => new FakeDbQuery(table, tables)
+    trxFn.raw = dbFn.raw
+    try {
+      return await cb(trxFn)
+    } catch (err) {
+      // Rollback tables to snapshot
+      for (const k of Object.keys(tables)) {
+        delete tables[k]
+      }
+      for (const [k, v] of Object.entries(snapshot)) {
+        tables[k] = v.map((row) => ({ ...row }))
+      }
+      throw err
+    }
+  }
   return dbFn
+}
+
+class TagModel extends Vertex {
+  static _name = 'demo.tag'
+  name = fields.Char({ required: true })
+  isSecret = fields.Boolean({ default: false })
 }
 
 class PostModel extends Vertex {
@@ -204,6 +231,7 @@ class PostModel extends Vertex {
   state = fields.Char({ default: 'draft' })
   ownerId = fields.Integer()
   comments = fields.One2many({ comodel: 'demo.comment', relation: 'postId' })
+  tags = fields.Many2many({ comodel: 'demo.tag', relation: 'demo_post_demo_tag_rel' })
 }
 
 class CommentModel extends Vertex {
@@ -218,6 +246,7 @@ describe('Issue #28: Operation-Specific ORM Authorization', () => {
   const models: Record<string, typeof Vertex> = {
     'demo.post': PostModel,
     'demo.comment': CommentModel,
+    'demo.tag': TagModel,
   }
 
   const getModel = (name: string) => models[name]
@@ -236,9 +265,10 @@ describe('Issue #28: Operation-Specific ORM Authorization', () => {
       mx_model: [
         { id: 100, model: 'demo.post' },
         { id: 101, model: 'demo.comment' },
+        { id: 102, model: 'demo.tag' },
       ],
       mx_grant: [
-        // Role 10 has full model permissions on demo.post and demo.comment
+        // Role 10 has full model permissions on demo.post, demo.comment, demo.tag
         {
           model_id: 100,
           group_id: 10,
@@ -255,11 +285,20 @@ describe('Issue #28: Operation-Specific ORM Authorization', () => {
           perm_create: true,
           perm_unlink: true,
         },
+        {
+          model_id: 102,
+          group_id: 10,
+          perm_read: true,
+          perm_write: true,
+          perm_create: true,
+          perm_unlink: true,
+        },
       ],
       mx_rule_vx_role_rel: [
         { rule_id: 1, role_id: 10 },
         { rule_id: 2, role_id: 10 },
         { rule_id: 3, role_id: 10 },
+        { rule_id: 6, role_id: 10 },
       ],
       mx_rule: [
         // Rule 1: Read rule -> anyone in Role 10 can read all published posts
@@ -295,6 +334,17 @@ describe('Issue #28: Operation-Specific ORM Authorization', () => {
           perm_create: false,
           perm_unlink: true,
         },
+        // Rule 6: Tag read rule -> role 10 can only access non-secret tags
+        {
+          id: 6,
+          model_id: 102,
+          name: 'Non-secret tags only',
+          domain_force: '[["is_secret", "=", false]]',
+          perm_read: true,
+          perm_write: true,
+          perm_create: true,
+          perm_unlink: true,
+        },
       ],
       demo_post: [
         { id: 1, title: "Alice's Post", state: 'published', owner_id: 42, is_active: true },
@@ -303,6 +353,13 @@ describe('Issue #28: Operation-Specific ORM Authorization', () => {
       demo_comment: [
         { id: 10, content: 'Comment on Alice post', post_id: 1, author_id: 42, is_active: true },
         { id: 20, content: 'Comment on Bob post', post_id: 2, author_id: 99, is_active: true },
+      ],
+      demo_tag: [
+        { id: 101, name: 'Public Tag', is_secret: false, is_active: true },
+        { id: 102, name: 'Confidential Tag', is_secret: true, is_active: true },
+      ],
+      demo_post_demo_tag_rel: [
+        { demo_post_id: 1, demo_tag_id: 101 },
       ],
     }
 
@@ -548,5 +605,103 @@ describe('Issue #28: Operation-Specific ORM Authorization', () => {
 
     expect(resultIds).toContain(10)
     expect(resultIds).not.toContain(11) // Secret Post 11 is excluded by record rules!
+  })
+
+  it('M2M cmd 3: denies unlinking forbidden relation target', async () => {
+    const aliceEnv = createCtx(42, {}, getModel)
+
+    // Alice attempts to unlink Tag 102 (confidential tag which Alice cannot read)
+    await expect(
+      PostModel.morph(PostModel, aliceEnv, 1, {
+        tags: [[3, 102, 0]],
+      })
+    ).rejects.toThrowError(AuthorizationError)
+  })
+
+  it('M2M cmd 4: denies linking forbidden relation target', async () => {
+    const aliceEnv = createCtx(42, {}, getModel)
+
+    // Alice attempts to link Tag 102 (confidential tag)
+    await expect(
+      PostModel.morph(PostModel, aliceEnv, 1, {
+        tags: [[4, 102, 0]],
+      })
+    ).rejects.toThrowError(AuthorizationError)
+
+    // Verify Tag 102 was not linked to Post 1
+    const links = tables.demo_post_demo_tag_rel.filter((r) => r.demo_post_id === 1)
+    expect(links.some((r) => r.demo_tag_id === 102)).toBe(false)
+  })
+
+  it('M2M cmd 5: denies clearing relation when an existing link is forbidden', async () => {
+    // Secret tag 102 is linked to Post 1
+    tables.demo_post_demo_tag_rel.push({ demo_post_id: 1, demo_tag_id: 102 })
+
+    const aliceEnv = createCtx(42, {}, getModel)
+
+    // Alice attempts to clear all tags on Post 1
+    await expect(
+      PostModel.morph(PostModel, aliceEnv, 1, {
+        tags: [[5, 0, 0]],
+      })
+    ).rejects.toThrowError(AuthorizationError)
+
+    // Verify existing link to 101 was not removed (atomic failure)
+    const links = tables.demo_post_demo_tag_rel.filter((r) => r.demo_post_id === 1)
+    expect(links.some((r) => r.demo_tag_id === 101)).toBe(true)
+  })
+
+  it('M2M cmd 6: mixed authorized and forbidden replace fails atomically with zero partial mutation', async () => {
+    const aliceEnv = createCtx(42, {}, getModel)
+
+    // Alice attempts to replace tags with [101 (public), 102 (secret)]
+    await expect(
+      PostModel.morph(PostModel, aliceEnv, 1, {
+        tags: [[6, 0, [101, 102]]],
+      })
+    ).rejects.toThrowError(AuthorizationError)
+
+    // Assert that demo_post_demo_tag_rel remained untouched with only initial link 101
+    const links = tables.demo_post_demo_tag_rel.filter((r) => r.demo_post_id === 1)
+    expect(links.length).toBe(1)
+    expect(links[0].demo_tag_id).toBe(101)
+  })
+
+  it('denied create with relational side effects rolls back completely with zero parent and child rows', async () => {
+    // Rule: can only create posts with state == 'draft'
+    tables.mx_rule.push({
+      id: 7,
+      model_id: 100,
+      name: 'Can only create draft posts',
+      domain_force: '[["state", "=", "draft"]]',
+      perm_read: false,
+      perm_write: false,
+      perm_create: true,
+      perm_unlink: false,
+    })
+    tables.mx_rule_vx_role_rel.push({ rule_id: 7, role_id: 10 })
+
+    const aliceEnv = createCtx(42, {}, getModel)
+
+    const initialCommentCount = tables.demo_comment.length
+    const initialPostCount = tables.demo_post.length
+
+    // Alice attempts to spawn Post with state 'published' AND a child comment in O2M cmd 0
+    await expect(
+      PostModel.spawn(PostModel, aliceEnv, {
+        title: 'Forbidden Direct Publish',
+        state: 'published',
+        ownerId: 42,
+        comments: [[0, 0, { content: 'Child comment during forbidden spawn', authorId: 42 }]],
+      })
+    ).rejects.toThrowError(AuthorizationError)
+
+    // Complete atomicity / rollback assertion:
+    // Zero parent post created
+    expect(tables.demo_post.length).toBe(initialPostCount)
+    expect(tables.demo_post.find((p) => p.title === 'Forbidden Direct Publish')).toBeUndefined()
+    // Zero child comment created
+    expect(tables.demo_comment.length).toBe(initialCommentCount)
+    expect(tables.demo_comment.find((c) => c.content === 'Child comment during forbidden spawn')).toBeUndefined()
   })
 })
