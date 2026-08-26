@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   canonicalRelationKey,
-  canonicalizeSymmetricEndpoints,
+  canonicalizeSymmetricEntities,
   validateRelationCandidate
 } from '../src/graph/identity.js'
 
@@ -14,26 +14,50 @@ const policy = {
 }
 
 describe('Witness graph core contracts', () => {
-  it('produces a deterministic relation identity', () => {
+  it('produces a deterministic cross-install relation identity from canonical keys', () => {
     const a = canonicalRelationKey({
-      fromEntityId: 10,
+      fromEntityKey: 'passage:quran:2:255',
       relationTypeCode: 'mentions',
-      toEntityId: 20,
+      toEntityKey: 'concept:mercy',
+      ontologyVersion: 'WITNESS_RELATION_V1',
       sourceRevision: 'rev-1'
     })
     const b = canonicalRelationKey({
-      fromEntityId: 10,
+      fromEntityKey: 'PASSAGE:QURAN:2:255',
       relationTypeCode: 'MENTIONS',
-      toEntityId: 20,
+      toEntityKey: 'CONCEPT:MERCY',
+      ontologyVersion: 'WITNESS_RELATION_V1',
       sourceRevision: 'rev-1'
     })
     expect(a).toBe(b)
     expect(a).toMatch(/^wxrel:[a-f0-9]{64}$/)
   })
 
-  it('canonicalizes symmetric endpoints', () => {
-    expect(canonicalizeSymmetricEndpoints(9, 3)).toEqual([3, 9])
-    expect(canonicalizeSymmetricEndpoints(3, 9)).toEqual([3, 9])
+  it('canonicalizes symmetric endpoints by semantic key rather than database id', () => {
+    const [left, right] = canonicalizeSymmetricEntities(
+      { id: 99, key: 'figure:musa', value: 'musa' },
+      { id: 2, key: 'figure:isa', value: 'isa' }
+    )
+    expect(left.key).toBe('figure:isa')
+    expect(left.id).toBe(2)
+    expect(right.key).toBe('figure:musa')
+    expect(right.id).toBe(99)
+  })
+
+  it('does not let database id allocation affect the relation hash', () => {
+    const installationA = canonicalRelationKey({
+      fromEntityKey: 'figure:musa',
+      relationTypeCode: 'PARALLELS',
+      toEntityKey: 'figure:isa',
+      ontologyVersion: 'WITNESS_RELATION_V1'
+    })
+    const installationB = canonicalRelationKey({
+      fromEntityKey: 'figure:musa',
+      relationTypeCode: 'PARALLELS',
+      toEntityKey: 'figure:isa',
+      ontologyVersion: 'WITNESS_RELATION_V1'
+    })
+    expect(installationA).toBe(installationB)
   })
 
   it('rejects a relation without required provenance', () => {
@@ -86,7 +110,7 @@ describe('Witness graph core contracts', () => {
     expect(result.issues).toContain('relation SAME_AS requires review before ESTABLISHED status')
   })
 
-  it('rejects midpoint-like invalid confidence ranges instead of silently clamping', () => {
+  it('rejects confidence outside basis-point bounds instead of silently clamping', () => {
     const result = validateRelationCandidate({
       fromEntityId: 1,
       fromKind: 'PASSAGE',
