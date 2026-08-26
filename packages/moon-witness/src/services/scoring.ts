@@ -48,6 +48,10 @@ export function scoreRelation(input: { authority?: number; provenance?: number; 
   return score(profile, [['SOURCE_AUTHORITY', input.authority], ['PROVENANCE_QUALITY', input.provenance], ['EVIDENCE_DIRECTNESS', input.directness], ['RELATION_CONFIDENCE', input.confidence]].map(([code, value]) => ({ code, state: value === undefined ? 'INSUFFICIENT' : 'AVAILABLE', value, evidenceRefs: [], reasonCodes: value === undefined ? [`${code}_MISSING`] : [] })) as WitnessScoreDimension[])
 }
 
+export const scoreAssertion = scoreRelation
+export const scoreEvidence = scoreRelation
+export const scoreFinding = scoreRelation
+
 export function score(profile: WitnessScoreProfile, dimensions: WitnessScoreDimension[]): WitnessScoreResult {
   const normalized = [...dimensions].sort((a, b) => a.code.localeCompare(b.code))
   for (const item of normalized) {
