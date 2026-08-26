@@ -339,6 +339,7 @@ async function alterColumn(
   migrations: MigrationCommand[] = []
 ) {
   const db = getDb()
+  if (colType.startsWith('vector(')) throw new Error(`Vector dimension change for ${table}.${colName} requires an explicit reviewed migration; automatic alteration is refused.`)
   const sql = `ALTER TABLE ${sqlIdentifier(table)} ALTER COLUMN ${colName} TYPE ${colType}`
   if (dryRun) {
     migrations.push({ up: sql, down: `-- Manual intervention required to down-migrate column type alteration for ${table}.${colName}` })
