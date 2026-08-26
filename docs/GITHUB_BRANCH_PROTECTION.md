@@ -15,9 +15,10 @@ Configure a repository ruleset or branch protection rule matching each branch:
 - block branch deletion;
 - do not allow bypassing these rules for ordinary contributors.
 
-The PostgreSQL certification workflow is manual-only and must not be listed as a required status
-check. It is a release/database-validation check and may be run from Actions when a PostgreSQL
-capable runner is available.
+The PostgreSQL certification workflow runs on pushes to `dev` and `main`, weekly, and manually. It
+is a release/database-validation check and should be required for the `dev → main` promotion rule
+once a PostgreSQL-capable self-hosted runner is available. It intentionally does not run on
+`pull_request` events because it uses a self-hosted runner.
 
 ## Promotion policy
 

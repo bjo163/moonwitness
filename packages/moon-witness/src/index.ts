@@ -150,7 +150,17 @@ export { resolveEngineScope, checksumEngineScope } from './services/engine-scope
 export { finalizeEngineResult, checksumEngineResult } from './services/engine-evidence.js'
 export { SCORE_PROFILES, getScoreProfile, score, scoreEntity, scoreRelation, scoreAssertion, scoreEvidence, scoreFinding, toEngineScore, independentEvidence, type EvidenceIndependenceInput, type WitnessScoreDimension, type WitnessScoreProfile, type WitnessScoreResult } from './services/scoring.js'
 export { persistScoreResult, type PersistScoreInput } from './services/score-store.js'
-export { mapLegacyResearchRecord, legacyIdempotencyKey, type LegacyResearchRecord, type LegacyResearchSource, type WitnessLegacyCandidate } from './services/legacy-research-adapters.js'
+export {
+  mapLegacyResearchRecord,
+  adaptLegacyResearchRecord,
+  getLegacyResearchAdapter,
+  legacyIdempotencyKey,
+  type LegacyResearchAdapter,
+  type LegacyResearchProvenance,
+  type LegacyResearchRecord,
+  type LegacyResearchSource,
+  type WitnessLegacyCandidate
+} from './services/legacy-research-adapters.js'
 export { distribution, type ResearchDistribution, type ResearchObservation } from './services/research-patterns.js'
 export { InMemoryEngineRunStore, MoonOrmEngineRunStore } from './services/engine-store.js'
 export { WitnessEngineRegistry, WitnessEngineRuntime } from './services/engine-runtime.js'

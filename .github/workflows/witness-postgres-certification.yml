@@ -1,17 +1,18 @@
 name: Witness PostgreSQL Certification
 
 on:
-  pull_request:
+  push:
     branches:
       - dev
       - main
-      - 'feature/**'
     paths:
-      - 'packages/moon-witness/**'
-      - 'packages/moon-orm/**'
-      - 'packages/moon-base/**'
-      - 'apps/api/**'
-      - '.github/workflows/witness-postgres-certification.yml'
+      - "packages/moon-witness/**"
+      - "packages/moon-orm/**"
+      - "packages/moon-base/**"
+      - "apps/api/**"
+      - ".github/workflows/witness-postgres-certification.yml"
+  schedule:
+    - cron: "17 3 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -24,15 +25,17 @@ concurrency:
 jobs:
   certify-postgres:
     name: PostgreSQL 16 Graph Certification
-    # PostgreSQL certification is release/periodic validation, not a fast PR gate.
-    # The skipped PR job reports success without occupying the self-hosted runner.
-    if: github.event_name != 'pull_request'
+    # This workflow intentionally does not run on pull_request events: it uses a
+    # self-hosted runner and must never execute untrusted fork code with access
+    # to the runner or repository configuration.
     runs-on: self-hosted
     timeout-minutes: 20
     env:
-      CI: 'true'
+      CI: "true"
       NODE_ENV: test
       TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+      DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+      JWT_SECRET: certification-only-test-secret
 
     steps:
       - name: Checkout
@@ -41,13 +44,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
 
       - name: Ensure PostgreSQL is ready
         shell: bash
         run: |
           if [ -n "${TEST_DATABASE_URL:-}" ]; then
             echo "Using TEST_DATABASE_URL supplied by repository secret."
+            echo "DATABASE_URL=$TEST_DATABASE_URL" >> "$GITHUB_ENV"
             exit 0
           fi
           command -v docker >/dev/null || { echo "Docker is required when TEST_DATABASE_URL is not configured."; exit 1; }
@@ -64,6 +68,7 @@ jobs:
               && timeout 2 bash -c "</dev/tcp/127.0.0.1/$mapped_port" >/dev/null 2>&1; then
               echo "PostgreSQL is ready on 127.0.0.1:$mapped_port"
               echo "TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:$mapped_port/moonwitness_witness_cert" >> "$GITHUB_ENV"
+              echo "DATABASE_URL=postgres://postgres:postgres@127.0.0.1:$mapped_port/moonwitness_witness_cert" >> "$GITHUB_ENV"
               echo "MOONWITNESS_PG_STARTED=true" >> "$GITHUB_ENV"
               exit 0
             fi
@@ -86,10 +91,16 @@ jobs:
       - name: Build Moon packages
         run: pnpm --filter "@moon/*" build
 
+      - name: Verify migrations and canonical seed
+        run: pnpm --filter api db:verify
+
       - name: Certify Witness graph on PostgreSQL
         run: pnpm --filter api certify:witness-graph-pg
 
       - name: Stop PostgreSQL certification container
         if: always()
         shell: bash
-        run: docker rm -f moonwitness-pg-cert >/dev/null 2>&1 || true
+        run: |
+          if [ "${MOONWITNESS_PG_STARTED:-}" = "true" ] && command -v docker >/dev/null 2>&1; then
+            docker rm -f moonwitness-pg-cert >/dev/null 2>&1 || true
+          fi

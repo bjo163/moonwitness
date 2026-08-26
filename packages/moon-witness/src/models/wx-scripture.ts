@@ -1,16 +1,16 @@
-import { Vertex, fields } from '@moon/orm'
-import { AUTHORITY_CLASS_SELECTION, RECORD_STATUS_SELECTION, SOURCE_CLASS_SELECTION } from '../graph/contracts.js'
+import { Vertex, fields, type Ctx } from '@moon/orm'
+import { AUTHORITY_CLASS_SELECTION, normalizeRevelationFamilyCode, RECORD_STATUS_SELECTION, SOURCE_CLASS_SELECTION } from '../graph/contracts.js'
 
 /**
  * wx.scripture — Universal Divine Scripture
  * 
- * Represents any holy scripture: Al-Quran, Taurat (Torah), Zabur (Psalms), Injil (Gospel),
- * or any other sacred text. All scriptures share the same structure.
+ * Represents a Revelation family identity. Textual witnesses and later sacred
+ * or historical works remain separate source/content records.
  */
 export default class WxScripture extends Vertex {
   static _name = 'wx.scripture'
   static _description = 'Divine Scripture / Holy Book'
-  static _public = true
+  static _public = false
 
   /** Canonical graph anchor; legacy rows may be backfilled during migration. */
   entityId = fields.Many2one({ comodel: 'wx.entity', index: true })
@@ -40,4 +40,25 @@ export default class WxScripture extends Vertex {
   description = fields.Text()
   coverImageUrl = fields.Text()
   themeColor = fields.Char({ size: 20 })
+
+  static async beforeSave(
+    _modelClass: typeof Vertex,
+    _env: Ctx,
+    values: Record<string, unknown>
+  ): Promise<void> {
+    const sourceClass = String(values.sourceClass ?? '').trim().toUpperCase()
+    const scriptureType = String(values.type ?? '').trim().toLowerCase()
+    const canonicalCode = String(values.canonicalCode ?? values.canonical_code ?? '').trim()
+    const normative = sourceClass === 'REVELATION' || scriptureType === 'canonical'
+
+    if (normative && !canonicalCode) {
+      throw new Error('Normative scripture requires one of the four Revelation family codes')
+    }
+    if (normative && !normalizeRevelationFamilyCode(canonicalCode)) {
+      throw new Error('Normative scripture must be QURAN, TAWRAT, ZABUR, or INJIL')
+    }
+    if ((scriptureType === 'additional' || scriptureType === 'philosophy') && sourceClass === 'REVELATION') {
+      throw new Error('Additional or philosophy texts cannot claim the REVELATION source class')
+    }
+  }
 }

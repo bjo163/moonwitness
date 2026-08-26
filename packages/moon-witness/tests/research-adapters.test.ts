@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { legacyIdempotencyKey, mapLegacyResearchRecord } from '../src/services/legacy-research-adapters.js'
+import { getLegacyResearchAdapter, legacyIdempotencyKey, mapLegacyResearchRecord } from '../src/services/legacy-research-adapters.js'
 import { distribution } from '../src/services/research-patterns.js'
 
 describe('research and legacy adapter contracts (#61/#66)', () => {
@@ -63,5 +63,29 @@ describe('research and legacy adapter contracts (#61/#66)', () => {
     expect(mapped.targetLane).toBe('UNRESOLVED')
     expect(mapped.evidenceEligible).toBe(false)
     expect(mapped.warnings).toContain('Legacy item is missing required provenance: originRepo, originCommit, originPath, adapterVersion.')
+  })
+
+  it('retains the complete raw payload and separates legacy metadata from canonical semantics', () => {
+    const payload = { legacyScore: 0.8, status: 'READY', relation: 'supports', nested: { source: 'fixture' } }
+    const mapped = mapLegacyResearchRecord({ id: 'cosmic-1', payload, source: 'COSMIC', originRepo: 'bjo163/cosmic', originCommit: 'r1', originPath: 'evidence/1.json', adapterVersion: '1.1.0' })
+    expect(mapped.rawPayload).toBe(payload)
+    expect(mapped.provenance.originChecksum).toBe(mapped.originChecksum)
+    expect(mapped.legacyMetadata).toEqual({ legacyScore: 0.8, status: 'READY', relation: 'supports' })
+    expect(mapped.canonicalPromotion).toBe('NEVER_AUTOMATIC')
+    expect(mapped.evidenceEligible).toBe(true)
+  })
+
+  it('detects AI/mock markers without rejecting ordinary words containing the letters ai', () => {
+    const ordinary = mapLegacyResearchRecord({ id: 'ordinary', payload: { title: 'Maid record' }, source: 'PROPETIC', originRepo: 'bjo163/propetic', originCommit: 'r1', originPath: 'data/1.json', adapterVersion: '1.0.0' })
+    const generated = mapLegacyResearchRecord({ id: 'generated', payload: { generated_by: 'ai', result: 'fallback' }, source: 'PROPETIC', originRepo: 'bjo163/propetic', originCommit: 'r1', originPath: 'data/2.json', adapterVersion: '1.0.0' })
+    expect(ordinary.evidenceEligible).toBe(true)
+    expect(generated.evidenceEligible).toBe(false)
+  })
+
+  it('exposes source-specific adapter policy and preserves Divine Text licensing caution', () => {
+    expect(getLegacyResearchAdapter('PROPETIC').mappingKind).toBe('FIGURE_PROJECTION')
+    const mapped = mapLegacyResearchRecord({ id: 'quran-manifest', payload: { corpus: 'local-quran' }, source: 'DIVINE_TEXT', originRepo: 'bjo163/divine-text', originCommit: 'r1', originPath: 'manifest.json', adapterVersion: '1.0.0' })
+    expect(mapped.mappingKind).toBe('TEXTUAL_WITNESS')
+    expect(mapped.warnings).toContain('Divine Text item has no explicit license metadata; verify licensing before copying corpus bytes.')
   })
 })

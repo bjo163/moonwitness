@@ -7,7 +7,7 @@ import WxResearchRun from '../models/wx-research-run.js'
 import WxSource from '../models/wx-source.js'
 import { stableSerialize } from '../services/hash.js'
 import type { Loose } from '../graph/service.js'
-import type { EngineEvidenceExplanation, EngineResultDraft, EngineRunRecord, EngineScopeInput, EngineValidationResult, WitnessEngineModule } from '../types/engine.js'
+import type { EngineEvidenceExplanation, EngineResultDraft, EngineRunRecord, EngineScopeInput, EngineValidationResult, RevelationFamily, WitnessEngineModule } from '../types/engine.js'
 
 export interface ResearchHypothesisInput { hypothesisId: number; predicate?: string; assertionClass?: string; algorithmVersion: string; filters?: Record<string, string> }
 const REVISION_FAMILIES = new Set(['QURAN', 'TAWRAT', 'ZABUR', 'INJIL'])
@@ -35,7 +35,7 @@ export function createResearchHypothesisModule(): WitnessEngineModule<ResearchHy
           const family = text(value(source, 'scriptureFamily', 'scripture_family')).toUpperCase()
           return { sourceKey, revision, ...(REVISION_FAMILIES.has(family) ? { family } : {}) }
         })
-        .filter((item): item is { sourceKey: string; revision: string; family?: string } => Boolean(item))
+        .filter((item): item is { sourceKey: string; revision: string; family?: RevelationFamily } => Boolean(item))
       return { relationCodes: input.predicate ? [input.predicate] : [], sourceRevisions } satisfies EngineScopeInput
     },
     async execute(ctx, input) {

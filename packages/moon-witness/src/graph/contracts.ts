@@ -26,6 +26,20 @@ export const ENTITY_KIND_SELECTION: Array<[string, string]> = [
   ['ENGINE_FINDING', 'Engine Finding']
 ]
 
+/** The only normative Revelation family identities admitted by Witness. */
+export const REVELATION_FAMILY_CODES = ['QURAN', 'TAWRAT', 'ZABUR', 'INJIL'] as const
+export type RevelationFamilyCode = (typeof REVELATION_FAMILY_CODES)[number]
+
+export function normalizeRevelationFamilyCode(value: unknown): RevelationFamilyCode | null {
+  const aliases: Record<string, RevelationFamilyCode> = {
+    QURAN: 'QURAN', QURANIC: 'QURAN',
+    TAWRAT: 'TAWRAT', TORAH: 'TAWRAT',
+    ZABUR: 'ZABUR', PSALMS: 'ZABUR',
+    INJIL: 'INJIL', GOSPEL: 'INJIL'
+  }
+  return aliases[String(value ?? '').trim().toUpperCase()] ?? null
+}
+
 export const SOURCE_CLASS_SELECTION: Array<[string, string]> = [
   ['REVELATION', 'Revelation'],
   ['TEXTUAL_WITNESS', 'Textual Witness'],
