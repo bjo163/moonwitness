@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto'
 import {
   seedBaseData
 } from './seed.js'
@@ -84,15 +85,14 @@ export const COMPANY_SEED = {
   currencyCode: 'IDR'
 }
 
-import { randomBytes } from 'node:crypto'
-
-const getSecureBootstrapSecret = (envKey: string): string => {
+const readBootstrapEnv = (envKey: string): string | undefined => {
   const proc = (globalThis as any).process
   const envVal = proc && proc.env ? proc.env[envKey] : undefined
-  if (envVal && typeof envVal === 'string' && envVal.trim().length > 0) {
-    return envVal.trim()
-  }
-  return randomBytes(32).toString('base64url')
+  return typeof envVal === 'string' && envVal.trim().length > 0 ? envVal.trim() : undefined
+}
+
+const getSecureBootstrapSecret = (envKey: string): string => {
+  return readBootstrapEnv(envKey) ?? randomBytes(32).toString('base64url')
 }
 
 export const PARTNER_SEED_DATA = {
@@ -119,7 +119,7 @@ export const PARTNER_SEED_DATA = {
     {
       mode: 'admin',
       name: 'Administrator',
-      email: getEnv('BOOTSTRAP_ADMIN_EMAIL') || 'admin@moonwitness.org',
+      email: readBootstrapEnv('BOOTSTRAP_ADMIN_EMAIL') || 'admin@moonwitness.org',
       password: getSecureBootstrapSecret('BOOTSTRAP_ADMIN_PASSWORD'),
       isCompany: false
     }
