@@ -10,6 +10,7 @@ import type { Loose } from '../graph/service.js'
 import type { EngineEvidenceExplanation, EngineResultDraft, EngineRunRecord, EngineScopeInput, EngineValidationResult, WitnessEngineModule } from '../types/engine.js'
 
 export interface ResearchHypothesisInput { hypothesisId: number; predicate?: string; assertionClass?: string; algorithmVersion: string; filters?: Record<string, string> }
+const REVISION_FAMILIES = new Set(['QURAN', 'TAWRAT', 'ZABUR', 'INJIL'])
 function value(row: Loose | null | undefined, camel: string, snake = camel): any { return row?.[camel] ?? row?.[snake] }
 function idOf(row: Loose | null | undefined): number { return Number(value(row, 'id') ?? 0) }
 function text(raw: unknown): string { return typeof raw === 'string' ? raw.trim() : '' }
@@ -24,12 +25,28 @@ export function validateResearchHypothesisInput(input: ResearchHypothesisInput):
 export function createResearchHypothesisModule(): WitnessEngineModule<ResearchHypothesisInput> {
   return {
     code: 'research.hypothesis', version: '1.0.0', deterministic: true, inputSchemaVersion: 'RESEARCH_HYPOTHESIS_INPUT_V1', outputSchemaVersion: 'WITNESS_ENGINE_RESULT_V1', validateInput: validateResearchHypothesisInput,
-    async resolveScope(ctx, input) { return { relationCodes: input.predicate ? [input.predicate] : [] } satisfies EngineScopeInput },
+    async resolveScope(ctx, input) {
+      const sources = await WxSource.fetch(WxSource, ctx as Ctx, [['active', '=', true]], undefined, { limit: 500, order: 'id ASC' })
+      const sourceRevisions = sources
+        .map((source) => {
+          const sourceKey = text(value(source, 'stableKey', 'stable_key'))
+          const revision = text(value(source, 'revision'))
+          if (!sourceKey || !revision) return null
+          const family = text(value(source, 'scriptureFamily', 'scripture_family')).toUpperCase()
+          return { sourceKey, revision, ...(REVISION_FAMILIES.has(family) ? { family } : {}) }
+        })
+        .filter((item): item is { sourceKey: string; revision: string; family?: string } => Boolean(item))
+      return { relationCodes: input.predicate ? [input.predicate] : [], sourceRevisions } satisfies EngineScopeInput
+    },
     async execute(ctx, input) {
       const env = ctx as Ctx
       const hypothesis = (await WxResearchHypothesis.fetch(WxResearchHypothesis, env, [['id', '=', input.hypothesisId], ['active', '=', true]]))[0] ?? null
       if (!hypothesis) return { summary: 'No accessible research hypothesis matched the request.', findings: [{ key: 'research:unresolved', statement: 'Research hypothesis was not found.', authorityClass: 'HYPOTHESIS', unresolvedReasonCodes: ['HYPOTHESIS_NOT_FOUND'] }] }
-      const assertions = (await WxAssertion.fetch(WxAssertion, env, [['active', '=', true]], undefined, { limit: 500, order: 'id ASC' })).filter((item) => (!input.predicate || text(value(item, 'predicate')) === input.predicate) && (!input.assertionClass || text(value(item, 'assertionClass', 'assertion_class')) === input.assertionClass))
+      const assertions = (await WxAssertion.fetch(WxAssertion, env, [['active', '=', true]], undefined, { limit: 500, order: 'id ASC' })).filter((item) => {
+        if (input.predicate && text(value(item, 'predicate')) !== input.predicate) return false
+        if (input.assertionClass && text(value(item, 'assertionClass', 'assertion_class')) !== input.assertionClass) return false
+        return Object.entries(input.filters ?? {}).every(([key, expected]) => text(value(item, key, key.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`))) === text(expected))
+      })
       let supports = 0; let contradicts = 0; let ambiguous = 0; const findings: EngineResultDraft['findings'] = []; const evidenceCandidates: any[] = []
       for (const assertion of assertions) {
         const assertionEvidence: any[] = []

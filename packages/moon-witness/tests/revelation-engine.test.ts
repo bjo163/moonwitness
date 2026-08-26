@@ -273,6 +273,29 @@ describe('Revelation Query and Cross-Scripture engines (#58)', () => {
     expect(result.diagnostics).toEqual(expect.arrayContaining(['supports:1', 'contradicts:1', 'denominator:2']))
   })
 
+  it('captures active source revisions in the research checksum lineage', async () => {
+    const module = createResearchHypothesisModule()
+    const request = { moduleCode: module.code, moduleVersion: module.version, input: { hypothesisId: 1301, predicate: 'HAS_QUALITY', algorithmVersion: 'distribution-v1' } }
+    const first = await runtime(module).runModule(env(), request)
+    expect(first.sourceRevisions).toEqual(expect.arrayContaining([
+      expect.objectContaining({ sourceKey: 'corpus:quran:original', revision: 'quran-r1' })
+    ]))
+    mockDb.wx_source[0].revision = 'quran-r2'
+    const changed = await runtime(module).runModule(env(), request)
+    expect(checksumEngineResult(first)).not.toBe(checksumEngineResult(changed))
+  })
+
+  it('applies research filters before calculating the evidence denominator', async () => {
+    const module = createResearchHypothesisModule()
+    const result = await runtime(module).runModule(env(), {
+      moduleCode: module.code,
+      moduleVersion: module.version,
+      input: { hypothesisId: 1301, predicate: 'HAS_QUALITY', algorithmVersion: 'distribution-v1', filters: { assertionClass: 'DERIVED' } }
+    })
+    expect(result.findings.find((finding) => finding.key === 'research:1301:summary')).toMatchObject({ status: 'INSUFFICIENT_EVIDENCE' })
+    expect(result.diagnostics).toEqual(expect.arrayContaining(['denominator:0']))
+  })
+
   it('requires provider metadata for AI research and retains AI_ASSISTED authority', async () => {
     const module = createAiResearchSynthesisModule()
     const request = { moduleCode: module.code, moduleVersion: module.version, input: { hypothesisId: 1301, predicate: 'HAS_QUALITY', algorithmVersion: 'distribution-v1' } }
