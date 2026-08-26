@@ -21,7 +21,19 @@ export function independentEvidence<T extends EvidenceIndependenceInput>(evidenc
 export const SCORE_PROFILES: Record<string, WitnessScoreProfile> = {
   source_reliability_v1: { code: 'source_reliability', version: '1.0.0', weights: { SOURCE_AUTHORITY: 30, PROVENANCE_QUALITY: 40, TEXTUAL_INTEGRITY: 30 }, minimumCoverage: 0.6 },
   relation_confidence_v1: { code: 'relation_confidence', version: '1.0.0', weights: { SOURCE_AUTHORITY: 25, PROVENANCE_QUALITY: 25, EVIDENCE_DIRECTNESS: 30, RELATION_CONFIDENCE: 20 }, minimumCoverage: 0.6 },
-  research_hypothesis_v1: { code: 'research_hypothesis', version: '1.0.0', weights: { COVERAGE: 50, AGREEMENT: 50 }, minimumCoverage: 0.5 }
+  research_hypothesis_v1: { code: 'research_hypothesis', version: '1.0.0', weights: { COVERAGE: 50, AGREEMENT: 50 }, minimumCoverage: 0.5 },
+  figure_identity_v1: { code: 'figure_identity', version: '1.0.0', weights: { IDENTITY_CONFIDENCE: 40, PROVENANCE_QUALITY: 30, ATTRIBUTION_CONFIDENCE: 30 }, minimumCoverage: 0.6 },
+  tradition_transmission_v1: { code: 'tradition_transmission', version: '1.0.0', weights: { TRANSMISSION_SUPPORT: 40, PROVENANCE_QUALITY: 30, COVERAGE: 30 }, minimumCoverage: 0.6 },
+  hadith_analysis_v1: { code: 'hadith_analysis', version: '1.0.0', weights: { TRANSMISSION_SUPPORT: 40, AGREEMENT: 30, COVERAGE: 30 }, minimumCoverage: 0.6 },
+  lexical_match_v1: { code: 'lexical_match', version: '1.0.0', weights: { LEXICAL_CONFIDENCE: 60, PROVENANCE_QUALITY: 40 }, minimumCoverage: 0.6 },
+  concept_evidence_v1: { code: 'concept_evidence', version: '1.0.0', weights: { SEMANTIC_CONFIDENCE: 40, EVIDENCE_DIRECTNESS: 30, AGREEMENT: 30 }, minimumCoverage: 0.6 },
+  cross_scripture_v1: { code: 'cross_scripture', version: '1.0.0', weights: { CROSS_SOURCE_SUPPORT: 40, EVIDENCE_DIRECTNESS: 30, AGREEMENT: 30 }, minimumCoverage: 0.6 }
+}
+
+export function getScoreProfile(key: string): WitnessScoreProfile {
+  const profile = SCORE_PROFILES[key]
+  if (!profile) throw new Error(`Unknown scoring profile: ${key}`)
+  return { ...profile, weights: { ...profile.weights } }
 }
 
 export function score(profile: WitnessScoreProfile, dimensions: WitnessScoreDimension[]): WitnessScoreResult {
