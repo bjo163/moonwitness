@@ -3,6 +3,7 @@ import { getAuthToken } from "./auth-token"
 
 export const apiClient = axios.create({
   timeout: 10000,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },

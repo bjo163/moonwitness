@@ -112,7 +112,8 @@ export class MoonClient {
       const res = await fetch(`${this.config.baseUrl}${path}`, {
         method,
         headers,
-        body: body ? JSON.stringify(body) : undefined
+        body: body ? JSON.stringify(body) : undefined,
+        credentials: 'include',
       })
 
       if (res.status === 401 && this.config.onUnauthorized) {

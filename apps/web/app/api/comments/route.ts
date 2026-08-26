@@ -9,7 +9,7 @@ const commentRate = new Map<number, { count: number; startedAt: number }>()
 function getBearerToken(req: NextRequest): string | null {
   const authorization = req.headers.get("authorization")
   if (authorization?.startsWith("Bearer ")) return authorization.slice(7).trim() || null
-  return req.cookies.get("moon_token")?.value || null
+  return req.cookies.get("moon_session")?.value || null
 }
 
 async function getSession(req: NextRequest) {

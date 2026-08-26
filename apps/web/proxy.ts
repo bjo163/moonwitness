@@ -8,10 +8,7 @@ const protectedRoutes = ["/erp", "/console"]
 const guestRoutes = ["/login", "/register"]
 
 export function proxy(request: NextRequest) {
-  // Check both cookie and local storage is not possible in middleware,
-  // but if the auth system uses a cookie `moon_token`, it works.
-  // In our case, moon_store likely uses localStorage, so we might need to check if there's a cookie or just trust it.
-  const token = request.cookies.get("moon_token")?.value
+  const token = request.cookies.get("moon_session")?.value
   const pathname = request.nextUrl.pathname
 
   // Check if it's a protected route
