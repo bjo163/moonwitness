@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest'
 import {
   unavailableSemanticObservation,
   validateSemanticObservation,
+  WITNESS_ANALYZE_RESULT_V1,
   WITNESS_SEMANTIC_OBSERVATION_V1
 } from '../src/types/analyze.js'
+import { validateAnalyzeResult } from '../src/services/analyze-contract.js'
 
 const metadata = {
   provider: 'fixture',
@@ -54,5 +56,56 @@ describe('Witness Analyze contract (#67)', () => {
       intentionSignals: ['INFERRED'],
       diagnostics: []
     }).candidates).toHaveLength(1)
+  })
+
+  it('keeps reserved and unverified results behind the review gate', () => {
+    const result = {
+      protocol: WITNESS_ANALYZE_RESULT_V1,
+      run: { id: 'run-1', inputFingerprint: 'fixture' },
+      status: 'RESERVED',
+      findings: [],
+      evidenceSummary: 'INSUFFICIENT',
+      sourceGrounding: [],
+      reviewGate: {
+        decision: 'BLOCK_ADVERSE_ACTION',
+        severity: 'HIGH',
+        reasonCodes: ['RESERVED_DOMAIN'],
+        evidenceRefs: [],
+        evidenceGaps: [],
+        recommendedActions: []
+      },
+      diagnostics: []
+    } as const
+
+    expect(validateAnalyzeResult(result).status).toBe('RESERVED')
+    expect(() => validateAnalyzeResult({ ...result, reviewGate: { ...result.reviewGate, decision: 'ALLOW_ANALYTICAL_DISPLAY' } }))
+      .toThrow(/must block adverse action/)
+  })
+
+  it('does not let missing score dimensions acquire a midpoint value', () => {
+    const result = {
+      protocol: WITNESS_ANALYZE_RESULT_V1,
+      run: { id: 'run-2', inputFingerprint: 'fixture' },
+      status: 'PROVISIONAL',
+      findings: [],
+      evidenceSummary: 'SUPPORTED_NOT_VERIFIED',
+      sourceGrounding: [],
+      reviewGate: {
+        decision: 'REQUIRE_HUMAN_REVIEW',
+        severity: 'WARNING',
+        reasonCodes: [],
+        evidenceRefs: [],
+        evidenceGaps: [],
+        recommendedActions: []
+      },
+      score: {
+        profile: { id: 'fixture', version: '1', formulaFingerprint: 'fixture' },
+        calibrationStatus: 'UNCALIBRATED',
+        dimensions: [{ code: 'evidence', state: 'INSUFFICIENT', value: 0.5, evidenceRefs: [] }]
+      },
+      diagnostics: []
+    }
+
+    expect(() => validateAnalyzeResult(result)).toThrow(/must not have a numeric value/)
   })
 })

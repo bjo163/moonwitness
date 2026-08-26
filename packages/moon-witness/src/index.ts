@@ -62,6 +62,8 @@ export {
   WITNESS_SEMANTIC_OBSERVATION_V1
 } from './types/analyze.js'
 
+export { validateAnalyzeResult } from './services/analyze-contract.js'
+
 export {
   registerAdapter,
   getAdapter,
