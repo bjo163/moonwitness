@@ -89,7 +89,30 @@ async function main() {
     'wx_relation_type',
     'wx_relation',
     'wx_religion',
-    'wx_community'
+    'wx_community',
+    'wx_passage',
+    'wx_text_edition',
+    'wx_content',
+    'wx_root',
+    'wx_lexeme',
+    'wx_lexical_occurrence',
+    'wx_revelation_event',
+    'wx_revelation_event_passage',
+    'wx_figure',
+    'wx_figure_name',
+    'wx_figure_role',
+    'wx_tradition_corpus',
+    'wx_tradition_unit',
+    'wx_tradition_reference',
+    'wx_tradition_attribution',
+    'wx_transmission_chain',
+    'wx_transmission_link',
+    'wx_tradition_assessment',
+    'wx_concept',
+    'wx_assertion',
+    'wx_evidence',
+    'wx_divine_expression',
+    'wx_divine_expression_occurrence'
   ]
   for (const table of requiredTables) {
     assert.equal(await tableExists(table), true, `forge must create ${table}`)
@@ -100,6 +123,15 @@ async function main() {
   assert.equal(await hasForeignKey('wx_relation', 'provenance_id', 'wx_provenance'), true)
   assert.equal(await hasForeignKey('wx_provenance', 'source_id', 'wx_source'), true)
   assert.equal(await hasForeignKey('wx_source_policy', 'source_id', 'wx_source'), true)
+  assert.equal(await hasForeignKey('wx_passage', 'scripture_id', 'wx_scripture'), true)
+  assert.equal(await hasForeignKey('wx_passage', 'parent_id', 'wx_passage'), true)
+  assert.equal(await hasForeignKey('wx_content', 'passage_id', 'wx_passage'), true)
+  assert.equal(await hasForeignKey('wx_content', 'edition_id', 'wx_text_edition'), true)
+  assert.equal(await hasForeignKey('wx_figure', 'entity_id', 'wx_entity'), true)
+  assert.equal(await hasForeignKey('wx_tradition_unit', 'corpus_id', 'wx_tradition_corpus'), true)
+  assert.equal(await hasForeignKey('wx_transmission_link', 'chain_id', 'wx_transmission_chain'), true)
+  assert.equal(await hasForeignKey('wx_evidence', 'assertion_id', 'wx_assertion'), true)
+  assert.equal(await hasForeignKey('wx_divine_expression_occurrence', 'passage_id', 'wx_passage'), true)
 
   const seedOne = await seedWitnessGraphCore()
   const relationTypesAfterFirstSeed = await count('wx_relation_type')
