@@ -68,6 +68,8 @@ The foundation workflow lives at:
 .github/workflows/foundation-ci.yml
 ```
 
+Its required check name is `Lint, Typecheck, Test, Build`.
+
 It runs for:
 
 - pull requests targeting `dev`
