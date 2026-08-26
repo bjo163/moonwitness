@@ -60,6 +60,7 @@ function recordFromRow(row: Record<string, unknown>): EngineRunRecord {
 
 /** ORM-backed engine persistence. It intentionally accepts a normal Ctx, never a privileged read path. */
 export class MoonOrmEngineRunStore implements EngineRunStore {
+  readonly persistent = true
   async create(ctx: unknown, record: Omit<EngineRunRecord, 'id'>): Promise<EngineRunRecord> {
     const row = await WxEngineRun.spawn(WxEngineRun, ctx as Ctx, {
       runKey: record.runKey,
@@ -149,6 +150,7 @@ export class MoonOrmEngineRunStore implements EngineRunStore {
 
 /** Test and local fixture store. Production wiring must use MoonOrmEngineRunStore. */
 export class InMemoryEngineRunStore implements EngineRunStore {
+  readonly persistent = false
   private nextId = 1
   private readonly runs = new Map<string, EngineRunRecord>()
   private readonly results = new Map<string, EngineResultEnvelope>()

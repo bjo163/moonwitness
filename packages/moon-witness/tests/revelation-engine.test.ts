@@ -15,7 +15,7 @@ import {
 import { createLexicalAnalysisModule } from '../src/engines/lexical-analysis.js'
 import { createConceptEvidenceModule } from '../src/engines/concept-evidence.js'
 import { createDivineExpressionModule } from '../src/engines/divine-expression.js'
-import { createResearchHypothesisModule } from '../src/engines/research-hypothesis.js'
+import { createAiResearchSynthesisModule, createResearchHypothesisModule } from '../src/engines/research-hypothesis.js'
 import type { WitnessEngineModule } from '../src/types/engine.js'
 
 type Row = Record<string, any>
@@ -271,5 +271,13 @@ describe('Revelation Query and Cross-Scripture engines (#58)', () => {
     expect(result.findings.find((finding) => finding.key === 'research:1301:summary')).toMatchObject({ authorityClass: 'HYPOTHESIS', status: 'CONFLICTED' })
     expect(result.summary).toMatch(/non-canonical/)
     expect(result.diagnostics).toEqual(expect.arrayContaining(['supports:1', 'contradicts:1', 'denominator:2']))
+  })
+
+  it('requires provider metadata for AI research and retains AI_ASSISTED authority', async () => {
+    const module = createAiResearchSynthesisModule()
+    const request = { moduleCode: module.code, moduleVersion: module.version, input: { hypothesisId: 1301, predicate: 'HAS_QUALITY', algorithmVersion: 'distribution-v1' } }
+    await expect(runtime(module).runModule(env(), request)).rejects.toThrow(/requires provider metadata/)
+    const result = await runtime(module).runModule(env(), { ...request, ai: { provider: 'test', configurationFingerprint: 'cfg-v1' } })
+    expect(result.findings.every((finding) => finding.authorityClass === 'AI_ASSISTED')).toBe(true)
   })
 })

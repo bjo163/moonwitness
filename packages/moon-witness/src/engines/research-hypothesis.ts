@@ -3,9 +3,11 @@ import WxAssertion from '../models/wx-assertion.js'
 import WxEvidence from '../models/wx-evidence.js'
 import WxProvenance from '../models/wx-provenance.js'
 import WxResearchHypothesis from '../models/wx-research-hypothesis.js'
+import WxResearchRun from '../models/wx-research-run.js'
 import WxSource from '../models/wx-source.js'
+import { stableSerialize } from '../services/hash.js'
 import type { Loose } from '../graph/service.js'
-import type { EngineEvidenceExplanation, EngineResultDraft, EngineScopeInput, EngineValidationResult, WitnessEngineModule } from '../types/engine.js'
+import type { EngineEvidenceExplanation, EngineResultDraft, EngineRunRecord, EngineScopeInput, EngineValidationResult, WitnessEngineModule } from '../types/engine.js'
 
 export interface ResearchHypothesisInput { hypothesisId: number; predicate?: string; assertionClass?: string; algorithmVersion: string; filters?: Record<string, string> }
 function value(row: Loose | null | undefined, camel: string, snake = camel): any { return row?.[camel] ?? row?.[snake] }
@@ -46,6 +48,27 @@ export function createResearchHypothesisModule(): WitnessEngineModule<ResearchHy
       findings.unshift({ key: `research:${input.hypothesisId}:summary`, statement: `${text(value(hypothesis, 'title'))}: supports=${supports}, contradicts=${contradicts}, ambiguous=${ambiguous}, denominator=${denominator}.`, authorityClass: 'HYPOTHESIS', status, evidence: evidenceCandidates, score: { algorithmVersion: input.algorithmVersion, components: [{ code: 'EVIDENCE_COVERAGE', algorithmVersion: input.algorithmVersion, valueBp: denominator ? Math.round(((supports + contradicts + ambiguous) / denominator) * 10000) : undefined, evidenceRefs: evidenceCandidates.map((item) => item.evidenceKey), state: denominator ? 'AVAILABLE' : 'INSUFFICIENT' }] }, unresolvedReasonCodes: denominator ? [] : ['RESEARCH_EVIDENCE_INSUFFICIENT'] })
       return { summary: `Research hypothesis ${text(value(hypothesis, 'stableKey', 'stable_key'))} used transparent evidence counts; conclusions remain non-canonical.`, findings, diagnostics: [`supports:${supports}`, `contradicts:${contradicts}`, `ambiguous:${ambiguous}`, `denominator:${denominator}`] }
     },
-    async explain(_ctx, output) { const finding = output.findings[0]; if (!finding) throw new Error('Research output has no findings'); return { findingKey: finding.key, evidence: finding.evidence, provenanceRefs: finding.provenanceRefs, narrative: 'Research results are derived or hypothesis-class findings; they never promote conclusions to Revelation authority.' } satisfies EngineEvidenceExplanation }
+    async explain(_ctx, output) { const finding = output.findings[0]; if (!finding) throw new Error('Research output has no findings'); return { findingKey: finding.key, evidence: finding.evidence, provenanceRefs: finding.provenanceRefs, narrative: 'Research results are derived or hypothesis-class findings; they never promote conclusions to Revelation authority.' } satisfies EngineEvidenceExplanation },
+    async afterComplete(ctx, input, run: EngineRunRecord, output, outputChecksum) {
+      await WxResearchRun.spawn(WxResearchRun, ctx as Ctx, {
+        runKey: `research:${run.runKey}`, hypothesisId: input.hypothesisId, engineRunId: Number(run.id), corpusRevisions: stableSerialize(run.sourceRevisions), selectionCriteria: stableSerialize(input.filters ?? {}), methodParameters: stableSerialize({ predicate: input.predicate, assertionClass: input.assertionClass }), algorithmVersion: input.algorithmVersion, deterministic: true, evidenceIdentity: stableSerialize(output.findings.flatMap((finding) => finding.evidence.map((item) => item.evidenceKey)).sort()), conflictCount: output.conflicts.length, unresolvedCount: output.unresolved.length, outputChecksum, createdAt: new Date().toISOString(), active: true
+      })
+    }
+  }
+}
+
+/** AI may synthesize candidate research prose only; it cannot create canonical graph facts. */
+export function createAiResearchSynthesisModule(): WitnessEngineModule<ResearchHypothesisInput> {
+  const deterministic = createResearchHypothesisModule()
+  return {
+    ...deterministic,
+    code: 'research.hypothesis.ai', version: '1.0.0', deterministic: false, aiAssisted: true,
+    async execute(ctx, input, scope) {
+      const draft = await deterministic.execute(ctx, input, scope)
+      return { ...draft, summary: `${draft.summary} AI synthesis remains a candidate research artifact.`, findings: draft.findings.map((finding) => ({ ...finding, authorityClass: 'AI_ASSISTED', status: 'PROVISIONAL' })) }
+    },
+    async afterComplete(ctx, input, run, output, checksum) {
+      await deterministic.afterComplete?.(ctx, input, run, output, checksum)
+    }
   }
 }

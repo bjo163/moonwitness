@@ -213,6 +213,7 @@ export class WitnessEngineRuntime {
       })
       const outputChecksum = checksumEngineResult(result)
       await this.store.complete(ctx, run.id, result, outputChecksum)
+      if (this.store.persistent) await module.afterComplete?.(ctx, request.input, run, result, outputChecksum)
       return result
     } catch (error) {
       const failure = sanitizeFailure(error)

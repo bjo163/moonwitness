@@ -1,4 +1,4 @@
-import { Vertex, fields } from '@moon/orm'
+import { Vertex, fields, type Ctx } from '@moon/orm'
 
 /** Immutable research-specific lineage linked to the shared Witness Engine run. */
 export default class WxResearchRun extends Vertex {
@@ -19,4 +19,8 @@ export default class WxResearchRun extends Vertex {
   outputChecksum = fields.Char({ required: true, size: 64, index: true })
   createdAt = fields.DateTime({ required: true, index: true })
   active = fields.Boolean({ default: true, index: true })
+
+  static async beforeSave(_model: typeof Vertex, _env: Ctx, _values: Record<string, unknown>, id?: number): Promise<void> {
+    if (id) throw new Error(`Research run ${id} is immutable`)
+  }
 }

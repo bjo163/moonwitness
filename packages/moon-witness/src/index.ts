@@ -191,6 +191,7 @@ export {
 } from './engines/divine-expression.js'
 export {
   createResearchHypothesisModule,
+  createAiResearchSynthesisModule,
   validateResearchHypothesisInput,
   type ResearchHypothesisInput
 } from './engines/research-hypothesis.js'
