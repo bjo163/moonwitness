@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { EventEmitter } from 'node:events'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import {
@@ -9,6 +9,7 @@ import {
   PayloadTooLargeError,
   InvalidJsonError
 } from '../src/utils/http.js'
+import { corsMiddleware } from '../src/middleware/cors.js'
 
 function createMockReq(dataChunks: (string | Buffer)[], headers: Record<string, string> = {}): IncomingMessage {
   const emitter = new EventEmitter() as any
@@ -32,9 +33,12 @@ function createMockRes(): { res: ServerResponse; getHeaders: () => Record<string
 
   const res = {
     headersSent: false,
-    writeHead: (code: number, hdrs: any) => {
+    setHeader: (name: string, value: string) => {
+      headers[name] = value
+    },
+    writeHead: (code: number, hdrs?: any) => {
       statusCode = code
-      Object.assign(headers, hdrs)
+      if (hdrs) Object.assign(headers, hdrs)
     },
     end: (data: string) => {
       if (data) body += data
@@ -76,13 +80,14 @@ describe('HTTP Security & Request Boundaries (#16)', () => {
   })
 
   describe('CORS Resolution & Security Headers', () => {
-    it('applies standard security headers (X-Content-Type-Options, X-Frame-Options)', () => {
+    it('applies standard security headers (X-Content-Type-Options, X-Frame-Options, Referrer-Policy)', () => {
       const { res, getHeaders, getStatus } = createMockRes()
       sendJson(res, 200, { ok: true })
 
       expect(getStatus()).toBe(200)
       expect(getHeaders()['X-Content-Type-Options']).toBe('nosniff')
-      expect(getHeaders()['X-Frame-Options']).toBe('DENY')
+      expect(getHeaders()['X-Frame-Options']).toBe('SAMEORIGIN')
+      expect(getHeaders()['Referrer-Policy']).toBe('strict-origin-when-cross-origin')
     })
 
     it('whitelists allowed origins and omits disallowed origins', () => {
@@ -97,7 +102,7 @@ describe('HTTP Security & Request Boundaries (#16)', () => {
       expect(disallowed).toBeNull()
     })
 
-    it('handles CORS OPTIONS preflight with 204 No Content', () => {
+    it('handles CORS OPTIONS preflight with 204 No Content and credentials for specific origin', () => {
       const { res, getHeaders, getStatus } = createMockRes()
       const req = {
         method: 'OPTIONS',
@@ -115,6 +120,76 @@ describe('HTTP Security & Request Boundaries (#16)', () => {
       expect(getStatus()).toBe(204)
       expect(getHeaders()['Access-Control-Allow-Origin']).toBe('https://app.moonwitness.org')
       expect(getHeaders()['Access-Control-Allow-Credentials']).toBe('true')
+      expect(getHeaders()['Vary']).toBe('Origin')
+    })
+
+    it('does not set Access-Control-Allow-Credentials when wildcard origin * is used', () => {
+      const { res, getHeaders, getStatus } = createMockRes()
+      const req = {
+        method: 'OPTIONS',
+        headers: {
+          origin: 'https://any-domain.com',
+        }
+      } as any
+
+      const handled = handleCorsPreflight(req, res, {
+        allowedOrigins: ['*']
+      })
+
+      expect(handled).toBe(true)
+      expect(getStatus()).toBe(204)
+      expect(getHeaders()['Access-Control-Allow-Origin']).toBe('*')
+      expect(getHeaders()['Access-Control-Allow-Credentials']).toBeUndefined()
+    })
+
+    it('includes HSTS header when NODE_ENV is production', () => {
+      const originalEnv = process.env.NODE_ENV
+      process.env.NODE_ENV = 'production'
+      try {
+        const { res, getHeaders } = createMockRes()
+        sendJson(res, 200, { ok: true })
+        expect(getHeaders()['Strict-Transport-Security']).toBe('max-age=31536000; includeSubDomains')
+      } finally {
+        process.env.NODE_ENV = originalEnv
+      }
+    })
+  })
+
+  describe('CORS Middleware Integration', () => {
+    it('sets CORS and security headers and calls next() on standard requests', async () => {
+      const { res, getHeaders } = createMockRes()
+      const req: any = {
+        method: 'GET',
+        headers: { origin: 'https://app.moonwitness.org' }
+      }
+      const next = vi.fn().mockResolvedValue(undefined)
+
+      const mw = corsMiddleware({ allowedOrigins: ['https://app.moonwitness.org'] })
+      await mw(req, res, next)
+
+      expect(getHeaders()['Access-Control-Allow-Origin']).toBe('https://app.moonwitness.org')
+      expect(getHeaders()['Access-Control-Allow-Credentials']).toBe('true')
+      expect(getHeaders()['X-Content-Type-Options']).toBe('nosniff')
+      expect(next).toHaveBeenCalledTimes(1)
+    })
+
+    it('handles OPTIONS preflight in corsMiddleware directly with 204 and ends response', async () => {
+      const { res, getHeaders, getStatus } = createMockRes()
+      const req: any = {
+        method: 'OPTIONS',
+        headers: {
+          origin: 'https://app.moonwitness.org',
+          'access-control-request-headers': 'Authorization'
+        }
+      }
+      const next = vi.fn()
+
+      const mw = corsMiddleware({ allowedOrigins: ['https://app.moonwitness.org'] })
+      await mw(req, res, next)
+
+      expect(getStatus()).toBe(204)
+      expect(getHeaders()['Access-Control-Allow-Origin']).toBe('https://app.moonwitness.org')
+      expect(next).not.toHaveBeenCalled()
     })
   })
 })

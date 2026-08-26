@@ -19,7 +19,7 @@ import { handleRest } from './handlers/rest.js'
 import { handleRpc } from './handlers/rpc.js'
 import { handleSSE, getActiveClientCount } from './handlers/sse.js'
 import { renderDashboard, renderSwaggerUI } from './views/dashboard.js'
-import { sendJson } from './utils/http.js'
+import { sendJson, handleCorsPreflight, type CorsConfig } from './utils/http.js'
 
 export interface MoonConfig {
   database: DbConfig
@@ -27,6 +27,7 @@ export interface MoonConfig {
   port?: number
   host?: string
   addons?: typeof Vertex[]
+  cors?: CorsConfig
   onBoot?: () => Promise<void>
   email?: {
     service?: string
@@ -161,20 +162,13 @@ export class NativeServer {
     } as any
     
     if (req.method === 'OPTIONS') {
-      const origin = (req.headers.origin as string) || '*'
-      const reqHeaders = (req.headers['access-control-request-headers'] as string) || 'Content-Type, Authorization, X-Requested-With, Accept, Origin, Cache-Control, Last-Event-ID'
-      res.writeHead(204, {
-        'Access-Control-Allow-Origin': origin,
-        'Access-Control-Allow-Credentials': 'true',
-        'Access-Control-Allow-Methods': 'OPTIONS, POST, GET, PUT, DELETE, PATCH',
-        'Access-Control-Allow-Headers': reqHeaders,
-        'Access-Control-Max-Age': '86400'
-      })
-      return res.end()
+      if (handleCorsPreflight(req, res, this.config.cors)) {
+        return
+      }
     }
     
     if (req.method === 'GET' && (req.url === '/favicon.ico' || req.url === '/favicon.png')) {
-      res.writeHead(200, { 'Content-Type': 'image/x-icon', 'Access-Control-Allow-Origin': '*' })
+      res.writeHead(200, { 'Content-Type': 'image/x-icon' })
       return res.end()
     }
 
@@ -212,7 +206,7 @@ export class NativeServer {
     }
 
     if (req.method === 'GET' && req.url === '/openapi.json') {
-      return sendJson(res, 200, generateOpenApi(), req)
+      return sendJson(res, 200, generateOpenApi(), req, this.config.cors)
     }
 
     if (req.method === 'GET' && req.url === '/docs') {
@@ -282,7 +276,7 @@ export class NativeServer {
       return handleRest(req, res, restMatch, this.config.jwtSecret)
     }
 
-    return sendJson(res, 404, { error: 'Not Found' }, req)
+    return sendJson(res, 404, { error: 'Not Found' }, req, this.config.cors)
   }
 
   public async start() {

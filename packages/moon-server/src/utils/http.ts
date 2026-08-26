@@ -120,13 +120,21 @@ export function sendJson(
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY'
+    'X-Frame-Options': 'SAMEORIGIN',
+    'Referrer-Policy': 'strict-origin-when-cross-origin'
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
   }
 
   if (allowedOrigin) {
     headers['Access-Control-Allow-Origin'] = allowedOrigin
     if (allowedOrigin !== '*') {
-      headers['Access-Control-Allow-Credentials'] = 'true'
+      headers['Vary'] = 'Origin'
+      if (corsConfig?.allowCredentials !== false) {
+        headers['Access-Control-Allow-Credentials'] = 'true'
+      }
     }
     headers['Access-Control-Allow-Methods'] = 'OPTIONS, POST, GET, PUT, DELETE, PATCH'
     headers['Access-Control-Allow-Headers'] =
@@ -152,13 +160,21 @@ export function handleCorsPreflight(
 
     const headers: Record<string, string> = {
       'X-Content-Type-Options': 'nosniff',
-      'X-Frame-Options': 'DENY'
+      'X-Frame-Options': 'SAMEORIGIN',
+      'Referrer-Policy': 'strict-origin-when-cross-origin'
+    }
+
+    if (process.env.NODE_ENV === 'production') {
+      headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
     }
 
     if (allowedOrigin) {
       headers['Access-Control-Allow-Origin'] = allowedOrigin
       if (allowedOrigin !== '*') {
-        headers['Access-Control-Allow-Credentials'] = 'true'
+        headers['Vary'] = 'Origin'
+        if (corsConfig?.allowCredentials !== false) {
+          headers['Access-Control-Allow-Credentials'] = 'true'
+        }
       }
       headers['Access-Control-Allow-Methods'] = 'OPTIONS, POST, GET, PUT, DELETE, PATCH'
       headers['Access-Control-Allow-Headers'] =
