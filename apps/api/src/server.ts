@@ -168,11 +168,11 @@ server.proxy('GET', '/api/external/binance/ticker', 'https://api.binance.com/api
 
 // ── System Status (Internal) ──────────────────────────────────────────────────
 server.proxy('GET', '/api/external/db/status', 'http://localhost:4000/db/status', {
-  cache: '30m',
+  cache: '30s',
 })
 
 server.proxy('GET', '/api/external/meta/models', 'http://localhost:4000/meta/models', {
-  cache: '30m',
+  cache: '30s',
 })
 
 // ── Trends (Google) ───────────────────────────────────────────────────────────
