@@ -1,5 +1,6 @@
 import type { Ctx } from '@moon/orm'
 import WxEntity from '../models/wx-entity.js'
+import WxEntityAlias from '../models/wx-entity-alias.js'
 import WxProvenance from '../models/wx-provenance.js'
 import WxRelation from '../models/wx-relation.js'
 import WxRelationType from '../models/wx-relation-type.js'
@@ -21,6 +22,12 @@ function idOf(row: Loose): number {
 
 function value(row: Loose, camel: string, snake: string = camel): any {
   return row[camel] ?? row[snake]
+}
+
+function foreignId(row: Loose, camel: string, snake: string): number {
+  const raw = value(row, camel, snake)
+  const scalar = Array.isArray(raw) ? raw[0] : raw
+  return Number(scalar ?? 0)
 }
 
 function canonicalKeyOf(row: Loose): string {
@@ -55,6 +62,23 @@ export interface TraversalNode {
   viaRelationId?: number
 }
 
+export interface NeighborResult {
+  entity: Loose
+  relation: Loose
+  direction: 'OUTBOUND' | 'INBOUND'
+}
+
+export interface GraphPath {
+  nodes: Loose[]
+  relations: Loose[]
+}
+
+export interface RelationProvenanceBundle {
+  relation: Loose
+  provenance: Loose | null
+  source: Loose | null
+}
+
 export class WitnessGraphService {
   static async relationType(env: Ctx, code: string): Promise<Loose | null> {
     const rows = await WxRelationType.fetch(WxRelationType, env, [
@@ -70,6 +94,14 @@ export class WitnessGraphService {
       ['active', '=', true]
     ])
     return rows[0] ?? null
+  }
+
+  static async aliases(env: Ctx, entityId: number): Promise<Loose[]> {
+    if (!await this.entity(env, entityId)) return []
+    return WxEntityAlias.fetch(WxEntityAlias, env, [
+      ['entityId', '=', entityId],
+      ['active', '=', true]
+    ])
   }
 
   static async provenance(env: Ctx, provenanceId: number): Promise<Loose | null> {
@@ -103,13 +135,27 @@ export class WitnessGraphService {
       if (!provenance) throw new Error(`Provenance ${input.provenanceId} does not exist, is superseded, or is inaccessible`)
     }
 
-    const provenanceSourceId = provenance ? Number(value(provenance, 'sourceId', 'source_id') ?? 0) : 0
+    const provenanceSourceId = provenance ? foreignId(provenance, 'sourceId', 'source_id') : 0
     if (input.sourceId != null && provenanceSourceId && Number(input.sourceId) !== provenanceSourceId) {
       throw new Error(`sourceId ${input.sourceId} does not match provenance source ${provenanceSourceId}`)
     }
     const resolvedSourceId = Number(input.sourceId ?? provenanceSourceId) || 0
     const source = resolvedSourceId ? await this.source(env, resolvedSourceId) : null
     if (resolvedSourceId && !source) throw new Error(`Source ${resolvedSourceId} does not exist or is inaccessible`)
+
+    const provenanceRevision = provenance ? String(value(provenance, 'sourceRevision', 'source_revision') ?? '').trim() : ''
+    const sourceRevision = source ? String(value(source, 'revision') ?? '').trim() : ''
+    if (input.sourceRevision && provenanceRevision && input.sourceRevision !== provenanceRevision) {
+      throw new Error(`sourceRevision ${input.sourceRevision} does not match provenance revision ${provenanceRevision}`)
+    }
+    if (provenanceRevision && sourceRevision && provenanceRevision !== sourceRevision) {
+      throw new Error(`Provenance revision ${provenanceRevision} does not match source revision ${sourceRevision}`)
+    }
+
+    const canonicalSourceClass = source ? String(value(source, 'sourceClass', 'source_class') ?? 'UNKNOWN') : ''
+    if (input.sourceClass && canonicalSourceClass && input.sourceClass !== canonicalSourceClass) {
+      throw new Error(`sourceClass ${input.sourceClass} does not match source classification ${canonicalSourceClass}`)
+    }
 
     if (input.assertionEntityId != null) {
       const assertion = await this.entity(env, input.assertionEntityId)
@@ -135,8 +181,8 @@ export class WitnessGraphService {
     }
 
     const resolvedSourceRevision = input.sourceRevision
-      ?? (provenance ? value(provenance, 'sourceRevision', 'source_revision') : null)
-      ?? (source ? value(source, 'revision') : null)
+      ?? provenanceRevision
+      ?? sourceRevision
       ?? null
 
     const validation = validateRelationCandidate({
@@ -190,14 +236,14 @@ export class WitnessGraphService {
       assertionEntityId: input.assertionEntityId ?? undefined,
       provenanceId: provenance ? idOf(provenance) : undefined,
       sourceId: source ? idOf(source) : undefined,
-      sourceClass: input.sourceClass ?? (source ? value(source, 'sourceClass', 'source_class') : 'UNKNOWN'),
+      sourceClass: canonicalSourceClass || input.sourceClass || 'UNKNOWN',
       epistemicLane: input.epistemicLane ?? 'UNRESOLVED',
       authorityClass: input.authorityClass ?? 'NOT_APPLICABLE',
       operationalStatus: input.operationalStatus ?? 'PROVISIONAL',
       polarity: input.polarity ?? 'AFFIRMED',
       modality: input.modality ?? 'ASSERTED',
       confidenceBp: input.confidenceBp ?? 0,
-      sourceRevision: resolvedSourceRevision ?? undefined,
+      sourceRevision: resolvedSourceRevision || undefined,
       ontologyVersion,
       validFrom: input.validFrom ?? undefined,
       validTo: input.validTo ?? undefined,
@@ -206,47 +252,116 @@ export class WitnessGraphService {
     })
   }
 
-  private static async rawRelations(env: Ctx, entityId: number, relationTypeCode?: string): Promise<Loose[]> {
-    let relationTypeId: number | null = null
-    if (relationTypeCode) {
-      const type = await this.relationType(env, relationTypeCode)
-      if (!type) return []
-      relationTypeId = idOf(type)
-    }
-
-    const extra = relationTypeId ? [['relationTypeId', '=', relationTypeId]] : []
-    const outbound = await WxRelation.fetch(WxRelation, env, [
-      ['fromEntityId', '=', entityId],
-      ['active', '=', true],
-      ...extra
-    ] as any)
-    const inbound = await WxRelation.fetch(WxRelation, env, [
-      ['toEntityId', '=', entityId],
-      ['active', '=', true],
-      ...extra
-    ] as any)
-
-    return [...new Map([...outbound, ...inbound].map((row: Loose) => [idOf(row), row])).values()]
+  private static async relationTypeId(env: Ctx, relationTypeCode?: string): Promise<number | null | undefined> {
+    if (!relationTypeCode) return undefined
+    const type = await this.relationType(env, relationTypeCode)
+    return type ? idOf(type) : null
   }
 
-  static async relations(env: Ctx, entityId: number, relationTypeCode?: string): Promise<Loose[]> {
-    const rows = await this.rawRelations(env, entityId, relationTypeCode)
+  private static async filterVisibleRelations(env: Ctx, rows: Loose[]): Promise<Loose[]> {
     const visible: Loose[] = []
     for (const relation of rows) {
-      const fromId = Number(value(relation, 'fromEntityId', 'from_entity_id'))
-      const toId = Number(value(relation, 'toEntityId', 'to_entity_id'))
+      const fromId = foreignId(relation, 'fromEntityId', 'from_entity_id')
+      const toId = foreignId(relation, 'toEntityId', 'to_entity_id')
       const [fromEntity, toEntity] = await Promise.all([
         this.entity(env, fromId),
         this.entity(env, toId)
       ])
-      // Never return an edge when either endpoint is inaccessible; this avoids
-      // leaking hidden target IDs through counts or relation metadata.
       if (fromEntity && toEntity) visible.push(relation)
     }
     return visible
   }
 
-  static async traverse(env: Ctx, startEntityId: number, maxDepth = 1): Promise<TraversalNode[]> {
+  static async outboundRelations(env: Ctx, entityId: number, relationTypeCode?: string): Promise<Loose[]> {
+    if (!await this.entity(env, entityId)) return []
+    const relationTypeId = await this.relationTypeId(env, relationTypeCode)
+    if (relationTypeId === null) return []
+    const domain: any[] = [
+      ['fromEntityId', '=', entityId],
+      ['active', '=', true]
+    ]
+    if (relationTypeId !== undefined) domain.push(['relationTypeId', '=', relationTypeId])
+    const rows = await WxRelation.fetch(WxRelation, env, domain)
+    return this.filterVisibleRelations(env, rows)
+  }
+
+  static async inboundRelations(env: Ctx, entityId: number, relationTypeCode?: string): Promise<Loose[]> {
+    if (!await this.entity(env, entityId)) return []
+    const relationTypeId = await this.relationTypeId(env, relationTypeCode)
+    if (relationTypeId === null) return []
+    const domain: any[] = [
+      ['toEntityId', '=', entityId],
+      ['active', '=', true]
+    ]
+    if (relationTypeId !== undefined) domain.push(['relationTypeId', '=', relationTypeId])
+    const rows = await WxRelation.fetch(WxRelation, env, domain)
+    return this.filterVisibleRelations(env, rows)
+  }
+
+  static async relations(env: Ctx, entityId: number, relationTypeCode?: string): Promise<Loose[]> {
+    const [outbound, inbound] = await Promise.all([
+      this.outboundRelations(env, entityId, relationTypeCode),
+      this.inboundRelations(env, entityId, relationTypeCode)
+    ])
+    return [...new Map([...outbound, ...inbound].map((row: Loose) => [idOf(row), row])).values()]
+  }
+
+  static async neighbors(env: Ctx, entityId: number, relationTypeCode?: string): Promise<NeighborResult[]> {
+    if (!await this.entity(env, entityId)) return []
+    const [outbound, inbound] = await Promise.all([
+      this.outboundRelations(env, entityId, relationTypeCode),
+      this.inboundRelations(env, entityId, relationTypeCode)
+    ])
+    const results: NeighborResult[] = []
+    const seen = new Set<string>()
+
+    for (const relation of outbound) {
+      const neighborId = foreignId(relation, 'toEntityId', 'to_entity_id')
+      const entity = await this.entity(env, neighborId)
+      if (!entity) continue
+      const key = `${idOf(relation)}:OUTBOUND:${neighborId}`
+      if (seen.has(key)) continue
+      seen.add(key)
+      results.push({ entity, relation, direction: 'OUTBOUND' })
+    }
+
+    for (const relation of inbound) {
+      const neighborId = foreignId(relation, 'fromEntityId', 'from_entity_id')
+      const entity = await this.entity(env, neighborId)
+      if (!entity) continue
+      const key = `${idOf(relation)}:INBOUND:${neighborId}`
+      if (seen.has(key)) continue
+      seen.add(key)
+      results.push({ entity, relation, direction: 'INBOUND' })
+    }
+
+    return results
+  }
+
+  static async relationProvenance(env: Ctx, relationId: number): Promise<RelationProvenanceBundle | null> {
+    const rows = await WxRelation.fetch(WxRelation, env, [
+      ['id', '=', relationId],
+      ['active', '=', true]
+    ])
+    const relation = rows[0]
+    if (!relation) return null
+    const visible = await this.filterVisibleRelations(env, [relation])
+    if (!visible.length) return null
+
+    const provenanceId = foreignId(relation, 'provenanceId', 'provenance_id')
+    const sourceId = foreignId(relation, 'sourceId', 'source_id')
+    const provenance = provenanceId ? await this.provenance(env, provenanceId) : null
+    const resolvedSourceId = sourceId || (provenance ? foreignId(provenance, 'sourceId', 'source_id') : 0)
+    const source = resolvedSourceId ? await this.source(env, resolvedSourceId) : null
+    return { relation, provenance, source }
+  }
+
+  static async traverse(
+    env: Ctx,
+    startEntityId: number,
+    maxDepth = 1,
+    relationTypeCode?: string
+  ): Promise<TraversalNode[]> {
     if (!Number.isInteger(maxDepth) || maxDepth < 0 || maxDepth > MAX_TRAVERSAL_DEPTH) {
       throw new Error(`maxDepth must be an integer between 0 and ${MAX_TRAVERSAL_DEPTH}`)
     }
@@ -261,18 +376,13 @@ export class WitnessGraphService {
     for (let depth = 1; depth <= maxDepth && frontier.length; depth++) {
       const next: number[] = []
       for (const currentId of frontier) {
-        const relations = await this.relations(env, currentId)
-        for (const relation of relations) {
-          const fromId = Number(value(relation, 'fromEntityId', 'from_entity_id'))
-          const toId = Number(value(relation, 'toEntityId', 'to_entity_id'))
-          const neighborId = fromId === currentId ? toId : fromId
+        const neighbors = await this.neighbors(env, currentId, relationTypeCode)
+        for (const neighbor of neighbors) {
+          const neighborId = idOf(neighbor.entity)
           if (!neighborId || visited.has(neighborId)) continue
 
-          const entity = await this.entity(env, neighborId)
-          if (!entity) continue
-
           visited.add(neighborId)
-          results.push({ entity, depth, viaRelationId: idOf(relation) })
+          results.push({ entity: neighbor.entity, depth, viaRelationId: idOf(neighbor.relation) })
           next.push(neighborId)
           if (results.length >= MAX_TRAVERSAL_NODES) return results
         }
@@ -281,5 +391,58 @@ export class WitnessGraphService {
     }
 
     return results
+  }
+
+  static async pathBetween(
+    env: Ctx,
+    startEntityId: number,
+    targetEntityId: number,
+    maxDepth = MAX_TRAVERSAL_DEPTH,
+    relationTypeCode?: string
+  ): Promise<GraphPath | null> {
+    if (!Number.isInteger(maxDepth) || maxDepth < 0 || maxDepth > MAX_TRAVERSAL_DEPTH) {
+      throw new Error(`maxDepth must be an integer between 0 and ${MAX_TRAVERSAL_DEPTH}`)
+    }
+
+    const [start, target] = await Promise.all([
+      this.entity(env, startEntityId),
+      this.entity(env, targetEntityId)
+    ])
+    if (!start || !target) return null
+    if (startEntityId === targetEntityId) return { nodes: [start], relations: [] }
+    if (maxDepth === 0) return null
+
+    const visited = new Set<number>([startEntityId])
+    const queue: Array<{ entityId: number; nodes: Loose[]; relations: Loose[]; depth: number }> = [
+      { entityId: startEntityId, nodes: [start], relations: [], depth: 0 }
+    ]
+    let discovered = 1
+
+    while (queue.length) {
+      const current = queue.shift()!
+      if (current.depth >= maxDepth) continue
+
+      const neighbors = await this.neighbors(env, current.entityId, relationTypeCode)
+      for (const neighbor of neighbors) {
+        const neighborId = idOf(neighbor.entity)
+        if (!neighborId || visited.has(neighborId)) continue
+        visited.add(neighborId)
+        discovered += 1
+        if (discovered > MAX_TRAVERSAL_NODES) return null
+
+        const nodes = [...current.nodes, neighbor.entity]
+        const relations = [...current.relations, neighbor.relation]
+        if (neighborId === targetEntityId) return { nodes, relations }
+
+        queue.push({
+          entityId: neighborId,
+          nodes,
+          relations,
+          depth: current.depth + 1
+        })
+      }
+    }
+
+    return null
   }
 }
