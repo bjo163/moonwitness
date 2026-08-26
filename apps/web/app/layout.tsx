@@ -10,7 +10,7 @@ import {
   GlobalTickerWidget,
 } from "@core/widgets"
 import { TacticalToastContainer } from "@core/ui"
-import { CommandPalette } from "@workspace/ui"
+import { CommandPalette, CosmicAudioToggle } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
 
 const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" })
@@ -96,6 +96,9 @@ export default function RootLayout({
         </LanguageProvider>
         <TacticalToastContainer />
         <CommandPalette />
+        <div className="fixed bottom-14 right-4 z-40 hidden sm:block">
+          <CosmicAudioToggle />
+        </div>
       </body>
     </html>
   )

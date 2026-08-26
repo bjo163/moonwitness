@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 import { Orbitron, JetBrains_Mono, Geist } from "next/font/google"
 import "@workspace/ui/globals.css"
-import { Sidebar, Topbar, CommandPalette } from "@workspace/ui"
+import { Sidebar, Topbar, CommandPalette, CosmicAudioToggle } from "@workspace/ui"
 
 const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" })
 const jetBrainsMono = JetBrains_Mono({
@@ -40,6 +40,9 @@ export default function RootLayout({
           </div>
         </div>
         <CommandPalette />
+        <div className="fixed bottom-4 right-4 z-40 hidden sm:block">
+          <CosmicAudioToggle />
+        </div>
       </body>
     </html>
   )
