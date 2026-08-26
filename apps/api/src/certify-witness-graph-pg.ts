@@ -126,6 +126,11 @@ async function main() {
   })
 
   const policy = await WxSourcePolicy.spawn(WxSourcePolicy, env, {
+    code: 'CERT_QURAN_CORE',
+    name: 'Certification Qur’an Core Policy',
+    authorityClass: 'REVELATION',
+    allowedEngineUse: 'NORMATIVE_CORE',
+    revelationFamily: 'QURAN',
     stableKey: 'cert:policy:quran-core:v1',
     policyCode: 'CERT_QURAN_CORE',
     policyVersion: '1',

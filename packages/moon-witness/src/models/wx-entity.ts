@@ -21,6 +21,9 @@ export default class WxEntity extends Vertex {
 
   canonicalKey = fields.Char({ required: true, unique: true, index: true, size: 180 })
   kind = fields.Selection({ selection: ENTITY_KIND_SELECTION, required: true, index: true })
+  // Moon ORM uses `name` for generic relation labels; retain `label` as the
+  // graph-facing display field while keeping relation hydration portable.
+  name = fields.Char({ size: 240, index: true })
   label = fields.Char({ size: 240, index: true })
   sourceClass = fields.Selection({ selection: SOURCE_CLASS_SELECTION, default: 'UNKNOWN', required: true, index: true })
   epistemicLane = fields.Selection({ selection: EPISTEMIC_LANE_SELECTION, default: 'UNRESOLVED', required: true, index: true })

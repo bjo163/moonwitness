@@ -418,6 +418,7 @@ function needsAlter(
 
 function normalizeType(t: string): string {
   return t
+    .replace(/timestamp without time zone/, 'timestamp')
     .replace(/character varying/, 'varchar')
     .replace(/double precision/, 'float8')
     .replace(/\(\d+\)$/, '')

@@ -55,7 +55,7 @@ export function relationSeedValues(seed: RelationTypeSeed) {
   return {
     code: seed.code,
     name: seed.name,
-    symmetric: seed.symmetric ?? false,
+    isSymmetric: seed.symmetric ?? false,
     transitive: seed.transitive ?? false,
     selfLoopAllowed: seed.selfLoopAllowed ?? false,
     provenanceRequired: seed.provenanceRequired ?? true,
