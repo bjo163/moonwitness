@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { NativeServer } from '@moon/server';
 import baseAddons, { seedBaseData, loadBaseData } from '@moon/base';
 import performanceAddons, { performanceMiddleware } from '@moon/performance';
-import witnessAddons, { registerWitnessRoutes } from '@moon/witness';
+import witnessAddons, { registerWitnessRoutes, seedWitnessGraphCore } from '@moon/witness';
 import khidraAddons from '@moon/khidra';
 import mizanAddons, { registerMizanRoutes } from '@moon/mizan';
 import shootgunAddons from '@moon/shootgun';
@@ -146,7 +146,7 @@ server.proxy('GET', '/api/external/noaa/kp-index', 'https://services.swpc.noaa.g
   cache: '10m',
 })
 
-// ── Space ─────────────────────────────────────────────────────────────────────
+// ── Space ──────────────────────────────────────────────────────────────────────
 server.proxy('GET', '/api/external/iss', 'https://api.wheretheiss.at/v1/satellites/25544', {
   cache: '10s',
 })
@@ -168,11 +168,11 @@ server.proxy('GET', '/api/external/binance/ticker', 'https://api.binance.com/api
 
 // ── System Status (Internal) ──────────────────────────────────────────────────
 server.proxy('GET', '/api/external/db/status', 'http://localhost:4000/db/status', {
-  cache: '30s',
+  cache: '30m',
 })
 
 server.proxy('GET', '/api/external/meta/models', 'http://localhost:4000/meta/models', {
-  cache: '30s',
+  cache: '30m',
 })
 
 // ── Trends (Google) ───────────────────────────────────────────────────────────
@@ -187,6 +187,8 @@ server.start().then(async () => {
   try {
     await seedBaseData();
     await loadBaseData();
+    const graphSeed = await seedWitnessGraphCore();
+    console.log(`[App] Witness graph core seeded: ${graphSeed.relationTypeCount} relation types (${graphSeed.ontologyVersion}), ${graphSeed.religionContextCount} religion contexts`);
     console.log('[App] Programmatic boot executed and data seeded!');
     
     // Start system metrics collection (every 60 seconds)
