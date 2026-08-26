@@ -47,3 +47,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# pwa generated
+apps/web/public/sw.js
+apps/web/public/swe-worker-*.js
+
