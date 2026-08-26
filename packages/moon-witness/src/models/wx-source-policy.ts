@@ -1,4 +1,5 @@
 import { Vertex, fields } from '@moon/orm'
+import { SOURCE_POLICY_ROLE_SELECTION } from '../graph/contracts.js'
 
 /**
  * wx.source.policy — Source Classification & Authority Gate
@@ -63,4 +64,19 @@ export default class WxSourcePolicy extends Vertex {
 
   /** Policy version string — enables policy evolution tracking */
   version = fields.Char({ required: true, size: 20, default: '1.0' })
+
+  // Versioned graph-policy lineage (#50); retained alongside ingestion fields.
+  stableKey = fields.Char({ required: true, unique: true, index: true, size: 220 })
+  policyCode = fields.Char({ required: true, size: 120, index: true })
+  policyVersion = fields.Char({ required: true, size: 80, index: true })
+  sourceId = fields.Many2one({ comodel: 'wx.source', required: true, index: true })
+  sourceRevision = fields.Char({ size: 160, index: true })
+  role = fields.Selection({ selection: SOURCE_POLICY_ROLE_SELECTION, required: true, index: true })
+  originalRevelationEquated = fields.Boolean({ default: false })
+  corroborationRole = fields.Char({ size: 120, index: true })
+  allowedEngineUses = fields.Text()
+  policyNote = fields.Text()
+  validFrom = fields.DateTime({ index: true })
+  validTo = fields.DateTime({ index: true })
+  active = fields.Boolean({ default: true, index: true })
 }
