@@ -27,6 +27,7 @@ const databaseUrl = process.env.TEST_DATABASE_URL
 if (!databaseUrl) {
   throw new Error('TEST_DATABASE_URL is required for Witness PostgreSQL certification')
 }
+const resolvedDatabaseUrl: string = databaseUrl
 
 function scalarId(row: Record<string, any>, camel: string, snake: string): number {
   const raw = row[camel] ?? row[snake]
@@ -73,7 +74,7 @@ async function main() {
   for (const model of [...baseAddons.models, ...witnessAddons.models]) {
     registerModel(model)
   }
-  setupOrm(databaseUrl)
+  setupOrm(resolvedDatabaseUrl)
 
   const firstForge = await forge()
   assert.equal(firstForge.pending.length, 0, 'fresh PostgreSQL forge must have no pending unsafe changes')
