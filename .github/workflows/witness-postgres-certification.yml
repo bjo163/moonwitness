@@ -17,6 +17,8 @@ on:
       - 'apps/api/**'
       - '.github/workflows/witness-postgres-certification.yml'
   workflow_dispatch:
+  schedule:
+    - cron: '17 2 * * 1'
 
 permissions:
   contents: read
@@ -28,6 +30,9 @@ concurrency:
 jobs:
   certify-postgres:
     name: PostgreSQL 16 Graph Certification
+    # PostgreSQL certification is release/periodic validation, not a fast PR gate.
+    # The skipped PR job reports success without occupying the self-hosted runner.
+    if: github.event_name != 'pull_request'
     runs-on: self-hosted
     timeout-minutes: 20
     env:
