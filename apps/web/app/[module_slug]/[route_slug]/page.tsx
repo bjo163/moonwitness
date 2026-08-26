@@ -1,6 +1,6 @@
 import React from "react"
 import { notFound } from "next/navigation"
-import { getModule } from "@modules/index"
+import { getViewForRoute } from "@/views/route-map"
 
 export default async function ModuleRoutePage({
   params,
@@ -13,23 +13,12 @@ export default async function ModuleRoutePage({
     return null
   }
 
-  const moduleDef = getModule(module_slug)
+  const Component = getViewForRoute(module_slug, route_slug)
 
-  if (!moduleDef) {
+  if (!Component) {
     notFound()
   }
-
-  // Support deeply nested routes by joining rest of array if route_slug is an array
-  // Wait, route_slug is a string here, but if we used [...route_slug] it would be an array.
-  // Since we use [route_slug], it's just one level deep. This fits our architecture.
-
-  const routeDef = moduleDef.routes.find((r) => r.slug === route_slug)
-
-  if (!routeDef || !routeDef.component) {
-    notFound()
-  }
-
-  const Component = routeDef.component
 
   return <Component />
 }
+

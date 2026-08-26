@@ -1,9 +1,6 @@
 import React, { Suspense } from "react"
-import { notFound } from "next/navigation"
-import { buildNavigation, getModule } from "@modules/index"
-import type { NavLinkConfig } from "@workspace/types"
-import { CommandCenterSidebar, CommandCenterNavbar } from "@core/shell-command-center"
-import { Navbar } from "@core/shell/navbar"
+import { Navbar } from "@workspace/ui"
+import { NAVIGATION_MESH } from "@workspace/types"
 import { AutoBreadcrumb } from "@core/ui/breadcrumb"
 
 export default async function ModuleLayout({
@@ -20,36 +17,11 @@ export default async function ModuleLayout({
     return <>{children}</>
   }
 
-  const moduleDef = getModule(module_slug)
-
-  if (!moduleDef) {
-    notFound()
-  }
-
-  if (moduleDef.navPlacement === "ERP_SIDEBAR") {
-    const sidebarModules: NavLinkConfig[] = buildNavigation("ERP_SIDEBAR")
-    return (
-      <div className="bg-space flex min-h-screen text-white">
-        <Suspense fallback={null}>
-          <CommandCenterSidebar sidebarModules={sidebarModules} />
-        </Suspense>
-        <div className="flex flex-1 flex-col pl-64">
-          <Suspense fallback={null}>
-            <CommandCenterNavbar />
-          </Suspense>
-          <main className="flex-1 overflow-x-hidden p-6 lg:p-8">
-            {children}
-          </main>
-        </div>
-      </div>
-    )
-  }
-
-  // Standard OS Layout for OS_DOCK and HIDDEN
+  // Standard Public Portal Layout
   return (
     <>
       <Suspense fallback={null}>
-        <Navbar navLinks={buildNavigation("OS_DOCK")} />
+        <Navbar navLinks={NAVIGATION_MESH.portal} />
       </Suspense>
       <main className="flex min-h-screen flex-col pt-16">
         <Suspense fallback={<div className="h-6"></div>}>

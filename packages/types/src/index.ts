@@ -1,51 +1,12 @@
-// Core Monorepo Types for MoonWitness OS
+// ◈ MOONWITNESS OS — CENTRALIZED TYPES & INTERFACES
+// Single Source of Truth for Domain Types, DTOs & Constants
 
-import type { ElementType } from "react"
-
-export type NavLinkConfig = {
-  label: string
-  href: string
-  icon?: string
-  subLinks?: Omit<NavLinkConfig, "subLinks">[]
-}
-
-export interface PrayerData {
-  city: string
-  nextPrayer: string
-  nextPrayerTime: string
-  countdown: string
-  status: "ONLINE" | "SYNCING" | "OFFLINE"
-  schedule: {
-    Fajr: string
-    Dhuhr: string
-    Asr: string
-    Maghrib: string
-    Isha: string
-  }
-}
-
-export interface LunarDayItem {
-  hijriDay: number
-  gregorianDate: string
-  phaseName: string
-  illumination: number
-  isAyyamulBidh: boolean
-  moonrise: string
-  moonset: string
-  icon: string
-}
-
-export interface EclipseEvent {
-  dateStr: string
-  type: "LUNAR" | "SOLAR"
-  title: string
-  visibility: string
-  duration: string
-  prayerGuidance: string
-}
-
-export interface SubNavLink {
-  label: string
-  href: string
-  icon: string | ElementType
-}
+export * from "./navigation.types"
+export * from "./scripture.types"
+export * from "./hadith.types"
+export * from "./astronomy.types"
+export * from "./governance.types"
+export * from "./auth.types"
+export * from "./telemetry.types"
+export * from "./constants"
+export * from "./garden-brainstorm-parser"

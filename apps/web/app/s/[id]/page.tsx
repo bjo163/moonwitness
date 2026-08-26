@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { InspirationCommentsClient } from "@modules/knowledge/components/inspiration-comments-client"
+import { InspirationCommentsClient } from "@/views/knowledge/components/inspiration-comments-client"
 import { cleanHadithText } from "@core/utils/hadith-cleaner"
 import { ContextBlock } from "@core/ui"
 import { moonClientInstance } from "@core/store/moon-store"

@@ -10,6 +10,7 @@ import {
   GlobalTickerWidget,
 } from "@core/widgets"
 import { TacticalToastContainer } from "@core/ui"
+import { CommandPalette } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
 
 const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" })
@@ -94,6 +95,7 @@ export default function RootLayout({
           </ToastProvider>
         </LanguageProvider>
         <TacticalToastContainer />
+        <CommandPalette />
       </body>
     </html>
   )

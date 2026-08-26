@@ -1,6 +1,6 @@
 import React from "react"
-import { notFound, redirect } from "next/navigation"
-import { getModule } from "@modules/index"
+import { notFound } from "next/navigation"
+import { getViewForRoute } from "@/views/route-map"
 
 export default async function ModuleIndexPage({
   params,
@@ -13,20 +13,12 @@ export default async function ModuleIndexPage({
     return null
   }
 
-  const moduleDef = getModule(module_slug)
+  const Component = getViewForRoute(module_slug)
 
-  if (!moduleDef) {
+  if (!Component) {
     notFound()
   }
-
-  const defaultRoute = moduleDef.defaultRoute
-  const routeDef = moduleDef.routes.find((r) => r.slug === defaultRoute)
-
-  if (!routeDef || !routeDef.component) {
-    notFound()
-  }
-
-  const Component = routeDef.component
 
   return <Component />
 }
+

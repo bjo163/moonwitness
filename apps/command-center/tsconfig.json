@@ -1,0 +1,28 @@
+{
+  "extends": "@workspace/typescript-config/nextjs.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./*"],
+      "@core/*": ["./@core/*"],
+      "@workspace/types/*": ["../../packages/types/src/*"],
+      "@workspace/ui/*": ["../../packages/ui/src/*"],
+      "@workspace/ui": ["../../packages/ui/src/index.ts"],
+      "@moon/time": ["../../packages/moon-time/src/index.ts"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    "next.config.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.mts",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
+}

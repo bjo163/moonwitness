@@ -270,21 +270,21 @@ export function Navbar({ navLinks }: { navLinks: NavLinkConfig[] }) {
                         <UserIcon className="h-4 w-4" /> PLAYER IDENTITY
                       </Link>
 
-                      <Link
-                        href="/command-center/dashboard"
+                      <a
+                        href="http://localhost:3001/dashboard"
                         onClick={() => setProfileDropdownOpen(false)}
                         className="flex items-center gap-3 rounded-lg px-3 py-2 text-[10px] font-bold text-fuchsia-400 transition-colors hover:bg-fuchsia-500/10 hover:text-fuchsia-300"
                       >
-                        <ShieldCheck className="h-4 w-4" /> COMMAND CENTER
-                      </Link>
+                        <ShieldCheck className="h-4 w-4" /> COMMAND CENTER ↗
+                      </a>
 
-                      <Link
-                        href="/command-center/terminal"
+                      <a
+                        href="http://localhost:3001/terminal"
                         onClick={() => setProfileDropdownOpen(false)}
                         className="flex items-center gap-3 rounded-lg px-3 py-2 text-[10px] font-bold text-emerald-400 transition-colors hover:bg-emerald-500/10 hover:text-emerald-300"
                       >
-                        <Terminal className="h-4 w-4" /> DEV TERMINAL
-                      </Link>
+                        <Terminal className="h-4 w-4" /> DEV TERMINAL ↗
+                      </a>
 
                       <button
                         disabled

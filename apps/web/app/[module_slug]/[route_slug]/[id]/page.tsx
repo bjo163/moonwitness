@@ -1,6 +1,6 @@
 import React from "react"
 import { notFound } from "next/navigation"
-import { UniversalReaderView } from "@modules/knowledge/views/universal-reader-view"
+import { UniversalReaderView } from "@/views/knowledge/views/universal-reader-view"
 
 export default async function ModuleRouteIdPage({
   params,

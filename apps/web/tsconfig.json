@@ -9,7 +9,6 @@
       "@shell/*": ["./@core/shell/*"],
       "@tokens/*": ["./@core/tokens/*"],
       "@ui/*": ["./@core/ui/*"],
-      "@modules/*": ["./@modules/*"],
       "@views/*": ["./views/*"],
       "@configs/*": ["./configs/*"],
       "@navigation/*": ["./navigation/*"],

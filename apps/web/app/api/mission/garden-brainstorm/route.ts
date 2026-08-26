@@ -1,11 +1,11 @@
 import { z } from "zod"
 import { GoogleGenAI } from "@google/genai"
-import { GARDEN_BRAINSTORM_PROMPT } from "@modules/mission/data/garden-brainstorm.prompt"
+import { GARDEN_BRAINSTORM_PROMPT } from "@/views/mission/data/garden-brainstorm.prompt"
 import {
   formatTasksAsMarkdown,
   normalizeTasks,
   parseTasksFromMarkdown,
-} from "@modules/mission/data/garden-brainstorm-parser"
+} from "@workspace/types"
 
 const requestSchema = z
   .object({
