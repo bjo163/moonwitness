@@ -1,4 +1,4 @@
-﻿import http from 'node:http'
+import http from 'node:http'
 import { setupOrm, forge, getLastPending, getDb, getModel, createCtx, SUPERUSER_ID, Vertex, registerModel, registry, type DbConfig } from '@moon/orm'
 import { globalRoutes, HttpHandler } from './router.js'
 import { createProxyHandler } from './proxy.js'
@@ -39,6 +39,21 @@ export class NativeServer {
 
   constructor(config: MoonConfig) {
     this.config = config
+    const isProduction = process.env.NODE_ENV === 'production'
+    if (isProduction) {
+      if (!config.jwtSecret || config.jwtSecret === 'secret' || config.jwtSecret.trim().length < 16) {
+        throw new Error(
+          '[moon.security] Fatal: In production (NODE_ENV=production), JWT_SECRET must be explicitly set to a strong secret (at least 16 characters).'
+        )
+      }
+    } else {
+      if (!config.jwtSecret || config.jwtSecret === 'secret') {
+        logger.warn(
+          'moon.security',
+          'Insecure default JWT_SECRET is in use. Set JWT_SECRET in environment for production.'
+        )
+      }
+    }
     setupOrm(config.database)
     if (config.addons) {
       for (const addon of config.addons) {

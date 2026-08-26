@@ -18,11 +18,14 @@ export interface AuthConfig {
  * Get mailer transport
  */
 function getMailer(config: AuthConfig) {
+  if (!config.emailUser || !config.emailPass) {
+    return null
+  }
   return nodemailer.createTransport({
     service: config.emailService || 'gmail',
     auth: {
-      user: config.emailUser || 'rocksoultech@gmail.com',
-      pass: config.emailPass || 'qpva imgx ndcu nbnt'
+      user: config.emailUser,
+      pass: config.emailPass
     }
   })
 }
@@ -200,30 +203,34 @@ export async function handleForgotPassword(
       await VxUser.morph(VxUser as any, txEnv, user.id, { otpCode, otpExpires })
     })
 
-    // Send email
+    // Send email if mailer is configured
     try {
       const mailer = getMailer(config)
-      await mailer.sendMail({
-        from: config.emailFrom || '"Moonwitness Security" <rocksoultech@gmail.com>',
-        to: email,
-        subject: 'Your Password Reset Code',
-        html: `
-          <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
-            <h2 style="color: #0ea5e9;">MoonWitness OS - Password Reset</h2>
-            <p>Hello ${user.name},</p>
-            <p>You requested a password reset. Please use the following 6-digit code to proceed:</p>
-            <div style="font-size: 32px; font-weight: bold; letter-spacing: 4px; color: #0f172a; margin: 20px 0; text-align: center;">
-              ${otpCode}
+      if (mailer) {
+        const fromAddress = config.emailFrom || (config.emailUser ? `"MoonWitness Security" <${config.emailUser}>` : '"MoonWitness Security"')
+        await mailer.sendMail({
+          from: fromAddress,
+          to: email,
+          subject: 'Your Password Reset Code',
+          html: `
+            <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
+              <h2 style="color: #0ea5e9;">MoonWitness OS - Password Reset</h2>
+              <p>Hello ${user.name},</p>
+              <p>You requested a password reset. Please use the following 6-digit code to proceed:</p>
+              <div style="font-size: 32px; font-weight: bold; letter-spacing: 4px; color: #0f172a; margin: 20px 0; text-align: center;">
+                ${otpCode}
+              </div>
+              <p>This code will expire in 15 minutes.</p>
+              <p style="color: #64748b; font-size: 12px; margin-top: 30px;">If you did not request this, please ignore this email.</p>
             </div>
-            <p>This code will expire in 15 minutes.</p>
-            <p style="color: #64748b; font-size: 12px; margin-top: 30px;">If you did not request this, please ignore this email.</p>
-          </div>
-        `
-      })
-      logger.info('moon.auth', `OTP sent to ${email}`)
+          `
+        })
+        logger.info('moon.auth', `OTP sent to ${email}`)
+      } else {
+        logger.warn('moon.auth', `Mail transport is not configured. OTP generated for ${email} but email sending was skipped.`)
+      }
     } catch (emailErr) {
       logger.error('moon.auth', 'Failed to send OTP email:', emailErr)
-      // Continue anyway - OTP is saved in DB
     }
 
     return sendJson(res, 200, { message: 'Password reset code has been sent to your email' }, req)
