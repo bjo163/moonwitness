@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { persist, createJSONStorage } from "zustand/middleware"
-import { MoonClient } from "@moon/client"
+import { MoonClient, setStoredSession, clearStoredSession } from "@moon/client"
 
 // Instantiate globally to prevent reconnection loops during React re-renders
 export const moonClientInstance = new MoonClient({
@@ -72,6 +72,9 @@ export const useMoonStore = create<MoonState>()(
             if (!response.ok) {
               throw new Error(result.error || "Login failed")
             }
+            if (result.user) {
+              setStoredSession(result.user, result.token || `mw_jwt_${Date.now()}`)
+            }
             set({ user: result.user })
           } catch (err) {
             console.error("MoonStore Login Failed:", err)
@@ -132,6 +135,7 @@ export const useMoonStore = create<MoonState>()(
           try {
             await fetch("/api/auth/session/logout", { method: "POST" })
           } finally {
+            clearStoredSession()
             moonClientInstance.setToken("")
             set({ user: null })
           }

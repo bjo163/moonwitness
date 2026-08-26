@@ -20,16 +20,8 @@ import {
   DialogDescription,
   ContextBlock,
 } from "@workspace/ui"
-
-type HadithEntry = {
-  id: string
-  book: string
-  number: number
-  arabicText: string
-  translation: string
-  grade: string
-  topic: string
-}
+import { type HadithEntry, STORAGE_KEYS } from "@workspace/types"
+import { fetchHadiths, saveHadith } from "@moon/client"
 
 const INITIAL_HADITHS: HadithEntry[] = [
   {
@@ -72,22 +64,31 @@ export function HadithsView() {
   const [notification, setNotification] = useState("")
 
   useEffect(() => {
-    const saved = localStorage.getItem("mw_erp_hadiths_data")
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved)
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setTimeout(() => setHadiths(parsed), 0)
+    fetchHadiths()
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setHadiths(data)
+          localStorage.setItem(STORAGE_KEYS.HADITHS, JSON.stringify(data))
         }
-      } catch (e) {
-        console.error("Failed to load HADITHS data state:", e)
-      }
-    }
+      })
+      .catch(() => {
+        const saved = localStorage.getItem(STORAGE_KEYS.HADITHS)
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved)
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setHadiths(parsed)
+            }
+          } catch (e) {
+            console.error("Failed to load HADITHS data state:", e)
+          }
+        }
+      })
   }, [])
 
   const saveHadithsState = (newHadiths: HadithEntry[]) => {
     setHadiths(newHadiths)
-    localStorage.setItem("mw_erp_hadiths_data", JSON.stringify(newHadiths))
+    localStorage.setItem(STORAGE_KEYS.HADITHS, JSON.stringify(newHadiths))
   }
 
   const showNotify = (msg: string) => {

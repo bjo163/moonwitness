@@ -20,18 +20,8 @@ import {
   DialogDescription,
   ContextBlock,
 } from "@workspace/ui"
-
-type QuranAyahItem = {
-  id: string
-  surahNumber: number
-  surahName: string
-  ayahNumber: number
-  arabicText: string
-  transliteration: string
-  translation: string
-  tafsirNote: string
-  updatedAt: string
-}
+import { type QuranAyahItem, STORAGE_KEYS } from "@workspace/types"
+import { fetchScriptures, saveScripture } from "@moon/client"
 
 const SAMPLE_QURAN_VERSES: QuranAyahItem[] = [
   {
@@ -95,28 +85,50 @@ export function ScripturesView() {
   const [editTranslation, setEditTranslation] = useState("")
   const [editTafsir, setEditTafsir] = useState("")
 
+  // Add New Verse State
+  const [isAddOpen, setIsAddOpen] = useState(false)
+  const [newSurahNo, setNewSurahNo] = useState(1)
+  const [newSurahName, setNewSurahName] = useState("Al-Fatihah")
+  const [newAyahNo, setNewAyahNo] = useState(1)
+  const [newArabic, setNewArabic] = useState("")
+  const [newTranslit, setNewTranslit] = useState("")
+  const [newTranslation, setNewTranslation] = useState("")
+  const [newTafsir, setNewTafsir] = useState("")
+
+  // Filter Category
+  const [selectedSurah, setSelectedSurah] = useState("all")
+
   // Sync Status
   const [syncingApi, setSyncingApi] = useState(false)
   const [notification, setNotification] = useState("")
 
   // Load state from localStorage on mount
   useEffect(() => {
-    const saved = localStorage.getItem("mw_erp_quran_verses_data")
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved)
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setTimeout(() => setVerses(parsed), 0)
+    fetchScriptures()
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setVerses(data)
+          localStorage.setItem(STORAGE_KEYS.VERSES, JSON.stringify(data))
         }
-      } catch (e) {
-        console.error("Failed to load Quran verses state:", e)
-      }
-    }
+      })
+      .catch(() => {
+        const saved = localStorage.getItem(STORAGE_KEYS.VERSES)
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved)
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setVerses(parsed)
+            }
+          } catch (e) {
+            console.error("Failed to load Quran verses state:", e)
+          }
+        }
+      })
   }, [])
 
   const saveVersesState = (newVerses: QuranAyahItem[]) => {
     setVerses(newVerses)
-    localStorage.setItem("mw_erp_quran_verses_data", JSON.stringify(newVerses))
+    localStorage.setItem(STORAGE_KEYS.VERSES, JSON.stringify(newVerses))
   }
 
   const showNotify = (msg: string) => {
