@@ -21,6 +21,7 @@ export * from './graph/contracts.js'
 export * from './graph/identity.js'
 export * from './graph/relation-ontology.js'
 export { WitnessGraphService } from './graph/service.js'
+export { seedWitnessGraphCore } from './seed/graph-core.js'
 
 // Astronomy (pure compute — no DB)
 export { getMoonData, type MoonData } from './astronomy/moon-phase.js'
