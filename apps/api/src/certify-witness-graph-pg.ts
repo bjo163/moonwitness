@@ -153,6 +153,9 @@ async function main() {
     "wx_legacy_mapping",
     "wx_engine_run",
     "wx_engine_result",
+    "wx_research_hypothesis",
+    "wx_research_run",
+    "wx_score_result",
   ]
   for (const table of requiredTables) {
     assert.equal(await tableExists(table), true, `forge must create ${table}`)
@@ -235,6 +238,9 @@ async function main() {
     await hasForeignKey("wx_engine_result", "run_id", "wx_engine_run"),
     true
   )
+  assert.equal(await hasForeignKey("wx_research_run", "hypothesis_id", "wx_research_hypothesis"), true)
+  assert.equal(await hasForeignKey("wx_research_run", "engine_run_id", "wx_engine_run"), true)
+  assert.equal(await hasForeignKey("wx_score_result", "target_entity_id", "wx_entity"), true)
 
   const seedOne = await seedWitnessGraphCore()
   const relationTypesAfterFirstSeed = await count("wx_relation_type")

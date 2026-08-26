@@ -2,6 +2,20 @@
 
 Status: **Canonical high-level roadmap**.
 
+Current release line: **Production Core v0.2.0**. Foundation hardening (ORM transactions,
+fail-closed authorization, JWT/session policy, REST bounds, CORS, and server lifecycle) is
+complete. Remaining production work is deterministic migration/install verification, the
+Witness graph/engine expansion, and PostgreSQL certification.
+
+## Current Production Core Priorities
+
+- deterministic migrations, install/seed/verify commands, and operator runbooks
+- Witness graph contracts, corpus ingestion, engine modules, and stable APIs
+- PostgreSQL and browser/API certification before release promotion to `main`
+
+Completed Foundation issues are retained in Git history and GitHub; they are not active roadmap
+work items.
+
 This roadmap intentionally prioritizes correctness and simplicity before new feature expansion.
 
 ## Phase 0 — Architecture Freeze

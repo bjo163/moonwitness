@@ -33,6 +33,7 @@ import { handleRpc } from './handlers/rpc.js'
 import { handleSSE, getActiveClientCount, closeAllSSEConnections } from './handlers/sse.js'
 import { renderDashboard, renderSwaggerUI } from './views/dashboard.js'
 import { sendJson, handleCorsPreflight, type CorsConfig } from './utils/http.js'
+import { authenticateRequest, AuthError, issueJwt } from './utils/auth.js'
 
 export interface MoonConfig {
   database: DbConfig
@@ -105,6 +106,24 @@ export class NativeServer {
 
   public use(mw: (req: http.IncomingMessage, res: http.ServerResponse, next: () => Promise<void>) => Promise<void> | void) {
     this.middlewares.push(mw)
+  }
+
+  private async requireAdmin(req: http.IncomingMessage, res: http.ServerResponse) {
+    try {
+      const session = await authenticateRequest(req, this.config.jwtSecret, { allowAnonymous: false })
+      if (session.uid !== SUPERUSER_ID) {
+        await sendJson(res, 403, { error: 'Administrator access required', code: 'AUTH_FORBIDDEN' }, req, this.config.cors)
+        return null
+      }
+      return session
+    } catch (error) {
+      if (error instanceof AuthError) {
+        await sendJson(res, error.statusCode, { error: error.message, code: error.code }, req, this.config.cors)
+        return null
+      }
+      await sendJson(res, 500, { error: 'Internal server error', code: 'INTERNAL_ERROR' }, req, this.config.cors)
+      return null
+    }
   }
 
   private registerRoute(method: string, path: string, handler: HttpHandler) {
@@ -215,8 +234,16 @@ export class NativeServer {
     }
 
     if (req.method === 'GET' && (req.url === '/' || req.url === '')) {
-      const html = renderDashboard(this.config.jwtSecret)
-      res.writeHead(200, { 'Content-Type': 'text/html' })
+      const session = await this.requireAdmin(req, res)
+      if (!session) return
+      const sessionToken = issueJwt({ sub: session.uid, email: session.email, tokenVersion: session.tokenVersion }, this.config.jwtSecret)
+      const cookieFlags = process.env.NODE_ENV === 'production' ? '; Secure' : ''
+      const html = renderDashboard()
+      res.writeHead(200, {
+        'Content-Type': 'text/html',
+        'Cache-Control': 'no-store',
+        'Set-Cookie': `moon_session=${encodeURIComponent(sessionToken)}; HttpOnly; SameSite=Strict; Path=/${cookieFlags}`
+      })
       return res.end(html)
     }
 
@@ -283,6 +310,7 @@ export class NativeServer {
     }
 
     if (req.method === 'GET' && req.url && req.url.startsWith('/live')) {
+      if (!(await this.requireAdmin(req, res))) return
       return handleSSE(req, res, { cors: this.config.cors })
     }
 

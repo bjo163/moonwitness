@@ -188,15 +188,16 @@ export async function loadBaseData() {
           }
         }
 
-        // Add user to admin group
-        const exists = await conn('vx_user_vx_role_rel')
-          .where({ vx_user_id: userId, vx_role_id: adminGroupId })
-          .first()
-        if (!exists) {
-          await conn('vx_user_vx_role_rel').insert({
-            vx_user_id: userId,
-            vx_role_id: adminGroupId
-          })
+        if (u.isAdmin) {
+          const exists = await conn('vx_user_vx_role_rel')
+            .where({ vx_user_id: userId, vx_role_id: adminGroupId })
+            .first()
+          if (!exists) {
+            await conn('vx_user_vx_role_rel').insert({
+              vx_user_id: userId,
+              vx_role_id: adminGroupId
+            })
+          }
         }
       }
     }

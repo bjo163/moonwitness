@@ -4,10 +4,15 @@ import { MoonClient } from "@moon/client"
 
 // Instantiate globally to prevent reconnection loops during React re-renders
 export const moonClientInstance = new MoonClient({
-  baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:4000",
+  baseUrl:
+    typeof window === "undefined"
+      ? process.env.MOON_API_URL ||
+        process.env.NEXT_PUBLIC_API_URL ||
+        "http://127.0.0.1:4000"
+      : "/api/backend",
   onUnauthorized: () => {
     // This will be called by MoonClient if API returns 401
-    useMoonStore.getState().logout()
+    void useMoonStore.getState().logout()
     if (typeof window !== "undefined") {
       window.location.href = "/auth/login"
     }
@@ -29,7 +34,7 @@ interface MoonState {
     code: string,
     newPassword: string
   ) => Promise<any>
-  logout: () => void
+  logout: () => Promise<void>
   completeOnboarding: () => void
   request: (method: string, path: string, data?: any) => Promise<any>
   subscribe: (topic: string, callback: (data: any) => void) => () => void
@@ -58,12 +63,16 @@ export const useMoonStore = create<MoonState>()(
 
         login: async (email, pass) => {
           try {
-            const res = await moonClientInstance.login(email, pass)
-            // Store user details in state
-            set({ user: { ...res.user, token: res.token } })
-            if (typeof document !== "undefined") {
-              document.cookie = `moon_token=${res.token}; path=/; max-age=86400`
+            const response = await fetch("/api/auth/session/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password: pass }),
+            })
+            const result = await response.json()
+            if (!response.ok) {
+              throw new Error(result.error || "Login failed")
             }
+            set({ user: result.user })
           } catch (err) {
             console.error("MoonStore Login Failed:", err)
             throw err
@@ -72,9 +81,16 @@ export const useMoonStore = create<MoonState>()(
 
         register: async (email, pass, name) => {
           try {
-            const res = await moonClientInstance.register(email, pass, name)
-            // Store user details in state
-            set({ user: { ...res.user, token: res.token } })
+            const response = await fetch("/api/auth/session/register", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password: pass, name }),
+            })
+            const result = await response.json()
+            if (!response.ok) {
+              throw new Error(result.error || "Registration failed")
+            }
+            set({ user: result.user })
           } catch (err) {
             console.error("MoonStore Register Failed:", err)
             throw err
@@ -112,23 +128,16 @@ export const useMoonStore = create<MoonState>()(
           }
         },
 
-        logout: () => {
-          moonClientInstance.setToken("")
-          set({ user: null })
-          if (typeof document !== "undefined") {
-            document.cookie = "moon_token=; path=/; max-age=0"
-          }
-          if (typeof window !== "undefined") {
-            localStorage.removeItem("moon_token")
+        logout: async () => {
+          try {
+            await fetch("/api/auth/session/logout", { method: "POST" })
+          } finally {
+            moonClientInstance.setToken("")
+            set({ user: null })
           }
         },
 
         request: async (method, path, data) => {
-          // Hydrate token to client if persisted
-          const currentToken = get().user?.token
-          if (currentToken && !moonClientInstance.config.token) {
-            moonClientInstance.setToken(currentToken)
-          }
           return await moonClientInstance.request(method, path, data)
         },
 
@@ -149,22 +158,13 @@ export const useMoonStore = create<MoonState>()(
             }
       ),
       partialize: (state) => ({
-        user: state.user,
         hasCompletedOnboarding: state.hasCompletedOnboarding,
-      }), // persist user and onboarding
+      }),
     }
   )
 )
 
-// Automatically hydrate client token on boot if it exists in local storage
+// Remove browser-readable credentials persisted by pre-HttpOnly session builds.
 if (typeof window !== "undefined") {
-  const storedData = localStorage.getItem("moon_store")
-  if (storedData) {
-    try {
-      const parsed = JSON.parse(storedData)
-      if (parsed.state?.user?.token) {
-        moonClientInstance.setToken(parsed.state.user.token)
-      }
-    } catch (e) {}
-  }
+  localStorage.removeItem("moon_store")
 }

@@ -10,6 +10,10 @@ export {
   issueJwt,
   validateUserSession,
   revokeUserSessions,
+  authenticateRequest,
+  resolveJwtPolicy,
+  reloadCanonicalJwtPolicy,
+  ALLOWED_JWT_ALGORITHMS,
   hashOtpToken,
   generateSecureOtp,
   createOtpChallenge,
@@ -21,6 +25,7 @@ export {
   type AllowedJwtAlgorithm,
   type JwtClaims,
   type VerifyTokenOptions,
+  type AuthenticateRequestOptions,
   type OtpChallenge,
 } from './utils/auth.js'
 

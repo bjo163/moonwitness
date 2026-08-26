@@ -33,7 +33,7 @@ import witnessAddons from '@moon/witness'
 const server = new NativeServer({
   port: Number(process.env.API_PORT || 4000),
   database: process.env.DATABASE_URL || 'postgres://localhost/moonwitness',
-  jwtSecret: process.env.JWT_SECRET || 'secret',
+  jwtSecret: process.env.JWT_SECRET ?? '',
   addons: [...baseAddons.models, ...witnessAddons.models]
 })
 

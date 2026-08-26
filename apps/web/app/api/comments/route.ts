@@ -1,8 +1,33 @@
 import { NextRequest, NextResponse } from "next/server"
-import { moonClientInstance } from "@core/store/moon-store"
+import { MoonClient } from "@moon/client"
+
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:4000"
+const commentRateWindowMs = 60_000
+const commentRateLimit = 10
+const commentRate = new Map<number, { count: number; startedAt: number }>()
+
+function getBearerToken(req: NextRequest): string | null {
+  const authorization = req.headers.get("authorization")
+  if (authorization?.startsWith("Bearer ")) return authorization.slice(7).trim() || null
+  return req.cookies.get("moon_session")?.value || null
+}
+
+async function getSession(req: NextRequest) {
+  const token = getBearerToken(req)
+  if (!token) return null
+  const client = new MoonClient({ baseUrl: apiBaseUrl, token })
+  try {
+    const response = await client.request("GET", "/auth/me")
+    return { client, user: response.user }
+  } catch {
+    return null
+  }
+}
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
+  const session = await getSession(req)
+  const client = session?.client || new MoonClient({ baseUrl: apiBaseUrl })
 
   const fetchAll = searchParams.get("all") === "true"
   const periodCode = searchParams.get("period_code") || "zuhur"
@@ -22,7 +47,7 @@ export async function GET(req: NextRequest) {
 
     let comments = []
     try {
-      const json = await moonClientInstance.request(
+      const json = await client.request(
         "GET",
         `/api/fx.msg?resModel=${resModel}`
       )
@@ -80,39 +105,57 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await getSession(req)
+    if (!session) return NextResponse.json({ error: "Authentication required", code: "AUTH_REQUIRED" }, { status: 401 })
     const body = await req.json()
     const {
       period_code,
       date_str,
       item_type,
       item_id,
-      user_email,
-      user_name,
-      user_role,
       user_avatar,
       comment_text,
     } = body
 
-    if (!comment_text || !user_name || !user_email) {
+    if (typeof comment_text !== "string" || !comment_text.trim()) {
       return NextResponse.json(
-        { error: "Email, Nama, dan Teks komentar wajib diisi." },
+        { error: "Teks komentar wajib diisi." },
         { status: 400 }
       )
     }
 
-    const cleanEmail = user_email.trim().toLowerCase()
-    const role =
-      user_role ||
-      (cleanEmail.includes("admin") || cleanEmail.includes("rocksoul")
-        ? "admin"
-        : "public")
+    if (comment_text.trim().length > 2000) {
+      return NextResponse.json({ error: "Teks komentar terlalu panjang." }, { status: 400 })
+    }
+
+    const itemId = Number(item_id)
+    if (!Number.isSafeInteger(itemId) || itemId <= 0) {
+      return NextResponse.json({ error: "item_id tidak valid." }, { status: 400 })
+    }
+
+    const userId = Number(session.user.id)
+    const now = Date.now()
+    const currentRate = commentRate.get(userId)
+    const rate = currentRate && now - currentRate.startedAt < commentRateWindowMs
+      ? currentRate
+      : { count: 0, startedAt: now }
+    if (rate.count >= commentRateLimit) {
+      return NextResponse.json({ error: "Terlalu banyak komentar. Coba lagi nanti.", code: "RATE_LIMITED" }, { status: 429 })
+    }
+    rate.count += 1
+    commentRate.set(userId, rate)
+
+    const cleanEmail = String(session.user.email || "").trim().toLowerCase()
+    const userName = String(session.user.name || cleanEmail.split("@")[0] || "User").trim()
+    const role = userId === 1 ? "admin" : "user"
 
     const newCommentMeta = {
       period_code: period_code || "zuhur",
       date_str: date_str || new Date().toISOString().split("T")[0],
       item_type: item_type || "AYAH",
+      user_id: userId,
       user_email: cleanEmail,
-      user_name: user_name.trim(),
+      user_name: userName,
       user_role: role,
       user_avatar: user_avatar || (role === "admin" ? "👑" : "🌙"),
       comment_text: comment_text.trim(),
@@ -121,12 +164,12 @@ export async function POST(req: NextRequest) {
 
     const fxMsgPayload = {
       resModel: "wx.scripture.verse",
-      resId: item_id || 1,
+      resId: itemId,
       messageType: "comment",
       body: JSON.stringify(newCommentMeta),
     }
 
-    const json = await moonClientInstance.request(
+    const json = await session.client.request(
       "POST",
       "/api/fx.msg",
       fxMsgPayload
@@ -158,7 +201,20 @@ export async function DELETE(req: NextRequest) {
   }
 
   try {
-    const json = await moonClientInstance.request("DELETE", `/api/fx.msg/${id}`)
+    const session = await getSession(req)
+    if (!session) return NextResponse.json({ error: "Authentication required", code: "AUTH_REQUIRED" }, { status: 401 })
+
+    const commentResponse = await session.client.request("GET", `/api/fx.msg/${id}`)
+    const comment = commentResponse.data?.data || commentResponse.data
+    let metadata: any = {}
+    try { metadata = JSON.parse(comment?.body || "{}") } catch { metadata = {} }
+    const isOwner = Number(metadata.user_id) === Number(session.user.id)
+      || String(metadata.user_email || "").toLowerCase() === String(session.user.email || "").toLowerCase()
+    if (Number(session.user.id) !== 1 && !isOwner) {
+      return NextResponse.json({ error: "You may only delete your own comments", code: "AUTH_FORBIDDEN" }, { status: 403 })
+    }
+
+    const json = await session.client.request("DELETE", `/api/fx.msg/${id}`)
     if (json.error) throw new Error(json.error)
 
     return NextResponse.json({

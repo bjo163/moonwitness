@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getDailyPrayerTimes } from "@moon/witness/dist/astronomy/prayer-times.js"
+export const dynamic = "force-dynamic"
 import { cleanHadithText } from "@core/utils/hadith-cleaner"
 import { moonClientInstance } from "@core/store/moon-store"
 

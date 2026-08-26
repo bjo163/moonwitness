@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { NativeServer } from "@moon/server"
+import { NativeServer, authenticateRequest, AuthError, sendJson } from "@moon/server"
 import baseAddons, { seedBaseData, loadBaseData } from "@moon/base"
 import performanceAddons, { performanceMiddleware } from "@moon/performance"
 import witnessAddons, {
@@ -15,10 +15,29 @@ import { publish } from "@moon/server"
 import { trackSystem } from "@moon/performance"
 import { getModel, createCtx, SUPERUSER_ID } from "@moon/orm"
 
+async function requireAdmin(req: any, res: any, jwtSecret: string): Promise<boolean> {
+  try {
+    const session = await authenticateRequest(req, jwtSecret, { allowAnonymous: false })
+    if (session.uid !== SUPERUSER_ID) {
+      await sendJson(res, 403, { error: "Administrator access required", code: "AUTH_FORBIDDEN" }, req)
+      return false
+    }
+    return true
+  } catch (error) {
+    if (error instanceof AuthError) {
+      await sendJson(res, error.statusCode, { error: error.message, code: error.code }, req)
+      return false
+    }
+    await sendJson(res, 500, { error: "Internal server error", code: "INTERNAL_ERROR" }, req)
+    return false
+  }
+}
+
 globalRoutes.push({
   method: "POST",
   path: "/test-publish",
-  handler: (req, res) => {
+  handler: async (req, res) => {
+    if (!(await requireAdmin(req, res, process.env.JWT_SECRET || ""))) return
     publish("chat_global", { text: "Realtime works perfectly!" })
     res.writeHead(200, { "Content-Type": "application/json" })
     res.end(JSON.stringify({ ok: true }))
@@ -30,6 +49,7 @@ globalRoutes.push({
   method: "GET",
   path: "/api/external/performance/stats",
   handler: async (req, res) => {
+    if (!(await requireAdmin(req, res, process.env.JWT_SECRET || ""))) return
     try {
       const env = createCtx(SUPERUSER_ID, {}, getModel as any)
 
@@ -111,7 +131,7 @@ globalRoutes.push({
 
 const server = new NativeServer({
   database: process.env.DATABASE_URL || "postgres://localhost/moonwitness",
-  jwtSecret: process.env.JWT_SECRET || "secret",
+  jwtSecret: process.env.JWT_SECRET || "",
   port: Number(process.env.API_PORT || process.env.PORT) || 4000,
   email: {
     service: process.env.SMTP_SERVICE || process.env.EMAIL_SERVICE,
@@ -275,6 +295,10 @@ server.proxy(
 )
 
 server.start().then(async () => {
+  if (process.env.MOON_BOOTSTRAP_ON_START !== "true") {
+    console.log("[App] Automatic seed disabled; use pnpm db:install or pnpm db:seed.")
+    return
+  }
   try {
     await seedBaseData()
     await loadBaseData()

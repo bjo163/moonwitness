@@ -8,6 +8,7 @@ interface ColumnInfo {
   udt_name: string
   is_nullable: string
   character_maximum_length: number | null
+  vector_dimension: number | null
 }
 
 interface PendingChange {
@@ -272,16 +273,17 @@ async function hasForeignKey(table: string, colName: string, refTable: string): 
 
 async function getColumns(table: string): Promise<ColumnInfo[]> {
   const db = getDb()
-  const rows = await db
-    .select(
-      db.raw(`
-        column_name, data_type, udt_name,
-        is_nullable, character_maximum_length
-      `)
-    )
-    .from('information_schema.columns')
-    .where({ table_schema: 'public', table_name: table })
-  return rows as unknown as ColumnInfo[]
+  const rows = await db.raw(`
+    SELECT c.column_name, c.data_type, c.udt_name, c.is_nullable,
+      c.character_maximum_length,
+      CASE WHEN c.udt_name = 'vector' THEN NULLIF(a.atttypmod - 4, -4) END AS vector_dimension
+    FROM information_schema.columns c
+    LEFT JOIN pg_catalog.pg_attribute a
+      ON a.attrelid = to_regclass('public.' || ?) AND a.attname = c.column_name AND a.attnum > 0
+    WHERE c.table_schema = 'public' AND c.table_name = ?
+  `, [table, table])
+  const resultRows = (rows as any).rows || rows
+  return resultRows as unknown as ColumnInfo[]
 }
 
 async function createTable(
@@ -337,11 +339,18 @@ async function alterColumn(
   migrations: MigrationCommand[] = []
 ) {
   const db = getDb()
+  validateAutomaticAlteration(colType, table, colName)
   const sql = `ALTER TABLE ${sqlIdentifier(table)} ALTER COLUMN ${colName} TYPE ${colType}`
   if (dryRun) {
     migrations.push({ up: sql, down: `-- Manual intervention required to down-migrate column type alteration for ${table}.${colName}` })
   } else {
     await db.raw(sql)
+  }
+}
+
+export function validateAutomaticAlteration(colType: string, table = 'table', colName = 'column'): void {
+  if (colType.startsWith('vector(')) {
+    throw new Error(`Vector dimension change for ${table}.${colName} requires an explicit reviewed migration; automatic alteration is refused.`)
   }
 }
 
@@ -415,8 +424,10 @@ function needsAlter(
   const expected = mapFieldType(field)
   let actual = existing.data_type
   if (actual === 'USER-DEFINED' && existing.udt_name === 'vector') {
-    actual = 'vector' // We only get 'vector' without dims from information_schema easily, so let's just ignore dim changes for now
+    actual = 'vector'
     if (expected.startsWith('vector')) {
+      const expectedDimension = Number(expected.match(/vector\((\d+)\)/)?.[1] ?? 0)
+      if (existing.vector_dimension && expectedDimension && existing.vector_dimension !== expectedDimension) return true
       return false
     }
   }

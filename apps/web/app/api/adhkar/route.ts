@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { moonClientInstance } from "@core/store/moon-store"
+export const dynamic = "force-dynamic"
 
 export async function GET(request: NextRequest) {
   try {
@@ -26,9 +27,9 @@ export async function GET(request: NextRequest) {
       text_latin: d.textTransliteration,
       translation_id: d.translationId,
       translation_en: d.translationEn,
-      category: "Dzikir", // Placeholder mapped
-      timing: "Pagi/Petang", // Placeholder mapped
-      source: d.sourceId,
+      category: d.category || d.type || "Lainnya",
+      timing: d.timing || "Semua",
+      source: d.source || d.sourceId,
     }))
 
     if (category && category !== "Semua") {

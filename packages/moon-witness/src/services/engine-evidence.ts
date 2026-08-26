@@ -111,7 +111,12 @@ function findingStatus(
 }
 
 function validateScore(candidate: EngineFindingCandidate): void {
-  for (const component of candidate.score?.components ?? []) {
+  const score = candidate.score
+  if (!score) return
+  if (score.compositeBp !== undefined && (!Number.isInteger(score.compositeBp) || score.compositeBp < 0 || score.compositeBp > 10000)) throw new Error('Score compositeBp requires a 0..10000 basis-point value')
+  if (score.coverageBp !== undefined && (!Number.isInteger(score.coverageBp) || score.coverageBp < 0 || score.coverageBp > 10000)) throw new Error('Score coverageBp requires a 0..10000 basis-point value')
+  if ((score.profileCode && !score.profileVersion) || (!score.profileCode && score.profileVersion)) throw new Error('Score profile code and version must be supplied together')
+  for (const component of score.components) {
     if (!component.code.trim() || !component.algorithmVersion.trim()) throw new Error('Score components require code and algorithmVersion')
     if (component.state === 'AVAILABLE' && (!Number.isInteger(component.valueBp) || component.valueBp! < 0 || component.valueBp! > 10000)) {
       throw new Error(`Available score component ${component.code} requires a 0..10000 basis-point value`)
@@ -119,6 +124,21 @@ function validateScore(candidate: EngineFindingCandidate): void {
     if (component.state !== 'AVAILABLE' && component.valueBp !== undefined) {
       throw new Error(`Unavailable score component ${component.code} must not contain a numeric value`)
     }
+  }
+}
+
+function defaultFindingScore(candidate: EngineFindingCandidate, evidence: EngineEvidenceReference[]): EngineFindingCandidate['score'] | undefined {
+  if (!evidence.length || candidate.score) return candidate.score
+  const primary = evidence.every((item) => item.authorityClass === 'PRIMARY_SOURCE')
+  return {
+    algorithmVersion: '1.0.0', profileCode: 'relation_confidence', profileVersion: '1.0.0',
+    compositeBp: primary ? 10000 : 7500, coverageBp: 10000,
+    formulaFingerprint: sha256String(stableSerialize({ profile: 'relation_confidence@1.0.0', evidence: evidence.map((item) => item.evidenceKey).sort() })),
+    components: [
+      { code: 'SOURCE_AUTHORITY', algorithmVersion: '1.0.0', valueBp: primary ? 10000 : 7500, evidenceRefs: evidence.map((item) => item.evidenceKey), state: 'AVAILABLE' },
+      { code: 'PROVENANCE_QUALITY', algorithmVersion: '1.0.0', valueBp: 10000, evidenceRefs: evidence.map((item) => item.evidenceKey), state: 'AVAILABLE' },
+      { code: 'EVIDENCE_DIRECTNESS', algorithmVersion: '1.0.0', valueBp: evidence.some((item) => item.span) ? 10000 : 7000, evidenceRefs: evidence.map((item) => item.evidenceKey), state: 'AVAILABLE' }
+    ]
   }
 }
 
@@ -154,7 +174,7 @@ export function finalizeEngineResult(draft: EngineResultDraft, options: Finalize
       evidence,
       provenanceRefs: [...new Set(evidence.map((item) => item.provenanceRef))].sort(),
       unresolvedReasonCodes: reasonCodes,
-      score: candidate.score
+      score: defaultFindingScore(candidate, evidence)
     } satisfies EngineFinding
   }).sort((left, right) => left.key.localeCompare(right.key))
 

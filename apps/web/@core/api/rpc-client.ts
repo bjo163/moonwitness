@@ -2,7 +2,10 @@ import axios, { AxiosInstance } from "axios"
 import { getAuthToken } from "./auth-token"
 
 // Default to Fastify backend port 4000
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"
+const BASE_URL =
+  typeof window === "undefined"
+    ? process.env.MOON_API_URL || process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:4000"
+    : "/api/backend"
 
 export class OdooRpcClient {
   private client: AxiosInstance
@@ -11,6 +14,7 @@ export class OdooRpcClient {
     this.client = axios.create({
       baseURL: BASE_URL,
       timeout: 15000,
+      withCredentials: true,
       headers: {
         "Content-Type": "application/json",
       },

@@ -4,7 +4,7 @@ import {
   normalizeTasks,
   parseTasksFromMarkdown,
   type BrainstormTask,
-} from "../../../apps/web/@modules/mission/data/garden-brainstorm-parser"
+} from "../../types/src/garden-brainstorm-parser"
 
 function makeTask(index: number, score: number): BrainstormTask {
   return {

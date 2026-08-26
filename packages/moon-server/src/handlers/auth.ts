@@ -14,6 +14,7 @@ import {
   validateUserSession,
   revokeUserSessions,
   verifyToken,
+  authenticateRequest,
   AuthError,
 } from '../utils/auth.js'
 
@@ -82,8 +83,7 @@ export async function handleLogin(
 
     const token = issueJwt(
       { sub: user.id, email: user.email, tokenVersion: user.token_version || user.tokenVersion || 1 },
-      config.jwtSecret,
-      { expiresIn: '7d' }
+      config.jwtSecret
     )
 
     logger.info('moon.auth', `User ${email} logged in`)
@@ -158,8 +158,7 @@ export async function handleRegister(
 
     const token = issueJwt(
       { sub: user.id, email: user.email, tokenVersion: 1 },
-      config.jwtSecret,
-      { expiresIn: '7d' }
+      config.jwtSecret
     )
 
     logger.info('moon.auth', `New user registered: ${email}`)
@@ -469,15 +468,9 @@ export async function handleLogout(
   config: AuthConfig
 ): Promise<void> {
   try {
-    const decoded = verifyToken(req, config.jwtSecret)
-    const uid = decoded.sub as number
-
-    if (!uid || uid <= 0) {
-      return sendJson(res, 401, { error: 'Unauthorized', code: 'AUTH_REQUIRED' }, req)
-    }
-
-    await revokeUserSessions(uid)
-    logger.info('moon.auth', `User id ${uid} logged out (session revoked)`)
+    const auth = await authenticateRequest(req, config.jwtSecret, { allowAnonymous: false })
+    await revokeUserSessions(auth.uid)
+    logger.info('moon.auth', `User id ${auth.uid} logged out (session revoked)`)
 
     return sendJson(res, 200, { message: 'Logged out successfully' }, req)
   } catch (err: any) {
@@ -498,16 +491,7 @@ export async function handleGetSession(
   config: AuthConfig
 ): Promise<void> {
   try {
-    const decoded = verifyToken(req, config.jwtSecret)
-    const uid = decoded.sub as number
-
-    if (!uid || uid <= 0) {
-      return sendJson(res, 401, { error: 'Unauthorized', code: 'AUTH_REQUIRED' }, req)
-    }
-
-    const env = createCtx(ANONYMOUS_ID, authSecurityContext('login'), getModel as any)
-    const session = await validateUserSession(env, uid, decoded.tokenVersion)
-
+    const session = await authenticateRequest(req, config.jwtSecret, { allowAnonymous: false })
     return sendJson(res, 200, { user: session }, req)
   } catch (err: any) {
     if (err instanceof AuthError) {

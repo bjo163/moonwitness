@@ -97,6 +97,24 @@ const getSecureBootstrapSecret = (envKey: string): string => {
   return readBootstrapEnv(envKey) ?? randomBytes(32).toString('base64url')
 }
 
+const getBootstrapAdminEmail = (): string => {
+  const email = readBootstrapEnv('BOOTSTRAP_ADMIN_EMAIL')
+  if (email) return email
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('BOOTSTRAP_ADMIN_EMAIL is required for production installation')
+  }
+  return 'admin@moonwitness.org'
+}
+
+const getBootstrapAdminPassword = (): string => {
+  const password = readBootstrapEnv('BOOTSTRAP_ADMIN_PASSWORD')
+  if (password) return password
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('BOOTSTRAP_ADMIN_PASSWORD is required for production installation')
+  }
+  return getSecureBootstrapSecret('BOOTSTRAP_ADMIN_PASSWORD')
+}
+
 export const PARTNER_SEED_DATA = {
   company: {
     name: 'MoonWitness',
@@ -109,21 +127,24 @@ export const PARTNER_SEED_DATA = {
       name: 'System',
       email: 'system@local',
       password: getSecureBootstrapSecret('BOOTSTRAP_SYSTEM_PASSWORD'),
-      isCompany: false
+      isCompany: false,
+      isAdmin: false,
     },
     {
       mode: 'bot',
       name: 'Bot',
       email: 'bot@local',
       password: getSecureBootstrapSecret('BOOTSTRAP_BOT_PASSWORD'),
-      isCompany: false
+      isCompany: false,
+      isAdmin: false,
     },
     {
       mode: 'admin',
       name: 'Administrator',
-      email: readBootstrapEnv('BOOTSTRAP_ADMIN_EMAIL') || 'admin@moonwitness.org',
-      password: getSecureBootstrapSecret('BOOTSTRAP_ADMIN_PASSWORD'),
-      isCompany: false
+      email: getBootstrapAdminEmail(),
+      password: getBootstrapAdminPassword(),
+      isCompany: false,
+      isAdmin: true,
     }
   ]
 }

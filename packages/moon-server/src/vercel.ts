@@ -63,8 +63,7 @@ export function createVercelAdapter(config: VercelAdapterConfig) {
         const tokenVersion = Number(user.token_version ?? user.tokenVersion ?? 1)
         const token = issueJwt(
           { sub: user.id, email: user.email, tokenVersion },
-          config.jwtSecret || 'secret',
-          { expiresIn: '24h' }
+          config.jwtSecret
         );
         return Response.json({ token, user: { id: user.id, email: user.email, name: user.name, partnerId: user.partner_id } }, { status: 200, headers });
       }
@@ -77,7 +76,7 @@ export function createVercelAdapter(config: VercelAdapterConfig) {
         }
         const token = authHeader.split(' ')[1];
         if (!token) return Response.json({ error: 'Missing token' }, { status: 401, headers });
-        const decoded = jwt.verify(token, config.jwtSecret || 'secret', {
+        const decoded = jwt.verify(token, config.jwtSecret, {
           algorithms: ['HS256', 'HS384', 'HS512']
         }) as any;
         const uid = decoded.sub as number;

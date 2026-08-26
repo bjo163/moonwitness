@@ -1,9 +1,10 @@
 import type { IncomingMessage } from 'node:http'
 import jwt from 'jsonwebtoken'
 import { randomInt, createHash } from 'node:crypto'
-import { ANONYMOUS_ID, SUPERUSER_ID, createCtx, getModel, type Ctx } from '@moon/orm'
+import { ANONYMOUS_ID, SUPERUSER_ID, createCtx, getModel, authSecurityContext, type Ctx } from '@moon/orm'
 
-export type AllowedJwtAlgorithm = 'HS256' | 'HS384' | 'HS512'
+export const ALLOWED_JWT_ALGORITHMS = ['HS256', 'HS384', 'HS512'] as const
+export type AllowedJwtAlgorithm = (typeof ALLOWED_JWT_ALGORITHMS)[number]
 
 export interface JwtPolicy {
   algorithm: AllowedJwtAlgorithm
@@ -18,15 +19,58 @@ export const DEFAULT_JWT_ALGORITHM: AllowedJwtAlgorithm = 'HS256'
 export const DEFAULT_JWT_EXPIRES_IN = '7d'
 export const DEFAULT_JWT_CLOCK_TOLERANCE_SECONDS = 60
 
-export const CANONICAL_JWT_POLICY: JwtPolicy = {
-  algorithm: (process.env.JWT_ALGORITHM as AllowedJwtAlgorithm) || DEFAULT_JWT_ALGORITHM,
-  allowedAlgorithms: ['HS256', 'HS384', 'HS512'],
-  issuer: process.env.JWT_ISSUER || undefined,
-  audience: process.env.JWT_AUDIENCE || undefined,
-  expiresIn: process.env.JWT_ACCESS_TOKEN_TTL || DEFAULT_JWT_EXPIRES_IN,
-  clockTolerance: process.env.JWT_CLOCK_TOLERANCE_SECONDS
-    ? parseInt(process.env.JWT_CLOCK_TOLERANCE_SECONDS, 10)
-    : DEFAULT_JWT_CLOCK_TOLERANCE_SECONDS
+/**
+ * Resolve and validate canonical JWT policy from environment variables.
+ * Fails closed with 500 AuthError if algorithm, clock tolerance, or TTL configuration is invalid.
+ */
+export function resolveJwtPolicy(env: Record<string, string | undefined> = process.env): JwtPolicy {
+  const rawAlg = env.JWT_ALGORITHM?.trim() || DEFAULT_JWT_ALGORITHM
+  if (!ALLOWED_JWT_ALGORITHMS.includes(rawAlg as any)) {
+    throw new AuthError(
+      'AUTH_INVALID',
+      `Invalid JWT_ALGORITHM configuration: "${rawAlg}". Allowed algorithms: ${ALLOWED_JWT_ALGORITHMS.join(', ')}`,
+      500
+    )
+  }
+  const algorithm = rawAlg as AllowedJwtAlgorithm
+
+  const rawTtl = env.JWT_ACCESS_TOKEN_TTL?.trim()
+  if (rawTtl !== undefined && rawTtl === '') {
+    throw new AuthError('AUTH_INVALID', 'Invalid JWT_ACCESS_TOKEN_TTL configuration: cannot be empty', 500)
+  }
+  const expiresIn = rawTtl || DEFAULT_JWT_EXPIRES_IN
+
+  let clockTolerance = DEFAULT_JWT_CLOCK_TOLERANCE_SECONDS
+  if (env.JWT_CLOCK_TOLERANCE_SECONDS !== undefined && env.JWT_CLOCK_TOLERANCE_SECONDS.trim() !== '') {
+    const parsed = parseInt(env.JWT_CLOCK_TOLERANCE_SECONDS, 10)
+    if (isNaN(parsed) || parsed < 0) {
+      throw new AuthError(
+        'AUTH_INVALID',
+        `Invalid JWT_CLOCK_TOLERANCE_SECONDS configuration: must be a non-negative integer, received "${env.JWT_CLOCK_TOLERANCE_SECONDS}"`,
+        500
+      )
+    }
+    clockTolerance = parsed
+  }
+
+  const issuer = env.JWT_ISSUER?.trim() || undefined
+  const audience = env.JWT_AUDIENCE?.trim() || undefined
+
+  return {
+    algorithm,
+    allowedAlgorithms: [algorithm],
+    issuer,
+    audience,
+    expiresIn,
+    clockTolerance
+  }
+}
+
+export let CANONICAL_JWT_POLICY: JwtPolicy = resolveJwtPolicy()
+
+export function reloadCanonicalJwtPolicy(env: Record<string, string | undefined> = process.env): JwtPolicy {
+  CANONICAL_JWT_POLICY = resolveJwtPolicy(env)
+  return CANONICAL_JWT_POLICY
 }
 
 export type AuthErrorCode =
@@ -63,6 +107,12 @@ export interface VerifyTokenOptions {
   algorithms?: AllowedJwtAlgorithm[]
 }
 
+export interface AuthenticateRequestOptions {
+  allowAnonymous?: boolean
+  env?: Ctx
+  verifyOptions?: VerifyTokenOptions
+}
+
 export interface JwtClaims {
   sub: number
   email?: string
@@ -84,7 +134,7 @@ export const OTP_EXPIRY_MS = 15 * 60 * 1000 // 15 minutes
 export const MAX_OTP_ATTEMPTS = 5
 
 /**
- * Issue a standard signed JWT token with algorithm pinning and tokenVersion
+ * Issue a standard signed JWT token with algorithm pinning, canonical TTL, and tokenVersion
  */
 export function issueJwt(
   payload: JwtClaims,
@@ -96,6 +146,10 @@ export function issueJwt(
   }
 
   const algorithm = (options.algorithm as AllowedJwtAlgorithm) || CANONICAL_JWT_POLICY.algorithm
+  if (!ALLOWED_JWT_ALGORITHMS.includes(algorithm)) {
+    throw new AuthError('AUTH_INVALID', `Unsupported JWT algorithm: ${algorithm}`, 500)
+  }
+
   const expiresIn = options.expiresIn ?? CANONICAL_JWT_POLICY.expiresIn
   const issuer = options.issuer ?? CANONICAL_JWT_POLICY.issuer
   const audience = options.audience ?? CANONICAL_JWT_POLICY.audience
@@ -124,7 +178,11 @@ export async function validateUserSession(
     throw new AuthError('AUTH_INVALID', 'User model not found', 500)
   }
 
-  const users = await VxUser.fetch(VxUser as any, env, [['id', '=', userId]])
+  const queryEnv = env?.withContext
+    ? env.withContext({ active_test: false })
+    : createCtx(env?.uid ?? ANONYMOUS_ID, { ...(env?.context ?? {}), active_test: false }, getModel as any)
+
+  const users = await VxUser.fetch(VxUser as any, queryEnv, [['id', '=', userId]])
   if (users.length === 0) {
     throw new AuthError('AUTH_USER_NOT_FOUND', 'User not found', 401)
   }
@@ -170,6 +228,39 @@ export async function revokeUserSessions(
     tokenVersion: nextVersion
   })
   return nextVersion
+}
+
+/**
+ * Authenticate incoming HTTP request with full session validation.
+ * - Missing / empty Authorization header returns { uid: ANONYMOUS_ID } (if allowed) or throws AUTH_REQUIRED.
+ * - Malformed Bearer header throws AUTH_MALFORMED.
+ * - Valid Bearer token verifies JWT signature and validates active user and tokenVersion against database.
+ */
+export async function authenticateRequest(
+  req: IncomingMessage,
+  jwtSecret: string,
+  options: AuthenticateRequestOptions = {}
+): Promise<{ uid: number; email?: string; name?: string; tokenVersion?: number; partnerId?: number }> {
+  const decoded = verifyToken(req, jwtSecret, options.verifyOptions)
+  const uid = decoded.sub as number
+
+  if (!uid || uid === ANONYMOUS_ID) {
+    if (options.allowAnonymous) {
+      return { uid: ANONYMOUS_ID }
+    }
+    throw new AuthError('AUTH_REQUIRED', 'Authentication required', 401)
+  }
+
+  const authCtx = options.env ?? createCtx(ANONYMOUS_ID, authSecurityContext('login'), getModel as any)
+  const session = await validateUserSession(authCtx, uid, decoded.tokenVersion)
+
+  return {
+    uid: session.id,
+    email: session.email,
+    name: session.name,
+    tokenVersion: session.tokenVersion,
+    partnerId: session.partnerId
+  }
 }
 
 /**
@@ -250,19 +341,25 @@ export function verifyToken(
   }
 
   const authHeader = req.headers.authorization
+  const cookieToken = req.headers.cookie
+    ?.split(';')
+    .map((cookie) => cookie.trim())
+    .find((cookie) => cookie.startsWith('moon_session='))
+    ?.slice('moon_session='.length)
+  const suppliedAuth = authHeader || (cookieToken ? `Bearer ${decodeURIComponent(cookieToken)}` : undefined)
 
   // 1. Missing or completely empty header => intentional Anonymous request
-  if (!authHeader || !authHeader.trim()) {
+  if (!suppliedAuth || !suppliedAuth.trim()) {
     return { sub: ANONYMOUS_ID }
   }
 
   // 2. Header present but not starting with 'Bearer ' => Malformed
-  if (!authHeader.startsWith('Bearer ')) {
+  if (!suppliedAuth.startsWith('Bearer ')) {
     throw new AuthError('AUTH_MALFORMED', 'Invalid authorization format', 401)
   }
 
   // 3. 'Bearer ' present but token content is empty/whitespace => Malformed
-  const token = authHeader.substring(7).trim()
+  const token = suppliedAuth.substring(7).trim()
   if (!token) {
     throw new AuthError('AUTH_MALFORMED', 'Malformed Bearer token', 401)
   }
@@ -325,6 +422,9 @@ export function verifyToken(
       }
       if (msg.includes('jwt audience invalid') || msg.includes('audience')) {
         throw new AuthError('AUTH_AUDIENCE_INVALID', 'Invalid token audience', 401)
+      }
+      if (msg.includes('invalid algorithm') || msg.includes('algorithm')) {
+        throw new AuthError('AUTH_INVALID', 'Invalid token algorithm', 401)
       }
       throw new AuthError('AUTH_INVALID', 'Invalid token', 401)
     }

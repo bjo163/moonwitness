@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { createCtx, setupOrm, SUPERUSER_ID } from '@moon/orm'
 import { checksumEngineResult } from '../src/services/engine-evidence.js'
+import { sha256String } from '../src/services/hash.js'
 import { InMemoryEngineRunStore } from '../src/services/engine-store.js'
 import { WitnessEngineRegistry, WitnessEngineRuntime } from '../src/services/engine-runtime.js'
 import {
@@ -11,6 +12,11 @@ import {
   createRevelationQueryModule,
   resolveRevelationPassageContext
 } from '../src/engines/revelation-query.js'
+import { createLexicalAnalysisModule } from '../src/engines/lexical-analysis.js'
+import { createConceptEvidenceModule } from '../src/engines/concept-evidence.js'
+import { createDivineExpressionModule } from '../src/engines/divine-expression.js'
+import { createAiResearchSynthesisModule, createResearchHypothesisModule } from '../src/engines/research-hypothesis.js'
+import type { WitnessEngineModule } from '../src/types/engine.js'
 
 type Row = Record<string, any>
 let mockDb: Record<string, Row[]> = {}
@@ -124,7 +130,12 @@ function seed() {
       { id: 701, passage_id: 21, content_type: 'ORIGINAL_TEXT', text: 'Allahu la ilaha illa huwa', revision: 'quran-r1', source_id: 501, provenance_id: 401, active: true, is_active: true },
       { id: 702, passage_id: 21, content_type: 'TRANSLATION', text: 'God—there is no deity except Him.', language_code: 'en', revision: 'quran-en-r1', edition_id: 601, source_id: 502, provenance_id: 402, active: true, is_active: true }
     ],
-    wx_lexical_occurrence: [],
+    wx_root: [{ id: 610, entity_id: 202, stable_key: 'root:ar:alh', language_code: 'ar', written_form: 'اله', transliteration: 'alh', active: true, is_active: true }],
+    wx_lexeme: [
+      { id: 611, entity_id: 202, stable_key: 'lexeme:ar:allahu', language_code: 'ar', lemma: 'الله', transliteration: 'allahu', root_id: 610, active: true, is_active: true },
+      { id: 612, entity_id: 202, stable_key: 'lexeme:en:god', language_code: 'en', lemma: 'god', transliteration: 'allahu', active: true, is_active: true }
+    ],
+    wx_lexical_occurrence: [{ id: 613, lexeme_id: 611, content_id: 701, passage_id: 21, offset_scheme: 'UNICODE_CODEPOINT', start_offset: 0, end_offset: 6, fragment_checksum: sha256String('Allahu'), source_id: 501, provenance_id: 401, active: true, is_active: true }],
     wx_revelation_event_passage: [],
     wx_revelation_event: [],
     wx_relation_type: [{ id: 801, code: 'MENTIONS', name: 'Mentions', active: true, is_active: true }],
@@ -135,9 +146,20 @@ function seed() {
       { id: 904, from_entity_id: 104, relation_type_id: 801, to_entity_id: 201, provenance_id: 405, source_id: 505, source_revision: 'injil-r1', source_class: 'REVELATION', authority_class: 'PRIMARY_SOURCE', polarity: 'NEGATED', active: true, is_active: true },
       { id: 905, from_entity_id: 101, relation_type_id: 801, to_entity_id: 201, assertion_entity_id: 301, provenance_id: 401, source_id: 501, source_revision: 'quran-r1', source_class: 'ENGINE_DERIVED', authority_class: 'DERIVED', polarity: 'AFFIRMED', active: true, is_active: true }
     ],
-    wx_assertion: [{ id: 1001, entity_id: 301, assertion_class: 'DERIVED', active: true, is_active: true }],
+    wx_assertion: [
+      { id: 1001, entity_id: 301, assertion_class: 'DERIVED', active: true, is_active: true },
+      { id: 1002, entity_id: 202, subject_entity_id: 202, predicate: 'HAS_QUALITY', object_value: 'Mercy', assertion_class: 'SOURCE_SUMMARY', source_id: 501, provenance_id: 401, active: true, is_active: true }
+    ],
+    wx_entity_alias: [{ id: 1101, entity_id: 202, label: 'Rahmah', normalized_label: 'rahmah', active: true, is_active: true }],
+    wx_evidence: [
+      { id: 1102, assertion_id: 1002, evidence_entity_id: 202, relation: 'SUPPORTS', provenance_id: 401, active: true, is_active: true },
+      { id: 1103, assertion_id: 1002, evidence_entity_id: 202, relation: 'CONTRADICTS', provenance_id: 401, active: true, is_active: true }
+    ],
+    wx_divine_expression: [{ id: 1201, entity_id: 202, language_code: 'ar', lexical_form: 'Allahu', lemma: 'الله', root_id: 610, expression_type: 'NAME', source_id: 501, provenance_id: 401, active: true, is_active: true }],
+    wx_divine_expression_occurrence: [{ id: 1202, expression_id: 1201, passage_id: 21, content_id: 701, offset_scheme: 'UNICODE_CODEPOINT', start_offset: 0, end_offset: 6, fragment_checksum: sha256String('Allahu'), source_id: 501, provenance_id: 401, active: true, is_active: true }],
+    wx_research_hypothesis: [{ id: 1301, stable_key: 'research:mercy', title: 'Mercy distribution', statement: 'Mercy evidence is present.', hypothesis_class: 'CONCEPT_DISTRIBUTION', method_version: '1', scope_definition: '{}', created_at: '2026-01-01T00:00:00.000Z', active: true, is_active: true }],
     wx_figure: [],
-    wx_concept: []
+    wx_concept: [{ id: 1, entity_id: 202, stable_key: 'concept:mercy', name: 'Mercy', language_code: 'en', active: true, is_active: true }]
   }
 }
 
@@ -145,7 +167,7 @@ function env() {
   return createCtx(SUPERUSER_ID, {}, () => null)
 }
 
-function runtime(module: ReturnType<typeof createRevelationQueryModule> | ReturnType<typeof createCrossScriptureComparisonModule>) {
+function runtime(module: WitnessEngineModule) {
   const registry = new WitnessEngineRegistry()
   registry.register(module)
   return new WitnessEngineRuntime(new InMemoryEngineRunStore(), { registry })
@@ -218,5 +240,44 @@ describe('Revelation Query and Cross-Scripture engines (#58)', () => {
     const included = await buildCrossScriptureEvidenceMatrix(env(), { entityId: 201, includeDerivedAssertions: true })
     expect(excluded!.groups.QURAN).toHaveLength(1)
     expect(included!.groups.QURAN.map((entry) => entry.classification)).toContain('DERIVED_ASSERTION')
+  })
+
+  it('keeps exact lexical spans source-backed and labels cross-language comparison derived', async () => {
+    const module = createLexicalAnalysisModule()
+    const result = await runtime(module).runModule(env(), { moduleCode: module.code, moduleVersion: module.version, input: { lexeme: 'allahu', includeCrossLanguageDerived: true } })
+    expect(result.findings.find((finding) => finding.key === 'lexical:613')).toMatchObject({ objectValue: 'Allahu', authorityClass: 'PRIMARY_SOURCE', provenanceRefs: ['prov:quran:original'] })
+    expect(result.findings.find((finding) => finding.authorityClass === 'DERIVED')).toMatchObject({ predicate: 'CROSS_LANGUAGE_LEXICAL_COMPARISON' })
+  })
+
+  it('keeps concept evidence grouped by assertion and preserves contradictions', async () => {
+    const module = createConceptEvidenceModule()
+    const result = await runtime(module).runModule(env(), { moduleCode: module.code, moduleVersion: module.version, input: { query: 'mercy' } })
+    expect(result.findings.find((finding) => finding.key === 'concept:1:label:1101')).toMatchObject({ objectValue: 'Rahmah' })
+    expect(result.findings.find((finding) => finding.key === 'concept:1:assertion:1002')).toMatchObject({ status: 'CONFLICTED' })
+    expect(result.conflicts).toContainEqual(expect.objectContaining({ findingKey: 'concept:1:assertion:1002' }))
+  })
+
+  it('returns corpus-mined divine expressions from exact allowed occurrences without a fixed count', async () => {
+    const module = createDivineExpressionModule()
+    const result = await runtime(module).runModule(env(), { moduleCode: module.code, moduleVersion: module.version, input: { expressionType: 'NAME' } })
+    expect(result.findings).toHaveLength(1)
+    expect(result.findings[0]).toMatchObject({ objectValue: 'Allahu', authorityClass: 'PRIMARY_SOURCE', provenanceRefs: ['prov:quran:original'] })
+    expect(result.summary).toMatch(/does not assume any fixed count/)
+  })
+
+  it('returns transparent, non-canonical research findings with contrary evidence visible', async () => {
+    const module = createResearchHypothesisModule()
+    const result = await runtime(module).runModule(env(), { moduleCode: module.code, moduleVersion: module.version, input: { hypothesisId: 1301, predicate: 'HAS_QUALITY', algorithmVersion: 'distribution-v1' } })
+    expect(result.findings.find((finding) => finding.key === 'research:1301:summary')).toMatchObject({ authorityClass: 'HYPOTHESIS', status: 'CONFLICTED' })
+    expect(result.summary).toMatch(/non-canonical/)
+    expect(result.diagnostics).toEqual(expect.arrayContaining(['supports:1', 'contradicts:1', 'denominator:2']))
+  })
+
+  it('requires provider metadata for AI research and retains AI_ASSISTED authority', async () => {
+    const module = createAiResearchSynthesisModule()
+    const request = { moduleCode: module.code, moduleVersion: module.version, input: { hypothesisId: 1301, predicate: 'HAS_QUALITY', algorithmVersion: 'distribution-v1' } }
+    await expect(runtime(module).runModule(env(), request)).rejects.toThrow(/requires provider metadata/)
+    const result = await runtime(module).runModule(env(), { ...request, ai: { provider: 'test', configurationFingerprint: 'cfg-v1' } })
+    expect(result.findings.every((finding) => finding.authorityClass === 'AI_ASSISTED')).toBe(true)
   })
 })

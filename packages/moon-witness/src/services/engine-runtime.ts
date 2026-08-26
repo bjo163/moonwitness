@@ -1,6 +1,7 @@
 import { sha256String, stableSerialize } from './hash.js'
 import { checksumEngineResult, finalizeEngineResult } from './engine-evidence.js'
 import { checksumEngineScope, resolveEngineScope } from './engine-scope.js'
+import WxScoreResult from '../models/wx-score-result.js'
 import {
   WITNESS_ENGINE_RUNTIME_VERSION,
   type EngineEvidenceExplanation,
@@ -120,6 +121,10 @@ export class WitnessEngineRuntime {
     return this.store.getRun(ctx, runId)
   }
 
+  async getResult(ctx: unknown, runId: string): Promise<EngineResultEnvelope | null> {
+    return this.store.getResult(ctx, runId)
+  }
+
   async replayRun(ctx: unknown, runId: string): Promise<EngineResultEnvelope> {
     const historicalRun = await this.store.getRun(ctx, runId)
     if (!historicalRun) throw new Error(`Engine run ${runId} was not found or is inaccessible`)
@@ -213,11 +218,37 @@ export class WitnessEngineRuntime {
       })
       const outputChecksum = checksumEngineResult(result)
       await this.store.complete(ctx, run.id, result, outputChecksum)
+      if (this.store.persistent) await this.persistFindingScores(ctx, run, result, outputChecksum)
+      if (this.store.persistent) await module.afterComplete?.(ctx, request.input, run, result, outputChecksum)
       return result
     } catch (error) {
       const failure = sanitizeFailure(error)
       await this.store.fail(ctx, run.id, failure.code, failure.diagnostics)
       throw error
+    }
+  }
+
+  private async persistFindingScores(ctx: unknown, run: EngineRunRecord, result: EngineResultEnvelope, outputChecksum: string): Promise<void> {
+    const sourceRevisionFingerprint = sha256String(stableSerialize(result.sourceRevisions))
+    for (const finding of result.findings) {
+      if (!finding.score) continue
+      const score = finding.score
+      await WxScoreResult.spawn(WxScoreResult, ctx as any, {
+        resultKey: `score:finding:${sha256String(stableSerialize({ run: run.id, finding: finding.key, score }))}`,
+        profileCode: score.profileCode ?? run.moduleCode,
+        profileVersion: score.profileVersion ?? score.algorithmVersion,
+        targetEntityId: finding.subjectEntityId,
+        findingKey: finding.key,
+        dimensionsJson: stableSerialize(score.components),
+        compositeBp: score.compositeBp,
+        coverageBp: score.coverageBp ?? 0,
+        status: finding.status,
+        evidenceIdsJson: stableSerialize(finding.evidence.map((item) => item.evidenceKey)),
+        sourceRevisionFingerprint,
+        formulaFingerprint: score.formulaFingerprint ?? outputChecksum,
+        createdAt: new Date().toISOString(),
+        active: true
+      })
     }
   }
 }

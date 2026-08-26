@@ -42,6 +42,9 @@ import WxDivineExpressionOccurrence from './models/wx-divine-expression-occurren
 import WxLegacyMapping from './models/wx-legacy-mapping.js'
 import WxEngineRun from './models/wx-engine-run.js'
 import WxEngineResult from './models/wx-engine-result.js'
+import WxResearchHypothesis from './models/wx-research-hypothesis.js'
+import WxResearchRun from './models/wx-research-run.js'
+import WxScoreResult from './models/wx-score-result.js'
 
 // Ingestion Data Plane (#65)
 import WxSourcePolicy from './models/wx-source-policy.js'
@@ -76,6 +79,7 @@ export { getSunPosition, getDuhaTime, type SunPositionData, type DuhaTimeData, t
 
 // Routes
 export { registerWitnessRoutes } from './routes.js'
+export { registerWitnessEngineRoutes } from './engine-routes.js'
 
 // Ingestion pipeline exports (#65)
 export type {
@@ -144,6 +148,10 @@ export type {
 export { WITNESS_ENGINE_RESULT_V1, WITNESS_ENGINE_RUNTIME_VERSION } from './types/engine.js'
 export { resolveEngineScope, checksumEngineScope } from './services/engine-scope.js'
 export { finalizeEngineResult, checksumEngineResult } from './services/engine-evidence.js'
+export { SCORE_PROFILES, getScoreProfile, score, scoreEntity, scoreRelation, scoreAssertion, scoreEvidence, scoreFinding, toEngineScore, independentEvidence, type EvidenceIndependenceInput, type WitnessScoreDimension, type WitnessScoreProfile, type WitnessScoreResult } from './services/scoring.js'
+export { persistScoreResult, type PersistScoreInput } from './services/score-store.js'
+export { mapLegacyResearchRecord, legacyIdempotencyKey, type LegacyResearchRecord, type LegacyResearchSource, type WitnessLegacyCandidate } from './services/legacy-research-adapters.js'
+export { distribution, type ResearchDistribution, type ResearchObservation } from './services/research-patterns.js'
 export { InMemoryEngineRunStore, MoonOrmEngineRunStore } from './services/engine-store.js'
 export { WitnessEngineRegistry, WitnessEngineRuntime } from './services/engine-runtime.js'
 export {
@@ -172,6 +180,27 @@ export {
   type FigureAnalysisInput,
   type TraditionAnalysisInput
 } from './engines/figure-tradition.js'
+export {
+  createLexicalAnalysisModule,
+  validateLexicalAnalysisInput,
+  type LexicalAnalysisInput
+} from './engines/lexical-analysis.js'
+export {
+  createConceptEvidenceModule,
+  validateConceptEvidenceInput,
+  type ConceptEvidenceInput
+} from './engines/concept-evidence.js'
+export {
+  createDivineExpressionModule,
+  validateDivineExpressionInput,
+  type DivineExpressionInput
+} from './engines/divine-expression.js'
+export {
+  createResearchHypothesisModule,
+  createAiResearchSynthesisModule,
+  validateResearchHypothesisInput,
+  type ResearchHypothesisInput
+} from './engines/research-hypothesis.js'
 
 export {
   planLegacyMigration,
@@ -277,6 +306,9 @@ export {
   WxLegacyMapping,
   WxEngineRun,
   WxEngineResult,
+  WxResearchHypothesis,
+  WxResearchRun,
+  WxScoreResult,
 
   // Ingestion data plane models (#65)
   WxSourcePolicy,
@@ -355,8 +387,11 @@ export default {
     WxDivineExpression,
     WxDivineExpressionOccurrence,
     WxLegacyMapping,
-    WxEngineRun,
-    WxEngineResult,
+  WxEngineRun,
+  WxEngineResult,
+  WxResearchHypothesis,
+  WxResearchRun,
+  WxScoreResult,
 
     // Ingestion data plane (#65)
     WxSourcePolicy,

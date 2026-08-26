@@ -10,6 +10,7 @@ import { getMoonData } from './astronomy/moon-phase.js'
 import { getIslamicData, getDailyPrayerTimes } from './astronomy/prayer-times.js'
 import { cache } from '@moon/cache'
 import { registerWitnessGraphRoutes } from './graph/routes.js'
+import { registerWitnessEngineRoutes } from './engine-routes.js'
 
 const CORS = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
 
@@ -491,7 +492,8 @@ globalRoutes.push({
   }
 })
 
-export function registerWitnessRoutes(jwtSecret = process.env.JWT_SECRET || 'secret') {
+export function registerWitnessRoutes(jwtSecret = process.env.JWT_SECRET || '') {
   registerWitnessGraphRoutes(jwtSecret)
+  registerWitnessEngineRoutes(jwtSecret)
   console.log('[moon-witness] custom API routes registered')
 }

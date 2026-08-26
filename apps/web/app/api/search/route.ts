@@ -23,7 +23,11 @@ export async function GET(request: Request) {
       snippet: a.textId || a.textEn,
     }))
 
-    return NextResponse.json({ results })
+    const filteredResults = filter === "ALL"
+      ? results
+      : results.filter((result: any) => result.type === filter)
+
+    return NextResponse.json({ results: filteredResults })
   } catch (error) {
     console.error("Search API Error:", error)
     return NextResponse.json({ results: [] })

@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { getModel, createCtx, AuthorizationError } from '@moon/orm'
 import { parseBody, sendJson, parseUrl } from '../utils/http.js'
-import { verifyToken, AuthError } from '../utils/auth.js'
+import { authenticateRequest, AuthError } from '../utils/auth.js'
 
 const MAX_LIMIT = 100
 const DEFAULT_LIMIT = 80
@@ -19,8 +19,8 @@ export async function handleRest(
   jwtSecret: string
 ): Promise<void> {
   try {
-    const decoded = verifyToken(req, jwtSecret)
-    const uid = decoded.sub as number
+    const auth = await authenticateRequest(req, jwtSecret, { allowAnonymous: true })
+    const uid = auth.uid
 
     const model = match[1] as string
     const idStr = match[2]

@@ -30,4 +30,4 @@ pnpm run certify:witness-graph-pg
 | `JWT_SECRET` | Secret key for signing and verifying tokens | `your-secret-key` |
 | `API_PORT` | Port for the HTTP API | `4000` |
 | `BOOTSTRAP_ADMIN_EMAIL` | Superuser bootstrap email | `admin@moonwitness.org` |
-| `BOOTSTRAP_ADMIN_PASSWORD` | Superuser bootstrap password | `password` |
+| `BOOTSTRAP_ADMIN_PASSWORD` | Superuser bootstrap password (required in production) | Set a unique secret |

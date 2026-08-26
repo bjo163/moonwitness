@@ -106,6 +106,11 @@ export interface EngineScoreComponent {
 export interface EngineScoreBreakdown {
   algorithmVersion: string
   components: EngineScoreComponent[]
+  profileCode?: string
+  profileVersion?: string
+  compositeBp?: number
+  coverageBp?: number
+  formulaFingerprint?: string
 }
 
 export interface EngineFindingCandidate {
@@ -194,6 +199,7 @@ export interface WitnessEngineModule<I = unknown> {
   resolveScope(ctx: unknown, input: I): Promise<EngineScopeInput>
   execute(ctx: unknown, input: I, scope: EngineScope): Promise<EngineResultDraft>
   explain(ctx: unknown, output: EngineResultEnvelope, scope: EngineScope): Promise<EngineEvidenceExplanation>
+  afterComplete?(ctx: unknown, input: I, run: EngineRunRecord, output: EngineResultEnvelope, outputChecksum: string): Promise<void>
 }
 
 export interface EngineRunRecord {
@@ -239,6 +245,7 @@ export interface EngineRevisionResolver {
 }
 
 export interface EngineRunStore {
+  persistent?: boolean
   create(ctx: unknown, record: Omit<EngineRunRecord, 'id'>): Promise<EngineRunRecord>
   complete(ctx: unknown, runId: string, result: EngineResultEnvelope, outputChecksum: string): Promise<void>
   fail(ctx: unknown, runId: string, code: string, diagnostics: string): Promise<void>
