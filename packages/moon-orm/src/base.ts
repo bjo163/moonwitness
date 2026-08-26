@@ -79,6 +79,14 @@ export class Recordset<M extends typeof Vertex, W extends string = never> {
       return r;
     })
   }
+  map<U>(fn: (item: ModelRecord<M, W>, index: number) => U): U[] {
+    return this.records.map(fn)
+  }
+
+  forEach(fn: (item: ModelRecord<M, W>, index: number) => void): void {
+    this.records.forEach(fn)
+  }
+
   mapped<K extends keyof ModelRecord<M, W>>(field: K): ModelRecord<M, W>[K][] {
     return this.records.map(r => r[field])
   }
@@ -491,6 +499,16 @@ export class Vertex {
       if ((modelClass as any).afterSave) {
         await (modelClass as any).afterSave(modelClass, env, row.id, clonedVals)
       }
+
+      try {
+        await this.checkRecordOperationAccess(modelClass, env, row.id, 'permCreate')
+      } catch (err) {
+        if (!env.trx) {
+          await conn(table).where({ id: row.id }).delete()
+        }
+        throw err
+      }
+
       this.emitEvent('spawn', { model: modelClass._name, id: row.id, vals: clonedVals })
     }
     return row
@@ -977,34 +995,51 @@ export class Vertex {
             }
           }
           if (idsToFetch.size > 0) {
-            // Note: we fetch as proxies using scan/QueryBuilder internally? No, fetch returns proxies directly!
-            // Wait, fetch returns raw rows, and the proxy is wrapped at the very end in query.ts or base.ts fetch?
-            // Actually, fetch returns raw rows in Moon ORM, and Recordset proxy wraps them!
-            const relatedRows = await Comodel.fetch(Comodel, env, [['id', 'in', Array.from(idsToFetch)]])
-            const relatedMap = new Map(relatedRows.map((r: any) => [r.id, r]))
-            for (const row of rows) {
-               const val = row[colName]
-               const id = Array.isArray(val) ? val[0] : val
-               if (id && relatedMap.has(id)) {
-                 row[`$${camelRel}`] = relatedMap.get(id)
-               } else {
-                 row[`$${camelRel}`] = null
-               }
+            try {
+              const relatedRows = await Comodel.fetch(Comodel, env, [['id', 'in', Array.from(idsToFetch)]])
+              const relatedMap = new Map(relatedRows.map((r: any) => [r.id, r]))
+              for (const row of rows) {
+                 const val = row[colName]
+                 const id = Array.isArray(val) ? val[0] : val
+                 if (id && relatedMap.has(id)) {
+                   row[`$${camelRel}`] = relatedMap.get(id)
+                 } else {
+                   row[`$${camelRel}`] = null
+                 }
+              }
+            } catch (e: any) {
+              if (e instanceof AuthorizationError) {
+                for (const row of rows) {
+                  row[`$${camelRel}`] = null
+                }
+              } else {
+                throw e
+              }
             }
           }
         }
         else if (def.type === 'one2many' && def.inverse) {
           const ids = rows.map((r: any) => r.id)
           const inverseCol = toSnakeCase(def.inverse)
-          const relatedRows = await Comodel.fetch(Comodel, env, [[def.inverse, 'in', ids]])
-          const grouped = new Map<number, any[]>()
-          for (const r of relatedRows as any[]) {
-            const pid = Array.isArray(r[inverseCol]) ? r[inverseCol][0] : (r[def.inverse] || r[inverseCol])
-            if (!grouped.has(pid)) grouped.set(pid, [])
-            grouped.get(pid)!.push(r)
-          }
-          for (const row of rows) {
-             row[`$${camelRel}`] = grouped.get(row.id) || []
+          try {
+            const relatedRows = await Comodel.fetch(Comodel, env, [[def.inverse, 'in', ids]])
+            const grouped = new Map<number, any[]>()
+            for (const r of relatedRows as any[]) {
+              const pid = Array.isArray(r[inverseCol]) ? r[inverseCol][0] : (r[def.inverse] || r[inverseCol])
+              if (!grouped.has(pid)) grouped.set(pid, [])
+              grouped.get(pid)!.push(r)
+            }
+            for (const row of rows) {
+               row[`$${camelRel}`] = grouped.get(row.id) || []
+            }
+          } catch (e: any) {
+            if (e instanceof AuthorizationError) {
+              for (const row of rows) {
+                row[`$${camelRel}`] = []
+              }
+            } else {
+              throw e
+            }
           }
         }
       }
@@ -1033,14 +1068,25 @@ export class Vertex {
         }
 
         if (ids.size > 0) {
-          const names = await Comodel.label(Comodel, env, Array.from(ids))
-          const nameMap = new Map(names)
-          for (const row of rows) {
-            const val = row[colName]
-            if (val) {
-              row[colName] = [val, nameMap.get(val) || 'Unknown']
+          try {
+            const names = await Comodel.label(Comodel, env, Array.from(ids))
+            const nameMap = new Map(names)
+            for (const row of rows) {
+              const val = row[colName]
+              const numId = Array.isArray(val) ? val[0] : val
+              if (numId && nameMap.has(numId)) {
+                row[colName] = [numId, nameMap.get(numId)!]
+              } else {
+                row[colName] = false
+              }
+            }
+          } catch (e: any) {
+            if (e instanceof AuthorizationError) {
+              for (const row of rows) {
+                row[colName] = false
+              }
             } else {
-              row[colName] = false
+              throw e
             }
           }
         } else {

@@ -116,6 +116,14 @@ class FakeDbQuery {
     return this
   }
 
+  orderBy(_col: string, _dir?: string): this {
+    return this
+  }
+
+  limit(_limit: number): this {
+    return this
+  }
+
   select(...columns: string[]): this {
     this.selects = columns.map((c) => c.replace(`${this.tableName}.`, ''))
     return this
@@ -191,6 +199,7 @@ function makeDb(tables: Tables) {
 
 class PostModel extends Vertex {
   static _name = 'demo.post'
+  static override _rec_name = 'title'
   title = fields.Char({ required: true })
   state = fields.Char({ default: 'draft' })
   ownerId = fields.Integer()
@@ -200,7 +209,7 @@ class PostModel extends Vertex {
 class CommentModel extends Vertex {
   static _name = 'demo.comment'
   content = fields.Char({ required: true })
-  postId = fields.Integer()
+  postId = fields.Many2one({ comodel: 'demo.post' })
   authorId = fields.Integer()
 }
 
@@ -431,5 +440,113 @@ describe('Issue #28: Operation-Specific ORM Authorization', () => {
         comments: [[5, 0, 0]],
       })
     ).rejects.toThrowError(AuthorizationError)
+  })
+
+  it('pick() fails closed when requested record is blocked by record rules', async () => {
+    // Add draft post owned by Bob
+    tables.demo_post.push({
+      id: 3,
+      title: "Bob's Secret Draft",
+      state: 'draft',
+      owner_id: 99,
+      is_active: true,
+    })
+
+    const aliceEnv = createCtx(42, {}, getModel)
+
+    // Alice cannot pick Post 3 because state !== 'published'
+    await expect(PostModel.pick(PostModel, aliceEnv, 3)).rejects.toThrowError(
+      AuthorizationError
+    )
+  })
+
+  it('label() suppresses names of records denied by record rules', async () => {
+    // Add draft post owned by Bob
+    tables.demo_post.push({
+      id: 4,
+      title: "Bob's Confidential Project",
+      state: 'draft',
+      owner_id: 99,
+      is_active: true,
+    })
+
+    const aliceEnv = createCtx(42, {}, getModel)
+
+    // Alice queries label for Post 4 (forbidden) and Post 1 (allowed)
+    const labels = await PostModel.label(PostModel, aliceEnv, [1, 4])
+    expect(labels.length).toBe(1)
+    expect(labels[0]).toEqual([1, "Alice's Post"])
+    // Post 4 was not leaked!
+  })
+
+  it('many2one hydration suppresses labels when comodel record is inaccessible', async () => {
+    // Add Many2one field to CommentModel
+    tables.demo_comment.push({
+      id: 50,
+      content: 'Comment pointing to secret post',
+      post_id: 5, // Secret post
+      author_id: 42,
+      is_active: true,
+    })
+    tables.demo_post.push({
+      id: 5,
+      title: 'Top Secret Post',
+      state: 'draft',
+      owner_id: 99,
+      is_active: true,
+    })
+
+    const aliceEnv = createCtx(42, {}, getModel)
+
+    const comments = await CommentModel.fetch(CommentModel, aliceEnv, [['id', '=', 50]])
+    expect(comments.length).toBe(1)
+    // post_id should be false (redacted/suppressed) because Alice cannot read Post 5
+    expect(comments[0].post_id).toBe(false)
+  })
+
+  it('spawn() fails and rolls back when new record violates permCreate record rule', async () => {
+    // Add create rule on PostModel: can only create posts with state == 'draft'
+    tables.mx_rule.push({
+      id: 5,
+      model_id: 100,
+      name: 'Can only create draft posts',
+      domain_force: '[["state", "=", "draft"]]',
+      perm_read: false,
+      perm_write: false,
+      perm_create: true,
+      perm_unlink: false,
+    })
+    tables.mx_rule_vx_role_rel.push({ rule_id: 5, role_id: 10 })
+
+    const aliceEnv = createCtx(42, {}, getModel)
+
+    // Alice attempts to spawn directly as 'published' (violates permCreate rule)
+    await expect(
+      PostModel.spawn(PostModel, aliceEnv, {
+        title: 'Direct Publish Post',
+        state: 'published',
+        ownerId: 42,
+      })
+    ).rejects.toThrowError(AuthorizationError)
+
+    // Verify record was deleted/rolled back
+    expect(tables.demo_post.find((p) => p.title === 'Direct Publish Post')).toBeUndefined()
+  })
+
+  it('similarityScan() enforces record rules and excludes inaccessible high-similarity vectors', async () => {
+    // Add vector-bearing posts
+    tables.demo_post.push(
+      { id: 10, title: 'Allowed Post', state: 'published', owner_id: 42, is_active: true },
+      { id: 11, title: 'Secret Post', state: 'draft', owner_id: 99, is_active: true }
+    )
+
+    const aliceEnv = createCtx(42, {}, getModel)
+
+    // Alice performs similarityScan
+    const results = await PostModel.similarityScan(PostModel, aliceEnv, 'title', [0.1, 0.2])
+    const resultIds = results.map((r: any) => r.id)
+
+    expect(resultIds).toContain(10)
+    expect(resultIds).not.toContain(11) // Secret Post 11 is excluded by record rules!
   })
 })
