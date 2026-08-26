@@ -63,16 +63,16 @@ jobs:
             -e POSTGRES_DB=moonwitness_witness_cert \
             -p 127.0.0.1::5432 postgres:16
           for attempt in $(seq 1 60); do
-            mapped_port="$(docker inspect -f '{{(index (index .NetworkSettings.Ports "5432/tcp") 0).HostPort}}' moonwitness-pg-cert 2>/dev/null || true)"
-            if [ -n "$mapped_port" ] && docker exec moonwitness-pg-cert pg_isready -U postgres -d moonwitness_witness_cert >/dev/null 2>&1 \
-              && timeout 2 bash -c "</dev/tcp/127.0.0.1/$mapped_port" >/dev/null 2>&1; then
-              echo "PostgreSQL is ready on 127.0.0.1:$mapped_port"
-              echo "TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:$mapped_port/moonwitness_witness_cert" >> "$GITHUB_ENV"
-              echo "DATABASE_URL=postgres://postgres:postgres@127.0.0.1:$mapped_port/moonwitness_witness_cert" >> "$GITHUB_ENV"
+            container_ip="$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' moonwitness-pg-cert 2>/dev/null || true)"
+            if [ -n "$container_ip" ] && docker exec moonwitness-pg-cert pg_isready -U postgres -d moonwitness_witness_cert >/dev/null 2>&1 \
+              && timeout 2 bash -c "</dev/tcp/$container_ip/5432" >/dev/null 2>&1; then
+              echo "PostgreSQL is ready on $container_ip:5432"
+              echo "TEST_DATABASE_URL=postgres://postgres:postgres@$container_ip:5432/moonwitness_witness_cert" >> "$GITHUB_ENV"
+              echo "DATABASE_URL=postgres://postgres:postgres@$container_ip:5432/moonwitness_witness_cert" >> "$GITHUB_ENV"
               echo "MOONWITNESS_PG_STARTED=true" >> "$GITHUB_ENV"
               exit 0
             fi
-            echo "Waiting for PostgreSQL container/host port (attempt $attempt/60)..."
+            echo "Waiting for PostgreSQL container endpoint (attempt $attempt/60)..."
             sleep 1
           done
           docker logs moonwitness-pg-cert || true
