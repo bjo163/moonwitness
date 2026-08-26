@@ -5,6 +5,7 @@ import { isFieldDef as isFieldDefFn, fields } from './fields.js'
 import type { Ctx } from './env.js'
 import { createCtx } from './env.js'
 import { checkAccessRights, getRecordRulesDomain, AuthorizationError } from './security.js'
+import type { PermissionOperation } from './security.js'
 
 export type ModelFields<M extends typeof Vertex> = {
   [K in keyof InstanceType<M> as InstanceType<M>[K] extends FieldDef<any> ? K : never]: InferFieldType<InstanceType<M>[K]>
@@ -87,17 +88,15 @@ export class Recordset<M extends typeof Vertex, W extends string = never> {
   }
 
   async morph(vals: Partial<ModelRecord<M>>): Promise<boolean> {
-    for (const r of this.records) {
-      await (this.modelClass as any).morph(this.modelClass, this.env, r.id, vals)
-    }
-    return true
+    const ids = this.records.map((r: any) => r.id)
+    if (ids.length === 0) return true
+    return (this.modelClass as any).morph(this.modelClass, this.env, ids, vals)
   }
 
   async purge(): Promise<boolean> {
-    for (const r of this.records) {
-      await (this.modelClass as any).purge(this.modelClass, this.env, r.id)
-    }
-    return true
+    const ids = this.records.map((r: any) => r.id)
+    if (ids.length === 0) return true
+    return (this.modelClass as any).purge(this.modelClass, this.env, ids)
   }
 }
 
@@ -176,7 +175,6 @@ export class Vertex {
   }
 
   static validateData(modelClass: typeof Vertex, vals: Record<string, unknown>) {
-    console.log(`[VALIDATE] Validating ${modelClass._name}:`, vals)
     const fieldDefs = this.getFieldDefs(modelClass)
     for (const [k, v] of Object.entries(vals)) {
       const snakeKey = toSnakeCase(k)
@@ -319,14 +317,21 @@ export class Vertex {
            } else if (cmd === 4) {
              await Comodel.morph(Comodel, env, id, { [def.relation]: recordId });
            } else if (cmd === 5) {
-             const table2 = this.tableName(Comodel);
-             await conn(table2).where({ [fkCol]: recordId }).update({ [fkCol]: null });
+             const childRecs = await Comodel.fetch(Comodel, env, [[def.relation, '=', recordId]]);
+             const childIds = childRecs.map((r: any) => r.id);
+             if (childIds.length > 0) {
+               await Comodel.morph(Comodel, env, childIds, { [def.relation]: null });
+             }
            } else if (cmd === 6) {
-             const table2 = this.tableName(Comodel);
-             await conn(table2).where({ [fkCol]: recordId }).update({ [fkCol]: null });
-             const ids = Array.isArray(vals) ? vals : [];
-             for (const targetId of ids) {
-               await Comodel.morph(Comodel, env, targetId, { [def.relation]: recordId });
+             const childRecs = await Comodel.fetch(Comodel, env, [[def.relation, '=', recordId]]);
+             const currentIds = new Set(childRecs.map((r: any) => r.id));
+             const targetIds = Array.isArray(vals) ? vals : [];
+             const toUnlink = Array.from(currentIds).filter((cid) => !targetIds.includes(cid));
+             if (toUnlink.length > 0) {
+               await Comodel.morph(Comodel, env, toUnlink, { [def.relation]: null });
+             }
+             if (targetIds.length > 0) {
+               await Comodel.morph(Comodel, env, targetIds, { [def.relation]: recordId });
              }
            }
          }
@@ -491,6 +496,59 @@ export class Vertex {
     return row
   }
 
+  static async checkRecordOperationAccess(
+    modelClass: typeof Vertex,
+    env: Ctx,
+    ids: number | number[],
+    operation: PermissionOperation
+  ): Promise<void> {
+    const idArray = Array.isArray(ids) ? ids : [ids]
+    if (idArray.length === 0) return
+
+    await checkAccessRights(modelClass, env, operation)
+    if (env.uid === 1) return
+
+    const ruleDomain = await getRecordRulesDomain(modelClass, env, operation)
+    if (ruleDomain.length === 0) return
+
+    const table = this.tableName(modelClass)
+    const db = getDb()
+    const conn = env.trx || db
+    const query = conn(table)
+
+    // Handle _inherits joins
+    const parentTables: Record<string, string[]> = {}
+    if (modelClass._inherits && env.getModel) {
+      for (const [parentModelName, fkField] of Object.entries(modelClass._inherits)) {
+        const ParentModel = env.getModel(parentModelName)
+        if (ParentModel) {
+          const pt = this.tableName(ParentModel)
+          const pcol = toSnakeCase(fkField)
+          query.join(pt, `${table}.${pcol}`, '=', `${pt}.id`)
+          const pDefs = this.getFieldDefs(ParentModel)
+          parentTables[pt] = Object.keys(pDefs).map((f) => toSnakeCase(f))
+        }
+      }
+    }
+
+    const finalDomain = ['&', ['id', 'in', idArray], ...ruleDomain]
+    applyDomain(query, finalDomain, table, parentTables)
+    query.select(`${table}.id`)
+
+    const allowedRows = await query
+    const allowedIds = new Set(allowedRows.map((r: any) => r.id))
+
+    for (const reqId of idArray) {
+      if (!allowedIds.has(reqId)) {
+        const opName = operation.replace('perm', '').toLowerCase()
+        throw new AuthorizationError(
+          'ACCESS_DENIED',
+          `Access Denied: Record rule prevents ${modelClass._name} ${opName} on record ${reqId}`
+        )
+      }
+    }
+  }
+
   static async morph(
     modelClass: typeof Vertex,
     env: Ctx,
@@ -500,21 +558,7 @@ export class Vertex {
     const idArray = Array.isArray(ids) ? ids : [ids]
     if (idArray.length === 0) return true
     
-    await checkAccessRights(modelClass, env, 'permWrite')
-
-    const ruleDomain = await getRecordRulesDomain(modelClass, env, 'permWrite')
-    if (ruleDomain.length > 0) {
-      const allowedRecords = await this.fetch(modelClass, env, [['id', 'in', idArray]])
-      const allowedIds = new Set(allowedRecords.map((r: any) => r.id))
-      for (const reqId of idArray) {
-        if (!allowedIds.has(reqId)) {
-          throw new AuthorizationError(
-            'ACCESS_DENIED',
-            `Access Denied: Record rule prevents ${modelClass._name} write on record ${reqId}`
-          )
-        }
-      }
-    }
+    await this.checkRecordOperationAccess(modelClass, env, idArray, 'permWrite')
 
     const clonedVals = { ...vals }
 
@@ -1139,21 +1183,7 @@ export class Vertex {
   ) {
     const idArray = Array.isArray(ids) ? ids : [ids]
     if (idArray.length === 0) return true
-    await checkAccessRights(modelClass, env, 'permUnlink')
-
-    const ruleDomain = await getRecordRulesDomain(modelClass, env, 'permUnlink')
-    if (ruleDomain.length > 0) {
-      const allowedRecords = await this.fetch(modelClass, env, [['id', 'in', idArray]])
-      const allowedIds = new Set(allowedRecords.map((r: any) => r.id))
-      for (const reqId of idArray) {
-        if (!allowedIds.has(reqId)) {
-          throw new AuthorizationError(
-            'ACCESS_DENIED',
-            `Access Denied: Record rule prevents ${modelClass._name} deletion on record ${reqId}`
-          )
-        }
-      }
-    }
+    await this.checkRecordOperationAccess(modelClass, env, idArray, 'permUnlink')
     
     if ((modelClass as any).beforeDelete) {
       for (const id of idArray) {
