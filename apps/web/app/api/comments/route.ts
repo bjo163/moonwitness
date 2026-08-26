@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server"
 import { MoonClient } from "@moon/client"
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:4000"
+const commentRateWindowMs = 60_000
+const commentRateLimit = 10
+const commentRate = new Map<number, { count: number; startedAt: number }>()
 
 function getBearerToken(req: NextRequest): string | null {
   const authorization = req.headers.get("authorization")
@@ -131,6 +134,17 @@ export async function POST(req: NextRequest) {
     }
 
     const userId = Number(session.user.id)
+    const now = Date.now()
+    const currentRate = commentRate.get(userId)
+    const rate = currentRate && now - currentRate.startedAt < commentRateWindowMs
+      ? currentRate
+      : { count: 0, startedAt: now }
+    if (rate.count >= commentRateLimit) {
+      return NextResponse.json({ error: "Terlalu banyak komentar. Coba lagi nanti.", code: "RATE_LIMITED" }, { status: 429 })
+    }
+    rate.count += 1
+    commentRate.set(userId, rate)
+
     const cleanEmail = String(session.user.email || "").trim().toLowerCase()
     const userName = String(session.user.name || cleanEmail.split("@")[0] || "User").trim()
     const role = userId === 1 ? "admin" : "user"
