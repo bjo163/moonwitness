@@ -31,65 +31,65 @@ jobs:
       CI: "true"
       NODE_ENV: test
       JWT_SECRET: certification-only-test-secret
+      CERT_NETWORK: moonwitness-cert-${{ github.run_id }}
+      CERT_PG_CONTAINER: moonwitness-pg-cert-${{ github.run_id }}
+      CERT_APP_CONTAINER: moonwitness-app-cert-${{ github.run_id }}
+      CERT_IMAGE: moonwitness-api-cert:${{ github.run_id }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-
-      - name: Start isolated PostgreSQL certification container
+      - name: Start isolated PostgreSQL certification network
         shell: bash
         run: |
           set -euo pipefail
           command -v docker >/dev/null || { echo "Docker is required on the self-hosted runner."; exit 1; }
-          docker rm -f moonwitness-pg-cert >/dev/null 2>&1 || true
-          docker run -d --rm --name moonwitness-pg-cert \
+          docker network create "$CERT_NETWORK"
+          docker run -d --rm \
+            --name "$CERT_PG_CONTAINER" \
+            --network "$CERT_NETWORK" \
+            --network-alias postgres \
             -e POSTGRES_USER=postgres \
             -e POSTGRES_PASSWORD=postgres \
             -e POSTGRES_DB=moonwitness_witness_cert \
-            -p 127.0.0.1::5432 postgres:16
+            postgres:16
 
           for attempt in $(seq 1 60); do
-            container_ip="$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' moonwitness-pg-cert 2>/dev/null || true)"
-            if [ -n "$container_ip" ] \
-              && docker exec moonwitness-pg-cert pg_isready -U postgres -d moonwitness_witness_cert >/dev/null 2>&1 \
-              && timeout 2 bash -c "</dev/tcp/$container_ip/5432" >/dev/null 2>&1; then
-              database_url="postgres://postgres:postgres@$container_ip:5432/moonwitness_witness_cert"
-              echo "PostgreSQL is ready on $container_ip:5432"
-              echo "TEST_DATABASE_URL=$database_url" >> "$GITHUB_ENV"
-              echo "DATABASE_URL=$database_url" >> "$GITHUB_ENV"
+            if docker exec "$CERT_PG_CONTAINER" \
+              pg_isready -U postgres -d moonwitness_witness_cert >/dev/null 2>&1; then
+              echo "PostgreSQL is healthy inside $CERT_NETWORK."
               exit 0
             fi
-            echo "Waiting for PostgreSQL container/bridge endpoint (attempt $attempt/60)..."
+            echo "Waiting for PostgreSQL health check (attempt $attempt/60)..."
             sleep 1
           done
-          docker logs moonwitness-pg-cert || true
+          docker logs "$CERT_PG_CONTAINER" || true
           exit 1
 
-      - name: Enable pinned pnpm
+      - name: Build certification image
+        shell: bash
+        run: docker build --file apps/api/Dockerfile --tag "$CERT_IMAGE" .
+
+      - name: Verify migrations, seed, and Witness graph
         shell: bash
         run: |
-          corepack enable
-          corepack prepare pnpm@10.33.4 --activate
-          pnpm --version
+          docker run --rm \
+            --name "$CERT_APP_CONTAINER" \
+            --network "$CERT_NETWORK" \
+            -e CI=true \
+            -e NODE_ENV=test \
+            -e JWT_SECRET="$JWT_SECRET" \
+            -e TEST_DATABASE_URL=postgres://postgres:postgres@postgres:5432/moonwitness_witness_cert \
+            -e DATABASE_URL=postgres://postgres:postgres@postgres:5432/moonwitness_witness_cert \
+            "$CERT_IMAGE" \
+            sh -lc 'pnpm --filter api db:verify && pnpm --filter api certify:witness-graph-pg'
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build Moon packages
-        run: pnpm --filter "@moon/*" build
-
-      - name: Verify migrations and canonical seed
-        run: pnpm --filter api db:verify
-
-      - name: Certify Witness graph on PostgreSQL
-        run: pnpm --filter api certify:witness-graph-pg
-
-      - name: Stop PostgreSQL certification container
+      - name: Clean certification containers and network
         if: always()
         shell: bash
-        run: docker rm -f moonwitness-pg-cert >/dev/null 2>&1 || true
+        run: |
+          docker rm -f "$CERT_APP_CONTAINER" >/dev/null 2>&1 || true
+          docker rm -f "$CERT_PG_CONTAINER" >/dev/null 2>&1 || true
+          docker network rm "$CERT_NETWORK" >/dev/null 2>&1 || true
+          docker image rm "$CERT_IMAGE" >/dev/null 2>&1 || true
