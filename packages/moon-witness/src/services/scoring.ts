@@ -36,7 +36,7 @@ export function getScoreProfile(key: string): WitnessScoreProfile {
   return { ...profile, weights: { ...profile.weights } }
 }
 
-export function scoreEntity(input: { identity?: number; provenance?: number; coverage?: number }, profile = SCORE_PROFILES.figure_identity_v1): WitnessScoreResult {
+export function scoreEntity(input: { identity?: number; provenance?: number; coverage?: number }, profile = SCORE_PROFILES.figure_identity_v1!): WitnessScoreResult {
   return score(profile, [
     { code: 'IDENTITY_CONFIDENCE', state: input.identity === undefined ? 'INSUFFICIENT' : 'AVAILABLE', value: input.identity, evidenceRefs: [], reasonCodes: input.identity === undefined ? ['IDENTITY_MISSING'] : [] },
     { code: 'PROVENANCE_QUALITY', state: input.provenance === undefined ? 'INSUFFICIENT' : 'AVAILABLE', value: input.provenance, evidenceRefs: [], reasonCodes: input.provenance === undefined ? ['PROVENANCE_MISSING'] : [] },
@@ -44,7 +44,7 @@ export function scoreEntity(input: { identity?: number; provenance?: number; cov
   ])
 }
 
-export function scoreRelation(input: { authority?: number; provenance?: number; directness?: number; confidence?: number }, profile = SCORE_PROFILES.relation_confidence_v1): WitnessScoreResult {
+export function scoreRelation(input: { authority?: number; provenance?: number; directness?: number; confidence?: number }, profile = SCORE_PROFILES.relation_confidence_v1!): WitnessScoreResult {
   return score(profile, [['SOURCE_AUTHORITY', input.authority], ['PROVENANCE_QUALITY', input.provenance], ['EVIDENCE_DIRECTNESS', input.directness], ['RELATION_CONFIDENCE', input.confidence]].map(([code, value]) => ({ code, state: value === undefined ? 'INSUFFICIENT' : 'AVAILABLE', value, evidenceRefs: [], reasonCodes: value === undefined ? [`${code}_MISSING`] : [] })) as WitnessScoreDimension[])
 }
 
