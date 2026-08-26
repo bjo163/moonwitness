@@ -327,6 +327,19 @@ importers:
         specifier: ^8.60.0
         version: 8.60.0(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.3)
 
+  packages/moon-account:
+    dependencies:
+      '@moon/base':
+        specifier: workspace:*
+        version: link:../moon-base
+      '@moon/orm':
+        specifier: workspace:*
+        version: link:../moon-orm
+    devDependencies:
+      typescript:
+        specifier: ^5.5.4
+        version: 5.9.3
+
   packages/moon-base:
     dependencies:
       '@moon/orm':
@@ -369,6 +382,22 @@ importers:
         version: 5.9.3
 
   packages/moon-client:
+    devDependencies:
+      typescript:
+        specifier: ^5.5.4
+        version: 5.9.3
+
+  packages/moon-crm:
+    dependencies:
+      '@moon/base':
+        specifier: workspace:*
+        version: link:../moon-base
+      '@moon/mail':
+        specifier: workspace:*
+        version: link:../moon-mail
+      '@moon/orm':
+        specifier: workspace:*
+        version: link:../moon-orm
     devDependencies:
       typescript:
         specifier: ^5.5.4
@@ -460,6 +489,19 @@ importers:
         specifier: ^5.0.0
         version: 5.9.3
 
+  packages/moon-product:
+    dependencies:
+      '@moon/base':
+        specifier: workspace:*
+        version: link:../moon-base
+      '@moon/orm':
+        specifier: workspace:*
+        version: link:../moon-orm
+    devDependencies:
+      typescript:
+        specifier: ^5.5.4
+        version: 5.9.3
+
   packages/moon-server:
     dependencies:
       '@moon/base':
@@ -517,6 +559,22 @@ importers:
     devDependencies:
       typescript:
         specifier: ^5.0.0
+        version: 5.9.3
+
+  packages/moon-stock:
+    dependencies:
+      '@moon/base':
+        specifier: workspace:*
+        version: link:../moon-base
+      '@moon/orm':
+        specifier: workspace:*
+        version: link:../moon-orm
+      '@moon/product':
+        specifier: workspace:*
+        version: link:../moon-product
+    devDependencies:
+      typescript:
+        specifier: ^5.5.4
         version: 5.9.3
 
   packages/moon-testing:
