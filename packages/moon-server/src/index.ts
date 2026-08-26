@@ -5,13 +5,34 @@ export { ExternalCache, createProxyHandler, type ProxyOptions } from './proxy.js
 
 // Utilities
 export { parseBody, sendJson, parseUrl } from './utils/http.js'
-export { verifyToken } from './utils/auth.js'
+export {
+  verifyToken,
+  issueJwt,
+  validateUserSession,
+  revokeUserSessions,
+  hashOtpToken,
+  generateSecureOtp,
+  createOtpChallenge,
+  verifyOtpChallenge,
+  type JwtClaims,
+  type VerifyTokenOptions,
+  type OtpChallenge,
+} from './utils/auth.js'
 
 // Middleware
 export { corsMiddleware } from './middleware/cors.js'
 
 // Handlers
-export { handleLogin, handleRegister, handleForgotPassword, handleVerifyOtp, handleResetPassword, type AuthConfig } from './handlers/auth.js'
+export {
+  handleLogin,
+  handleRegister,
+  handleForgotPassword,
+  handleVerifyOtp,
+  handleResetPassword,
+  handleLogout,
+  handleGetSession,
+  type AuthConfig,
+} from './handlers/auth.js'
 export { handleDbStatus, handleMetaModels } from './handlers/meta.js'
 export { handleRest } from './handlers/rest.js'
 export { handleRpc } from './handlers/rpc.js'

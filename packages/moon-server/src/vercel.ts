@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import { setupOrm, getDb, getModel, createCtx, SUPERUSER_ID, Vertex, registerModel, type DbConfig } from '@moon/orm'
 import { getRegistry } from '@moon/orm/dist/registry.js'
+import { issueJwt } from './utils/auth.js'
 
 export interface VercelAdapterConfig {
   database: DbConfig;
@@ -59,7 +60,12 @@ export function createVercelAdapter(config: VercelAdapterConfig) {
         const isValid = await bcrypt.compare(password, user.password);
         if (!isValid) return Response.json({ error: 'Invalid credentials' }, { status: 401, headers });
 
-        const token = jwt.sign({ sub: user.id, email: user.email }, config.jwtSecret || 'secret', { expiresIn: '24h' });
+        const tokenVersion = Number(user.token_version ?? user.tokenVersion ?? 1)
+        const token = issueJwt(
+          { sub: user.id, email: user.email, tokenVersion },
+          config.jwtSecret || 'secret',
+          { expiresIn: '24h' }
+        );
         return Response.json({ token, user: { id: user.id, email: user.email, name: user.name, partnerId: user.partner_id } }, { status: 200, headers });
       }
 
@@ -71,7 +77,9 @@ export function createVercelAdapter(config: VercelAdapterConfig) {
         }
         const token = authHeader.split(' ')[1];
         if (!token) return Response.json({ error: 'Missing token' }, { status: 401, headers });
-        const decoded = jwt.verify(token, config.jwtSecret || 'secret') as any;
+        const decoded = jwt.verify(token, config.jwtSecret || 'secret', {
+          algorithms: ['HS256', 'HS384', 'HS512']
+        }) as any;
         const uid = decoded.sub as number;
         if (!uid) return Response.json({ error: 'Unauthorized' }, { status: 401, headers });
 

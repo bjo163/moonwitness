@@ -5,7 +5,16 @@ import nodemailer from 'nodemailer'
 import { getModel, createCtx, ANONYMOUS_ID, authSecurityContext } from '@moon/orm'
 import { logger } from '../logger.js'
 import { parseBody, sendJson } from '../utils/http.js'
-import { generateSecureOtp, hashOtpToken, OTP_EXPIRY_MS, MAX_OTP_ATTEMPTS } from '../utils/auth.js'
+import {
+  generateSecureOtp,
+  hashOtpToken,
+  OTP_EXPIRY_MS,
+  MAX_OTP_ATTEMPTS,
+  issueJwt,
+  validateUserSession,
+  revokeUserSessions,
+  verifyToken,
+} from '../utils/auth.js'
 
 export interface AuthConfig {
   jwtSecret: string
@@ -70,7 +79,7 @@ export async function handleLogin(
       return sendJson(res, 401, { error: 'Invalid credentials' }, req)
     }
 
-    const token = jwt.sign(
+    const token = issueJwt(
       { sub: user.id, email: user.email, tokenVersion: user.token_version || user.tokenVersion || 1 },
       config.jwtSecret,
       { expiresIn: '7d' }
@@ -146,7 +155,7 @@ export async function handleRegister(
       })
     })
 
-    const token = jwt.sign(
+    const token = issueJwt(
       { sub: user.id, email: user.email, tokenVersion: 1 },
       config.jwtSecret,
       { expiresIn: '7d' }
@@ -449,3 +458,67 @@ export async function handleResetPassword(
     return sendJson(res, 500, { error: 'Internal server error' }, req)
   }
 }
+
+/**
+ * Handle logout / session revocation
+ */
+export async function handleLogout(
+  req: IncomingMessage,
+  res: ServerResponse,
+  config: AuthConfig
+): Promise<void> {
+  try {
+    const decoded = verifyToken(req, config.jwtSecret)
+    const uid = decoded.sub as number
+
+    if (uid && uid > 0) {
+      await revokeUserSessions(uid)
+      logger.info('moon.auth', `User id ${uid} logged out (session revoked)`)
+    }
+
+    return sendJson(res, 200, { message: 'Logged out successfully' }, req)
+  } catch (err: any) {
+    logger.error('moon.auth', 'Logout error:', err)
+    return sendJson(res, 500, { error: 'Internal server error' }, req)
+  }
+}
+
+/**
+ * Handle get current authenticated session / me
+ */
+export async function handleGetSession(
+  req: IncomingMessage,
+  res: ServerResponse,
+  config: AuthConfig
+): Promise<void> {
+  try {
+    const decoded = verifyToken(req, config.jwtSecret)
+    const uid = decoded.sub as number
+
+    if (!uid || uid <= 0) {
+      return sendJson(res, 401, { error: 'Unauthorized', code: 'AUTH_REQUIRED' }, req)
+    }
+
+    const env = createCtx(ANONYMOUS_ID, authSecurityContext('login'), getModel as any)
+    const session = await validateUserSession(env, uid, decoded.tokenVersion)
+
+    return sendJson(res, 200, { user: session }, req)
+  } catch (err: any) {
+    if (err?.message === 'Session revoked' || err?.message === 'User account is inactive or disabled') {
+      return sendJson(res, 401, { error: err.message, code: 'SESSION_REVOKED' }, req)
+    }
+    const isAuthError = [
+      'Token expired',
+      'Invalid token',
+      'Authorization header required',
+      'Invalid authorization format',
+      'Invalid token subject'
+    ].includes(err?.message)
+    const statusCode = isAuthError ? 401 : 500
+    return sendJson(res, statusCode, {
+      error: err?.message || 'Internal server error',
+      code: isAuthError ? 'AUTH_REQUIRED' : 'INTERNAL_ERROR'
+    }, req)
+  }
+}
+

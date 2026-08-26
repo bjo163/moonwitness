@@ -4,7 +4,16 @@ import { globalRoutes, HttpHandler } from './router.js'
 import { createProxyHandler } from './proxy.js'
 import { logger } from './logger.js'
 import { generateOpenApi } from './openapi.js'
-import { handleLogin, handleRegister, handleForgotPassword, handleVerifyOtp, handleResetPassword, type AuthConfig } from './handlers/auth.js'
+import {
+  handleLogin,
+  handleRegister,
+  handleForgotPassword,
+  handleVerifyOtp,
+  handleResetPassword,
+  handleLogout,
+  handleGetSession,
+  type AuthConfig
+} from './handlers/auth.js'
 import { handleDbStatus, handleMetaModels, handleHealth, handleLiveness, handleReadiness } from './handlers/meta.js'
 import { handleRest } from './handlers/rest.js'
 import { handleRpc } from './handlers/rpc.js'
@@ -232,6 +241,14 @@ export class NativeServer {
       return handleResetPassword(req, res, authConfig)
     }
 
+    if (req.method === 'POST' && req.url === '/auth/logout') {
+      return handleLogout(req, res, authConfig)
+    }
+
+    if (req.method === 'GET' && (req.url === '/auth/me' || req.url === '/auth/session')) {
+      return handleGetSession(req, res, authConfig)
+    }
+
     if (req.method === 'POST' && req.url === '/rpc') {
       return handleRpc(req, res, this.config.jwtSecret)
     }
@@ -283,6 +300,8 @@ export class NativeServer {
         { method: 'POST', path: '/auth/forgot-password' },
         { method: 'POST', path: '/auth/verify-otp' },
         { method: 'POST', path: '/auth/reset-password' },
+        { method: 'POST', path: '/auth/logout' },
+        { method: 'GET', path: '/auth/me' },
         { method: 'POST', path: '/rpc' },
         { method: 'GET', path: '/db/status' },
         { method: 'GET', path: '/meta/models' },
