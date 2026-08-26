@@ -172,6 +172,21 @@ export {
   type FigureAnalysisInput,
   type TraditionAnalysisInput
 } from './engines/figure-tradition.js'
+export {
+  createLexicalAnalysisModule,
+  validateLexicalAnalysisInput,
+  type LexicalAnalysisInput
+} from './engines/lexical-analysis.js'
+export {
+  createConceptEvidenceModule,
+  validateConceptEvidenceInput,
+  type ConceptEvidenceInput
+} from './engines/concept-evidence.js'
+export {
+  createDivineExpressionModule,
+  validateDivineExpressionInput,
+  type DivineExpressionInput
+} from './engines/divine-expression.js'
 
 export {
   planLegacyMigration,
