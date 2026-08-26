@@ -34,14 +34,16 @@ interface ModelMetadataRow {
   model: string
 }
 
-interface RuleLinkRow {
-  ir_rule_id: number
-}
-
 interface RuleRow {
   id: number
   name?: string
   domain_force?: string
+  active?: boolean
+  is_active?: boolean
+  perm_read?: boolean
+  perm_write?: boolean
+  perm_create?: boolean
+  perm_unlink?: boolean
 }
 
 export class AuthorizationError extends Error {
@@ -233,7 +235,6 @@ export function parseDeclarativeDomain(raw: string): unknown[] {
     const parsed = JSON.parse(trimmed)
     if (Array.isArray(parsed)) return parsed
   } catch {
-    // Try normalizing single-quoted array representation: e.g. [['owner_id', '=', '$user.id']]
     try {
       const jsonCompatible = trimmed
         .replace(/'((?:\\'|[^'])*)'/g, '"$1"')
@@ -307,67 +308,140 @@ export function evaluateRecordRuleDomain(
   return evaluated
 }
 
+/**
+ * Resolves active record rule domains for a given model, user, and operation.
+ * Supports Global Rules (AND-composition) and Group Rules (OR-composition).
+ */
 export async function getRecordRulesDomain(
   modelClass: typeof Vertex,
-  env: Ctx
+  env: Ctx,
+  operation: PermissionOperation = 'permRead'
 ): Promise<unknown[]> {
-  if (env.uid === 1 || modelClass._public) return []
+  if (env.uid === 1) return []
+  if (modelClass._public && operation === 'permRead') return []
   if (env.uid === 0 && getAuthSecurityScope(env)) return []
 
   const groupIds = await getUserRoleIds(env)
-  if (groupIds.length === 0) {
-    deny('ACCESS_DENIED', `Access Denied: No groups assigned to user for ${modelClass._name}`)
-  }
-
   const model = await getModelMetadata(modelClass, env)
   const db = getDb()
   const conn = env.trx || db
+  const permCol = permissionColumn(operation)
 
-  const ruleGroupRows = (await conn('ir_rule_res_groups_rel')
-    .whereIn('vx_role_id', groupIds)
-    .select('ir_rule_id')) as RuleLinkRow[]
-  const ruleIds = ruleGroupRows.map((row) => row.ir_rule_id)
+  // Query all active rules for this model
+  let ruleQuery = conn('mx_rule').where('model_id', model.id)
+  
+  // Check active flag if present in schema
+  const allRules = (await ruleQuery) as RuleRow[]
+  if (!allRules || allRules.length === 0) return []
 
-  if (ruleIds.length === 0) return []
+  // Filter rules by active flag and operation permission
+  const activeRules = allRules.filter((r) => {
+    const isActive = r.active !== false && r.is_active !== false
+    const hasPerm = (r as any)[permCol] !== false
+    return isActive && hasPerm
+  })
 
-  const rules = (await conn('mx_rule')
-    .where('model_id', model.id)
-    .whereIn('id', ruleIds)
-    .select('id', 'name', 'domain_force')) as RuleRow[]
+  if (activeRules.length === 0) return []
 
-  if (rules.length === 0) {
-    deny(
-      'SECURITY_METADATA_MISSING',
-      `Access Denied: Record-rule links reference missing rules for ${modelClass._name}`
-    )
+  // Find relation links: support canonical mx_rule_vx_role_rel and legacy ir_rule_res_groups_rel
+  let relRows: Array<{ rule_id: number; role_id: number }> = []
+  try {
+    const rows = await conn('mx_rule_vx_role_rel')
+    relRows = rows.map((r: any) => ({
+      rule_id: r.mx_rule_id ?? r.ir_rule_id ?? r.rule_id,
+      role_id: r.vx_role_id ?? r.group_id ?? r.role_id,
+    }))
+  } catch {
+    try {
+      const rows = await conn('ir_rule_res_groups_rel')
+      relRows = rows.map((r: any) => ({
+        rule_id: r.ir_rule_id ?? r.mx_rule_id ?? r.rule_id,
+        role_id: r.vx_role_id ?? r.group_id ?? r.role_id,
+      }))
+    } catch {
+      relRows = []
+    }
   }
 
-  const user = (await conn('vx_user').where('id', env.uid).first()) as Record<string, unknown> | undefined
-  if (!user) {
+  // Separate Global Rules (no roles linked) and Group Rules (linked to roles)
+  const globalRules: RuleRow[] = []
+  const groupRules: RuleRow[] = []
+
+  for (const rule of activeRules) {
+    const links = relRows.filter((l) => l.rule_id === rule.id)
+    if (links.length === 0) {
+      globalRules.push(rule)
+    } else {
+      // If user has one of the linked roles, include in groupRules
+      const matchesUserRole = links.some((l) => groupIds.includes(l.role_id))
+      if (matchesUserRole) {
+        groupRules.push(rule)
+      }
+    }
+  }
+
+  // Resolve principal user attributes (including partner enrichment)
+  const userRow = (await conn('vx_user').where('id', env.uid).first()) as Record<string, unknown> | undefined
+  if (!userRow) {
     deny('ACCESS_DENIED', `Access Denied: User ${env.uid} does not exist`)
   }
 
-  let combinedDomain: unknown[] = []
-
-  for (const rule of rules) {
-    if (typeof rule.domain_force !== 'string' || rule.domain_force.trim().length === 0) {
-      deny('SECURITY_RULE_INVALID', `Access Denied: Invalid record rule ${rule.name ?? rule.id}`)
-    }
-
+  const userContext = { ...userRow }
+  const partnerId = userRow.partner_id ?? userRow.partnerId
+  if (partnerId) {
     try {
-      const evaluated = evaluateRecordRuleDomain(rule.domain_force, user)
-      if (evaluated.length === 0) continue
-
-      if (combinedDomain.length === 0) {
-        combinedDomain = evaluated
-      } else {
-        combinedDomain = ['|', ...combinedDomain, ...evaluated]
+      const partnerRow = await conn('vx_node').where('id', partnerId).first()
+      if (partnerRow) {
+        userContext.name = userContext.name || partnerRow.name
+        userContext.email = userContext.email || partnerRow.email
+        userContext.company_id = userContext.company_id ?? partnerRow.company_id
       }
-    } catch (error) {
-      if (error instanceof AuthorizationError) throw error
-      deny('SECURITY_RULE_INVALID', `Access Denied: Failed to evaluate record rule ${rule.name ?? rule.id}`)
+    } catch {
+      // Ignored if partner table not available
     }
   }
 
-  return combinedDomain
+  // 1. Evaluate Global Rules (ALL must match -> AND composition)
+  const evaluatedGlobal: unknown[][] = []
+  for (const rule of globalRules) {
+    if (!rule.domain_force) continue
+    const domain = evaluateRecordRuleDomain(rule.domain_force, userContext)
+    if (domain.length > 0) evaluatedGlobal.push(domain)
+  }
+
+  // 2. Evaluate Group Rules (ANY can match -> OR composition)
+  const evaluatedGroup: unknown[][] = []
+  for (const rule of groupRules) {
+    if (!rule.domain_force) continue
+    const domain = evaluateRecordRuleDomain(rule.domain_force, userContext)
+    if (domain.length > 0) evaluatedGroup.push(domain)
+  }
+
+  let groupDomain: unknown[] = []
+  for (const gd of evaluatedGroup) {
+    if (groupDomain.length === 0) {
+      groupDomain = gd
+    } else {
+      groupDomain = ['|', ...groupDomain, ...gd]
+    }
+  }
+
+  let finalRuleDomain: unknown[] = []
+  for (const gd of evaluatedGlobal) {
+    if (finalRuleDomain.length === 0) {
+      finalRuleDomain = gd
+    } else {
+      finalRuleDomain = ['&', ...finalRuleDomain, ...gd]
+    }
+  }
+
+  if (groupDomain.length > 0) {
+    if (finalRuleDomain.length > 0) {
+      finalRuleDomain = ['&', ...finalRuleDomain, ...groupDomain]
+    } else {
+      finalRuleDomain = groupDomain
+    }
+  }
+
+  return finalRuleDomain
 }

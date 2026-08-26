@@ -502,7 +502,7 @@ export class Vertex {
     
     await checkAccessRights(modelClass, env, 'permWrite')
 
-    const ruleDomain = await getRecordRulesDomain(modelClass, env)
+    const ruleDomain = await getRecordRulesDomain(modelClass, env, 'permWrite')
     if (ruleDomain.length > 0) {
       const allowedRecords = await this.fetch(modelClass, env, [['id', 'in', idArray]])
       const allowedIds = new Set(allowedRecords.map((r: any) => r.id))
@@ -690,33 +690,29 @@ export class Vertex {
     env: Ctx,
     ids: number | number[]
   ): Promise<Recordset<M>> {
-    const db = getDb()
-    const table = (modelClass as unknown as typeof Vertex).tableName(modelClass)
-    const conn = env.trx || db
+    await checkAccessRights(modelClass, env, 'permRead')
     const idArray = Array.isArray(ids) ? ids : [ids]
     if (idArray.length === 0) return new Recordset(modelClass, env, [])
-    
-    // Check cache first
-    const uncachedIds: number[] = []
-    const cachedRows: any[] = []
-    for (const id of idArray) {
-      const cacheKey = `${table}_${id}`
-      if (env.cache?.has(cacheKey)) {
-        cachedRows.push(env.cache.get(cacheKey))
-      } else {
-        uncachedIds.push(id)
+
+    const rows = await (modelClass as unknown as typeof Vertex).fetch(
+      modelClass,
+      env,
+      [['id', 'in', idArray]]
+    )
+
+    if (rows.length !== idArray.length) {
+      const allowedIds = new Set(rows.map((r: any) => r.id))
+      for (const reqId of idArray) {
+        if (!allowedIds.has(reqId)) {
+          throw new AuthorizationError(
+            'ACCESS_DENIED',
+            `Access Denied: Record rule prevents ${modelClass._name} read on record ${reqId}`
+          )
+        }
       }
     }
 
-    if (uncachedIds.length > 0) {
-      const rows = await conn(table).whereIn('id', uncachedIds)
-      for (const row of rows) {
-        env.cache?.set(`${table}_${row.id}`, row)
-        cachedRows.push(row)
-      }
-    }
-    
-    return new Recordset(modelClass, env, cachedRows)
+    return new Recordset(modelClass, env, rows)
   }
 
   static async scan<M extends typeof Vertex>(
@@ -749,8 +745,14 @@ export class Vertex {
     const query = conn(table)
 
     const baseDomain = options?.domain || []
-    if (baseDomain.length > 0) {
-      applyDomain(query, baseDomain, table, {})
+    const ruleDomain = await getRecordRulesDomain(modelClass, env, 'permRead')
+    let finalDomain = baseDomain
+    if (ruleDomain.length > 0) {
+      finalDomain = finalDomain.length > 0 ? ['&', ...finalDomain, ...ruleDomain] : ruleDomain
+    }
+
+    if (finalDomain.length > 0) {
+      applyDomain(query, finalDomain, table, {})
     }
 
     const col = toSnakeCase(vectorField)
@@ -800,7 +802,7 @@ export class Vertex {
       }
     }
 
-    const ruleDomain = await getRecordRulesDomain(modelClass, env)
+    const ruleDomain = await getRecordRulesDomain(modelClass, env, 'permRead')
     
     let finalDomain = baseDomain
     if (ruleDomain.length > 0) {
@@ -1121,13 +1123,13 @@ export class Vertex {
     env: Ctx,
     ids: number[]
   ): Promise<[number, string][]> {
-    const table = this.tableName(modelClass)
+    if (ids.length === 0) return []
+    await checkAccessRights(modelClass, env, 'permRead')
     const recName = modelClass._rec_name || 'name'
     const colName = toSnakeCase(recName)
-    const db = getDb()
-    const conn = env.trx || db
-    const rows = await conn(table).whereIn('id', ids).select('id', colName)
-    return rows.map((r: any) => [r.id, String(r[colName] || '')])
+    
+    const rows = await this.fetch(modelClass, env, [['id', 'in', ids]], ['id', colName])
+    return rows.map((r: any) => [r.id, String(r[colName] || r[recName] || '')])
   }
 
   static async purge(
@@ -1136,9 +1138,10 @@ export class Vertex {
     ids: number | number[]
   ) {
     const idArray = Array.isArray(ids) ? ids : [ids]
+    if (idArray.length === 0) return true
     await checkAccessRights(modelClass, env, 'permUnlink')
 
-    const ruleDomain = await getRecordRulesDomain(modelClass, env)
+    const ruleDomain = await getRecordRulesDomain(modelClass, env, 'permUnlink')
     if (ruleDomain.length > 0) {
       const allowedRecords = await this.fetch(modelClass, env, [['id', 'in', idArray]])
       const allowedIds = new Set(allowedRecords.map((r: any) => r.id))
@@ -1233,7 +1236,7 @@ export class Vertex {
       }
     }
 
-    const ruleDomain = await getRecordRulesDomain(modelClass, env)
+    const ruleDomain = await getRecordRulesDomain(modelClass, env, 'permRead')
     
     let finalDomain = baseDomain
     if (ruleDomain.length > 0) {
@@ -1287,7 +1290,7 @@ export class Vertex {
       }
     }
 
-    const ruleDomain = await getRecordRulesDomain(modelClass, env)
+    const ruleDomain = await getRecordRulesDomain(modelClass, env, 'permRead')
     let finalDomain = baseDomain
     if (ruleDomain.length > 0) {
       if (finalDomain.length > 0) {

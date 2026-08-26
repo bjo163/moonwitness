@@ -14,6 +14,22 @@ export default class IrSequence extends Vertex {
   companyId = fields.Many2one({ comodel: 'vx.org' })
 
   /**
+   * Interpolates date variables in prefix/suffix: %(year)s, %(y)s, %(month)s, %(day)s
+   */
+  static interpolateTemplate(template: string, now: Date = new Date()): string {
+    const year = now.getFullYear().toString()
+    const y = year.slice(-2)
+    const month = (now.getMonth() + 1).toString().padStart(2, '0')
+    const day = now.getDate().toString().padStart(2, '0')
+
+    return template
+      .replace(/%\(year\)s/g, year)
+      .replace(/%\(y\)s/g, y)
+      .replace(/%\(month\)s/g, month)
+      .replace(/%\(day\)s/g, day)
+  }
+
+  /**
    * Allocate the next sequential code safely in an atomic transaction
    */
   static async nextByCode(env: Ctx, code: string): Promise<string> {
@@ -27,8 +43,11 @@ export default class IrSequence extends Vertex {
       const currentNext = Number(seq.number_next ?? seq.numberNext ?? 1)
       const increment = Number(seq.number_increment ?? seq.numberIncrement ?? 1)
       const padding = Number(seq.padding ?? 4)
-      const prefix = String(seq.prefix ?? '')
-      const suffix = String(seq.suffix ?? '')
+      const rawPrefix = String(seq.prefix ?? '')
+      const rawSuffix = String(seq.suffix ?? '')
+
+      const prefix = this.interpolateTemplate(rawPrefix)
+      const suffix = this.interpolateTemplate(rawSuffix)
 
       const formattedNumber = String(currentNext).padStart(padding, '0')
       const formattedCode = `${prefix}${formattedNumber}${suffix}`

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import type { IncomingMessage } from 'node:http'
 import jwt from 'jsonwebtoken'
-import { verifyToken } from '../src/utils/auth.js'
+import { verifyToken, createOtpChallenge, verifyOtpChallenge } from '../src/utils/auth.js'
 import { ANONYMOUS_ID } from '@moon/orm'
 
 const TEST_SECRET = 'super-secret-jwt-key-for-unit-testing-32chars!'
@@ -74,5 +74,54 @@ describe('JWT Verification & Expiry Enforcement (#15)', () => {
 
     const tokenString = jwt.sign({ sub: 'admin-user' }, TEST_SECRET, { expiresIn: '1h' })
     expect(() => verifyToken(mockReq(`Bearer ${tokenString}`), TEST_SECRET)).toThrow('Invalid token subject')
+  })
+})
+
+describe('OTP Challenge Hardening & Expiration (#29)', () => {
+  it('creates a 6-digit OTP challenge expiring in 15 minutes', () => {
+    const challenge = createOtpChallenge(42)
+    expect(challenge.userId).toBe(42)
+    expect(challenge.code).toHaveLength(6)
+    expect(challenge.used).toBe(false)
+    expect(challenge.expiresAt).toBeGreaterThan(Date.now())
+  })
+
+  it('verifies valid code and enforces single-use invalidation', () => {
+    const challenge = createOtpChallenge(42)
+    const result1 = verifyOtpChallenge(challenge, challenge.code)
+    expect(result1.valid).toBe(true)
+    expect(challenge.used).toBe(true)
+
+    // Second attempt fails because challenge is now used
+    const result2 = verifyOtpChallenge(challenge, challenge.code)
+    expect(result2.valid).toBe(false)
+    expect(result2.error).toContain('already been used')
+  })
+
+  it('rejects invalid codes and limits attempts to maxAttempts', () => {
+    const challenge = createOtpChallenge(42)
+    for (let i = 0; i < 4; i++) {
+      const res = verifyOtpChallenge(challenge, '000000')
+      expect(res.valid).toBe(false)
+      expect(res.error).toBe('Invalid OTP code')
+    }
+
+    // 5th failed attempt exhausts maxAttempts and invalidates
+    const res5 = verifyOtpChallenge(challenge, '000000')
+    expect(res5.valid).toBe(false)
+
+    // Further attempt blocked by rate limit
+    const res6 = verifyOtpChallenge(challenge, challenge.code)
+    expect(res6.valid).toBe(false)
+    expect(res6.error).toContain('Maximum OTP attempts exceeded')
+  })
+
+  it('rejects expired OTP challenges', () => {
+    const challenge = createOtpChallenge(42)
+    challenge.expiresAt = Date.now() - 1000 // Expired
+
+    const res = verifyOtpChallenge(challenge, challenge.code)
+    expect(res.valid).toBe(false)
+    expect(res.error).toContain('expired')
   })
 })

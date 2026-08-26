@@ -29,4 +29,32 @@ export default class IrModelData extends Vertex {
     if (records.length === 0) return null
     return { model: records[0].model, resId: records[0].res_id || records[0].resId }
   }
+
+  /**
+   * Create or update external XML ID record idempotently
+   */
+  static async setXmlid(
+    env: Ctx,
+    xmlid: string,
+    model: string,
+    resId: number,
+    noupdate: boolean = false
+  ): Promise<void> {
+    const parts = xmlid.split('.')
+    const module = parts.length > 1 ? parts[0] : 'base'
+    const name = parts.length > 1 ? parts.slice(1).join('.') : parts[0]
+
+    const existing = await this.fetch(this as any, env, [
+      ['module', '=', module],
+      ['name', '=', name]
+    ])
+
+    if (existing.length > 0) {
+      if (!existing[0].noupdate) {
+        await this.morph(this as any, env, existing[0].id, { model, resId, noupdate })
+      }
+    } else {
+      await this.spawn(this as any, env, { module, name, model, resId, noupdate })
+    }
+  }
 }

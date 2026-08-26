@@ -84,9 +84,15 @@ export const COMPANY_SEED = {
   currencyCode: 'IDR'
 }
 
-const getEnv = (key: string): string | undefined => {
+import { randomBytes } from 'node:crypto'
+
+const getSecureBootstrapSecret = (envKey: string): string => {
   const proc = (globalThis as any).process
-  return proc && proc.env ? proc.env[key] : undefined
+  const envVal = proc && proc.env ? proc.env[envKey] : undefined
+  if (envVal && typeof envVal === 'string' && envVal.trim().length > 0) {
+    return envVal.trim()
+  }
+  return randomBytes(32).toString('base64url')
 }
 
 export const PARTNER_SEED_DATA = {
@@ -100,21 +106,21 @@ export const PARTNER_SEED_DATA = {
       mode: 'system',
       name: 'System',
       email: 'system@local',
-      password: getEnv('BOOTSTRAP_SYSTEM_PASSWORD') || 'system_internal_service_key',
+      password: getSecureBootstrapSecret('BOOTSTRAP_SYSTEM_PASSWORD'),
       isCompany: false
     },
     {
       mode: 'bot',
       name: 'Bot',
       email: 'bot@local',
-      password: getEnv('BOOTSTRAP_BOT_PASSWORD') || 'bot_internal_service_key',
+      password: getSecureBootstrapSecret('BOOTSTRAP_BOT_PASSWORD'),
       isCompany: false
     },
     {
       mode: 'admin',
       name: 'Administrator',
       email: getEnv('BOOTSTRAP_ADMIN_EMAIL') || 'admin@moonwitness.org',
-      password: getEnv('BOOTSTRAP_ADMIN_PASSWORD') || 'admin_dev_password',
+      password: getSecureBootstrapSecret('BOOTSTRAP_ADMIN_PASSWORD'),
       isCompany: false
     }
   ]

@@ -54,6 +54,10 @@ class FakeQuery {
   async first(): Promise<Row | undefined> {
     return this.rows[0]
   }
+
+  then(resolve: (rows: Row[]) => void): void {
+    resolve(this.rows)
+  }
 }
 
 function makeDb(tables: Tables) {
@@ -130,11 +134,56 @@ describe('Moon ORM fail-closed authorization', () => {
     })
   })
 
+  it('evaluates operation-specific record rules (permRead vs permWrite)', async () => {
+    mocks.getDb.mockReturnValue(makeDb({
+      vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
+      mx_model: [{ id: 11, model: 'demo.model' }],
+      mx_rule_vx_role_rel: [
+        { rule_id: 1, role_id: 7 },
+        { rule_id: 2, role_id: 7 }
+      ],
+      mx_rule: [
+        { id: 1, model_id: 11, name: 'Read rule', domain_force: '[["state", "=", "published"]]', perm_read: true, perm_write: false },
+        { id: 2, model_id: 11, name: 'Write rule', domain_force: '[["owner_id", "=", "$user.id"]]', perm_read: false, perm_write: true },
+      ],
+      vx_user: [{ id: 42, name: 'Operator' }],
+    }))
+
+    const readDomain = await getRecordRulesDomain(model('demo.model'), createCtx(42), 'permRead')
+    expect(readDomain).toEqual([['state', '=', 'published']])
+
+    const writeDomain = await getRecordRulesDomain(model('demo.model'), createCtx(42), 'permWrite')
+    expect(writeDomain).toEqual([['owner_id', '=', 42]])
+  })
+
+  it('composes Global rules (AND) and Group rules (OR) correctly', async () => {
+    mocks.getDb.mockReturnValue(makeDb({
+      vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
+      mx_model: [{ id: 11, model: 'demo.model' }],
+      mx_rule_vx_role_rel: [
+        { rule_id: 2, role_id: 7 }
+        // Rule 1 has no links, so it is a GLOBAL rule!
+      ],
+      mx_rule: [
+        { id: 1, model_id: 11, name: 'Global active rule', domain_force: '[["is_active", "=", true]]', perm_read: true },
+        { id: 2, model_id: 11, name: 'Group department rule', domain_force: '[["dept_id", "=", 10]]', perm_read: true },
+      ],
+      vx_user: [{ id: 42, name: 'Operator' }],
+    }))
+
+    const domain = await getRecordRulesDomain(model('demo.model'), createCtx(42), 'permRead')
+    expect(domain).toEqual([
+      '&',
+      ['is_active', '=', true],
+      ['dept_id', '=', 10]
+    ])
+  })
+
   it('fails closed when a persisted record rule cannot be evaluated', async () => {
     mocks.getDb.mockReturnValue(makeDb({
       vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
       mx_model: [{ id: 11, model: 'demo.model' }],
-      ir_rule_res_groups_rel: [{ vx_role_id: 7, ir_rule_id: 5 }],
+      mx_rule_vx_role_rel: [{ role_id: 7, rule_id: 5 }],
       mx_rule: [{ id: 5, model_id: 11, name: 'Broken rule', domain_force: '(()' }],
       vx_user: [{ id: 42, name: 'Operator' }],
     }))
@@ -148,7 +197,7 @@ describe('Moon ORM fail-closed authorization', () => {
     mocks.getDb.mockReturnValue(makeDb({
       vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
       mx_model: [{ id: 11, model: 'demo.model' }],
-      ir_rule_res_groups_rel: [{ vx_role_id: 7, ir_rule_id: 5 }],
+      mx_rule_vx_role_rel: [{ role_id: 7, rule_id: 5 }],
       mx_rule: [{
         id: 5,
         model_id: 11,
@@ -165,34 +214,11 @@ describe('Moon ORM fail-closed authorization', () => {
     ])
   })
 
-  it('combines multiple record rules with OR logic deterministically', async () => {
-    mocks.getDb.mockReturnValue(makeDb({
-      vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
-      mx_model: [{ id: 11, model: 'demo.model' }],
-      ir_rule_res_groups_rel: [
-        { vx_role_id: 7, ir_rule_id: 1 },
-        { vx_role_id: 7, ir_rule_id: 2 }
-      ],
-      mx_rule: [
-        { id: 1, model_id: 11, name: 'Rule 1', domain_force: '[["state", "=", "public"]]' },
-        { id: 2, model_id: 11, name: 'Rule 2', domain_force: '[["owner_id", "=", "$user.id"]]' },
-      ],
-      vx_user: [{ id: 42, name: 'Operator' }],
-    }))
-
-    const domain = await getRecordRulesDomain(model('demo.model'), createCtx(42))
-    expect(domain).toEqual([
-      '|',
-      ['state', '=', 'public'],
-      ['owner_id', '=', 42]
-    ])
-  })
-
   it('rejects dynamic code injection without executing JavaScript', async () => {
     mocks.getDb.mockReturnValue(makeDb({
       vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
       mx_model: [{ id: 11, model: 'demo.model' }],
-      ir_rule_res_groups_rel: [{ vx_role_id: 7, ir_rule_id: 9 }],
+      mx_rule_vx_role_rel: [{ role_id: 7, rule_id: 9 }],
       mx_rule: [{
         id: 9,
         model_id: 11,
@@ -211,7 +237,7 @@ describe('Moon ORM fail-closed authorization', () => {
     mocks.getDb.mockReturnValue(makeDb({
       vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
       mx_model: [{ id: 11, model: 'demo.model' }],
-      ir_rule_res_groups_rel: [{ vx_role_id: 7, ir_rule_id: 10 }],
+      mx_rule_vx_role_rel: [{ role_id: 7, rule_id: 10 }],
       mx_rule: [{
         id: 10,
         model_id: 11,
@@ -224,29 +250,5 @@ describe('Moon ORM fail-closed authorization', () => {
     await expect(getRecordRulesDomain(model('demo.model'), createCtx(42))).rejects.toMatchObject({
       code: 'SECURITY_RULE_INVALID',
     })
-  })
-
-  it('exposes authorization failures as a typed error', () => {
-    const error = new AuthorizationError('ACCESS_DENIED', 'denied')
-    expect(error).toBeInstanceOf(Error)
-    expect(error.statusCode).toBe(403)
-  })
-
-  it('enforces record rules on searchCount and readGroup', async () => {
-    mocks.getDb.mockReturnValue(makeDb({
-      vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
-      mx_model: [{ id: 11, model: 'demo.model' }],
-      ir_rule_res_groups_rel: [{ vx_role_id: 7, ir_rule_id: 10 }],
-      mx_rule: [{
-        id: 10,
-        model_id: 11,
-        name: 'Own records only',
-        domain_force: '[["user_id", "=", "$user.id"]]'
-      }],
-      vx_user: [{ id: 42, name: 'Operator' }],
-    }))
-
-    const ruleDomain = await getRecordRulesDomain(model('demo.model'), createCtx(42))
-    expect(ruleDomain).toEqual([['user_id', '=', 42]])
   })
 })

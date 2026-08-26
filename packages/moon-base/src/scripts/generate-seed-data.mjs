@@ -82,9 +82,10 @@ const systemData = {
 
 function writeJson(filename, data) {
   const content = JSON.stringify(data, null, 2) + '\n'
-  writeFileSync(join(dataDir, filename), content, 'utf8')
-  const hash = createHash('sha256').update(content).digest('hex')
-  return { filename, hash, size: Buffer.byteLength(content) }
+  const normalized = content.replace(/\r\n/g, '\n')
+  writeFileSync(join(dataDir, filename), normalized, 'utf8')
+  const hash = createHash('sha256').update(normalized).digest('hex')
+  return { filename, hash, size: Buffer.byteLength(normalized) }
 }
 
 const manifest = {

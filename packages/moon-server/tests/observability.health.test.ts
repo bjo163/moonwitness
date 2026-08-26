@@ -1,11 +1,11 @@
 import { describe, it, expect, vi } from 'vitest'
-import { handleHealth, handleDbStatus } from '../src/handlers/meta.js'
+import { handleHealth, handleDbStatus, handleLiveness, handleReadiness } from '../src/handlers/meta.js'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 
-function createMockReqRes() {
+function createMockReqRes(url = '/health') {
   const req: Partial<IncomingMessage> = {
     method: 'GET',
-    url: '/health',
+    url,
     headers: {}
   }
   let statusCode = 200
@@ -44,9 +44,30 @@ vi.mock('@moon/orm', () => {
   }
 })
 
-describe('Observability: Health & Telemetry Probes (#18)', () => {
-  it('returns 200 OK and healthy payload when database probe succeeds', async () => {
-    const { req, res, getStatusCode, getData } = createMockReqRes()
+describe('Observability: Health, Liveness & Readiness Probes (#18, #21)', () => {
+  it('returns 200 OK for /health/live without querying database', () => {
+    const { req, res, getStatusCode, getData } = createMockReqRes('/health/live')
+    handleLiveness(req, res)
+
+    expect(getStatusCode()).toBe(200)
+    const data = getData()
+    expect(data.status).toBe('live')
+    expect(data.memory).toBeDefined()
+    expect(typeof data.uptime).toBe('number')
+  })
+
+  it('returns 200 OK for /health/ready when database is connected', async () => {
+    const { req, res, getStatusCode, getData } = createMockReqRes('/health/ready')
+    await handleReadiness(req, res)
+
+    expect(getStatusCode()).toBe(200)
+    const data = getData()
+    expect(data.status).toBe('ready')
+    expect(data.database).toBe('connected')
+  })
+
+  it('returns 200 OK and healthy payload for general /health', async () => {
+    const { req, res, getStatusCode, getData } = createMockReqRes('/health')
     await handleHealth(req, res)
 
     expect(getStatusCode()).toBe(200)
@@ -58,7 +79,7 @@ describe('Observability: Health & Telemetry Probes (#18)', () => {
   })
 
   it('returns 200 OK for /db/status', async () => {
-    const { req, res, getStatusCode, getData } = createMockReqRes()
+    const { req, res, getStatusCode, getData } = createMockReqRes('/db/status')
     await handleDbStatus(req, res)
 
     expect(getStatusCode()).toBe(200)

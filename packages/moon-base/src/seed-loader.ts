@@ -39,7 +39,7 @@ export function verifySeedIntegrity(): { valid: boolean; errors: string[] } {
       continue
     }
 
-    const content = readFileSync(filePath, 'utf8')
+    const content = readFileSync(filePath, 'utf8').replace(/\r\n/g, '\n')
     const calculatedHash = createHash('sha256').update(content).digest('hex')
 
     if (calculatedHash !== file.hash) {
