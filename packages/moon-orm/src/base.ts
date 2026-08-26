@@ -1289,17 +1289,17 @@ export class Vertex {
         const parts = f.split(':')
         const col = parts[0]
         const agg = parts[1]
-        const alias = parts[2] || col
-        
         if (!col || !agg) continue
-        const snake = toSnakeCase(col)
+        const alias = parts[2] || col
+        const snake: string = toSnakeCase(col)
+        const safeAlias: string = alias
         
         // Count behaves differently, count(id) or count(*)
-        if (agg === 'count') selectArgs.push(conn.raw(`count(??) as ??`, [snake, alias]))
-        else if (agg === 'sum') selectArgs.push(conn.raw(`sum(??) as ??`, [snake, alias]))
-        else if (agg === 'avg') selectArgs.push(conn.raw(`avg(??) as ??`, [snake, alias]))
-        else if (agg === 'min') selectArgs.push(conn.raw(`min(??) as ??`, [snake, alias]))
-        else if (agg === 'max') selectArgs.push(conn.raw(`max(??) as ??`, [snake, alias]))
+        if (agg === 'count') selectArgs.push(conn.raw(`count(??) as ??`, [snake, safeAlias]))
+        else if (agg === 'sum') selectArgs.push(conn.raw(`sum(??) as ??`, [snake, safeAlias]))
+        else if (agg === 'avg') selectArgs.push(conn.raw(`avg(??) as ??`, [snake, safeAlias]))
+        else if (agg === 'min') selectArgs.push(conn.raw(`min(??) as ??`, [snake, safeAlias]))
+        else if (agg === 'max') selectArgs.push(conn.raw(`max(??) as ??`, [snake, safeAlias]))
       }
     }
 

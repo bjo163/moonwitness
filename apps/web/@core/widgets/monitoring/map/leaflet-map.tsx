@@ -6,8 +6,11 @@ import { MapContainer, TileLayer, Marker, Popup, Polyline } from "react-leaflet"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
 
+// @ts-ignore
 import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png"
+// @ts-ignore
 import iconUrl from "leaflet/dist/images/marker-icon.png"
+// @ts-ignore
 import shadowUrl from "leaflet/dist/images/marker-shadow.png"
 import {
   EarthquakeFeature,
@@ -18,9 +21,9 @@ import {
 } from "@core/api/hooks/use-global-monitoring"
 
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: iconRetinaUrl.src,
-  iconUrl: iconUrl.src,
-  shadowUrl: shadowUrl.src,
+  iconRetinaUrl: typeof iconRetinaUrl === "string" ? iconRetinaUrl : (iconRetinaUrl as any)?.src,
+  iconUrl: typeof iconUrl === "string" ? iconUrl : (iconUrl as any)?.src,
+  shadowUrl: typeof shadowUrl === "string" ? shadowUrl : (shadowUrl as any)?.src,
 })
 
 // Custom red icon for earthquakes

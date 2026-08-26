@@ -1,15 +1,24 @@
 export { Vertex, Recordset } from './base.js'
 export { QueryBuilder } from './query.js'
 export type { ModelFields, ModelRecord } from './base.js'
-export { fields } from './fields.js'
+export { fields, isFieldDef } from './fields.js'
 export { onchange } from './hooks.js'
 export type { FieldDef, InferFieldType } from './fields.js'
 export { 
   type Ctx, 
   createCtx, 
-  SUPERUSER_ID,
-  ANONYMOUS_ID
+  SUPERUSER_ID, 
+  ANONYMOUS_ID 
 } from './env.js'
+export {
+  AuthorizationError,
+  authSecurityContext,
+  evaluateRecordRuleDomain,
+  parseDeclarativeDomain,
+  type AuthorizationErrorCode,
+  type AuthSecurityScope,
+  type PermissionOperation,
+} from './security.js'
 export { registry, getModel, loadModels, registerModel } from './registry.js'
 export { forge, getLastPending } from './schema-sync.js'
 export { diff, up, down } from './migrator.js'
