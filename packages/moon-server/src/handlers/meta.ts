@@ -3,6 +3,39 @@ import { getDb, registry } from '@moon/orm'
 import { sendJson } from '../utils/http.js'
 
 /**
+ * Handle /health and /healthz probe endpoints
+ */
+export async function handleHealth(
+  req: IncomingMessage,
+  res: ServerResponse
+): Promise<void> {
+  try {
+    const db = getDb()
+    await db.raw('SELECT 1 as ping')
+    const memory = process.memoryUsage()
+
+    sendJson(res, 200, {
+      status: 'healthy',
+      database: 'connected',
+      uptime: process.uptime(),
+      memory: {
+        rss: `${Math.round(memory.rss / 1024 / 1024)}MB`,
+        heapUsed: `${Math.round(memory.heapUsed / 1024 / 1024)}MB`,
+        heapTotal: `${Math.round(memory.heapTotal / 1024 / 1024)}MB`
+      },
+      timestamp: new Date().toISOString()
+    }, req)
+  } catch (err: any) {
+    sendJson(res, 503, {
+      status: 'unhealthy',
+      database: 'disconnected',
+      error: err.message,
+      timestamp: new Date().toISOString()
+    }, req)
+  }
+}
+
+/**
  * Handle /db/status endpoint
  */
 export async function handleDbStatus(
@@ -15,13 +48,13 @@ export async function handleDbStatus(
     
     sendJson(res, 200, {
       status: 'connected',
-      driver: db.client.driverName,
+      driver: db.client?.driverName || 'pg',
       ping: result[0]?.ping || 1,
       uptime: process.uptime(),
       timestamp: new Date().toISOString()
     }, req)
   } catch (err: any) {
-    sendJson(res, 500, {
+    sendJson(res, 503, {
       status: 'error',
       message: err.message
     }, req)
