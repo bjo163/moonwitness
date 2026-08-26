@@ -65,7 +65,7 @@ export async function forge(options: { dryRun?: boolean } = {}): Promise<{
 
   const deferredFks: DeferredFK[] = []
   const deferredM2m: DeferredM2M[] = []
-  const deferredIndexes: { table: string, colName: string, modelName: string }[] = []
+  const deferredIndexes: { table: string, colName: string, modelName: string, isVector?: boolean }[] = []
 
   // Pass 1: Tables and physical columns
   for (const [name, ModelClass] of registry) {
@@ -99,8 +99,13 @@ export async function forge(options: { dryRun?: boolean } = {}): Promise<{
         deferredFks.push({ table, colName: toSnakeCase(fieldName), comodel: fieldDef.comodel, modelName: name })
       }
       
-      if (fieldDef.index) {
-        deferredIndexes.push({ table, colName: toSnakeCase(fieldName), modelName: name })
+      if (fieldDef.index || fieldDef.type === 'vector') {
+        deferredIndexes.push({
+          table,
+          colName: toSnakeCase(fieldName),
+          modelName: name,
+          isVector: fieldDef.type === 'vector'
+        })
       }
     }
 
@@ -199,11 +204,11 @@ export async function forge(options: { dryRun?: boolean } = {}): Promise<{
     const exists = await hasIndex(idxName)
     if (!exists) {
       try {
-        await createIndex(idx.table, idx.colName, idxName, options.dryRun, migrations)
+        await createIndex(idx.table, idx.colName, idxName, idx.isVector ?? false, options.dryRun, migrations)
         applied.push({
           model: idx.modelName,
           type: 'add_column',
-          detail: `Created index ${idxName} on ${idx.table}(${idx.colName})`,
+          detail: `Created ${idx.isVector ? 'HNSW vector ' : ''}index ${idxName} on ${idx.table}(${idx.colName})`,
           safe: true
         })
       } catch (err: any) {
@@ -224,9 +229,11 @@ async function hasIndex(indexName: string): Promise<boolean> {
   return rows.length > 0
 }
 
-async function createIndex(table: string, colName: string, indexName: string, dryRun: boolean = false, migrations: MigrationCommand[] = []) {
+async function createIndex(table: string, colName: string, indexName: string, isVector: boolean = false, dryRun: boolean = false, migrations: MigrationCommand[] = []) {
   const db = getDb()
-  const sql = `CREATE INDEX ${sqlIdentifier(indexName)} ON ${sqlIdentifier(table)} (${sqlIdentifier(colName)})`
+  const sql = isVector
+    ? `CREATE INDEX ${sqlIdentifier(indexName)} ON ${sqlIdentifier(table)} USING hnsw (${sqlIdentifier(colName)} vector_cosine_ops)`
+    : `CREATE INDEX ${sqlIdentifier(indexName)} ON ${sqlIdentifier(table)} (${sqlIdentifier(colName)})`
   if (dryRun) {
     migrations.push({ up: sql, down: `DROP INDEX IF EXISTS ${sqlIdentifier(indexName)}` })
   } else {
