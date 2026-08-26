@@ -146,7 +146,7 @@ export type {
 export { WITNESS_ENGINE_RESULT_V1, WITNESS_ENGINE_RUNTIME_VERSION } from './types/engine.js'
 export { resolveEngineScope, checksumEngineScope } from './services/engine-scope.js'
 export { finalizeEngineResult, checksumEngineResult } from './services/engine-evidence.js'
-export { SCORE_PROFILES, score, toEngineScore, type WitnessScoreDimension, type WitnessScoreProfile, type WitnessScoreResult } from './services/scoring.js'
+export { SCORE_PROFILES, score, toEngineScore, independentEvidence, type EvidenceIndependenceInput, type WitnessScoreDimension, type WitnessScoreProfile, type WitnessScoreResult } from './services/scoring.js'
 export { InMemoryEngineRunStore, MoonOrmEngineRunStore } from './services/engine-store.js'
 export { WitnessEngineRegistry, WitnessEngineRuntime } from './services/engine-runtime.js'
 export {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { SCORE_PROFILES, score, toEngineScore } from '../src/services/scoring.js'
+import { SCORE_PROFILES, independentEvidence, score, toEngineScore } from '../src/services/scoring.js'
 
 describe('Witness scoring kernel (#63)', () => {
   it('keeps not-applicable dimensions distinct from zero and is deterministic', () => {
@@ -27,5 +27,8 @@ describe('Witness scoring kernel (#63)', () => {
   it('exports a profile-bound engine score without losing vector semantics', () => {
     const result = score(SCORE_PROFILES.research_hypothesis_v1, [{ code: 'COVERAGE', state: 'AVAILABLE', value: 75, evidenceRefs: ['e1'], reasonCodes: [] }])
     expect(toEngineScore(result)).toMatchObject({ profileCode: 'research_hypothesis', profileVersion: '1.0.0', compositeBp: 7500, coverageBp: 10000 })
+  })
+  it('does not count derived editions as independent evidence', () => {
+    expect(independentEvidence([{ evidenceKey: 'original', sourceKey: 'quran', provenanceRef: 'p', canonicalContentId: 7 }, { evidenceKey: 'translation', sourceKey: 'quran', provenanceRef: 'p-en', derivedFromContentId: 7 }]).map((item) => item.evidenceKey)).toEqual(['original'])
   })
 })

@@ -5,6 +5,18 @@ export type WitnessScoreState = 'AVAILABLE' | 'INSUFFICIENT' | 'NOT_APPLICABLE'
 export interface WitnessScoreDimension { code: string; state: WitnessScoreState; value?: number; weight?: number; evidenceRefs: string[]; reasonCodes: string[] }
 export interface WitnessScoreProfile { code: string; version: string; weights: Record<string, number>; minimumCoverage: number }
 export interface WitnessScoreResult { profileCode: string; profileVersion: string; dimensions: WitnessScoreDimension[]; composite?: number; coverage: number; status: 'COMPLETE' | 'PARTIAL' | 'INSUFFICIENT' | 'CONFLICTED'; formulaFingerprint: string }
+export interface EvidenceIndependenceInput { evidenceKey: string; sourceKey: string; provenanceRef: string; canonicalContentId?: number; derivedFromContentId?: number }
+
+/** Deduplicates editions/translations that descend from one canonical witness. */
+export function independentEvidence<T extends EvidenceIndependenceInput>(evidence: T[]): T[] {
+  const seen = new Set<string>()
+  return [...evidence].sort((a, b) => a.evidenceKey.localeCompare(b.evidenceKey)).filter((item) => {
+    const lineage = item.derivedFromContentId ?? item.canonicalContentId ?? item.provenanceRef
+    const key = `${item.sourceKey}\u0000${lineage}`
+    if (seen.has(key)) return false
+    seen.add(key); return true
+  })
+}
 
 export const SCORE_PROFILES: Record<string, WitnessScoreProfile> = {
   source_reliability_v1: { code: 'source_reliability', version: '1.0.0', weights: { SOURCE_AUTHORITY: 30, PROVENANCE_QUALITY: 40, TEXTUAL_INTEGRITY: 30 }, minimumCoverage: 0.6 },
