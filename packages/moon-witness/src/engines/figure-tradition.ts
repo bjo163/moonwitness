@@ -139,7 +139,11 @@ export function createFigureAnalysisModule(): WitnessEngineModule<FigureAnalysis
 async function resolveUnit(env: Ctx, input: TraditionAnalysisInput): Promise<Loose | null> {
   if (input.unitId) return (await WxTraditionUnit.fetch(WxTraditionUnit, env, [['id', '=', input.unitId], ['active', '=', true]]))[0] ?? null
   if (input.entityId) return (await WxTraditionUnit.fetch(WxTraditionUnit, env, [['entityId', '=', input.entityId], ['active', '=', true]]))[0] ?? null
-  if (input.reference) return (await WxTraditionReference.fetch(WxTraditionReference, env, [['stableKey', '=', input.reference], ['active', '=', true]]))[0] ? (await WxTraditionUnit.fetch(WxTraditionUnit, env, [['id', '=', foreignId((await WxTraditionReference.fetch(WxTraditionReference, env, [['stableKey', '=', input.reference], ['active', '=', true]]))[0], 'unitId', 'unit_id')], ['active', '=', true]]))[0] ?? null : null
+  if (input.reference) {
+    const reference = (await WxTraditionReference.fetch(WxTraditionReference, env, [['stableKey', '=', input.reference], ['active', '=', true]]))[0] ?? null
+    const unitId = foreignId(reference, 'unitId', 'unit_id')
+    return unitId ? (await WxTraditionUnit.fetch(WxTraditionUnit, env, [['id', '=', unitId], ['active', '=', true]]))[0] ?? null : null
+  }
   const units = await WxTraditionAttribution.fetch(WxTraditionAttribution, env, [['figureId', '=', input.figureId], ['active', '=', true]], undefined, { limit: 2, order: 'id ASC' })
   return units.length === 1 ? (await WxTraditionUnit.fetch(WxTraditionUnit, env, [['id', '=', foreignId(units[0], 'unitId', 'unit_id')], ['active', '=', true]]))[0] ?? null : null
 }
