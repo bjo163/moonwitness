@@ -23,6 +23,12 @@ const amiri = Amiri({
   variable: "--font-arabic",
 })
 
+export const viewport = {
+  themeColor: "#05070A",
+  width: "device-width",
+  initialScale: 1,
+}
+
 export const metadata = {
   title: "MoonWitness — When the Moon Witness, We Share messages.",
   description:

@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-08-26T01:30:07.993Z",
+  "files": [
+    {
+      "filename": "countries.json",
+      "hash": "c48d1323e57fac50f542b3b9278b772e1ea79fc2d2016b45d9011e5b7e403819",
+      "size": 4563
+    },
+    {
+      "filename": "currencies.json",
+      "hash": "2e79347061d71057077f4658e3b5b6aacd8c20da867ecdd65294438b61c120d2",
+      "size": 1777
+    },
+    {
+      "filename": "languages.json",
+      "hash": "bfd3f3c223e5f419411123c1b035301132720c02ab6e4405a6c6749335206a7b",
+      "size": 891
+    },
+    {
+      "filename": "timezones.json",
+      "hash": "7fb403e7a830788a258bf6e50570b366eef86da28121674ece7f54f6fe1effa6",
+      "size": 871
+    },
+    {
+      "filename": "system-data.json",
+      "hash": "ec14265d673febb728ac07fd85285d0a0978ae94c8c7a7458f607d3d4b0c7257",
+      "size": 1060
+    }
+  ]
+}

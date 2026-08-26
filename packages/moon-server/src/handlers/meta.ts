@@ -3,6 +3,86 @@ import { getDb, registry } from '@moon/orm'
 import { sendJson } from '../utils/http.js'
 
 /**
+ * Handle /health/live liveness probe (checks process responsiveness without depending on DB)
+ */
+export function handleLiveness(
+  req: IncomingMessage,
+  res: ServerResponse
+): void {
+  const memory = process.memoryUsage()
+  sendJson(res, 200, {
+    status: 'live',
+    uptime: process.uptime(),
+    memory: {
+      rss: `${Math.round(memory.rss / 1024 / 1024)}MB`,
+      heapUsed: `${Math.round(memory.heapUsed / 1024 / 1024)}MB`,
+      heapTotal: `${Math.round(memory.heapTotal / 1024 / 1024)}MB`
+    },
+    timestamp: new Date().toISOString()
+  }, req)
+}
+
+/**
+ * Handle /health/ready readiness probe (checks downstream database connection & readiness)
+ */
+export async function handleReadiness(
+  req: IncomingMessage,
+  res: ServerResponse
+): Promise<void> {
+  try {
+    const db = getDb()
+    await db.raw('SELECT 1 as ping')
+
+    sendJson(res, 200, {
+      status: 'ready',
+      database: 'connected',
+      uptime: process.uptime(),
+      timestamp: new Date().toISOString()
+    }, req)
+  } catch (err: any) {
+    sendJson(res, 503, {
+      status: 'unready',
+      database: 'disconnected',
+      error: 'Database service unavailable',
+      timestamp: new Date().toISOString()
+    }, req)
+  }
+}
+
+/**
+ * Handle general /health, /healthz, /api/health probe endpoints
+ */
+export async function handleHealth(
+  req: IncomingMessage,
+  res: ServerResponse
+): Promise<void> {
+  try {
+    const db = getDb()
+    await db.raw('SELECT 1 as ping')
+    const memory = process.memoryUsage()
+
+    sendJson(res, 200, {
+      status: 'healthy',
+      database: 'connected',
+      uptime: process.uptime(),
+      memory: {
+        rss: `${Math.round(memory.rss / 1024 / 1024)}MB`,
+        heapUsed: `${Math.round(memory.heapUsed / 1024 / 1024)}MB`,
+        heapTotal: `${Math.round(memory.heapTotal / 1024 / 1024)}MB`
+      },
+      timestamp: new Date().toISOString()
+    }, req)
+  } catch (err: any) {
+    sendJson(res, 503, {
+      status: 'unhealthy',
+      database: 'disconnected',
+      error: 'Database connection failed',
+      timestamp: new Date().toISOString()
+    }, req)
+  }
+}
+
+/**
  * Handle /db/status endpoint
  */
 export async function handleDbStatus(
@@ -15,15 +95,15 @@ export async function handleDbStatus(
     
     sendJson(res, 200, {
       status: 'connected',
-      driver: db.client.driverName,
+      driver: db.client?.driverName || 'pg',
       ping: result[0]?.ping || 1,
       uptime: process.uptime(),
       timestamp: new Date().toISOString()
     }, req)
   } catch (err: any) {
-    sendJson(res, 500, {
+    sendJson(res, 503, {
       status: 'error',
-      message: err.message
+      message: 'Database connection error'
     }, req)
   }
 }

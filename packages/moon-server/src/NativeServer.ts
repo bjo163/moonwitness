@@ -5,7 +5,7 @@ import { createProxyHandler } from './proxy.js'
 import { logger } from './logger.js'
 import { generateOpenApi } from './openapi.js'
 import { handleLogin, handleRegister, handleForgotPassword, handleVerifyOtp, handleResetPassword, type AuthConfig } from './handlers/auth.js'
-import { handleDbStatus, handleMetaModels } from './handlers/meta.js'
+import { handleDbStatus, handleMetaModels, handleHealth, handleLiveness, handleReadiness } from './handlers/meta.js'
 import { handleRest } from './handlers/rest.js'
 import { handleRpc } from './handlers/rpc.js'
 import { handleSSE, getActiveClientCount } from './handlers/sse.js'
@@ -234,6 +234,18 @@ export class NativeServer {
 
     if (req.method === 'POST' && req.url === '/rpc') {
       return handleRpc(req, res, this.config.jwtSecret)
+    }
+
+    if (req.method === 'GET' && (req.url === '/health/live' || req.url === '/livez')) {
+      return handleLiveness(req, res)
+    }
+
+    if (req.method === 'GET' && (req.url === '/health/ready' || req.url === '/readyz')) {
+      return handleReadiness(req, res)
+    }
+
+    if (req.method === 'GET' && (req.url === '/health' || req.url === '/healthz' || req.url === '/api/health')) {
+      return handleHealth(req, res)
     }
 
     if (req.method === 'GET' && req.url === '/db/status') {

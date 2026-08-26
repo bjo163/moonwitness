@@ -3,7 +3,6 @@ import { Vertex, fields } from '@moon/orm'
 export class FxMsg extends Vertex {
   static _name = 'fx.msg'
   static _description = 'Message'
-  static _public = true
 
   resModel = fields.Char({ required: true, index: true })
   resId = fields.Integer({ required: true, index: true })

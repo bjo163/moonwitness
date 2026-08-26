@@ -1,0 +1,20 @@
+{
+  "name": "@moon/geo",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "monitor:run": "node src/scripts/monitor-cli.mjs --all",
+    "monitor:status": "node src/scripts/monitor-cli.mjs --status"
+  },
+  "dependencies": {
+    "@moon/orm": "workspace:*",
+    "@moon/base": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "typescript": "^5.5.4"
+  }
+}

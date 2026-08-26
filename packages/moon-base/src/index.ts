@@ -1,10 +1,16 @@
+import { randomBytes } from 'node:crypto'
 import {
   seedBaseData
 } from './seed.js'
 import {
   loadBaseData
 } from './base-data.js'
+import {
+  verifySeedIntegrity,
+  loadCanonicalReferenceData
+} from './seed-loader.js'
 import VxZone from './vx-zone.js'
+import VxZoneSubdivision from './vx-zone-subdivision.js'
 import VxRole from './vx-role.js'
 import MxModel from './mx-model.js'
 import MxGrant from './mx-grant.js'
@@ -12,16 +18,47 @@ import MxRule from './mx-rule.js'
 import VxUser from './vx-user.js'
 import IxLang from './ix-lang.js'
 import IxDict from './ix-dict.js'
+import IxTimezone from './ix-timezone.js'
 import { FxMsg, FxTrack } from './fx-msg.js'
 import VxNode from './vx-node.js'
 import VxOrg from './vx-org.js'
 import VxCoin from './vx-coin.js'
 import MxMetric from './mx-metric.js'
 import FxSession from './fx-session.js'
+import IrModelData from './ir-model-data.js'
+import IrSequence from './ir-sequence.js'
+import IrConfigParameter from './ir-config-parameter.js'
+import IrAttachment from './ir-attachment.js'
 
 export { loadModels } from '@moon/orm'
 
-export { seedBaseData, loadBaseData, VxZone, VxRole, MxModel, MxGrant, MxRule, VxUser, VxNode, VxOrg, VxCoin, IxLang, IxDict, FxMsg, FxTrack, MxMetric, FxSession }
+export {
+  seedBaseData,
+  loadBaseData,
+  verifySeedIntegrity,
+  loadCanonicalReferenceData,
+  VxZone,
+  VxZoneSubdivision,
+  VxRole,
+  MxModel,
+  MxGrant,
+  MxRule,
+  VxUser,
+  VxNode,
+  VxOrg,
+  VxCoin,
+  IxLang,
+  IxDict,
+  IxTimezone,
+  FxMsg,
+  FxTrack,
+  MxMetric,
+  FxSession,
+  IrModelData,
+  IrSequence,
+  IrConfigParameter,
+  IrAttachment
+}
 
 export const SYSTEM_MODE = 'system'
 export const BOT_MODE = 'bot'
@@ -48,6 +85,16 @@ export const COMPANY_SEED = {
   currencyCode: 'IDR'
 }
 
+const readBootstrapEnv = (envKey: string): string | undefined => {
+  const proc = (globalThis as any).process
+  const envVal = proc && proc.env ? proc.env[envKey] : undefined
+  return typeof envVal === 'string' && envVal.trim().length > 0 ? envVal.trim() : undefined
+}
+
+const getSecureBootstrapSecret = (envKey: string): string => {
+  return readBootstrapEnv(envKey) ?? randomBytes(32).toString('base64url')
+}
+
 export const PARTNER_SEED_DATA = {
   company: {
     name: 'MoonWitness',
@@ -59,21 +106,21 @@ export const PARTNER_SEED_DATA = {
       mode: 'system',
       name: 'System',
       email: 'system@local',
-      password: 'system',
+      password: getSecureBootstrapSecret('BOOTSTRAP_SYSTEM_PASSWORD'),
       isCompany: false
     },
     {
       mode: 'bot',
       name: 'Bot',
       email: 'bot@local',
-      password: 'bot',
+      password: getSecureBootstrapSecret('BOOTSTRAP_BOT_PASSWORD'),
       isCompany: false
     },
     {
       mode: 'admin',
-      name: 'Rocksoul Tech',
-      email: 'rocksoultech@gmail.com',
-      password: 'password123',
+      name: 'Administrator',
+      email: readBootstrapEnv('BOOTSTRAP_ADMIN_EMAIL') || 'admin@moonwitness.org',
+      password: getSecureBootstrapSecret('BOOTSTRAP_ADMIN_PASSWORD'),
       isCompany: false
     }
   ]
@@ -81,13 +128,14 @@ export const PARTNER_SEED_DATA = {
 
 export default {
   name: 'base',
-  description: 'Core base addon',
+  description: 'Core base kernel addon',
   depends: [],
   models: [
     VxUser,
     VxNode,
     VxOrg,
     VxZone,
+    VxZoneSubdivision,
     VxCoin,
     VxRole,
     MxModel,
@@ -95,9 +143,14 @@ export default {
     MxRule,
     IxLang,
     IxDict,
+    IxTimezone,
     FxMsg,
     FxTrack,
     MxMetric,
-    FxSession
+    FxSession,
+    IrModelData,
+    IrSequence,
+    IrConfigParameter,
+    IrAttachment
   ]
 }

@@ -1,0 +1,101 @@
+[
+  {
+    "code": "IDR",
+    "numberCode": "360",
+    "name": "Indonesian Rupiah",
+    "symbol": "Rp",
+    "decimals": 0,
+    "rounding": 1,
+    "active": true
+  },
+  {
+    "code": "USD",
+    "numberCode": "840",
+    "name": "US Dollar",
+    "symbol": "$",
+    "decimals": 2,
+    "rounding": 0.01,
+    "active": true
+  },
+  {
+    "code": "EUR",
+    "numberCode": "978",
+    "name": "Euro",
+    "symbol": "€",
+    "decimals": 2,
+    "rounding": 0.01,
+    "active": true
+  },
+  {
+    "code": "SAR",
+    "numberCode": "682",
+    "name": "Saudi Riyal",
+    "symbol": "﷼",
+    "decimals": 2,
+    "rounding": 0.01,
+    "active": true
+  },
+  {
+    "code": "MYR",
+    "numberCode": "458",
+    "name": "Malaysian Ringgit",
+    "symbol": "RM",
+    "decimals": 2,
+    "rounding": 0.01,
+    "active": true
+  },
+  {
+    "code": "SGD",
+    "numberCode": "702",
+    "name": "Singapore Dollar",
+    "symbol": "S$",
+    "decimals": 2,
+    "rounding": 0.01,
+    "active": true
+  },
+  {
+    "code": "GBP",
+    "numberCode": "826",
+    "name": "British Pound",
+    "symbol": "£",
+    "decimals": 2,
+    "rounding": 0.01,
+    "active": true
+  },
+  {
+    "code": "JPY",
+    "numberCode": "392",
+    "name": "Japanese Yen",
+    "symbol": "¥",
+    "decimals": 0,
+    "rounding": 1,
+    "active": true
+  },
+  {
+    "code": "AED",
+    "numberCode": "784",
+    "name": "UAE Dirham",
+    "symbol": "د.إ",
+    "decimals": 2,
+    "rounding": 0.01,
+    "active": true
+  },
+  {
+    "code": "TRY",
+    "numberCode": "949",
+    "name": "Turkish Lira",
+    "symbol": "₺",
+    "decimals": 2,
+    "rounding": 0.01,
+    "active": true
+  },
+  {
+    "code": "QAR",
+    "numberCode": "634",
+    "name": "Qatari Riyal",
+    "symbol": "ر.ق",
+    "decimals": 2,
+    "rounding": 0.01,
+    "active": true
+  }
+]
