@@ -4,7 +4,7 @@ import type { FieldDef, InferFieldType } from './fields.js'
 import { isFieldDef as isFieldDefFn, fields } from './fields.js'
 import type { Ctx } from './env.js'
 import { createCtx } from './env.js'
-import { checkAccessRights, getRecordRulesDomain } from './security.js'
+import { checkAccessRights, getRecordRulesDomain, AuthorizationError } from './security.js'
 
 export type ModelFields<M extends typeof Vertex> = {
   [K in keyof InstanceType<M> as InstanceType<M>[K] extends FieldDef<any> ? K : never]: InferFieldType<InstanceType<M>[K]>
@@ -509,13 +509,14 @@ export class Vertex {
       for (const reqId of idArray) {
         if (!allowedIds.has(reqId)) {
           throw new AuthorizationError(
-            `Access Denied: Record rule prevents ${modelClass._name} write on record ${reqId}`,
-            'SECURITY_RULE_VIOLATION',
-            403
+            'ACCESS_DENIED',
+            `Access Denied: Record rule prevents ${modelClass._name} write on record ${reqId}`
           )
         }
       }
     }
+
+    const clonedVals = { ...vals }
 
     if (clonedVals.updatedAt === undefined) clonedVals.updatedAt = new Date().toISOString()
 
@@ -1144,9 +1145,8 @@ export class Vertex {
       for (const reqId of idArray) {
         if (!allowedIds.has(reqId)) {
           throw new AuthorizationError(
-            `Access Denied: Record rule prevents ${modelClass._name} deletion on record ${reqId}`,
-            'SECURITY_RULE_VIOLATION',
-            403
+            'ACCESS_DENIED',
+            `Access Denied: Record rule prevents ${modelClass._name} deletion on record ${reqId}`
           )
         }
       }

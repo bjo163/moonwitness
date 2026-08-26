@@ -396,6 +396,19 @@ importers:
         specifier: ^5.0.0
         version: 5.9.3
 
+  packages/moon-mail:
+    dependencies:
+      '@moon/base':
+        specifier: workspace:*
+        version: link:../moon-base
+      '@moon/orm':
+        specifier: workspace:*
+        version: link:../moon-orm
+    devDependencies:
+      typescript:
+        specifier: ^5.5.4
+        version: 5.9.3
+
   packages/moon-mizan:
     dependencies:
       '@moon/base':
