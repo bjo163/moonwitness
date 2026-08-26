@@ -4,10 +4,16 @@ import { NativeServer } from "@moon/server"
 import baseAddons from "@moon/base"
 
 async function run() {
+  const jwtSecret = process.env.JWT_SECRET?.trim()
+  if (!jwtSecret) {
+    throw new Error(
+      "JWT_SECRET is required for migration commands. Set it explicitly before running diff, up, or down."
+    )
+  }
+
   new NativeServer({
     database: process.env.DATABASE_URL || "postgres://localhost/moonwitness",
-    jwtSecret:
-      process.env.JWT_SECRET || "migration-script-temporary-key-32chars",
+    jwtSecret,
     addons: baseAddons.models,
   })
 
