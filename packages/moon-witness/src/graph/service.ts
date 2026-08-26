@@ -148,14 +148,18 @@ export class WitnessGraphService {
     if (input.sourceRevision && provenanceRevision && input.sourceRevision !== provenanceRevision) {
       throw new Error(`sourceRevision ${input.sourceRevision} does not match provenance revision ${provenanceRevision}`)
     }
+    if (input.sourceRevision && sourceRevision && input.sourceRevision !== sourceRevision) {
+      throw new Error(`sourceRevision ${input.sourceRevision} does not match source revision ${sourceRevision}`)
+    }
     if (provenanceRevision && sourceRevision && provenanceRevision !== sourceRevision) {
       throw new Error(`Provenance revision ${provenanceRevision} does not match source revision ${sourceRevision}`)
     }
 
     const canonicalSourceClass = source ? String(value(source, 'sourceClass', 'source_class') ?? 'UNKNOWN') : ''
-    if (input.sourceClass && canonicalSourceClass && input.sourceClass !== canonicalSourceClass) {
+    if (input.sourceClass && canonicalSourceClass && input.sourceClass.toUpperCase() !== canonicalSourceClass.toUpperCase()) {
       throw new Error(`sourceClass ${input.sourceClass} does not match source classification ${canonicalSourceClass}`)
     }
+    const canonicalSourceKey = source ? String(value(source, 'stableKey', 'stable_key') ?? '').trim() : ''
 
     if (input.assertionEntityId != null) {
       const assertion = await this.entity(env, input.assertionEntityId)
@@ -180,10 +184,7 @@ export class WitnessGraphService {
       toEntity = right.value
     }
 
-    const resolvedSourceRevision = input.sourceRevision
-      ?? provenanceRevision
-      ?? sourceRevision
-      ?? null
+    const resolvedSourceRevision = input.sourceRevision || provenanceRevision || sourceRevision || null
 
     const validation = validateRelationCandidate({
       fromEntityId,
@@ -217,6 +218,7 @@ export class WitnessGraphService {
       relationTypeCode,
       toEntityKey: canonicalKeyOf(toEntity),
       ontologyVersion,
+      sourceKey: canonicalSourceKey || null,
       sourceRevision: resolvedSourceRevision,
       validFrom: input.validFrom,
       validTo: input.validTo
