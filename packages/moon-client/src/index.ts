@@ -4,4 +4,5 @@
 export * from "./api-client"
 export * from "./endpoints"
 export * from "./realtime-client"
+export * from "./realtime-stream"
 export * from "./auth"
