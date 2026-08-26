@@ -8,8 +8,11 @@ import {
   issueJwt,
   validateUserSession,
   revokeUserSessions,
+  AuthError,
 } from '../src/utils/auth.js'
 import { handleLogout, handleGetSession } from '../src/handlers/auth.js'
+import { handleRest } from '../src/handlers/rest.js'
+import { handleRpc } from '../src/handlers/rpc.js'
 import { registerModel, setupOrm, Vertex, fields, ANONYMOUS_ID, SUPERUSER_ID, createCtx, getModel } from '@moon/orm'
 
 const TEST_SECRET = 'super-secret-jwt-key-for-unit-testing-32chars!'
@@ -211,12 +214,70 @@ describe('JWT Verification & Expiry Enforcement (#15)', () => {
     expect(() => verifyToken(mockReq(`Bearer ${noneToken}`), TEST_SECRET)).toThrow()
   })
 
-  it('rejects tokens with non-positive or non-numeric subject', () => {
+  it('rejects tokens with non-positive, non-integer, or malformed subject', () => {
     const tokenZero = jwt.sign({ sub: 0 }, TEST_SECRET, { algorithm: 'HS256', expiresIn: '1h' })
     expect(() => verifyToken(mockReq(`Bearer ${tokenZero}`), TEST_SECRET)).toThrow('Invalid token subject')
 
+    const tokenNegative = jwt.sign({ sub: -5 }, TEST_SECRET, { algorithm: 'HS256', expiresIn: '1h' })
+    expect(() => verifyToken(mockReq(`Bearer ${tokenNegative}`), TEST_SECRET)).toThrow('Invalid token subject')
+
+    const tokenFloat = jwt.sign({ sub: 42.7 }, TEST_SECRET, { algorithm: 'HS256', expiresIn: '1h' })
+    expect(() => verifyToken(mockReq(`Bearer ${tokenFloat}`), TEST_SECRET)).toThrow('Invalid token subject')
+
+    const tokenAlpha = jwt.sign({ sub: '1abc' }, TEST_SECRET, { algorithm: 'HS256', expiresIn: '1h' })
+    expect(() => verifyToken(mockReq(`Bearer ${tokenAlpha}`), TEST_SECRET)).toThrow('Invalid token subject')
+
     const tokenString = jwt.sign({ sub: 'admin-user' }, TEST_SECRET, { algorithm: 'HS256', expiresIn: '1h' })
     expect(() => verifyToken(mockReq(`Bearer ${tokenString}`), TEST_SECRET)).toThrow('Invalid token subject')
+
+    // Valid string of digits is safely parsed
+    const tokenStringDigits = jwt.sign({ sub: '42' }, TEST_SECRET, { algorithm: 'HS256', expiresIn: '1h' })
+    const verified = verifyToken(mockReq(`Bearer ${tokenStringDigits}`), TEST_SECRET)
+    expect(verified.sub).toBe(42)
+  })
+
+  it('enforces issuer and audience validation when configured', () => {
+    const validToken = issueJwt(
+      { sub: 42 },
+      TEST_SECRET,
+      { expiresIn: '1h', issuer: 'moonwitness', audience: 'moonwitness-api' }
+    )
+
+    // Matching issuer and audience succeeds
+    const verified = verifyToken(mockReq(`Bearer ${validToken}`), TEST_SECRET, {
+      issuer: 'moonwitness',
+      audience: 'moonwitness-api',
+    })
+    expect(verified.sub).toBe(42)
+
+    // Mismatched issuer is rejected
+    expect(() =>
+      verifyToken(mockReq(`Bearer ${validToken}`), TEST_SECRET, {
+        issuer: 'rogue-issuer',
+        audience: 'moonwitness-api',
+      })
+    ).toThrow('Invalid token issuer')
+
+    // Mismatched audience is rejected
+    expect(() =>
+      verifyToken(mockReq(`Bearer ${validToken}`), TEST_SECRET, {
+        issuer: 'moonwitness',
+        audience: 'wrong-audience',
+      })
+    ).toThrow('Invalid token audience')
+  })
+
+  it('distinguishes missing authorization from malformed Bearer credentials', () => {
+    // Missing / empty -> ANONYMOUS_ID
+    expect(verifyToken(mockReq(), TEST_SECRET)).toEqual({ sub: ANONYMOUS_ID })
+    expect(verifyToken(mockReq(''), TEST_SECRET)).toEqual({ sub: ANONYMOUS_ID })
+    expect(verifyToken(mockReq('   '), TEST_SECRET)).toEqual({ sub: ANONYMOUS_ID })
+
+    // Malformed Bearer -> throws AUTH_MALFORMED
+    expect(() => verifyToken(mockReq('Bearer '), TEST_SECRET)).toThrow('Malformed Bearer token')
+    expect(() => verifyToken(mockReq('Bearer    '), TEST_SECRET)).toThrow('Malformed Bearer token')
+    expect(() => verifyToken(mockReq('Basic YWRtaW46cGFzcw=='), TEST_SECRET)).toThrow('Invalid authorization format')
+    expect(() => verifyToken(mockReq('Bearer not-a-valid-jwt'), TEST_SECRET)).toThrow('Invalid token')
   })
 })
 
@@ -300,12 +361,12 @@ describe('JWT Session Revocation & Lifecycle (#15)', () => {
     // 2. User logs out / session is revoked
     await handleLogout(mockReq(`Bearer ${token}`), createMockRes().res, config)
 
-    // 3. Subsequent request with old token is rejected with SESSION_REVOKED
+    // 3. Subsequent request with old token is rejected with AUTH_SESSION_REVOKED
     const req2 = mockReq(`Bearer ${token}`)
     const { res: res2, getResult: getResult2 } = createMockRes()
     await handleGetSession(req2, res2, config)
     expect(getResult2().status).toBe(401)
-    expect(getResult2().body.code).toBe('SESSION_REVOKED')
+    expect(getResult2().body.code).toBe('AUTH_SESSION_REVOKED')
   })
 })
 
@@ -355,5 +416,107 @@ describe('OTP Challenge Hardening & Expiration (#29)', () => {
     const res = verifyOtpChallenge(challenge, challenge.code)
     expect(res.valid).toBe(false)
     expect(res.error).toContain('expired')
+  })
+})
+
+describe('Transport Auth Boundary: REST & RPC Integration (#15)', () => {
+  let tables: Tables
+  const config = { jwtSecret: TEST_SECRET }
+
+  beforeEach(() => {
+    tables = {
+      vx_user: [
+        {
+          id: 42,
+          email: 'operator@moonwitness.org',
+          name: 'Operator Alice',
+          password: 'hashed-password',
+          token_version: 1,
+          is_active: true,
+        },
+      ],
+      mx_model: [{ id: 1, model: 'vx.user' }],
+    }
+    setupOrm(makeDb(tables))
+  })
+
+  it('handleRest returns 401 with AUTH_MALFORMED for malformed Bearer header', async () => {
+    const req = mockReq('Bearer ')
+    req.method = 'GET'
+    req.url = '/api/vx.user'
+    const { res, getResult } = createMockRes()
+    const match = ['/api/vx.user', 'vx.user'] as RegExpMatchArray
+
+    await handleRest(req, res, match, TEST_SECRET)
+    const result = getResult()
+
+    expect(result.status).toBe(401)
+    expect(result.body.code).toBe('AUTH_MALFORMED')
+  })
+
+  it('handleRest returns 401 with AUTH_EXPIRED for expired JWT', async () => {
+    const expiredToken = jwt.sign(
+      { sub: 42, exp: Math.floor(Date.now() / 1000) - 120 },
+      TEST_SECRET,
+      { algorithm: 'HS256' }
+    )
+    const req = mockReq(`Bearer ${expiredToken}`)
+    req.method = 'GET'
+    req.url = '/api/vx.user'
+    const { res, getResult } = createMockRes()
+    const match = ['/api/vx.user', 'vx.user'] as RegExpMatchArray
+
+    await handleRest(req, res, match, TEST_SECRET)
+    const result = getResult()
+
+    expect(result.status).toBe(401)
+    expect(result.body.code).toBe('AUTH_EXPIRED')
+  })
+
+  it('handleRpc returns 401 with AUTH_REQUIRED when no authorization header is present', async () => {
+    const req = mockReq()
+    req.method = 'POST'
+    req.url = '/rpc'
+    ;(req as any).body = { model: 'vx.user', method: 'fetch' }
+    const { res, getResult } = createMockRes()
+
+    await handleRpc(req, res, TEST_SECRET)
+    const result = getResult()
+
+    expect(result.status).toBe(401)
+    expect(result.body.code).toBe('AUTH_REQUIRED')
+  })
+
+  it('handleRpc returns 401 with AUTH_MALFORMED for invalid authorization header scheme', async () => {
+    const req = mockReq('Basic 12345')
+    req.method = 'POST'
+    req.url = '/rpc'
+    ;(req as any).body = { model: 'vx.user', method: 'fetch' }
+    const { res, getResult } = createMockRes()
+
+    await handleRpc(req, res, TEST_SECRET)
+    const result = getResult()
+
+    expect(result.status).toBe(401)
+    expect(result.body.code).toBe('AUTH_MALFORMED')
+  })
+
+  it('handleRpc returns 401 with AUTH_EXPIRED for expired token', async () => {
+    const expiredToken = jwt.sign(
+      { sub: 42, exp: Math.floor(Date.now() / 1000) - 120 },
+      TEST_SECRET,
+      { algorithm: 'HS256' }
+    )
+    const req = mockReq(`Bearer ${expiredToken}`)
+    req.method = 'POST'
+    req.url = '/rpc'
+    ;(req as any).body = { model: 'vx.user', method: 'fetch' }
+    const { res, getResult } = createMockRes()
+
+    await handleRpc(req, res, TEST_SECRET)
+    const result = getResult()
+
+    expect(result.status).toBe(401)
+    expect(result.body.code).toBe('AUTH_EXPIRED')
   })
 })

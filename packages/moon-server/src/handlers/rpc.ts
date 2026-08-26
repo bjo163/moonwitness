@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import { getModel, getDb, createCtx, AuthorizationError } from '@moon/orm'
+import { getModel, getDb, createCtx, AuthorizationError, ANONYMOUS_ID } from '@moon/orm'
 import { parseBody, sendJson } from '../utils/http.js'
-import { verifyToken } from '../utils/auth.js'
+import { verifyToken, AuthError } from '../utils/auth.js'
 
 /**
  * Handle RPC (Remote Procedure Call) requests
@@ -16,7 +16,7 @@ export async function handleRpc(
     const decoded = verifyToken(req, jwtSecret)
     const uid = decoded.sub as number
 
-    if (!uid) {
+    if (!uid || uid === ANONYMOUS_ID) {
       return sendJson(res, 401, { error: 'Unauthorized', code: 'AUTH_REQUIRED' }, req)
     }
 
@@ -50,11 +50,13 @@ export async function handleRpc(
 
     return sendJson(res, 200, { result }, req)
   } catch (err: any) {
+    if (err instanceof AuthError) {
+      return sendJson(res, err.statusCode, { error: err.message, code: err.code }, req)
+    }
     if (err instanceof AuthorizationError) {
       return sendJson(res, err.statusCode, { error: err.message, code: err.code }, req)
     }
-    const isAuthError = ['Token expired', 'Invalid token', 'Authorization header required'].includes(err?.message)
-    const statusCode = isAuthError ? 401 : (err?.statusCode || 500)
-    return sendJson(res, statusCode, { error: err?.message || 'Internal server error', code: err?.code || (isAuthError ? 'AUTH_REQUIRED' : 'INTERNAL_ERROR') }, req)
+    const statusCode = err?.statusCode || 500
+    return sendJson(res, statusCode, { error: err?.message || 'Internal server error', code: err?.code || 'INTERNAL_ERROR' }, req)
   }
 }

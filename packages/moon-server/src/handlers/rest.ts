@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { getModel, createCtx, AuthorizationError } from '@moon/orm'
 import { parseBody, sendJson, parseUrl } from '../utils/http.js'
-import { verifyToken } from '../utils/auth.js'
+import { verifyToken, AuthError } from '../utils/auth.js'
 
 const MAX_LIMIT = 100
 const DEFAULT_LIMIT = 80
@@ -182,26 +182,22 @@ export async function handleRest(
 
     return sendJson(res, 405, { error: 'Method not allowed', code: 'METHOD_NOT_ALLOWED' }, req)
   } catch (err: any) {
+    if (err instanceof AuthError) {
+      return sendJson(res, err.statusCode, { error: err.message, code: err.code }, req)
+    }
     if (err instanceof AuthorizationError) {
       return sendJson(res, err.statusCode, { error: err.message, code: err.code }, req)
     }
     if (err?.message?.startsWith('Validation Error:')) {
       return sendJson(res, 400, { error: err.message, code: 'VALIDATION_ERROR' }, req)
     }
-    const isAuthError = [
-      'Token expired',
-      'Invalid token',
-      'Authorization header required',
-      'Invalid authorization format',
-      'Invalid token subject'
-    ].includes(err?.message)
-    const statusCode = isAuthError ? 401 : (err?.statusCode || 500)
+    const statusCode = err?.statusCode || 500
     return sendJson(
       res,
       statusCode,
       {
         error: err?.message || 'Internal server error',
-        code: err?.code || (isAuthError ? 'AUTH_REQUIRED' : 'INTERNAL_ERROR')
+        code: err?.code || 'INTERNAL_ERROR'
       },
       req
     )
