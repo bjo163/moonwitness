@@ -1,3 +1,11 @@
+import WxEntity from './models/wx-entity.js'
+import WxEntityAlias from './models/wx-entity-alias.js'
+import WxSource from './models/wx-source.js'
+import WxProvenance from './models/wx-provenance.js'
+import WxRelationType from './models/wx-relation-type.js'
+import WxRelation from './models/wx-relation.js'
+import WxReligion from './models/wx-religion.js'
+import WxCommunity from './models/wx-community.js'
 import WxScripture from './models/wx-scripture.js'
 import WxScriptureBook from './models/wx-scripture-book.js'
 import WxScriptureVerse from './models/wx-scripture-verse.js'
@@ -7,6 +15,12 @@ import WxDevotion from './models/wx-devotion.js'
 import WxAsmaulHusna from './models/wx-asmaul-husna.js'
 import WxBookmark from './models/wx-bookmark.js'
 import WxHistory from './models/wx-history.js'
+
+// Graph core
+export * from './graph/contracts.js'
+export * from './graph/identity.js'
+export * from './graph/relation-ontology.js'
+export { WitnessGraphService } from './graph/service.js'
 
 // Astronomy (pure compute — no DB)
 export { getMoonData, type MoonData } from './astronomy/moon-phase.js'
@@ -18,6 +32,14 @@ export { registerWitnessRoutes } from './routes.js'
 
 // Models export
 export {
+  WxEntity,
+  WxEntityAlias,
+  WxSource,
+  WxProvenance,
+  WxRelationType,
+  WxRelation,
+  WxReligion,
+  WxCommunity,
   WxScripture,
   WxScriptureBook,
   WxScriptureVerse,
@@ -30,20 +52,30 @@ export {
 }
 
 /**
- * @moon/witness — Divine Knowledge Addon
- * 
- * 📖 Scripture:  wx.scripture → wx.scripture.book → wx.scripture.verse
- * 📜 Tradition:  wx.tradition → wx.tradition.item
- * 🤲 Devotion:   wx.devotion (Adhkar, Doa, Hymns)
- * ✨ Asmaul Husna: wx.asmaul.husna (99 Names of Allah)
- * 🔖 User:       wx.bookmark, wx.history
- * 🌙 Astronomy:  getMoonData(), getIslamicData(), getDailyPrayerTimes()
+ * @moon/witness — connected Revelation Knowledge Graph addon.
+ *
+ * Canonical graph core:
+ *   wx.entity -> wx.relation <- wx.relation.type
+ *              -> wx.provenance -> wx.source
+ *              -> wx.entity.alias
+ *
+ * Legacy Scripture/Tradition/Asma models remain registered temporarily for
+ * migration compatibility. New canonical domain work binds to wx.entity and
+ * follows #64/#67 authority, provenance and epistemic contracts.
  */
 export default {
   name: 'witness',
-  description: 'Divine Knowledge, Scriptures, Traditions & Astronomy',
+  description: 'Connected Revelation Knowledge Graph, Traditions, Evidence & Astronomy',
   depends: ['base'],
   models: [
+    WxEntity,
+    WxEntityAlias,
+    WxSource,
+    WxProvenance,
+    WxRelationType,
+    WxRelation,
+    WxReligion,
+    WxCommunity,
     WxScripture,
     WxScriptureBook,
     WxScriptureVerse,
