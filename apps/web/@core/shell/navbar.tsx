@@ -13,7 +13,7 @@ import {
   Terminal,
 } from "lucide-react"
 import { useMoonStore } from "@core/store/moon-store"
-import { buildGlobalNavigation } from "@modules/index"
+import type { NavLinkConfig } from "@workspace/types"
 import { AutoAvatar } from "@workspace/auto-avatar"
 import { NotificationBell, GlobalSearchModal } from "@core/widgets"
 
@@ -31,7 +31,7 @@ const EQUALIZER_MOD_FACTOR = 3
 const EQUALIZER_MAX_HEIGHT = 12
 const EQUALIZER_DELAY_STEP_MS = 150
 
-export function Navbar() {
+export function Navbar({ navLinks }: { navLinks: NavLinkConfig[] }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userProfile, setUserProfile] = useState<UserProfileData | null>(null)
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
@@ -107,8 +107,6 @@ export function Navbar() {
     setProfileDropdownOpen(false)
     router.push("/auth/login")
   }
-
-  const navLinks = buildGlobalNavigation()
 
   const handleNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,

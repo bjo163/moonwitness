@@ -32,7 +32,7 @@ import {
   ChevronDown,
   ChevronRight,
 } from "lucide-react"
-import { buildNavigation } from "@modules/index"
+import type { NavLinkConfig } from "@workspace/types"
 
 function getIcon(name?: string) {
   const props = { className: "w-4 h-4 shrink-0" }
@@ -88,7 +88,7 @@ function getIcon(name?: string) {
   }
 }
 
-export function ErpSidebar() {
+export function ErpSidebar({ erpModules }: { erpModules: NavLinkConfig[] }) {
   const pathname = usePathname()
   const { logout } = useMoonStore()
   const [expandedModules, setExpandedModules] = useState<
@@ -101,8 +101,6 @@ export function ErpSidebar() {
   }
 
   // ── Dynamic nav from module registry — reads ALL ERP_SIDEBAR modules ──
-  const erpModules = buildNavigation("ERP_SIDEBAR")
-
   const toggleModule = (label: string) => {
     setExpandedModules((prev) => ({ ...prev, [label]: !prev[label] }))
   }

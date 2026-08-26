@@ -1,4 +1,4 @@
-import type { NavLinkConfig } from "@core/navigation"
+import type { NavLinkConfig } from "@modules/types"
 
 export const erpNavigation: NavLinkConfig[] = [
   { label: "Dashboard", href: "/erp/dashboard", icon: "LayoutDashboard" },

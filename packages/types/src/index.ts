@@ -2,6 +2,13 @@
 
 import type { ElementType } from "react"
 
+export type NavLinkConfig = {
+  label: string
+  href: string
+  icon?: string
+  subLinks?: Omit<NavLinkConfig, "subLinks">[]
+}
+
 export interface PrayerData {
   city: string
   nextPrayer: string

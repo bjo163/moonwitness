@@ -1,4 +1,5 @@
 import type { ComponentType } from "react"
+export type { NavLinkConfig } from "@workspace/types"
 
 /**
  * Represents a single route/page within a module.
@@ -55,9 +56,3 @@ export type ModuleDefinition = {
  * Navigation link configuration derived from module definitions.
  * Used by navbar, sidebar, and other navigation components.
  */
-export type NavLinkConfig = {
-  label: string
-  href: string
-  icon?: string
-  subLinks?: Omit<NavLinkConfig, "subLinks">[]
-}

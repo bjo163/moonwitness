@@ -1,6 +1,7 @@
 import React, { Suspense } from "react"
 import { notFound } from "next/navigation"
-import { getModule } from "@modules/index"
+import { buildNavigation, getModule } from "@modules/index"
+import type { NavLinkConfig } from "@workspace/types"
 import { ErpSidebar, ErpNavbar } from "@core/shell-erp"
 import { Navbar } from "@core/shell/navbar"
 import { AutoBreadcrumb } from "@core/ui/breadcrumb"
@@ -26,10 +27,11 @@ export default async function ModuleLayout({
   }
 
   if (moduleDef.navPlacement === "ERP_SIDEBAR") {
+    const erpModules: NavLinkConfig[] = buildNavigation("ERP_SIDEBAR")
     return (
       <div className="bg-space flex min-h-screen text-white">
         <Suspense fallback={null}>
-          <ErpSidebar />
+          <ErpSidebar erpModules={erpModules} />
         </Suspense>
         <div className="flex flex-1 flex-col pl-64">
           <Suspense fallback={null}>
@@ -47,7 +49,7 @@ export default async function ModuleLayout({
   return (
     <>
       <Suspense fallback={null}>
-        <Navbar />
+        <Navbar navLinks={buildNavigation("OS_DOCK")} />
       </Suspense>
       <main className="flex min-h-screen flex-col pt-16">
         <Suspense fallback={<div className="h-6"></div>}>
