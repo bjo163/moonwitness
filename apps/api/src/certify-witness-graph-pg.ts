@@ -6,12 +6,27 @@ import {
   WxEntityAlias,
   WxEngineResult,
   MoonOrmEngineRunStore,
+  WitnessEngineRegistry,
+  WitnessEngineRuntime,
+  checksumEngineResult,
+  createFigureAnalysisModule,
+  createTraditionTransmissionModule,
   WxProvenance,
   WxRelation,
   WxRelationType,
   WxReligion,
   WxSource,
   WxSourcePolicy,
+  WxFigure,
+  WxFigureName,
+  WxFigureRole,
+  WxTraditionCorpus,
+  WxTraditionUnit,
+  WxTraditionReference,
+  WxTraditionAttribution,
+  WxTransmissionChain,
+  WxTransmissionLink,
+  WxTraditionAssessment,
   seedWitnessGraphCore,
   default as witnessAddons,
 } from "@moon/witness"
@@ -528,6 +543,135 @@ async function main() {
     )
   }
 
+  // ── Figure & Tradition Analysis Engines Certification (#59) ──
+  const figure = await WxFigure.spawn(WxFigure, env, {
+    entityId: musa.id,
+    name: "Musa",
+    canonicalKey: "cert:figure:musa:profile",
+    active: true,
+  })
+
+  await WxFigureName.spawn(WxFigureName, env, {
+    figureId: figure.id,
+    name: "Musa ibn Imran",
+    provenanceId: provenance.id,
+    sourceReference: "Qur’anic lineage tradition",
+    active: true,
+  })
+
+  await WxFigureRole.spawn(WxFigureRole, env, {
+    figureId: figure.id,
+    roleCode: "PROPHET",
+    provenanceId: provenance.id,
+    sourceReference: "Qur’an 19:51",
+    active: true,
+  })
+
+  const traditionCorpus = await WxTraditionCorpus.spawn(WxTraditionCorpus, env, {
+    title: "Sahih Al-Bukhari Fixture",
+    traditionType: "HADITH",
+    authoritySourceId: source.id,
+    active: true,
+  })
+
+  const traditionUnit = await WxTraditionUnit.spawn(WxTraditionUnit, env, {
+    corpusId: traditionCorpus.id,
+    stableKey: "cert:hadith:unit:1",
+    active: true,
+  })
+
+  await WxTraditionReference.spawn(WxTraditionReference, env, {
+    unitId: traditionUnit.id,
+    stableKey: "bukhari:1:1",
+    provenanceId: provenance.id,
+    active: true,
+  })
+
+  await WxTraditionAttribution.spawn(WxTraditionAttribution, env, {
+    unitId: traditionUnit.id,
+    figureId: figure.id,
+    roleCode: "PRIMARY_TRANSMITTER",
+    provenanceId: provenance.id,
+    active: true,
+  })
+
+  const traditionChain = await WxTransmissionChain.spawn(WxTransmissionChain, env, {
+    traditionUnitId: traditionUnit.id,
+    chainType: "ISNAD_CONTINUOUS",
+    provenanceId: provenance.id,
+    active: true,
+  })
+
+  await WxTransmissionLink.spawn(WxTransmissionLink, env, {
+    chainId: traditionChain.id,
+    sequence: 1,
+    personEntityId: musa.id,
+    transmissionMode: "DIRECT_HEARING",
+    active: true,
+  })
+
+  await WxTraditionAssessment.spawn(WxTraditionAssessment, env, {
+    traditionUnitId: traditionUnit.id,
+    assessmentScheme: "HADITH_AUTHENTICITY",
+    rawValue: "SAHIH",
+    provenanceId: provenance.id,
+    active: true,
+  })
+
+  const engineRegistry = new WitnessEngineRegistry()
+  engineRegistry.register(createFigureAnalysisModule())
+  engineRegistry.register(createTraditionTransmissionModule())
+
+  const runtime = new WitnessEngineRuntime(engineStore, {
+    registry: engineRegistry,
+    revisionResolver: {
+      async verify() {
+        return { missing: [] }
+      }
+    }
+  })
+
+  // 1. Run Figure Analysis Engine
+  const figureResult = await runtime.runModule(env, {
+    moduleCode: "figure.analysis",
+    moduleVersion: "1.0.0",
+    input: { figureId: figure.id },
+  })
+  assert.equal(figureResult.protocol, "WITNESS_ENGINE_RESULT_V1")
+  assert.equal(
+    figureResult.findings.length >= 3,
+    true,
+    "Figure analysis must return names, roles, and mentions"
+  )
+
+  // 2. Run Tradition Transmission Engine
+  const traditionResult = await runtime.runModule(env, {
+    moduleCode: "tradition.transmission",
+    moduleVersion: "1.0.0",
+    input: { unitId: traditionUnit.id },
+  })
+  assert.equal(traditionResult.protocol, "WITNESS_ENGINE_RESULT_V1")
+  assert.equal(
+    traditionResult.findings.length >= 4,
+    true,
+    "Tradition transmission must return reference, attribution, chain, and assessment"
+  )
+
+  // 3. Verify Deterministic Replay
+  const figureReplay = await runtime.replayRun(env, figureResult.runId)
+  assert.equal(
+    checksumEngineResult(figureResult),
+    checksumEngineResult(figureReplay),
+    "Figure analysis replay must be checksum-identical"
+  )
+
+  const traditionReplay = await runtime.replayRun(env, traditionResult.runId)
+  assert.equal(
+    checksumEngineResult(traditionResult),
+    checksumEngineResult(traditionReplay),
+    "Tradition transmission replay must be checksum-identical"
+  )
+
   const secondForge = await forge()
   assert.equal(
     secondForge.pending.length,
@@ -554,6 +698,8 @@ async function main() {
       ontologyVersion: seedOne.ontologyVersion,
       relationTypes: relationTypesAfterFirstSeed,
       religionContexts: religionsAfterFirstSeed,
+      figureAnalysisResult: figureResult.findings.length,
+      traditionTransmissionResult: traditionResult.findings.length,
       appliedOnFreshForge: firstForge.applied.length,
       appliedOnSecondForge: secondForge.applied.length,
     })

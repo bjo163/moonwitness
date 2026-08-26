@@ -1,6 +1,10 @@
 name: Witness PostgreSQL Certification
 
 on:
+  push:
+    branches:
+      - dev
+      - main
   pull_request:
     branches:
       - dev
@@ -18,7 +22,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: witness-pg-cert-${{ github.event.pull_request.number || github.ref }}
+  group: witness-pg-cert-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -26,24 +30,10 @@ jobs:
     name: PostgreSQL 16 Graph Certification
     runs-on: self-hosted
     timeout-minutes: 20
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: moonwitness_witness_cert
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres -d moonwitness_witness_cert"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     env:
       CI: 'true'
       NODE_ENV: test
-      TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/moonwitness_witness_cert
+      TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL || 'postgres://postgres:postgres@127.0.0.1:5432/moonwitness_witness_cert' }}
 
     steps:
       - name: Checkout
@@ -53,6 +43,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+
+      - name: Ensure PostgreSQL is ready
+        shell: bash
+        run: |
+          echo "Checking PostgreSQL connection..."
+          if ! pg_isready -h 127.0.0.1 -p 5432 >/dev/null 2>&1; then
+            echo "Starting PostgreSQL container on runner..."
+            docker run -d --rm --name moonwitness-pg-cert -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=moonwitness_witness_cert -p 5432:5432 postgres:16 || true
+            sleep 5
+          fi
 
       - name: Enable pinned pnpm
         shell: bash
