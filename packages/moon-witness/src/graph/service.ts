@@ -4,7 +4,7 @@ import WxRelation from '../models/wx-relation.js'
 import WxRelationType from '../models/wx-relation-type.js'
 import {
   canonicalRelationKey,
-  canonicalizeSymmetricEndpoints,
+  canonicalizeSymmetricEntities,
   validateRelationCandidate
 } from './identity.js'
 
@@ -19,6 +19,12 @@ function idOf(row: Loose): number {
 
 function value(row: Loose, camel: string, snake: string = camel): any {
   return row[camel] ?? row[snake]
+}
+
+function canonicalKeyOf(row: Loose): string {
+  const key = String(value(row, 'canonicalKey', 'canonical_key') ?? '').trim()
+  if (!key) throw new Error(`wx.entity ${idOf(row)} has no canonicalKey`)
+  return key
 }
 
 export interface CreateRelationInput {
@@ -78,13 +84,14 @@ export class WitnessGraphService {
     let toEntity = originalTo
 
     if (Boolean(value(relationType, 'symmetric'))) {
-      const [canonicalFrom, canonicalTo] = canonicalizeSymmetricEndpoints(fromEntityId, toEntityId)
-      if (canonicalFrom !== fromEntityId) {
-        fromEntityId = canonicalFrom
-        toEntityId = canonicalTo
-        fromEntity = originalTo
-        toEntity = originalFrom
-      }
+      const [left, right] = canonicalizeSymmetricEntities(
+        { id: fromEntityId, key: canonicalKeyOf(fromEntity), value: fromEntity },
+        { id: toEntityId, key: canonicalKeyOf(toEntity), value: toEntity }
+      )
+      fromEntityId = left.id
+      toEntityId = right.id
+      fromEntity = left.value
+      toEntity = right.value
     }
 
     const validation = validateRelationCandidate({
@@ -113,10 +120,12 @@ export class WitnessGraphService {
     if (!validation.ok) throw new Error(`Invalid Witness relation: ${validation.issues.join('; ')}`)
 
     const relationTypeCode = String(value(relationType, 'code'))
+    const ontologyVersion = String(value(relationType, 'ontologyVersion', 'ontology_version') ?? 'WITNESS_RELATION_V1')
     const edgeKey = canonicalRelationKey({
-      fromEntityId,
+      fromEntityKey: canonicalKeyOf(fromEntity),
       relationTypeCode,
-      toEntityId,
+      toEntityKey: canonicalKeyOf(toEntity),
+      ontologyVersion,
       sourceRevision: input.sourceRevision,
       validFrom: input.validFrom,
       validTo: input.validTo
@@ -144,7 +153,7 @@ export class WitnessGraphService {
       modality: input.modality ?? 'ASSERTED',
       confidenceBp: input.confidenceBp ?? 0,
       sourceRevision: input.sourceRevision ?? undefined,
-      ontologyVersion: value(relationType, 'ontologyVersion', 'ontology_version') ?? 'WITNESS_RELATION_V1',
+      ontologyVersion,
       validFrom: input.validFrom ?? undefined,
       validTo: input.validTo ?? undefined,
       qualifier: input.qualifier ?? undefined,

@@ -36,18 +36,28 @@ function normalizedKinds(value: string | string[] | undefined): string[] {
   return parseKindList(value)
 }
 
+/**
+ * Cross-install stable semantic relation key.
+ * Never hash database primary keys: they are allocation artifacts, not identity.
+ */
 export function canonicalRelationKey(input: {
-  fromEntityId: number
+  fromEntityKey: string
   relationTypeCode: string
-  toEntityId: number
+  toEntityKey: string
+  ontologyVersion?: string | null
   sourceRevision?: string | null
   validFrom?: string | null
   validTo?: string | null
 }): string {
+  const fromKey = input.fromEntityKey.trim().toLowerCase()
+  const toKey = input.toEntityKey.trim().toLowerCase()
+  if (!fromKey || !toKey) throw new Error('canonical relation endpoints require non-empty entity keys')
+
   const payload = [
-    String(input.fromEntityId),
+    fromKey,
     input.relationTypeCode.trim().toUpperCase(),
-    String(input.toEntityId),
+    toKey,
+    input.ontologyVersion?.trim() ?? 'WITNESS_RELATION_V1',
     input.sourceRevision?.trim() ?? '',
     input.validFrom?.trim() ?? '',
     input.validTo?.trim() ?? ''
@@ -100,6 +110,16 @@ export function validateRelationCandidate(candidate: RelationCandidate): Relatio
   return { ok: issues.length === 0, issues }
 }
 
-export function canonicalizeSymmetricEndpoints(fromEntityId: number, toEntityId: number): [number, number] {
-  return fromEntityId <= toEntityId ? [fromEntityId, toEntityId] : [toEntityId, fromEntityId]
+export interface CanonicalEndpoint<T = unknown> {
+  id: number
+  key: string
+  value: T
+}
+
+/** Canonical ordering for symmetric edges uses stable semantic keys, never IDs. */
+export function canonicalizeSymmetricEntities<T>(
+  left: CanonicalEndpoint<T>,
+  right: CanonicalEndpoint<T>
+): [CanonicalEndpoint<T>, CanonicalEndpoint<T>] {
+  return left.key.localeCompare(right.key) <= 0 ? [left, right] : [right, left]
 }
