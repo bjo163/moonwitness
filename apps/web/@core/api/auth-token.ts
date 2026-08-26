@@ -14,7 +14,9 @@ export function getAuthToken(): string | null {
 
   try {
     const storedState = localStorage.getItem(AUTH_STORAGE_KEY)
-    const token = storedState ? JSON.parse(storedState).state?.user?.token : null
+    const token = storedState
+      ? JSON.parse(storedState).state?.user?.token
+      : null
     return typeof token === "string" && token.length > 0 ? token : null
   } catch {
     return null
