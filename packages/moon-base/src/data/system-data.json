@@ -1,0 +1,54 @@
+{
+  "roles": [
+    {
+      "name": "Admin",
+      "description": "System Administrator with full management access"
+    },
+    {
+      "name": "Operator",
+      "description": "Terminal Operator for monitoring and telemetry"
+    },
+    {
+      "name": "User",
+      "description": "Standard authenticated member"
+    },
+    {
+      "name": "Public",
+      "description": "Unauthenticated public guest"
+    }
+  ],
+  "configParameters": [
+    {
+      "key": "system.title",
+      "value": "MoonWitness Operating System"
+    },
+    {
+      "key": "system.version",
+      "value": "3.0.0"
+    },
+    {
+      "key": "geo.default_country",
+      "value": "ID"
+    },
+    {
+      "key": "geo.default_currency",
+      "value": "IDR"
+    }
+  ],
+  "sequences": [
+    {
+      "name": "Standard Transaction",
+      "code": "moon.tx",
+      "prefix": "TX/%(year)s/",
+      "padding": 5,
+      "numberNext": 1
+    },
+    {
+      "name": "Audit Log Sequence",
+      "code": "moon.audit",
+      "prefix": "AUD/%(year)s/",
+      "padding": 6,
+      "numberNext": 1
+    }
+  ]
+}

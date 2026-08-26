@@ -352,6 +352,9 @@ importers:
       '@types/bcryptjs':
         specifier: ^2.4.6
         version: 2.4.6
+      '@types/node':
+        specifier: ^20.17.0
+        version: 20.19.41
       typescript:
         specifier: ^5.5.4
         version: 5.9.3
@@ -399,6 +402,22 @@ importers:
         specifier: workspace:*
         version: link:../moon-orm
     devDependencies:
+      typescript:
+        specifier: ^5.5.4
+        version: 5.9.3
+
+  packages/moon-geo:
+    dependencies:
+      '@moon/base':
+        specifier: workspace:*
+        version: link:../moon-base
+      '@moon/orm':
+        specifier: workspace:*
+        version: link:../moon-orm
+    devDependencies:
+      '@types/node':
+        specifier: ^20.17.0
+        version: 20.19.41
       typescript:
         specifier: ^5.5.4
         version: 5.9.3

@@ -4,7 +4,12 @@ import {
 import {
   loadBaseData
 } from './base-data.js'
+import {
+  verifySeedIntegrity,
+  loadCanonicalReferenceData
+} from './seed-loader.js'
 import VxZone from './vx-zone.js'
+import VxZoneSubdivision from './vx-zone-subdivision.js'
 import VxRole from './vx-role.js'
 import MxModel from './mx-model.js'
 import MxGrant from './mx-grant.js'
@@ -12,6 +17,7 @@ import MxRule from './mx-rule.js'
 import VxUser from './vx-user.js'
 import IxLang from './ix-lang.js'
 import IxDict from './ix-dict.js'
+import IxTimezone from './ix-timezone.js'
 import { FxMsg, FxTrack } from './fx-msg.js'
 import VxNode from './vx-node.js'
 import VxOrg from './vx-org.js'
@@ -28,7 +34,10 @@ export { loadModels } from '@moon/orm'
 export {
   seedBaseData,
   loadBaseData,
+  verifySeedIntegrity,
+  loadCanonicalReferenceData,
   VxZone,
+  VxZoneSubdivision,
   VxRole,
   MxModel,
   MxGrant,
@@ -39,6 +48,7 @@ export {
   VxCoin,
   IxLang,
   IxDict,
+  IxTimezone,
   FxMsg,
   FxTrack,
   MxMetric,
@@ -119,6 +129,7 @@ export default {
     VxNode,
     VxOrg,
     VxZone,
+    VxZoneSubdivision,
     VxCoin,
     VxRole,
     MxModel,
@@ -126,6 +137,7 @@ export default {
     MxRule,
     IxLang,
     IxDict,
+    IxTimezone,
     FxMsg,
     FxTrack,
     MxMetric,

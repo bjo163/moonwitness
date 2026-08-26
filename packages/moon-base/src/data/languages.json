@@ -1,0 +1,47 @@
+[
+  {
+    "code": "en_US",
+    "name": "English (US)",
+    "nativeName": "English (US)",
+    "isoCode": "en",
+    "script": "Latn",
+    "direction": "ltr",
+    "active": true
+  },
+  {
+    "code": "id_ID",
+    "name": "Indonesian",
+    "nativeName": "Bahasa Indonesia",
+    "isoCode": "id",
+    "script": "Latn",
+    "direction": "ltr",
+    "active": true
+  },
+  {
+    "code": "ar_SA",
+    "name": "Arabic (Saudi Arabia)",
+    "nativeName": "العربية",
+    "isoCode": "ar",
+    "script": "Arab",
+    "direction": "rtl",
+    "active": true
+  },
+  {
+    "code": "ms_MY",
+    "name": "Malay",
+    "nativeName": "Bahasa Melayu",
+    "isoCode": "ms",
+    "script": "Latn",
+    "direction": "ltr",
+    "active": true
+  },
+  {
+    "code": "tr_TR",
+    "name": "Turkish",
+    "nativeName": "Türkçe",
+    "isoCode": "tr",
+    "script": "Latn",
+    "direction": "ltr",
+    "active": true
+  }
+]

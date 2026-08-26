@@ -15,6 +15,7 @@ export default defineConfig({
       '@moon/account': path.resolve(__dirname, 'packages/moon-account/src/index.ts'),
       '@moon/stock': path.resolve(__dirname, 'packages/moon-stock/src/index.ts'),
       '@moon/crm': path.resolve(__dirname, 'packages/moon-crm/src/index.ts'),
+      '@moon/geo': path.resolve(__dirname, 'packages/moon-geo/src/index.ts'),
       '@moon/server': path.resolve(__dirname, 'packages/moon-server/src/index.ts'),
     }
   }
