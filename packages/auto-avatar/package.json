@@ -11,14 +11,16 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "lint": "../eslint-config/node_modules/.bin/eslint ."
+    "lint": "eslint ."
   },
   "devDependencies": {
     "@dicebear/collection": "^9.4.2",
     "@dicebear/core": "^9.4.3",
     "@types/node": "^20",
     "@types/react": "^19",
+    "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
+    "eslint": "^9",
     "react": "^19.0.0",
     "typescript": "^5"
   }

@@ -8,7 +8,7 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "lint": "../../packages/eslint-config/node_modules/.bin/eslint .",
+    "lint": "eslint .",
     "format": "prettier --write \"**/*.{ts,js,json}\"",
     "typecheck": "tsc --noEmit"
   },
@@ -32,6 +32,7 @@
     "@types/node": "^26.1.2",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
+    "eslint": "^9",
     "eventsource": "^4.1.0",
     "tsx": "^4.7.0",
     "typescript": "^5.5.4"

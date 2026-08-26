@@ -217,8 +217,10 @@ function UpgradeCouncilTab() {
       </div>
 
       {UPGRADE_REQUESTS.map((req) => {
-        const fromLevel = Q4Q_LEVELS[req.levelFrom - 1]
-        const toLevel = Q4Q_LEVELS[req.levelTo - 1]
+        const defaultLevel = Q4Q_LEVELS[0]
+        const fromLevel = Q4Q_LEVELS[req.levelFrom - 1] || defaultLevel
+        const toLevel = Q4Q_LEVELS[req.levelTo - 1] || defaultLevel
+        if (!toLevel || !fromLevel) return null
         const isOpen = expanded === req.id
         const ToIcon = toLevel.icon
 
