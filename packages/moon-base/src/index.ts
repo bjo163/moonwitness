@@ -59,21 +59,21 @@ export const PARTNER_SEED_DATA = {
       mode: 'system',
       name: 'System',
       email: 'system@local',
-      password: 'system',
+      password: process.env.BOOTSTRAP_SYSTEM_PASSWORD || 'system_internal_service_key',
       isCompany: false
     },
     {
       mode: 'bot',
       name: 'Bot',
       email: 'bot@local',
-      password: 'bot',
+      password: process.env.BOOTSTRAP_BOT_PASSWORD || 'bot_internal_service_key',
       isCompany: false
     },
     {
       mode: 'admin',
-      name: 'Rocksoul Tech',
-      email: 'rocksoultech@gmail.com',
-      password: 'password123',
+      name: 'Administrator',
+      email: process.env.BOOTSTRAP_ADMIN_EMAIL || 'admin@moonwitness.org',
+      password: process.env.BOOTSTRAP_ADMIN_PASSWORD || 'admin_dev_password',
       isCompany: false
     }
   ]
