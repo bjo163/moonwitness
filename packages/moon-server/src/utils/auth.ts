@@ -341,19 +341,25 @@ export function verifyToken(
   }
 
   const authHeader = req.headers.authorization
+  const cookieToken = req.headers.cookie
+    ?.split(';')
+    .map((cookie) => cookie.trim())
+    .find((cookie) => cookie.startsWith('moon_session='))
+    ?.slice('moon_session='.length)
+  const suppliedAuth = authHeader || (cookieToken ? `Bearer ${decodeURIComponent(cookieToken)}` : undefined)
 
   // 1. Missing or completely empty header => intentional Anonymous request
-  if (!authHeader || !authHeader.trim()) {
+  if (!suppliedAuth || !suppliedAuth.trim()) {
     return { sub: ANONYMOUS_ID }
   }
 
   // 2. Header present but not starting with 'Bearer ' => Malformed
-  if (!authHeader.startsWith('Bearer ')) {
+  if (!suppliedAuth.startsWith('Bearer ')) {
     throw new AuthError('AUTH_MALFORMED', 'Invalid authorization format', 401)
   }
 
   // 3. 'Bearer ' present but token content is empty/whitespace => Malformed
-  const token = authHeader.substring(7).trim()
+  const token = suppliedAuth.substring(7).trim()
   if (!token) {
     throw new AuthError('AUTH_MALFORMED', 'Malformed Bearer token', 401)
   }

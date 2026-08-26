@@ -16,6 +16,8 @@ import {
 import { handleLogout, handleGetSession, handleResetPassword } from '../src/handlers/auth.js'
 import { handleRest } from '../src/handlers/rest.js'
 import { handleRpc } from '../src/handlers/rpc.js'
+import { renderDashboard } from '../src/views/dashboard.js'
+import { NativeServer } from '../src/NativeServer.js'
 import { registerModel, setupOrm, Vertex, fields, ANONYMOUS_ID, SUPERUSER_ID, createCtx, getModel } from '@moon/orm'
 
 const TEST_SECRET = 'super-secret-jwt-key-for-unit-testing-32chars!'
@@ -328,6 +330,48 @@ describe('JWT Session Revocation & Lifecycle (#15)', () => {
       ],
     }
     setupOrm(makeDb(tables))
+  })
+
+  it('accepts the dashboard session cookie without exposing credentials in dashboard HTML', async () => {
+    const token = issueJwt({ sub: 42, email: 'operator@moonwitness.org', tokenVersion: 1 }, TEST_SECRET)
+    const session = await authenticateRequest(
+      { headers: { cookie: `moon_session=${encodeURIComponent(token)}` } } as any,
+      TEST_SECRET
+    )
+
+    expect(session.uid).toBe(42)
+    const html = renderDashboard()
+    expect(html).not.toContain('explorerToken')
+    expect(html).not.toContain(TEST_SECRET)
+  })
+
+  it('blocks anonymous dashboard requests and permits the authenticated superuser', async () => {
+    setupOrm(makeDb({
+      vx_user: [{ id: SUPERUSER_ID, email: 'admin@moonwitness.org', name: 'Admin', token_version: 1, is_active: true }],
+    }))
+    const server = new NativeServer({ database: makeDb({
+      vx_user: [{ id: SUPERUSER_ID, email: 'admin@moonwitness.org', name: 'Admin', token_version: 1, is_active: true }],
+    }) as any, jwtSecret: TEST_SECRET })
+    const response = () => {
+      let status = 200
+      let body = ''
+      const res = {
+        setHeader: vi.fn(),
+        writeHead: (code: number) => { status = code },
+        end: (data?: string) => { body = data || '' },
+      } as any
+      return { res, get: () => ({ status, body }) }
+    }
+
+    const anonymous = response()
+    await server.handleRequest({ method: 'GET', url: '/', headers: {} } as any, anonymous.res)
+    expect(anonymous.get().status).toBe(401)
+
+    const token = issueJwt({ sub: SUPERUSER_ID, email: 'admin@moonwitness.org', tokenVersion: 1 }, TEST_SECRET)
+    const admin = response()
+    await server.handleRequest({ method: 'GET', url: '/', headers: { authorization: `Bearer ${token}` } } as any, admin.res)
+    expect(admin.get().status).toBe(200)
+    expect(admin.get().body).not.toContain(TEST_SECRET)
   })
 
   it('validates active session matching current tokenVersion', async () => {

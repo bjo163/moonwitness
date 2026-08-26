@@ -13,9 +13,7 @@ type PageProps = {
   }>
 }
 
-export async function generateStaticParams() {
-  return [{ id: "1-1" }]
-}
+export const dynamic = "force-dynamic"
 
 function parseShortId(idStr: string): {
   surahNum: number

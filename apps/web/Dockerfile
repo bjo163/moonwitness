@@ -1,12 +1,12 @@
 FROM node:24-alpine
 WORKDIR /app
-RUN corepack enable && corepack prepare pnpm@9.15.9 --activate
+RUN corepack enable && corepack prepare pnpm@10.33.4 --activate
 
 # Copy all source files
 COPY . .
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile=false
+RUN pnpm install --frozen-lockfile=true
 
 # Set environment variables for Next.js build
 ENV NEXT_TELEMETRY_DISABLED=1

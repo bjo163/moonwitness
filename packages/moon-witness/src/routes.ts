@@ -491,7 +491,7 @@ globalRoutes.push({
   }
 })
 
-export function registerWitnessRoutes(jwtSecret = process.env.JWT_SECRET || 'secret') {
+export function registerWitnessRoutes(jwtSecret = process.env.JWT_SECRET || '') {
   registerWitnessGraphRoutes(jwtSecret)
   console.log('[moon-witness] custom API routes registered')
 }

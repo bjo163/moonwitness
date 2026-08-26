@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { MOCK_ERP_DASHBOARD } from "@core/db/data/erp-dashboard.db"
+export const dynamic = "force-dynamic"
 import { moonClientInstance } from "@core/store/moon-store"
 import { getDailyPrayerTimes } from "@moon/witness/dist/astronomy/prayer-times.js"
 

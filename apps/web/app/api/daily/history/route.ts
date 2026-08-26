@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { moonClientInstance } from "@core/store/moon-store"
+export const dynamic = "force-dynamic"
 
 function getSeedHash(seedStr: string): number {
   let hash = 0
