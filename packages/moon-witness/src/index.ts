@@ -164,6 +164,14 @@ export {
   type CrossScriptureEvidenceEntry,
   type CrossScriptureEvidenceMatrix
 } from './engines/cross-scripture.js'
+export {
+  createFigureAnalysisModule,
+  createTraditionTransmissionModule,
+  validateFigureAnalysisInput,
+  validateTraditionAnalysisInput,
+  type FigureAnalysisInput,
+  type TraditionAnalysisInput
+} from './engines/figure-tradition.js'
 
 export {
   planLegacyMigration,
