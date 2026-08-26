@@ -37,7 +37,7 @@ function normalizedKinds(value: string | string[] | undefined): string[] {
 }
 
 /**
- * Cross-install stable semantic relation key.
+ * Cross-install stable source-scoped semantic relation key.
  * Never hash database primary keys: they are allocation artifacts, not identity.
  */
 export function canonicalRelationKey(input: {
@@ -45,6 +45,7 @@ export function canonicalRelationKey(input: {
   relationTypeCode: string
   toEntityKey: string
   ontologyVersion?: string | null
+  sourceKey?: string | null
   sourceRevision?: string | null
   validFrom?: string | null
   validTo?: string | null
@@ -58,6 +59,7 @@ export function canonicalRelationKey(input: {
     input.relationTypeCode.trim().toUpperCase(),
     toKey,
     input.ontologyVersion?.trim() ?? 'WITNESS_RELATION_V1',
+    input.sourceKey?.trim().toLowerCase() ?? '',
     input.sourceRevision?.trim() ?? '',
     input.validFrom?.trim() ?? '',
     input.validTo?.trim() ?? ''
