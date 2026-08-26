@@ -127,6 +127,21 @@ function validateScore(candidate: EngineFindingCandidate): void {
   }
 }
 
+function defaultFindingScore(candidate: EngineFindingCandidate, evidence: EngineEvidenceReference[]): EngineFindingCandidate['score'] | undefined {
+  if (!evidence.length || candidate.score) return candidate.score
+  const primary = evidence.every((item) => item.authorityClass === 'PRIMARY_SOURCE')
+  return {
+    algorithmVersion: '1.0.0', profileCode: 'relation_confidence', profileVersion: '1.0.0',
+    compositeBp: primary ? 10000 : 7500, coverageBp: 10000,
+    formulaFingerprint: sha256String(stableSerialize({ profile: 'relation_confidence@1.0.0', evidence: evidence.map((item) => item.evidenceKey).sort() })),
+    components: [
+      { code: 'SOURCE_AUTHORITY', algorithmVersion: '1.0.0', valueBp: primary ? 10000 : 7500, evidenceRefs: evidence.map((item) => item.evidenceKey), state: 'AVAILABLE' },
+      { code: 'PROVENANCE_QUALITY', algorithmVersion: '1.0.0', valueBp: 10000, evidenceRefs: evidence.map((item) => item.evidenceKey), state: 'AVAILABLE' },
+      { code: 'EVIDENCE_DIRECTNESS', algorithmVersion: '1.0.0', valueBp: evidence.some((item) => item.span) ? 10000 : 7000, evidenceRefs: evidence.map((item) => item.evidenceKey), state: 'AVAILABLE' }
+    ]
+  }
+}
+
 /** Plan reproducible evidence and constrain the resulting authority class. */
 export function finalizeEngineResult(draft: EngineResultDraft, options: FinalizeOptions): EngineResultEnvelope {
   const conflicts: EngineConflict[] = []
@@ -159,7 +174,7 @@ export function finalizeEngineResult(draft: EngineResultDraft, options: Finalize
       evidence,
       provenanceRefs: [...new Set(evidence.map((item) => item.provenanceRef))].sort(),
       unresolvedReasonCodes: reasonCodes,
-      score: candidate.score
+      score: defaultFindingScore(candidate, evidence)
     } satisfies EngineFinding
   }).sort((left, right) => left.key.localeCompare(right.key))
 
