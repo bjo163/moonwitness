@@ -102,6 +102,48 @@ export const SOURCE_CAPABILITY_SELECTION: Array<[string, string]> = [
   ['STRUCTURED_DATASET', 'Structured Dataset']
 ]
 
+export const PASSAGE_TYPE_SELECTION: Array<[string, string]> = [
+  ['SURAH', 'Surah'],
+  ['AYAH', 'Ayah'],
+  ['BOOK', 'Book'],
+  ['CHAPTER', 'Chapter'],
+  ['PSALM', 'Psalm'],
+  ['VERSE', 'Verse'],
+  ['SECTION', 'Section'],
+  ['PERICOPE', 'Pericope'],
+  ['UNIT', 'Unit']
+]
+
+export const CONTENT_TYPE_SELECTION: Array<[string, string]> = [
+  ['ORIGINAL_TEXT', 'Original Text'],
+  ['TEXTUAL_WITNESS', 'Textual Witness'],
+  ['TRANSLATION', 'Translation'],
+  ['TRANSLITERATION', 'Transliteration'],
+  ['LEXICAL_GLOSS', 'Lexical Gloss'],
+  ['COMMENTARY', 'Commentary'],
+  ['TAFSIR', 'Tafsir'],
+  ['SUMMARY', 'Summary'],
+  ['FOOTNOTE', 'Footnote'],
+  ['MATN', 'Matn']
+]
+
+export const TEXT_EDITION_TYPE_SELECTION: Array<[string, string]> = [
+  ['ORIGINAL', 'Original Text Edition'],
+  ['TEXTUAL_WITNESS', 'Textual Witness'],
+  ['TRANSLATION', 'Translation'],
+  ['COMMENTARY', 'Commentary'],
+  ['MANUSCRIPT', 'Manuscript'],
+  ['DATASET', 'Dataset']
+]
+
+export const RECORD_STATUS_SELECTION: Array<[string, string]> = [
+  ['DRAFT', 'Draft'],
+  ['APPROVED', 'Approved'],
+  ['PROVISIONAL', 'Provisional'],
+  ['SUPERSEDED', 'Superseded'],
+  ['EXCLUDED', 'Excluded']
+]
+
 export const SOURCE_POLICY_ROLE_SELECTION: Array<[string, string]> = [
   ['PRIMARY_NORMATIVE', 'Primary Normative'],
   ['COMPLEMENTARY_REVELATION_REFERENCE', 'Complementary Revelation Reference'],

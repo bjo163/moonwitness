@@ -16,6 +16,29 @@ import WxDevotion from './models/wx-devotion.js'
 import WxAsmaulHusna from './models/wx-asmaul-husna.js'
 import WxBookmark from './models/wx-bookmark.js'
 import WxHistory from './models/wx-history.js'
+import WxPassage from './models/wx-passage.js'
+import WxTextEdition from './models/wx-text-edition.js'
+import WxContent from './models/wx-content.js'
+import WxRoot from './models/wx-root.js'
+import WxLexeme from './models/wx-lexeme.js'
+import WxLexicalOccurrence from './models/wx-lexical-occurrence.js'
+import WxRevelationEvent from './models/wx-revelation-event.js'
+import WxRevelationEventPassage from './models/wx-revelation-event-passage.js'
+import WxFigure from './models/wx-figure.js'
+import WxFigureName from './models/wx-figure-name.js'
+import WxFigureRole from './models/wx-figure-role.js'
+import WxTraditionCorpus from './models/wx-tradition-corpus.js'
+import WxTraditionUnit from './models/wx-tradition-unit.js'
+import WxTraditionReference from './models/wx-tradition-reference.js'
+import WxTraditionAttribution from './models/wx-tradition-attribution.js'
+import WxTransmissionChain from './models/wx-transmission-chain.js'
+import WxTransmissionLink from './models/wx-transmission-link.js'
+import WxTraditionAssessment from './models/wx-tradition-assessment.js'
+import WxConcept from './models/wx-concept.js'
+import WxAssertion from './models/wx-assertion.js'
+import WxEvidence from './models/wx-evidence.js'
+import WxDivineExpression from './models/wx-divine-expression.js'
+import WxDivineExpressionOccurrence from './models/wx-divine-expression-occurrence.js'
 
 // Ingestion Data Plane (#65)
 import WxSourcePolicy from './models/wx-source-policy.js'
@@ -133,6 +156,37 @@ export {
   WxBookmark,
   WxHistory,
 
+  // Canonical Scripture / Revelation graph (#51)
+  WxPassage,
+  WxTextEdition,
+  WxContent,
+  WxRoot,
+  WxLexeme,
+  WxLexicalOccurrence,
+  WxRevelationEvent,
+  WxRevelationEventPassage,
+
+  // Canonical Figure / Person graph (#52)
+  WxFigure,
+  WxFigureName,
+  WxFigureRole,
+
+  // Universal Tradition / Transmission graph (#53)
+  WxTraditionCorpus,
+  WxTraditionUnit,
+  WxTraditionReference,
+  WxTraditionAttribution,
+  WxTransmissionChain,
+  WxTransmissionLink,
+  WxTraditionAssessment,
+
+  // Concepts, assertions, evidence, and corpus-mined expressions (#54)
+  WxConcept,
+  WxAssertion,
+  WxEvidence,
+  WxDivineExpression,
+  WxDivineExpressionOccurrence,
+
   // Ingestion data plane models (#65)
   WxSourcePolicy,
   WxSourceManifest,
@@ -178,6 +232,37 @@ export default {
     WxAsmaulHusna,
     WxBookmark,
     WxHistory,
+
+    // Canonical Scripture / Revelation graph (#51)
+    WxPassage,
+    WxTextEdition,
+    WxContent,
+    WxRoot,
+    WxLexeme,
+    WxLexicalOccurrence,
+    WxRevelationEvent,
+    WxRevelationEventPassage,
+
+    // Canonical Figure / Person graph (#52)
+    WxFigure,
+    WxFigureName,
+    WxFigureRole,
+
+    // Universal Tradition / Transmission graph (#53)
+    WxTraditionCorpus,
+    WxTraditionUnit,
+    WxTraditionReference,
+    WxTraditionAttribution,
+    WxTransmissionChain,
+    WxTransmissionLink,
+    WxTraditionAssessment,
+
+    // Concepts, assertions, evidence, and corpus-mined expressions (#54)
+    WxConcept,
+    WxAssertion,
+    WxEvidence,
+    WxDivineExpression,
+    WxDivineExpressionOccurrence,
 
     // Ingestion data plane (#65)
     WxSourcePolicy,
