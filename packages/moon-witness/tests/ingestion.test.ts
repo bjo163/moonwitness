@@ -7,6 +7,7 @@ import {
   sha256File,
   computeFingerprint,
   computeRecordsChecksum,
+  computeNormalizedChecksum,
   validateArtifactPath
 } from '../src/services/hash.js'
 import {
@@ -564,6 +565,23 @@ describe('Witness Corpus Ingestion Data Plane (#65)', () => {
 
       const snapshot = mockDb['wx_source_snapshot'][0]
       expect(snapshot.status).toBe('failed')
+    })
+
+    it('produces deterministic checksums regardless of object key insertion order in nested objects', () => {
+      const records1 = [
+        { id: '1', meta: { beta: 2, alpha: 1 }, text: 'A' },
+        { id: '2', meta: { y: 'yes', x: 'no' }, text: 'B' }
+      ]
+      const records2 = [
+        { text: 'A', id: '1', meta: { alpha: 1, beta: 2 } },
+        { text: 'B', id: '2', meta: { x: 'no', y: 'yes' } }
+      ]
+
+      const checksum1 = computeNormalizedChecksum(records1)
+      const checksum2 = computeNormalizedChecksum(records2)
+
+      expect(checksum1).toBe(checksum2)
+      expect(computeRecordsChecksum(records1)).toBe(computeRecordsChecksum(records2))
     })
   })
 })

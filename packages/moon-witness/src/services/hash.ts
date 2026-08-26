@@ -94,7 +94,7 @@ export function computeFingerprint(
 export function computeNormalizedChecksum(
   records: Array<Record<string, unknown>>
 ): string {
-  const stableJson = JSON.stringify(records, Object.keys(records[0] || {}).sort())
+  const stableJson = stableSerialize(records)
   return sha256String(stableJson)
 }
 
