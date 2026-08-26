@@ -4,6 +4,8 @@ import {
   WitnessGraphService,
   WxEntity,
   WxEntityAlias,
+  WxEngineResult,
+  MoonOrmEngineRunStore,
   WxProvenance,
   WxRelation,
   WxRelationType,
@@ -24,6 +26,7 @@ import {
 } from '@moon/orm'
 
 const databaseUrl = process.env.TEST_DATABASE_URL
+const CHECKSUM_LENGTH = 64
 if (!databaseUrl) {
   throw new Error('TEST_DATABASE_URL is required for Witness PostgreSQL certification')
 }
@@ -113,7 +116,9 @@ async function main() {
     'wx_evidence',
     'wx_divine_expression',
     'wx_divine_expression_occurrence',
-    'wx_legacy_mapping'
+    'wx_legacy_mapping',
+    'wx_engine_run',
+    'wx_engine_result'
   ]
   for (const table of requiredTables) {
     assert.equal(await tableExists(table), true, `forge must create ${table}`)
@@ -133,6 +138,9 @@ async function main() {
   assert.equal(await hasForeignKey('wx_transmission_link', 'chain_id', 'wx_transmission_chain'), true)
   assert.equal(await hasForeignKey('wx_evidence', 'assertion_id', 'wx_assertion'), true)
   assert.equal(await hasForeignKey('wx_divine_expression_occurrence', 'passage_id', 'wx_passage'), true)
+  assert.equal(await hasForeignKey('wx_engine_run', 'parent_run_id', 'wx_engine_run'), true)
+  assert.equal(await hasForeignKey('wx_engine_run', 'rerun_of_id', 'wx_engine_run'), true)
+  assert.equal(await hasForeignKey('wx_engine_result', 'run_id', 'wx_engine_run'), true)
 
   const seedOne = await seedWitnessGraphCore()
   const relationTypesAfterFirstSeed = await count('wx_relation_type')
@@ -154,7 +162,7 @@ async function main() {
     capability: 'TEXT_AVAILABLE',
     scriptureFamily: 'QURAN',
     revision: 'cert-r1',
-    artifactChecksum: 'a'.repeat(64),
+    artifactChecksum: 'a'.repeat(CHECKSUM_LENGTH),
     active: true
   })
 
@@ -181,12 +189,66 @@ async function main() {
     sourceId: source.id,
     sourceReference: 'QURAN 2:255 certification fixture',
     sourceRevision: 'cert-r1',
-    artifactChecksum: 'a'.repeat(64),
+    artifactChecksum: 'a'.repeat(CHECKSUM_LENGTH),
     parserVersion: 'cert-v1',
     importerVersion: 'cert-v1',
     superseded: false,
     active: true
   })
+
+  const engineStore = new MoonOrmEngineRunStore()
+  const engineRun = await engineStore.create(env, {
+    runKey: 'cert:engine:run:1',
+    moduleCode: 'cert.fixture',
+    moduleVersion: '1.0.0',
+    runtimeVersion: '1.0.0',
+    inputSchemaVersion: 'CERT_INPUT_V1',
+    outputSchemaVersion: 'CERT_OUTPUT_V1',
+    deterministic: true,
+    input: { fixture: true },
+    inputChecksum: 'b'.repeat(CHECKSUM_LENGTH),
+    scope: {
+      scriptureFamilies: ['QURAN', 'TAWRAT', 'ZABUR', 'INJIL'],
+      sourceRevisions: [],
+      languagePreferences: [],
+      authorityClasses: ['PRIMARY_SOURCE'],
+      includeHadith: false,
+      includeDerivedAssertions: false,
+      figureIds: [],
+      conceptIds: [],
+      relationCodes: [],
+      eventIds: [],
+      placeIds: [],
+      traversal: { maxDepth: 2, maxNodes: 100 }
+    },
+    scopeChecksum: 'c'.repeat(CHECKSUM_LENGTH),
+    sourceRevisions: [],
+    ontologyVersion: 'WITNESS_RELATION_V1',
+    identityChecksum: 'd'.repeat(CHECKSUM_LENGTH),
+    status: 'RUNNING',
+    startedAt: '2026-01-01T00:00:00.000Z',
+    completedAt: undefined
+  })
+  const engineResult = {
+    protocol: 'WITNESS_ENGINE_RESULT_V1' as const,
+    runId: engineRun.id,
+    summary: 'Certification engine result',
+    findings: [],
+    conflicts: [],
+    unresolved: [],
+    sourceRevisions: [],
+    provenanceSummary: { evidenceCount: 0, provenanceRefs: [] },
+    diagnostics: []
+  }
+  await engineStore.complete(env, engineRun.id, engineResult, 'e'.repeat(CHECKSUM_LENGTH))
+  const storedEngineResult = await engineStore.getResult(env, engineRun.id)
+  assert.equal(storedEngineResult?.runId, engineRun.id)
+  const engineResultRows = await WxEngineResult.fetch(WxEngineResult, env, [['runId', '=', Number(engineRun.id)]])
+  assert.equal(scalarId(engineResultRows[0], 'runId', 'run_id'), Number(engineRun.id))
+  await assert.rejects(
+    engineStore.complete(env, engineRun.id, engineResult, 'e'.repeat(CHECKSUM_LENGTH)),
+    /immutable/
+  )
 
   const passage = await WxEntity.spawn(WxEntity, env, {
     canonicalKey: 'cert:passage:quran:2:255',

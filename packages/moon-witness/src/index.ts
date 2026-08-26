@@ -40,6 +40,8 @@ import WxEvidence from './models/wx-evidence.js'
 import WxDivineExpression from './models/wx-divine-expression.js'
 import WxDivineExpressionOccurrence from './models/wx-divine-expression-occurrence.js'
 import WxLegacyMapping from './models/wx-legacy-mapping.js'
+import WxEngineRun from './models/wx-engine-run.js'
+import WxEngineResult from './models/wx-engine-result.js'
 
 // Ingestion Data Plane (#65)
 import WxSourcePolicy from './models/wx-source-policy.js'
@@ -118,6 +120,32 @@ export {
 
 export { validateAnalyzeResult } from './services/analyze-contract.js'
 export { analyzeWitness } from './services/analyze.js'
+
+// Reusable engine kernel (#57)
+export type {
+  EngineAiMetadata,
+  EngineEvidenceCandidate,
+  EngineEvidenceExplanation,
+  EngineEvidenceReference,
+  EngineFinding,
+  EngineFindingCandidate,
+  EngineFindingStatus,
+  EngineOutputAuthorityClass,
+  EngineResultDraft,
+  EngineResultEnvelope,
+  EngineRunRecord,
+  EngineRunRequest,
+  EngineRunStore,
+  EngineScope,
+  EngineScopeInput,
+  EngineSourceRevision,
+  WitnessEngineModule
+} from './types/engine.js'
+export { WITNESS_ENGINE_RESULT_V1, WITNESS_ENGINE_RUNTIME_VERSION } from './types/engine.js'
+export { resolveEngineScope, checksumEngineScope } from './services/engine-scope.js'
+export { finalizeEngineResult, checksumEngineResult } from './services/engine-evidence.js'
+export { InMemoryEngineRunStore, MoonOrmEngineRunStore } from './services/engine-store.js'
+export { WitnessEngineRegistry, WitnessEngineRuntime } from './services/engine-runtime.js'
 
 export {
   planLegacyMigration,
@@ -221,6 +249,8 @@ export {
   WxDivineExpression,
   WxDivineExpressionOccurrence,
   WxLegacyMapping,
+  WxEngineRun,
+  WxEngineResult,
 
   // Ingestion data plane models (#65)
   WxSourcePolicy,
@@ -299,6 +329,8 @@ export default {
     WxDivineExpression,
     WxDivineExpressionOccurrence,
     WxLegacyMapping,
+    WxEngineRun,
+    WxEngineResult,
 
     // Ingestion data plane (#65)
     WxSourcePolicy,
