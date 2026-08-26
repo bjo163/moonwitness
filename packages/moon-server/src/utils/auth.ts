@@ -3,9 +3,64 @@ import jwt from 'jsonwebtoken'
 import { randomInt, createHash } from 'node:crypto'
 import { ANONYMOUS_ID, SUPERUSER_ID, createCtx, getModel, type Ctx } from '@moon/orm'
 
+export type AllowedJwtAlgorithm = 'HS256' | 'HS384' | 'HS512'
+
+export interface JwtPolicy {
+  algorithm: AllowedJwtAlgorithm
+  allowedAlgorithms: AllowedJwtAlgorithm[]
+  issuer?: string
+  audience?: string
+  expiresIn: string | number
+  clockTolerance: number
+}
+
+export const DEFAULT_JWT_ALGORITHM: AllowedJwtAlgorithm = 'HS256'
+export const DEFAULT_JWT_EXPIRES_IN = '7d'
+export const DEFAULT_JWT_CLOCK_TOLERANCE_SECONDS = 60
+
+export const CANONICAL_JWT_POLICY: JwtPolicy = {
+  algorithm: (process.env.JWT_ALGORITHM as AllowedJwtAlgorithm) || DEFAULT_JWT_ALGORITHM,
+  allowedAlgorithms: ['HS256', 'HS384', 'HS512'],
+  issuer: process.env.JWT_ISSUER || undefined,
+  audience: process.env.JWT_AUDIENCE || undefined,
+  expiresIn: process.env.JWT_ACCESS_TOKEN_TTL || DEFAULT_JWT_EXPIRES_IN,
+  clockTolerance: process.env.JWT_CLOCK_TOLERANCE_SECONDS
+    ? parseInt(process.env.JWT_CLOCK_TOLERANCE_SECONDS, 10)
+    : DEFAULT_JWT_CLOCK_TOLERANCE_SECONDS
+}
+
+export type AuthErrorCode =
+  | 'AUTH_REQUIRED'
+  | 'AUTH_MISSING'
+  | 'AUTH_MALFORMED'
+  | 'AUTH_EXPIRED'
+  | 'AUTH_INVALID'
+  | 'AUTH_NOT_ACTIVE'
+  | 'AUTH_SUBJECT_INVALID'
+  | 'AUTH_ISSUER_INVALID'
+  | 'AUTH_AUDIENCE_INVALID'
+  | 'AUTH_SESSION_REVOKED'
+  | 'AUTH_USER_INACTIVE'
+  | 'AUTH_USER_NOT_FOUND'
+
+export class AuthError extends Error {
+  code: AuthErrorCode
+  statusCode: number
+
+  constructor(code: AuthErrorCode, message: string, statusCode: number = 401) {
+    super(message)
+    this.name = 'AuthError'
+    this.code = code
+    this.statusCode = statusCode
+  }
+}
+
 export interface VerifyTokenOptions {
   clockTolerance?: number
   maxAge?: string | number
+  issuer?: string
+  audience?: string
+  algorithms?: AllowedJwtAlgorithm[]
 }
 
 export interface JwtClaims {
@@ -27,7 +82,6 @@ export interface OtpChallenge {
 
 export const OTP_EXPIRY_MS = 15 * 60 * 1000 // 15 minutes
 export const MAX_OTP_ATTEMPTS = 5
-export const DEFAULT_JWT_ALGORITHM = 'HS256'
 
 /**
  * Issue a standard signed JWT token with algorithm pinning and tokenVersion
@@ -37,12 +91,24 @@ export function issueJwt(
   jwtSecret: string,
   options: jwt.SignOptions = {}
 ): string {
-  const { algorithm = DEFAULT_JWT_ALGORITHM, expiresIn = '7d', ...restOptions } = options
-  return jwt.sign(payload, jwtSecret, {
+  if (!jwtSecret || typeof jwtSecret !== 'string') {
+    throw new AuthError('AUTH_INVALID', 'JWT secret is missing or invalid', 500)
+  }
+
+  const algorithm = (options.algorithm as AllowedJwtAlgorithm) || CANONICAL_JWT_POLICY.algorithm
+  const expiresIn = options.expiresIn ?? CANONICAL_JWT_POLICY.expiresIn
+  const issuer = options.issuer ?? CANONICAL_JWT_POLICY.issuer
+  const audience = options.audience ?? CANONICAL_JWT_POLICY.audience
+
+  const signOpts: jwt.SignOptions = {
     algorithm: algorithm as jwt.Algorithm,
-    expiresIn,
-    ...restOptions
-  })
+    expiresIn: expiresIn as any,
+    ...(issuer ? { issuer } : {}),
+    ...(audience ? { audience } : {}),
+    ...options
+  }
+
+  return jwt.sign(payload, jwtSecret, signOpts)
 }
 
 /**
@@ -55,22 +121,22 @@ export async function validateUserSession(
 ): Promise<{ id: number; email: string; name: string; tokenVersion: number; partnerId?: number }> {
   const VxUser = getModel('vx.user')
   if (!VxUser) {
-    throw new Error('User model not found')
+    throw new AuthError('AUTH_INVALID', 'User model not found', 500)
   }
 
   const users = await VxUser.fetch(VxUser as any, env, [['id', '=', userId]])
   if (users.length === 0) {
-    throw new Error('User not found')
+    throw new AuthError('AUTH_USER_NOT_FOUND', 'User not found', 401)
   }
 
   const user = users[0]
   if (user.is_active === false || user.isActive === false) {
-    throw new Error('User account is inactive or disabled')
+    throw new AuthError('AUTH_USER_INACTIVE', 'User account is inactive or disabled', 401)
   }
 
   const currentTokenVersion = Number(user.token_version ?? user.tokenVersion ?? 1)
   if (tokenVersion !== undefined && Number(tokenVersion) !== currentTokenVersion) {
-    throw new Error('Session revoked')
+    throw new AuthError('AUTH_SESSION_REVOKED', 'Session revoked', 401)
   }
 
   return {
@@ -91,12 +157,12 @@ export async function revokeUserSessions(
 ): Promise<number> {
   const VxUser = getModel('vx.user')
   if (!VxUser) {
-    throw new Error('User model not found')
+    throw new AuthError('AUTH_INVALID', 'User model not found', 500)
   }
   const ctx = env ?? createCtx(SUPERUSER_ID, {}, getModel as any)
   const users = await VxUser.fetch(VxUser as any, ctx, [['id', '=', userId]])
   if (users.length === 0) {
-    throw new Error('User not found')
+    throw new AuthError('AUTH_USER_NOT_FOUND', 'User not found', 401)
   }
   const user = users[0]
   const nextVersion = (Number(user.token_version ?? user.tokenVersion ?? 1)) + 1
@@ -170,57 +236,98 @@ export function verifyOtpChallenge(
 }
 
 /**
- * Verify JWT token from Authorization header
- * Returns decoded token payload with valid `sub` or { sub: ANONYMOUS_ID } if no auth header present.
- * Throws explicit Error if token is expired, tampered, or invalid.
+ * Verify JWT token from Authorization header.
+ * Returns decoded token payload with valid positive numeric `sub` or { sub: ANONYMOUS_ID } if no auth header present.
+ * Throws explicit typed AuthError if token is expired, tampered, malformed, or invalid.
  */
 export function verifyToken(
   req: IncomingMessage,
   jwtSecret: string,
   options: VerifyTokenOptions = {}
 ): any {
+  if (!jwtSecret || typeof jwtSecret !== 'string') {
+    throw new AuthError('AUTH_INVALID', 'JWT secret is missing or invalid', 500)
+  }
+
   const authHeader = req.headers.authorization
 
+  // 1. Missing or completely empty header => intentional Anonymous request
   if (!authHeader || !authHeader.trim()) {
     return { sub: ANONYMOUS_ID }
   }
 
+  // 2. Header present but not starting with 'Bearer ' => Malformed
   if (!authHeader.startsWith('Bearer ')) {
-    throw new Error('Invalid authorization format')
+    throw new AuthError('AUTH_MALFORMED', 'Invalid authorization format', 401)
   }
 
+  // 3. 'Bearer ' present but token content is empty/whitespace => Malformed
   const token = authHeader.substring(7).trim()
   if (!token) {
-    return { sub: ANONYMOUS_ID }
+    throw new AuthError('AUTH_MALFORMED', 'Malformed Bearer token', 401)
   }
 
+  // 4. Verify token with canonical algorithms, clockTolerance, issuer, and audience
   try {
-    const decoded: any = jwt.verify(token, jwtSecret, {
-      algorithms: ['HS256', 'HS384', 'HS512'],
-      clockTolerance: options.clockTolerance ?? 60,
-      maxAge: options.maxAge
-    })
+    const algorithms = options.algorithms || CANONICAL_JWT_POLICY.allowedAlgorithms
+    const clockTolerance = options.clockTolerance ?? CANONICAL_JWT_POLICY.clockTolerance
+    const expectedIssuer = options.issuer ?? CANONICAL_JWT_POLICY.issuer
+    const expectedAudience = options.audience ?? CANONICAL_JWT_POLICY.audience
 
-    if (decoded && typeof decoded === 'object') {
-      const sub = Number(decoded.sub)
-      if (isNaN(sub) || sub <= 0) {
-        throw new Error('Invalid token subject')
-      }
-      return { ...decoded, sub }
+    const verifyOpts: jwt.VerifyOptions = {
+      algorithms: algorithms as jwt.Algorithm[],
+      clockTolerance,
+      ...(options.maxAge ? { maxAge: options.maxAge } : {}),
+      ...(expectedIssuer ? { issuer: expectedIssuer } : {}),
+      ...(expectedAudience ? { audience: expectedAudience } : {}),
     }
 
-    throw new Error('Invalid token payload')
+    const decoded: any = jwt.verify(token, jwtSecret, verifyOpts)
+
+    if (!decoded || typeof decoded !== 'object') {
+      throw new AuthError('AUTH_INVALID', 'Invalid token payload', 401)
+    }
+
+    // 5. Strict Subject Validation: must be a positive safe integer
+    const rawSub = decoded.sub
+    if (rawSub === undefined || rawSub === null || typeof rawSub === 'boolean' || Array.isArray(rawSub) || typeof rawSub === 'object') {
+      throw new AuthError('AUTH_SUBJECT_INVALID', 'Invalid token subject', 401)
+    }
+
+    let sub: number
+    if (typeof rawSub === 'number') {
+      sub = rawSub
+    } else if (typeof rawSub === 'string' && /^\d+$/.test(rawSub.trim())) {
+      sub = parseInt(rawSub.trim(), 10)
+    } else {
+      throw new AuthError('AUTH_SUBJECT_INVALID', 'Invalid token subject', 401)
+    }
+
+    if (!Number.isInteger(sub) || !Number.isSafeInteger(sub) || sub <= 0) {
+      throw new AuthError('AUTH_SUBJECT_INVALID', 'Invalid token subject', 401)
+    }
+
+    return { ...decoded, sub }
   } catch (err: any) {
+    if (err instanceof AuthError) {
+      throw err
+    }
     if (err instanceof jwt.TokenExpiredError) {
-      throw new Error('Token expired')
+      throw new AuthError('AUTH_EXPIRED', 'Token expired', 401)
     }
     if (err instanceof jwt.NotBeforeError) {
-      throw new Error('Token not active yet')
+      throw new AuthError('AUTH_NOT_ACTIVE', 'Token not active yet', 401)
     }
     if (err instanceof jwt.JsonWebTokenError) {
-      throw new Error('Invalid token')
+      const msg = err.message.toLowerCase()
+      if (msg.includes('jwt issuer invalid') || msg.includes('issuer')) {
+        throw new AuthError('AUTH_ISSUER_INVALID', 'Invalid token issuer', 401)
+      }
+      if (msg.includes('jwt audience invalid') || msg.includes('audience')) {
+        throw new AuthError('AUTH_AUDIENCE_INVALID', 'Invalid token audience', 401)
+      }
+      throw new AuthError('AUTH_INVALID', 'Invalid token', 401)
     }
-    throw err
+    throw new AuthError('AUTH_INVALID', err?.message || 'Invalid token', 401)
   }
 }
-

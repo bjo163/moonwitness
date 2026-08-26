@@ -14,6 +14,7 @@ import {
   validateUserSession,
   revokeUserSessions,
   verifyToken,
+  AuthError,
 } from '../utils/auth.js'
 
 export interface AuthConfig {
@@ -471,15 +472,20 @@ export async function handleLogout(
     const decoded = verifyToken(req, config.jwtSecret)
     const uid = decoded.sub as number
 
-    if (uid && uid > 0) {
-      await revokeUserSessions(uid)
-      logger.info('moon.auth', `User id ${uid} logged out (session revoked)`)
+    if (!uid || uid <= 0) {
+      return sendJson(res, 401, { error: 'Unauthorized', code: 'AUTH_REQUIRED' }, req)
     }
+
+    await revokeUserSessions(uid)
+    logger.info('moon.auth', `User id ${uid} logged out (session revoked)`)
 
     return sendJson(res, 200, { message: 'Logged out successfully' }, req)
   } catch (err: any) {
+    if (err instanceof AuthError) {
+      return sendJson(res, err.statusCode, { error: err.message, code: err.code }, req)
+    }
     logger.error('moon.auth', 'Logout error:', err)
-    return sendJson(res, 500, { error: 'Internal server error' }, req)
+    return sendJson(res, 500, { error: 'Internal server error', code: 'INTERNAL_ERROR' }, req)
   }
 }
 
@@ -504,20 +510,13 @@ export async function handleGetSession(
 
     return sendJson(res, 200, { user: session }, req)
   } catch (err: any) {
-    if (err?.message === 'Session revoked' || err?.message === 'User account is inactive or disabled') {
-      return sendJson(res, 401, { error: err.message, code: 'SESSION_REVOKED' }, req)
+    if (err instanceof AuthError) {
+      return sendJson(res, err.statusCode, { error: err.message, code: err.code }, req)
     }
-    const isAuthError = [
-      'Token expired',
-      'Invalid token',
-      'Authorization header required',
-      'Invalid authorization format',
-      'Invalid token subject'
-    ].includes(err?.message)
-    const statusCode = isAuthError ? 401 : 500
-    return sendJson(res, statusCode, {
+    logger.error('moon.auth', 'Get session error:', err)
+    return sendJson(res, 500, {
       error: err?.message || 'Internal server error',
-      code: isAuthError ? 'AUTH_REQUIRED' : 'INTERNAL_ERROR'
+      code: 'INTERNAL_ERROR'
     }, req)
   }
 }
