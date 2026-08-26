@@ -1,5 +1,18 @@
 import http from 'node:http'
-import { setupOrm, forge, getLastPending, getDb, getModel, createCtx, SUPERUSER_ID, Vertex, registerModel, registry, type DbConfig } from '@moon/orm'
+import {
+  setupOrm,
+  teardownOrm,
+  forge,
+  getLastPending,
+  getDb,
+  getModel,
+  createCtx,
+  SUPERUSER_ID,
+  Vertex,
+  registerModel,
+  registry,
+  type DbConfig
+} from '@moon/orm'
 import { globalRoutes, HttpHandler } from './router.js'
 import { createProxyHandler } from './proxy.js'
 import { logger } from './logger.js'
@@ -45,6 +58,8 @@ export function publish(topic: string, payload: any) {
 
 export class NativeServer {
   private config: MoonConfig
+  private server: http.Server | null = null
+  private metricInterval: NodeJS.Timeout | null = null
   private middlewares: ((req: http.IncomingMessage, res: http.ServerResponse, next: () => Promise<void>) => Promise<void> | void)[] = []
 
   constructor(config: MoonConfig) {
@@ -323,6 +338,7 @@ export class NativeServer {
       }
 
       const server = http.createServer((req, res) => this.handleRequest(req, res))
+      this.server = server
 
       const port = this.config.port || Number(process.env.API_PORT || process.env.PORT) || 4000
       const host = this.config.host || '0.0.0.0'
@@ -330,7 +346,7 @@ export class NativeServer {
       server.listen(port, host, () => {
         logger.info('moon.core', `Native Engine running at http://${host}:${port}`)
         
-        setInterval(async () => {
+        this.metricInterval = setInterval(async () => {
           try {
             const MxMetric = getModel('mx.metric')
             const activeCount = getActiveClientCount()
@@ -347,5 +363,21 @@ export class NativeServer {
       logger.error('moon.core', 'Failed to start:', err)
       process.exit(1)
     }
+  }
+
+  public async stop(): Promise<void> {
+    if (this.metricInterval) {
+      clearInterval(this.metricInterval)
+      this.metricInterval = null
+    }
+
+    if (this.server) {
+      await new Promise<void>((resolve, reject) => {
+        this.server!.close((err) => (err ? reject(err) : resolve()))
+      })
+      this.server = null
+    }
+
+    await teardownOrm()
   }
 }

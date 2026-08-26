@@ -66,3 +66,14 @@ export function getDb(): Knex {
   }
   return dbInstance
 }
+
+export async function teardownOrm(): Promise<void> {
+  if (dbInstance) {
+    if (typeof (dbInstance as any).destroy === 'function') {
+      await (dbInstance as any).destroy()
+    }
+    dbInstance = null
+  }
+}
+
+export const closeDb = teardownOrm

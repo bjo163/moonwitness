@@ -22,5 +22,5 @@ export {
 export { registry, getModel, loadModels, registerModel } from './registry.js'
 export { forge, getLastPending } from './schema-sync.js'
 export { diff, up, down } from './migrator.js'
-export { setupOrm, getDb } from './config.js'
+export { setupOrm, getDb, teardownOrm, closeDb } from './config.js'
 export type { DbConfig } from './config.js'
