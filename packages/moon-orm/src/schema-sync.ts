@@ -339,12 +339,18 @@ async function alterColumn(
   migrations: MigrationCommand[] = []
 ) {
   const db = getDb()
-  if (colType.startsWith('vector(')) throw new Error(`Vector dimension change for ${table}.${colName} requires an explicit reviewed migration; automatic alteration is refused.`)
+  validateAutomaticAlteration(colType, table, colName)
   const sql = `ALTER TABLE ${sqlIdentifier(table)} ALTER COLUMN ${colName} TYPE ${colType}`
   if (dryRun) {
     migrations.push({ up: sql, down: `-- Manual intervention required to down-migrate column type alteration for ${table}.${colName}` })
   } else {
     await db.raw(sql)
+  }
+}
+
+export function validateAutomaticAlteration(colType: string, table = 'table', colName = 'column'): void {
+  if (colType.startsWith('vector(')) {
+    throw new Error(`Vector dimension change for ${table}.${colName} requires an explicit reviewed migration; automatic alteration is refused.`)
   }
 }
 
@@ -418,7 +424,7 @@ function needsAlter(
   const expected = mapFieldType(field)
   let actual = existing.data_type
   if (actual === 'USER-DEFINED' && existing.udt_name === 'vector') {
-    actual = 'vector' // We only get 'vector' without dims from information_schema easily, so let's just ignore dim changes for now
+    actual = 'vector'
     if (expected.startsWith('vector')) {
       const expectedDimension = Number(expected.match(/vector\((\d+)\)/)?.[1] ?? 0)
       if (existing.vector_dimension && expectedDimension && existing.vector_dimension !== expectedDimension) return true
