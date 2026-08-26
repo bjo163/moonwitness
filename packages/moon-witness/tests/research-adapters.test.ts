@@ -8,8 +8,32 @@ describe('research and legacy adapter contracts (#61/#66)', () => {
     const mapped = mapLegacyResearchRecord(record)
     expect(mapped.targetLane).toBe('DERIVED')
     expect(mapped.canonicalPromotion).toBe('NEVER_AUTOMATIC')
+    expect(mapped.mappingKind).toBe('FIGURE_PROJECTION')
+    expect(mapped.evidenceEligible).toBe(false)
     expect(mapped.warnings).toContain('AI/mock legacy output is retained as non-evidence candidate only.')
     expect(legacyIdempotencyKey(record)).toBe(legacyIdempotencyKey({ ...record }))
+  })
+
+  it('classifies Cosmic, Propetic, and Divine Text imports without changing their source identity', () => {
+    const cases = [
+      ['COSMIC', 'ONTOLOGY_EVIDENCE', 'bjo163/cosmic'],
+      ['PROPETIC', 'FIGURE_PROJECTION', 'bjo163/propetic'],
+      ['DIVINE_TEXT', 'TEXTUAL_WITNESS', 'bjo163/divine-text']
+    ] as const
+    for (const [source, mappingKind, originRepo] of cases) {
+      const mapped = mapLegacyResearchRecord({ id: source, payload: { status: 'READY' }, source, originRepo, originCommit: 'r1', originPath: 'fixture.json', adapterVersion: '1.0.0' })
+      expect(mapped.mappingKind).toBe(mappingKind)
+      expect(mapped.originRepo).toBe(originRepo)
+      expect(mapped.targetLane).toBe('DERIVED')
+      expect(mapped.evidenceEligible).toBe(true)
+    }
+  })
+
+  it('keeps unresolved legacy status out of derived evidence', () => {
+    const mapped = mapLegacyResearchRecord({ id: 'pending-crosswalk', payload: { status: 'PENDING', legacyScore: 0 }, source: 'DIVINE_TEXT', originRepo: 'bjo163/divine-text', originCommit: 'r1', originPath: 'crosswalk.json', adapterVersion: '1.0.0' })
+    expect(mapped.targetLane).toBe('UNRESOLVED')
+    expect(mapped.evidenceEligible).toBe(false)
+    expect(mapped.warnings).toContain('Legacy item has unresolved status and requires review before research use.')
   })
 
   it('returns deterministic denominator-explicit research distributions', () => {
