@@ -17,8 +17,6 @@ on:
       - 'apps/api/**'
       - '.github/workflows/witness-postgres-certification.yml'
   workflow_dispatch:
-  schedule:
-    - cron: '17 2 * * 1'
 
 permissions:
   contents: read
