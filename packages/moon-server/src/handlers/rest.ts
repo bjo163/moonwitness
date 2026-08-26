@@ -80,24 +80,34 @@ export async function handleRest(
         }
       }
 
-      // Other query parameters
+      // Relational eager loading validation
+      const rawWith = searchParams.get('with')
+      if (rawWith) {
+        const fieldDefs = typeof ModelClass.getFieldDefs === 'function' ? ModelClass.getFieldDefs(ModelClass) : {}
+        const rels = rawWith.split(',')
+        for (const rel of rels) {
+          const trimmedRel = rel.trim()
+          if (!trimmedRel) continue
+          if (!VALID_PARAM_KEY_REGEX.test(trimmedRel)) {
+            return sendJson(res, 400, { error: `Invalid relation field: ${trimmedRel}`, code: 'INVALID_RELATION' }, req)
+          }
+          const fieldDef = fieldDefs[trimmedRel] || Object.entries(fieldDefs).find(([k]) => k.toLowerCase() === trimmedRel.toLowerCase())?.[1]
+          if (fieldDef && !['many2one', 'one2many', 'many2many'].includes(fieldDef.type)) {
+            return sendJson(res, 400, { error: `Field '${trimmedRel}' is not a relation`, code: 'INVALID_RELATION' }, req)
+          }
+          query.with(trimmedRel)
+        }
+      }
+
+      // Other query parameters for field equality filters
       const RESERVED_PARAMS = new Set(['page', 'limit', 'with', 'order', 'sort', 'domain'])
       for (const [key, value] of searchParams.entries()) {
         if (RESERVED_PARAMS.has(key)) continue
 
-        if (key === 'with') {
-          const rels = value.split(',')
-          for (const rel of rels) {
-            if (VALID_PARAM_KEY_REGEX.test(rel.trim())) {
-              query.with(rel.trim())
-            }
-          }
-        } else {
-          if (!VALID_PARAM_KEY_REGEX.test(key)) {
-            return sendJson(res, 400, { error: `Invalid query field: ${key}`, code: 'INVALID_QUERY_FIELD' }, req)
-          }
-          query.where(key, value)
+        if (!VALID_PARAM_KEY_REGEX.test(key)) {
+          return sendJson(res, 400, { error: `Invalid query field: ${key}`, code: 'INVALID_QUERY_FIELD' }, req)
         }
+        query.where(key, value)
       }
 
       const result = await query.paginate(page, limit)
@@ -106,7 +116,25 @@ export async function handleRest(
 
     // GET /api/:model/:id - Get single record
     if (req.method === 'GET' && id) {
-      const record = await ModelClass.query(env).where('id', id).first()
+      const query = ModelClass.query(env).where('id', id)
+      const rawWith = searchParams.get('with')
+      if (rawWith) {
+        const fieldDefs = typeof ModelClass.getFieldDefs === 'function' ? ModelClass.getFieldDefs(ModelClass) : {}
+        const rels = rawWith.split(',')
+        for (const rel of rels) {
+          const trimmedRel = rel.trim()
+          if (!trimmedRel) continue
+          if (!VALID_PARAM_KEY_REGEX.test(trimmedRel)) {
+            return sendJson(res, 400, { error: `Invalid relation field: ${trimmedRel}`, code: 'INVALID_RELATION' }, req)
+          }
+          const fieldDef = fieldDefs[trimmedRel] || Object.entries(fieldDefs).find(([k]) => k.toLowerCase() === trimmedRel.toLowerCase())?.[1]
+          if (fieldDef && !['many2one', 'one2many', 'many2many'].includes(fieldDef.type)) {
+            return sendJson(res, 400, { error: `Field '${trimmedRel}' is not a relation`, code: 'INVALID_RELATION' }, req)
+          }
+          query.with(trimmedRel)
+        }
+      }
+      const record = await query.first()
       if (!record) {
         return sendJson(res, 404, { error: 'Record not found', code: 'RECORD_NOT_FOUND' }, req)
       }
@@ -157,8 +185,25 @@ export async function handleRest(
     if (err instanceof AuthorizationError) {
       return sendJson(res, err.statusCode, { error: err.message, code: err.code }, req)
     }
-    const isAuthError = ['Token expired', 'Invalid token', 'Authorization header required', 'Invalid authorization format', 'Invalid token subject'].includes(err?.message)
+    if (err?.message?.startsWith('Validation Error:')) {
+      return sendJson(res, 400, { error: err.message, code: 'VALIDATION_ERROR' }, req)
+    }
+    const isAuthError = [
+      'Token expired',
+      'Invalid token',
+      'Authorization header required',
+      'Invalid authorization format',
+      'Invalid token subject'
+    ].includes(err?.message)
     const statusCode = isAuthError ? 401 : (err?.statusCode || 500)
-    return sendJson(res, statusCode, { error: err?.message || 'Internal server error', code: err?.code || (isAuthError ? 'AUTH_REQUIRED' : 'INTERNAL_ERROR') }, req)
+    return sendJson(
+      res,
+      statusCode,
+      {
+        error: err?.message || 'Internal server error',
+        code: err?.code || (isAuthError ? 'AUTH_REQUIRED' : 'INTERNAL_ERROR')
+      },
+      req
+    )
   }
 }

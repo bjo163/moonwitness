@@ -13,8 +13,13 @@ class SampleItem extends Vertex {
   static override _fields = {
     id: fields.Integer(),
     name: fields.Char(),
-    status: fields.Selection([['draft', 'Draft'], ['done', 'Done']])
+    status: fields.Selection([['draft', 'Draft'], ['done', 'Done']]),
+    authorId: fields.Many2one({ comodel: 'sample.author' })
   }
+
+  name = fields.Char()
+  status = fields.Selection([['draft', 'Draft'], ['done', 'Done']])
+  authorId = fields.Many2one({ comodel: 'sample.author' })
 }
 
 registerModel(SampleItem)
@@ -91,5 +96,37 @@ describe('REST Query Controls & Input Validation (#17)', () => {
 
     expect(getStatus()).toBe(400)
     expect(getBody().code).toBe('INVALID_REQUEST_BODY')
+  })
+
+  it('rejects invalid relation field in with parameter with 400 Bad Request', async () => {
+    // 'name' is a Char field, not a relation
+    const req = createReq('GET', '/api/sample.item?with=name')
+    const { res, getStatus, getBody } = createRes()
+
+    await handleRest(req, res, ['/api/sample.item', 'sample.item', undefined] as any, TEST_SECRET)
+
+    expect(getStatus()).toBe(400)
+    expect(getBody().code).toBe('INVALID_RELATION')
+    expect(getBody().error).toContain("Field 'name' is not a relation")
+  })
+
+  it('rejects malformed relation name containing illegal characters', async () => {
+    const req = createReq('GET', '/api/sample.item?with=author;DROP+TABLE')
+    const { res, getStatus, getBody } = createRes()
+
+    await handleRest(req, res, ['/api/sample.item', 'sample.item', undefined] as any, TEST_SECRET)
+
+    expect(getStatus()).toBe(400)
+    expect(getBody().code).toBe('INVALID_RELATION')
+  })
+
+  it('rejects query fields containing illegal parameter characters with 400 Bad Request', async () => {
+    const req = createReq('GET', '/api/sample.item?author%20id=1')
+    const { res, getStatus, getBody } = createRes()
+
+    await handleRest(req, res, ['/api/sample.item', 'sample.item', undefined] as any, TEST_SECRET)
+
+    expect(getStatus()).toBe(400)
+    expect(getBody().code).toBe('INVALID_QUERY_FIELD')
   })
 })
