@@ -704,4 +704,118 @@ describe('Issue #28: Operation-Specific ORM Authorization', () => {
     expect(tables.demo_comment.length).toBe(initialCommentCount)
     expect(tables.demo_comment.find((c) => c.content === 'Child comment during forbidden spawn')).toBeUndefined()
   })
+
+  it('morph scalar update rolls back completely if relational tuple authorization fails', async () => {
+    const aliceEnv = createCtx(42, {}, getModel)
+
+    const originalPost = tables.demo_post.find((p) => p.id === 1)!
+    expect(originalPost.title).toBe("Alice's Post")
+
+    // Alice attempts to update title AND link forbidden Tag 102
+    await expect(
+      PostModel.morph(PostModel, aliceEnv, 1, {
+        title: 'NEW FORBIDDEN TITLE',
+        tags: [[4, 102, 0]],
+      })
+    ).rejects.toThrowError(AuthorizationError)
+
+    // Transaction atomicity assertion:
+    // Scalar title must remain original
+    const postAfter = tables.demo_post.find((p) => p.id === 1)!
+    expect(postAfter.title).toBe("Alice's Post")
+    // Relation must not contain 102
+    const links = tables.demo_post_demo_tag_rel.filter((r) => r.demo_post_id === 1)
+    expect(links.some((r) => r.demo_tag_id === 102)).toBe(false)
+  })
+
+  it('morph earlier relation mutation rolls back if a later tuple fails', async () => {
+    // Add tag 103 (allowed)
+    tables.demo_tag.push({ id: 103, name: 'Allowed Tag 3', is_secret: false, is_active: true })
+    const aliceEnv = createCtx(42, {}, getModel)
+
+    // Initial links on post 1 has tag 101 only
+    expect(tables.demo_post_demo_tag_rel.some((r) => r.demo_post_id === 1 && r.demo_tag_id === 103)).toBe(false)
+
+    // Tuple 1: link 103 (valid), Tuple 2: link 102 (forbidden)
+    await expect(
+      PostModel.morph(PostModel, aliceEnv, 1, {
+        tags: [
+          [4, 103, 0],
+          [4, 102, 0],
+        ],
+      })
+    ).rejects.toThrowError(AuthorizationError)
+
+    // Earlier tuple (103) MUST NOT persist!
+    expect(tables.demo_post_demo_tag_rel.some((r) => r.demo_post_id === 1 && r.demo_tag_id === 103)).toBe(false)
+  })
+
+  it('M2M cmd 6 failure leaves source scalar + full relation set unchanged', async () => {
+    const aliceEnv = createCtx(42, {}, getModel)
+
+    // Attempt to update title and replace tags with [101, 102 (forbidden)]
+    await expect(
+      PostModel.morph(PostModel, aliceEnv, 1, {
+        title: 'TITLE MUST NOT CHANGE',
+        tags: [[6, 0, [101, 102]]],
+      })
+    ).rejects.toThrowError(AuthorizationError)
+
+    const postAfter = tables.demo_post.find((p) => p.id === 1)!
+    expect(postAfter.title).toBe("Alice's Post")
+
+    const links = tables.demo_post_demo_tag_rel.filter((r) => r.demo_post_id === 1)
+    expect(links.length).toBe(1)
+    expect(links[0].demo_tag_id).toBe(101)
+  })
+
+  it('purge is transactional and rolls back when a lifecycle hook or sub-operation fails', async () => {
+    // Attach a temporary failing afterDelete hook
+    const originalAfterDelete = (PostModel as any).afterDelete
+    ;(PostModel as any).afterDelete = async () => {
+      throw new Error('Simulated afterDelete crash')
+    }
+
+    const aliceEnv = createCtx(42, {}, getModel)
+
+    try {
+      await expect(PostModel.purge(PostModel, aliceEnv, 1)).rejects.toThrowError(
+        'Simulated afterDelete crash'
+      )
+
+      // Verify row 1 was rolled back and still exists in DB!
+      const post = tables.demo_post.find((p) => p.id === 1)
+      expect(post).toBeDefined()
+      expect(post?.id).toBe(1)
+    } finally {
+      (PostModel as any).afterDelete = originalAfterDelete
+    }
+  })
+
+  it('nested comodel mutation reuses active transaction context', async () => {
+    let capturedTrx: any = null
+    const aliceEnv = createCtx(42, {}, getModel)
+
+    await aliceEnv.transaction(async (trxEnv) => {
+      capturedTrx = trxEnv.trx
+      expect(capturedTrx).toBeDefined()
+
+      // Spawn inside transaction
+      const post = await PostModel.spawn(PostModel, trxEnv, {
+        title: 'Draft in Trx',
+        state: 'draft',
+        ownerId: 42,
+      })
+
+      // Morph inside transaction
+      await PostModel.morph(PostModel, trxEnv, post.id, {
+        title: 'Draft Renamed in Trx',
+      })
+
+      expect(tables.demo_post.find((p) => p.id === post.id)?.title).toBe('Draft Renamed in Trx')
+    })
+
+    // After commit, the post exists
+    expect(tables.demo_post.find((p) => p.title === 'Draft Renamed in Trx')).toBeDefined()
+  })
 })
