@@ -1,6 +1,15 @@
 import { defaultCache } from "@serwist/next/worker"
-import type { PrecacheEntry, SerwistGlobalConfig, RuntimeCaching } from "serwist"
-import { Serwist, CacheFirst, ExpirationPlugin, StaleWhileRevalidate } from "serwist"
+import type {
+  PrecacheEntry,
+  SerwistGlobalConfig,
+  RuntimeCaching,
+} from "serwist"
+import {
+  Serwist,
+  CacheFirst,
+  ExpirationPlugin,
+  StaleWhileRevalidate,
+} from "serwist"
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {

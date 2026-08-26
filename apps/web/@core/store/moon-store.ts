@@ -1,43 +1,46 @@
-import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
-import { MoonClient } from '@moon/client'
+import { create } from "zustand"
+import { persist, createJSONStorage } from "zustand/middleware"
+import { MoonClient } from "@moon/client"
 
 // Instantiate globally to prevent reconnection loops during React re-renders
-export const moonClientInstance = new MoonClient({ 
-  baseUrl: process.env.NEXT_PUBLIC_API_URL ||  'http://127.0.0.1:4000', 
+export const moonClientInstance = new MoonClient({
+  baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:4000",
   onUnauthorized: () => {
     // This will be called by MoonClient if API returns 401
     useMoonStore.getState().logout()
-    if (typeof window !== 'undefined') {
-      window.location.href = '/auth/login'
+    if (typeof window !== "undefined") {
+      window.location.href = "/auth/login"
     }
-  }
+  },
 })
 
 interface MoonState {
-  client: MoonClient;
-  isConnected: boolean;
-  user: any | null;
-  activeConnections: number;
-  hasCompletedOnboarding: boolean;
-  login: (email: string, pass: string) => Promise<void>;
-  register: (email: string, pass: string, name?: string) => Promise<void>;
-  forgotPassword: (email: string) => Promise<any>;
-  verifyOtp: (email: string, code: string) => Promise<any>;
-  resetPassword: (email: string, code: string, newPassword: string) => Promise<any>;
-  logout: () => void;
-  completeOnboarding: () => void;
-  request: (method: string, path: string, data?: any) => Promise<any>;
-  subscribe: (topic: string, callback: (data: any) => void) => () => void;
+  client: MoonClient
+  isConnected: boolean
+  user: any | null
+  activeConnections: number
+  hasCompletedOnboarding: boolean
+  login: (email: string, pass: string) => Promise<void>
+  register: (email: string, pass: string, name?: string) => Promise<void>
+  forgotPassword: (email: string) => Promise<any>
+  verifyOtp: (email: string, code: string) => Promise<any>
+  resetPassword: (
+    email: string,
+    code: string,
+    newPassword: string
+  ) => Promise<any>
+  logout: () => void
+  completeOnboarding: () => void
+  request: (method: string, path: string, data?: any) => Promise<any>
+  subscribe: (topic: string, callback: (data: any) => void) => () => void
 }
 
 export const useMoonStore = create<MoonState>()(
   persist(
     (set, get) => {
-      
       // Example of global listening for system health/connections
-      moonClientInstance.subscribe('system_connections', (data) => {
-        if (data && typeof data.activeCount === 'number') {
+      moonClientInstance.subscribe("system_connections", (data) => {
+        if (data && typeof data.activeCount === "number") {
           set({ activeConnections: data.activeCount })
         }
       })
@@ -49,101 +52,113 @@ export const useMoonStore = create<MoonState>()(
         activeConnections: 0,
         hasCompletedOnboarding: false,
 
-    completeOnboarding: () => {
-      set({ hasCompletedOnboarding: true })
-    },
+        completeOnboarding: () => {
+          set({ hasCompletedOnboarding: true })
+        },
 
-    login: async (email, pass) => {
-      try {
-        const res = await moonClientInstance.login(email, pass)
-        // Store user details in state
-        set({ user: { ...res.user, token: res.token } })
-        if (typeof document !== 'undefined') {
-          document.cookie = `moon_token=${res.token}; path=/; max-age=86400`
-        }
-      } catch (err) {
-        console.error("MoonStore Login Failed:", err)
-        throw err
+        login: async (email, pass) => {
+          try {
+            const res = await moonClientInstance.login(email, pass)
+            // Store user details in state
+            set({ user: { ...res.user, token: res.token } })
+            if (typeof document !== "undefined") {
+              document.cookie = `moon_token=${res.token}; path=/; max-age=86400`
+            }
+          } catch (err) {
+            console.error("MoonStore Login Failed:", err)
+            throw err
+          }
+        },
+
+        register: async (email, pass, name) => {
+          try {
+            const res = await moonClientInstance.register(email, pass, name)
+            // Store user details in state
+            set({ user: { ...res.user, token: res.token } })
+          } catch (err) {
+            console.error("MoonStore Register Failed:", err)
+            throw err
+          }
+        },
+
+        forgotPassword: async (email) => {
+          try {
+            return await moonClientInstance.forgotPassword(email)
+          } catch (err) {
+            console.error("MoonStore ForgotPassword Failed:", err)
+            throw err
+          }
+        },
+
+        verifyOtp: async (email, code) => {
+          try {
+            return await moonClientInstance.verifyOtp(email, code)
+          } catch (err) {
+            console.error("MoonStore VerifyOtp Failed:", err)
+            throw err
+          }
+        },
+
+        resetPassword: async (email, code, newPassword) => {
+          try {
+            return await moonClientInstance.resetPassword(
+              email,
+              code,
+              newPassword
+            )
+          } catch (err) {
+            console.error("MoonStore ResetPassword Failed:", err)
+            throw err
+          }
+        },
+
+        logout: () => {
+          moonClientInstance.setToken("")
+          set({ user: null })
+          if (typeof document !== "undefined") {
+            document.cookie = "moon_token=; path=/; max-age=0"
+          }
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("moon_token")
+          }
+        },
+
+        request: async (method, path, data) => {
+          // Hydrate token to client if persisted
+          const currentToken = get().user?.token
+          if (currentToken && !moonClientInstance.config.token) {
+            moonClientInstance.setToken(currentToken)
+          }
+          return await moonClientInstance.request(method, path, data)
+        },
+
+        subscribe: (topic, callback) => {
+          return moonClientInstance.subscribe(topic, callback)
+        },
       }
     },
-
-    register: async (email, pass, name) => {
-      try {
-        const res = await moonClientInstance.register(email, pass, name)
-        // Store user details in state
-        set({ user: { ...res.user, token: res.token } })
-      } catch (err) {
-        console.error("MoonStore Register Failed:", err)
-        throw err
-      }
-    },
-
-    forgotPassword: async (email) => {
-      try {
-        return await moonClientInstance.forgotPassword(email)
-      } catch (err) {
-        console.error("MoonStore ForgotPassword Failed:", err)
-        throw err
-      }
-    },
-
-    verifyOtp: async (email, code) => {
-      try {
-        return await moonClientInstance.verifyOtp(email, code)
-      } catch (err) {
-        console.error("MoonStore VerifyOtp Failed:", err)
-        throw err
-      }
-    },
-
-    resetPassword: async (email, code, newPassword) => {
-      try {
-        return await moonClientInstance.resetPassword(email, code, newPassword)
-      } catch (err) {
-        console.error("MoonStore ResetPassword Failed:", err)
-        throw err
-      }
-    },
-
-    logout: () => {
-      moonClientInstance.setToken('')
-      set({ user: null })
-      if (typeof document !== 'undefined') {
-        document.cookie = 'moon_token=; path=/; max-age=0'
-      }
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('moon_token')
-      }
-    },
-
-    request: async (method, path, data) => {
-      // Hydrate token to client if persisted
-      const currentToken = get().user?.token;
-      if (currentToken && !moonClientInstance.config.token) {
-        moonClientInstance.setToken(currentToken)
-      }
-      return await moonClientInstance.request(method, path, data)
-    },
-
-    subscribe: (topic, callback) => {
-      return moonClientInstance.subscribe(topic, callback)
+    {
+      name: "moon_store", // name of item in storage
+      storage: createJSONStorage(() =>
+        typeof window !== "undefined"
+          ? localStorage
+          : {
+              getItem: () => null,
+              setItem: () => {},
+              removeItem: () => {},
+            }
+      ),
+      partialize: (state) => ({
+        user: state.user,
+        hasCompletedOnboarding: state.hasCompletedOnboarding,
+      }), // persist user and onboarding
     }
-  }
-},
-{
-  name: 'moon_store', // name of item in storage
-  storage: createJSONStorage(() => (typeof window !== 'undefined' ? localStorage : {
-    getItem: () => null,
-    setItem: () => {},
-    removeItem: () => {},
-  })),
-  partialize: (state) => ({ user: state.user, hasCompletedOnboarding: state.hasCompletedOnboarding }), // persist user and onboarding
-}
-))
+  )
+)
 
 // Automatically hydrate client token on boot if it exists in local storage
-if (typeof window !== 'undefined') {
-  const storedData = localStorage.getItem('moon_store')
+if (typeof window !== "undefined") {
+  const storedData = localStorage.getItem("moon_store")
   if (storedData) {
     try {
       const parsed = JSON.parse(storedData)

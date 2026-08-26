@@ -176,7 +176,6 @@ export function GlobalSearchModal() {
   const inputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
-
     function handleKeyDown(e: KeyboardEvent) {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
         e.preventDefault()

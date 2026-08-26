@@ -3,7 +3,10 @@ import { useMounted } from "@core/hooks"
 
 import React, { useState, useEffect } from "react"
 import { getMoonData } from "@moon/witness/dist/astronomy/moon-phase.js"
-import { getIslamicData, PrayerData } from "@moon/witness/dist/astronomy/prayer-times.js"
+import {
+  getIslamicData,
+  PrayerData,
+} from "@moon/witness/dist/astronomy/prayer-times.js"
 
 const SECONDS_PER_MINUTE = 60
 const MINUTES_PER_HOUR = 60
@@ -25,7 +28,6 @@ export function HomeTelemetrySidebarWidget() {
   }>({ phaseName: "ACQUIRING...", illumination: 0, distance: 0 })
 
   useEffect(() => {
-
     const timer = setInterval(() => {
       const now = new Date()
       setClockWIB(

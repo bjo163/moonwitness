@@ -15,9 +15,10 @@ export default function RootRedirectPage() {
 
   useEffect(() => {
     if (!mounted) return
-    
+
     if (user) {
-      if (user.partner_id) { // User has a partner profile
+      if (user.partner_id) {
+        // User has a partner profile
         router.replace("/home")
       } else {
         router.replace("/home")

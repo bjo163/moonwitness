@@ -40,60 +40,88 @@ export function ErpMizanView() {
 
   const mizanColumns: CrudColumn[] = [
     { name: "title", label: "Case Title", type: "text", required: true },
-    { name: "caseText", label: "Case Details", type: "text", required: true, hideInTable: true },
+    {
+      name: "caseText",
+      label: "Case Details",
+      type: "text",
+      required: true,
+      hideInTable: true,
+    },
     { name: "subjectAlias", label: "Subject Alias", type: "text" },
     { name: "subjectAge", label: "Subject Age", type: "number" },
-    { 
-      name: "status", 
-      label: "Status", 
+    {
+      name: "status",
+      label: "Status",
       type: "text",
       render: (val) => {
         let color = "text-slate-400"
         if (val === "draft") color = "text-amber-400"
         if (val === "assessed") color = "text-emerald-400"
         if (val === "needs_reference") color = "text-purple-400"
-        
-        return <span className={`text-xs font-semibold ${color}`}>{val?.toString().toUpperCase() || 'DRAFT'}</span>
-      }
-    }
+
+        return (
+          <span className={`text-xs font-semibold ${color}`}>
+            {val?.toString().toUpperCase() || "DRAFT"}
+          </span>
+        )
+      },
+    },
   ]
 
   const topWidgets = (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div className="rounded-xl border border-cyan-900/30 bg-black/40 backdrop-blur-md p-4 flex flex-col gap-2 relative overflow-hidden">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="relative flex flex-col gap-2 overflow-hidden rounded-xl border border-cyan-900/30 bg-black/40 p-4 backdrop-blur-md">
         <div className="absolute top-0 right-0 p-4 opacity-10">
-          <Scale className="w-16 h-16 text-cyan-500" />
+          <Scale className="h-16 w-16 text-cyan-500" />
         </div>
         <div className="flex items-center gap-2 text-cyan-500">
-          <Scale className="w-4 h-4" />
-          <span className="text-xs font-bold uppercase tracking-wider">Total Cases</span>
+          <Scale className="h-4 w-4" />
+          <span className="text-xs font-bold tracking-wider uppercase">
+            Total Cases
+          </span>
         </div>
-        <div className="text-2xl font-bold text-white">{summary?.total ?? "—"}</div>
-        <div className="text-[10px] text-cyan-400">Recorded cases in system</div>
-      </div>
-      
-      <div className="rounded-xl border border-emerald-900/30 bg-black/40 backdrop-blur-md p-4 flex flex-col gap-2 relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-4 opacity-10">
-          <CheckCircle2 className="w-16 h-16 text-emerald-500" />
+        <div className="text-2xl font-bold text-white">
+          {summary?.total ?? "—"}
         </div>
-        <div className="flex items-center gap-2 text-emerald-500">
-          <CheckCircle2 className="w-4 h-4" />
-          <span className="text-xs font-bold uppercase tracking-wider">Assessed</span>
+        <div className="text-[10px] text-cyan-400">
+          Recorded cases in system
         </div>
-        <div className="text-2xl font-bold text-white">{summary?.assessed ?? "—"}</div>
-        <div className="text-[10px] text-emerald-500">Validated through Mizan</div>
       </div>
 
-      <div className="rounded-xl border border-purple-900/30 bg-black/40 backdrop-blur-md p-4 flex flex-col gap-2 relative overflow-hidden">
+      <div className="relative flex flex-col gap-2 overflow-hidden rounded-xl border border-emerald-900/30 bg-black/40 p-4 backdrop-blur-md">
         <div className="absolute top-0 right-0 p-4 opacity-10">
-          <ShieldAlert className="w-16 h-16 text-purple-500" />
+          <CheckCircle2 className="h-16 w-16 text-emerald-500" />
+        </div>
+        <div className="flex items-center gap-2 text-emerald-500">
+          <CheckCircle2 className="h-4 w-4" />
+          <span className="text-xs font-bold tracking-wider uppercase">
+            Assessed
+          </span>
+        </div>
+        <div className="text-2xl font-bold text-white">
+          {summary?.assessed ?? "—"}
+        </div>
+        <div className="text-[10px] text-emerald-500">
+          Validated through Mizan
+        </div>
+      </div>
+
+      <div className="relative flex flex-col gap-2 overflow-hidden rounded-xl border border-purple-900/30 bg-black/40 p-4 backdrop-blur-md">
+        <div className="absolute top-0 right-0 p-4 opacity-10">
+          <ShieldAlert className="h-16 w-16 text-purple-500" />
         </div>
         <div className="flex items-center gap-2 text-purple-500">
-          <ShieldAlert className="w-4 h-4" />
-          <span className="text-xs font-bold uppercase tracking-wider">Needs Reference</span>
+          <ShieldAlert className="h-4 w-4" />
+          <span className="text-xs font-bold tracking-wider uppercase">
+            Needs Reference
+          </span>
         </div>
-        <div className="text-2xl font-bold text-white">{summary?.needsReference ?? "—"}</div>
-        <div className="text-[10px] text-purple-400">Awaiting internal prophetic references</div>
+        <div className="text-2xl font-bold text-white">
+          {summary?.needsReference ?? "—"}
+        </div>
+        <div className="text-[10px] text-purple-400">
+          Awaiting internal prophetic references
+        </div>
       </div>
     </div>
   )
@@ -115,7 +143,7 @@ export function ErpMizanView() {
         accentColor="system"
       />
 
-      <MoonDataTable 
+      <MoonDataTable
         modelName="mz.case"
         title="Mizan Cases"
         description="List of all cases submitted for balance assessment."

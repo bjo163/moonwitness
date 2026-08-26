@@ -45,11 +45,21 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }
 
   const toggleLang = () => {
-    const nextLangMap: Record<Language, Language> = { en: "id", id: "ar", ar: "fr", fr: "en" }
+    const nextLangMap: Record<Language, Language> = {
+      en: "id",
+      id: "ar",
+      ar: "fr",
+      fr: "en",
+    }
     setLang(nextLangMap[lang])
   }
 
-  const t = (enText: string, idText?: string, arText?: string, frText?: string): string => {
+  const t = (
+    enText: string,
+    idText?: string,
+    arText?: string,
+    frText?: string
+  ): string => {
     if (lang === "id" && idText) return idText
     if (lang === "ar" && arText) return arText
     if (lang === "fr" && frText) return frText

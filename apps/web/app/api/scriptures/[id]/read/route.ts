@@ -10,8 +10,11 @@ export async function GET(
     const bookId = searchParams.get("book") || "1" // Default to book 1
     const { id } = await params
 
-    const json = await moonClientInstance.request("GET", `/api/witness/quran/surah?number=${bookId}`)
-    
+    const json = await moonClientInstance.request(
+      "GET",
+      `/api/witness/quran/surah?number=${bookId}`
+    )
+
     if (json.error) throw new Error(json.error)
 
     const surah = json.surah
@@ -24,7 +27,7 @@ export async function GET(
         type: "quran",
         bookName: surah.name,
         bookNameOriginal: surah.nameOriginal,
-        versesCount: surah.versesCount
+        versesCount: surah.versesCount,
       },
       data: ayahs.map((a: any) => ({
         id: a.number,
@@ -33,8 +36,8 @@ export async function GET(
         text_latin: a.textLatin,
         translation_id: a.translationId,
         audio_url: a.audioUrl,
-        juz: a.juz
-      }))
+        juz: a.juz,
+      })),
     })
   } catch (error: any) {
     console.error("Error reading scripture content:", error)

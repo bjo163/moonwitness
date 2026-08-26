@@ -21,7 +21,10 @@ type PrayerPeriodInfo = {
   periodIndex: number
 }
 
-function calculateDynamicPrayerPeriod(currentMins: number, todayPrayers: any): PrayerPeriodInfo {
+function calculateDynamicPrayerPeriod(
+  currentMins: number,
+  todayPrayers: any
+): PrayerPeriodInfo {
   const formatTime = (d: Date) =>
     `${d.getHours().toString().padStart(2, "0")}.${d.getMinutes().toString().padStart(2, "0")}`
   const getMins = (d: Date) => d.getHours() * 60 + d.getMinutes()
@@ -107,7 +110,8 @@ export async function GET(req: NextRequest) {
   const todayPrayers = getDailyPrayerTimes(JAKARTA_LAT, JAKARTA_LNG, now)
   const prayerPeriod = calculateDynamicPrayerPeriod(currentMins, todayPrayers)
 
-  const fajrMins = todayPrayers.fajr.getHours() * 60 + todayPrayers.fajr.getMinutes()
+  const fajrMins =
+    todayPrayers.fajr.getHours() * 60 + todayPrayers.fajr.getMinutes()
 
   let targetYear = pObj.year || "2026"
   let targetMonth = pObj.month || "07"
@@ -133,7 +137,12 @@ export async function GET(req: NextRequest) {
   const launchDateOnly = new Date("2026-07-26T00:00:00Z")
   const prayerDateOnly = new Date(`${dateStr}T00:00:00Z`)
 
-  const elapsedDays = Math.max(0, Math.floor((prayerDateOnly.getTime() - launchDateOnly.getTime()) / (24 * 3600 * 1000)))
+  const elapsedDays = Math.max(
+    0,
+    Math.floor(
+      (prayerDateOnly.getTime() - launchDateOnly.getTime()) / (24 * 3600 * 1000)
+    )
+  )
   const elapsedPeriods = elapsedDays * 6 + prayerPeriod.periodIndex
   const totalAyahCount = 6236
   const globalSeenCount = Math.min(totalAyahCount, Math.max(1, elapsedPeriods))
@@ -148,55 +157,65 @@ export async function GET(req: NextRequest) {
 
     try {
       const todayAyahId = (dailySeed % totalAyahCount) + 1
-      
-      const json = await moonClientInstance.request("GET", `/api/wx.scripture.verse/${todayAyahId}`)
+
+      const json = await moonClientInstance.request(
+        "GET",
+        `/api/wx.scripture.verse/${todayAyahId}`
+      )
       if (json.data) {
-         const a = json.data
-         // ORM returns snake_case fields. book_id is a [id, name] tuple.
-         // book_id[0] = surah number (1-114), book_id[1] = surah name
-         const bookId = Array.isArray(a.book_id) ? a.book_id[0] : 1
-         const bookName = Array.isArray(a.book_id) ? a.book_id[1] : (a.book_id || "")
-         
-         let englishTranslation = a.translation_en || ""
+        const a = json.data
+        // ORM returns snake_case fields. book_id is a [id, name] tuple.
+        // book_id[0] = surah number (1-114), book_id[1] = surah name
+        const bookId = Array.isArray(a.book_id) ? a.book_id[0] : 1
+        const bookName = Array.isArray(a.book_id)
+          ? a.book_id[1]
+          : a.book_id || ""
 
-         // Fallback to online API if english translation is missing
-         if (!englishTranslation) {
-           try {
-             const fallbackRes = await fetch(`http://api.alquran.cloud/v1/ayah/${bookId}:${a.verse_number || 1}/en.sahih`)
-             if (fallbackRes.ok) {
-               const fallbackJson = await fallbackRes.json()
-               if (fallbackJson.data && fallbackJson.data.text) {
-                 englishTranslation = fallbackJson.data.text
-               }
-             }
-           } catch (e) {
-             console.warn("Failed to fetch fallback english translation", e)
-           }
-         }
+        let englishTranslation = a.translation_en || ""
 
-         ayahData = {
-            surah_number: bookId,
-            surah_name_latin: bookName || ("Surah " + bookId),
-            ayah_number: a.verse_number || 1,
-            text_arabic: a.text_original || "",
-            text_latin: a.text_transliteration || "",
-            translation_id: a.translation_id || "",
-            translation_en: englishTranslation,
-            audio_url: a.audio_url || ""
-         }
+        // Fallback to online API if english translation is missing
+        if (!englishTranslation) {
+          try {
+            const fallbackRes = await fetch(
+              `http://api.alquran.cloud/v1/ayah/${bookId}:${a.verse_number || 1}/en.sahih`
+            )
+            if (fallbackRes.ok) {
+              const fallbackJson = await fallbackRes.json()
+              if (fallbackJson.data && fallbackJson.data.text) {
+                englishTranslation = fallbackJson.data.text
+              }
+            }
+          } catch (e) {
+            console.warn("Failed to fetch fallback english translation", e)
+          }
+        }
+
+        ayahData = {
+          surah_number: bookId,
+          surah_name_latin: bookName || "Surah " + bookId,
+          ayah_number: a.verse_number || 1,
+          text_arabic: a.text_original || "",
+          text_latin: a.text_transliteration || "",
+          translation_id: a.translation_id || "",
+          translation_en: englishTranslation,
+          audio_url: a.audio_url || "",
+        }
       }
     } catch (e) {
       console.warn("Failed to fetch daily ayah", e)
     }
 
     try {
-      const json = await moonClientInstance.request("GET", "/api/wx.asmaul.husna?limit=100")
+      const json = await moonClientInstance.request(
+        "GET",
+        "/api/wx.asmaul.husna?limit=100"
+      )
       const asmaul = json.data || []
       if (asmaul.length > 0) {
-         const surahNum = ayahData?.surah_number || 1
-         const ayahNum = ayahData?.ayah_number || 1
-         asmaulSurahData = asmaul[(surahNum - 1) % 99] || asmaul[0]
-         asmaulAyahData = asmaul[(ayahNum - 1) % 99] || asmaul[1]
+        const surahNum = ayahData?.surah_number || 1
+        const ayahNum = ayahData?.ayah_number || 1
+        asmaulSurahData = asmaul[(surahNum - 1) % 99] || asmaul[0]
+        asmaulAyahData = asmaul[(ayahNum - 1) % 99] || asmaul[1]
       }
     } catch (e) {
       console.warn("Failed to fetch daily asmaul husna", e)
@@ -204,9 +223,12 @@ export async function GET(req: NextRequest) {
 
     try {
       const randomPage = Math.max(1, (dailySeed * 7) % 500)
-      const json = await moonClientInstance.request("GET", `/api/witness/hadith?slug=bukhari&page=${randomPage}&limit=1`)
+      const json = await moonClientInstance.request(
+        "GET",
+        `/api/witness/hadith?slug=bukhari&page=${randomPage}&limit=1`
+      )
       if (json.items && json.items.length > 0) {
-         hadithData = json.items[0]
+        hadithData = json.items[0]
       }
     } catch (e) {
       console.warn("Failed to fetch daily hadith", e)
@@ -224,44 +246,54 @@ export async function GET(req: NextRequest) {
         seenAyahsCount: globalSeenCount,
         remainingAyahsCount: remainingCount,
       },
-      ayah: ayahData ? {
-        id: dailySeed % totalAyahCount,
-        surahNumber: ayahData.surah_number,
-        surahName: ayahData.surah_name_latin,
-        ayahNumber: ayahData.ayah_number,
-        textArabic: ayahData.text_arabic,
-        textLatin: ayahData.text_latin,
-        translationId: ayahData.translation_id,
-        translationEn: ayahData.translation_en,
-        audioUrl: ayahData.audio_url,
-      } : {
-        id: dailySeed % totalAyahCount,
-        surahNumber: 1,
-        surahName: "Al-Fatihah",
-        ayahNumber: 1,
-        textArabic: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
-        textLatin: "Bismillāhir-raḥmānir-raḥīm",
-        translationId: "Dengan nama Allah Yang Maha Pengasih, Maha Penyayang.",
-        translationEn: "In the name of Allah, the Entirely Merciful, the Especially Merciful.",
-        audioUrl: "",
-      },
-      asmaulSurah: asmaulSurahData ? {
-        number: asmaulSurahData.number || 1,
-        nameArabic: asmaulSurahData.name_arabic || "",
-        nameLatin: asmaulSurahData.name_latin || "",
-        translationId: asmaulSurahData.translation_id || "",
-      } : undefined,
-      asmaulAyah: asmaulAyahData ? {
-        number: asmaulAyahData.number || 2,
-        nameArabic: asmaulAyahData.name_arabic || "",
-        nameLatin: asmaulAyahData.name_latin || "",
-        translationId: asmaulAyahData.translation_id || "",
-      } : undefined,
+      ayah: ayahData
+        ? {
+            id: dailySeed % totalAyahCount,
+            surahNumber: ayahData.surah_number,
+            surahName: ayahData.surah_name_latin,
+            ayahNumber: ayahData.ayah_number,
+            textArabic: ayahData.text_arabic,
+            textLatin: ayahData.text_latin,
+            translationId: ayahData.translation_id,
+            translationEn: ayahData.translation_en,
+            audioUrl: ayahData.audio_url,
+          }
+        : {
+            id: dailySeed % totalAyahCount,
+            surahNumber: 1,
+            surahName: "Al-Fatihah",
+            ayahNumber: 1,
+            textArabic: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+            textLatin: "Bismillāhir-raḥmānir-raḥīm",
+            translationId:
+              "Dengan nama Allah Yang Maha Pengasih, Maha Penyayang.",
+            translationEn:
+              "In the name of Allah, the Entirely Merciful, the Especially Merciful.",
+            audioUrl: "",
+          },
+      asmaulSurah: asmaulSurahData
+        ? {
+            number: asmaulSurahData.number || 1,
+            nameArabic: asmaulSurahData.name_arabic || "",
+            nameLatin: asmaulSurahData.name_latin || "",
+            translationId: asmaulSurahData.translation_id || "",
+          }
+        : undefined,
+      asmaulAyah: asmaulAyahData
+        ? {
+            number: asmaulAyahData.number || 2,
+            nameArabic: asmaulAyahData.name_arabic || "",
+            nameLatin: asmaulAyahData.name_latin || "",
+            translationId: asmaulAyahData.translation_id || "",
+          }
+        : undefined,
       hadith: {
         id: hadithData?.number || 1,
         bookName: "Shahih Bukhari",
         number: hadithData?.number || 1,
-        textId: cleanHadithText(hadithData?.textId || "Sesungguhnya amalan itu tergantung niatnya."),
+        textId: cleanHadithText(
+          hadithData?.textId || "Sesungguhnya amalan itu tergantung niatnya."
+        ),
         textEn: hadithData?.textEn || "Actions are judged by intentions.",
         levelBadge: "Shahih",
       },

@@ -39,7 +39,8 @@ const PRESETS: WavePreset[] = [
   {
     id: "p-wave-shallow",
     name: "P-WAVE SHALLOW (M3.2)",
-    description: "Typical P-wave from a shallow focus earthquake at ~10km depth",
+    description:
+      "Typical P-wave from a shallow focus earthquake at ~10km depth",
     params: {
       frequency: 4.0,
       amplitude: 30,
@@ -231,7 +232,9 @@ function LabCanvas({
       const xNorm = x / w
       const dampFactor = Math.exp(-damping * xNorm * 3)
       const wave1 =
-        Math.sin(xNorm * Math.PI * 2 * frequency * 10 + tRef.current * 5 + phaseShift) *
+        Math.sin(
+          xNorm * Math.PI * 2 * frequency * 10 + tRef.current * 5 + phaseShift
+        ) *
         amplitude *
         dampFactor
       const wave2 =
@@ -356,9 +359,7 @@ export function WaveformLabView() {
                   borderColor: isActive
                     ? `${preset.color}50`
                     : "rgba(0,240,255,0.1)",
-                  boxShadow: isActive
-                    ? `0 0 20px ${preset.color}20`
-                    : "none",
+                  boxShadow: isActive ? `0 0 20px ${preset.color}20` : "none",
                   background: isActive ? `${preset.color}05` : "transparent",
                 }}
               >
@@ -424,7 +425,7 @@ export function WaveformLabView() {
           <div className="mt-4 flex items-center gap-3">
             <button
               onClick={() => setIsPlaying(!isPlaying)}
-              className="btn-clip flex items-center gap-2 border px-4 py-2 font-mono text-[10px] font-bold tracking-widest transition-all"
+              className="flex items-center gap-2 border px-4 py-2 font-mono text-[10px] font-bold tracking-widest transition-all btn-clip"
               style={{
                 borderColor: isPlaying
                   ? "rgba(0, 255, 102, 0.4)"
@@ -447,7 +448,7 @@ export function WaveformLabView() {
             </button>
             <button
               onClick={resetParams}
-              className="btn-clip flex items-center gap-2 border border-primary/20 px-3 py-2 font-mono text-[10px] font-bold tracking-widest text-primary transition-all hover:border-primary/40"
+              className="flex items-center gap-2 border border-primary/20 px-3 py-2 font-mono text-[10px] font-bold tracking-widest text-primary transition-all btn-clip hover:border-primary/40"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               RESET
@@ -516,9 +517,9 @@ export function WaveformLabView() {
 
           <div className="mt-5 border-t border-primary/10 pt-3">
             <p className="font-mono text-[7px] leading-relaxed text-primary">
-              ADJUST PARAMETERS TO OBSERVE WAVEFORM BEHAVIOR. FREQUENCY
-              CONTROLS OSCILLATION RATE. DAMPING REDUCES AMPLITUDE OVER
-              DISTANCE. NOISE SIMULATES GEOLOGICAL INTERFERENCE.
+              ADJUST PARAMETERS TO OBSERVE WAVEFORM BEHAVIOR. FREQUENCY CONTROLS
+              OSCILLATION RATE. DAMPING REDUCES AMPLITUDE OVER DISTANCE. NOISE
+              SIMULATES GEOLOGICAL INTERFERENCE.
             </p>
           </div>
         </Panel>

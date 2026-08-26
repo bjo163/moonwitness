@@ -185,7 +185,7 @@ function SeismographCanvas({
       const harmonic =
         Math.sin((x + offsetRef.current) * p.freq * 2.7) * (p.amp * 0.3)
       const noise = (Math.random() - 0.5) * p.noise
-      const decay = 1 - Math.abs(x - w / 2) / (w / 2) * 0.3
+      const decay = 1 - (Math.abs(x - w / 2) / (w / 2)) * 0.3
       const y = mid + (base + harmonic + noise) * decay
 
       if (x === 0) ctx.moveTo(x, y)
@@ -298,10 +298,7 @@ function EventCard({ event }: { event: SeismicEvent }) {
               background: `${color}15`,
             }}
           >
-            <Activity
-              className="h-3 w-3"
-              style={{ color }}
-            />
+            <Activity className="h-3 w-3" style={{ color }} />
           </div>
           <span
             className="font-mono text-[9px] font-bold tracking-widest uppercase"
@@ -328,7 +325,8 @@ function EventCard({ event }: { event: SeismicEvent }) {
         </span>
         <span className="flex items-center gap-1">
           <MapPin className="h-3 w-3" />
-          {event.coordinates.lat.toFixed(1)}°, {event.coordinates.lng.toFixed(1)}°
+          {event.coordinates.lat.toFixed(1)}°,{" "}
+          {event.coordinates.lng.toFixed(1)}°
         </span>
       </div>
 
@@ -391,9 +389,7 @@ export function SeismicForgeView() {
   useEffect(() => {
     const tick = () => {
       const now = new Date()
-      setSystemTime(
-        now.toISOString().replace("T", " • ").slice(0, 21) + " UTC"
-      )
+      setSystemTime(now.toISOString().replace("T", " • ").slice(0, 21) + " UTC")
     }
     tick()
     const interval = setInterval(tick, 1000)
@@ -480,7 +476,7 @@ export function SeismicForgeView() {
           />
           <button
             onClick={() => setIsMonitoring(!isMonitoring)}
-            className="btn-clip flex items-center gap-2 border px-3 py-1.5 font-mono text-[10px] font-bold tracking-widest transition-all"
+            className="flex items-center gap-2 border px-3 py-1.5 font-mono text-[10px] font-bold tracking-widest transition-all btn-clip"
             style={{
               borderColor: isMonitoring
                 ? "rgba(0, 255, 102, 0.4)"
@@ -515,15 +511,14 @@ export function SeismicForgeView() {
           {/* Waveform legend overlay */}
           <div className="absolute bottom-2 left-3 flex items-center gap-3 font-mono text-[8px] font-bold tracking-widest">
             <span style={{ color: WAVE_COLORS[activeWave] }}>
-              ◉ {activeWave === "pWave"
+              ◉{" "}
+              {activeWave === "pWave"
                 ? "PRIMARY WAVE"
                 : activeWave === "sWave"
                   ? "SECONDARY WAVE"
                   : "SURFACE WAVE"}
             </span>
-            <span className="text-primary">
-              SYS.TIME: {systemTime}
-            </span>
+            <span className="text-primary">SYS.TIME: {systemTime}</span>
           </div>
         </div>
 
@@ -557,17 +552,11 @@ export function SeismicForgeView() {
               className="panel-box border p-3 transition-all duration-300 hover:-translate-y-0.5"
               style={{
                 borderColor:
-                  activeWave === w.key
-                    ? `${w.color}50`
-                    : "rgba(0,240,255,0.1)",
+                  activeWave === w.key ? `${w.color}50` : "rgba(0,240,255,0.1)",
                 background:
-                  activeWave === w.key
-                    ? `${w.color}08`
-                    : "transparent",
+                  activeWave === w.key ? `${w.color}08` : "transparent",
                 boxShadow:
-                  activeWave === w.key
-                    ? `0 0 20px ${w.color}15`
-                    : "none",
+                  activeWave === w.key ? `0 0 20px ${w.color}15` : "none",
               }}
             >
               <div className="mb-1 flex items-center gap-2">
@@ -675,12 +664,10 @@ export function SeismicForgeView() {
 
           <div className="mt-4 border-t border-primary/10 pt-3">
             <p className="font-mono text-[8px] text-primary">
-              DATA SOURCE: USGS EARTHQUAKE HAZARDS PROGRAM • IRIS DMC •
-              GEOSCOPE NETWORK
+              DATA SOURCE: USGS EARTHQUAKE HAZARDS PROGRAM • IRIS DMC • GEOSCOPE
+              NETWORK
               <br />
-              <span className="text-foreground">
-                LAST SYNC: {systemTime}
-              </span>
+              <span className="text-foreground">LAST SYNC: {systemTime}</span>
             </p>
           </div>
         </Panel>

@@ -281,10 +281,7 @@ function PlateDetail({ plate }: { plate: TectonicPlate }) {
         }}
       >
         <div className="mb-2 flex items-center gap-2">
-          <BoundaryIcon
-            className="h-4 w-4"
-            style={{ color: boundary.color }}
-          />
+          <BoundaryIcon className="h-4 w-4" style={{ color: boundary.color }} />
           <span
             className="font-mono text-[10px] font-bold tracking-widest"
             style={{ color: boundary.color }}
@@ -393,10 +390,7 @@ export function TectonicMapView() {
                 }}
               >
                 <div className="mb-2 flex items-center gap-2">
-                  <Icon
-                    className="h-4 w-4"
-                    style={{ color: info.color }}
-                  />
+                  <Icon className="h-4 w-4" style={{ color: info.color }} />
                   <span
                     className="font-mono text-[10px] font-bold tracking-widest"
                     style={{ color: info.color }}

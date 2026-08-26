@@ -17,7 +17,12 @@ export function useGeolocation() {
 
   useEffect(() => {
     if (typeof window === "undefined" || !("geolocation" in navigator)) {
-      setState({ lat: null, lng: null, loading: false, error: "Geolocation not supported" })
+      setState({
+        lat: null,
+        lng: null,
+        loading: false,
+        error: "Geolocation not supported",
+      })
       return
     }
 
@@ -40,12 +45,20 @@ export function useGeolocation() {
       (position) => {
         const lat = position.coords.latitude
         const lng = position.coords.longitude
-        localStorage.setItem("mw_last_location", JSON.stringify({ lat, lng, timestamp: Date.now() }))
+        localStorage.setItem(
+          "mw_last_location",
+          JSON.stringify({ lat, lng, timestamp: Date.now() })
+        )
         setState({ lat, lng, loading: false, error: null })
       },
       (error) => {
         // Fallback to Jakarta if denied or timeout
-        setState({ lat: JAKARTA_LAT, lng: JAKARTA_LNG, loading: false, error: error.message })
+        setState({
+          lat: JAKARTA_LAT,
+          lng: JAKARTA_LNG,
+          loading: false,
+          error: error.message,
+        })
       },
       { timeout: 5000, enableHighAccuracy: false, maximumAge: 1000 * 60 * 60 }
     )

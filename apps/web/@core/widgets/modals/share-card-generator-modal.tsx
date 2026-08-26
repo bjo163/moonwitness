@@ -29,7 +29,6 @@ export function ShareCardGeneratorModal({
   const [isOpen, setIsOpen] = useState(false)
   const [copied, setCopied] = useState(false)
 
-  
   function handleCopyCardText() {
     const cardText = `◈ MOONWITNESS TRANSMISSION CARD ◈\nQ.S ${surahName} (${surahNumber}:${ayahNumber})\n\n${textArabic}\n\n"${translationId}"\n\n- Transmitted via MoonWitness Observatory (https://moonwitness.com)`
     navigator.clipboard.writeText(cardText)

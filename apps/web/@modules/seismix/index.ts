@@ -1,10 +1,18 @@
 import dynamic from "next/dynamic"
 import { defineModule } from "@modules/define-module"
 
-const SeismicForgeView = dynamic(() => import("./views/seismic-forge-view").then(m => m.SeismicForgeView))
-const TectonicMapView = dynamic(() => import("./views/tectonic-map-view").then(m => m.TectonicMapView))
-const WaveformLabView = dynamic(() => import("./views/waveform-lab-view").then(m => m.WaveformLabView))
-const QuakeArchiveView = dynamic(() => import("./views/quake-archive-view").then(m => m.QuakeArchiveView))
+const SeismicForgeView = dynamic(() =>
+  import("./views/seismic-forge-view").then((m) => m.SeismicForgeView)
+)
+const TectonicMapView = dynamic(() =>
+  import("./views/tectonic-map-view").then((m) => m.TectonicMapView)
+)
+const WaveformLabView = dynamic(() =>
+  import("./views/waveform-lab-view").then((m) => m.WaveformLabView)
+)
+const QuakeArchiveView = dynamic(() =>
+  import("./views/quake-archive-view").then((m) => m.QuakeArchiveView)
+)
 
 /**
  * SEISMIX Module — MoonWitness OS (O-08)

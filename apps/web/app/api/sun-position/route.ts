@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getSunPosition, getDuhaTime } from "@moon/witness/dist/astronomy/sun-position.js"
+import {
+  getSunPosition,
+  getDuhaTime,
+} from "@moon/witness/dist/astronomy/sun-position.js"
 import { getDailyPrayerTimes } from "@moon/witness/dist/astronomy/prayer-times.js"
 
 /**
  * GET /api/sun-position?lat=...&lng=...
- * 
+ *
  * Returns real-time sun position data and Duha prayer window timing.
  * Uses device geolocation coordinates for accurate calculation.
  */

@@ -3,7 +3,10 @@ import { moonClientInstance } from "@core/store/moon-store"
 
 export async function GET() {
   try {
-    const json = await moonClientInstance.request("GET", "/api/witness/asmaul-husna")
+    const json = await moonClientInstance.request(
+      "GET",
+      "/api/witness/asmaul-husna"
+    )
     const data = json.data || []
 
     const processedData = data.map((item: any) => ({
@@ -12,7 +15,7 @@ export async function GET() {
       arabic: item.arabic,
       latin: item.latin,
       meaning: item.translationId,
-      meaning_en: item.translationEn
+      meaning_en: item.translationEn,
     }))
 
     return NextResponse.json({

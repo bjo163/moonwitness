@@ -1,85 +1,104 @@
 # @moon/orm
 
-An enterprise-grade, advanced Vertex-based ORM for Node.js and TypeScript, powered by Knex.js.
+> **Advanced Vertex-Based ORM with Row-Level Security, Magic Tuples & pgvector Integration for Node.js & TypeScript**
+
+`@moon/orm` is the canonical data layer and model runtime for MoonWitness OS, powered by Knex.js and PostgreSQL.
+
+---
 
 ## Features
 
-- **Vertex-Based API**: Intuitive `fetch`, `spawn`, `morph`, `purge`, `pick` methods.
-- **Relational Tuples**: "Magic tuples" for One2Many and Many2Many morphs (e.g. `[0, 0, vals]`, `[4, id]`, `[6, 0, ids]`).
-- **Record Rules & Row-Level Security**: Fully integrated access rights and dynamic record rules (`mx.rule`).
+- **Vertex-Based API**: Declarative models with expressive `fetch`, `spawn`, `morph`, `purge`, and `pick` methods.
+- **Relational Magic Tuples**: Atomic Odoo-style relational mutations (e.g. `[0, 0, vals]`, `[4, id]`, `[6, 0, ids]`).
+- **PostgreSQL `pgvector` Integration**: Native `vector(n)` field definitions and similarity distance queries (`<->`, `<=>`, `<#>`).
+- **Row-Level Security & Record Rules**: Safe-by-default access rights and dynamic record rules (`mx.rule`).
 - **Computed Fields (with Store)**: Declare computed fields that automatically evaluate on morph and persist to the database (`store: true`).
-- **Delegation Inheritance**: `_inherits` support. Seamlessly read and morph to parent and child tables as if they are one model.
-- **Hierarchical Trees**: Native Materialized Path (`parent_path`) support for lightning-fast `child_of` and `parent_of` queries.
+- **Delegation Inheritance**: Multi-table inheritance with transparent field delegation (`_inherits`).
+- **Hierarchical Trees**: Native Materialized Path (`parent_path`) support for fast `child_of` and `parent_of` queries.
 - **I18N Translatable Fields**: Automatic JSONB column mapping and transparent translation switching based on `env.context.lang`.
 - **Recordset Caching**: Zero-cost N+1 mitigation. Records fetched in the same request lifecycle are automatically cached.
-- **Context Propagation**: Inherit contexts (`env.context`) everywhere, including smart defaults (`default_X`).
 - **Auto-Schema Synchronization (Forge)**: Compare your TypeScript definitions with the database and automatically generate/execute DDL statements without manual migration files.
+
+---
 
 ## Installation
 
 ```bash
-npm install @moon/orm knex
+pnpm add @moon/orm knex pg
 ```
-*(Note: You also need to install your database driver, e.g., `pg` for PostgreSQL).*
 
-## Initialization (Dependency Injection)
+---
 
-`@moon/orm` needs to be initialized with a Knex instance.
+## Initialization
 
 ```typescript
-import knex from 'knex';
-import { setupOrm, forge } from '@moon/orm';
+import knex from 'knex'
+import { setupOrm, forge, registerModel } from '@moon/orm'
 
 const db = knex({
   client: 'pg',
-  connection: 'postgres://user:pass@localhost:5432/mydb'
-});
+  connection: process.env.DATABASE_URL || 'postgres://postgres:password@localhost:5432/moonwitness'
+})
 
 // Inject the db instance into the ORM engine
-setupOrm(db);
+setupOrm(db)
 ```
+
+---
 
 ## Defining Models
 
 ```typescript
-import { Vertex, fields } from '@moon/orm';
+import { Vertex, fields } from '@moon/orm'
 
-export default class Product extends Vertex {
-  static _name = 'product.template';
+export default class DocumentEmbedding extends Vertex {
+  static _name = 'document.embedding'
+
+  title = fields.Char({ required: true, translate: true })
+  content = fields.Text({ required: true })
   
-  name = fields.Char({ required: true, translate: true });
-  price = fields.Float({ default: 0.0 });
-  categoryId = fields.Many2one({ relation: 'category_id', comodel: 'product.category' });
-  
+  // Vector embedding definition (e.g. OpenAI ada-002 or text-embedding-3)
+  embedding = fields.Vector({ dim: 1536 })
+
+  categoryId = fields.Many2one({
+    relation: 'category_id',
+    comodel: 'document.category'
+  })
+
   // Computed field stored in DB
-  totalValue = fields.Float({
-    compute: (record) => record.price * 10,
+  charCount = fields.Integer({
+    compute: (record) => (record.content ? record.content.length : 0),
     store: true
-  });
+  })
 }
 ```
+
+---
 
 ## Usage
 
 ```typescript
-import { spawnCtx, getModel } from '@moon/orm';
+import { createCtx, getModel, SUPERUSER_ID } from '@moon/orm'
 
 // 1. Create Environment Context
-const env = spawnCtx(1, { lang: 'en_US' }, getModel);
+const env = createCtx(SUPERUSER_ID, { lang: 'en_US' }, getModel)
 
 // 2. Access Model
-const Product = getModel('product.template');
+const Document = getModel('document.embedding')
 
-// 3. Create
-const product = await Product.spawn(Product, env, {
-  name: 'Super Gadget',
-  price: 99.99
-});
+// 3. Create (Spawn)
+const doc = await Document.spawn(Document, env, {
+  title: 'Cosmic Wisdom',
+  content: 'Observation of celestial bodies and scripture harmony.',
+  embedding: [0.012, -0.045, 0.089 /* ... 1536 dims */]
+})
 
-// 4. Search and Read
-const results = await Product.fetch(Product, env, [['price', '>', 50]]);
-console.log(results);
+// 4. Query
+const results = await Document.fetch(Document, env, [['charCount', '>', 10]])
 ```
 
+---
+
 ## License
+
 MIT

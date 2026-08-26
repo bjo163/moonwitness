@@ -7,27 +7,38 @@ export async function GET() {
     const month = today.getMonth()
     const year = today.getFullYear()
     const numDays = new Date(year, month + 1, 0).getDate()
-    const daysArray = Array.from({ length: numDays }, (_, i) => new Date(year, month, i + 1))
+    const daysArray = Array.from(
+      { length: numDays },
+      (_, i) => new Date(year, month, i + 1)
+    )
 
-    const hijriFormatter = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {
-      day: 'numeric', month: 'numeric', year: 'numeric'
+    const hijriFormatter = new Intl.DateTimeFormat("en-u-ca-islamic-umalqura", {
+      day: "numeric",
+      month: "numeric",
+      year: "numeric",
     })
-    const hijriMonthFormatter = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {
-      month: 'long'
-    })
-    const gregMonthFormatter = new Intl.DateTimeFormat('en', { month: 'long' })
+    const hijriMonthFormatter = new Intl.DateTimeFormat(
+      "en-u-ca-islamic-umalqura",
+      {
+        month: "long",
+      }
+    )
+    const gregMonthFormatter = new Intl.DateTimeFormat("en", { month: "long" })
 
-    const formattedDays = daysArray.map(date => {
-      const hijriParts = hijriFormatter.formatToParts(date).reduce((acc, part) => {
-        acc[part.type] = part.value
-        return acc
-      }, {} as any)
-      
+    const formattedDays = daysArray.map((date) => {
+      const hijriParts = hijriFormatter
+        .formatToParts(date)
+        .reduce((acc, part) => {
+          acc[part.type] = part.value
+          return acc
+        }, {} as any)
+
       const hijriMonthName = hijriMonthFormatter.format(date).split(" ")[0]
 
       const hijriDay = parseInt(hijriParts.day || "1", 10)
       const hijriMonthNumber = parseInt(hijriParts.month || "1", 10)
-      const isAyyamulBidh = hijriDay === 13 || hijriDay === 14 || hijriDay === 15
+      const isAyyamulBidh =
+        hijriDay === 13 || hijriDay === 14 || hijriDay === 15
 
       // Calculate Phase Approximations
       let phaseName = "Waxing Crescent"
@@ -75,7 +86,7 @@ export async function GET() {
         hijriDay,
         hijriMonthName,
         hijriYear: hijriParts.year,
-        gregorianDate: `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`,
+        gregorianDate: `${String(date.getDate()).padStart(2, "0")}-${String(date.getMonth() + 1).padStart(2, "0")}-${date.getFullYear()}`,
         gregorianDay: date.getDate(),
         gregorianMonthName: gregMonthFormatter.format(date),
         gregorianYear: date.getFullYear(),
@@ -84,7 +95,8 @@ export async function GET() {
         isAyyamulBidh,
         icon,
         holidays: [],
-        propheticEvents: propheticEvents.length > 0 ? propheticEvents : undefined,
+        propheticEvents:
+          propheticEvents.length > 0 ? propheticEvents : undefined,
         moonrise: `${String((18 + Math.floor(hijriDay * 0.8)) % 24).padStart(2, "0")}:15 WIB`,
         moonset: `${String((5 + Math.floor(hijriDay * 0.8)) % 24).padStart(2, "0")}:45 WIB`,
       }

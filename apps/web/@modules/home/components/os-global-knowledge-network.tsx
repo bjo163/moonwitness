@@ -275,7 +275,11 @@ export function OSGlobalKnowledgeNetwork() {
                 <div className="absolute top-[60%] left-[80%] h-2 w-2 rounded-full bg-blue-400 shadow-[0_0_10px_#3B82F6]" />
 
                 {/* Connecting paths */}
-                <svg className="absolute inset-0 z-0 h-full w-full opacity-40" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <svg
+                  className="absolute inset-0 z-0 h-full w-full opacity-40"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                >
                   <path
                     d="M 20 40 Q 30 30 45 30"
                     fill="none"

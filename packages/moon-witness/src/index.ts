@@ -146,6 +146,24 @@ export { resolveEngineScope, checksumEngineScope } from './services/engine-scope
 export { finalizeEngineResult, checksumEngineResult } from './services/engine-evidence.js'
 export { InMemoryEngineRunStore, MoonOrmEngineRunStore } from './services/engine-store.js'
 export { WitnessEngineRegistry, WitnessEngineRuntime } from './services/engine-runtime.js'
+export {
+  REVELATION_FAMILIES,
+  createRevelationQueryModule,
+  resolveRevelationPassageContext,
+  validateRevelationQueryInput,
+  type RevelationContentWitness,
+  type RevelationPassageContext,
+  type RevelationQueryInput
+} from './engines/revelation-query.js'
+export {
+  buildCrossScriptureEvidenceMatrix,
+  createCrossScriptureComparisonModule,
+  validateCrossScriptureComparisonInput,
+  type CrossScriptureComparisonInput,
+  type CrossScriptureEvidenceClass,
+  type CrossScriptureEvidenceEntry,
+  type CrossScriptureEvidenceMatrix
+} from './engines/cross-scripture.js'
 
 export {
   planLegacyMigration,

@@ -1,5 +1,5 @@
-import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
+import { create } from "zustand"
+import { persist, createJSONStorage } from "zustand/middleware"
 
 export interface Achievement {
   id: string
@@ -12,26 +12,26 @@ export interface Achievement {
 
 export const ACHIEVEMENTS: Record<string, Achievement> = {
   first_login: {
-    id: 'first_login',
-    title: 'Initiate Sequence',
-    description: 'Enter the MoonWitness system for the first time.',
+    id: "first_login",
+    title: "Initiate Sequence",
+    description: "Enter the MoonWitness system for the first time.",
     points: 10,
-    icon: 'Terminal'
+    icon: "Terminal",
   },
   dzikir_master: {
-    id: 'dzikir_master',
-    title: 'Dzikir Master',
-    description: 'Complete 33 counts of Dzikir.',
+    id: "dzikir_master",
+    title: "Dzikir Master",
+    description: "Complete 33 counts of Dzikir.",
     points: 50,
-    icon: 'Shield'
+    icon: "Shield",
   },
   quran_explorer: {
-    id: 'quran_explorer',
-    title: 'Divine Explorer',
-    description: 'Listen to an audio recitation.',
+    id: "quran_explorer",
+    title: "Divine Explorer",
+    description: "Listen to an audio recitation.",
     points: 25,
-    icon: 'Music'
-  }
+    icon: "Music",
+  },
 }
 
 interface AchievementState {
@@ -46,7 +46,7 @@ export const useAchievementStore = create<AchievementState>()(
     (set, get) => ({
       points: 0,
       unlockedIds: [],
-      
+
       unlockAchievement: (id, triggerToast) => {
         const state = get()
         if (state.unlockedIds.includes(id)) return // Already unlocked
@@ -56,26 +56,30 @@ export const useAchievementStore = create<AchievementState>()(
 
         set({
           points: state.points + achievement.points,
-          unlockedIds: [...state.unlockedIds, id]
+          unlockedIds: [...state.unlockedIds, id],
         })
 
         // Notify user using the injected toast function from context
         triggerToast({
           variant: "success",
           title: "ACHIEVEMENT UNLOCKED",
-          description: `+${achievement.points} XP : ${achievement.title}`
+          description: `+${achievement.points} XP : ${achievement.title}`,
         })
       },
 
-      hasAchievement: (id) => get().unlockedIds.includes(id)
+      hasAchievement: (id) => get().unlockedIds.includes(id),
     }),
     {
-      name: 'moon_achievements',
-      storage: createJSONStorage(() => (typeof window !== 'undefined' ? localStorage : {
-        getItem: () => null,
-        setItem: () => {},
-        removeItem: () => {},
-      })),
+      name: "moon_achievements",
+      storage: createJSONStorage(() =>
+        typeof window !== "undefined"
+          ? localStorage
+          : {
+              getItem: () => null,
+              setItem: () => {},
+              removeItem: () => {},
+            }
+      ),
     }
   )
 )

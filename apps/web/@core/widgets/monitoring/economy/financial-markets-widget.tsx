@@ -32,7 +32,10 @@ export function FinancialMarketsWidget() {
       try {
         const promises = ASSETS.map(async (asset) => {
           // Use moon api server proxy with caching (30s)
-          const data = await request('GET', `/api/external/binance/ticker?symbol=${asset.symbol}`)
+          const data = await request(
+            "GET",
+            `/api/external/binance/ticker?symbol=${asset.symbol}`
+          )
           return {
             symbol: asset.symbol,
             name: asset.name,

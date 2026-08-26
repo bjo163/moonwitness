@@ -69,12 +69,14 @@ export function InspirationCommentsClient({
 
   useEffect(() => {
     fetchComments()
-    
+
     // Set up real-time listener via MoonStore
-    const unsubscribe = useMoonStore.getState().subscribe('fx.msg', (msgData) => {
-      // Refresh comments when a new message is broadcasted
-      fetchComments()
-    })
+    const unsubscribe = useMoonStore
+      .getState()
+      .subscribe("fx.msg", (msgData) => {
+        // Refresh comments when a new message is broadcasted
+        fetchComments()
+      })
 
     return () => {
       unsubscribe()
@@ -111,7 +113,12 @@ export function InspirationCommentsClient({
       if (!navigator.onLine) {
         queueOfflineSync("/api/comments", "POST", payload)
         setCommentText("")
-        setSubmittedMessage(t("📡 SAVED OFFLINE. WILL SYNC LATER.", "📡 TERSIMPAN OFFLINE. AKAN DISINKRON SAAT ONLINE."))
+        setSubmittedMessage(
+          t(
+            "📡 SAVED OFFLINE. WILL SYNC LATER.",
+            "📡 TERSIMPAN OFFLINE. AKAN DISINKRON SAAT ONLINE."
+          )
+        )
         setTimeout(() => setSubmittedMessage(""), 4000)
         setSubmitting(false)
         return
@@ -306,12 +313,20 @@ export function InspirationCommentsClient({
       ) : (
         <div className="relative mt-2">
           {/* Holographic fade at the bottom */}
-          <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-12 bg-gradient-to-t from-[#040C1A] to-transparent" />
-          
-          <div className="space-y-2.5 max-h-[400px] overflow-y-auto hide-scrollbar pb-12" style={{ maskImage: "linear-gradient(to bottom, black 85%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, black 85%, transparent 100%)" }}>
+          <div className="pointer-events-none absolute right-0 bottom-0 left-0 z-10 h-12 bg-gradient-to-t from-[#040C1A] to-transparent" />
+
+          <div
+            className="hide-scrollbar max-h-[400px] space-y-2.5 overflow-y-auto pb-12"
+            style={{
+              maskImage:
+                "linear-gradient(to bottom, black 85%, transparent 100%)",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, black 85%, transparent 100%)",
+            }}
+          >
             {comments.map((c) => {
               const isAdmin = c.user_role === "admin" || c.user_avatar === "👑"
-  
+
               return (
                 <div
                   key={c.id}
@@ -329,14 +344,14 @@ export function InspirationCommentsClient({
                       <span className="text-xs font-bold text-foreground">
                         {c.user_name}
                       </span>
-  
+
                       {isAdmin && (
                         <span className="tag-clip tag-clip-purple tag-clip py-0 text-[8px]">
                           👑 ADMIN
                         </span>
                       )}
                     </div>
-  
+
                     <span className="text-[9px] text-primary">
                       {new Date(c.created_at).toLocaleTimeString("id-ID", {
                         hour: "2-digit",
@@ -345,7 +360,7 @@ export function InspirationCommentsClient({
                       WIB
                     </span>
                   </div>
-  
+
                   <p className="pl-8 font-mono text-xs leading-relaxed text-foreground/90">
                     "{c.comment_text}"
                   </p>

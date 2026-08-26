@@ -22,7 +22,7 @@ export function EmptyState({
     warning: "border-amber-500/20 text-amber-500/50 bg-amber-950/20",
     success: "border-emerald-500/20 text-emerald-500/50 bg-emerald-950/20",
   }
-  
+
   const iconColors = {
     default: "text-cyan-500/50",
     danger: "text-red-500/50",
@@ -31,14 +31,16 @@ export function EmptyState({
   }
 
   return (
-    <div className={`flex flex-col items-center justify-center rounded-2xl border ${variantStyles[variant]} p-8 backdrop-blur-xl text-center min-h-[160px] animate-in fade-in zoom-in duration-500`}>
-      <Icon className={`h-10 w-10 mb-3 ${iconColors[variant]} animate-pulse`} />
+    <div
+      className={`flex flex-col items-center justify-center rounded-2xl border ${variantStyles[variant]} min-h-[160px] animate-in p-8 text-center backdrop-blur-xl duration-500 fade-in zoom-in`}
+    >
+      <Icon className={`mb-3 h-10 w-10 ${iconColors[variant]} animate-pulse`} />
       {title && (
-        <h3 className="font-sans text-sm font-bold tracking-widest uppercase mb-1">
+        <h3 className="mb-1 font-sans text-sm font-bold tracking-widest uppercase">
           {title}
         </h3>
       )}
-      <p className="font-mono text-xs max-w-sm mx-auto leading-relaxed opacity-80">
+      <p className="mx-auto max-w-sm font-mono text-xs leading-relaxed opacity-80">
         {message}
       </p>
       {action && <div className="mt-4">{action}</div>}

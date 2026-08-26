@@ -1,7 +1,13 @@
-import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
+import { create } from "zustand"
+import { persist, createJSONStorage } from "zustand/middleware"
 
-export type NotificationType = 'info' | 'success' | 'warning' | 'error' | 'prayer' | 'achievement'
+export type NotificationType =
+  | "info"
+  | "success"
+  | "warning"
+  | "error"
+  | "prayer"
+  | "achievement"
 
 export interface NotificationItem {
   id: string
@@ -16,7 +22,9 @@ export interface NotificationItem {
 
 interface NotificationState {
   notifications: NotificationItem[]
-  addNotification: (notification: Omit<NotificationItem, 'id' | 'timestamp' | 'read'>) => void
+  addNotification: (
+    notification: Omit<NotificationItem, "id" | "timestamp" | "read">
+  ) => void
   markAsRead: (id: string) => void
   markAllAsRead: () => void
   clearAll: () => void
@@ -27,7 +35,7 @@ export const useNotificationStore = create<NotificationState>()(
   persist(
     (set, get) => ({
       notifications: [],
-      
+
       addNotification: (notification) => {
         const newItem: NotificationItem = {
           ...notification,
@@ -37,21 +45,21 @@ export const useNotificationStore = create<NotificationState>()(
         }
         set((state) => ({
           // Keep only the last 50 notifications to prevent storage bloat
-          notifications: [newItem, ...state.notifications].slice(0, 50)
+          notifications: [newItem, ...state.notifications].slice(0, 50),
         }))
       },
 
       markAsRead: (id) => {
         set((state) => ({
-          notifications: state.notifications.map((n) => 
+          notifications: state.notifications.map((n) =>
             n.id === id ? { ...n, read: true } : n
-          )
+          ),
         }))
       },
 
       markAllAsRead: () => {
         set((state) => ({
-          notifications: state.notifications.map((n) => ({ ...n, read: true }))
+          notifications: state.notifications.map((n) => ({ ...n, read: true })),
         }))
       },
 
@@ -61,15 +69,19 @@ export const useNotificationStore = create<NotificationState>()(
 
       getUnreadCount: () => {
         return get().notifications.filter((n) => !n.read).length
-      }
+      },
     }),
     {
-      name: 'moon_notifications',
-      storage: createJSONStorage(() => (typeof window !== 'undefined' ? localStorage : {
-        getItem: () => null,
-        setItem: () => {},
-        removeItem: () => {},
-      })),
+      name: "moon_notifications",
+      storage: createJSONStorage(() =>
+        typeof window !== "undefined"
+          ? localStorage
+          : {
+              getItem: () => null,
+              setItem: () => {},
+              removeItem: () => {},
+            }
+      ),
       // Automatically deserialize dates since JSON stringifies them
       partialize: (state) => ({
         notifications: state.notifications,
@@ -77,12 +89,14 @@ export const useNotificationStore = create<NotificationState>()(
       merge: (persistedState: any, currentState) => {
         return {
           ...currentState,
-          notifications: (persistedState?.notifications || []).map((n: any) => ({
-            ...n,
-            timestamp: new Date(n.timestamp)
-          }))
+          notifications: (persistedState?.notifications || []).map(
+            (n: any) => ({
+              ...n,
+              timestamp: new Date(n.timestamp),
+            })
+          ),
         }
-      }
+      },
     }
   )
 )

@@ -188,11 +188,11 @@ export function DoaHarianView() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:flex md:flex-wrap gap-4 rounded-2xl border border-white/5 bg-[#040C1A] p-4 lg:gap-6">
+          <div className="grid grid-cols-2 gap-4 rounded-2xl border border-white/5 bg-[#040C1A] p-4 md:flex md:flex-wrap lg:gap-6">
             {dynamicTopStats.map((stat, idx) => (
               <div
                 key={idx}
-                className={`flex items-center gap-2 md:gap-3 ${idx !== dynamicTopStats.length - 1 ? "md:border-r border-white/5 md:pr-4 lg:pr-6" : ""}`}
+                className={`flex items-center gap-2 md:gap-3 ${idx !== dynamicTopStats.length - 1 ? "border-white/5 md:border-r md:pr-4 lg:pr-6" : ""}`}
               >
                 <div
                   className={`h-10 w-10 shrink-0 rounded-full bg-${stat.color}-500/10 border border-${stat.color}-500/20 flex items-center justify-center text-${stat.color}-400`}
@@ -203,18 +203,20 @@ export function DoaHarianView() {
                   <div className="mb-0.5 text-[8px] font-bold tracking-widest text-[#8F9FB3] uppercase">
                     {stat.label}
                   </div>
-                  <div className="mb-0.5 font-mono text-base md:text-lg leading-none font-bold text-white">
+                  <div className="mb-0.5 font-mono text-base leading-none font-bold text-white md:text-lg">
                     {stat.value}
                   </div>
-                  <div className="text-[8px] text-[#8F9FB3] hidden sm:block">{stat.sub}</div>
+                  <div className="hidden text-[8px] text-[#8F9FB3] sm:block">
+                    {stat.sub}
+                  </div>
                 </div>
               </div>
             ))}
-            <div className="col-span-2 md:col-span-1 flex items-center justify-center md:border-l border-white/5 md:pl-4 lg:pl-6 mt-2 md:mt-0 pt-2 md:pt-0 border-t md:border-t-0">
-              <div className="relative flex h-12 w-12 md:h-16 md:w-16 items-center justify-center overflow-hidden rounded-full border border-amber-500/30 shadow-[0_0_20px_rgba(245,158,11,0.15)]">
+            <div className="col-span-2 mt-2 flex items-center justify-center border-t border-white/5 pt-2 md:col-span-1 md:mt-0 md:border-t-0 md:border-l md:pt-0 md:pl-4 lg:pl-6">
+              <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-amber-500/30 shadow-[0_0_20px_rgba(245,158,11,0.15)] md:h-16 md:w-16">
                 <img
                   src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Allah-green.svg/1024px-Allah-green.svg.png"
-                  className="h-8 w-8 md:h-10 md:w-10 object-contain opacity-80 mix-blend-screen hue-rotate-[180deg]"
+                  className="h-8 w-8 object-contain opacity-80 mix-blend-screen hue-rotate-[180deg] md:h-10 md:w-10"
                   alt="Calligraphy"
                 />
               </div>
@@ -309,13 +311,13 @@ export function DoaHarianView() {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="hide-scrollbar mb-6 flex items-center justify-between overflow-x-auto border-b border-white/10 pb-0 snap-x">
+        <div className="hide-scrollbar mb-6 flex snap-x items-center justify-between overflow-x-auto border-b border-white/10 pb-0">
           <div className="flex min-w-max gap-6 px-2">
             {tabs.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`border-b-2 pb-3 snap-center text-[10px] font-bold tracking-widest whitespace-nowrap uppercase transition-all duration-300 ${
+                className={`snap-center border-b-2 pb-3 text-[10px] font-bold tracking-widest whitespace-nowrap uppercase transition-all duration-300 ${
                   activeTab === tab
                     ? "border-blue-500 text-blue-400"
                     : "border-transparent text-[#8F9FB3] hover:text-white"

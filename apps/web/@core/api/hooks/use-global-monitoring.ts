@@ -100,7 +100,7 @@ export function useGlobalMonitoring() {
         setIsLoading(true)
 
         // 1. Fetch USGS Earthquakes — via moon api server (cached 5m)
-        const usgsPromise = request('GET', '/api/external/usgs/earthquakes')
+        const usgsPromise = request("GET", "/api/external/usgs/earthquakes")
           .then((data: any) => data.features || [])
           .catch(() => [])
 
@@ -128,7 +128,7 @@ export function useGlobalMonitoring() {
                   Dhuhr: json.schedule.dzuhur,
                   Asr: json.schedule.ashar,
                   Maghrib: json.schedule.maghrib,
-                  Isha: json.schedule.isya
+                  Isha: json.schedule.isya,
                 },
                 currentPrayer: "Checking...",
                 nextPrayer: "Checking...",
@@ -140,18 +140,19 @@ export function useGlobalMonitoring() {
         ).then((res) => res.filter(Boolean) as GlobalCityPrayer[])
 
         // 3. Fetch ISS Tracker — via moon api server (cached 10s)
-        const issPromise = request('GET', '/api/external/iss')
-          .catch(() => null)
+        const issPromise = request("GET", "/api/external/iss").catch(() => null)
 
         // 4. Fetch NASA Space Weather DONKI CME — via moon api server (cached 30m)
         const date = new Date()
         date.setDate(date.getDate() - 30)
         const startDate = date.toISOString().split("T")[0]
-        const nasaPromise = request('GET', `/api/external/nasa/donki/cme?startDate=${startDate}`)
-          .catch(() => [])
+        const nasaPromise = request(
+          "GET",
+          `/api/external/nasa/donki/cme?startDate=${startDate}`
+        ).catch(() => [])
 
         // 5. Fetch OpenSky Flights — via moon api server (cached 1m, fixed EU bbox)
-        const openskyPromise = request('GET', '/api/external/opensky')
+        const openskyPromise = request("GET", "/api/external/opensky")
           .then((data: any) => {
             if (!data.states) return []
             return data.states
@@ -171,7 +172,7 @@ export function useGlobalMonitoring() {
           .catch(() => [])
 
         // 6. Fetch Humanity Trends (Google Trends via moon api server)
-        const trendsPromise = request('GET', '/api/external/trends')
+        const trendsPromise = request("GET", "/api/external/trends")
           .then((xmlText: string) => {
             // Lightweight Regex XML parsing since it's a simple, predictable RSS feed
             const items = []
@@ -182,9 +183,10 @@ export function useGlobalMonitoring() {
               const itemContent = match[1]
               if (!itemContent) continue
 
-              const titleMatch = /<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>/.exec(
-                itemContent
-              )
+              const titleMatch =
+                /<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>/.exec(
+                  itemContent
+                )
               const trafficMatch =
                 /<ht:approx_traffic>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/ht:approx_traffic>/.exec(
                   itemContent
@@ -194,8 +196,12 @@ export function useGlobalMonitoring() {
               if (titleMatch) {
                 items.push({
                   title: titleMatch[1] || "Unknown",
-                  traffic: (trafficMatch && trafficMatch[1]) ? trafficMatch[1] : "Unknown",
-                  pubDate: (pubDateMatch && pubDateMatch[1]) ? pubDateMatch[1] : "",
+                  traffic:
+                    trafficMatch && trafficMatch[1]
+                      ? trafficMatch[1]
+                      : "Unknown",
+                  pubDate:
+                    pubDateMatch && pubDateMatch[1] ? pubDateMatch[1] : "",
                 })
               }
             }
@@ -241,7 +247,7 @@ export function useGlobalMonitoring() {
 
     const issInterval = setInterval(async () => {
       try {
-        const issData = await request('GET', '/api/external/iss')
+        const issData = await request("GET", "/api/external/iss")
         if (isMounted && issData && !issData.error) setIssPosition(issData)
       } catch (e) {}
     }, 10000)

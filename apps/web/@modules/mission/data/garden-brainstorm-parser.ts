@@ -17,7 +17,9 @@ function toTaskType(value: string): TaskType | null {
 function parseTaskBlock(block: string): BrainstormTask | null {
   const titleMatch = block.match(/\*\*Title:\*\*\s*(.+)/i)
   const typeMatch = block.match(/\*\*Type:\*\*\s*(.+)/i)
-  const scoreMatch = block.match(/\*\*Score:\*\*\s*\**\s*(\d{1,2}|99)\s*\/\s*99\s*\**/i)
+  const scoreMatch = block.match(
+    /\*\*Score:\*\*\s*\**\s*(\d{1,2}|99)\s*\/\s*99\s*\**/i
+  )
   const goalMatch = block.match(/\*\*Goal:\*\*\s*(.+)/i)
 
   if (!titleMatch || !typeMatch || !scoreMatch || !goalMatch) return null
@@ -34,7 +36,9 @@ function parseTaskBlock(block: string): BrainstormTask | null {
   }
 }
 
-export function parseTasksFromMarkdown(rawText: string): BrainstormTask[] | null {
+export function parseTasksFromMarkdown(
+  rawText: string
+): BrainstormTask[] | null {
   const blocks = rawText
     .split(/###\s*TASK\s*\d{1,2}/i)
     .map((part) => part.trim())

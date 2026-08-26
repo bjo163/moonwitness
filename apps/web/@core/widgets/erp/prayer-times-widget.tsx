@@ -25,7 +25,7 @@ export function PrayerTimesWidget() {
   const [currentTime, setCurrentTime] = useState(new Date())
 
   const geo = useGeolocation()
-  
+
   // Refresh clock every second
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
@@ -41,7 +41,9 @@ export function PrayerTimesWidget() {
         setLoading(true)
         const lat = geo.lat || -6.2
         const lng = geo.lng || 106.8
-        const res = await fetch(`/api/witness/astronomy/prayer-times?lat=${lat}&lng=${lng}`)
+        const res = await fetch(
+          `/api/witness/astronomy/prayer-times?lat=${lat}&lng=${lng}`
+        )
         if (!res.ok) throw new Error("Failed to fetch prayer times")
         const json = await res.json()
         setData(json)
@@ -52,7 +54,7 @@ export function PrayerTimesWidget() {
       }
     }
     fetchPrayerTimes()
-    
+
     // Auto-refresh every hour
     const interval = setInterval(fetchPrayerTimes, 1000 * 60 * 60)
     return () => clearInterval(interval)
@@ -107,18 +109,18 @@ export function PrayerTimesWidget() {
     return new Date(isoString).toLocaleTimeString("en-US", {
       hour12: false,
       hour: "2-digit",
-      minute: "2-digit"
+      minute: "2-digit",
     })
   }
 
   if (loading) {
     return (
-      <div className="bg-space/60 rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl animate-pulse">
-        <div className="h-4 w-32 bg-cyan-500/20 rounded mb-4"></div>
-        <div className="h-20 w-full bg-black/40 rounded-xl mb-4"></div>
+      <div className="bg-space/60 animate-pulse rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
+        <div className="mb-4 h-4 w-32 rounded bg-cyan-500/20"></div>
+        <div className="mb-4 h-20 w-full rounded-xl bg-black/40"></div>
         <div className="space-y-2">
-          <div className="h-8 w-full bg-cyan-500/10 rounded"></div>
-          <div className="h-8 w-full bg-cyan-500/10 rounded"></div>
+          <div className="h-8 w-full rounded bg-cyan-500/10"></div>
+          <div className="h-8 w-full rounded bg-cyan-500/10"></div>
         </div>
       </div>
     )
@@ -126,9 +128,9 @@ export function PrayerTimesWidget() {
 
   if (error || !data) {
     return (
-      <div className="bg-space/60 rounded-2xl border border-red-500/20 p-5 backdrop-blur-xl flex flex-col items-center justify-center text-red-400">
-        <AlertTriangle className="h-6 w-6 mb-2" />
-        <div className="text-xs font-mono">{error || "Data unavailable"}</div>
+      <div className="bg-space/60 flex flex-col items-center justify-center rounded-2xl border border-red-500/20 p-5 text-red-400 backdrop-blur-xl">
+        <AlertTriangle className="mb-2 h-6 w-6" />
+        <div className="font-mono text-xs">{error || "Data unavailable"}</div>
       </div>
     )
   }
@@ -140,9 +142,13 @@ export function PrayerTimesWidget() {
           <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
             Adhan Command
           </h3>
-          <p className="flex items-center gap-1 font-mono text-[9px] text-primary/70 uppercase tracking-widest mt-0.5">
+          <p className="mt-0.5 flex items-center gap-1 font-mono text-[9px] tracking-widest text-primary/70 uppercase">
             <MapPin className="h-2.5 w-2.5" />
-            {geo.loading ? "LOCATING..." : geo.lat ? `${geo.lat.toFixed(2)}, ${geo.lng?.toFixed(2)}` : "DEFAULT LOC (JKT)"}
+            {geo.loading
+              ? "LOCATING..."
+              : geo.lat
+                ? `${geo.lat.toFixed(2)}, ${geo.lng?.toFixed(2)}`
+                : "DEFAULT LOC (JKT)"}
           </p>
         </div>
         <Target className="h-4 w-4 text-primary/50" />
@@ -154,8 +160,10 @@ export function PrayerTimesWidget() {
           <Clock className="h-6 w-6 text-cyan-400" />
         </div>
         <div className="flex-1">
-          <div className="font-mono text-[10px] text-cyan-400/80">T-MINUS TO {nextPrayerName}</div>
-          <div className="font-mono text-2xl font-black text-white tracking-widest tabular-nums drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]">
+          <div className="font-mono text-[10px] text-cyan-400/80">
+            T-MINUS TO {nextPrayerName}
+          </div>
+          <div className="font-mono text-2xl font-black tracking-widest text-white tabular-nums drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]">
             {countdownStr}
           </div>
         </div>
@@ -177,17 +185,23 @@ export function PrayerTimesWidget() {
               key={p.id}
               className={`flex items-center justify-between rounded-lg p-2.5 transition-all ${
                 isNext
-                  ? "bg-cyan-500/20 border border-cyan-500/50 shadow-[0_0_20px_rgba(0,240,255,0.3)] animate-pulse-slow"
-                  : "bg-black/20 hover:bg-black/40 border border-transparent"
+                  ? "animate-pulse-slow border border-cyan-500/50 bg-cyan-500/20 shadow-[0_0_20px_rgba(0,240,255,0.3)]"
+                  : "border border-transparent bg-black/20 hover:bg-black/40"
               }`}
             >
               <div className="flex items-center gap-3">
-                <p.icon className={`h-3.5 w-3.5 ${isNext ? "text-cyan-400 drop-shadow-[0_0_5px_rgba(0,240,255,0.8)]" : "text-primary/50"}`} />
-                <span className={`font-sans text-xs font-bold ${isNext ? "text-white" : "text-primary/70"}`}>
+                <p.icon
+                  className={`h-3.5 w-3.5 ${isNext ? "text-cyan-400 drop-shadow-[0_0_5px_rgba(0,240,255,0.8)]" : "text-primary/50"}`}
+                />
+                <span
+                  className={`font-sans text-xs font-bold ${isNext ? "text-white" : "text-primary/70"}`}
+                >
                   {p.id}
                 </span>
               </div>
-              <span className={`font-mono text-xs font-bold tabular-nums ${isNext ? "text-cyan-400 drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]" : "text-white"}`}>
+              <span
+                className={`font-mono text-xs font-bold tabular-nums ${isNext ? "text-cyan-400 drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]" : "text-white"}`}
+              >
                 {formatTime(p.time)}
               </span>
             </div>

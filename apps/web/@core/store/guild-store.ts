@@ -30,24 +30,29 @@ export const useGuildStore = create<GuildState>()(
       guilds: DEFAULT_GUILDS,
       joinGuild: (guildId) => set({ currentGuildId: guildId }),
       leaveGuild: () => set({ currentGuildId: null }),
-      addXP: (amount) => set((state) => {
-        if (!state.currentGuildId) return state
-        const updatedGuilds = state.guilds.map((g) => {
-          if (g.id === state.currentGuildId) {
-            return { ...g, xp: g.xp + amount }
-          }
-          return g
-        })
-        return { guilds: updatedGuilds }
-      })
+      addXP: (amount) =>
+        set((state) => {
+          if (!state.currentGuildId) return state
+          const updatedGuilds = state.guilds.map((g) => {
+            if (g.id === state.currentGuildId) {
+              return { ...g, xp: g.xp + amount }
+            }
+            return g
+          })
+          return { guilds: updatedGuilds }
+        }),
     }),
     {
       name: "moon-guild-storage",
-      storage: createJSONStorage(() => (typeof window !== 'undefined' ? localStorage : {
-        getItem: () => null,
-        setItem: () => {},
-        removeItem: () => {},
-      })),
+      storage: createJSONStorage(() =>
+        typeof window !== "undefined"
+          ? localStorage
+          : {
+              getItem: () => null,
+              setItem: () => {},
+              removeItem: () => {},
+            }
+      ),
     }
   )
 )

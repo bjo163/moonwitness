@@ -1,6 +1,12 @@
 "use client"
 
-import React, { createContext, useContext, useState, useEffect, useRef } from "react"
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+} from "react"
 import { Howl } from "howler"
 import { useToast } from "./toast-provider"
 import { useAchievementStore } from "@core/store/achievement-store"
@@ -31,7 +37,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const [isLooping, setIsLooping] = useState(false)
   const soundRef = useRef<Howl | null>(null)
   const { toast } = useToast()
-  const unlockAchievement = useAchievementStore(s => s.unlockAchievement)
+  const unlockAchievement = useAchievementStore((s) => s.unlockAchievement)
 
   // Cleanup on unmount
   useEffect(() => {
@@ -56,13 +62,13 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   }
 
   const toggleLoop = () => {
-    setIsLooping(prev => !prev)
+    setIsLooping((prev) => !prev)
   }
 
   const play = (surah: { number: number; name: string }) => {
     setCurrentSurah(surah)
     setIsPlaying(true)
-    
+
     // Unlock Explorer Achievement
     unlockAchievement("quran_explorer", toast)
 
@@ -70,7 +76,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       soundRef.current.unload()
     }
 
-    const paddedNumber = String(surah.number).padStart(3, '0')
+    const paddedNumber = String(surah.number).padStart(3, "0")
     const url = `https://everyayah.com/data/Alafasy_128kbps/${paddedNumber}001.mp3` // Only playing the first Ayah for demo
 
     soundRef.current = new Howl({
@@ -87,7 +93,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       },
       onplayerror: () => {
         setIsPlaying(false)
-      }
+      },
     })
 
     soundRef.current.play()
@@ -108,11 +114,17 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AudioContext.Provider
-      value={{ 
-        isPlaying, currentSurah, play, togglePlay, 
-        volume, setVolume, 
-        playbackRate, setPlaybackRate, 
-        isLooping, toggleLoop 
+      value={{
+        isPlaying,
+        currentSurah,
+        play,
+        togglePlay,
+        volume,
+        setVolume,
+        playbackRate,
+        setPlaybackRate,
+        isLooping,
+        toggleLoop,
       }}
     >
       {children}

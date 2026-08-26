@@ -21,9 +21,13 @@ import {
 } from "@core/api/hooks/use-global-monitoring"
 
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: typeof iconRetinaUrl === "string" ? iconRetinaUrl : (iconRetinaUrl as any)?.src,
+  iconRetinaUrl:
+    typeof iconRetinaUrl === "string"
+      ? iconRetinaUrl
+      : (iconRetinaUrl as any)?.src,
   iconUrl: typeof iconUrl === "string" ? iconUrl : (iconUrl as any)?.src,
-  shadowUrl: typeof shadowUrl === "string" ? shadowUrl : (shadowUrl as any)?.src,
+  shadowUrl:
+    typeof shadowUrl === "string" ? shadowUrl : (shadowUrl as any)?.src,
 })
 
 // Custom red icon for earthquakes
@@ -87,7 +91,6 @@ export default function LeafletMap({
   const mounted = useMounted()
   const [mapKey] = useState(() => Date.now().toString())
 
-  
   if (!mounted) return null
 
   return (
@@ -105,25 +108,26 @@ export default function LeafletMap({
         />
 
         {/* Render ISS */}
-        {issPosition?.latitude !== undefined && issPosition?.longitude !== undefined && (
-          <Marker
-            position={[issPosition.latitude, issPosition.longitude]}
-            icon={issIcon}
-            zIndexOffset={1000}
-          >
-            <Popup className="bg-space border border-white/10 text-white">
-              <div className="text-xs">
-                <div className="font-bold tracking-widest text-primary">
-                  INTERNATIONAL SPACE STATION
+        {issPosition?.latitude !== undefined &&
+          issPosition?.longitude !== undefined && (
+            <Marker
+              position={[issPosition.latitude, issPosition.longitude]}
+              icon={issIcon}
+              zIndexOffset={1000}
+            >
+              <Popup className="bg-space border border-white/10 text-white">
+                <div className="text-xs">
+                  <div className="font-bold tracking-widest text-primary">
+                    INTERNATIONAL SPACE STATION
+                  </div>
+                  <div className="mt-1 text-[10px] text-white/70">
+                    Alt: {issPosition.altitude?.toFixed(2) ?? "N/A"} km <br />
+                    Vel: {issPosition.velocity?.toFixed(2) ?? "N/A"} km/h
+                  </div>
                 </div>
-                <div className="mt-1 text-[10px] text-white/70">
-                  Alt: {issPosition.altitude?.toFixed(2) ?? 'N/A'} km <br />
-                  Vel: {issPosition.velocity?.toFixed(2) ?? 'N/A'} km/h
-                </div>
-              </div>
-            </Popup>
-          </Marker>
-        )}
+              </Popup>
+            </Marker>
+          )}
 
         {/* Render Flights */}
         {flights.map((flight) => (

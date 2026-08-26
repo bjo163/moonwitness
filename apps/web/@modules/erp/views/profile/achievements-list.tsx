@@ -44,30 +44,32 @@ export function AchievementsList() {
 
   return (
     <div className="rounded-xl border border-cyan-500/20 bg-black/40 p-6 backdrop-blur-md">
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <h3 className="font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
           Achievements
         </h3>
-        <button className="font-sans text-[9px] text-cyan-500 hover:text-cyan-400 transition-colors">
+        <button className="font-sans text-[9px] text-cyan-500 transition-colors hover:text-cyan-400">
           View All
         </button>
       </div>
-      
+
       <div className="space-y-4">
         {achievements.map((ach, i) => (
-          <div key={i} className="flex items-start gap-4 group cursor-default">
-            <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border bg-black/50 ${ach.color} transition-transform group-hover:scale-110 shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]`}>
+          <div key={i} className="group flex cursor-default items-start gap-4">
+            <div
+              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border bg-black/50 ${ach.color} shadow-[inset_0_0_10px_rgba(255,255,255,0.05)] transition-transform group-hover:scale-110`}
+            >
               <ach.icon className="h-5 w-5" />
             </div>
             <div className="flex-1">
-              <h4 className="font-sans text-sm font-semibold text-slate-200 group-hover:text-white transition-colors">
+              <h4 className="font-sans text-sm font-semibold text-slate-200 transition-colors group-hover:text-white">
                 {ach.title}
               </h4>
               <p className="font-sans text-[10px] text-slate-400">
                 {ach.description}
               </p>
             </div>
-            <div className="font-mono text-[9px] text-slate-500 pt-1">
+            <div className="pt-1 font-mono text-[9px] text-slate-500">
               {ach.date}
             </div>
           </div>

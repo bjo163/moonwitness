@@ -53,9 +53,10 @@ export function TasbihView() {
 
   useEffect(() => {
     if (user) {
-      moonClient.model('wx.devotion')
-        .where('userId', user.id)
-        .where('devotionType', 'dhikr')
+      moonClient
+        .model("wx.devotion")
+        .where("userId", user.id)
+        .where("devotionType", "dhikr")
         .fetch()
         .then((res: any) => {
           if (res && res.length > 0) {
@@ -70,16 +71,23 @@ export function TasbihView() {
   function saveDevotion(loops: number) {
     if (!user) return
     if (devotionId) {
-      moonClient.model('wx.devotion').update(devotionId, { count: loops }).catch(console.error)
+      moonClient
+        .model("wx.devotion")
+        .update(devotionId, { count: loops })
+        .catch(console.error)
     } else {
-      moonClient.model('wx.devotion').create({
-        userId: user.id,
-        devotionType: 'dhikr',
-        count: loops,
-        notes: activeZikr.latin
-      }).then((res: any) => {
-        if (res?.id) setDevotionId(res.id)
-      }).catch(console.error)
+      moonClient
+        .model("wx.devotion")
+        .create({
+          userId: user.id,
+          devotionType: "dhikr",
+          count: loops,
+          notes: activeZikr.latin,
+        })
+        .then((res: any) => {
+          if (res?.id) setDevotionId(res.id)
+        })
+        .catch(console.error)
     }
   }
 
@@ -101,7 +109,10 @@ export function TasbihView() {
     setCount(0)
     setCompletedLoops(0)
     if (devotionId) {
-      moonClient.model('wx.devotion').update(devotionId, { count: 0 }).catch(console.error)
+      moonClient
+        .model("wx.devotion")
+        .update(devotionId, { count: 0 })
+        .catch(console.error)
     }
   }
 

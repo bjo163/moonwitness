@@ -49,19 +49,28 @@ export async function POST(req: Request) {
     const parsed = requestSchema.safeParse(await req.json())
     if (!parsed.success) {
       return Response.json(
-        { error: "Invalid brainstorm request", details: parsed.error.flatten() },
+        {
+          error: "Invalid brainstorm request",
+          details: parsed.error.flatten(),
+        },
         { status: 400 }
       )
     }
 
     const questions = missingContext(parsed.data)
     if (questions.length > 0) {
-      return Response.json({ clarificationQuestions: questions }, { status: 422 })
+      return Response.json(
+        { clarificationQuestions: questions },
+        { status: 422 }
+      )
     }
 
     const apiKeys = getApiKeys()
     if (apiKeys.length === 0) {
-      return Response.json({ error: "No Gemini API keys configured" }, { status: 500 })
+      return Response.json(
+        { error: "No Gemini API keys configured" },
+        { status: 500 }
+      )
     }
 
     const currentKey = apiKeys[Math.floor(Math.random() * apiKeys.length)]
@@ -71,7 +80,9 @@ export async function POST(req: Request) {
       `Project or problem: ${parsed.data.project}`,
       `Desired outcome: ${parsed.data.outcome}`,
       `Affected people: ${parsed.data.affectedPeople}`,
-      parsed.data.constraints ? `Constraints: ${parsed.data.constraints}` : null,
+      parsed.data.constraints
+        ? `Constraints: ${parsed.data.constraints}`
+        : null,
     ]
       .filter(Boolean)
       .join("\n")
@@ -139,6 +150,9 @@ export async function POST(req: Request) {
     })
   } catch (error) {
     console.error("[Garden Brainstorm Route]", error)
-    return Response.json({ error: "Unable to start brainstorm" }, { status: 500 })
+    return Response.json(
+      { error: "Unable to start brainstorm" },
+      { status: 500 }
+    )
   }
 }

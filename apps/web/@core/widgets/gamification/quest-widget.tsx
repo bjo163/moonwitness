@@ -26,15 +26,15 @@ export function QuestWidget() {
 
       <div className="space-y-3">
         {quests.map((q) => (
-          <div 
+          <div
             key={q.id}
             onClick={() => {
               if (!q.completed) completeQuest(q.id)
             }}
-            className={`flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer ${
-              q.completed 
-                ? "border-emerald-500/20 bg-emerald-500/5 opacity-70" 
-                : "border-amber-500/10 bg-black/40 hover:bg-amber-500/10 hover:border-amber-500/30"
+            className={`flex cursor-pointer items-center justify-between rounded-xl border p-3 transition-all ${
+              q.completed
+                ? "border-emerald-500/20 bg-emerald-500/5 opacity-70"
+                : "border-amber-500/10 bg-black/40 hover:border-amber-500/30 hover:bg-amber-500/10"
             }`}
           >
             <div className="flex items-center gap-3">
@@ -44,12 +44,16 @@ export function QuestWidget() {
                 <Circle className="h-4 w-4 text-amber-400/50" />
               )}
               <div>
-                <div className={`font-sans text-xs font-bold ${q.completed ? "text-emerald-300 line-through" : "text-white"}`}>
+                <div
+                  className={`font-sans text-xs font-bold ${q.completed ? "text-emerald-300 line-through" : "text-white"}`}
+                >
                   {q.title}
                 </div>
               </div>
             </div>
-            <div className={`font-mono text-[10px] font-bold ${q.completed ? "text-emerald-500" : "text-amber-400"}`}>
+            <div
+              className={`font-mono text-[10px] font-bold ${q.completed ? "text-emerald-500" : "text-amber-400"}`}
+            >
               +{q.rewardXP} XP
             </div>
           </div>

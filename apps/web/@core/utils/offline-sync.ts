@@ -11,13 +11,15 @@ interface SyncJob {
 export function queueOfflineSync(url: string, method: string, body: any) {
   if (typeof window === "undefined") return
   try {
-    const queue: SyncJob[] = JSON.parse(localStorage.getItem(OFFLINE_QUEUE_KEY) || "[]")
+    const queue: SyncJob[] = JSON.parse(
+      localStorage.getItem(OFFLINE_QUEUE_KEY) || "[]"
+    )
     queue.push({
       id: crypto.randomUUID(),
       url,
       method,
       body,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     })
     localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(queue))
     console.log("[OfflineSync] Job queued for", url)
@@ -29,7 +31,9 @@ export function queueOfflineSync(url: string, method: string, body: any) {
 export async function flushOfflineQueue() {
   if (typeof window === "undefined") return
   try {
-    const queue: SyncJob[] = JSON.parse(localStorage.getItem(OFFLINE_QUEUE_KEY) || "[]")
+    const queue: SyncJob[] = JSON.parse(
+      localStorage.getItem(OFFLINE_QUEUE_KEY) || "[]"
+    )
     if (queue.length === 0) return
 
     console.log(`[OfflineSync] Flushing ${queue.length} jobs...`)
@@ -40,7 +44,7 @@ export async function flushOfflineQueue() {
         const res = await fetch(job.url, {
           method: job.method,
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(job.body)
+          body: JSON.stringify(job.body),
         })
         if (!res.ok) {
           console.warn("[OfflineSync] Job failed, requeueing...", job.id)
@@ -52,7 +56,7 @@ export async function flushOfflineQueue() {
     }
 
     localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(remainingQueue))
-    
+
     if (remainingQueue.length === 0) {
       console.log("[OfflineSync] Queue flushed successfully.")
       // Trigger a custom event so UI can react (e.g. show toast)

@@ -37,13 +37,13 @@ export function useKonami() {
             title: "SECRET OVERRIDE",
             description: "Admin clearance granted. Welcome, Operator.",
           })
-          
+
           // Confetti effect or CSS Matrix glow
           document.body.classList.add("theme-matrix")
           setTimeout(() => {
             document.body.classList.remove("theme-matrix")
           }, 5000)
-          
+
           return []
         }
 

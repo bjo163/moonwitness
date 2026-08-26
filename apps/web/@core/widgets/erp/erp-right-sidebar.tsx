@@ -20,7 +20,12 @@ import { PrayerTimesWidget } from "./prayer-times-widget"
 import { HijriCalendarWidget } from "./hijri-calendar-widget"
 import { AsmaulHusnaWidget } from "./asmaul-husna-widget"
 import { TacticalSettingsWidget } from "./tactical-settings-widget"
-import { AchievementWidget, RamadanModeWidget, GuildLeaderboardWidget, QuestWidget } from "@core/widgets"
+import {
+  AchievementWidget,
+  RamadanModeWidget,
+  GuildLeaderboardWidget,
+  QuestWidget,
+} from "@core/widgets"
 
 type GlobalMonitorItem = { name: string; value: string; status: string }
 type MissionStatus = {
@@ -238,30 +243,28 @@ export function ErpRightSidebar({
       {/* Mobile Toggle Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-20 right-4 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-cyan-950 border border-cyan-500/50 text-cyan-400 shadow-[0_0_20px_rgba(0,240,255,0.3)] xl:hidden"
+        className="fixed right-4 bottom-20 z-40 flex h-12 w-12 items-center justify-center rounded-full border border-cyan-500/50 bg-cyan-950 text-cyan-400 shadow-[0_0_20px_rgba(0,240,255,0.3)] xl:hidden"
       >
         <Menu className="h-6 w-6" />
       </button>
 
       {/* Backdrop for mobile */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm xl:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       {/* Sidebar Container */}
-      <div className={`
-        fixed inset-y-0 right-0 z-50 w-[300px] sm:w-[350px] overflow-y-auto hide-scrollbar bg-[#020813] border-l border-cyan-500/20 p-4 shadow-2xl transition-transform duration-300 ease-in-out
-        ${isOpen ? "translate-x-0" : "translate-x-full"}
-        xl:relative xl:w-auto xl:translate-x-0 xl:bg-transparent xl:border-none xl:p-0 xl:shadow-none xl:overflow-visible xl:z-0
-      `}>
+      <div
+        className={`hide-scrollbar fixed inset-y-0 right-0 z-50 w-[300px] overflow-y-auto border-l border-cyan-500/20 bg-[#020813] p-4 shadow-2xl transition-transform duration-300 ease-in-out sm:w-[350px] ${isOpen ? "translate-x-0" : "translate-x-full"} xl:relative xl:z-0 xl:w-auto xl:translate-x-0 xl:overflow-visible xl:border-none xl:bg-transparent xl:p-0 xl:shadow-none`}
+      >
         {/* Close Button Mobile */}
         <div className="mb-4 flex justify-end xl:hidden">
-          <button 
+          <button
             onClick={() => setIsOpen(false)}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-red-950/50 border border-red-500/50 text-red-400"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-red-500/50 bg-red-950/50 text-red-400"
           >
             <X className="h-5 w-5" />
           </button>

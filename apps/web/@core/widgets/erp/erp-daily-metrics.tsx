@@ -9,9 +9,9 @@ import {
   AlertTriangle,
   History,
   Moon,
-  Shield, 
-  CheckCircle, 
-  Database 
+  Shield,
+  CheckCircle,
+  Database,
 } from "lucide-react"
 import { InfaqTrackerWidget } from "./infaq-tracker-widget"
 import { DailyBriefingWidget } from "./daily-briefing-widget"

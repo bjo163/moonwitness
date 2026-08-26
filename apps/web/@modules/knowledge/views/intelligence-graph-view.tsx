@@ -222,32 +222,36 @@ export function IntelligenceGraphView() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [hoveredNode, setHoveredNode] = useState<Node | null>(null)
   const { client } = useMoonStore()
-  
+
   const [nodes, setNodes] = useState<Node[]>(KNOWLEDGE_NODES)
   const [edges, setEdges] = useState<Edge[]>(KNOWLEDGE_EDGES)
 
   useEffect(() => {
-    client.model('wx.scripture.book').fetch().then((books: any[]) => {
-      const bookNodes: Node[] = books.map((b, i) => ({
-        id: `book_${b.id}`,
-        label: b.name,
-        type: "book",
-        x: Math.random() * 800,
-        y: Math.random() * 600,
-        vx: (Math.random() - 0.5) * 1,
-        vy: (Math.random() - 0.5) * 1,
-        radius: 28,
-      }))
-      
-      const bookEdges: Edge[] = books.map((b) => ({
-        source: "n12", // Connecting to Makkah/Madinah conceptually
-        target: `book_${b.id}`,
-        strength: 0.6
-      }))
+    client
+      .model("wx.scripture.book")
+      .fetch()
+      .then((books: any[]) => {
+        const bookNodes: Node[] = books.map((b, i) => ({
+          id: `book_${b.id}`,
+          label: b.name,
+          type: "book",
+          x: Math.random() * 800,
+          y: Math.random() * 600,
+          vx: (Math.random() - 0.5) * 1,
+          vy: (Math.random() - 0.5) * 1,
+          radius: 28,
+        }))
 
-      setNodes([...KNOWLEDGE_NODES, ...bookNodes])
-      setEdges([...KNOWLEDGE_EDGES, ...bookEdges])
-    }).catch(console.error)
+        const bookEdges: Edge[] = books.map((b) => ({
+          source: "n12", // Connecting to Makkah/Madinah conceptually
+          target: `book_${b.id}`,
+          strength: 0.6,
+        }))
+
+        setNodes([...KNOWLEDGE_NODES, ...bookNodes])
+        setEdges([...KNOWLEDGE_EDGES, ...bookEdges])
+      })
+      .catch(console.error)
   }, [client])
 
   useEffect(() => {
@@ -425,7 +429,8 @@ export function IntelligenceGraphView() {
               <span className="h-2 w-2 rounded-full bg-[#ffaa00]" /> KONSEP
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-[#b829ff]" /> KITAB/SUMBER
+              <span className="h-2 w-2 rounded-full bg-[#b829ff]" />{" "}
+              KITAB/SUMBER
             </span>
           </div>
         </div>

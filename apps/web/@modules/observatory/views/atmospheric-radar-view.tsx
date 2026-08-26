@@ -58,7 +58,7 @@ export function AtmosphericRadarView() {
 
   useEffect(() => {
     setMounted(true)
-    request('GET', '/api/external/rainviewer')
+    request("GET", "/api/external/rainviewer")
       .then((data: any) => {
         if (data?.radar?.past?.length > 0) {
           setRainTimestamp(data.radar.past[data.radar.past.length - 1].time)

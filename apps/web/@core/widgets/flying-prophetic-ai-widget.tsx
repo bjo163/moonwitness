@@ -15,7 +15,6 @@ export function FlyingPropheticAIWidget() {
   // Jika sedang berada langsung di halaman /diagnostik-hikmah (yang sudah fullscreen), kita sembunyikan widget terbangnya agar tidak duplikatif
   const isOnDedicatedPage = pathname === "/diagnostik-hikmah"
 
-  
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {

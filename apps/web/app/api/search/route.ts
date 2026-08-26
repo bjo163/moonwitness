@@ -11,13 +11,16 @@ export async function GET(request: Request) {
   }
 
   try {
-    const json = await moonClientInstance.request("GET", `/api/witness/quran/search?q=${encodeURIComponent(query)}`)
+    const json = await moonClientInstance.request(
+      "GET",
+      `/api/witness/quran/search?q=${encodeURIComponent(query)}`
+    )
 
     const results = (json.ayahs || []).map((a: any) => ({
       type: "Qur'an",
       title: `Surah ${a.surahId}, Ayah ${a.number}`,
       link: `/scripture/1?book=${a.surahId}#ayah-${a.number}`,
-      snippet: a.textId || a.textEn
+      snippet: a.textId || a.textEn,
     }))
 
     return NextResponse.json({ results })

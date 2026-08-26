@@ -153,9 +153,12 @@ const HISTORIC_QUAKES: HistoricQuake[] = [
 
 // ── MAGNITUDE COLOR SYSTEM ───────────────────────────────
 function getMagnitudeStyle(mag: number) {
-  if (mag >= 9.0) return { color: "#FF0055", glow: "rgba(255,0,85,0.3)", label: "MEGA" }
-  if (mag >= 8.0) return { color: "#FF3355", glow: "rgba(255,51,85,0.25)", label: "GREAT" }
-  if (mag >= 7.0) return { color: "#FF9900", glow: "rgba(255,153,0,0.2)", label: "MAJOR" }
+  if (mag >= 9.0)
+    return { color: "#FF0055", glow: "rgba(255,0,85,0.3)", label: "MEGA" }
+  if (mag >= 8.0)
+    return { color: "#FF3355", glow: "rgba(255,51,85,0.25)", label: "GREAT" }
+  if (mag >= 7.0)
+    return { color: "#FF9900", glow: "rgba(255,153,0,0.2)", label: "MAJOR" }
   return { color: "#FFE600", glow: "rgba(255,230,0,0.2)", label: "STRONG" }
 }
 
@@ -245,7 +248,10 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
 
       {/* Expanded details */}
       {isExpanded && (
-        <div className="border-t px-4 pb-4 pt-3" style={{ borderColor: `${magStyle.color}15` }}>
+        <div
+          className="border-t px-4 pt-3 pb-4"
+          style={{ borderColor: `${magStyle.color}15` }}
+        >
           <p className="mb-3 font-mono text-[9px] leading-relaxed text-primary">
             {quake.description}
           </p>
@@ -255,7 +261,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
               <span className="block font-mono text-[7px] font-bold tracking-widest text-primary">
                 CASUALTIES
               </span>
-              <span className="font-mono text-xs font-bold text-danger">
+              <span className="text-danger font-mono text-xs font-bold">
                 {quake.casualties}
               </span>
             </div>
@@ -411,7 +417,7 @@ export function QuakeArchiveView() {
               placeholder="QUERY DATABASE..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full border border-primary/15 bg-transparent py-2 pl-9 pr-3 font-mono text-[10px] font-bold tracking-widest text-foreground placeholder:text-primary/50 focus:border-accent/40 focus:outline-none"
+              className="w-full border border-primary/15 bg-transparent py-2 pr-3 pl-9 font-mono text-[10px] font-bold tracking-widest text-foreground placeholder:text-primary/50 focus:border-accent/40 focus:outline-none"
             />
           </div>
 
@@ -420,7 +426,7 @@ export function QuakeArchiveView() {
             onClick={() =>
               setSortBy(sortBy === "magnitude" ? "date" : "magnitude")
             }
-            className="btn-clip flex items-center gap-2 border border-primary/20 px-3 py-2 font-mono text-[9px] font-bold tracking-widest text-primary transition-all hover:border-primary/40"
+            className="flex items-center gap-2 border border-primary/20 px-3 py-2 font-mono text-[9px] font-bold tracking-widest text-primary transition-all btn-clip hover:border-primary/40"
           >
             <ArrowUpDown className="h-3.5 w-3.5" />
             SORT: {sortBy === "magnitude" ? "MAGNITUDE" : "DATE"}
@@ -450,7 +456,7 @@ export function QuakeArchiveView() {
           <span className="block font-mono text-[8px] font-bold tracking-widest text-primary">
             MAX MAGNITUDE
           </span>
-          <span className="font-mono text-lg font-bold text-danger">
+          <span className="text-danger font-mono text-lg font-bold">
             {filteredQuakes.length > 0
               ? Math.max(...filteredQuakes.map((q) => q.magnitude)).toFixed(1)
               : "—"}
@@ -460,7 +466,7 @@ export function QuakeArchiveView() {
           <span className="block font-mono text-[8px] font-bold tracking-widest text-primary">
             TSUNAMI EVENTS
           </span>
-          <span className="font-mono text-lg font-bold text-system">
+          <span className="text-system font-mono text-lg font-bold">
             {filteredQuakes.filter((q) => q.tsunamiGenerated).length}
           </span>
         </div>

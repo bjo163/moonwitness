@@ -4,7 +4,10 @@ import { moonClientInstance } from "@core/store/moon-store"
 export async function GET(request: Request) {
   try {
     // Fetch all scriptures from the Witness API Gateway
-    const json = await moonClientInstance.request("GET", "/api/witness/scriptures")
+    const json = await moonClientInstance.request(
+      "GET",
+      "/api/witness/scriptures"
+    )
 
     // Map new API shape to what the frontend expects
     return NextResponse.json({

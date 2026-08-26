@@ -37,37 +37,63 @@ import { buildNavigation } from "@modules/index"
 function getIcon(name?: string) {
   const props = { className: "w-4 h-4 shrink-0" }
   switch (name) {
-    case "LayoutDashboard": return <LayoutDashboard {...props} />
-    case "Target":          return <Target {...props} />
-    case "Telescope":       return <Telescope {...props} />
-    case "BookOpen":        return <BookOpen {...props} />
-    case "ScrollText":      return <ScrollText {...props} />
-    case "Clock":           return <Clock {...props} />
-    case "Network":         return <Network {...props} />
-    case "Brain":           return <Brain {...props} />
-    case "FolderKanban":    return <FolderKanban {...props} />
-    case "CheckSquare":     return <CheckSquare {...props} />
-    case "BarChart3":       return <BarChart3 {...props} />
-    case "Users":           return <Users {...props} />
-    case "Globe":           return <Globe {...props} />
-    case "FlaskConical":    return <FlaskConical {...props} />
-    case "Activity":        return <Activity {...props} />
-    case "Settings":        return <Settings {...props} />
-    case "ShieldCheck":     return <ShieldCheck {...props} />
-    case "Bell":            return <Bell {...props} />
-    case "CreditCard":      return <CreditCard {...props} />
-    case "User":            return <User {...props} />
-    case "Scale":           return <Scale {...props} />
-    case "Crosshair":       return <Crosshair {...props} />
-    case "Database":        return <Database {...props} />
-    default:                return <LayoutDashboard {...props} />
+    case "LayoutDashboard":
+      return <LayoutDashboard {...props} />
+    case "Target":
+      return <Target {...props} />
+    case "Telescope":
+      return <Telescope {...props} />
+    case "BookOpen":
+      return <BookOpen {...props} />
+    case "ScrollText":
+      return <ScrollText {...props} />
+    case "Clock":
+      return <Clock {...props} />
+    case "Network":
+      return <Network {...props} />
+    case "Brain":
+      return <Brain {...props} />
+    case "FolderKanban":
+      return <FolderKanban {...props} />
+    case "CheckSquare":
+      return <CheckSquare {...props} />
+    case "BarChart3":
+      return <BarChart3 {...props} />
+    case "Users":
+      return <Users {...props} />
+    case "Globe":
+      return <Globe {...props} />
+    case "FlaskConical":
+      return <FlaskConical {...props} />
+    case "Activity":
+      return <Activity {...props} />
+    case "Settings":
+      return <Settings {...props} />
+    case "ShieldCheck":
+      return <ShieldCheck {...props} />
+    case "Bell":
+      return <Bell {...props} />
+    case "CreditCard":
+      return <CreditCard {...props} />
+    case "User":
+      return <User {...props} />
+    case "Scale":
+      return <Scale {...props} />
+    case "Crosshair":
+      return <Crosshair {...props} />
+    case "Database":
+      return <Database {...props} />
+    default:
+      return <LayoutDashboard {...props} />
   }
 }
 
 export function ErpSidebar() {
   const pathname = usePathname()
   const { logout } = useMoonStore()
-  const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({})
+  const [expandedModules, setExpandedModules] = useState<
+    Record<string, boolean>
+  >({})
 
   const handleLogout = () => {
     logout()
@@ -123,17 +149,22 @@ export function ErpSidebar() {
                       >
                         <span className="flex items-center gap-2">
                           {getIcon(mod.icon)}
-                          <span className="font-semibold tracking-wider uppercase text-[10px]">{mod.label}</span>
+                          <span className="text-[10px] font-semibold tracking-wider uppercase">
+                            {mod.label}
+                          </span>
                         </span>
-                        {isExpanded
-                          ? <ChevronDown className="w-3 h-3 opacity-50" />
-                          : <ChevronRight className="w-3 h-3 opacity-50" />
-                        }
+                        {isExpanded ? (
+                          <ChevronDown className="h-3 w-3 opacity-50" />
+                        ) : (
+                          <ChevronRight className="h-3 w-3 opacity-50" />
+                        )}
                       </button>
                       {isExpanded && (
-                        <ul className="ml-4 mt-0.5 space-y-0.5 border-l border-cyan-500/10 pl-3">
+                        <ul className="mt-0.5 ml-4 space-y-0.5 border-l border-cyan-500/10 pl-3">
                           {mod.subLinks?.map((sub) => {
-                            const isActive = pathname === sub.href || pathname?.startsWith(`${sub.href}/`)
+                            const isActive =
+                              pathname === sub.href ||
+                              pathname?.startsWith(`${sub.href}/`)
                             return (
                               <li key={sub.href}>
                                 <Link
@@ -179,14 +210,23 @@ export function ErpSidebar() {
           </p>
           <ul className="space-y-1">
             {[
-              { label: "My Profile",      href: "/erp/profile",       icon: "User" },
-              { label: "Settings",        href: "/erp/settings",      icon: "Settings" },
-              { label: "Security Center", href: "/erp/security",      icon: "ShieldCheck" },
-              { label: "Notifications",   href: "/erp/notifications", icon: "Bell" },
-              { label: "Organizations",   href: "/erp/orgs",          icon: "Users" },
-              { label: "Billing",         href: "/erp/billing",       icon: "CreditCard" },
+              { label: "My Profile", href: "/erp/profile", icon: "User" },
+              { label: "Settings", href: "/erp/settings", icon: "Settings" },
+              {
+                label: "Security Center",
+                href: "/erp/security",
+                icon: "ShieldCheck",
+              },
+              {
+                label: "Notifications",
+                href: "/erp/notifications",
+                icon: "Bell",
+              },
+              { label: "Organizations", href: "/erp/orgs", icon: "Users" },
+              { label: "Billing", href: "/erp/billing", icon: "CreditCard" },
             ].map((item) => {
-              const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`)
+              const isActive =
+                pathname === item.href || pathname?.startsWith(`${item.href}/`)
               return (
                 <li key={item.href}>
                   <Link
@@ -215,8 +255,8 @@ export function ErpSidebar() {
         <div className="flex items-center gap-3">
           <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-cyan-500/30 bg-cyan-500/10">
             <Target className="h-5 w-5 text-cyan-400 opacity-50" />
-            <div className="absolute inset-0 rounded-full border border-cyan-400 border-t-transparent animate-[spin_4s_linear_infinite]" />
-            <div className="absolute inset-1 rounded-full border border-cyan-500/50 border-b-transparent animate-[spin_3s_linear_infinite_reverse]" />
+            <div className="absolute inset-0 animate-[spin_4s_linear_infinite] rounded-full border border-cyan-400 border-t-transparent" />
+            <div className="absolute inset-1 animate-[spin_3s_linear_infinite_reverse] rounded-full border border-cyan-500/50 border-b-transparent" />
           </div>
           <div className="flex flex-col">
             <span className="font-sans text-xs font-semibold text-emerald-400">
@@ -227,7 +267,7 @@ export function ErpSidebar() {
             </span>
           </div>
         </div>
-        <button className="mt-3 w-full rounded-md border border-cyan-500/30 px-3 py-1.5 font-sans text-[10px] text-cyan-400 transition-colors hover:bg-cyan-500/10 flex items-center justify-center gap-2">
+        <button className="mt-3 flex w-full items-center justify-center gap-2 rounded-md border border-cyan-500/30 px-3 py-1.5 font-sans text-[10px] text-cyan-400 transition-colors hover:bg-cyan-500/10">
           View System Health &rarr;
         </button>
       </div>

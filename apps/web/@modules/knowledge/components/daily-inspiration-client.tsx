@@ -346,57 +346,58 @@ export function DailyInspirationClient() {
     setTimeout(() => setIsZapping(false), 400) // End visual glitch
 
     try {
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext
+      const AudioContextClass =
+        window.AudioContext || (window as any).webkitAudioContext
       if (!AudioContextClass) return
-      
+
       const ctx = new AudioContextClass()
       const now = ctx.currentTime
-      
+
       // 1. High Voltage Electric Crackle (Sawtooth)
       const crackle = ctx.createOscillator()
       const crackleGain = ctx.createGain()
-      crackle.type = 'sawtooth'
+      crackle.type = "sawtooth"
       crackle.connect(crackleGain)
       crackleGain.connect(ctx.destination)
-      
+
       crackle.frequency.setValueAtTime(150, now)
       crackle.frequency.exponentialRampToValueAtTime(1200, now + 0.3) // Sweep up for sci-fi feel
-      
+
       // 2. Modulator to create the "Zzzzzzt" stutter effect (Square wave LFO at 50Hz)
       const modulator = ctx.createOscillator()
       const modGain = ctx.createGain()
-      modulator.type = 'square'
+      modulator.type = "square"
       modulator.frequency.value = 50 // 50 Hz electric hum rate
       modulator.connect(modGain)
-      
+
       // Modulate the volume of the crackle to make it stutter rapidly
       modGain.connect(crackleGain.gain)
       modGain.gain.setValueAtTime(0.4, now)
-      
+
       // Overall volume envelope for the zap
       crackleGain.gain.setValueAtTime(0, now)
       crackleGain.gain.linearRampToValueAtTime(0.4, now + 0.02) // Sharp attack
       crackleGain.gain.exponentialRampToValueAtTime(0.01, now + 0.4) // Fast decay
-      
+
       crackle.start(now)
       modulator.start(now)
       crackle.stop(now + 0.4)
       modulator.stop(now + 0.4)
-      
+
       // 3. Sub-bass Thump (Gives the electric shock some weight/punch)
       const sub = ctx.createOscillator()
       const subGain = ctx.createGain()
-      sub.type = 'sine'
+      sub.type = "sine"
       sub.connect(subGain)
       subGain.connect(ctx.destination)
-      
+
       sub.frequency.setValueAtTime(120, now)
       sub.frequency.exponentialRampToValueAtTime(30, now + 0.3)
-      
+
       subGain.gain.setValueAtTime(0, now)
       subGain.gain.linearRampToValueAtTime(0.5, now + 0.02)
       subGain.gain.exponentialRampToValueAtTime(0.01, now + 0.3)
-      
+
       sub.start(now)
       sub.stop(now + 0.3)
     } catch (e) {
@@ -1055,7 +1056,7 @@ ${transmissionText}`
         id="whatsapp-share-card"
         className={`relative w-full overflow-hidden rounded-[2rem] border border-white/5 p-6 font-sans text-white shadow-[0_20px_60px_rgba(0,10,30,0.8)] backdrop-blur-2xl sm:p-10 ${
           isZapping
-            ? "bg-cyan-500/30 brightness-150 contrast-125 saturate-150 translate-x-[2px] -translate-y-[2px] transition-none"
+            ? "translate-x-[2px] -translate-y-[2px] bg-cyan-500/30 brightness-150 contrast-125 saturate-150 transition-none"
             : "bg-[#0a0f1d]/60 transition-all duration-700"
         }`}
       >
@@ -1084,11 +1085,11 @@ ${transmissionText}`
         {/* ──── HEADER BRANDING ──── */}
         <div className="relative z-10 mb-8 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div 
+            <div
               onClick={triggerZapEffect}
               className={`flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border bg-gradient-to-br shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-transform hover:scale-105 active:scale-95 ${
-                isZapping 
-                  ? "border-cyan-400 bg-cyan-400/50 scale-110 shadow-[0_0_40px_rgba(34,211,238,1)]" 
+                isZapping
+                  ? "scale-110 border-cyan-400 bg-cyan-400/50 shadow-[0_0_40px_rgba(34,211,238,1)]"
                   : "border-blue-500/30 from-blue-500/20 to-purple-500/10"
               }`}
               title="Play Futuristic Scan Sound"

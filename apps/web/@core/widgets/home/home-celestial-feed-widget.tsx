@@ -44,12 +44,14 @@ export function HomeCelestialFeedWidget() {
         </div>
       </div>
 
-      <div className="my-auto flex overflow-x-auto snap-x hide-scrollbar gap-3 pb-2 sm:grid sm:grid-cols-4 sm:overflow-x-visible sm:pb-0">
+      <div className="hide-scrollbar my-auto flex snap-x gap-3 overflow-x-auto pb-2 sm:grid sm:grid-cols-4 sm:overflow-x-visible sm:pb-0">
         {/* Cam 1: LUNAR OPTICS */}
         <div className="group relative flex w-[160px] shrink-0 snap-center flex-col items-center justify-between overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] p-2.5 shadow-inner backdrop-blur-md transition-all hover:border-primary sm:w-auto">
           <div className="absolute top-1 right-1 z-10 flex items-center gap-1 rounded bg-black/60 px-1 backdrop-blur">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-            <span className="font-mono text-[6px] text-emerald-400">TRACKING</span>
+            <span className="font-mono text-[6px] text-emerald-400">
+              TRACKING
+            </span>
           </div>
           <div className="relative my-1 flex h-24 w-full items-center justify-center overflow-hidden rounded-md border border-white/10 bg-black">
             <img
@@ -75,7 +77,9 @@ export function HomeCelestialFeedWidget() {
           <div className="relative my-1 flex h-24 w-full items-center justify-center overflow-hidden rounded-md border border-white/10 bg-black">
             <img
               src={liveEarth}
-              onError={(e) => { e.currentTarget.src = "/assets/cam_earth.png" }}
+              onError={(e) => {
+                e.currentTarget.src = "/assets/cam_earth.png"
+              }}
               alt="Live Earth NOAA"
               className="h-[120%] w-[120%] object-cover object-center transition-transform duration-700 group-hover:scale-110"
             />
@@ -92,12 +96,16 @@ export function HomeCelestialFeedWidget() {
         <div className="group relative flex w-[160px] shrink-0 snap-center flex-col items-center justify-between overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] p-2.5 shadow-inner backdrop-blur-md transition-all hover:border-fuchsia-400 sm:w-auto">
           <div className="absolute top-1 right-1 z-10 flex items-center gap-1 rounded bg-black/60 px-1 backdrop-blur">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-            <span className="font-mono text-[6px] text-emerald-400">TRACKING</span>
+            <span className="font-mono text-[6px] text-emerald-400">
+              TRACKING
+            </span>
           </div>
           <div className="relative my-1 flex h-24 w-full items-center justify-center overflow-hidden rounded-md border border-white/10 bg-black">
             <img
               src={deepSkyImg}
-              onError={(e) => { e.currentTarget.src = "/assets/galaxy_milkyway_bg.png" }}
+              onError={(e) => {
+                e.currentTarget.src = "/assets/galaxy_milkyway_bg.png"
+              }}
               alt={apod?.title ?? "Deep Sky"}
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
@@ -119,7 +127,9 @@ export function HomeCelestialFeedWidget() {
           <div className="relative my-1 flex h-24 w-full items-center justify-center overflow-hidden rounded-md border border-white/10 bg-black">
             <img
               src={liveSunRed}
-              onError={(e) => { e.currentTarget.src = "/assets/cam_sun.png" }}
+              onError={(e) => {
+                e.currentTarget.src = "/assets/cam_sun.png"
+              }}
               alt="NASA SDO AIA-304"
               className="h-[110%] w-[110%] object-cover object-center mix-blend-screen transition-transform duration-700 group-hover:scale-110"
             />

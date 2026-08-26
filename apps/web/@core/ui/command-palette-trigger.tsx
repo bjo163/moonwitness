@@ -15,7 +15,6 @@ export function CommandPaletteTrigger({
   const mounted = useMounted()
   const colorHex = THEME_TOKENS.colors[accentColor]
 
-  
   return (
     <button
       onClick={onClick}

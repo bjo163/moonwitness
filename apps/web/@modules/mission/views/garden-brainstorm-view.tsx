@@ -4,7 +4,10 @@ import { FormEvent, useState } from "react"
 import { AlertTriangle, LoaderCircle, Send, Sprout } from "lucide-react"
 import { ContextBlock, Panel, PanelHeader } from "@core/ui"
 import { GARDEN_BRAINSTORM_CONFIG } from "../data/garden-brainstorm.config"
-import { BrainstormTask, parseTasksFromMarkdown } from "../data/garden-brainstorm-parser"
+import {
+  BrainstormTask,
+  parseTasksFromMarkdown,
+} from "../data/garden-brainstorm-parser"
 
 type BrainstormForm = {
   project: string
@@ -41,21 +44,30 @@ export function GardenBrainstormView() {
     setIsSubmitting(true)
 
     try {
-      const response = await fetch("/api/mission/garden-brainstorm?format=json", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      })
+      const response = await fetch(
+        "/api/mission/garden-brainstorm?format=json",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        }
+      )
 
       if (response.status === 422) {
-        const payload = (await response.json()) as { clarificationQuestions: string[] }
+        const payload = (await response.json()) as {
+          clarificationQuestions: string[]
+        }
         setQuestions(payload.clarificationQuestions)
         return
       }
 
       if (!response.ok) {
-        const payload = (await response.json().catch(() => null)) as { error?: string } | null
-        throw new Error(payload?.error || "The brainstorm service is unavailable.")
+        const payload = (await response.json().catch(() => null)) as {
+          error?: string
+        } | null
+        throw new Error(
+          payload?.error || "The brainstorm service is unavailable."
+        )
       }
 
       const payload = (await response.json()) as {
@@ -131,7 +143,11 @@ export function GardenBrainstormView() {
                 disabled={isSubmitting}
                 className="btn-primary flex w-full items-center justify-center gap-2 px-4 py-2 text-xs btn-clip disabled:opacity-50"
               >
-                {isSubmitting ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                {isSubmitting ? (
+                  <LoaderCircle className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Send className="h-4 w-4" />
+                )}
                 {isSubmitting ? "CULTIVATING PLAN..." : "GENERATE 10 TASKS"}
               </button>
             </form>
@@ -146,14 +162,21 @@ export function GardenBrainstormView() {
                 accentColor="success"
                 subtitle="Exactly ten actionable tasks appear here after context is complete."
               />
-              <ResultState result={result} tasks={tasks} questions={questions} error={error} />
+              <ResultState
+                result={result}
+                tasks={tasks}
+                questions={questions}
+                error={error}
+              />
             </Panel>
 
             <Panel level="level1" accentColor="warning">
               <div className="flex gap-3">
-                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-warning" />
+                <AlertTriangle className="text-warning mt-0.5 h-4 w-4 shrink-0" />
                 <div className="space-y-2 text-[11px] leading-relaxed text-foreground/80">
-                  <p className="font-bold text-warning">{GARDEN_BRAINSTORM_CONFIG.archetype.name}</p>
+                  <p className="text-warning font-bold">
+                    {GARDEN_BRAINSTORM_CONFIG.archetype.name}
+                  </p>
                   <p>{GARDEN_BRAINSTORM_CONFIG.archetype.description}</p>
                   {GARDEN_BRAINSTORM_CONFIG.boundaries.map((boundary) => (
                     <p key={boundary}>{boundary}</p>
@@ -210,27 +233,57 @@ function ResultState({
 }) {
   const parsedTasks = tasks.length > 0 ? tasks : parseTasksFromMarkdown(result)
 
-  if (error) return <p className="mt-4 border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive">{error}</p>
-  if (questions.length > 0) return <ul className="mt-4 space-y-2 border border-warning/30 bg-warning/10 p-3 text-xs text-warning">{questions.map((question) => <li key={question}>{question}</li>)}</ul>
-  if (!result) return <p className="mt-4 border border-primary/15 bg-space/60 p-4 text-xs leading-relaxed text-primary/70">Complete the project context to receive a focused action plan.</p>
+  if (error)
+    return (
+      <p className="mt-4 border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive">
+        {error}
+      </p>
+    )
+  if (questions.length > 0)
+    return (
+      <ul className="border-warning/30 bg-warning/10 text-warning mt-4 space-y-2 border p-3 text-xs">
+        {questions.map((question) => (
+          <li key={question}>{question}</li>
+        ))}
+      </ul>
+    )
+  if (!result)
+    return (
+      <p className="bg-space/60 mt-4 border border-primary/15 p-4 text-xs leading-relaxed text-primary/70">
+        Complete the project context to receive a focused action plan.
+      </p>
+    )
 
   if (!parsedTasks) {
-    return <pre className="mt-4 max-h-[620px] overflow-auto whitespace-pre-wrap border border-success/25 bg-space/70 p-4 text-xs leading-relaxed text-foreground">{result}</pre>
+    return (
+      <pre className="border-success/25 bg-space/70 mt-4 max-h-[620px] overflow-auto border p-4 text-xs leading-relaxed whitespace-pre-wrap text-foreground">
+        {result}
+      </pre>
+    )
   }
 
   return (
     <div className="mt-4 space-y-3">
       {parsedTasks.map((task, index) => (
-        <div key={`${task.title}-${index}`} className="tag-clip border border-success/25 bg-space/70 p-3">
-          <div className="mb-2 flex flex-wrap items-center justify-between gap-2 border-b border-success/20 pb-2">
-            <p className="text-[10px] font-bold text-success">TASK {String(index + 1).padStart(2, "0")}</p>
+        <div
+          key={`${task.title}-${index}`}
+          className="tag-clip border-success/25 bg-space/70 border p-3"
+        >
+          <div className="border-success/20 mb-2 flex flex-wrap items-center justify-between gap-2 border-b pb-2">
+            <p className="text-success text-[10px] font-bold">
+              TASK {String(index + 1).padStart(2, "0")}
+            </p>
             <div className="flex items-center gap-2 text-[10px]">
-              <span className="tag-clip tag-clip-green px-2 py-0.5 font-bold">{task.type}</span>
+              <span className="tag-clip tag-clip-green px-2 py-0.5 font-bold">
+                {task.type}
+              </span>
               <span className="font-bold text-primary">{task.score}/99</span>
             </div>
           </div>
           <p className="text-sm font-bold text-foreground">{task.title}</p>
-          <p className="mt-1 text-xs leading-relaxed text-foreground/80">{task.goal}</p>
+          <p className="mt-1 text-xs leading-relaxed text-foreground/80">
+            {task.goal}
+          </p>
         </div>
       ))}
     </div>

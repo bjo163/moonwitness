@@ -1,4 +1,4 @@
-import type { Knex } from 'knex'
+import type { Knex } from "knex"
 
 export async function up(db: Knex): Promise<void> {
   await db.raw(`ALTER TABLE "vx_user" ALTER COLUMN created_at TYPE timestamp`)
@@ -32,32 +32,88 @@ export async function up(db: Knex): Promise<void> {
 }
 
 export async function down(db: Knex): Promise<void> {
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for vx_user.created_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for vx_user.updated_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for vx_user.deleted_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for vx_node.created_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for vx_node.updated_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for vx_node.deleted_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for vx_org.created_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for vx_org.updated_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for vx_zone.created_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for vx_zone.updated_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for vx_coin.created_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for vx_coin.updated_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for vx_role.created_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for vx_role.updated_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for mx_model.created_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for mx_model.updated_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for mx_grant.created_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for mx_grant.updated_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for mx_rule.created_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for mx_rule.updated_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for ix_lang.created_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for ix_lang.updated_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for ix_dict.created_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for ix_dict.updated_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for fx_msg.created_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for fx_msg.updated_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for fx_track.created_at`)
-  await db.raw(`-- Manual intervention required to down-migrate column type alteration for fx_track.updated_at`)
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for vx_user.created_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for vx_user.updated_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for vx_user.deleted_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for vx_node.created_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for vx_node.updated_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for vx_node.deleted_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for vx_org.created_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for vx_org.updated_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for vx_zone.created_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for vx_zone.updated_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for vx_coin.created_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for vx_coin.updated_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for vx_role.created_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for vx_role.updated_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for mx_model.created_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for mx_model.updated_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for mx_grant.created_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for mx_grant.updated_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for mx_rule.created_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for mx_rule.updated_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for ix_lang.created_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for ix_lang.updated_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for ix_dict.created_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for ix_dict.updated_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for fx_msg.created_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for fx_msg.updated_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for fx_track.created_at`
+  )
+  await db.raw(
+    `-- Manual intervention required to down-migrate column type alteration for fx_track.updated_at`
+  )
 }

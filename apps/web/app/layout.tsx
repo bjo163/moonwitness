@@ -4,7 +4,11 @@ import { Orbitron, JetBrains_Mono, Geist, Amiri } from "next/font/google"
 import "@workspace/ui/globals.css"
 import { Taskbar, PwaRegister, Cosmic3DBackground } from "@core/shell"
 import { LanguageProvider, AudioProvider, ToastProvider } from "@core/contexts"
-import { FlyingPropheticAIWidget, OnboardingWizard, GlobalTickerWidget } from "@core/widgets"
+import {
+  FlyingPropheticAIWidget,
+  OnboardingWizard,
+  GlobalTickerWidget,
+} from "@core/widgets"
 import { TacticalToastContainer } from "@core/ui"
 import { cn } from "@workspace/ui/lib/utils"
 

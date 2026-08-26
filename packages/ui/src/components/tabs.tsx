@@ -15,7 +15,7 @@ function Tabs({
       data-slot="tabs"
       data-orientation={orientation}
       className={cn(
-        "group/tabs flex gap-2 data-horizontal:flex-col font-mono",
+        "group/tabs flex gap-2 font-mono data-horizontal:flex-col",
         className
       )}
       {...props}
@@ -24,12 +24,12 @@ function Tabs({
 }
 
 const tabsListVariants = cva(
-  "group/tabs-list inline-flex w-fit items-center justify-center tag-clip p-1 bg-panel border border-primary/30 text-primary",
+  "group/tabs-list tag-clip bg-panel inline-flex w-fit items-center justify-center border border-primary/30 p-1 text-primary",
   {
     variants: {
       variant: {
         default: "bg-panel",
-        line: "gap-1 bg-transparent border-none",
+        line: "gap-1 border-none bg-transparent",
       },
     },
     defaultVariants: {
@@ -58,7 +58,7 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={cn(
-        "tag-clip inline-flex items-center justify-center gap-1.5 border border-transparent px-3 py-1.5 font-mono text-xs font-black tracking-widest uppercase transition-all text-primary hover:text-primary hover:bg-primary/10 data-active:bg-primary/20 data-active:text-primary data-active:border-primary data-active:shadow-[0_0_12px_rgba(0,240,255,0.3)] cursor-pointer",
+        "tag-clip inline-flex cursor-pointer items-center justify-center gap-1.5 border border-transparent px-3 py-1.5 font-mono text-xs font-black tracking-widest text-primary uppercase transition-all hover:bg-primary/10 hover:text-primary data-active:border-primary data-active:bg-primary/20 data-active:text-primary data-active:shadow-[0_0_12px_rgba(0,240,255,0.3)]",
         className
       )}
       {...props}
@@ -70,7 +70,7 @@ function TabsContent({ className, ...props }: TabsPrimitive.Panel.Props) {
   return (
     <TabsPrimitive.Panel
       data-slot="tabs-content"
-      className={cn("flex-1 text-xs font-mono outline-none pt-2", className)}
+      className={cn("flex-1 pt-2 font-mono text-xs outline-none", className)}
       {...props}
     />
   )

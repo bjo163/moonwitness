@@ -38,9 +38,18 @@ export async function POST(request: NextRequest) {
 
     // 1. Fetch live data via moonClientInstance (server-to-server)
     const [jktRes, nyRes, btcRes] = await Promise.all([
-      moonClientInstance.request("GET", "/api/external/weather?latitude=-6.2088&longitude=106.8456&current_weather=true"),
-      moonClientInstance.request("GET", "/api/external/weather?latitude=40.7128&longitude=-74.0060&current_weather=true"),
-      moonClientInstance.request("GET", "/api/external/binance/ticker?symbol=BTCUSDT"),
+      moonClientInstance.request(
+        "GET",
+        "/api/external/weather?latitude=-6.2088&longitude=106.8456&current_weather=true"
+      ),
+      moonClientInstance.request(
+        "GET",
+        "/api/external/weather?latitude=40.7128&longitude=-74.0060&current_weather=true"
+      ),
+      moonClientInstance.request(
+        "GET",
+        "/api/external/binance/ticker?symbol=BTCUSDT"
+      ),
     ])
 
     const jktData = jktRes.data || null

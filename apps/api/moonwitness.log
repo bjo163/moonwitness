@@ -13246,3 +13246,1613 @@
 [2026-08-16T15:14:34.014Z] [INFO] moon.rest: GET, POST      /api/cab.decision
 [2026-08-16T15:14:34.014Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.decision/:id
 [2026-08-16T15:14:34.018Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-08-26T13:55:32.893Z] [INFO] moon.schema: Schema sync: 0 applied, 0 pending
+[2026-08-26T13:55:32.893Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-08-26T13:55:32.894Z] [INFO] moon.rest: POST           /auth/login
+[2026-08-26T13:55:32.894Z] [INFO] moon.rest: POST           /auth/register
+[2026-08-26T13:55:32.894Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-08-26T13:55:32.894Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-08-26T13:55:32.894Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-08-26T13:55:32.895Z] [INFO] moon.rest: POST           /rpc
+[2026-08-26T13:55:32.895Z] [INFO] moon.rest: GET            /db/status
+[2026-08-26T13:55:32.895Z] [INFO] moon.rest: GET            /meta/models
+[2026-08-26T13:55:32.895Z] [INFO] moon.rest: GET            /live
+[2026-08-26T13:55:32.896Z] [INFO] moon.rest: GET            /openapi.json
+[2026-08-26T13:55:32.896Z] [INFO] moon.rest: GET            /docs
+[2026-08-26T13:55:32.896Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-08-26T13:55:32.896Z] [INFO] moon.rest: GET            /api/witness/scriptures
+[2026-08-26T13:55:32.896Z] [INFO] moon.rest: GET            /api/witness/quran/surahs
+[2026-08-26T13:55:32.896Z] [INFO] moon.rest: GET            /api/witness/quran/surah
+[2026-08-26T13:55:32.897Z] [INFO] moon.rest: GET            /api/witness/quran/search
+[2026-08-26T13:55:32.897Z] [INFO] moon.rest: GET            /api/witness/hadith/books
+[2026-08-26T13:55:32.897Z] [INFO] moon.rest: GET            /api/witness/hadith
+[2026-08-26T13:55:32.897Z] [INFO] moon.rest: GET            /api/witness/traditions
+[2026-08-26T13:55:32.897Z] [INFO] moon.rest: GET            /api/witness/asmaul-husna
+[2026-08-26T13:55:32.897Z] [INFO] moon.rest: GET            /api/witness/devotions
+[2026-08-26T13:55:32.898Z] [INFO] moon.rest: GET            /api/witness/astronomy/moon-phase
+[2026-08-26T13:55:32.898Z] [INFO] moon.rest: GET            /api/witness/astronomy/prayer-times
+[2026-08-26T13:55:32.898Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-26T13:55:32.898Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-26T13:55:32.898Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-26T13:55:32.899Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-26T13:55:32.899Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-26T13:55:32.899Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-26T13:55:32.899Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-26T13:55:32.899Z] [INFO] moon.rest: GET            /api/witness/bookmarks
+[2026-08-26T13:55:32.899Z] [INFO] moon.rest: GET            /api/witness/history
+[2026-08-26T13:55:32.900Z] [INFO] moon.rest: GET            /api/mizan/decision
+[2026-08-26T13:55:32.900Z] [INFO] moon.rest: GET            /api/mizan/summary
+[2026-08-26T13:55:32.900Z] [INFO] moon.rest: GET            /api/cab/summary
+[2026-08-26T13:55:32.900Z] [INFO] moon.rest: POST           /test-publish
+[2026-08-26T13:55:32.900Z] [INFO] moon.rest: GET            /api/external/performance/stats
+[2026-08-26T13:55:32.901Z] [INFO] moon.rest: GET            /api/witness/graph/entities
+[2026-08-26T13:55:32.901Z] [INFO] moon.rest: GET            /api/witness/graph/entities/:entityId/profile
+[2026-08-26T13:55:32.901Z] [INFO] moon.rest: GET            /api/witness/graph/passages
+[2026-08-26T13:55:32.901Z] [INFO] moon.rest: GET            /api/witness/graph/passages/:passageId/content
+[2026-08-26T13:55:32.901Z] [INFO] moon.rest: GET            /api/witness/graph/passages/:passageId/tree
+[2026-08-26T13:55:32.901Z] [INFO] moon.rest: GET            /api/witness/graph/figures/:entityId/mentions
+[2026-08-26T13:55:32.902Z] [INFO] moon.rest: GET            /api/external/nasa/neo
+[2026-08-26T13:55:32.902Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-26T13:55:32.902Z] [INFO] moon.rest: GET            /api/external/nasa/apod
+[2026-08-26T13:55:32.902Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-26T13:55:32.902Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-26T13:55:32.902Z] [INFO] moon.rest: GET            /api/external/noaa/kp-index
+[2026-08-26T13:55:32.903Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-26T13:55:32.903Z] [INFO] moon.rest: GET            /api/external/rainviewer
+[2026-08-26T13:55:32.903Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-26T13:55:32.903Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-26T13:55:32.903Z] [INFO] moon.rest: GET            /api/external/db/status
+[2026-08-26T13:55:32.904Z] [INFO] moon.rest: GET            /api/external/meta/models
+[2026-08-26T13:55:32.904Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-26T13:55:32.904Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-08-26T13:55:32.904Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-08-26T13:55:32.904Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-08-26T13:55:32.904Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-08-26T13:55:32.905Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-08-26T13:55:32.905Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-08-26T13:55:32.905Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-08-26T13:55:32.905Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-08-26T13:55:32.905Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-08-26T13:55:32.905Z] [INFO] moon.rest: GET, POST      /api/vx.zone.subdivision
+[2026-08-26T13:55:32.906Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone.subdivision/:id
+[2026-08-26T13:55:32.906Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-08-26T13:55:32.906Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-08-26T13:55:32.906Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-08-26T13:55:32.906Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-08-26T13:55:32.906Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-08-26T13:55:32.906Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-08-26T13:55:32.907Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-08-26T13:55:32.907Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-08-26T13:55:32.907Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-08-26T13:55:32.907Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-08-26T13:55:32.907Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-08-26T13:55:32.907Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-08-26T13:55:32.908Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-08-26T13:55:32.908Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-08-26T13:55:32.908Z] [INFO] moon.rest: GET, POST      /api/ix.timezone
+[2026-08-26T13:55:32.908Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.timezone/:id
+[2026-08-26T13:55:32.908Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-08-26T13:55:32.908Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-08-26T13:55:32.909Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-08-26T13:55:32.909Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-08-26T13:55:32.909Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-08-26T13:55:32.909Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-08-26T13:55:32.909Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-08-26T13:55:32.909Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-08-26T13:55:32.910Z] [INFO] moon.rest: GET, POST      /api/ir.model.data
+[2026-08-26T13:55:32.910Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.model.data/:id
+[2026-08-26T13:55:32.910Z] [INFO] moon.rest: GET, POST      /api/ir.sequence
+[2026-08-26T13:55:32.910Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.sequence/:id
+[2026-08-26T13:55:32.910Z] [INFO] moon.rest: GET, POST      /api/ir.config_parameter
+[2026-08-26T13:55:32.910Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.config_parameter/:id
+[2026-08-26T13:55:32.911Z] [INFO] moon.rest: GET, POST      /api/ir.attachment
+[2026-08-26T13:55:32.911Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.attachment/:id
+[2026-08-26T13:55:32.911Z] [INFO] moon.rest: GET, POST      /api/px.request
+[2026-08-26T13:55:32.911Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.request/:id
+[2026-08-26T13:55:32.911Z] [INFO] moon.rest: GET, POST      /api/px.cache
+[2026-08-26T13:55:32.911Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.cache/:id
+[2026-08-26T13:55:32.912Z] [INFO] moon.rest: GET, POST      /api/px.query
+[2026-08-26T13:55:32.912Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.query/:id
+[2026-08-26T13:55:32.912Z] [INFO] moon.rest: GET, POST      /api/px.system
+[2026-08-26T13:55:32.912Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.system/:id
+[2026-08-26T13:55:32.912Z] [INFO] moon.rest: GET, POST      /api/wx.entity
+[2026-08-26T13:55:32.912Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity/:id
+[2026-08-26T13:55:32.912Z] [INFO] moon.rest: GET, POST      /api/wx.entity.alias
+[2026-08-26T13:55:32.913Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity.alias/:id
+[2026-08-26T13:55:32.913Z] [INFO] moon.rest: GET, POST      /api/wx.entity.identifier
+[2026-08-26T13:55:32.913Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity.identifier/:id
+[2026-08-26T13:55:32.913Z] [INFO] moon.rest: GET, POST      /api/wx.source
+[2026-08-26T13:55:32.913Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source/:id
+[2026-08-26T13:55:32.913Z] [INFO] moon.rest: GET, POST      /api/wx.provenance
+[2026-08-26T13:55:32.914Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.provenance/:id
+[2026-08-26T13:55:32.914Z] [INFO] moon.rest: GET, POST      /api/wx.relation.type
+[2026-08-26T13:55:32.914Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.relation.type/:id
+[2026-08-26T13:55:32.914Z] [INFO] moon.rest: GET, POST      /api/wx.relation
+[2026-08-26T13:55:32.914Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.relation/:id
+[2026-08-26T13:55:32.914Z] [INFO] moon.rest: GET, POST      /api/wx.religion
+[2026-08-26T13:55:32.915Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.religion/:id
+[2026-08-26T13:55:32.915Z] [INFO] moon.rest: GET, POST      /api/wx.community
+[2026-08-26T13:55:32.915Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.community/:id
+[2026-08-26T13:55:32.915Z] [INFO] moon.rest: GET, POST      /api/wx.scripture
+[2026-08-26T13:55:32.915Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture/:id
+[2026-08-26T13:55:32.915Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.book
+[2026-08-26T13:55:32.915Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.book/:id
+[2026-08-26T13:55:32.916Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.verse
+[2026-08-26T13:55:32.916Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.verse/:id
+[2026-08-26T13:55:32.916Z] [INFO] moon.rest: GET, POST      /api/wx.tradition
+[2026-08-26T13:55:32.916Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition/:id
+[2026-08-26T13:55:32.916Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.item
+[2026-08-26T13:55:32.916Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.item/:id
+[2026-08-26T13:55:32.917Z] [INFO] moon.rest: GET, POST      /api/wx.devotion
+[2026-08-26T13:55:32.917Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.devotion/:id
+[2026-08-26T13:55:32.917Z] [INFO] moon.rest: GET, POST      /api/wx.asmaul.husna
+[2026-08-26T13:55:32.917Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.asmaul.husna/:id
+[2026-08-26T13:55:32.917Z] [INFO] moon.rest: GET, POST      /api/wx.bookmark
+[2026-08-26T13:55:32.917Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.bookmark/:id
+[2026-08-26T13:55:32.918Z] [INFO] moon.rest: GET, POST      /api/wx.history
+[2026-08-26T13:55:32.918Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.history/:id
+[2026-08-26T13:55:32.918Z] [INFO] moon.rest: GET, POST      /api/wx.passage
+[2026-08-26T13:55:32.918Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.passage/:id
+[2026-08-26T13:55:32.918Z] [INFO] moon.rest: GET, POST      /api/wx.text.edition
+[2026-08-26T13:55:32.919Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.text.edition/:id
+[2026-08-26T13:55:32.919Z] [INFO] moon.rest: GET, POST      /api/wx.content
+[2026-08-26T13:55:32.919Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.content/:id
+[2026-08-26T13:55:32.919Z] [INFO] moon.rest: GET, POST      /api/wx.root
+[2026-08-26T13:55:32.919Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.root/:id
+[2026-08-26T13:55:32.919Z] [INFO] moon.rest: GET, POST      /api/wx.lexeme
+[2026-08-26T13:55:32.920Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.lexeme/:id
+[2026-08-26T13:55:32.920Z] [INFO] moon.rest: GET, POST      /api/wx.lexical.occurrence
+[2026-08-26T13:55:32.920Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.lexical.occurrence/:id
+[2026-08-26T13:55:32.920Z] [INFO] moon.rest: GET, POST      /api/wx.revelation.event
+[2026-08-26T13:55:32.920Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.revelation.event/:id
+[2026-08-26T13:55:32.920Z] [INFO] moon.rest: GET, POST      /api/wx.revelation.event.passage
+[2026-08-26T13:55:32.921Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.revelation.event.passage/:id
+[2026-08-26T13:55:32.921Z] [INFO] moon.rest: GET, POST      /api/wx.figure
+[2026-08-26T13:55:32.921Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure/:id
+[2026-08-26T13:55:32.921Z] [INFO] moon.rest: GET, POST      /api/wx.figure.name
+[2026-08-26T13:55:32.921Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure.name/:id
+[2026-08-26T13:55:32.921Z] [INFO] moon.rest: GET, POST      /api/wx.figure.role
+[2026-08-26T13:55:32.922Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure.role/:id
+[2026-08-26T13:55:32.922Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.corpus
+[2026-08-26T13:55:32.922Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.corpus/:id
+[2026-08-26T13:55:32.922Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.unit
+[2026-08-26T13:55:32.922Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.unit/:id
+[2026-08-26T13:55:32.922Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.reference
+[2026-08-26T13:55:32.922Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.reference/:id
+[2026-08-26T13:55:32.923Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.attribution
+[2026-08-26T13:55:32.923Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.attribution/:id
+[2026-08-26T13:55:32.923Z] [INFO] moon.rest: GET, POST      /api/wx.transmission.chain
+[2026-08-26T13:55:32.923Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.transmission.chain/:id
+[2026-08-26T13:55:32.923Z] [INFO] moon.rest: GET, POST      /api/wx.transmission.link
+[2026-08-26T13:55:32.923Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.transmission.link/:id
+[2026-08-26T13:55:32.924Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.assessment
+[2026-08-26T13:55:32.924Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.assessment/:id
+[2026-08-26T13:55:32.924Z] [INFO] moon.rest: GET, POST      /api/wx.concept
+[2026-08-26T13:55:32.924Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.concept/:id
+[2026-08-26T13:55:32.924Z] [INFO] moon.rest: GET, POST      /api/wx.assertion
+[2026-08-26T13:55:32.924Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.assertion/:id
+[2026-08-26T13:55:32.925Z] [INFO] moon.rest: GET, POST      /api/wx.evidence
+[2026-08-26T13:55:32.925Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.evidence/:id
+[2026-08-26T13:55:32.925Z] [INFO] moon.rest: GET, POST      /api/wx.divine.expression
+[2026-08-26T13:55:32.925Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.divine.expression/:id
+[2026-08-26T13:55:32.925Z] [INFO] moon.rest: GET, POST      /api/wx.divine.expression.occurrence
+[2026-08-26T13:55:32.926Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.divine.expression.occurrence/:id
+[2026-08-26T13:55:32.926Z] [INFO] moon.rest: GET, POST      /api/wx.legacy.mapping
+[2026-08-26T13:55:32.926Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.legacy.mapping/:id
+[2026-08-26T13:55:32.926Z] [INFO] moon.rest: GET, POST      /api/wx.engine.run
+[2026-08-26T13:55:32.926Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.engine.run/:id
+[2026-08-26T13:55:32.926Z] [INFO] moon.rest: GET, POST      /api/wx.engine.result
+[2026-08-26T13:55:32.926Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.engine.result/:id
+[2026-08-26T13:55:32.927Z] [INFO] moon.rest: GET, POST      /api/wx.source.policy
+[2026-08-26T13:55:32.927Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.policy/:id
+[2026-08-26T13:55:32.927Z] [INFO] moon.rest: GET, POST      /api/wx.source.manifest
+[2026-08-26T13:55:32.927Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.manifest/:id
+[2026-08-26T13:55:32.927Z] [INFO] moon.rest: GET, POST      /api/wx.source.artifact
+[2026-08-26T13:55:32.927Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.artifact/:id
+[2026-08-26T13:55:32.928Z] [INFO] moon.rest: GET, POST      /api/wx.source.snapshot
+[2026-08-26T13:55:32.928Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.snapshot/:id
+[2026-08-26T13:55:32.928Z] [INFO] moon.rest: GET, POST      /api/kh.conversation
+[2026-08-26T13:55:32.928Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.conversation/:id
+[2026-08-26T13:55:32.928Z] [INFO] moon.rest: GET, POST      /api/kh.message
+[2026-08-26T13:55:32.928Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
+[2026-08-26T13:55:32.929Z] [INFO] moon.rest: GET, POST      /api/mz.case
+[2026-08-26T13:55:32.929Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.case/:id
+[2026-08-26T13:55:32.929Z] [INFO] moon.rest: GET, POST      /api/mz.assessment
+[2026-08-26T13:55:32.929Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.assessment/:id
+[2026-08-26T13:55:32.929Z] [INFO] moon.rest: GET, POST      /api/mz.filter
+[2026-08-26T13:55:32.929Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.filter/:id
+[2026-08-26T13:55:32.930Z] [INFO] moon.rest: GET, POST      /api/mz.reference
+[2026-08-26T13:55:32.930Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.reference/:id
+[2026-08-26T13:55:32.930Z] [INFO] moon.rest: GET, POST      /api/sg.operation
+[2026-08-26T13:55:32.930Z] [INFO] moon.rest: GET, PUT, DEL  /api/sg.operation/:id
+[2026-08-26T13:55:32.930Z] [INFO] moon.rest: GET, POST      /api/cab.project
+[2026-08-26T13:55:32.930Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.project/:id
+[2026-08-26T13:55:32.930Z] [INFO] moon.rest: GET, POST      /api/cab.task
+[2026-08-26T13:55:32.931Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.task/:id
+[2026-08-26T13:55:32.931Z] [INFO] moon.rest: GET, POST      /api/cab.change
+[2026-08-26T13:55:32.931Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.change/:id
+[2026-08-26T13:55:32.931Z] [INFO] moon.rest: GET, POST      /api/cab.meeting
+[2026-08-26T13:55:32.931Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.meeting/:id
+[2026-08-26T13:55:32.931Z] [INFO] moon.rest: GET, POST      /api/cab.decision
+[2026-08-26T13:55:32.931Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.decision/:id
+[2026-08-26T13:55:32.935Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-08-26T13:56:01.272Z] [INFO] moon.schema: Schema sync: 0 applied, 0 pending
+[2026-08-26T13:56:01.273Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-08-26T13:56:01.273Z] [INFO] moon.rest: POST           /auth/login
+[2026-08-26T13:56:01.273Z] [INFO] moon.rest: POST           /auth/register
+[2026-08-26T13:56:01.274Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-08-26T13:56:01.275Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-08-26T13:56:01.275Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-08-26T13:56:01.275Z] [INFO] moon.rest: POST           /rpc
+[2026-08-26T13:56:01.275Z] [INFO] moon.rest: GET            /db/status
+[2026-08-26T13:56:01.276Z] [INFO] moon.rest: GET            /meta/models
+[2026-08-26T13:56:01.276Z] [INFO] moon.rest: GET            /live
+[2026-08-26T13:56:01.276Z] [INFO] moon.rest: GET            /openapi.json
+[2026-08-26T13:56:01.276Z] [INFO] moon.rest: GET            /docs
+[2026-08-26T13:56:01.277Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-08-26T13:56:01.277Z] [INFO] moon.rest: GET            /api/witness/scriptures
+[2026-08-26T13:56:01.277Z] [INFO] moon.rest: GET            /api/witness/quran/surahs
+[2026-08-26T13:56:01.277Z] [INFO] moon.rest: GET            /api/witness/quran/surah
+[2026-08-26T13:56:01.278Z] [INFO] moon.rest: GET            /api/witness/quran/search
+[2026-08-26T13:56:01.278Z] [INFO] moon.rest: GET            /api/witness/hadith/books
+[2026-08-26T13:56:01.278Z] [INFO] moon.rest: GET            /api/witness/hadith
+[2026-08-26T13:56:01.278Z] [INFO] moon.rest: GET            /api/witness/traditions
+[2026-08-26T13:56:01.279Z] [INFO] moon.rest: GET            /api/witness/asmaul-husna
+[2026-08-26T13:56:01.279Z] [INFO] moon.rest: GET            /api/witness/devotions
+[2026-08-26T13:56:01.279Z] [INFO] moon.rest: GET            /api/witness/astronomy/moon-phase
+[2026-08-26T13:56:01.279Z] [INFO] moon.rest: GET            /api/witness/astronomy/prayer-times
+[2026-08-26T13:56:01.280Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-26T13:56:01.280Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-26T13:56:01.280Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-26T13:56:01.280Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-26T13:56:01.281Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-26T13:56:01.281Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-26T13:56:01.281Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-26T13:56:01.281Z] [INFO] moon.rest: GET            /api/witness/bookmarks
+[2026-08-26T13:56:01.282Z] [INFO] moon.rest: GET            /api/witness/history
+[2026-08-26T13:56:01.282Z] [INFO] moon.rest: GET            /api/mizan/decision
+[2026-08-26T13:56:01.282Z] [INFO] moon.rest: GET            /api/mizan/summary
+[2026-08-26T13:56:01.282Z] [INFO] moon.rest: GET            /api/cab/summary
+[2026-08-26T13:56:01.283Z] [INFO] moon.rest: POST           /test-publish
+[2026-08-26T13:56:01.283Z] [INFO] moon.rest: GET            /api/external/performance/stats
+[2026-08-26T13:56:01.283Z] [INFO] moon.rest: GET            /api/witness/graph/entities
+[2026-08-26T13:56:01.284Z] [INFO] moon.rest: GET            /api/witness/graph/entities/:entityId/profile
+[2026-08-26T13:56:01.284Z] [INFO] moon.rest: GET            /api/witness/graph/passages
+[2026-08-26T13:56:01.284Z] [INFO] moon.rest: GET            /api/witness/graph/passages/:passageId/content
+[2026-08-26T13:56:01.284Z] [INFO] moon.rest: GET            /api/witness/graph/passages/:passageId/tree
+[2026-08-26T13:56:01.285Z] [INFO] moon.rest: GET            /api/witness/graph/figures/:entityId/mentions
+[2026-08-26T13:56:01.285Z] [INFO] moon.rest: GET            /api/external/nasa/neo
+[2026-08-26T13:56:01.285Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-26T13:56:01.286Z] [INFO] moon.rest: GET            /api/external/nasa/apod
+[2026-08-26T13:56:01.286Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-26T13:56:01.287Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-26T13:56:01.287Z] [INFO] moon.rest: GET            /api/external/noaa/kp-index
+[2026-08-26T13:56:01.287Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-26T13:56:01.288Z] [INFO] moon.rest: GET            /api/external/rainviewer
+[2026-08-26T13:56:01.288Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-26T13:56:01.288Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-26T13:56:01.288Z] [INFO] moon.rest: GET            /api/external/db/status
+[2026-08-26T13:56:01.289Z] [INFO] moon.rest: GET            /api/external/meta/models
+[2026-08-26T13:56:01.289Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-26T13:56:01.289Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-08-26T13:56:01.289Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-08-26T13:56:01.290Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-08-26T13:56:01.290Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-08-26T13:56:01.290Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-08-26T13:56:01.290Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-08-26T13:56:01.290Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-08-26T13:56:01.291Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-08-26T13:56:01.291Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-08-26T13:56:01.291Z] [INFO] moon.rest: GET, POST      /api/vx.zone.subdivision
+[2026-08-26T13:56:01.291Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone.subdivision/:id
+[2026-08-26T13:56:01.292Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-08-26T13:56:01.292Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-08-26T13:56:01.292Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-08-26T13:56:01.292Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-08-26T13:56:01.292Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-08-26T13:56:01.293Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-08-26T13:56:01.293Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-08-26T13:56:01.293Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-08-26T13:56:01.293Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-08-26T13:56:01.294Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-08-26T13:56:01.294Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-08-26T13:56:01.294Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-08-26T13:56:01.294Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-08-26T13:56:01.294Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-08-26T13:56:01.295Z] [INFO] moon.rest: GET, POST      /api/ix.timezone
+[2026-08-26T13:56:01.295Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.timezone/:id
+[2026-08-26T13:56:01.295Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-08-26T13:56:01.295Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-08-26T13:56:01.295Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-08-26T13:56:01.296Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-08-26T13:56:01.296Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-08-26T13:56:01.296Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-08-26T13:56:01.296Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-08-26T13:56:01.296Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-08-26T13:56:01.297Z] [INFO] moon.rest: GET, POST      /api/ir.model.data
+[2026-08-26T13:56:01.297Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.model.data/:id
+[2026-08-26T13:56:01.297Z] [INFO] moon.rest: GET, POST      /api/ir.sequence
+[2026-08-26T13:56:01.297Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.sequence/:id
+[2026-08-26T13:56:01.297Z] [INFO] moon.rest: GET, POST      /api/ir.config_parameter
+[2026-08-26T13:56:01.298Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.config_parameter/:id
+[2026-08-26T13:56:01.298Z] [INFO] moon.rest: GET, POST      /api/ir.attachment
+[2026-08-26T13:56:01.298Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.attachment/:id
+[2026-08-26T13:56:01.298Z] [INFO] moon.rest: GET, POST      /api/px.request
+[2026-08-26T13:56:01.298Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.request/:id
+[2026-08-26T13:56:01.299Z] [INFO] moon.rest: GET, POST      /api/px.cache
+[2026-08-26T13:56:01.299Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.cache/:id
+[2026-08-26T13:56:01.299Z] [INFO] moon.rest: GET, POST      /api/px.query
+[2026-08-26T13:56:01.299Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.query/:id
+[2026-08-26T13:56:01.300Z] [INFO] moon.rest: GET, POST      /api/px.system
+[2026-08-26T13:56:01.300Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.system/:id
+[2026-08-26T13:56:01.300Z] [INFO] moon.rest: GET, POST      /api/wx.entity
+[2026-08-26T13:56:01.300Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity/:id
+[2026-08-26T13:56:01.300Z] [INFO] moon.rest: GET, POST      /api/wx.entity.alias
+[2026-08-26T13:56:01.301Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity.alias/:id
+[2026-08-26T13:56:01.301Z] [INFO] moon.rest: GET, POST      /api/wx.entity.identifier
+[2026-08-26T13:56:01.301Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity.identifier/:id
+[2026-08-26T13:56:01.301Z] [INFO] moon.rest: GET, POST      /api/wx.source
+[2026-08-26T13:56:01.302Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source/:id
+[2026-08-26T13:56:01.302Z] [INFO] moon.rest: GET, POST      /api/wx.provenance
+[2026-08-26T13:56:01.302Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.provenance/:id
+[2026-08-26T13:56:01.302Z] [INFO] moon.rest: GET, POST      /api/wx.relation.type
+[2026-08-26T13:56:01.302Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.relation.type/:id
+[2026-08-26T13:56:01.303Z] [INFO] moon.rest: GET, POST      /api/wx.relation
+[2026-08-26T13:56:01.303Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.relation/:id
+[2026-08-26T13:56:01.303Z] [INFO] moon.rest: GET, POST      /api/wx.religion
+[2026-08-26T13:56:01.303Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.religion/:id
+[2026-08-26T13:56:01.303Z] [INFO] moon.rest: GET, POST      /api/wx.community
+[2026-08-26T13:56:01.304Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.community/:id
+[2026-08-26T13:56:01.304Z] [INFO] moon.rest: GET, POST      /api/wx.scripture
+[2026-08-26T13:56:01.304Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture/:id
+[2026-08-26T13:56:01.304Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.book
+[2026-08-26T13:56:01.304Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.book/:id
+[2026-08-26T13:56:01.305Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.verse
+[2026-08-26T13:56:01.305Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.verse/:id
+[2026-08-26T13:56:01.305Z] [INFO] moon.rest: GET, POST      /api/wx.tradition
+[2026-08-26T13:56:01.305Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition/:id
+[2026-08-26T13:56:01.305Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.item
+[2026-08-26T13:56:01.305Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.item/:id
+[2026-08-26T13:56:01.306Z] [INFO] moon.rest: GET, POST      /api/wx.devotion
+[2026-08-26T13:56:01.306Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.devotion/:id
+[2026-08-26T13:56:01.306Z] [INFO] moon.rest: GET, POST      /api/wx.asmaul.husna
+[2026-08-26T13:56:01.306Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.asmaul.husna/:id
+[2026-08-26T13:56:01.306Z] [INFO] moon.rest: GET, POST      /api/wx.bookmark
+[2026-08-26T13:56:01.307Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.bookmark/:id
+[2026-08-26T13:56:01.307Z] [INFO] moon.rest: GET, POST      /api/wx.history
+[2026-08-26T13:56:01.307Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.history/:id
+[2026-08-26T13:56:01.307Z] [INFO] moon.rest: GET, POST      /api/wx.passage
+[2026-08-26T13:56:01.307Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.passage/:id
+[2026-08-26T13:56:01.307Z] [INFO] moon.rest: GET, POST      /api/wx.text.edition
+[2026-08-26T13:56:01.308Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.text.edition/:id
+[2026-08-26T13:56:01.308Z] [INFO] moon.rest: GET, POST      /api/wx.content
+[2026-08-26T13:56:01.308Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.content/:id
+[2026-08-26T13:56:01.308Z] [INFO] moon.rest: GET, POST      /api/wx.root
+[2026-08-26T13:56:01.309Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.root/:id
+[2026-08-26T13:56:01.309Z] [INFO] moon.rest: GET, POST      /api/wx.lexeme
+[2026-08-26T13:56:01.309Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.lexeme/:id
+[2026-08-26T13:56:01.309Z] [INFO] moon.rest: GET, POST      /api/wx.lexical.occurrence
+[2026-08-26T13:56:01.309Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.lexical.occurrence/:id
+[2026-08-26T13:56:01.310Z] [INFO] moon.rest: GET, POST      /api/wx.revelation.event
+[2026-08-26T13:56:01.310Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.revelation.event/:id
+[2026-08-26T13:56:01.310Z] [INFO] moon.rest: GET, POST      /api/wx.revelation.event.passage
+[2026-08-26T13:56:01.310Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.revelation.event.passage/:id
+[2026-08-26T13:56:01.310Z] [INFO] moon.rest: GET, POST      /api/wx.figure
+[2026-08-26T13:56:01.311Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure/:id
+[2026-08-26T13:56:01.311Z] [INFO] moon.rest: GET, POST      /api/wx.figure.name
+[2026-08-26T13:56:01.311Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure.name/:id
+[2026-08-26T13:56:01.311Z] [INFO] moon.rest: GET, POST      /api/wx.figure.role
+[2026-08-26T13:56:01.311Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure.role/:id
+[2026-08-26T13:56:01.312Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.corpus
+[2026-08-26T13:56:01.312Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.corpus/:id
+[2026-08-26T13:56:01.312Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.unit
+[2026-08-26T13:56:01.312Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.unit/:id
+[2026-08-26T13:56:01.312Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.reference
+[2026-08-26T13:56:01.313Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.reference/:id
+[2026-08-26T13:56:01.313Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.attribution
+[2026-08-26T13:56:01.313Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.attribution/:id
+[2026-08-26T13:56:01.313Z] [INFO] moon.rest: GET, POST      /api/wx.transmission.chain
+[2026-08-26T13:56:01.313Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.transmission.chain/:id
+[2026-08-26T13:56:01.314Z] [INFO] moon.rest: GET, POST      /api/wx.transmission.link
+[2026-08-26T13:56:01.314Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.transmission.link/:id
+[2026-08-26T13:56:01.314Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.assessment
+[2026-08-26T13:56:01.314Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.assessment/:id
+[2026-08-26T13:56:01.314Z] [INFO] moon.rest: GET, POST      /api/wx.concept
+[2026-08-26T13:56:01.315Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.concept/:id
+[2026-08-26T13:56:01.315Z] [INFO] moon.rest: GET, POST      /api/wx.assertion
+[2026-08-26T13:56:01.315Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.assertion/:id
+[2026-08-26T13:56:01.315Z] [INFO] moon.rest: GET, POST      /api/wx.evidence
+[2026-08-26T13:56:01.316Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.evidence/:id
+[2026-08-26T13:56:01.316Z] [INFO] moon.rest: GET, POST      /api/wx.divine.expression
+[2026-08-26T13:56:01.316Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.divine.expression/:id
+[2026-08-26T13:56:01.316Z] [INFO] moon.rest: GET, POST      /api/wx.divine.expression.occurrence
+[2026-08-26T13:56:01.316Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.divine.expression.occurrence/:id
+[2026-08-26T13:56:01.317Z] [INFO] moon.rest: GET, POST      /api/wx.legacy.mapping
+[2026-08-26T13:56:01.317Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.legacy.mapping/:id
+[2026-08-26T13:56:01.317Z] [INFO] moon.rest: GET, POST      /api/wx.engine.run
+[2026-08-26T13:56:01.318Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.engine.run/:id
+[2026-08-26T13:56:01.318Z] [INFO] moon.rest: GET, POST      /api/wx.engine.result
+[2026-08-26T13:56:01.319Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.engine.result/:id
+[2026-08-26T13:56:01.319Z] [INFO] moon.rest: GET, POST      /api/wx.source.policy
+[2026-08-26T13:56:01.319Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.policy/:id
+[2026-08-26T13:56:01.319Z] [INFO] moon.rest: GET, POST      /api/wx.source.manifest
+[2026-08-26T13:56:01.320Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.manifest/:id
+[2026-08-26T13:56:01.320Z] [INFO] moon.rest: GET, POST      /api/wx.source.artifact
+[2026-08-26T13:56:01.320Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.artifact/:id
+[2026-08-26T13:56:01.320Z] [INFO] moon.rest: GET, POST      /api/wx.source.snapshot
+[2026-08-26T13:56:01.321Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.snapshot/:id
+[2026-08-26T13:56:01.321Z] [INFO] moon.rest: GET, POST      /api/kh.conversation
+[2026-08-26T13:56:01.321Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.conversation/:id
+[2026-08-26T13:56:01.321Z] [INFO] moon.rest: GET, POST      /api/kh.message
+[2026-08-26T13:56:01.321Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
+[2026-08-26T13:56:01.322Z] [INFO] moon.rest: GET, POST      /api/mz.case
+[2026-08-26T13:56:01.322Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.case/:id
+[2026-08-26T13:56:01.322Z] [INFO] moon.rest: GET, POST      /api/mz.assessment
+[2026-08-26T13:56:01.322Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.assessment/:id
+[2026-08-26T13:56:01.323Z] [INFO] moon.rest: GET, POST      /api/mz.filter
+[2026-08-26T13:56:01.323Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.filter/:id
+[2026-08-26T13:56:01.323Z] [INFO] moon.rest: GET, POST      /api/mz.reference
+[2026-08-26T13:56:01.323Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.reference/:id
+[2026-08-26T13:56:01.323Z] [INFO] moon.rest: GET, POST      /api/sg.operation
+[2026-08-26T13:56:01.324Z] [INFO] moon.rest: GET, PUT, DEL  /api/sg.operation/:id
+[2026-08-26T13:56:01.324Z] [INFO] moon.rest: GET, POST      /api/cab.project
+[2026-08-26T13:56:01.324Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.project/:id
+[2026-08-26T13:56:01.324Z] [INFO] moon.rest: GET, POST      /api/cab.task
+[2026-08-26T13:56:01.324Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.task/:id
+[2026-08-26T13:56:01.325Z] [INFO] moon.rest: GET, POST      /api/cab.change
+[2026-08-26T13:56:01.325Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.change/:id
+[2026-08-26T13:56:01.325Z] [INFO] moon.rest: GET, POST      /api/cab.meeting
+[2026-08-26T13:56:01.325Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.meeting/:id
+[2026-08-26T13:56:01.325Z] [INFO] moon.rest: GET, POST      /api/cab.decision
+[2026-08-26T13:56:01.326Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.decision/:id
+[2026-08-26T13:56:01.330Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-08-26T13:56:38.100Z] [INFO] moon.schema: Schema sync: 0 applied, 0 pending
+[2026-08-26T13:56:38.101Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-08-26T13:56:38.101Z] [INFO] moon.rest: POST           /auth/login
+[2026-08-26T13:56:38.101Z] [INFO] moon.rest: POST           /auth/register
+[2026-08-26T13:56:38.102Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-08-26T13:56:38.102Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-08-26T13:56:38.102Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-08-26T13:56:38.102Z] [INFO] moon.rest: POST           /rpc
+[2026-08-26T13:56:38.102Z] [INFO] moon.rest: GET            /db/status
+[2026-08-26T13:56:38.103Z] [INFO] moon.rest: GET            /meta/models
+[2026-08-26T13:56:38.103Z] [INFO] moon.rest: GET            /live
+[2026-08-26T13:56:38.103Z] [INFO] moon.rest: GET            /openapi.json
+[2026-08-26T13:56:38.103Z] [INFO] moon.rest: GET            /docs
+[2026-08-26T13:56:38.104Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-08-26T13:56:38.104Z] [INFO] moon.rest: GET            /api/witness/scriptures
+[2026-08-26T13:56:38.104Z] [INFO] moon.rest: GET            /api/witness/quran/surahs
+[2026-08-26T13:56:38.104Z] [INFO] moon.rest: GET            /api/witness/quran/surah
+[2026-08-26T13:56:38.104Z] [INFO] moon.rest: GET            /api/witness/quran/search
+[2026-08-26T13:56:38.105Z] [INFO] moon.rest: GET            /api/witness/hadith/books
+[2026-08-26T13:56:38.105Z] [INFO] moon.rest: GET            /api/witness/hadith
+[2026-08-26T13:56:38.105Z] [INFO] moon.rest: GET            /api/witness/traditions
+[2026-08-26T13:56:38.105Z] [INFO] moon.rest: GET            /api/witness/asmaul-husna
+[2026-08-26T13:56:38.105Z] [INFO] moon.rest: GET            /api/witness/devotions
+[2026-08-26T13:56:38.106Z] [INFO] moon.rest: GET            /api/witness/astronomy/moon-phase
+[2026-08-26T13:56:38.106Z] [INFO] moon.rest: GET            /api/witness/astronomy/prayer-times
+[2026-08-26T13:56:38.106Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-26T13:56:38.106Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-26T13:56:38.106Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-26T13:56:38.107Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-26T13:56:38.107Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-26T13:56:38.107Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-26T13:56:38.107Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-26T13:56:38.108Z] [INFO] moon.rest: GET            /api/witness/bookmarks
+[2026-08-26T13:56:38.108Z] [INFO] moon.rest: GET            /api/witness/history
+[2026-08-26T13:56:38.108Z] [INFO] moon.rest: GET            /api/mizan/decision
+[2026-08-26T13:56:38.108Z] [INFO] moon.rest: GET            /api/mizan/summary
+[2026-08-26T13:56:38.109Z] [INFO] moon.rest: GET            /api/cab/summary
+[2026-08-26T13:56:38.109Z] [INFO] moon.rest: POST           /test-publish
+[2026-08-26T13:56:38.109Z] [INFO] moon.rest: GET            /api/external/performance/stats
+[2026-08-26T13:56:38.109Z] [INFO] moon.rest: GET            /api/witness/graph/entities
+[2026-08-26T13:56:38.109Z] [INFO] moon.rest: GET            /api/witness/graph/entities/:entityId/profile
+[2026-08-26T13:56:38.110Z] [INFO] moon.rest: GET            /api/witness/graph/passages
+[2026-08-26T13:56:38.110Z] [INFO] moon.rest: GET            /api/witness/graph/passages/:passageId/content
+[2026-08-26T13:56:38.110Z] [INFO] moon.rest: GET            /api/witness/graph/passages/:passageId/tree
+[2026-08-26T13:56:38.111Z] [INFO] moon.rest: GET            /api/witness/graph/figures/:entityId/mentions
+[2026-08-26T13:56:38.111Z] [INFO] moon.rest: GET            /api/external/nasa/neo
+[2026-08-26T13:56:38.111Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-26T13:56:38.111Z] [INFO] moon.rest: GET            /api/external/nasa/apod
+[2026-08-26T13:56:38.111Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-26T13:56:38.112Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-26T13:56:38.112Z] [INFO] moon.rest: GET            /api/external/noaa/kp-index
+[2026-08-26T13:56:38.112Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-26T13:56:38.113Z] [INFO] moon.rest: GET            /api/external/rainviewer
+[2026-08-26T13:56:38.113Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-26T13:56:38.113Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-26T13:56:38.114Z] [INFO] moon.rest: GET            /api/external/db/status
+[2026-08-26T13:56:38.114Z] [INFO] moon.rest: GET            /api/external/meta/models
+[2026-08-26T13:56:38.114Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-26T13:56:38.114Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-08-26T13:56:38.114Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-08-26T13:56:38.115Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-08-26T13:56:38.115Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-08-26T13:56:38.115Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-08-26T13:56:38.115Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-08-26T13:56:38.115Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-08-26T13:56:38.116Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-08-26T13:56:38.116Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-08-26T13:56:38.116Z] [INFO] moon.rest: GET, POST      /api/vx.zone.subdivision
+[2026-08-26T13:56:38.116Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone.subdivision/:id
+[2026-08-26T13:56:38.117Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-08-26T13:56:38.117Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-08-26T13:56:38.117Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-08-26T13:56:38.117Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-08-26T13:56:38.117Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-08-26T13:56:38.118Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-08-26T13:56:38.118Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-08-26T13:56:38.118Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-08-26T13:56:38.118Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-08-26T13:56:38.119Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-08-26T13:56:38.119Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-08-26T13:56:38.119Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-08-26T13:56:38.119Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-08-26T13:56:38.120Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-08-26T13:56:38.120Z] [INFO] moon.rest: GET, POST      /api/ix.timezone
+[2026-08-26T13:56:38.120Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.timezone/:id
+[2026-08-26T13:56:38.120Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-08-26T13:56:38.121Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-08-26T13:56:38.121Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-08-26T13:56:38.121Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-08-26T13:56:38.121Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-08-26T13:56:38.121Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-08-26T13:56:38.122Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-08-26T13:56:38.122Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-08-26T13:56:38.122Z] [INFO] moon.rest: GET, POST      /api/ir.model.data
+[2026-08-26T13:56:38.122Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.model.data/:id
+[2026-08-26T13:56:38.122Z] [INFO] moon.rest: GET, POST      /api/ir.sequence
+[2026-08-26T13:56:38.123Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.sequence/:id
+[2026-08-26T13:56:38.123Z] [INFO] moon.rest: GET, POST      /api/ir.config_parameter
+[2026-08-26T13:56:38.123Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.config_parameter/:id
+[2026-08-26T13:56:38.124Z] [INFO] moon.rest: GET, POST      /api/ir.attachment
+[2026-08-26T13:56:38.124Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.attachment/:id
+[2026-08-26T13:56:38.124Z] [INFO] moon.rest: GET, POST      /api/px.request
+[2026-08-26T13:56:38.124Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.request/:id
+[2026-08-26T13:56:38.124Z] [INFO] moon.rest: GET, POST      /api/px.cache
+[2026-08-26T13:56:38.125Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.cache/:id
+[2026-08-26T13:56:38.125Z] [INFO] moon.rest: GET, POST      /api/px.query
+[2026-08-26T13:56:38.125Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.query/:id
+[2026-08-26T13:56:38.125Z] [INFO] moon.rest: GET, POST      /api/px.system
+[2026-08-26T13:56:38.126Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.system/:id
+[2026-08-26T13:56:38.126Z] [INFO] moon.rest: GET, POST      /api/wx.entity
+[2026-08-26T13:56:38.126Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity/:id
+[2026-08-26T13:56:38.126Z] [INFO] moon.rest: GET, POST      /api/wx.entity.alias
+[2026-08-26T13:56:38.126Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity.alias/:id
+[2026-08-26T13:56:38.127Z] [INFO] moon.rest: GET, POST      /api/wx.entity.identifier
+[2026-08-26T13:56:38.127Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity.identifier/:id
+[2026-08-26T13:56:38.127Z] [INFO] moon.rest: GET, POST      /api/wx.source
+[2026-08-26T13:56:38.127Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source/:id
+[2026-08-26T13:56:38.128Z] [INFO] moon.rest: GET, POST      /api/wx.provenance
+[2026-08-26T13:56:38.128Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.provenance/:id
+[2026-08-26T13:56:38.128Z] [INFO] moon.rest: GET, POST      /api/wx.relation.type
+[2026-08-26T13:56:38.129Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.relation.type/:id
+[2026-08-26T13:56:38.129Z] [INFO] moon.rest: GET, POST      /api/wx.relation
+[2026-08-26T13:56:38.130Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.relation/:id
+[2026-08-26T13:56:38.130Z] [INFO] moon.rest: GET, POST      /api/wx.religion
+[2026-08-26T13:56:38.130Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.religion/:id
+[2026-08-26T13:56:38.130Z] [INFO] moon.rest: GET, POST      /api/wx.community
+[2026-08-26T13:56:38.131Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.community/:id
+[2026-08-26T13:56:38.131Z] [INFO] moon.rest: GET, POST      /api/wx.scripture
+[2026-08-26T13:56:38.131Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture/:id
+[2026-08-26T13:56:38.132Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.book
+[2026-08-26T13:56:38.132Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.book/:id
+[2026-08-26T13:56:38.132Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.verse
+[2026-08-26T13:56:38.132Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.verse/:id
+[2026-08-26T13:56:38.132Z] [INFO] moon.rest: GET, POST      /api/wx.tradition
+[2026-08-26T13:56:38.133Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition/:id
+[2026-08-26T13:56:38.133Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.item
+[2026-08-26T13:56:38.133Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.item/:id
+[2026-08-26T13:56:38.133Z] [INFO] moon.rest: GET, POST      /api/wx.devotion
+[2026-08-26T13:56:38.133Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.devotion/:id
+[2026-08-26T13:56:38.134Z] [INFO] moon.rest: GET, POST      /api/wx.asmaul.husna
+[2026-08-26T13:56:38.134Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.asmaul.husna/:id
+[2026-08-26T13:56:38.134Z] [INFO] moon.rest: GET, POST      /api/wx.bookmark
+[2026-08-26T13:56:38.134Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.bookmark/:id
+[2026-08-26T13:56:38.134Z] [INFO] moon.rest: GET, POST      /api/wx.history
+[2026-08-26T13:56:38.135Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.history/:id
+[2026-08-26T13:56:38.135Z] [INFO] moon.rest: GET, POST      /api/wx.passage
+[2026-08-26T13:56:38.135Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.passage/:id
+[2026-08-26T13:56:38.135Z] [INFO] moon.rest: GET, POST      /api/wx.text.edition
+[2026-08-26T13:56:38.135Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.text.edition/:id
+[2026-08-26T13:56:38.136Z] [INFO] moon.rest: GET, POST      /api/wx.content
+[2026-08-26T13:56:38.136Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.content/:id
+[2026-08-26T13:56:38.136Z] [INFO] moon.rest: GET, POST      /api/wx.root
+[2026-08-26T13:56:38.136Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.root/:id
+[2026-08-26T13:56:38.137Z] [INFO] moon.rest: GET, POST      /api/wx.lexeme
+[2026-08-26T13:56:38.137Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.lexeme/:id
+[2026-08-26T13:56:38.137Z] [INFO] moon.rest: GET, POST      /api/wx.lexical.occurrence
+[2026-08-26T13:56:38.137Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.lexical.occurrence/:id
+[2026-08-26T13:56:38.137Z] [INFO] moon.rest: GET, POST      /api/wx.revelation.event
+[2026-08-26T13:56:38.138Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.revelation.event/:id
+[2026-08-26T13:56:38.138Z] [INFO] moon.rest: GET, POST      /api/wx.revelation.event.passage
+[2026-08-26T13:56:38.138Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.revelation.event.passage/:id
+[2026-08-26T13:56:38.138Z] [INFO] moon.rest: GET, POST      /api/wx.figure
+[2026-08-26T13:56:38.138Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure/:id
+[2026-08-26T13:56:38.139Z] [INFO] moon.rest: GET, POST      /api/wx.figure.name
+[2026-08-26T13:56:38.139Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure.name/:id
+[2026-08-26T13:56:38.139Z] [INFO] moon.rest: GET, POST      /api/wx.figure.role
+[2026-08-26T13:56:38.139Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure.role/:id
+[2026-08-26T13:56:38.139Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.corpus
+[2026-08-26T13:56:38.140Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.corpus/:id
+[2026-08-26T13:56:38.140Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.unit
+[2026-08-26T13:56:38.140Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.unit/:id
+[2026-08-26T13:56:38.140Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.reference
+[2026-08-26T13:56:38.140Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.reference/:id
+[2026-08-26T13:56:38.141Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.attribution
+[2026-08-26T13:56:38.141Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.attribution/:id
+[2026-08-26T13:56:38.141Z] [INFO] moon.rest: GET, POST      /api/wx.transmission.chain
+[2026-08-26T13:56:38.141Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.transmission.chain/:id
+[2026-08-26T13:56:38.142Z] [INFO] moon.rest: GET, POST      /api/wx.transmission.link
+[2026-08-26T13:56:38.142Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.transmission.link/:id
+[2026-08-26T13:56:38.142Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.assessment
+[2026-08-26T13:56:38.142Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.assessment/:id
+[2026-08-26T13:56:38.142Z] [INFO] moon.rest: GET, POST      /api/wx.concept
+[2026-08-26T13:56:38.143Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.concept/:id
+[2026-08-26T13:56:38.143Z] [INFO] moon.rest: GET, POST      /api/wx.assertion
+[2026-08-26T13:56:38.143Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.assertion/:id
+[2026-08-26T13:56:38.143Z] [INFO] moon.rest: GET, POST      /api/wx.evidence
+[2026-08-26T13:56:38.143Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.evidence/:id
+[2026-08-26T13:56:38.144Z] [INFO] moon.rest: GET, POST      /api/wx.divine.expression
+[2026-08-26T13:56:38.144Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.divine.expression/:id
+[2026-08-26T13:56:38.144Z] [INFO] moon.rest: GET, POST      /api/wx.divine.expression.occurrence
+[2026-08-26T13:56:38.144Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.divine.expression.occurrence/:id
+[2026-08-26T13:56:38.144Z] [INFO] moon.rest: GET, POST      /api/wx.legacy.mapping
+[2026-08-26T13:56:38.144Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.legacy.mapping/:id
+[2026-08-26T13:56:38.145Z] [INFO] moon.rest: GET, POST      /api/wx.engine.run
+[2026-08-26T13:56:38.145Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.engine.run/:id
+[2026-08-26T13:56:38.145Z] [INFO] moon.rest: GET, POST      /api/wx.engine.result
+[2026-08-26T13:56:38.145Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.engine.result/:id
+[2026-08-26T13:56:38.145Z] [INFO] moon.rest: GET, POST      /api/wx.source.policy
+[2026-08-26T13:56:38.146Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.policy/:id
+[2026-08-26T13:56:38.146Z] [INFO] moon.rest: GET, POST      /api/wx.source.manifest
+[2026-08-26T13:56:38.146Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.manifest/:id
+[2026-08-26T13:56:38.147Z] [INFO] moon.rest: GET, POST      /api/wx.source.artifact
+[2026-08-26T13:56:38.147Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.artifact/:id
+[2026-08-26T13:56:38.147Z] [INFO] moon.rest: GET, POST      /api/wx.source.snapshot
+[2026-08-26T13:56:38.147Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.snapshot/:id
+[2026-08-26T13:56:38.148Z] [INFO] moon.rest: GET, POST      /api/kh.conversation
+[2026-08-26T13:56:38.148Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.conversation/:id
+[2026-08-26T13:56:38.148Z] [INFO] moon.rest: GET, POST      /api/kh.message
+[2026-08-26T13:56:38.148Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
+[2026-08-26T13:56:38.148Z] [INFO] moon.rest: GET, POST      /api/mz.case
+[2026-08-26T13:56:38.149Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.case/:id
+[2026-08-26T13:56:38.149Z] [INFO] moon.rest: GET, POST      /api/mz.assessment
+[2026-08-26T13:56:38.149Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.assessment/:id
+[2026-08-26T13:56:38.149Z] [INFO] moon.rest: GET, POST      /api/mz.filter
+[2026-08-26T13:56:38.149Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.filter/:id
+[2026-08-26T13:56:38.150Z] [INFO] moon.rest: GET, POST      /api/mz.reference
+[2026-08-26T13:56:38.150Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.reference/:id
+[2026-08-26T13:56:38.150Z] [INFO] moon.rest: GET, POST      /api/sg.operation
+[2026-08-26T13:56:38.150Z] [INFO] moon.rest: GET, PUT, DEL  /api/sg.operation/:id
+[2026-08-26T13:56:38.151Z] [INFO] moon.rest: GET, POST      /api/cab.project
+[2026-08-26T13:56:38.151Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.project/:id
+[2026-08-26T13:56:38.151Z] [INFO] moon.rest: GET, POST      /api/cab.task
+[2026-08-26T13:56:38.151Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.task/:id
+[2026-08-26T13:56:38.151Z] [INFO] moon.rest: GET, POST      /api/cab.change
+[2026-08-26T13:56:38.152Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.change/:id
+[2026-08-26T13:56:38.152Z] [INFO] moon.rest: GET, POST      /api/cab.meeting
+[2026-08-26T13:56:38.152Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.meeting/:id
+[2026-08-26T13:56:38.152Z] [INFO] moon.rest: GET, POST      /api/cab.decision
+[2026-08-26T13:56:38.153Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.decision/:id
+[2026-08-26T13:56:38.158Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-08-26T13:56:42.570Z] [INFO] moon.schema: Schema sync: 0 applied, 0 pending
+[2026-08-26T13:56:42.572Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-08-26T13:56:42.572Z] [INFO] moon.rest: POST           /auth/login
+[2026-08-26T13:56:42.573Z] [INFO] moon.rest: POST           /auth/register
+[2026-08-26T13:56:42.573Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-08-26T13:56:42.574Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-08-26T13:56:42.577Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-08-26T13:56:42.577Z] [INFO] moon.rest: POST           /rpc
+[2026-08-26T13:56:42.579Z] [INFO] moon.rest: GET            /db/status
+[2026-08-26T13:56:42.580Z] [INFO] moon.rest: GET            /meta/models
+[2026-08-26T13:56:42.580Z] [INFO] moon.rest: GET            /live
+[2026-08-26T13:56:42.581Z] [INFO] moon.rest: GET            /openapi.json
+[2026-08-26T13:56:42.582Z] [INFO] moon.rest: GET            /docs
+[2026-08-26T13:56:42.583Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-08-26T13:56:42.584Z] [INFO] moon.rest: GET            /api/witness/scriptures
+[2026-08-26T13:56:42.585Z] [INFO] moon.rest: GET            /api/witness/quran/surahs
+[2026-08-26T13:56:42.587Z] [INFO] moon.rest: GET            /api/witness/quran/surah
+[2026-08-26T13:56:42.588Z] [INFO] moon.rest: GET            /api/witness/quran/search
+[2026-08-26T13:56:42.588Z] [INFO] moon.rest: GET            /api/witness/hadith/books
+[2026-08-26T13:56:42.589Z] [INFO] moon.rest: GET            /api/witness/hadith
+[2026-08-26T13:56:42.589Z] [INFO] moon.rest: GET            /api/witness/traditions
+[2026-08-26T13:56:42.589Z] [INFO] moon.rest: GET            /api/witness/asmaul-husna
+[2026-08-26T13:56:42.590Z] [INFO] moon.rest: GET            /api/witness/devotions
+[2026-08-26T13:56:42.590Z] [INFO] moon.rest: GET            /api/witness/astronomy/moon-phase
+[2026-08-26T13:56:42.590Z] [INFO] moon.rest: GET            /api/witness/astronomy/prayer-times
+[2026-08-26T13:56:42.591Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-26T13:56:42.591Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-26T13:56:42.591Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-26T13:56:42.592Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-26T13:56:42.592Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-26T13:56:42.592Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-26T13:56:42.593Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-26T13:56:42.593Z] [INFO] moon.rest: GET            /api/witness/bookmarks
+[2026-08-26T13:56:42.594Z] [INFO] moon.rest: GET            /api/witness/history
+[2026-08-26T13:56:42.595Z] [INFO] moon.rest: GET            /api/mizan/decision
+[2026-08-26T13:56:42.595Z] [INFO] moon.rest: GET            /api/mizan/summary
+[2026-08-26T13:56:42.595Z] [INFO] moon.rest: GET            /api/cab/summary
+[2026-08-26T13:56:42.595Z] [INFO] moon.rest: POST           /test-publish
+[2026-08-26T13:56:42.596Z] [INFO] moon.rest: GET            /api/external/performance/stats
+[2026-08-26T13:56:42.596Z] [INFO] moon.rest: GET            /api/witness/graph/entities
+[2026-08-26T13:56:42.596Z] [INFO] moon.rest: GET            /api/witness/graph/entities/:entityId/profile
+[2026-08-26T13:56:42.597Z] [INFO] moon.rest: GET            /api/witness/graph/passages
+[2026-08-26T13:56:42.597Z] [INFO] moon.rest: GET            /api/witness/graph/passages/:passageId/content
+[2026-08-26T13:56:42.597Z] [INFO] moon.rest: GET            /api/witness/graph/passages/:passageId/tree
+[2026-08-26T13:56:42.598Z] [INFO] moon.rest: GET            /api/witness/graph/figures/:entityId/mentions
+[2026-08-26T13:56:42.598Z] [INFO] moon.rest: GET            /api/external/nasa/neo
+[2026-08-26T13:56:42.599Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-26T13:56:42.600Z] [INFO] moon.rest: GET            /api/external/nasa/apod
+[2026-08-26T13:56:42.600Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-26T13:56:42.601Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-26T13:56:42.602Z] [INFO] moon.rest: GET            /api/external/noaa/kp-index
+[2026-08-26T13:56:42.602Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-26T13:56:42.603Z] [INFO] moon.rest: GET            /api/external/rainviewer
+[2026-08-26T13:56:42.603Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-26T13:56:42.604Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-26T13:56:42.604Z] [INFO] moon.rest: GET            /api/external/db/status
+[2026-08-26T13:56:42.604Z] [INFO] moon.rest: GET            /api/external/meta/models
+[2026-08-26T13:56:42.605Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-26T13:56:42.606Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-08-26T13:56:42.606Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-08-26T13:56:42.607Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-08-26T13:56:42.609Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-08-26T13:56:42.609Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-08-26T13:56:42.610Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-08-26T13:56:42.611Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-08-26T13:56:42.615Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-08-26T13:56:42.616Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-08-26T13:56:42.618Z] [INFO] moon.rest: GET, POST      /api/vx.zone.subdivision
+[2026-08-26T13:56:42.618Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone.subdivision/:id
+[2026-08-26T13:56:42.618Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-08-26T13:56:42.619Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-08-26T13:56:42.621Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-08-26T13:56:42.622Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-08-26T13:56:42.622Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-08-26T13:56:42.623Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-08-26T13:56:42.623Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-08-26T13:56:42.624Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-08-26T13:56:42.626Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-08-26T13:56:42.627Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-08-26T13:56:42.627Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-08-26T13:56:42.628Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-08-26T13:56:42.629Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-08-26T13:56:42.629Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-08-26T13:56:42.630Z] [INFO] moon.rest: GET, POST      /api/ix.timezone
+[2026-08-26T13:56:42.630Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.timezone/:id
+[2026-08-26T13:56:42.630Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-08-26T13:56:42.631Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-08-26T13:56:42.631Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-08-26T13:56:42.631Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-08-26T13:56:42.632Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-08-26T13:56:42.633Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-08-26T13:56:42.634Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-08-26T13:56:42.634Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-08-26T13:56:42.635Z] [INFO] moon.rest: GET, POST      /api/ir.model.data
+[2026-08-26T13:56:42.636Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.model.data/:id
+[2026-08-26T13:56:42.636Z] [INFO] moon.rest: GET, POST      /api/ir.sequence
+[2026-08-26T13:56:42.636Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.sequence/:id
+[2026-08-26T13:56:42.639Z] [INFO] moon.rest: GET, POST      /api/ir.config_parameter
+[2026-08-26T13:56:42.640Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.config_parameter/:id
+[2026-08-26T13:56:42.640Z] [INFO] moon.rest: GET, POST      /api/ir.attachment
+[2026-08-26T13:56:42.640Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.attachment/:id
+[2026-08-26T13:56:42.640Z] [INFO] moon.rest: GET, POST      /api/px.request
+[2026-08-26T13:56:42.641Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.request/:id
+[2026-08-26T13:56:42.641Z] [INFO] moon.rest: GET, POST      /api/px.cache
+[2026-08-26T13:56:42.641Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.cache/:id
+[2026-08-26T13:56:42.641Z] [INFO] moon.rest: GET, POST      /api/px.query
+[2026-08-26T13:56:42.641Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.query/:id
+[2026-08-26T13:56:42.642Z] [INFO] moon.rest: GET, POST      /api/px.system
+[2026-08-26T13:56:42.642Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.system/:id
+[2026-08-26T13:56:42.643Z] [INFO] moon.rest: GET, POST      /api/wx.entity
+[2026-08-26T13:56:42.644Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity/:id
+[2026-08-26T13:56:42.645Z] [INFO] moon.rest: GET, POST      /api/wx.entity.alias
+[2026-08-26T13:56:42.646Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity.alias/:id
+[2026-08-26T13:56:42.646Z] [INFO] moon.rest: GET, POST      /api/wx.entity.identifier
+[2026-08-26T13:56:42.647Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity.identifier/:id
+[2026-08-26T13:56:42.647Z] [INFO] moon.rest: GET, POST      /api/wx.source
+[2026-08-26T13:56:42.648Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source/:id
+[2026-08-26T13:56:42.648Z] [INFO] moon.rest: GET, POST      /api/wx.provenance
+[2026-08-26T13:56:42.648Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.provenance/:id
+[2026-08-26T13:56:42.648Z] [INFO] moon.rest: GET, POST      /api/wx.relation.type
+[2026-08-26T13:56:42.649Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.relation.type/:id
+[2026-08-26T13:56:42.649Z] [INFO] moon.rest: GET, POST      /api/wx.relation
+[2026-08-26T13:56:42.649Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.relation/:id
+[2026-08-26T13:56:42.649Z] [INFO] moon.rest: GET, POST      /api/wx.religion
+[2026-08-26T13:56:42.650Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.religion/:id
+[2026-08-26T13:56:42.650Z] [INFO] moon.rest: GET, POST      /api/wx.community
+[2026-08-26T13:56:42.650Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.community/:id
+[2026-08-26T13:56:42.650Z] [INFO] moon.rest: GET, POST      /api/wx.scripture
+[2026-08-26T13:56:42.651Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture/:id
+[2026-08-26T13:56:42.651Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.book
+[2026-08-26T13:56:42.651Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.book/:id
+[2026-08-26T13:56:42.651Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.verse
+[2026-08-26T13:56:42.652Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.verse/:id
+[2026-08-26T13:56:42.652Z] [INFO] moon.rest: GET, POST      /api/wx.tradition
+[2026-08-26T13:56:42.652Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition/:id
+[2026-08-26T13:56:42.653Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.item
+[2026-08-26T13:56:42.653Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.item/:id
+[2026-08-26T13:56:42.653Z] [INFO] moon.rest: GET, POST      /api/wx.devotion
+[2026-08-26T13:56:42.653Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.devotion/:id
+[2026-08-26T13:56:42.654Z] [INFO] moon.rest: GET, POST      /api/wx.asmaul.husna
+[2026-08-26T13:56:42.654Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.asmaul.husna/:id
+[2026-08-26T13:56:42.654Z] [INFO] moon.rest: GET, POST      /api/wx.bookmark
+[2026-08-26T13:56:42.655Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.bookmark/:id
+[2026-08-26T13:56:42.655Z] [INFO] moon.rest: GET, POST      /api/wx.history
+[2026-08-26T13:56:42.655Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.history/:id
+[2026-08-26T13:56:42.658Z] [INFO] moon.rest: GET, POST      /api/wx.passage
+[2026-08-26T13:56:42.658Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.passage/:id
+[2026-08-26T13:56:42.658Z] [INFO] moon.rest: GET, POST      /api/wx.text.edition
+[2026-08-26T13:56:42.659Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.text.edition/:id
+[2026-08-26T13:56:42.659Z] [INFO] moon.rest: GET, POST      /api/wx.content
+[2026-08-26T13:56:42.660Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.content/:id
+[2026-08-26T13:56:42.660Z] [INFO] moon.rest: GET, POST      /api/wx.root
+[2026-08-26T13:56:42.660Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.root/:id
+[2026-08-26T13:56:42.660Z] [INFO] moon.rest: GET, POST      /api/wx.lexeme
+[2026-08-26T13:56:42.660Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.lexeme/:id
+[2026-08-26T13:56:42.661Z] [INFO] moon.rest: GET, POST      /api/wx.lexical.occurrence
+[2026-08-26T13:56:42.663Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.lexical.occurrence/:id
+[2026-08-26T13:56:42.664Z] [INFO] moon.rest: GET, POST      /api/wx.revelation.event
+[2026-08-26T13:56:42.665Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.revelation.event/:id
+[2026-08-26T13:56:42.665Z] [INFO] moon.rest: GET, POST      /api/wx.revelation.event.passage
+[2026-08-26T13:56:42.666Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.revelation.event.passage/:id
+[2026-08-26T13:56:42.668Z] [INFO] moon.rest: GET, POST      /api/wx.figure
+[2026-08-26T13:56:42.670Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure/:id
+[2026-08-26T13:56:42.670Z] [INFO] moon.rest: GET, POST      /api/wx.figure.name
+[2026-08-26T13:56:42.672Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure.name/:id
+[2026-08-26T13:56:42.672Z] [INFO] moon.rest: GET, POST      /api/wx.figure.role
+[2026-08-26T13:56:42.672Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure.role/:id
+[2026-08-26T13:56:42.673Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.corpus
+[2026-08-26T13:56:42.673Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.corpus/:id
+[2026-08-26T13:56:42.674Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.unit
+[2026-08-26T13:56:42.674Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.unit/:id
+[2026-08-26T13:56:42.674Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.reference
+[2026-08-26T13:56:42.674Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.reference/:id
+[2026-08-26T13:56:42.674Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.attribution
+[2026-08-26T13:56:42.675Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.attribution/:id
+[2026-08-26T13:56:42.675Z] [INFO] moon.rest: GET, POST      /api/wx.transmission.chain
+[2026-08-26T13:56:42.675Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.transmission.chain/:id
+[2026-08-26T13:56:42.675Z] [INFO] moon.rest: GET, POST      /api/wx.transmission.link
+[2026-08-26T13:56:42.675Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.transmission.link/:id
+[2026-08-26T13:56:42.676Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.assessment
+[2026-08-26T13:56:42.676Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.assessment/:id
+[2026-08-26T13:56:42.676Z] [INFO] moon.rest: GET, POST      /api/wx.concept
+[2026-08-26T13:56:42.676Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.concept/:id
+[2026-08-26T13:56:42.679Z] [INFO] moon.rest: GET, POST      /api/wx.assertion
+[2026-08-26T13:56:42.679Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.assertion/:id
+[2026-08-26T13:56:42.679Z] [INFO] moon.rest: GET, POST      /api/wx.evidence
+[2026-08-26T13:56:42.680Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.evidence/:id
+[2026-08-26T13:56:42.681Z] [INFO] moon.rest: GET, POST      /api/wx.divine.expression
+[2026-08-26T13:56:42.681Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.divine.expression/:id
+[2026-08-26T13:56:42.682Z] [INFO] moon.rest: GET, POST      /api/wx.divine.expression.occurrence
+[2026-08-26T13:56:42.683Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.divine.expression.occurrence/:id
+[2026-08-26T13:56:42.684Z] [INFO] moon.rest: GET, POST      /api/wx.legacy.mapping
+[2026-08-26T13:56:42.684Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.legacy.mapping/:id
+[2026-08-26T13:56:42.684Z] [INFO] moon.rest: GET, POST      /api/wx.engine.run
+[2026-08-26T13:56:42.685Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.engine.run/:id
+[2026-08-26T13:56:42.685Z] [INFO] moon.rest: GET, POST      /api/wx.engine.result
+[2026-08-26T13:56:42.685Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.engine.result/:id
+[2026-08-26T13:56:42.686Z] [INFO] moon.rest: GET, POST      /api/wx.source.policy
+[2026-08-26T13:56:42.686Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.policy/:id
+[2026-08-26T13:56:42.686Z] [INFO] moon.rest: GET, POST      /api/wx.source.manifest
+[2026-08-26T13:56:42.687Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.manifest/:id
+[2026-08-26T13:56:42.687Z] [INFO] moon.rest: GET, POST      /api/wx.source.artifact
+[2026-08-26T13:56:42.687Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.artifact/:id
+[2026-08-26T13:56:42.688Z] [INFO] moon.rest: GET, POST      /api/wx.source.snapshot
+[2026-08-26T13:56:42.688Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.snapshot/:id
+[2026-08-26T13:56:42.688Z] [INFO] moon.rest: GET, POST      /api/kh.conversation
+[2026-08-26T13:56:42.689Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.conversation/:id
+[2026-08-26T13:56:42.689Z] [INFO] moon.rest: GET, POST      /api/kh.message
+[2026-08-26T13:56:42.690Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
+[2026-08-26T13:56:42.690Z] [INFO] moon.rest: GET, POST      /api/mz.case
+[2026-08-26T13:56:42.691Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.case/:id
+[2026-08-26T13:56:42.691Z] [INFO] moon.rest: GET, POST      /api/mz.assessment
+[2026-08-26T13:56:42.691Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.assessment/:id
+[2026-08-26T13:56:42.692Z] [INFO] moon.rest: GET, POST      /api/mz.filter
+[2026-08-26T13:56:42.692Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.filter/:id
+[2026-08-26T13:56:42.692Z] [INFO] moon.rest: GET, POST      /api/mz.reference
+[2026-08-26T13:56:42.692Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.reference/:id
+[2026-08-26T13:56:42.693Z] [INFO] moon.rest: GET, POST      /api/sg.operation
+[2026-08-26T13:56:42.693Z] [INFO] moon.rest: GET, PUT, DEL  /api/sg.operation/:id
+[2026-08-26T13:56:42.693Z] [INFO] moon.rest: GET, POST      /api/cab.project
+[2026-08-26T13:56:42.694Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.project/:id
+[2026-08-26T13:56:42.694Z] [INFO] moon.rest: GET, POST      /api/cab.task
+[2026-08-26T13:56:42.695Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.task/:id
+[2026-08-26T13:56:42.696Z] [INFO] moon.rest: GET, POST      /api/cab.change
+[2026-08-26T13:56:42.697Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.change/:id
+[2026-08-26T13:56:42.698Z] [INFO] moon.rest: GET, POST      /api/cab.meeting
+[2026-08-26T13:56:42.698Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.meeting/:id
+[2026-08-26T13:56:42.698Z] [INFO] moon.rest: GET, POST      /api/cab.decision
+[2026-08-26T13:56:42.699Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.decision/:id
+[2026-08-26T13:56:42.705Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-08-26T13:56:47.917Z] [INFO] moon.schema: Schema sync: 0 applied, 0 pending
+[2026-08-26T13:56:47.919Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-08-26T13:56:47.920Z] [INFO] moon.rest: POST           /auth/login
+[2026-08-26T13:56:47.920Z] [INFO] moon.rest: POST           /auth/register
+[2026-08-26T13:56:47.920Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-08-26T13:56:47.920Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-08-26T13:56:47.921Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-08-26T13:56:47.921Z] [INFO] moon.rest: POST           /rpc
+[2026-08-26T13:56:47.921Z] [INFO] moon.rest: GET            /db/status
+[2026-08-26T13:56:47.921Z] [INFO] moon.rest: GET            /meta/models
+[2026-08-26T13:56:47.922Z] [INFO] moon.rest: GET            /live
+[2026-08-26T13:56:47.922Z] [INFO] moon.rest: GET            /openapi.json
+[2026-08-26T13:56:47.922Z] [INFO] moon.rest: GET            /docs
+[2026-08-26T13:56:47.922Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-08-26T13:56:47.923Z] [INFO] moon.rest: GET            /api/witness/scriptures
+[2026-08-26T13:56:47.923Z] [INFO] moon.rest: GET            /api/witness/quran/surahs
+[2026-08-26T13:56:47.923Z] [INFO] moon.rest: GET            /api/witness/quran/surah
+[2026-08-26T13:56:47.923Z] [INFO] moon.rest: GET            /api/witness/quran/search
+[2026-08-26T13:56:47.924Z] [INFO] moon.rest: GET            /api/witness/hadith/books
+[2026-08-26T13:56:47.924Z] [INFO] moon.rest: GET            /api/witness/hadith
+[2026-08-26T13:56:47.924Z] [INFO] moon.rest: GET            /api/witness/traditions
+[2026-08-26T13:56:47.924Z] [INFO] moon.rest: GET            /api/witness/asmaul-husna
+[2026-08-26T13:56:47.924Z] [INFO] moon.rest: GET            /api/witness/devotions
+[2026-08-26T13:56:47.925Z] [INFO] moon.rest: GET            /api/witness/astronomy/moon-phase
+[2026-08-26T13:56:47.925Z] [INFO] moon.rest: GET            /api/witness/astronomy/prayer-times
+[2026-08-26T13:56:47.925Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-26T13:56:47.925Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-26T13:56:47.925Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-26T13:56:47.926Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-26T13:56:47.926Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-26T13:56:47.926Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-26T13:56:47.926Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-26T13:56:47.926Z] [INFO] moon.rest: GET            /api/witness/bookmarks
+[2026-08-26T13:56:47.927Z] [INFO] moon.rest: GET            /api/witness/history
+[2026-08-26T13:56:47.927Z] [INFO] moon.rest: GET            /api/mizan/decision
+[2026-08-26T13:56:47.927Z] [INFO] moon.rest: GET            /api/mizan/summary
+[2026-08-26T13:56:47.927Z] [INFO] moon.rest: GET            /api/cab/summary
+[2026-08-26T13:56:47.928Z] [INFO] moon.rest: POST           /test-publish
+[2026-08-26T13:56:47.928Z] [INFO] moon.rest: GET            /api/external/performance/stats
+[2026-08-26T13:56:47.928Z] [INFO] moon.rest: GET            /api/witness/graph/entities
+[2026-08-26T13:56:47.928Z] [INFO] moon.rest: GET            /api/witness/graph/entities/:entityId/profile
+[2026-08-26T13:56:47.929Z] [INFO] moon.rest: GET            /api/witness/graph/passages
+[2026-08-26T13:56:47.929Z] [INFO] moon.rest: GET            /api/witness/graph/passages/:passageId/content
+[2026-08-26T13:56:47.929Z] [INFO] moon.rest: GET            /api/witness/graph/passages/:passageId/tree
+[2026-08-26T13:56:47.929Z] [INFO] moon.rest: GET            /api/witness/graph/figures/:entityId/mentions
+[2026-08-26T13:56:47.930Z] [INFO] moon.rest: GET            /api/external/nasa/neo
+[2026-08-26T13:56:47.930Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-26T13:56:47.930Z] [INFO] moon.rest: GET            /api/external/nasa/apod
+[2026-08-26T13:56:47.931Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-26T13:56:47.931Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-26T13:56:47.931Z] [INFO] moon.rest: GET            /api/external/noaa/kp-index
+[2026-08-26T13:56:47.931Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-26T13:56:47.932Z] [INFO] moon.rest: GET            /api/external/rainviewer
+[2026-08-26T13:56:47.932Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-26T13:56:47.932Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-26T13:56:47.932Z] [INFO] moon.rest: GET            /api/external/db/status
+[2026-08-26T13:56:47.933Z] [INFO] moon.rest: GET            /api/external/meta/models
+[2026-08-26T13:56:47.933Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-26T13:56:47.933Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-08-26T13:56:47.933Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-08-26T13:56:47.933Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-08-26T13:56:47.934Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-08-26T13:56:47.934Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-08-26T13:56:47.934Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-08-26T13:56:47.934Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-08-26T13:56:47.935Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-08-26T13:56:47.935Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-08-26T13:56:47.935Z] [INFO] moon.rest: GET, POST      /api/vx.zone.subdivision
+[2026-08-26T13:56:47.935Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone.subdivision/:id
+[2026-08-26T13:56:47.935Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-08-26T13:56:47.936Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-08-26T13:56:47.936Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-08-26T13:56:47.936Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-08-26T13:56:47.936Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-08-26T13:56:47.937Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-08-26T13:56:47.937Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-08-26T13:56:47.937Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-08-26T13:56:47.937Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-08-26T13:56:47.937Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-08-26T13:56:47.938Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-08-26T13:56:47.938Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-08-26T13:56:47.938Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-08-26T13:56:47.938Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-08-26T13:56:47.938Z] [INFO] moon.rest: GET, POST      /api/ix.timezone
+[2026-08-26T13:56:47.939Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.timezone/:id
+[2026-08-26T13:56:47.939Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-08-26T13:56:47.939Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-08-26T13:56:47.939Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-08-26T13:56:47.940Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-08-26T13:56:47.940Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-08-26T13:56:47.940Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-08-26T13:56:47.940Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-08-26T13:56:47.940Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-08-26T13:56:47.941Z] [INFO] moon.rest: GET, POST      /api/ir.model.data
+[2026-08-26T13:56:47.941Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.model.data/:id
+[2026-08-26T13:56:47.941Z] [INFO] moon.rest: GET, POST      /api/ir.sequence
+[2026-08-26T13:56:47.941Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.sequence/:id
+[2026-08-26T13:56:47.941Z] [INFO] moon.rest: GET, POST      /api/ir.config_parameter
+[2026-08-26T13:56:47.942Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.config_parameter/:id
+[2026-08-26T13:56:47.942Z] [INFO] moon.rest: GET, POST      /api/ir.attachment
+[2026-08-26T13:56:47.942Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.attachment/:id
+[2026-08-26T13:56:47.942Z] [INFO] moon.rest: GET, POST      /api/px.request
+[2026-08-26T13:56:47.943Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.request/:id
+[2026-08-26T13:56:47.943Z] [INFO] moon.rest: GET, POST      /api/px.cache
+[2026-08-26T13:56:47.943Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.cache/:id
+[2026-08-26T13:56:47.943Z] [INFO] moon.rest: GET, POST      /api/px.query
+[2026-08-26T13:56:47.943Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.query/:id
+[2026-08-26T13:56:47.944Z] [INFO] moon.rest: GET, POST      /api/px.system
+[2026-08-26T13:56:47.944Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.system/:id
+[2026-08-26T13:56:47.944Z] [INFO] moon.rest: GET, POST      /api/wx.entity
+[2026-08-26T13:56:47.944Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity/:id
+[2026-08-26T13:56:47.944Z] [INFO] moon.rest: GET, POST      /api/wx.entity.alias
+[2026-08-26T13:56:47.945Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity.alias/:id
+[2026-08-26T13:56:47.945Z] [INFO] moon.rest: GET, POST      /api/wx.entity.identifier
+[2026-08-26T13:56:47.945Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity.identifier/:id
+[2026-08-26T13:56:47.945Z] [INFO] moon.rest: GET, POST      /api/wx.source
+[2026-08-26T13:56:47.946Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source/:id
+[2026-08-26T13:56:47.946Z] [INFO] moon.rest: GET, POST      /api/wx.provenance
+[2026-08-26T13:56:47.946Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.provenance/:id
+[2026-08-26T13:56:47.946Z] [INFO] moon.rest: GET, POST      /api/wx.relation.type
+[2026-08-26T13:56:47.947Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.relation.type/:id
+[2026-08-26T13:56:47.947Z] [INFO] moon.rest: GET, POST      /api/wx.relation
+[2026-08-26T13:56:47.948Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.relation/:id
+[2026-08-26T13:56:47.948Z] [INFO] moon.rest: GET, POST      /api/wx.religion
+[2026-08-26T13:56:47.948Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.religion/:id
+[2026-08-26T13:56:47.948Z] [INFO] moon.rest: GET, POST      /api/wx.community
+[2026-08-26T13:56:47.949Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.community/:id
+[2026-08-26T13:56:47.949Z] [INFO] moon.rest: GET, POST      /api/wx.scripture
+[2026-08-26T13:56:47.949Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture/:id
+[2026-08-26T13:56:47.950Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.book
+[2026-08-26T13:56:47.950Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.book/:id
+[2026-08-26T13:56:47.950Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.verse
+[2026-08-26T13:56:47.950Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.verse/:id
+[2026-08-26T13:56:47.950Z] [INFO] moon.rest: GET, POST      /api/wx.tradition
+[2026-08-26T13:56:47.951Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition/:id
+[2026-08-26T13:56:47.951Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.item
+[2026-08-26T13:56:47.951Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.item/:id
+[2026-08-26T13:56:47.951Z] [INFO] moon.rest: GET, POST      /api/wx.devotion
+[2026-08-26T13:56:47.952Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.devotion/:id
+[2026-08-26T13:56:47.952Z] [INFO] moon.rest: GET, POST      /api/wx.asmaul.husna
+[2026-08-26T13:56:47.952Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.asmaul.husna/:id
+[2026-08-26T13:56:47.953Z] [INFO] moon.rest: GET, POST      /api/wx.bookmark
+[2026-08-26T13:56:47.953Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.bookmark/:id
+[2026-08-26T13:56:47.953Z] [INFO] moon.rest: GET, POST      /api/wx.history
+[2026-08-26T13:56:47.953Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.history/:id
+[2026-08-26T13:56:47.954Z] [INFO] moon.rest: GET, POST      /api/wx.passage
+[2026-08-26T13:56:47.954Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.passage/:id
+[2026-08-26T13:56:47.954Z] [INFO] moon.rest: GET, POST      /api/wx.text.edition
+[2026-08-26T13:56:47.954Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.text.edition/:id
+[2026-08-26T13:56:47.955Z] [INFO] moon.rest: GET, POST      /api/wx.content
+[2026-08-26T13:56:47.955Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.content/:id
+[2026-08-26T13:56:47.955Z] [INFO] moon.rest: GET, POST      /api/wx.root
+[2026-08-26T13:56:47.956Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.root/:id
+[2026-08-26T13:56:47.956Z] [INFO] moon.rest: GET, POST      /api/wx.lexeme
+[2026-08-26T13:56:47.956Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.lexeme/:id
+[2026-08-26T13:56:47.956Z] [INFO] moon.rest: GET, POST      /api/wx.lexical.occurrence
+[2026-08-26T13:56:47.957Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.lexical.occurrence/:id
+[2026-08-26T13:56:47.957Z] [INFO] moon.rest: GET, POST      /api/wx.revelation.event
+[2026-08-26T13:56:47.957Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.revelation.event/:id
+[2026-08-26T13:56:47.958Z] [INFO] moon.rest: GET, POST      /api/wx.revelation.event.passage
+[2026-08-26T13:56:47.958Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.revelation.event.passage/:id
+[2026-08-26T13:56:47.958Z] [INFO] moon.rest: GET, POST      /api/wx.figure
+[2026-08-26T13:56:47.958Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure/:id
+[2026-08-26T13:56:47.959Z] [INFO] moon.rest: GET, POST      /api/wx.figure.name
+[2026-08-26T13:56:47.959Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure.name/:id
+[2026-08-26T13:56:47.959Z] [INFO] moon.rest: GET, POST      /api/wx.figure.role
+[2026-08-26T13:56:47.959Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure.role/:id
+[2026-08-26T13:56:47.959Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.corpus
+[2026-08-26T13:56:47.960Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.corpus/:id
+[2026-08-26T13:56:47.960Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.unit
+[2026-08-26T13:56:47.960Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.unit/:id
+[2026-08-26T13:56:47.960Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.reference
+[2026-08-26T13:56:47.961Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.reference/:id
+[2026-08-26T13:56:47.961Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.attribution
+[2026-08-26T13:56:47.961Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.attribution/:id
+[2026-08-26T13:56:47.962Z] [INFO] moon.rest: GET, POST      /api/wx.transmission.chain
+[2026-08-26T13:56:47.962Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.transmission.chain/:id
+[2026-08-26T13:56:47.963Z] [INFO] moon.rest: GET, POST      /api/wx.transmission.link
+[2026-08-26T13:56:47.964Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.transmission.link/:id
+[2026-08-26T13:56:47.965Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.assessment
+[2026-08-26T13:56:47.965Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.assessment/:id
+[2026-08-26T13:56:47.965Z] [INFO] moon.rest: GET, POST      /api/wx.concept
+[2026-08-26T13:56:47.966Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.concept/:id
+[2026-08-26T13:56:47.966Z] [INFO] moon.rest: GET, POST      /api/wx.assertion
+[2026-08-26T13:56:47.966Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.assertion/:id
+[2026-08-26T13:56:47.966Z] [INFO] moon.rest: GET, POST      /api/wx.evidence
+[2026-08-26T13:56:47.967Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.evidence/:id
+[2026-08-26T13:56:47.967Z] [INFO] moon.rest: GET, POST      /api/wx.divine.expression
+[2026-08-26T13:56:47.968Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.divine.expression/:id
+[2026-08-26T13:56:47.968Z] [INFO] moon.rest: GET, POST      /api/wx.divine.expression.occurrence
+[2026-08-26T13:56:47.968Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.divine.expression.occurrence/:id
+[2026-08-26T13:56:47.968Z] [INFO] moon.rest: GET, POST      /api/wx.legacy.mapping
+[2026-08-26T13:56:47.969Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.legacy.mapping/:id
+[2026-08-26T13:56:47.969Z] [INFO] moon.rest: GET, POST      /api/wx.engine.run
+[2026-08-26T13:56:47.969Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.engine.run/:id
+[2026-08-26T13:56:47.970Z] [INFO] moon.rest: GET, POST      /api/wx.engine.result
+[2026-08-26T13:56:47.970Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.engine.result/:id
+[2026-08-26T13:56:47.970Z] [INFO] moon.rest: GET, POST      /api/wx.source.policy
+[2026-08-26T13:56:47.971Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.policy/:id
+[2026-08-26T13:56:47.971Z] [INFO] moon.rest: GET, POST      /api/wx.source.manifest
+[2026-08-26T13:56:47.972Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.manifest/:id
+[2026-08-26T13:56:47.972Z] [INFO] moon.rest: GET, POST      /api/wx.source.artifact
+[2026-08-26T13:56:47.972Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.artifact/:id
+[2026-08-26T13:56:47.972Z] [INFO] moon.rest: GET, POST      /api/wx.source.snapshot
+[2026-08-26T13:56:47.973Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.snapshot/:id
+[2026-08-26T13:56:47.973Z] [INFO] moon.rest: GET, POST      /api/kh.conversation
+[2026-08-26T13:56:47.973Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.conversation/:id
+[2026-08-26T13:56:47.973Z] [INFO] moon.rest: GET, POST      /api/kh.message
+[2026-08-26T13:56:47.974Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
+[2026-08-26T13:56:47.974Z] [INFO] moon.rest: GET, POST      /api/mz.case
+[2026-08-26T13:56:47.974Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.case/:id
+[2026-08-26T13:56:47.975Z] [INFO] moon.rest: GET, POST      /api/mz.assessment
+[2026-08-26T13:56:47.975Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.assessment/:id
+[2026-08-26T13:56:47.975Z] [INFO] moon.rest: GET, POST      /api/mz.filter
+[2026-08-26T13:56:47.975Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.filter/:id
+[2026-08-26T13:56:47.976Z] [INFO] moon.rest: GET, POST      /api/mz.reference
+[2026-08-26T13:56:47.977Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.reference/:id
+[2026-08-26T13:56:47.977Z] [INFO] moon.rest: GET, POST      /api/sg.operation
+[2026-08-26T13:56:47.977Z] [INFO] moon.rest: GET, PUT, DEL  /api/sg.operation/:id
+[2026-08-26T13:56:47.977Z] [INFO] moon.rest: GET, POST      /api/cab.project
+[2026-08-26T13:56:47.978Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.project/:id
+[2026-08-26T13:56:47.978Z] [INFO] moon.rest: GET, POST      /api/cab.task
+[2026-08-26T13:56:47.978Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.task/:id
+[2026-08-26T13:56:47.978Z] [INFO] moon.rest: GET, POST      /api/cab.change
+[2026-08-26T13:56:47.979Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.change/:id
+[2026-08-26T13:56:47.979Z] [INFO] moon.rest: GET, POST      /api/cab.meeting
+[2026-08-26T13:56:47.979Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.meeting/:id
+[2026-08-26T13:56:47.979Z] [INFO] moon.rest: GET, POST      /api/cab.decision
+[2026-08-26T13:56:47.980Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.decision/:id
+[2026-08-26T13:56:47.986Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-08-26T13:56:49.709Z] [INFO] moon.schema: Schema sync: 0 applied, 0 pending
+[2026-08-26T13:56:49.710Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-08-26T13:56:49.710Z] [INFO] moon.rest: POST           /auth/login
+[2026-08-26T13:56:49.710Z] [INFO] moon.rest: POST           /auth/register
+[2026-08-26T13:56:49.711Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-08-26T13:56:49.711Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-08-26T13:56:49.711Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-08-26T13:56:49.711Z] [INFO] moon.rest: POST           /rpc
+[2026-08-26T13:56:49.712Z] [INFO] moon.rest: GET            /db/status
+[2026-08-26T13:56:49.712Z] [INFO] moon.rest: GET            /meta/models
+[2026-08-26T13:56:49.712Z] [INFO] moon.rest: GET            /live
+[2026-08-26T13:56:49.712Z] [INFO] moon.rest: GET            /openapi.json
+[2026-08-26T13:56:49.713Z] [INFO] moon.rest: GET            /docs
+[2026-08-26T13:56:49.713Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-08-26T13:56:49.713Z] [INFO] moon.rest: GET            /api/witness/scriptures
+[2026-08-26T13:56:49.713Z] [INFO] moon.rest: GET            /api/witness/quran/surahs
+[2026-08-26T13:56:49.713Z] [INFO] moon.rest: GET            /api/witness/quran/surah
+[2026-08-26T13:56:49.714Z] [INFO] moon.rest: GET            /api/witness/quran/search
+[2026-08-26T13:56:49.714Z] [INFO] moon.rest: GET            /api/witness/hadith/books
+[2026-08-26T13:56:49.714Z] [INFO] moon.rest: GET            /api/witness/hadith
+[2026-08-26T13:56:49.714Z] [INFO] moon.rest: GET            /api/witness/traditions
+[2026-08-26T13:56:49.715Z] [INFO] moon.rest: GET            /api/witness/asmaul-husna
+[2026-08-26T13:56:49.715Z] [INFO] moon.rest: GET            /api/witness/devotions
+[2026-08-26T13:56:49.715Z] [INFO] moon.rest: GET            /api/witness/astronomy/moon-phase
+[2026-08-26T13:56:49.715Z] [INFO] moon.rest: GET            /api/witness/astronomy/prayer-times
+[2026-08-26T13:56:49.716Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-26T13:56:49.716Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-26T13:56:49.716Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-26T13:56:49.716Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-26T13:56:49.717Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-26T13:56:49.717Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-26T13:56:49.717Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-26T13:56:49.717Z] [INFO] moon.rest: GET            /api/witness/bookmarks
+[2026-08-26T13:56:49.717Z] [INFO] moon.rest: GET            /api/witness/history
+[2026-08-26T13:56:49.718Z] [INFO] moon.rest: GET            /api/mizan/decision
+[2026-08-26T13:56:49.718Z] [INFO] moon.rest: GET            /api/mizan/summary
+[2026-08-26T13:56:49.718Z] [INFO] moon.rest: GET            /api/cab/summary
+[2026-08-26T13:56:49.718Z] [INFO] moon.rest: POST           /test-publish
+[2026-08-26T13:56:49.719Z] [INFO] moon.rest: GET            /api/external/performance/stats
+[2026-08-26T13:56:49.719Z] [INFO] moon.rest: GET            /api/witness/graph/entities
+[2026-08-26T13:56:49.719Z] [INFO] moon.rest: GET            /api/witness/graph/entities/:entityId/profile
+[2026-08-26T13:56:49.720Z] [INFO] moon.rest: GET            /api/witness/graph/passages
+[2026-08-26T13:56:49.720Z] [INFO] moon.rest: GET            /api/witness/graph/passages/:passageId/content
+[2026-08-26T13:56:49.720Z] [INFO] moon.rest: GET            /api/witness/graph/passages/:passageId/tree
+[2026-08-26T13:56:49.721Z] [INFO] moon.rest: GET            /api/witness/graph/figures/:entityId/mentions
+[2026-08-26T13:56:49.721Z] [INFO] moon.rest: GET            /api/external/nasa/neo
+[2026-08-26T13:56:49.721Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-26T13:56:49.721Z] [INFO] moon.rest: GET            /api/external/nasa/apod
+[2026-08-26T13:56:49.722Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-26T13:56:49.722Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-26T13:56:49.722Z] [INFO] moon.rest: GET            /api/external/noaa/kp-index
+[2026-08-26T13:56:49.722Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-26T13:56:49.723Z] [INFO] moon.rest: GET            /api/external/rainviewer
+[2026-08-26T13:56:49.723Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-26T13:56:49.723Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-26T13:56:49.723Z] [INFO] moon.rest: GET            /api/external/db/status
+[2026-08-26T13:56:49.723Z] [INFO] moon.rest: GET            /api/external/meta/models
+[2026-08-26T13:56:49.724Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-26T13:56:49.724Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-08-26T13:56:49.724Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-08-26T13:56:49.724Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-08-26T13:56:49.725Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-08-26T13:56:49.725Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-08-26T13:56:49.725Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-08-26T13:56:49.725Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-08-26T13:56:49.726Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-08-26T13:56:49.726Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-08-26T13:56:49.726Z] [INFO] moon.rest: GET, POST      /api/vx.zone.subdivision
+[2026-08-26T13:56:49.726Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone.subdivision/:id
+[2026-08-26T13:56:49.727Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-08-26T13:56:49.727Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-08-26T13:56:49.727Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-08-26T13:56:49.727Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-08-26T13:56:49.727Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-08-26T13:56:49.728Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-08-26T13:56:49.728Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-08-26T13:56:49.728Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-08-26T13:56:49.728Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-08-26T13:56:49.729Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-08-26T13:56:49.729Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-08-26T13:56:49.729Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-08-26T13:56:49.729Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-08-26T13:56:49.730Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-08-26T13:56:49.730Z] [INFO] moon.rest: GET, POST      /api/ix.timezone
+[2026-08-26T13:56:49.730Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.timezone/:id
+[2026-08-26T13:56:49.730Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-08-26T13:56:49.730Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-08-26T13:56:49.731Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-08-26T13:56:49.731Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-08-26T13:56:49.731Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-08-26T13:56:49.731Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-08-26T13:56:49.732Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-08-26T13:56:49.732Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-08-26T13:56:49.732Z] [INFO] moon.rest: GET, POST      /api/ir.model.data
+[2026-08-26T13:56:49.732Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.model.data/:id
+[2026-08-26T13:56:49.733Z] [INFO] moon.rest: GET, POST      /api/ir.sequence
+[2026-08-26T13:56:49.733Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.sequence/:id
+[2026-08-26T13:56:49.733Z] [INFO] moon.rest: GET, POST      /api/ir.config_parameter
+[2026-08-26T13:56:49.733Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.config_parameter/:id
+[2026-08-26T13:56:49.733Z] [INFO] moon.rest: GET, POST      /api/ir.attachment
+[2026-08-26T13:56:49.734Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.attachment/:id
+[2026-08-26T13:56:49.734Z] [INFO] moon.rest: GET, POST      /api/px.request
+[2026-08-26T13:56:49.734Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.request/:id
+[2026-08-26T13:56:49.735Z] [INFO] moon.rest: GET, POST      /api/px.cache
+[2026-08-26T13:56:49.735Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.cache/:id
+[2026-08-26T13:56:49.735Z] [INFO] moon.rest: GET, POST      /api/px.query
+[2026-08-26T13:56:49.735Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.query/:id
+[2026-08-26T13:56:49.736Z] [INFO] moon.rest: GET, POST      /api/px.system
+[2026-08-26T13:56:49.736Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.system/:id
+[2026-08-26T13:56:49.736Z] [INFO] moon.rest: GET, POST      /api/wx.entity
+[2026-08-26T13:56:49.737Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity/:id
+[2026-08-26T13:56:49.737Z] [INFO] moon.rest: GET, POST      /api/wx.entity.alias
+[2026-08-26T13:56:49.737Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity.alias/:id
+[2026-08-26T13:56:49.737Z] [INFO] moon.rest: GET, POST      /api/wx.entity.identifier
+[2026-08-26T13:56:49.738Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity.identifier/:id
+[2026-08-26T13:56:49.738Z] [INFO] moon.rest: GET, POST      /api/wx.source
+[2026-08-26T13:56:49.738Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source/:id
+[2026-08-26T13:56:49.738Z] [INFO] moon.rest: GET, POST      /api/wx.provenance
+[2026-08-26T13:56:49.739Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.provenance/:id
+[2026-08-26T13:56:49.739Z] [INFO] moon.rest: GET, POST      /api/wx.relation.type
+[2026-08-26T13:56:49.739Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.relation.type/:id
+[2026-08-26T13:56:49.739Z] [INFO] moon.rest: GET, POST      /api/wx.relation
+[2026-08-26T13:56:49.740Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.relation/:id
+[2026-08-26T13:56:49.740Z] [INFO] moon.rest: GET, POST      /api/wx.religion
+[2026-08-26T13:56:49.740Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.religion/:id
+[2026-08-26T13:56:49.740Z] [INFO] moon.rest: GET, POST      /api/wx.community
+[2026-08-26T13:56:49.741Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.community/:id
+[2026-08-26T13:56:49.741Z] [INFO] moon.rest: GET, POST      /api/wx.scripture
+[2026-08-26T13:56:49.741Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture/:id
+[2026-08-26T13:56:49.742Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.book
+[2026-08-26T13:56:49.742Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.book/:id
+[2026-08-26T13:56:49.742Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.verse
+[2026-08-26T13:56:49.743Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.verse/:id
+[2026-08-26T13:56:49.743Z] [INFO] moon.rest: GET, POST      /api/wx.tradition
+[2026-08-26T13:56:49.743Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition/:id
+[2026-08-26T13:56:49.744Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.item
+[2026-08-26T13:56:49.744Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.item/:id
+[2026-08-26T13:56:49.744Z] [INFO] moon.rest: GET, POST      /api/wx.devotion
+[2026-08-26T13:56:49.744Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.devotion/:id
+[2026-08-26T13:56:49.745Z] [INFO] moon.rest: GET, POST      /api/wx.asmaul.husna
+[2026-08-26T13:56:49.745Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.asmaul.husna/:id
+[2026-08-26T13:56:49.745Z] [INFO] moon.rest: GET, POST      /api/wx.bookmark
+[2026-08-26T13:56:49.745Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.bookmark/:id
+[2026-08-26T13:56:49.746Z] [INFO] moon.rest: GET, POST      /api/wx.history
+[2026-08-26T13:56:49.746Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.history/:id
+[2026-08-26T13:56:49.746Z] [INFO] moon.rest: GET, POST      /api/wx.passage
+[2026-08-26T13:56:49.746Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.passage/:id
+[2026-08-26T13:56:49.747Z] [INFO] moon.rest: GET, POST      /api/wx.text.edition
+[2026-08-26T13:56:49.747Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.text.edition/:id
+[2026-08-26T13:56:49.747Z] [INFO] moon.rest: GET, POST      /api/wx.content
+[2026-08-26T13:56:49.747Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.content/:id
+[2026-08-26T13:56:49.747Z] [INFO] moon.rest: GET, POST      /api/wx.root
+[2026-08-26T13:56:49.748Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.root/:id
+[2026-08-26T13:56:49.748Z] [INFO] moon.rest: GET, POST      /api/wx.lexeme
+[2026-08-26T13:56:49.748Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.lexeme/:id
+[2026-08-26T13:56:49.748Z] [INFO] moon.rest: GET, POST      /api/wx.lexical.occurrence
+[2026-08-26T13:56:49.749Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.lexical.occurrence/:id
+[2026-08-26T13:56:49.749Z] [INFO] moon.rest: GET, POST      /api/wx.revelation.event
+[2026-08-26T13:56:49.749Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.revelation.event/:id
+[2026-08-26T13:56:49.750Z] [INFO] moon.rest: GET, POST      /api/wx.revelation.event.passage
+[2026-08-26T13:56:49.750Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.revelation.event.passage/:id
+[2026-08-26T13:56:49.750Z] [INFO] moon.rest: GET, POST      /api/wx.figure
+[2026-08-26T13:56:49.750Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure/:id
+[2026-08-26T13:56:49.751Z] [INFO] moon.rest: GET, POST      /api/wx.figure.name
+[2026-08-26T13:56:49.751Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure.name/:id
+[2026-08-26T13:56:49.751Z] [INFO] moon.rest: GET, POST      /api/wx.figure.role
+[2026-08-26T13:56:49.752Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure.role/:id
+[2026-08-26T13:56:49.752Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.corpus
+[2026-08-26T13:56:49.752Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.corpus/:id
+[2026-08-26T13:56:49.754Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.unit
+[2026-08-26T13:56:49.754Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.unit/:id
+[2026-08-26T13:56:49.755Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.reference
+[2026-08-26T13:56:49.755Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.reference/:id
+[2026-08-26T13:56:49.756Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.attribution
+[2026-08-26T13:56:49.756Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.attribution/:id
+[2026-08-26T13:56:49.756Z] [INFO] moon.rest: GET, POST      /api/wx.transmission.chain
+[2026-08-26T13:56:49.757Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.transmission.chain/:id
+[2026-08-26T13:56:49.757Z] [INFO] moon.rest: GET, POST      /api/wx.transmission.link
+[2026-08-26T13:56:49.757Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.transmission.link/:id
+[2026-08-26T13:56:49.758Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.assessment
+[2026-08-26T13:56:49.758Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.assessment/:id
+[2026-08-26T13:56:49.758Z] [INFO] moon.rest: GET, POST      /api/wx.concept
+[2026-08-26T13:56:49.758Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.concept/:id
+[2026-08-26T13:56:49.759Z] [INFO] moon.rest: GET, POST      /api/wx.assertion
+[2026-08-26T13:56:49.759Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.assertion/:id
+[2026-08-26T13:56:49.759Z] [INFO] moon.rest: GET, POST      /api/wx.evidence
+[2026-08-26T13:56:49.759Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.evidence/:id
+[2026-08-26T13:56:49.760Z] [INFO] moon.rest: GET, POST      /api/wx.divine.expression
+[2026-08-26T13:56:49.760Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.divine.expression/:id
+[2026-08-26T13:56:49.760Z] [INFO] moon.rest: GET, POST      /api/wx.divine.expression.occurrence
+[2026-08-26T13:56:49.760Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.divine.expression.occurrence/:id
+[2026-08-26T13:56:49.761Z] [INFO] moon.rest: GET, POST      /api/wx.legacy.mapping
+[2026-08-26T13:56:49.761Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.legacy.mapping/:id
+[2026-08-26T13:56:49.761Z] [INFO] moon.rest: GET, POST      /api/wx.engine.run
+[2026-08-26T13:56:49.761Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.engine.run/:id
+[2026-08-26T13:56:49.762Z] [INFO] moon.rest: GET, POST      /api/wx.engine.result
+[2026-08-26T13:56:49.762Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.engine.result/:id
+[2026-08-26T13:56:49.762Z] [INFO] moon.rest: GET, POST      /api/wx.source.policy
+[2026-08-26T13:56:49.762Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.policy/:id
+[2026-08-26T13:56:49.763Z] [INFO] moon.rest: GET, POST      /api/wx.source.manifest
+[2026-08-26T13:56:49.763Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.manifest/:id
+[2026-08-26T13:56:49.763Z] [INFO] moon.rest: GET, POST      /api/wx.source.artifact
+[2026-08-26T13:56:49.763Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.artifact/:id
+[2026-08-26T13:56:49.763Z] [INFO] moon.rest: GET, POST      /api/wx.source.snapshot
+[2026-08-26T13:56:49.764Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.snapshot/:id
+[2026-08-26T13:56:49.764Z] [INFO] moon.rest: GET, POST      /api/kh.conversation
+[2026-08-26T13:56:49.764Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.conversation/:id
+[2026-08-26T13:56:49.764Z] [INFO] moon.rest: GET, POST      /api/kh.message
+[2026-08-26T13:56:49.765Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
+[2026-08-26T13:56:49.765Z] [INFO] moon.rest: GET, POST      /api/mz.case
+[2026-08-26T13:56:49.765Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.case/:id
+[2026-08-26T13:56:49.766Z] [INFO] moon.rest: GET, POST      /api/mz.assessment
+[2026-08-26T13:56:49.766Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.assessment/:id
+[2026-08-26T13:56:49.766Z] [INFO] moon.rest: GET, POST      /api/mz.filter
+[2026-08-26T13:56:49.766Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.filter/:id
+[2026-08-26T13:56:49.767Z] [INFO] moon.rest: GET, POST      /api/mz.reference
+[2026-08-26T13:56:49.767Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.reference/:id
+[2026-08-26T13:56:49.767Z] [INFO] moon.rest: GET, POST      /api/sg.operation
+[2026-08-26T13:56:49.767Z] [INFO] moon.rest: GET, PUT, DEL  /api/sg.operation/:id
+[2026-08-26T13:56:49.767Z] [INFO] moon.rest: GET, POST      /api/cab.project
+[2026-08-26T13:56:49.768Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.project/:id
+[2026-08-26T13:56:49.768Z] [INFO] moon.rest: GET, POST      /api/cab.task
+[2026-08-26T13:56:49.768Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.task/:id
+[2026-08-26T13:56:49.768Z] [INFO] moon.rest: GET, POST      /api/cab.change
+[2026-08-26T13:56:49.769Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.change/:id
+[2026-08-26T13:56:49.769Z] [INFO] moon.rest: GET, POST      /api/cab.meeting
+[2026-08-26T13:56:49.770Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.meeting/:id
+[2026-08-26T13:56:49.770Z] [INFO] moon.rest: GET, POST      /api/cab.decision
+[2026-08-26T13:56:49.771Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.decision/:id
+[2026-08-26T13:56:49.776Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000
+[2026-08-26T13:57:44.194Z] [INFO] moon.schema: Schema sync: 0 applied, 0 pending
+[2026-08-26T13:57:44.195Z] [INFO] moon.rest: --- Built-in Endpoints ---
+[2026-08-26T13:57:44.195Z] [INFO] moon.rest: POST           /auth/login
+[2026-08-26T13:57:44.195Z] [INFO] moon.rest: POST           /auth/register
+[2026-08-26T13:57:44.196Z] [INFO] moon.rest: POST           /auth/forgot-password
+[2026-08-26T13:57:44.196Z] [INFO] moon.rest: POST           /auth/verify-otp
+[2026-08-26T13:57:44.196Z] [INFO] moon.rest: POST           /auth/reset-password
+[2026-08-26T13:57:44.196Z] [INFO] moon.rest: POST           /rpc
+[2026-08-26T13:57:44.196Z] [INFO] moon.rest: GET            /db/status
+[2026-08-26T13:57:44.197Z] [INFO] moon.rest: GET            /meta/models
+[2026-08-26T13:57:44.197Z] [INFO] moon.rest: GET            /live
+[2026-08-26T13:57:44.197Z] [INFO] moon.rest: GET            /openapi.json
+[2026-08-26T13:57:44.197Z] [INFO] moon.rest: GET            /docs
+[2026-08-26T13:57:44.197Z] [INFO] moon.rest: --- Custom Endpoints ---
+[2026-08-26T13:57:44.198Z] [INFO] moon.rest: GET            /api/witness/scriptures
+[2026-08-26T13:57:44.198Z] [INFO] moon.rest: GET            /api/witness/quran/surahs
+[2026-08-26T13:57:44.198Z] [INFO] moon.rest: GET            /api/witness/quran/surah
+[2026-08-26T13:57:44.198Z] [INFO] moon.rest: GET            /api/witness/quran/search
+[2026-08-26T13:57:44.198Z] [INFO] moon.rest: GET            /api/witness/hadith/books
+[2026-08-26T13:57:44.198Z] [INFO] moon.rest: GET            /api/witness/hadith
+[2026-08-26T13:57:44.199Z] [INFO] moon.rest: GET            /api/witness/traditions
+[2026-08-26T13:57:44.199Z] [INFO] moon.rest: GET            /api/witness/asmaul-husna
+[2026-08-26T13:57:44.199Z] [INFO] moon.rest: GET            /api/witness/devotions
+[2026-08-26T13:57:44.199Z] [INFO] moon.rest: GET            /api/witness/astronomy/moon-phase
+[2026-08-26T13:57:44.199Z] [INFO] moon.rest: GET            /api/witness/astronomy/prayer-times
+[2026-08-26T13:57:44.199Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-26T13:57:44.200Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-26T13:57:44.200Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-26T13:57:44.200Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-26T13:57:44.200Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-26T13:57:44.200Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-26T13:57:44.200Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-26T13:57:44.201Z] [INFO] moon.rest: GET            /api/witness/bookmarks
+[2026-08-26T13:57:44.201Z] [INFO] moon.rest: GET            /api/witness/history
+[2026-08-26T13:57:44.201Z] [INFO] moon.rest: GET            /api/mizan/decision
+[2026-08-26T13:57:44.201Z] [INFO] moon.rest: GET            /api/mizan/summary
+[2026-08-26T13:57:44.201Z] [INFO] moon.rest: GET            /api/cab/summary
+[2026-08-26T13:57:44.202Z] [INFO] moon.rest: POST           /test-publish
+[2026-08-26T13:57:44.202Z] [INFO] moon.rest: GET            /api/external/performance/stats
+[2026-08-26T13:57:44.202Z] [INFO] moon.rest: GET            /api/witness/graph/entities
+[2026-08-26T13:57:44.202Z] [INFO] moon.rest: GET            /api/witness/graph/entities/:entityId/profile
+[2026-08-26T13:57:44.202Z] [INFO] moon.rest: GET            /api/witness/graph/passages
+[2026-08-26T13:57:44.202Z] [INFO] moon.rest: GET            /api/witness/graph/passages/:passageId/content
+[2026-08-26T13:57:44.203Z] [INFO] moon.rest: GET            /api/witness/graph/passages/:passageId/tree
+[2026-08-26T13:57:44.203Z] [INFO] moon.rest: GET            /api/witness/graph/figures/:entityId/mentions
+[2026-08-26T13:57:44.203Z] [INFO] moon.rest: GET            /api/external/nasa/neo
+[2026-08-26T13:57:44.203Z] [INFO] moon.rest: GET            /api/external/nasa/donki/cme
+[2026-08-26T13:57:44.203Z] [INFO] moon.rest: GET            /api/external/nasa/apod
+[2026-08-26T13:57:44.203Z] [INFO] moon.rest: GET            /api/external/weather
+[2026-08-26T13:57:44.204Z] [INFO] moon.rest: GET            /api/external/usgs/earthquakes
+[2026-08-26T13:57:44.204Z] [INFO] moon.rest: GET            /api/external/noaa/kp-index
+[2026-08-26T13:57:44.204Z] [INFO] moon.rest: GET            /api/external/iss
+[2026-08-26T13:57:44.204Z] [INFO] moon.rest: GET            /api/external/rainviewer
+[2026-08-26T13:57:44.204Z] [INFO] moon.rest: GET            /api/external/opensky
+[2026-08-26T13:57:44.204Z] [INFO] moon.rest: GET            /api/external/binance/ticker
+[2026-08-26T13:57:44.205Z] [INFO] moon.rest: GET            /api/external/db/status
+[2026-08-26T13:57:44.205Z] [INFO] moon.rest: GET            /api/external/meta/models
+[2026-08-26T13:57:44.205Z] [INFO] moon.rest: GET            /api/external/trends
+[2026-08-26T13:57:44.205Z] [INFO] moon.rest: --- Auto-Generated REST Endpoints ---
+[2026-08-26T13:57:44.205Z] [INFO] moon.rest: GET, POST      /api/vx.user
+[2026-08-26T13:57:44.205Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.user/:id
+[2026-08-26T13:57:44.206Z] [INFO] moon.rest: GET, POST      /api/vx.node
+[2026-08-26T13:57:44.206Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.node/:id
+[2026-08-26T13:57:44.206Z] [INFO] moon.rest: GET, POST      /api/vx.org
+[2026-08-26T13:57:44.206Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.org/:id
+[2026-08-26T13:57:44.206Z] [INFO] moon.rest: GET, POST      /api/vx.zone
+[2026-08-26T13:57:44.207Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone/:id
+[2026-08-26T13:57:44.207Z] [INFO] moon.rest: GET, POST      /api/vx.zone.subdivision
+[2026-08-26T13:57:44.207Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.zone.subdivision/:id
+[2026-08-26T13:57:44.207Z] [INFO] moon.rest: GET, POST      /api/vx.coin
+[2026-08-26T13:57:44.207Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.coin/:id
+[2026-08-26T13:57:44.207Z] [INFO] moon.rest: GET, POST      /api/vx.role
+[2026-08-26T13:57:44.208Z] [INFO] moon.rest: GET, PUT, DEL  /api/vx.role/:id
+[2026-08-26T13:57:44.208Z] [INFO] moon.rest: GET, POST      /api/mx.model
+[2026-08-26T13:57:44.208Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.model/:id
+[2026-08-26T13:57:44.208Z] [INFO] moon.rest: GET, POST      /api/mx.grant
+[2026-08-26T13:57:44.208Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.grant/:id
+[2026-08-26T13:57:44.208Z] [INFO] moon.rest: GET, POST      /api/mx.rule
+[2026-08-26T13:57:44.208Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.rule/:id
+[2026-08-26T13:57:44.209Z] [INFO] moon.rest: GET, POST      /api/ix.lang
+[2026-08-26T13:57:44.209Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.lang/:id
+[2026-08-26T13:57:44.209Z] [INFO] moon.rest: GET, POST      /api/ix.dict
+[2026-08-26T13:57:44.209Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.dict/:id
+[2026-08-26T13:57:44.209Z] [INFO] moon.rest: GET, POST      /api/ix.timezone
+[2026-08-26T13:57:44.210Z] [INFO] moon.rest: GET, PUT, DEL  /api/ix.timezone/:id
+[2026-08-26T13:57:44.210Z] [INFO] moon.rest: GET, POST      /api/fx.msg
+[2026-08-26T13:57:44.210Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.msg/:id
+[2026-08-26T13:57:44.210Z] [INFO] moon.rest: GET, POST      /api/fx.track
+[2026-08-26T13:57:44.210Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.track/:id
+[2026-08-26T13:57:44.211Z] [INFO] moon.rest: GET, POST      /api/mx.metric
+[2026-08-26T13:57:44.211Z] [INFO] moon.rest: GET, PUT, DEL  /api/mx.metric/:id
+[2026-08-26T13:57:44.211Z] [INFO] moon.rest: GET, POST      /api/fx.session
+[2026-08-26T13:57:44.211Z] [INFO] moon.rest: GET, PUT, DEL  /api/fx.session/:id
+[2026-08-26T13:57:44.211Z] [INFO] moon.rest: GET, POST      /api/ir.model.data
+[2026-08-26T13:57:44.212Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.model.data/:id
+[2026-08-26T13:57:44.212Z] [INFO] moon.rest: GET, POST      /api/ir.sequence
+[2026-08-26T13:57:44.212Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.sequence/:id
+[2026-08-26T13:57:44.212Z] [INFO] moon.rest: GET, POST      /api/ir.config_parameter
+[2026-08-26T13:57:44.212Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.config_parameter/:id
+[2026-08-26T13:57:44.213Z] [INFO] moon.rest: GET, POST      /api/ir.attachment
+[2026-08-26T13:57:44.213Z] [INFO] moon.rest: GET, PUT, DEL  /api/ir.attachment/:id
+[2026-08-26T13:57:44.213Z] [INFO] moon.rest: GET, POST      /api/px.request
+[2026-08-26T13:57:44.213Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.request/:id
+[2026-08-26T13:57:44.214Z] [INFO] moon.rest: GET, POST      /api/px.cache
+[2026-08-26T13:57:44.214Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.cache/:id
+[2026-08-26T13:57:44.214Z] [INFO] moon.rest: GET, POST      /api/px.query
+[2026-08-26T13:57:44.214Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.query/:id
+[2026-08-26T13:57:44.214Z] [INFO] moon.rest: GET, POST      /api/px.system
+[2026-08-26T13:57:44.214Z] [INFO] moon.rest: GET, PUT, DEL  /api/px.system/:id
+[2026-08-26T13:57:44.215Z] [INFO] moon.rest: GET, POST      /api/wx.entity
+[2026-08-26T13:57:44.215Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity/:id
+[2026-08-26T13:57:44.215Z] [INFO] moon.rest: GET, POST      /api/wx.entity.alias
+[2026-08-26T13:57:44.215Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity.alias/:id
+[2026-08-26T13:57:44.215Z] [INFO] moon.rest: GET, POST      /api/wx.entity.identifier
+[2026-08-26T13:57:44.216Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.entity.identifier/:id
+[2026-08-26T13:57:44.216Z] [INFO] moon.rest: GET, POST      /api/wx.source
+[2026-08-26T13:57:44.216Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source/:id
+[2026-08-26T13:57:44.216Z] [INFO] moon.rest: GET, POST      /api/wx.provenance
+[2026-08-26T13:57:44.216Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.provenance/:id
+[2026-08-26T13:57:44.216Z] [INFO] moon.rest: GET, POST      /api/wx.relation.type
+[2026-08-26T13:57:44.217Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.relation.type/:id
+[2026-08-26T13:57:44.217Z] [INFO] moon.rest: GET, POST      /api/wx.relation
+[2026-08-26T13:57:44.217Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.relation/:id
+[2026-08-26T13:57:44.217Z] [INFO] moon.rest: GET, POST      /api/wx.religion
+[2026-08-26T13:57:44.217Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.religion/:id
+[2026-08-26T13:57:44.218Z] [INFO] moon.rest: GET, POST      /api/wx.community
+[2026-08-26T13:57:44.218Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.community/:id
+[2026-08-26T13:57:44.218Z] [INFO] moon.rest: GET, POST      /api/wx.scripture
+[2026-08-26T13:57:44.218Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture/:id
+[2026-08-26T13:57:44.218Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.book
+[2026-08-26T13:57:44.218Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.book/:id
+[2026-08-26T13:57:44.219Z] [INFO] moon.rest: GET, POST      /api/wx.scripture.verse
+[2026-08-26T13:57:44.219Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.scripture.verse/:id
+[2026-08-26T13:57:44.219Z] [INFO] moon.rest: GET, POST      /api/wx.tradition
+[2026-08-26T13:57:44.219Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition/:id
+[2026-08-26T13:57:44.219Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.item
+[2026-08-26T13:57:44.220Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.item/:id
+[2026-08-26T13:57:44.220Z] [INFO] moon.rest: GET, POST      /api/wx.devotion
+[2026-08-26T13:57:44.220Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.devotion/:id
+[2026-08-26T13:57:44.220Z] [INFO] moon.rest: GET, POST      /api/wx.asmaul.husna
+[2026-08-26T13:57:44.220Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.asmaul.husna/:id
+[2026-08-26T13:57:44.221Z] [INFO] moon.rest: GET, POST      /api/wx.bookmark
+[2026-08-26T13:57:44.221Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.bookmark/:id
+[2026-08-26T13:57:44.221Z] [INFO] moon.rest: GET, POST      /api/wx.history
+[2026-08-26T13:57:44.221Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.history/:id
+[2026-08-26T13:57:44.221Z] [INFO] moon.rest: GET, POST      /api/wx.passage
+[2026-08-26T13:57:44.221Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.passage/:id
+[2026-08-26T13:57:44.222Z] [INFO] moon.rest: GET, POST      /api/wx.text.edition
+[2026-08-26T13:57:44.222Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.text.edition/:id
+[2026-08-26T13:57:44.222Z] [INFO] moon.rest: GET, POST      /api/wx.content
+[2026-08-26T13:57:44.222Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.content/:id
+[2026-08-26T13:57:44.222Z] [INFO] moon.rest: GET, POST      /api/wx.root
+[2026-08-26T13:57:44.222Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.root/:id
+[2026-08-26T13:57:44.223Z] [INFO] moon.rest: GET, POST      /api/wx.lexeme
+[2026-08-26T13:57:44.223Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.lexeme/:id
+[2026-08-26T13:57:44.223Z] [INFO] moon.rest: GET, POST      /api/wx.lexical.occurrence
+[2026-08-26T13:57:44.223Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.lexical.occurrence/:id
+[2026-08-26T13:57:44.223Z] [INFO] moon.rest: GET, POST      /api/wx.revelation.event
+[2026-08-26T13:57:44.224Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.revelation.event/:id
+[2026-08-26T13:57:44.224Z] [INFO] moon.rest: GET, POST      /api/wx.revelation.event.passage
+[2026-08-26T13:57:44.224Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.revelation.event.passage/:id
+[2026-08-26T13:57:44.224Z] [INFO] moon.rest: GET, POST      /api/wx.figure
+[2026-08-26T13:57:44.224Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure/:id
+[2026-08-26T13:57:44.224Z] [INFO] moon.rest: GET, POST      /api/wx.figure.name
+[2026-08-26T13:57:44.225Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure.name/:id
+[2026-08-26T13:57:44.225Z] [INFO] moon.rest: GET, POST      /api/wx.figure.role
+[2026-08-26T13:57:44.225Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.figure.role/:id
+[2026-08-26T13:57:44.225Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.corpus
+[2026-08-26T13:57:44.225Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.corpus/:id
+[2026-08-26T13:57:44.226Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.unit
+[2026-08-26T13:57:44.226Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.unit/:id
+[2026-08-26T13:57:44.226Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.reference
+[2026-08-26T13:57:44.226Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.reference/:id
+[2026-08-26T13:57:44.226Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.attribution
+[2026-08-26T13:57:44.227Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.attribution/:id
+[2026-08-26T13:57:44.227Z] [INFO] moon.rest: GET, POST      /api/wx.transmission.chain
+[2026-08-26T13:57:44.227Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.transmission.chain/:id
+[2026-08-26T13:57:44.227Z] [INFO] moon.rest: GET, POST      /api/wx.transmission.link
+[2026-08-26T13:57:44.228Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.transmission.link/:id
+[2026-08-26T13:57:44.228Z] [INFO] moon.rest: GET, POST      /api/wx.tradition.assessment
+[2026-08-26T13:57:44.228Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.tradition.assessment/:id
+[2026-08-26T13:57:44.228Z] [INFO] moon.rest: GET, POST      /api/wx.concept
+[2026-08-26T13:57:44.228Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.concept/:id
+[2026-08-26T13:57:44.229Z] [INFO] moon.rest: GET, POST      /api/wx.assertion
+[2026-08-26T13:57:44.229Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.assertion/:id
+[2026-08-26T13:57:44.229Z] [INFO] moon.rest: GET, POST      /api/wx.evidence
+[2026-08-26T13:57:44.229Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.evidence/:id
+[2026-08-26T13:57:44.229Z] [INFO] moon.rest: GET, POST      /api/wx.divine.expression
+[2026-08-26T13:57:44.229Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.divine.expression/:id
+[2026-08-26T13:57:44.230Z] [INFO] moon.rest: GET, POST      /api/wx.divine.expression.occurrence
+[2026-08-26T13:57:44.230Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.divine.expression.occurrence/:id
+[2026-08-26T13:57:44.230Z] [INFO] moon.rest: GET, POST      /api/wx.legacy.mapping
+[2026-08-26T13:57:44.230Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.legacy.mapping/:id
+[2026-08-26T13:57:44.230Z] [INFO] moon.rest: GET, POST      /api/wx.engine.run
+[2026-08-26T13:57:44.231Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.engine.run/:id
+[2026-08-26T13:57:44.231Z] [INFO] moon.rest: GET, POST      /api/wx.engine.result
+[2026-08-26T13:57:44.231Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.engine.result/:id
+[2026-08-26T13:57:44.231Z] [INFO] moon.rest: GET, POST      /api/wx.source.policy
+[2026-08-26T13:57:44.231Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.policy/:id
+[2026-08-26T13:57:44.232Z] [INFO] moon.rest: GET, POST      /api/wx.source.manifest
+[2026-08-26T13:57:44.232Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.manifest/:id
+[2026-08-26T13:57:44.232Z] [INFO] moon.rest: GET, POST      /api/wx.source.artifact
+[2026-08-26T13:57:44.232Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.artifact/:id
+[2026-08-26T13:57:44.232Z] [INFO] moon.rest: GET, POST      /api/wx.source.snapshot
+[2026-08-26T13:57:44.233Z] [INFO] moon.rest: GET, PUT, DEL  /api/wx.source.snapshot/:id
+[2026-08-26T13:57:44.233Z] [INFO] moon.rest: GET, POST      /api/kh.conversation
+[2026-08-26T13:57:44.233Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.conversation/:id
+[2026-08-26T13:57:44.233Z] [INFO] moon.rest: GET, POST      /api/kh.message
+[2026-08-26T13:57:44.233Z] [INFO] moon.rest: GET, PUT, DEL  /api/kh.message/:id
+[2026-08-26T13:57:44.234Z] [INFO] moon.rest: GET, POST      /api/mz.case
+[2026-08-26T13:57:44.234Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.case/:id
+[2026-08-26T13:57:44.234Z] [INFO] moon.rest: GET, POST      /api/mz.assessment
+[2026-08-26T13:57:44.234Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.assessment/:id
+[2026-08-26T13:57:44.234Z] [INFO] moon.rest: GET, POST      /api/mz.filter
+[2026-08-26T13:57:44.235Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.filter/:id
+[2026-08-26T13:57:44.235Z] [INFO] moon.rest: GET, POST      /api/mz.reference
+[2026-08-26T13:57:44.235Z] [INFO] moon.rest: GET, PUT, DEL  /api/mz.reference/:id
+[2026-08-26T13:57:44.235Z] [INFO] moon.rest: GET, POST      /api/sg.operation
+[2026-08-26T13:57:44.235Z] [INFO] moon.rest: GET, PUT, DEL  /api/sg.operation/:id
+[2026-08-26T13:57:44.236Z] [INFO] moon.rest: GET, POST      /api/cab.project
+[2026-08-26T13:57:44.236Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.project/:id
+[2026-08-26T13:57:44.236Z] [INFO] moon.rest: GET, POST      /api/cab.task
+[2026-08-26T13:57:44.236Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.task/:id
+[2026-08-26T13:57:44.236Z] [INFO] moon.rest: GET, POST      /api/cab.change
+[2026-08-26T13:57:44.236Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.change/:id
+[2026-08-26T13:57:44.237Z] [INFO] moon.rest: GET, POST      /api/cab.meeting
+[2026-08-26T13:57:44.237Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.meeting/:id
+[2026-08-26T13:57:44.237Z] [INFO] moon.rest: GET, POST      /api/cab.decision
+[2026-08-26T13:57:44.237Z] [INFO] moon.rest: GET, PUT, DEL  /api/cab.decision/:id
+[2026-08-26T13:57:44.241Z] [INFO] moon.core: Native Engine running at http://0.0.0.0:4000

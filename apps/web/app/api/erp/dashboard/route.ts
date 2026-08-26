@@ -50,7 +50,10 @@ export async function GET(req: NextRequest) {
     // 2. Real Knowledge Feed from Witness API
     try {
       const randomSurah = Math.floor(Math.random() * 114) + 1
-      const surahJson = await moonClientInstance.request("GET", `/api/witness/quran/surah?number=${randomSurah}`)
+      const surahJson = await moonClientInstance.request(
+        "GET",
+        `/api/witness/quran/surah?number=${randomSurah}`
+      )
       const ayahs = surahJson.ayahs || []
       if (ayahs.length > 0) {
         const randomAyah = ayahs[Math.floor(Math.random() * ayahs.length)]
@@ -68,7 +71,10 @@ export async function GET(req: NextRequest) {
 
     try {
       const randomPage = Math.floor(Math.random() * 500) + 1
-      const hadithJson = await moonClientInstance.request("GET", `/api/witness/hadith?slug=bukhari&page=${randomPage}&limit=1`)
+      const hadithJson = await moonClientInstance.request(
+        "GET",
+        `/api/witness/hadith?slug=bukhari&page=${randomPage}&limit=1`
+      )
       const hadiths = hadithJson.hadiths || []
       if (hadiths.length > 0) {
         const h = hadiths[0]

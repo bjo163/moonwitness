@@ -42,13 +42,21 @@ export const useToastStore = create<ToastStore>((set) => ({
 
 export const toast = {
   info: (title: string, description?: string, duration?: number) =>
-    useToastStore.getState().addToast({ title, description, type: "info", duration }),
+    useToastStore
+      .getState()
+      .addToast({ title, description, type: "info", duration }),
   success: (title: string, description?: string, duration?: number) =>
-    useToastStore.getState().addToast({ title, description, type: "success", duration }),
+    useToastStore
+      .getState()
+      .addToast({ title, description, type: "success", duration }),
   warning: (title: string, description?: string, duration?: number) =>
-    useToastStore.getState().addToast({ title, description, type: "warning", duration }),
+    useToastStore
+      .getState()
+      .addToast({ title, description, type: "warning", duration }),
   error: (title: string, description?: string, duration?: number) =>
-    useToastStore.getState().addToast({ title, description, type: "error", duration }),
+    useToastStore
+      .getState()
+      .addToast({ title, description, type: "error", duration }),
 }
 
 const icons = {
@@ -83,7 +91,7 @@ export function TacticalToastContainer() {
   if (!mounted) return null
 
   return (
-    <div className="fixed bottom-4 right-4 z-[100] flex flex-col gap-3 pointer-events-none w-full max-w-sm">
+    <div className="pointer-events-none fixed right-4 bottom-4 z-[100] flex w-full max-w-sm flex-col gap-3">
       <AnimatePresence>
         {toasts.map((t) => (
           <motion.div
@@ -96,26 +104,26 @@ export function TacticalToastContainer() {
             } ${bgGlows[t.type || "info"]} p-4 shadow-2xl backdrop-blur-xl`}
           >
             <div className="flex gap-3">
-              <div className="shrink-0 mt-0.5">{icons[t.type || "info"]}</div>
+              <div className="mt-0.5 shrink-0">{icons[t.type || "info"]}</div>
               <div className="flex-1 space-y-1">
-                <h4 className="font-sans text-sm font-bold text-white uppercase tracking-wider">
+                <h4 className="font-sans text-sm font-bold tracking-wider text-white uppercase">
                   {t.title}
                 </h4>
                 {t.description && (
-                  <p className="font-mono text-xs text-primary/80 leading-relaxed">
+                  <p className="font-mono text-xs leading-relaxed text-primary/80">
                     {t.description}
                   </p>
                 )}
               </div>
               <button
                 onClick={() => removeToast(t.id)}
-                className="shrink-0 text-white/50 hover:text-white transition-colors h-fit"
+                className="h-fit shrink-0 text-white/50 transition-colors hover:text-white"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
             {/* Holographic scanning line */}
-            <div className="absolute top-0 left-0 h-[1px] w-full bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-50 animate-[scan_2s_ease-in-out_infinite]" />
+            <div className="absolute top-0 left-0 h-[1px] w-full animate-[scan_2s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-50" />
           </motion.div>
         ))}
       </AnimatePresence>

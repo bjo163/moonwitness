@@ -24,10 +24,10 @@ export function ErpNavbar() {
   useEffect(() => {
     if (user) {
       setProfile({
-        name: user.name || (user.email ? user.email.split('@')[0] : "User"),
+        name: user.name || (user.email ? user.email.split("@")[0] : "User"),
         email: user.email || "",
         role: "user",
-        avatarUrl: ""
+        avatarUrl: "",
       })
     } else {
       setProfile(null)

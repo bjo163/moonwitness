@@ -34,7 +34,7 @@ export function GlobalClimateWidget() {
         const results = await Promise.all(
           CITIES.map(async (city) => {
             const data = await request(
-              'GET',
+              "GET",
               `/api/external/weather?latitude=${city.lat}&longitude=${city.lng}&current_weather=true`
             )
             return {

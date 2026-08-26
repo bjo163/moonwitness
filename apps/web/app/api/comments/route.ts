@@ -10,27 +10,33 @@ export async function GET(req: NextRequest) {
 
   try {
     // Determine the resModel mapped string. Currently mapping to "wx.scripture.verse"
-    const resModel = "wx.scripture.verse" 
-    
+    const resModel = "wx.scripture.verse"
+
     // We map dateStr and periodCode to search filters.
     // However, since fx.msg doesn't have periodCode and dateStr native fields,
-    // we assume the body is a stringified JSON containing these fields or we rely on 
-    // the target resModel. For simplicity, we just fetch all comments and filter in JS 
+    // we assume the body is a stringified JSON containing these fields or we rely on
+    // the target resModel. For simplicity, we just fetch all comments and filter in JS
     // if this is a small list, or better yet, MoonWitness might need a dedicated search
     // But since the user allowed keeping mocks if it's too complex, let's keep it simple.
     // Actually, we can just use `moonClientInstance.request` to search `fx.msg`.
-    
+
     let comments = []
     try {
-      const json = await moonClientInstance.request("GET", `/api/fx.msg?resModel=${resModel}`)
+      const json = await moonClientInstance.request(
+        "GET",
+        `/api/fx.msg?resModel=${resModel}`
+      )
       if (json && !json.error) {
         comments = json.data || []
       }
     } catch (apiErr) {
-      console.warn("[MoonClient] Database connection timeout or API error, falling back to empty comments:", apiErr)
+      console.warn(
+        "[MoonClient] Database connection timeout or API error, falling back to empty comments:",
+        apiErr
+      )
       comments = []
     }
-    
+
     // Convert fx.msg format back to the frontend shape
     let formattedComments = comments.map((msg: any) => {
       let meta: any = {}
@@ -117,13 +123,24 @@ export async function POST(req: NextRequest) {
       resModel: "wx.scripture.verse",
       resId: item_id || 1,
       messageType: "comment",
-      body: JSON.stringify(newCommentMeta)
+      body: JSON.stringify(newCommentMeta),
     }
 
-    const json = await moonClientInstance.request("POST", "/api/fx.msg", fxMsgPayload)
+    const json = await moonClientInstance.request(
+      "POST",
+      "/api/fx.msg",
+      fxMsgPayload
+    )
     if (json.error) throw new Error(json.error)
 
-    return NextResponse.json({ success: true, comment: { ...newCommentMeta, id: json.data?.id, item_id: fxMsgPayload.resId } })
+    return NextResponse.json({
+      success: true,
+      comment: {
+        ...newCommentMeta,
+        id: json.data?.id,
+        item_id: fxMsgPayload.resId,
+      },
+    })
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 })
   }

@@ -272,7 +272,7 @@ export function TwoFactorStep({
 
 export function Forgot1Step({
   onStateChange,
-  onSuccess
+  onSuccess,
 }: {
   onStateChange: (state: AuthState) => void
   onSuccess?: (email: string) => void
@@ -346,7 +346,7 @@ export function Forgot1Step({
 export function Forgot2Step({
   email,
   onStateChange,
-  onSuccess
+  onSuccess,
 }: {
   email?: string
   onStateChange: (state: AuthState) => void
@@ -378,8 +378,10 @@ export function Forgot2Step({
         <input
           type="text"
           value={code}
-          onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-          className="w-full text-center tracking-[1em] text-2xl font-bold rounded-xl border border-cyan-500/30 bg-black/60 px-4 py-4 text-white shadow-inner focus:border-cyan-400 focus:outline-none"
+          onChange={(e) =>
+            setCode(e.target.value.replace(/\D/g, "").slice(0, 6))
+          }
+          className="w-full rounded-xl border border-cyan-500/30 bg-black/60 px-4 py-4 text-center text-2xl font-bold tracking-[1em] text-white shadow-inner focus:border-cyan-400 focus:outline-none"
           placeholder="000000"
         />
       </div>

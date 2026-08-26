@@ -42,7 +42,6 @@ export function QiblaRadarWidget() {
   const [schedule, setSchedule] = useState<PrayerTimingThreshold[]>([])
 
   useEffect(() => {
-
     const fetchTelemetry = async (
       lat: number,
       lng: number,

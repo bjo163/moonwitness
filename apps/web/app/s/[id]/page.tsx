@@ -59,7 +59,10 @@ export async function generateMetadata({
 
   let surahName = `Surah ${surahNum}`
   try {
-    const json = await moonClientInstance.request("GET", `/api/witness/quran/surah?number=${surahNum}`)
+    const json = await moonClientInstance.request(
+      "GET",
+      `/api/witness/quran/surah?number=${surahNum}`
+    )
     if (json.surah?.name) surahName = json.surah.name
   } catch {}
 
@@ -100,7 +103,10 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
   let ayahData: any = null
   let surahName = `Surah ${surahNum}`
   try {
-    const json = await moonClientInstance.request("GET", `/api/witness/quran/surah?number=${surahNum}`)
+    const json = await moonClientInstance.request(
+      "GET",
+      `/api/witness/quran/surah?number=${surahNum}`
+    )
     surahName = json.surah?.name || surahName
     const ayahs = json.ayahs || []
     ayahData = ayahs.find((a: any) => a.number === ayahNum) || ayahs[0]
@@ -116,10 +122,13 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
   let asmaulSurah = null
   let asmaulAyah = null
   try {
-    const json = await moonClientInstance.request("GET", `/api/witness/asmaul-husna`)
+    const json = await moonClientInstance.request(
+      "GET",
+      `/api/witness/asmaul-husna`
+    )
     const data = json.data || []
-    asmaulSurah = data[((surahNum - 1) % 99)] || null
-    asmaulAyah = data[((ayahNum - 1) % 99)] || null
+    asmaulSurah = data[(surahNum - 1) % 99] || null
+    asmaulAyah = data[(ayahNum - 1) % 99] || null
   } catch (e) {
     console.error(e)
   }
@@ -128,15 +137,18 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
   let hadithData: any = null
   let bookName = "Shahih Bukhari"
   try {
-    const json = await moonClientInstance.request("GET", `/api/witness/hadith?slug=bukhari&limit=1&page=${ayahNum % 500}`)
+    const json = await moonClientInstance.request(
+      "GET",
+      `/api/witness/hadith?slug=bukhari&limit=1&page=${ayahNum % 500}`
+    )
     hadithData = (json.hadiths || [])[0]
-  } catch(e) {}
+  } catch (e) {}
 
   // 5. Fetch Scripture Wisdom
   // MOCK FOR NOW UNTIL WE ADD A SPECIFIC WITNESS ENDPOINT
   const scriptureData = {
     translation_id: "Sungguh petunjuk Allah adalah sebaik-baik petunjuk.",
-    notes: "Khazanah Kitab Suci Global"
+    notes: "Khazanah Kitab Suci Global",
   }
 
   const shortUrl = `http://localhost:3000/s/${id}`
@@ -179,42 +191,46 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
         </div>
 
         {/* Ayah Card */}
-          <VerseInsightTooltip verseKey={`${surahNum}-${ayahNum}`} arabicText={ayahData.textArabic} translation={ayahData.textId || ayahData.textEn}>
-            <div className="bg-space/90 space-y-4 panel-glass p-6 card-clip">
-              <div
-                className="arabic-text py-2 text-right text-2xl leading-[2.3] font-bold text-foreground sm:text-4xl"
-                style={{ textShadow: "0 0 10px rgba(0,240,255,0.15)" }}
-              >
-                {ayahData.textArabic}
-              </div>
-
-              {ayahData.textLatin && (
-                <p
-                  className="text-success font-serif text-xs font-bold italic sm:text-sm"
-                  style={{ textShadow: "0 0 5px rgba(0,255,102,0.3)" }}
-                >
-                  &ldquo;{ayahData.textLatin}&rdquo;
-                </p>
-              )}
-
-              <div className="bg-panel tag-clip border border-primary/20 p-4">
-                <p className="font-mono text-xs leading-relaxed text-foreground/90">
-                  &ldquo;{ayahData.textId || ayahData.textEn}&rdquo;
-                </p>
-              </div>
-
-              <div className="tag-clip border border-accent/30 bg-accent/5 p-4 text-xs">
-                <div className="mb-1 flex items-center gap-2 font-bold text-accent">
-                  <span>💡</span>
-                  <span>DIVINE TAFSIR & LORE NOTES:</span>
-                </div>
-                <p className="text-foreground/90 italic">
-                  &ldquo;Tadabbur tentang ketaatan semesta alam kepada Sang Maha
-                  Pencipta dan keagungan tauhid.&rdquo;
-                </p>
-              </div>
+        <VerseInsightTooltip
+          verseKey={`${surahNum}-${ayahNum}`}
+          arabicText={ayahData.textArabic}
+          translation={ayahData.textId || ayahData.textEn}
+        >
+          <div className="bg-space/90 space-y-4 panel-glass p-6 card-clip">
+            <div
+              className="arabic-text py-2 text-right text-2xl leading-[2.3] font-bold text-foreground sm:text-4xl"
+              style={{ textShadow: "0 0 10px rgba(0,240,255,0.15)" }}
+            >
+              {ayahData.textArabic}
             </div>
-          </VerseInsightTooltip>
+
+            {ayahData.textLatin && (
+              <p
+                className="text-success font-serif text-xs font-bold italic sm:text-sm"
+                style={{ textShadow: "0 0 5px rgba(0,255,102,0.3)" }}
+              >
+                &ldquo;{ayahData.textLatin}&rdquo;
+              </p>
+            )}
+
+            <div className="bg-panel tag-clip border border-primary/20 p-4">
+              <p className="font-mono text-xs leading-relaxed text-foreground/90">
+                &ldquo;{ayahData.textId || ayahData.textEn}&rdquo;
+              </p>
+            </div>
+
+            <div className="tag-clip border border-accent/30 bg-accent/5 p-4 text-xs">
+              <div className="mb-1 flex items-center gap-2 font-bold text-accent">
+                <span>💡</span>
+                <span>DIVINE TAFSIR & LORE NOTES:</span>
+              </div>
+              <p className="text-foreground/90 italic">
+                &ldquo;Tadabbur tentang ketaatan semesta alam kepada Sang Maha
+                Pencipta dan keagungan tauhid.&rdquo;
+              </p>
+            </div>
+          </div>
+        </VerseInsightTooltip>
 
         {/* Asmaul Husna Pairs */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -271,7 +287,8 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
               </span>
             </div>
             <p className="border-l-2 border-destructive/50 pl-3 font-serif text-sm leading-relaxed text-foreground/80 italic">
-              &ldquo;{cleanHadithText(hadithData.textId || hadithData.textEn)}&rdquo;
+              &ldquo;{cleanHadithText(hadithData.textId || hadithData.textEn)}
+              &rdquo;
             </p>
           </div>
         )}
@@ -280,7 +297,9 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
         <div className="corner-box space-y-3 panel-glass p-5 card-clip">
           <div className="flex items-center gap-2 text-[10px] font-bold text-secondary">
             <span>📜</span>
-            <span className="uppercase">UNIVERSAL SCRIPTURE CROSS-REFERENCE</span>
+            <span className="uppercase">
+              UNIVERSAL SCRIPTURE CROSS-REFERENCE
+            </span>
           </div>
           <p className="border-l-2 border-secondary/50 pl-3 font-serif text-sm leading-relaxed text-foreground/80 italic">
             &ldquo;{scriptureData.translation_id}&rdquo;
@@ -293,8 +312,8 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
         {/* Footer Actions */}
         <div className="mt-4 flex flex-col justify-between gap-4 border-t border-primary/20 pt-4 sm:flex-row sm:items-center">
           <div className="flex items-center gap-2">
-            <div className="h-2 w-2 animate-pulse bg-success" />
-            <span className="text-[10px] font-bold tracking-widest text-success uppercase">
+            <div className="bg-success h-2 w-2 animate-pulse" />
+            <span className="text-success text-[10px] font-bold tracking-widest uppercase">
               TRANSMISSION VERIFIED
             </span>
           </div>

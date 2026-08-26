@@ -23,30 +23,33 @@ const LeafletMap = dynamic(() => import("./leaflet-map"), {
   ),
 })
 
-class MapErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean}> {
-  constructor(props: {children: React.ReactNode}) {
-    super(props);
-    this.state = { hasError: false };
+class MapErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props)
+    this.state = { hasError: false }
   }
   static getDerivedStateFromError(error: any) {
-    return { hasError: true };
+    return { hasError: true }
   }
   componentDidCatch(error: any, errorInfo: any) {
-    console.warn("Map System Error Caught (Auto-Recovering):", error);
+    console.warn("Map System Error Caught (Auto-Recovering):", error)
     // Auto recover after 3 seconds
-    setTimeout(() => this.setState({ hasError: false }), 3000);
+    setTimeout(() => this.setState({ hasError: false }), 3000)
   }
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex h-full w-full items-center justify-center bg-black/50 border border-red-500/30">
-          <div className="text-xs font-bold text-red-500 animate-pulse tracking-widest">
+        <div className="flex h-full w-full items-center justify-center border border-red-500/30 bg-black/50">
+          <div className="animate-pulse text-xs font-bold tracking-widest text-red-500">
             SATELLITE LINK REESTABLISHING...
           </div>
         </div>
-      );
+      )
     }
-    return this.props.children;
+    return this.props.children
   }
 }
 

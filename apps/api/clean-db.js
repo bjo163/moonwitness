@@ -1,10 +1,10 @@
-import knex from 'knex';
+import knex from "knex"
 
 async function main() {
   const db = knex({
-    client: 'pg',
-    connection: 'postgres://postgres:Youknowm%403@localhost:5432/moonwitness'
-  });
+    client: "pg",
+    connection: "postgres://postgres:Youknowm%403@localhost:5432/moonwitness",
+  })
 
   const query = `
     DO $$ DECLARE
@@ -14,11 +14,11 @@ async function main() {
             EXECUTE 'DROP TABLE IF EXISTS ' || quote_ident(r.tablename) || ' CASCADE';
         END LOOP;
     END $$;
-  `;
+  `
 
-  await db.raw(query);
-  console.log('All tables dropped');
-  process.exit(0);
+  await db.raw(query)
+  console.log("All tables dropped")
+  process.exit(0)
 }
 
-main();
+main()

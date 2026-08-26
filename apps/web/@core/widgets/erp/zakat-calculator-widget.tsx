@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react"
 import { Calculator, Coins, Landmark, Sparkles } from "lucide-react"
 
 // Mock prices per gram (in IDR)
-const GOLD_PRICE = 1200000 
-const SILVER_PRICE = 15000 
+const GOLD_PRICE = 1200000
+const SILVER_PRICE = 15000
 const NISAB_GOLD = 85 // grams
 
 export function ZakatCalculatorWidget() {
@@ -17,9 +17,9 @@ export function ZakatCalculatorWidget() {
   const [nisabValue, setNisabValue] = useState(NISAB_GOLD * GOLD_PRICE)
 
   useEffect(() => {
-    const totalWealth = cash + (gold * GOLD_PRICE) + (silver * SILVER_PRICE)
+    const totalWealth = cash + gold * GOLD_PRICE + silver * SILVER_PRICE
     const nisabThreshold = NISAB_GOLD * GOLD_PRICE
-    
+
     setNisabValue(nisabThreshold)
 
     if (totalWealth >= nisabThreshold) {
@@ -35,7 +35,7 @@ export function ZakatCalculatorWidget() {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(val)
   }
 
@@ -52,42 +52,48 @@ export function ZakatCalculatorWidget() {
         {/* Input Fields */}
         <div className="space-y-3">
           <div>
-            <label className="text-[10px] font-bold text-amber-400/80 uppercase mb-1 block">Cash / Savings (IDR)</label>
+            <label className="mb-1 block text-[10px] font-bold text-amber-400/80 uppercase">
+              Cash / Savings (IDR)
+            </label>
             <div className="relative">
-              <Landmark className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-amber-500/50" />
-              <input 
+              <Landmark className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-amber-500/50" />
+              <input
                 type="number"
                 value={cash || ""}
                 onChange={(e) => setCash(Number(e.target.value))}
                 placeholder="0"
-                className="w-full bg-black/40 border border-amber-500/20 rounded-lg pl-10 pr-3 py-2 text-base text-white font-mono focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all"
+                className="w-full rounded-lg border border-amber-500/20 bg-black/40 py-2 pr-3 pl-10 font-mono text-base text-white transition-all focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.3)] focus:outline-none"
               />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-[10px] font-bold text-amber-400/80 uppercase mb-1 block">Gold (Grams)</label>
+              <label className="mb-1 block text-[10px] font-bold text-amber-400/80 uppercase">
+                Gold (Grams)
+              </label>
               <div className="relative">
-                <Sparkles className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-amber-500/50" />
-                <input 
+                <Sparkles className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-amber-500/50" />
+                <input
                   type="number"
                   value={gold || ""}
                   onChange={(e) => setGold(Number(e.target.value))}
                   placeholder="0"
-                  className="w-full bg-black/40 border border-amber-500/20 rounded-lg pl-9 pr-2 py-2 text-base text-white font-mono focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all"
+                  className="w-full rounded-lg border border-amber-500/20 bg-black/40 py-2 pr-2 pl-9 font-mono text-base text-white transition-all focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.3)] focus:outline-none"
                 />
               </div>
             </div>
             <div>
-              <label className="text-[10px] font-bold text-amber-400/80 uppercase mb-1 block">Silver (Grams)</label>
+              <label className="mb-1 block text-[10px] font-bold text-amber-400/80 uppercase">
+                Silver (Grams)
+              </label>
               <div className="relative">
-                <Coins className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400/50" />
-                <input 
+                <Coins className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-slate-400/50" />
+                <input
                   type="number"
                   value={silver || ""}
                   onChange={(e) => setSilver(Number(e.target.value))}
                   placeholder="0"
-                  className="w-full bg-black/40 border border-amber-500/20 rounded-lg pl-9 pr-2 py-2 text-base text-white font-mono focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all"
+                  className="w-full rounded-lg border border-amber-500/20 bg-black/40 py-2 pr-2 pl-9 font-mono text-base text-white transition-all focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.3)] focus:outline-none"
                 />
               </div>
             </div>
@@ -95,38 +101,43 @@ export function ZakatCalculatorWidget() {
         </div>
 
         {/* Status / Output */}
-        <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-4 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-[30px] rounded-full pointer-events-none"></div>
-          
-          <div className="flex justify-between items-end mb-2">
-            <div className="text-[10px] font-bold text-amber-300 uppercase">Nisab Threshold</div>
-            <div className="font-mono text-xs text-amber-400/80">{formatCurrency(nisabValue)}</div>
-          </div>
-          
-          <div className="h-px w-full bg-amber-500/20 mb-3"></div>
+        <div className="relative overflow-hidden rounded-xl border border-amber-500/30 bg-amber-500/5 p-4">
+          <div className="pointer-events-none absolute top-0 right-0 h-32 w-32 rounded-full bg-amber-500/10 blur-[30px]"></div>
 
-          <div className="flex justify-between items-center">
+          <div className="mb-2 flex items-end justify-between">
+            <div className="text-[10px] font-bold text-amber-300 uppercase">
+              Nisab Threshold
+            </div>
+            <div className="font-mono text-xs text-amber-400/80">
+              {formatCurrency(nisabValue)}
+            </div>
+          </div>
+
+          <div className="mb-3 h-px w-full bg-amber-500/20"></div>
+
+          <div className="flex items-center justify-between">
             <div>
-              <div className="text-[11px] font-black text-amber-400 uppercase tracking-widest mb-1">
+              <div className="mb-1 text-[11px] font-black tracking-widest text-amber-400 uppercase">
                 Zakat Liability (2.5%)
               </div>
               {isEligible ? (
-                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-red-500/20 border border-red-500/30 text-[9px] font-bold text-red-400 uppercase">
+                <div className="inline-flex items-center gap-1.5 rounded border border-red-500/30 bg-red-500/20 px-2 py-0.5 text-[9px] font-bold text-red-400 uppercase">
                   <AlertCircle size={10} /> Eligible to Pay
                 </div>
               ) : (
-                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/30 text-[9px] font-bold text-emerald-400 uppercase">
+                <div className="inline-flex items-center gap-1.5 rounded border border-emerald-500/30 bg-emerald-500/20 px-2 py-0.5 text-[9px] font-bold text-emerald-400 uppercase">
                   Below Nisab
                 </div>
               )}
             </div>
-            
-            <div className={`font-mono text-xl font-black ${isEligible ? 'text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]' : 'text-primary/50'}`}>
+
+            <div
+              className={`font-mono text-xl font-black ${isEligible ? "text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]" : "text-primary/50"}`}
+            >
               {formatCurrency(zakat)}
             </div>
           </div>
         </div>
-        
       </div>
     </div>
   )

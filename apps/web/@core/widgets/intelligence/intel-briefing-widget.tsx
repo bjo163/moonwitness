@@ -36,7 +36,9 @@ export function IntelBriefingWidget() {
     setImageUrl(null)
 
     try {
-      const data = await internalApi<any>("/api/intel/briefing", { method: "POST" })
+      const data = await internalApi<any>("/api/intel/briefing", {
+        method: "POST",
+      })
       setBriefing(data.briefing)
       if (data.imageUrl) setImageUrl(data.imageUrl)
     } catch (e: any) {

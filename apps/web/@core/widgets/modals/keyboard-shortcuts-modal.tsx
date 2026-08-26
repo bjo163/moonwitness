@@ -55,7 +55,6 @@ export function KeyboardShortcutsModal() {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "?" && !isOpen) {
         e.preventDefault()

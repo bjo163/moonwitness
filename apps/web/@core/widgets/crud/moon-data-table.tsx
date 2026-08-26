@@ -20,7 +20,14 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@workspace/ui/components/dialog"
-import { Loader2, Search, Plus, MoreHorizontal, Edit, Trash2 } from "lucide-react"
+import {
+  Loader2,
+  Search,
+  Plus,
+  MoreHorizontal,
+  Edit,
+  Trash2,
+} from "lucide-react"
 
 export type CrudColumn = {
   name: string
@@ -38,11 +45,11 @@ export type MoonDataTableProps = {
   description: string
   columns: CrudColumn[]
   icon?: React.ReactNode
-  
+
   // Advanced UI Slots
   topWidgets?: React.ReactNode
   sideWidgets?: React.ReactNode
-  tabs?: { id: string, label: string }[]
+  tabs?: { id: string; label: string }[]
   activeTab?: string
   onTabChange?: (tabId: string) => void
   filters?: Record<string, string>
@@ -50,12 +57,26 @@ export type MoonDataTableProps = {
   customActions?: React.ReactNode
 }
 
-export function MoonDataTable({ 
-  modelName, title, description, columns, icon,
-  topWidgets, sideWidgets, tabs, activeTab, onTabChange, filters, filterWidgets, customActions
+export function MoonDataTable({
+  modelName,
+  title,
+  description,
+  columns,
+  icon,
+  topWidgets,
+  sideWidgets,
+  tabs,
+  activeTab,
+  onTabChange,
+  filters,
+  filterWidgets,
+  customActions,
 }: MoonDataTableProps) {
-  const { data, loading, error, create, update, remove } = useMoonModel(modelName, filters)
-  
+  const { data, loading, error, create, update, remove } = useMoonModel(
+    modelName,
+    filters
+  )
+
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [formData, setFormData] = useState<Record<string, any>>({})
@@ -103,40 +124,45 @@ export function MoonDataTable({
   }
 
   // Frontend search filter (can be moved to backend in the future)
-  const filteredData = Array.isArray(data) ? data.filter((row: any) => {
-    if (!searchQuery) return true
-    const searchLower = searchQuery.toLowerCase()
-    return columns.some(c => !c.hideInTable && String(row[c.name] || "").toLowerCase().includes(searchLower))
-  }) : []
+  const filteredData = Array.isArray(data)
+    ? data.filter((row: any) => {
+        if (!searchQuery) return true
+        const searchLower = searchQuery.toLowerCase()
+        return columns.some(
+          (c) =>
+            !c.hideInTable &&
+            String(row[c.name] || "")
+              .toLowerCase()
+              .includes(searchLower)
+        )
+      })
+    : []
 
   return (
     <div className="flex flex-col gap-6">
       {/* Top Widgets Slot */}
-      {topWidgets && (
-        <div className="w-full">
-          {topWidgets}
-        </div>
-      )}
+      {topWidgets && <div className="w-full">{topWidgets}</div>}
 
-      <div className="flex flex-col xl:flex-row gap-6 items-start">
+      <div className="flex flex-col items-start gap-6 xl:flex-row">
         {/* Main Content Area */}
-        <div className={`flex flex-col gap-4 ${sideWidgets ? 'xl:w-3/4 w-full' : 'w-full'}`}>
-          <div className="rounded-xl border border-cyan-900/30 bg-black/40 backdrop-blur-md shadow-[0_0_30px_rgba(34,211,238,0.03)] overflow-hidden flex flex-col">
-            
+        <div
+          className={`flex flex-col gap-4 ${sideWidgets ? "w-full xl:w-3/4" : "w-full"}`}
+        >
+          <div className="flex flex-col overflow-hidden rounded-xl border border-cyan-900/30 bg-black/40 shadow-[0_0_30px_rgba(34,211,238,0.03)] backdrop-blur-md">
             {/* Toolbar / Header */}
-            <div className="p-4 border-b border-cyan-900/30 flex flex-col gap-4">
+            <div className="flex flex-col gap-4 border-b border-cyan-900/30 p-4">
               {/* Tabs & Primary Actions */}
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
                 {tabs && tabs.length > 0 ? (
-                  <div className="flex items-center gap-6 overflow-x-auto pb-1 md:pb-0 w-full md:w-auto scrollbar-hide">
-                    {tabs.map(tab => (
+                  <div className="scrollbar-hide flex w-full items-center gap-6 overflow-x-auto pb-1 md:w-auto md:pb-0">
+                    {tabs.map((tab) => (
                       <button
                         key={tab.id}
                         onClick={() => onTabChange && onTabChange(tab.id)}
-                        className={`text-xs font-semibold tracking-wider uppercase transition-colors whitespace-nowrap pb-2 border-b-2 ${
+                        className={`border-b-2 pb-2 text-xs font-semibold tracking-wider whitespace-nowrap uppercase transition-colors ${
                           activeTab === tab.id
-                            ? "text-cyan-400 border-cyan-400"
-                            : "text-slate-500 border-transparent hover:text-slate-300"
+                            ? "border-cyan-400 text-cyan-400"
+                            : "border-transparent text-slate-500 hover:text-slate-300"
                         }`}
                       >
                         {tab.label}
@@ -145,60 +171,73 @@ export function MoonDataTable({
                   </div>
                 ) : (
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+                    <div className="rounded-lg border border-cyan-500/20 bg-cyan-500/10 p-2 text-cyan-400">
                       {icon}
                     </div>
                     <div>
-                      <h2 className="text-sm font-bold text-white uppercase tracking-wider">{title}</h2>
+                      <h2 className="text-sm font-bold tracking-wider text-white uppercase">
+                        {title}
+                      </h2>
                       <p className="text-xs text-slate-400">{description}</p>
                     </div>
                   </div>
                 )}
-                
-                <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+
+                <div className="flex w-full items-center justify-end gap-3 md:w-auto">
                   {customActions}
-                  <Button 
-                    onClick={() => { setFormData({}); setIsAddOpen(true) }}
-                    className="bg-cyan-500 hover:bg-cyan-400 text-black font-semibold h-8 text-xs px-3 shadow-[0_0_15px_rgba(34,211,238,0.3)]"
+                  <Button
+                    onClick={() => {
+                      setFormData({})
+                      setIsAddOpen(true)
+                    }}
+                    className="h-8 bg-cyan-500 px-3 text-xs font-semibold text-black shadow-[0_0_15px_rgba(34,211,238,0.3)] hover:bg-cyan-400"
                   >
-                    <Plus className="w-4 h-4 mr-1" />
+                    <Plus className="mr-1 h-4 w-4" />
                     ADD RECORD
                   </Button>
                 </div>
               </div>
 
               {/* Filters & Search */}
-              <div className="flex flex-col md:flex-row items-center gap-3 w-full">
+              <div className="flex w-full flex-col items-center gap-3 md:flex-row">
                 <div className="relative w-full md:w-64">
-                  <Search className="absolute left-2.5 top-2 h-4 w-4 text-slate-500" />
-                  <Input 
-                    placeholder="Search records..." 
+                  <Search className="absolute top-2 left-2.5 h-4 w-4 text-slate-500" />
+                  <Input
+                    placeholder="Search records..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9 h-8 bg-black/50 border-cyan-900/50 text-xs text-slate-200 focus-visible:ring-cyan-500/50" 
+                    className="h-8 border-cyan-900/50 bg-black/50 pl-9 text-xs text-slate-200 focus-visible:ring-cyan-500/50"
                   />
                 </div>
-                
-                <div className="flex-1 flex items-center gap-3 overflow-x-auto scrollbar-hide">
+
+                <div className="scrollbar-hide flex flex-1 items-center gap-3 overflow-x-auto">
                   {filterWidgets}
                 </div>
               </div>
             </div>
 
             {/* Table Area */}
-            <div className="overflow-x-auto w-full">
-              <table className="w-full text-left border-collapse">
+            <div className="w-full overflow-x-auto">
+              <table className="w-full border-collapse text-left">
                 <thead>
                   <tr className="border-b border-cyan-900/30 bg-white/[0.02]">
-                    <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 w-12 text-center">
-                      <input type="checkbox" className="rounded border-cyan-900/50 bg-black/50" />
+                    <th className="w-12 px-4 py-3 text-center text-[10px] font-bold tracking-widest text-slate-500 uppercase">
+                      <input
+                        type="checkbox"
+                        className="rounded border-cyan-900/50 bg-black/50"
+                      />
                     </th>
-                    {columns.filter(c => !c.hideInTable).map((col) => (
-                      <th key={col.name} className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">
-                        {col.label}
-                      </th>
-                    ))}
-                    <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 text-right">
+                    {columns
+                      .filter((c) => !c.hideInTable)
+                      .map((col) => (
+                        <th
+                          key={col.name}
+                          className="px-4 py-3 text-[10px] font-bold tracking-widest text-slate-500 uppercase"
+                        >
+                          {col.label}
+                        </th>
+                      ))}
+                    <th className="px-4 py-3 text-right text-[10px] font-bold tracking-widest text-slate-500 uppercase">
                       Actions
                     </th>
                   </tr>
@@ -206,44 +245,76 @@ export function MoonDataTable({
                 <tbody>
                   {loading && Array.isArray(data) && data.length === 0 ? (
                     <tr>
-                      <td colSpan={columns.length + 2} className="px-4 py-12 text-center">
-                        <Loader2 className="w-6 h-6 text-cyan-500 animate-spin mx-auto mb-2" />
-                        <span className="text-xs text-slate-400 uppercase tracking-widest">Loading...</span>
+                      <td
+                        colSpan={columns.length + 2}
+                        className="px-4 py-12 text-center"
+                      >
+                        <Loader2 className="mx-auto mb-2 h-6 w-6 animate-spin text-cyan-500" />
+                        <span className="text-xs tracking-widest text-slate-400 uppercase">
+                          Loading...
+                        </span>
                       </td>
                     </tr>
                   ) : !Array.isArray(data) || data.length === 0 ? (
                     <tr>
-                      <td colSpan={columns.length + 2} className="px-4 py-12 text-center text-slate-500 text-xs tracking-wider">
-                        {error ? "Failed to load records." : "No records found."}
+                      <td
+                        colSpan={columns.length + 2}
+                        className="px-4 py-12 text-center text-xs tracking-wider text-slate-500"
+                      >
+                        {error
+                          ? "Failed to load records."
+                          : "No records found."}
                       </td>
                     </tr>
                   ) : filteredData.length === 0 ? (
                     <tr>
-                      <td colSpan={columns.length + 2} className="px-4 py-12 text-center text-slate-500 text-xs tracking-wider">
+                      <td
+                        colSpan={columns.length + 2}
+                        className="px-4 py-12 text-center text-xs tracking-wider text-slate-500"
+                      >
                         No matches found.
                       </td>
                     </tr>
                   ) : (
                     filteredData.map((row: any) => (
-                      <tr key={row.id} className="border-b border-cyan-900/10 hover:bg-white/[0.02] transition-colors group">
+                      <tr
+                        key={row.id}
+                        className="group border-b border-cyan-900/10 transition-colors hover:bg-white/[0.02]"
+                      >
                         <td className="px-4 py-3 text-center">
-                          <input type="checkbox" className="rounded border-cyan-900/50 bg-black/50" />
+                          <input
+                            type="checkbox"
+                            className="rounded border-cyan-900/50 bg-black/50"
+                          />
                         </td>
-                        {columns.filter(c => !c.hideInTable).map((col) => (
-                          <td key={col.name} className="px-4 py-3 font-sans text-xs text-slate-300">
-                            {col.render ? col.render(row[col.name], row) : (row[col.name] || "-")}
-                          </td>
-                        ))}
+                        {columns
+                          .filter((c) => !c.hideInTable)
+                          .map((col) => (
+                            <td
+                              key={col.name}
+                              className="px-4 py-3 font-sans text-xs text-slate-300"
+                            >
+                              {col.render
+                                ? col.render(row[col.name], row)
+                                : row[col.name] || "-"}
+                            </td>
+                          ))}
                         <td className="px-4 py-3 text-right">
-                          <div className="flex items-center justify-end gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
-                            <button onClick={() => openEdit(row)} className="p-1.5 rounded bg-white/5 hover:bg-cyan-500/20 text-slate-400 hover:text-cyan-400 transition-colors">
-                              <Edit className="w-3.5 h-3.5" />
+                          <div className="flex items-center justify-end gap-2 opacity-50 transition-opacity group-hover:opacity-100">
+                            <button
+                              onClick={() => openEdit(row)}
+                              className="rounded bg-white/5 p-1.5 text-slate-400 transition-colors hover:bg-cyan-500/20 hover:text-cyan-400"
+                            >
+                              <Edit className="h-3.5 w-3.5" />
                             </button>
-                            <button onClick={() => handleDelete(row.id)} className="p-1.5 rounded bg-white/5 hover:bg-red-500/20 text-slate-400 hover:text-red-400 transition-colors">
-                              <Trash2 className="w-3.5 h-3.5" />
+                            <button
+                              onClick={() => handleDelete(row.id)}
+                              className="rounded bg-white/5 p-1.5 text-slate-400 transition-colors hover:bg-red-500/20 hover:text-red-400"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
                             </button>
-                            <button className="p-1.5 rounded bg-white/5 hover:bg-white/10 text-slate-400 transition-colors">
-                              <MoreHorizontal className="w-3.5 h-3.5" />
+                            <button className="rounded bg-white/5 p-1.5 text-slate-400 transition-colors hover:bg-white/10">
+                              <MoreHorizontal className="h-3.5 w-3.5" />
                             </button>
                           </div>
                         </td>
@@ -255,25 +326,32 @@ export function MoonDataTable({
             </div>
 
             {/* Table Footer / Pagination */}
-            <div className="p-4 border-t border-cyan-900/30 flex items-center justify-between">
-              <span className="text-[10px] text-slate-500 tracking-wider">
+            <div className="flex items-center justify-between border-t border-cyan-900/30 p-4">
+              <span className="text-[10px] tracking-wider text-slate-500">
                 Showing {filteredData.length} records
               </span>
               <div className="flex items-center gap-1">
                 {/* Pagination placeholder */}
-                <button className="w-6 h-6 rounded flex items-center justify-center text-[10px] text-slate-500 hover:bg-white/5">&lt;</button>
-                <button className="w-6 h-6 rounded flex items-center justify-center text-[10px] bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">1</button>
-                <button className="w-6 h-6 rounded flex items-center justify-center text-[10px] text-slate-500 hover:bg-white/5">2</button>
-                <button className="w-6 h-6 rounded flex items-center justify-center text-[10px] text-slate-500 hover:bg-white/5">&gt;</button>
+                <button className="flex h-6 w-6 items-center justify-center rounded text-[10px] text-slate-500 hover:bg-white/5">
+                  &lt;
+                </button>
+                <button className="flex h-6 w-6 items-center justify-center rounded border border-cyan-500/30 bg-cyan-500/20 text-[10px] text-cyan-400">
+                  1
+                </button>
+                <button className="flex h-6 w-6 items-center justify-center rounded text-[10px] text-slate-500 hover:bg-white/5">
+                  2
+                </button>
+                <button className="flex h-6 w-6 items-center justify-center rounded text-[10px] text-slate-500 hover:bg-white/5">
+                  &gt;
+                </button>
               </div>
             </div>
-
           </div>
         </div>
 
         {/* Side Widgets Slot */}
         {sideWidgets && (
-          <div className="w-full xl:w-1/4 flex flex-col gap-4">
+          <div className="flex w-full flex-col gap-4 xl:w-1/4">
             {sideWidgets}
           </div>
         )}
@@ -281,31 +359,60 @@ export function MoonDataTable({
 
       {/* Add Dialog */}
       <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-        <DialogContent className="bg-slate-950 border-cyan-900/50">
+        <DialogContent className="border-cyan-900/50 bg-slate-950">
           <DialogHeader>
-            <DialogTitle className="text-cyan-400 uppercase tracking-wider text-sm font-bold">Add New {title}</DialogTitle>
-            <DialogDescription className="text-xs">Create a new record in the system.</DialogDescription>
+            <DialogTitle className="text-sm font-bold tracking-wider text-cyan-400 uppercase">
+              Add New {title}
+            </DialogTitle>
+            <DialogDescription className="text-xs">
+              Create a new record in the system.
+            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            {columns.filter(c => !c.hideInForm).map(col => (
-              <div key={col.name} className="flex flex-col gap-2">
-                <Label htmlFor={col.name} className="text-xs text-slate-400">{col.label} {col.required && <span className="text-red-500">*</span>}</Label>
-                <Input
-                  id={col.name}
-                  name={col.name}
-                  type={col.type === "password" ? "password" : col.type === "email" ? "email" : "text"}
-                  value={formData[col.name] || ""}
-                  onChange={handleInputChange}
-                  className="bg-black/50 border-cyan-900/50 text-slate-200 focus-visible:ring-cyan-500/50"
-                  required={col.required}
-                />
-              </div>
-            ))}
+            {columns
+              .filter((c) => !c.hideInForm)
+              .map((col) => (
+                <div key={col.name} className="flex flex-col gap-2">
+                  <Label htmlFor={col.name} className="text-xs text-slate-400">
+                    {col.label}{" "}
+                    {col.required && <span className="text-red-500">*</span>}
+                  </Label>
+                  <Input
+                    id={col.name}
+                    name={col.name}
+                    type={
+                      col.type === "password"
+                        ? "password"
+                        : col.type === "email"
+                          ? "email"
+                          : "text"
+                    }
+                    value={formData[col.name] || ""}
+                    onChange={handleInputChange}
+                    className="border-cyan-900/50 bg-black/50 text-slate-200 focus-visible:ring-cyan-500/50"
+                    required={col.required}
+                  />
+                </div>
+              ))}
           </div>
           <div className="flex justify-end gap-2">
-            <Button variant="ghost" onClick={() => setIsAddOpen(false)} className="text-xs h-8 text-slate-400 hover:text-slate-200">Cancel</Button>
-            <Button onClick={() => handleSave(false)} disabled={isSubmitting} className="bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-semibold h-8 px-6 shadow-[0_0_15px_rgba(34,211,238,0.3)]">
-              {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save Record"}
+            <Button
+              variant="ghost"
+              onClick={() => setIsAddOpen(false)}
+              className="h-8 text-xs text-slate-400 hover:text-slate-200"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => handleSave(false)}
+              disabled={isSubmitting}
+              className="h-8 bg-cyan-500 px-6 text-xs font-semibold text-black shadow-[0_0_15px_rgba(34,211,238,0.3)] hover:bg-cyan-400"
+            >
+              {isSubmitting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                "Save Record"
+              )}
             </Button>
           </div>
         </DialogContent>
@@ -313,31 +420,60 @@ export function MoonDataTable({
 
       {/* Edit Dialog */}
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <DialogContent className="bg-slate-950 border-cyan-900/50">
+        <DialogContent className="border-cyan-900/50 bg-slate-950">
           <DialogHeader>
-            <DialogTitle className="text-cyan-400 uppercase tracking-wider text-sm font-bold">Edit {title}</DialogTitle>
-            <DialogDescription className="text-xs">Update existing record details.</DialogDescription>
+            <DialogTitle className="text-sm font-bold tracking-wider text-cyan-400 uppercase">
+              Edit {title}
+            </DialogTitle>
+            <DialogDescription className="text-xs">
+              Update existing record details.
+            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            {columns.filter(c => !c.hideInForm).map(col => (
-              <div key={col.name} className="flex flex-col gap-2">
-                <Label htmlFor={col.name} className="text-xs text-slate-400">{col.label} {col.required && <span className="text-red-500">*</span>}</Label>
-                <Input
-                  id={col.name}
-                  name={col.name}
-                  type={col.type === "password" ? "password" : col.type === "email" ? "email" : "text"}
-                  value={formData[col.name] || ""}
-                  onChange={handleInputChange}
-                  className="bg-black/50 border-cyan-900/50 text-slate-200 focus-visible:ring-cyan-500/50"
-                  required={col.required}
-                />
-              </div>
-            ))}
+            {columns
+              .filter((c) => !c.hideInForm)
+              .map((col) => (
+                <div key={col.name} className="flex flex-col gap-2">
+                  <Label htmlFor={col.name} className="text-xs text-slate-400">
+                    {col.label}{" "}
+                    {col.required && <span className="text-red-500">*</span>}
+                  </Label>
+                  <Input
+                    id={col.name}
+                    name={col.name}
+                    type={
+                      col.type === "password"
+                        ? "password"
+                        : col.type === "email"
+                          ? "email"
+                          : "text"
+                    }
+                    value={formData[col.name] || ""}
+                    onChange={handleInputChange}
+                    className="border-cyan-900/50 bg-black/50 text-slate-200 focus-visible:ring-cyan-500/50"
+                    required={col.required}
+                  />
+                </div>
+              ))}
           </div>
           <div className="flex justify-end gap-2">
-            <Button variant="ghost" onClick={() => setIsEditOpen(false)} className="text-xs h-8 text-slate-400 hover:text-slate-200">Cancel</Button>
-            <Button onClick={() => handleSave(true)} disabled={isSubmitting} className="bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-semibold h-8 px-6 shadow-[0_0_15px_rgba(34,211,238,0.3)]">
-              {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Update Record"}
+            <Button
+              variant="ghost"
+              onClick={() => setIsEditOpen(false)}
+              className="h-8 text-xs text-slate-400 hover:text-slate-200"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => handleSave(true)}
+              disabled={isSubmitting}
+              className="h-8 bg-cyan-500 px-6 text-xs font-semibold text-black shadow-[0_0_15px_rgba(34,211,238,0.3)] hover:bg-cyan-400"
+            >
+              {isSubmitting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                "Update Record"
+              )}
             </Button>
           </div>
         </DialogContent>

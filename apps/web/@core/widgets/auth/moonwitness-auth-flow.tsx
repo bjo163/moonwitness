@@ -276,23 +276,23 @@ export function MoonwitnessAuthFlow() {
         <WorkspaceStep onSelectWorkspace={handleWorkspaceSelect} />
       ) : null}
       {currentState === "FORGOT_1" ? (
-        <Forgot1Step 
-          onStateChange={setCurrentState} 
-          onSuccess={(email) => setForgotEmail(email)} 
+        <Forgot1Step
+          onStateChange={setCurrentState}
+          onSuccess={(email) => setForgotEmail(email)}
         />
       ) : null}
       {currentState === "FORGOT_2" ? (
-        <Forgot2Step 
-          email={forgotEmail} 
-          onStateChange={setCurrentState} 
+        <Forgot2Step
+          email={forgotEmail}
+          onStateChange={setCurrentState}
           onSuccess={(code) => setForgotCode(code)}
         />
       ) : null}
       {currentState === "RESET_3" ? (
-        <Reset3Step 
+        <Reset3Step
           email={forgotEmail}
           code={forgotCode}
-          onStateChange={setCurrentState} 
+          onStateChange={setCurrentState}
         />
       ) : null}
       {currentState === "VERIFICATION" ? (

@@ -44,13 +44,16 @@ function ReaderContent({ id }: { id: string }) {
         setData(json.data)
         setIsLoading(false)
         window.scrollTo(0, 0)
-        
+
         // Auto-save history if logged in
         if (user && json.data.book?.id) {
-           moonClient.model('wx.history').create({
-             userId: user.id,
-             bookId: json.data.book.id
-           }).catch(console.error)
+          moonClient
+            .model("wx.history")
+            .create({
+              userId: user.id,
+              bookId: json.data.book.id,
+            })
+            .catch(console.error)
         }
       })
       .catch((err) => {
@@ -282,17 +285,23 @@ function ReaderContent({ id }: { id: string }) {
                       : "Listen Audio"}
                   </button>
                 )}
-                <button 
+                <button
                   onClick={() => {
                     if (!user) return alert("Please login to save bookmarks")
-                    moonClient.model('wx.bookmark').create({
-                      userId: user.id,
-                      bookId: book.id
-                    }).then(() => alert("Bookmark saved!"))
-                      .catch((err) => alert("Failed to save bookmark: " + err.message))
+                    moonClient
+                      .model("wx.bookmark")
+                      .create({
+                        userId: user.id,
+                        bookId: book.id,
+                      })
+                      .then(() => alert("Bookmark saved!"))
+                      .catch((err) =>
+                        alert("Failed to save bookmark: " + err.message)
+                      )
                   }}
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 transition-colors hover:bg-white/10 hover:text-blue-400 group relative">
-                  <Bookmark className="h-4 w-4 text-white/60 group-hover:text-blue-400 transition-colors" />
+                  className="group relative flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 transition-colors hover:bg-white/10 hover:text-blue-400"
+                >
+                  <Bookmark className="h-4 w-4 text-white/60 transition-colors group-hover:text-blue-400" />
                 </button>
               </div>
             </div>

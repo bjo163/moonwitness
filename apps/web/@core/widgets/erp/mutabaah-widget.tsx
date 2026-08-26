@@ -24,40 +24,46 @@ export function MutabaahWidget() {
     )
   }
 
-  const completedCount = devotions.filter(d => d.completed).length
+  const completedCount = devotions.filter((d) => d.completed).length
   const progress = (completedCount / devotions.length) * 100
 
   return (
-    <div className="bg-space/60 rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl flex flex-col h-full">
+    <div className="bg-space/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
           Mutaba'ah / Devotion
         </h3>
-        <Flame className={`h-4 w-4 ${progress === 100 ? 'text-amber-500 animate-pulse' : 'text-primary/50'}`} />
+        <Flame
+          className={`h-4 w-4 ${progress === 100 ? "animate-pulse text-amber-500" : "text-primary/50"}`}
+        />
       </div>
 
       <div className="mb-4">
-        <div className="flex justify-between items-end mb-1">
-          <span className="font-mono text-xs text-white uppercase">Daily Progress</span>
-          <span className="font-mono text-xs font-bold text-cyan-400">{completedCount}/{devotions.length}</span>
+        <div className="mb-1 flex items-end justify-between">
+          <span className="font-mono text-xs text-white uppercase">
+            Daily Progress
+          </span>
+          <span className="font-mono text-xs font-bold text-cyan-400">
+            {completedCount}/{devotions.length}
+          </span>
         </div>
-        <div className="h-1.5 w-full bg-black/60 rounded-full overflow-hidden border border-cyan-500/20">
-          <div 
+        <div className="h-1.5 w-full overflow-hidden rounded-full border border-cyan-500/20 bg-black/60">
+          <div
             className="h-full bg-cyan-400 transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
       </div>
 
-      <div className="space-y-2 flex-1">
-        {devotions.map(d => (
-          <button 
+      <div className="flex-1 space-y-2">
+        {devotions.map((d) => (
+          <button
             key={d.id}
             onClick={() => toggle(d.id)}
-            className={`w-full flex items-center gap-3 p-2.5 rounded-lg border transition-all ${
-              d.completed 
-                ? "bg-cyan-500/10 border-cyan-500/50 shadow-[0_0_10px_rgba(0,240,255,0.1)]" 
-                : "bg-black/20 border-transparent hover:bg-black/40 hover:border-white/10"
+            className={`flex w-full items-center gap-3 rounded-lg border p-2.5 transition-all ${
+              d.completed
+                ? "border-cyan-500/50 bg-cyan-500/10 shadow-[0_0_10px_rgba(0,240,255,0.1)]"
+                : "border-transparent bg-black/20 hover:border-white/10 hover:bg-black/40"
             }`}
           >
             {d.completed ? (
@@ -65,20 +71,20 @@ export function MutabaahWidget() {
             ) : (
               <Circle className="h-4 w-4 text-primary/50" />
             )}
-            <span className={`font-sans text-xs font-bold ${d.completed ? 'text-white' : 'text-primary/70'}`}>
+            <span
+              className={`font-sans text-xs font-bold ${d.completed ? "text-white" : "text-primary/70"}`}
+            >
               {d.label}
             </span>
           </button>
         ))}
       </div>
 
-      <div className="mt-4 pt-3 border-t border-cyan-500/10 flex items-center justify-between text-[9px] font-mono text-primary/60">
+      <div className="mt-4 flex items-center justify-between border-t border-cyan-500/10 pt-3 font-mono text-[9px] text-primary/60">
         <div className="flex items-center gap-1">
           <Activity className="h-3 w-3" /> Sync Active
         </div>
-        <div>
-          Last Sync: Just now
-        </div>
+        <div>Last Sync: Just now</div>
       </div>
     </div>
   )

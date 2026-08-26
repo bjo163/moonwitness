@@ -38,7 +38,12 @@ import {
 // DIVINE auto-whisper ketika tombol MERCY ditekan
 // ─────────────────────────────────────────────────────────────────────────────
 
-const MERCY_POOL: { arabic: string; latin: string; meaning: string; ref: string }[] = [
+const MERCY_POOL: {
+  arabic: string
+  latin: string
+  meaning: string
+  ref: string
+}[] = [
   {
     arabic: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
     latin: "Bismillahir Rahmanir Rahim",
@@ -108,7 +113,8 @@ const MERCY_POOL: { arabic: string; latin: string; meaning: string; ref: string 
   {
     arabic: "رَبِّ اغْفِرْ وَارْحَمْ وَأَنتَ خَيْرُ الرَّاحِمِينَ",
     latin: "Rabbighfir warham wa Anta khairur rahimin",
-    meaning: "Ya Tuhanku, ampunilah dan berilah rahmat, Engkaulah sebaik-baik pemberi rahmat",
+    meaning:
+      "Ya Tuhanku, ampunilah dan berilah rahmat, Engkaulah sebaik-baik pemberi rahmat",
     ref: "QS 23:118",
   },
 ]
@@ -118,7 +124,8 @@ const MERCY_POOL: { arabic: string; latin: string; meaning: string; ref: string 
  * berurutan agar setiap mercy tersampaikan bergantian).
  */
 function getMercyMessage(requestId: string, count: number) {
-  const idx = (requestId.charCodeAt(requestId.length - 1) + count) % MERCY_POOL.length
+  const idx =
+    (requestId.charCodeAt(requestId.length - 1) + count) % MERCY_POOL.length
   const m = MERCY_POOL[idx]!
   return `${m.arabic}\n\n"${m.meaning}"\n\n— ${m.latin} · ${m.ref}`
 }
@@ -171,18 +178,13 @@ export function MercyButton({ requestId, onMercySent }: MercyButtonProps) {
     <button
       onClick={handleMercy}
       title="Kirim MERCY — DIVINE whisper rahmat"
-      className={`
-        group flex items-center gap-1.5 hud-clip-btn border px-3 py-1.5
-        font-mono text-[9px] font-bold tracking-widest uppercase
-        transition-all duration-300
-        ${
-          glowing
-            ? "border-yellow-300/80 bg-yellow-400/20 text-yellow-200 shadow-[0_0_20px_rgba(255,230,0,0.4)]"
-            : sent
+      className={`group hud-clip-btn flex items-center gap-1.5 border px-3 py-1.5 font-mono text-[9px] font-bold tracking-widest uppercase transition-all duration-300 ${
+        glowing
+          ? "border-yellow-300/80 bg-yellow-400/20 text-yellow-200 shadow-[0_0_20px_rgba(255,230,0,0.4)]"
+          : sent
             ? "border-yellow-400/50 bg-yellow-400/10 text-yellow-300"
             : "border-yellow-400/20 bg-transparent text-yellow-400/50 hover:border-yellow-400/50 hover:bg-yellow-400/10 hover:text-yellow-300 hover:shadow-[0_0_12px_rgba(255,230,0,0.2)]"
-        }
-      `}
+      } `}
     >
       <Heart
         className={`h-3 w-3 transition-all duration-300 ${
@@ -200,7 +202,6 @@ export function MercyButton({ requestId, onMercySent }: MercyButtonProps) {
     </button>
   )
 }
-
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TYPES
@@ -223,7 +224,12 @@ export interface Whisper {
 // EXPIRY CONFIG — based on sifat ALLAH menciptakan masa
 // ─────────────────────────────────────────────────────────────────────────────
 
-const EXPIRY_OPTIONS: { days: WhisperExpiry; label: string; desc: string; ref: string }[] = [
+const EXPIRY_OPTIONS: {
+  days: WhisperExpiry
+  label: string
+  desc: string
+  ref: string
+}[] = [
   {
     days: 3,
     label: "3 HARI",
@@ -244,14 +250,17 @@ const EXPIRY_OPTIONS: { days: WhisperExpiry; label: string; desc: string; ref: s
   },
 ]
 
-const TIER_CONFIG: Record<WhisperTier, {
-  label: string
-  icon: React.ReactNode
-  color: string
-  border: string
-  bg: string
-  align: string
-}> = {
+const TIER_CONFIG: Record<
+  WhisperTier,
+  {
+    label: string
+    icon: React.ReactNode
+    color: string
+    border: string
+    bg: string
+    align: string
+  }
+> = {
   DIVINE: {
     label: "DIVINE",
     icon: <Infinity className="h-3 w-3" />,
@@ -333,7 +342,10 @@ function formatTimeLeft(expiresAt: number): { text: string; urgent: boolean } {
 
 function formatDate(ms: number) {
   return new Date(ms).toLocaleString("id-ID", {
-    day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit",
+    day: "2-digit",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
   })
 }
 
@@ -353,10 +365,16 @@ function WhisperBubble({
   const isShadow = whisper.tier === "SHADOW"
 
   return (
-    <div className={`flex flex-col gap-1 ${isShadow ? "items-end" : "items-start"}`}>
+    <div
+      className={`flex flex-col gap-1 ${isShadow ? "items-end" : "items-start"}`}
+    >
       {/* Tier label */}
-      <div className={`flex items-center gap-1 ${isShadow ? "flex-row-reverse" : "flex-row"}`}>
-        <span className={`${cfg.color} flex items-center gap-1 font-mono text-[8px] font-bold tracking-widest uppercase`}>
+      <div
+        className={`flex items-center gap-1 ${isShadow ? "flex-row-reverse" : "flex-row"}`}
+      >
+        <span
+          className={`${cfg.color} flex items-center gap-1 font-mono text-[8px] font-bold tracking-widest uppercase`}
+        >
           {cfg.icon} {cfg.label}
         </span>
         <span className="font-mono text-[8px] text-white/20">
@@ -366,10 +384,7 @@ function WhisperBubble({
 
       {/* Bubble */}
       <div
-        className={`
-          relative max-w-[85%] hud-clip-card border px-3 py-2
-          ${cfg.border} ${cfg.bg}
-        `}
+        className={`hud-clip-card relative max-w-[85%] border px-3 py-2 ${cfg.border} ${cfg.bg} `}
       >
         <p className={`font-mono text-xs ${cfg.color} leading-relaxed`}>
           {whisper.content}
@@ -466,21 +481,18 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
   }
 
   const activeCount = whispers.filter((w) => w.expiresAt > Date.now()).length
-  const selectedExpiryConfig = EXPIRY_OPTIONS.find((e) => e.days === selectedExpiry)!
+  const selectedExpiryConfig = EXPIRY_OPTIONS.find(
+    (e) => e.days === selectedExpiry
+  )!
 
   return (
     <div className="mt-4 border-t border-white/5 pt-3">
       {/* Toggle button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`
-          flex w-full items-center justify-between gap-2 rounded-none px-2 py-2
-          font-mono text-[10px] tracking-widest uppercase transition-all
-          ${isOpen
-            ? "text-yellow-400/80"
-            : "text-white/25 hover:text-white/50"
-          }
-        `}
+        className={`flex w-full items-center justify-between gap-2 rounded-none px-2 py-2 font-mono text-[10px] tracking-widest uppercase transition-all ${
+          isOpen ? "text-yellow-400/80" : "text-white/25 hover:text-white/50"
+        } `}
       >
         <span className="flex items-center gap-2">
           <MessageCircle className="h-3.5 w-3.5" />
@@ -492,7 +504,11 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
           )}
         </span>
         <span className="font-mono text-[8px] text-white/20">
-          {isOpen ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+          {isOpen ? (
+            <ChevronUp className="h-3 w-3" />
+          ) : (
+            <ChevronDown className="h-3 w-3" />
+          )}
         </span>
       </button>
 
@@ -502,7 +518,8 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
           <div className="flex items-start gap-2 rounded-none border border-yellow-400/10 bg-yellow-400/4 px-3 py-2">
             <Infinity className="mt-0.5 h-3 w-3 shrink-0 text-yellow-400/40" />
             <p className="font-mono text-[9px] text-yellow-400/40 italic">
-              Whisper ini bersifat fana — ia akan berakhir pada masanya. &quot;Kullu man &apos;alayha fan.&quot; QS 55:26
+              Whisper ini bersifat fana — ia akan berakhir pada masanya.
+              &quot;Kullu man &apos;alayha fan.&quot; QS 55:26
             </p>
           </div>
 
@@ -531,13 +548,14 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
             >
               <span className="flex items-center gap-2">
                 <Clock className="h-3 w-3" />
-                Masa berlaku: {selectedExpiryConfig.label} — {selectedExpiryConfig.desc}
+                Masa berlaku: {selectedExpiryConfig.label} —{" "}
+                {selectedExpiryConfig.desc}
               </span>
               <ChevronDown className="h-3 w-3" />
             </button>
 
             {showExpiryPicker && (
-              <div className="absolute left-0 right-0 top-full z-10 border border-white/10 bg-black/90 backdrop-blur-md">
+              <div className="absolute top-full right-0 left-0 z-10 border border-white/10 bg-black/90 backdrop-blur-md">
                 {EXPIRY_OPTIONS.map((opt) => (
                   <button
                     key={opt.days}
@@ -547,8 +565,12 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
                     }}
                     className="flex w-full flex-col px-3 py-2 text-left hover:bg-white/5"
                   >
-                    <span className="font-mono text-[10px] font-bold text-white/70">{opt.label} — {opt.desc}</span>
-                    <span className="font-mono text-[8px] text-yellow-400/40">{opt.ref}</span>
+                    <span className="font-mono text-[10px] font-bold text-white/70">
+                      {opt.label} — {opt.desc}
+                    </span>
+                    <span className="font-mono text-[8px] text-yellow-400/40">
+                      {opt.ref}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -563,14 +585,11 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
                 <button
                   key={tier}
                   onClick={() => setSelectedTier(tier)}
-                  className={`
-                    flex flex-1 items-center justify-center gap-1 hud-clip-btn border px-2 py-1.5
-                    font-mono text-[8px] font-bold tracking-widest uppercase transition-all
-                    ${selectedTier === tier
+                  className={`hud-clip-btn flex flex-1 items-center justify-center gap-1 border px-2 py-1.5 font-mono text-[8px] font-bold tracking-widest uppercase transition-all ${
+                    selectedTier === tier
                       ? `${cfg.border} ${cfg.color} ${cfg.bg}`
                       : "border-white/10 text-white/25 hover:border-white/20"
-                    }
-                  `}
+                  } `}
                 >
                   {cfg.icon} {tier}
                 </button>
@@ -583,23 +602,19 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
             <input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend() } }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault()
+                  handleSend()
+                }
+              }}
               placeholder={`Whisper dari ${selectedTier}...`}
-              className="
-                flex-1 border border-white/10 bg-black/40 px-3 py-2
-                font-mono text-xs text-white placeholder:text-white/20
-                focus:border-yellow-400/30 focus:outline-none
-              "
+              className="flex-1 border border-white/10 bg-black/40 px-3 py-2 font-mono text-xs text-white placeholder:text-white/20 focus:border-yellow-400/30 focus:outline-none"
             />
             <button
               onClick={handleSend}
               disabled={!inputValue.trim()}
-              className="
-                hud-clip-btn border border-yellow-400/30 bg-yellow-400/8 px-3 py-2
-                text-yellow-400 transition-all
-                hover:bg-yellow-400/15 hover:shadow-[0_0_10px_rgba(255,230,0,0.15)]
-                disabled:cursor-not-allowed disabled:opacity-30
-              "
+              className="hud-clip-btn border border-yellow-400/30 bg-yellow-400/8 px-3 py-2 text-yellow-400 transition-all hover:bg-yellow-400/15 hover:shadow-[0_0_10px_rgba(255,230,0,0.15)] disabled:cursor-not-allowed disabled:opacity-30"
             >
               <Send className="h-3.5 w-3.5" />
             </button>
@@ -609,7 +624,8 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
           <div className="flex items-center gap-2">
             <AlertTriangle className="h-3 w-3 shrink-0 text-white/15" />
             <p className="font-mono text-[8px] text-white/15">
-              Whisper disimpan secara lokal. Tidak ada server. Akan hilang otomatis sesuai masa yang dipilih.
+              Whisper disimpan secara lokal. Tidak ada server. Akan hilang
+              otomatis sesuai masa yang dipilih.
             </p>
           </div>
         </div>

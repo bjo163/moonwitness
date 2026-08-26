@@ -35,12 +35,15 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get("page") || "1")
     const limit = parseInt(searchParams.get("limit") || "20")
-    
+
     // By default the old API just fetched random hadiths from a single table
     // For Witness API we will fetch bukhari or allow slug param
     const slug = searchParams.get("slug") || "bukhari"
 
-    const json = await moonClientInstance.request("GET", `/api/witness/hadith?slug=${slug}&page=${page}&limit=${limit}`)
+    const json = await moonClientInstance.request(
+      "GET",
+      `/api/witness/hadith?slug=${slug}&page=${page}&limit=${limit}`
+    )
 
     const processedData = json.hadiths.map((item: any) => ({
       id: item.number,

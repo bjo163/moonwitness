@@ -27,21 +27,27 @@ export function HomePlanetaryTelemetryWidget() {
   }, [])
 
   const neoCount = neo?.element_count
-  const neoStat  = neoCount !== undefined ? `${neoCount} ASTEROIDS` : "SCANNING..."
-  const neoTrend = neoCount !== undefined
-    ? (neoCount > 15 ? "▲ ALERT" : "▼ SAFE")
-    : "..."
-  const neoColor = neoTrend.includes("ALERT") ? "text-amber-400" : "text-emerald-400"
+  const neoStat =
+    neoCount !== undefined ? `${neoCount} ASTEROIDS` : "SCANNING..."
+  const neoTrend =
+    neoCount !== undefined ? (neoCount > 15 ? "▲ ALERT" : "▼ SAFE") : "..."
+  const neoColor = neoTrend.includes("ALERT")
+    ? "text-amber-400"
+    : "text-emerald-400"
 
-  const quakeStat  = quake ? `${quake.count} DETECTED` : "SCANNING..."
+  const quakeStat = quake ? `${quake.count} DETECTED` : "SCANNING..."
   const quakeTrend = quake?.trend ?? "..."
-  const quakeColor = quakeTrend.includes("▲") ? "text-fuchsia-400" : "text-emerald-400"
+  const quakeColor = quakeTrend.includes("▲")
+    ? "text-fuchsia-400"
+    : "text-emerald-400"
 
-  const weatherStat  = weather ? `${weather.temp} °C` : "SCANNING..."
+  const weatherStat = weather ? `${weather.temp} °C` : "SCANNING..."
   const weatherTrend = weather?.condition ?? "..."
-  const weatherColor = weatherTrend.includes("▲") ? "text-amber-400" : "text-emerald-400"
+  const weatherColor = weatherTrend.includes("▲")
+    ? "text-amber-400"
+    : "text-emerald-400"
 
-  const kpStat  = kp ? `${kp.kp.toFixed(1)} KP` : "SCANNING..."
+  const kpStat = kp ? `${kp.kp.toFixed(1)} KP` : "SCANNING..."
   const kpTrend = kp?.trend ?? "..."
   const kpColor = kpTrend.includes("STORM") ? "text-danger" : "text-emerald-400"
 
@@ -89,15 +95,17 @@ export function HomePlanetaryTelemetryWidget() {
           {metrics.map((row) => (
             <div
               key={row.label}
-              className="group -mx-2 flex flex-wrap sm:flex-nowrap items-center justify-between rounded border-b border-white/[0.02] px-2 py-2 sm:py-1.5 transition-colors last:border-0 hover:bg-white/[0.02]"
+              className="group -mx-2 flex flex-wrap items-center justify-between rounded border-b border-white/[0.02] px-2 py-2 transition-colors last:border-0 hover:bg-white/[0.02] sm:flex-nowrap sm:py-1.5"
             >
-              <span className="w-1/2 sm:w-[35%] truncate pr-2 tracking-widest text-primary uppercase">
+              <span className="w-1/2 truncate pr-2 tracking-widest text-primary uppercase sm:w-[35%]">
                 {row.label}
               </span>
-              <span className="w-1/2 sm:w-[40%] text-right sm:text-left font-mono font-bold tracking-wide text-primary">
+              <span className="w-1/2 text-right font-mono font-bold tracking-wide text-primary sm:w-[40%] sm:text-left">
                 {row.stat}
               </span>
-              <span className={`w-full sm:w-[25%] mt-1 sm:mt-0 text-right text-[9px] font-bold tracking-wider ${row.trendColor}`}>
+              <span
+                className={`mt-1 w-full text-right text-[9px] font-bold tracking-wider sm:mt-0 sm:w-[25%] ${row.trendColor}`}
+              >
                 {row.trend}
               </span>
             </div>

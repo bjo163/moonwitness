@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
       translation_en: d.translationEn,
       category: "Dzikir", // Placeholder mapped
       timing: "Pagi/Petang", // Placeholder mapped
-      source: d.sourceId
+      source: d.sourceId,
     }))
 
     if (category && category !== "Semua") {
