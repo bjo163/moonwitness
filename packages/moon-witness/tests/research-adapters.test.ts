@@ -29,6 +29,22 @@ describe('research and legacy adapter contracts (#61/#66)', () => {
     }
   })
 
+  it('classifies CRAYON RGBL as derived ontology evidence with preserved provenance', () => {
+    const mapped = mapLegacyResearchRecord({
+      id: 'rgbl-1',
+      payload: { relation: 'RELATED_TO', score: 0.9 },
+      source: 'CRAYON_RGBL',
+      originRepo: 'bjo163/crayon-rgbl',
+      originCommit: 'r1',
+      originPath: 'fixtures/relations.json',
+      adapterVersion: '1.0.0'
+    })
+    expect(mapped.mappingKind).toBe('ONTOLOGY_EVIDENCE')
+    expect(mapped.targetLane).toBe('DERIVED')
+    expect(mapped.evidenceEligible).toBe(true)
+    expect(mapped.originChecksum).toMatch(/^[a-f0-9]{64}$/)
+  })
+
   it('keeps unresolved legacy status out of derived evidence', () => {
     const mapped = mapLegacyResearchRecord({ id: 'pending-crosswalk', payload: { status: 'PENDING', legacyScore: 0 }, source: 'DIVINE_TEXT', originRepo: 'bjo163/divine-text', originCommit: 'r1', originPath: 'crosswalk.json', adapterVersion: '1.0.0' })
     expect(mapped.targetLane).toBe('UNRESOLVED')
@@ -40,5 +56,12 @@ describe('research and legacy adapter contracts (#61/#66)', () => {
     const input = [{ category: 'FAITH', evidence: true }, { category: 'FAITH', evidence: false, disputed: true }, { category: 'LAW', evidence: true }]
     expect(distribution(input)).toEqual([{ category: 'FAITH', numerator: 1, denominator: 2, proportion: 0.5, evidenceCoverage: 0.5, disputed: 1 }, { category: 'LAW', numerator: 1, denominator: 1, proportion: 1, evidenceCoverage: 1, disputed: 0 }])
     expect(distribution([...input].reverse())).toEqual(distribution(input))
+  })
+
+  it('marks records with incomplete provenance unresolved', () => {
+    const mapped = mapLegacyResearchRecord({ id: 'missing-origin', payload: { status: 'READY' }, source: 'COSMIC', originRepo: '', originCommit: '', originPath: '', adapterVersion: '' })
+    expect(mapped.targetLane).toBe('UNRESOLVED')
+    expect(mapped.evidenceEligible).toBe(false)
+    expect(mapped.warnings).toContain('Legacy item is missing required provenance: originRepo, originCommit, originPath, adapterVersion.')
   })
 })
