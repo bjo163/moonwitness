@@ -1,6 +1,8 @@
 import WxEntity from './models/wx-entity.js'
 import WxEntityAlias from './models/wx-entity-alias.js'
+import WxEntityIdentifier from './models/wx-entity-identifier.js'
 import WxSource from './models/wx-source.js'
+import WxSourcePolicy from './models/wx-source-policy.js'
 import WxProvenance from './models/wx-provenance.js'
 import WxRelationType from './models/wx-relation-type.js'
 import WxRelation from './models/wx-relation.js'
@@ -35,7 +37,9 @@ export { registerWitnessRoutes } from './routes.js'
 export {
   WxEntity,
   WxEntityAlias,
+  WxEntityIdentifier,
   WxSource,
+  WxSourcePolicy,
   WxProvenance,
   WxRelationType,
   WxRelation,
@@ -56,9 +60,8 @@ export {
  * @moon/witness — connected Revelation Knowledge Graph addon.
  *
  * Canonical graph core:
- *   wx.entity -> wx.relation <- wx.relation.type
- *              -> wx.provenance -> wx.source
- *              -> wx.entity.alias
+ *   wx.entity -> aliases / identifiers / typed relations
+ *   wx.relation -> wx.provenance -> wx.source -> wx.source.policy
  *
  * Legacy Scripture/Tradition/Asma models remain registered temporarily for
  * migration compatibility. New canonical domain work binds to wx.entity and
@@ -71,7 +74,9 @@ export default {
   models: [
     WxEntity,
     WxEntityAlias,
+    WxEntityIdentifier,
     WxSource,
+    WxSourcePolicy,
     WxProvenance,
     WxRelationType,
     WxRelation,
