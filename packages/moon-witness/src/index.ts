@@ -44,6 +44,7 @@ import WxEngineRun from './models/wx-engine-run.js'
 import WxEngineResult from './models/wx-engine-result.js'
 import WxResearchHypothesis from './models/wx-research-hypothesis.js'
 import WxResearchRun from './models/wx-research-run.js'
+import WxScoreResult from './models/wx-score-result.js'
 
 // Ingestion Data Plane (#65)
 import WxSourcePolicy from './models/wx-source-policy.js'
@@ -303,6 +304,7 @@ export {
   WxEngineResult,
   WxResearchHypothesis,
   WxResearchRun,
+  WxScoreResult,
 
   // Ingestion data plane models (#65)
   WxSourcePolicy,
@@ -385,6 +387,7 @@ export default {
   WxEngineResult,
   WxResearchHypothesis,
   WxResearchRun,
+  WxScoreResult,
 
     // Ingestion data plane (#65)
     WxSourcePolicy,
