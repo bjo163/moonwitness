@@ -95,6 +95,12 @@ const getSecureBootstrapSecret = (envKey: string): string => {
   return randomBytes(32).toString('base64url')
 }
 
+const getBootstrapEnv = (envKey: string): string | undefined => {
+  const proc = (globalThis as any).process
+  const envVal = proc && proc.env ? proc.env[envKey] : undefined
+  return typeof envVal === 'string' && envVal.trim().length > 0 ? envVal.trim() : undefined
+}
+
 export const PARTNER_SEED_DATA = {
   company: {
     name: 'MoonWitness',
@@ -119,7 +125,7 @@ export const PARTNER_SEED_DATA = {
     {
       mode: 'admin',
       name: 'Administrator',
-      email: getEnv('BOOTSTRAP_ADMIN_EMAIL') || 'admin@moonwitness.org',
+      email: getBootstrapEnv('BOOTSTRAP_ADMIN_EMAIL') || 'admin@moonwitness.org',
       password: getSecureBootstrapSecret('BOOTSTRAP_ADMIN_PASSWORD'),
       isCompany: false
     }
