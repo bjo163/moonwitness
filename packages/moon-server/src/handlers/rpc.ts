@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { getModel, getDb, createCtx, AuthorizationError, ANONYMOUS_ID } from '@moon/orm'
 import { parseBody, sendJson } from '../utils/http.js'
-import { verifyToken, AuthError } from '../utils/auth.js'
+import { authenticateRequest, AuthError } from '../utils/auth.js'
 
 /**
  * Handle RPC (Remote Procedure Call) requests
@@ -13,12 +13,8 @@ export async function handleRpc(
   jwtSecret: string
 ): Promise<void> {
   try {
-    const decoded = verifyToken(req, jwtSecret)
-    const uid = decoded.sub as number
-
-    if (!uid || uid === ANONYMOUS_ID) {
-      return sendJson(res, 401, { error: 'Unauthorized', code: 'AUTH_REQUIRED' }, req)
-    }
+    const auth = await authenticateRequest(req, jwtSecret, { allowAnonymous: false })
+    const uid = auth.uid
 
     const body = await parseBody(req)
     const { model, method, args, kwargs } = body

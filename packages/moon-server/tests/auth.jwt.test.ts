@@ -8,9 +8,12 @@ import {
   issueJwt,
   validateUserSession,
   revokeUserSessions,
+  authenticateRequest,
+  resolveJwtPolicy,
+  reloadCanonicalJwtPolicy,
   AuthError,
 } from '../src/utils/auth.js'
-import { handleLogout, handleGetSession } from '../src/handlers/auth.js'
+import { handleLogout, handleGetSession, handleResetPassword } from '../src/handlers/auth.js'
 import { handleRest } from '../src/handlers/rest.js'
 import { handleRpc } from '../src/handlers/rpc.js'
 import { registerModel, setupOrm, Vertex, fields, ANONYMOUS_ID, SUPERUSER_ID, createCtx, getModel } from '@moon/orm'
@@ -19,6 +22,7 @@ const TEST_SECRET = 'super-secret-jwt-key-for-unit-testing-32chars!'
 
 class VxUser extends Vertex {
   static override _name = 'vx.user'
+  static override _public = true
   static override _softDelete = false
   email = fields.Char({ required: true })
   name = fields.Char()
@@ -46,6 +50,11 @@ class FakeDbQuery {
   }
 
   where(columnOrFn: string | Record<string, any> | ((qb: any) => void), opOrVal?: any, val?: any): this {
+    if (typeof columnOrFn === 'function') {
+      columnOrFn(this)
+      return this
+    }
+
     if (typeof columnOrFn === 'object' && columnOrFn !== null) {
       this.filters.push((row) =>
         Object.entries(columnOrFn).every(([key, expected]) => row[key] === expected)
@@ -74,6 +83,14 @@ class FakeDbQuery {
     return this
   }
 
+  andWhere(columnOrFn: string | Record<string, any> | ((qb: any) => void), opOrVal?: any, val?: any): this {
+    return this.where(columnOrFn, opOrVal, val)
+  }
+
+  orWhere(columnOrFn: string | Record<string, any> | ((qb: any) => void), opOrVal?: any, val?: any): this {
+    return this.where(columnOrFn, opOrVal, val)
+  }
+
   whereIn(columnOrFn: string, values: any[]): this {
     const column = String(columnOrFn).replace(`${this.tableName}.`, '')
     this.filters.push((row) => values.includes(row[column]))
@@ -90,6 +107,15 @@ class FakeDbQuery {
 
   limit(_count: number): this {
     return this
+  }
+
+  offset(_count: number): this {
+    return this
+  }
+
+  async count(_column?: string): Promise<{ count: number }[]> {
+    const rows = this.executeFilter()
+    return [{ count: rows.length }]
   }
 
   async first(): Promise<Row | undefined> {
@@ -518,5 +544,175 @@ describe('Transport Auth Boundary: REST & RPC Integration (#15)', () => {
 
     expect(result.status).toBe(401)
     expect(result.body.code).toBe('AUTH_EXPIRED')
+  })
+
+  it('handleRest and handleRpc reject revoked token with 401 AUTH_SESSION_REVOKED after user session revocation', async () => {
+    const token = issueJwt({ sub: 42, email: 'operator@moonwitness.org', tokenVersion: 1 }, TEST_SECRET)
+
+    // 1. Initially valid REST and RPC requests succeed (or reach business validation)
+    const reqRest1 = mockReq(`Bearer ${token}`)
+    reqRest1.method = 'GET'
+    reqRest1.url = '/api/vx.user'
+    const { res: resRest1, getResult: getRest1 } = createMockRes()
+    await handleRest(reqRest1, resRest1, ['/api/vx.user', 'vx.user'] as RegExpMatchArray, TEST_SECRET)
+    expect(getRest1().status).toBe(200)
+
+    // 2. Revoke user sessions
+    await revokeUserSessions(42)
+    expect(tables.vx_user[0].token_version).toBe(2)
+
+    // 3. Subsequent REST request with old token (tokenVersion 1) is rejected
+    const reqRest2 = mockReq(`Bearer ${token}`)
+    reqRest2.method = 'GET'
+    reqRest2.url = '/api/vx.user'
+    const { res: resRest2, getResult: getRest2 } = createMockRes()
+    await handleRest(reqRest2, resRest2, ['/api/vx.user', 'vx.user'] as RegExpMatchArray, TEST_SECRET)
+    expect(getRest2().status).toBe(401)
+    expect(getRest2().body.code).toBe('AUTH_SESSION_REVOKED')
+
+    // 4. Subsequent RPC request with old token (tokenVersion 1) is rejected
+    const reqRpc = mockReq(`Bearer ${token}`)
+    reqRpc.method = 'POST'
+    reqRpc.url = '/rpc'
+    ;(reqRpc as any).body = { model: 'vx.user', method: 'fetch' }
+    const { res: resRpc, getResult: getRpc } = createMockRes()
+    await handleRpc(reqRpc, resRpc, TEST_SECRET)
+    expect(getRpc().status).toBe(401)
+    expect(getRpc().body.code).toBe('AUTH_SESSION_REVOKED')
+  })
+
+  it('handleLogout validates current session and blocks repeated revocation calls with stale JWT', async () => {
+    const token = issueJwt({ sub: 42, email: 'operator@moonwitness.org', tokenVersion: 1 }, TEST_SECRET)
+
+    // 1. First logout succeeds and advances version to 2
+    const req1 = mockReq(`Bearer ${token}`)
+    const { res: res1, getResult: getResult1 } = createMockRes()
+    await handleLogout(req1, res1, config)
+    expect(getResult1().status).toBe(200)
+    expect(tables.vx_user[0].token_version).toBe(2)
+
+    // 2. Second logout with same stale token fails with AUTH_SESSION_REVOKED and does NOT advance DB version
+    const req2 = mockReq(`Bearer ${token}`)
+    const { res: res2, getResult: getResult2 } = createMockRes()
+    await handleLogout(req2, res2, config)
+    expect(getResult2().status).toBe(401)
+    expect(getResult2().body.code).toBe('AUTH_SESSION_REVOKED')
+    expect(tables.vx_user[0].token_version).toBe(2)
+  })
+
+  it('password reset invalidates active sessions across REST and RPC', async () => {
+    const oldToken = issueJwt({ sub: 42, email: 'operator@moonwitness.org', tokenVersion: 1 }, TEST_SECRET)
+
+    // Simulate password reset advancing tokenVersion to 2
+    tables.vx_user[0].token_version = 2
+
+    // REST with old token fails
+    const reqRest = mockReq(`Bearer ${oldToken}`)
+    reqRest.method = 'GET'
+    reqRest.url = '/api/vx.user'
+    const { res: resRest, getResult: getRest } = createMockRes()
+    await handleRest(reqRest, resRest, ['/api/vx.user', 'vx.user'] as RegExpMatchArray, TEST_SECRET)
+    expect(getRest().status).toBe(401)
+    expect(getRest().body.code).toBe('AUTH_SESSION_REVOKED')
+
+    // RPC with old token fails
+    const reqRpc = mockReq(`Bearer ${oldToken}`)
+    reqRpc.method = 'POST'
+    reqRpc.url = '/rpc'
+    ;(reqRpc as any).body = { model: 'vx.user', method: 'fetch' }
+    const { res: resRpc, getResult: getRpc } = createMockRes()
+    await handleRpc(reqRpc, resRpc, TEST_SECRET)
+    expect(getRpc().status).toBe(401)
+    expect(getRpc().body.code).toBe('AUTH_SESSION_REVOKED')
+
+    // New token issued with tokenVersion 2 succeeds
+    const newToken = issueJwt({ sub: 42, email: 'operator@moonwitness.org', tokenVersion: 2 }, TEST_SECRET)
+    const reqRestNew = mockReq(`Bearer ${newToken}`)
+    reqRestNew.method = 'GET'
+    reqRestNew.url = '/api/vx.user'
+    const { res: resRestNew, getResult: getRestNew } = createMockRes()
+    await handleRest(reqRestNew, resRestNew, ['/api/vx.user', 'vx.user'] as RegExpMatchArray, TEST_SECRET)
+    expect(getRestNew().status).toBe(200)
+  })
+
+  it('REST and RPC reject inactive user with 401 AUTH_USER_INACTIVE', async () => {
+    const token = issueJwt({ sub: 42, email: 'operator@moonwitness.org', tokenVersion: 1 }, TEST_SECRET)
+    tables.vx_user[0].is_active = false
+
+    const reqRest = mockReq(`Bearer ${token}`)
+    reqRest.method = 'GET'
+    reqRest.url = '/api/vx.user'
+    const { res: resRest, getResult: getRest } = createMockRes()
+    await handleRest(reqRest, resRest, ['/api/vx.user', 'vx.user'] as RegExpMatchArray, TEST_SECRET)
+    expect(getRest().status).toBe(401)
+    expect(getRest().body.code).toBe('AUTH_USER_INACTIVE')
+
+    const reqRpc = mockReq(`Bearer ${token}`)
+    reqRpc.method = 'POST'
+    reqRpc.url = '/rpc'
+    ;(reqRpc as any).body = { model: 'vx.user', method: 'fetch' }
+    const { res: resRpc, getResult: getRpc } = createMockRes()
+    await handleRpc(reqRpc, resRpc, TEST_SECRET)
+    expect(getRpc().status).toBe(401)
+    expect(getRpc().body.code).toBe('AUTH_USER_INACTIVE')
+  })
+
+  it('REST and RPC reject nonexistent user with 401 AUTH_USER_NOT_FOUND', async () => {
+    const token = issueJwt({ sub: 9999, email: 'ghost@moonwitness.org', tokenVersion: 1 }, TEST_SECRET)
+
+    const reqRest = mockReq(`Bearer ${token}`)
+    reqRest.method = 'GET'
+    reqRest.url = '/api/vx.user'
+    const { res: resRest, getResult: getRest } = createMockRes()
+    await handleRest(reqRest, resRest, ['/api/vx.user', 'vx.user'] as RegExpMatchArray, TEST_SECRET)
+    expect(getRest().status).toBe(401)
+    expect(getRest().body.code).toBe('AUTH_USER_NOT_FOUND')
+
+    const reqRpc = mockReq(`Bearer ${token}`)
+    reqRpc.method = 'POST'
+    reqRpc.url = '/rpc'
+    ;(reqRpc as any).body = { model: 'vx.user', method: 'fetch' }
+    const { res: resRpc, getResult: getRpc } = createMockRes()
+    await handleRpc(reqRpc, resRpc, TEST_SECRET)
+    expect(getRpc().status).toBe(401)
+    expect(getRpc().body.code).toBe('AUTH_USER_NOT_FOUND')
+  })
+
+  it('REST allows anonymous access for public paths while RPC requires authenticated user', async () => {
+    // REST without Authorization header
+    const reqRest = mockReq()
+    reqRest.method = 'GET'
+    reqRest.url = '/api/vx.user'
+    const { res: resRest, getResult: getRest } = createMockRes()
+    await handleRest(reqRest, resRest, ['/api/vx.user', 'vx.user'] as RegExpMatchArray, TEST_SECRET)
+    expect(getRest().status).toBe(200)
+
+    // RPC without Authorization header
+    const reqRpc = mockReq()
+    reqRpc.method = 'POST'
+    reqRpc.url = '/rpc'
+    ;(reqRpc as any).body = { model: 'vx.user', method: 'fetch' }
+    const { res: resRpc, getResult: getRpc } = createMockRes()
+    await handleRpc(reqRpc, resRpc, TEST_SECRET)
+    expect(getRpc().status).toBe(401)
+    expect(getRpc().body.code).toBe('AUTH_REQUIRED')
+  })
+
+  it('canonical TTL configuration controls issued access-token lifetime', () => {
+    reloadCanonicalJwtPolicy({ JWT_ACCESS_TOKEN_TTL: '2h' })
+    const token = issueJwt({ sub: 42, tokenVersion: 1 }, TEST_SECRET)
+    const decoded = jwt.decode(token) as any
+    expect(decoded.exp - decoded.iat).toBe(7200)
+
+    // Reset policy back to default
+    reloadCanonicalJwtPolicy({})
+  })
+
+  it('algorithm configuration fails closed on unsupported or invalid configuration', () => {
+    expect(() => resolveJwtPolicy({ JWT_ALGORITHM: 'RS256' })).toThrow('Invalid JWT_ALGORITHM configuration')
+    expect(() => resolveJwtPolicy({ JWT_ALGORITHM: 'none' })).toThrow('Invalid JWT_ALGORITHM configuration')
+    expect(() => resolveJwtPolicy({ JWT_CLOCK_TOLERANCE_SECONDS: '-10' })).toThrow('Invalid JWT_CLOCK_TOLERANCE_SECONDS configuration')
+    expect(() => resolveJwtPolicy({ JWT_CLOCK_TOLERANCE_SECONDS: 'abc' })).toThrow('Invalid JWT_CLOCK_TOLERANCE_SECONDS configuration')
+    expect(() => resolveJwtPolicy({ JWT_ACCESS_TOKEN_TTL: '' })).toThrow('Invalid JWT_ACCESS_TOKEN_TTL configuration')
   })
 })

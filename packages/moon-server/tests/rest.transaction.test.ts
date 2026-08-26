@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   parseBody: vi.fn(),
   parseUrl: vi.fn(),
   sendJson: vi.fn(),
+  authenticateRequest: vi.fn(),
   verifyToken: vi.fn(),
 }))
 
@@ -20,9 +21,14 @@ vi.mock('../src/utils/http.js', () => ({
   sendJson: mocks.sendJson,
 }))
 
-vi.mock('../src/utils/auth.js', () => ({
-  verifyToken: mocks.verifyToken,
-}))
+vi.mock('../src/utils/auth.js', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../src/utils/auth.js')>()
+  return {
+    ...actual,
+    authenticateRequest: mocks.authenticateRequest,
+    verifyToken: mocks.verifyToken,
+  }
+})
 
 import { handleRest } from '../src/handlers/rest.js'
 
@@ -49,6 +55,7 @@ function makeModel() {
 describe('REST write transaction context', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    mocks.authenticateRequest.mockResolvedValue({ uid: 42 })
     mocks.verifyToken.mockReturnValue({ sub: 42 })
     mocks.createCtx.mockReturnValue({ uid: 42, trx: undefined })
     mocks.parseBody.mockResolvedValue({ name: 'value' })
