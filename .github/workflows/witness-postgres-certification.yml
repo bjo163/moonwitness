@@ -33,7 +33,10 @@ jobs:
     env:
       CI: 'true'
       NODE_ENV: test
-      TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL || 'postgres://postgres:postgres@127.0.0.1:5432/moonwitness_witness_cert' }}
+      PG_CONTAINER: moonwitness-pg-cert-${{ github.run_id }}-${{ github.run_attempt }}
+      PG_DATABASE: moonwitness_witness_cert
+      PG_USER: postgres
+      PG_PASSWORD: postgres
 
     steps:
       - name: Checkout
@@ -44,15 +47,61 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Ensure PostgreSQL is ready
+      - name: Start isolated PostgreSQL 16
         shell: bash
         run: |
-          echo "Checking PostgreSQL connection..."
-          if ! pg_isready -h 127.0.0.1 -p 5432 >/dev/null 2>&1; then
-            echo "Starting PostgreSQL container on runner..."
-            docker run -d --rm --name moonwitness-pg-cert -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=moonwitness_witness_cert -p 5432:5432 postgres:16 || true
-            sleep 5
+          set -euo pipefail
+
+          echo "Starting isolated PostgreSQL certification container: ${PG_CONTAINER}"
+          docker rm -f "${PG_CONTAINER}" >/dev/null 2>&1 || true
+
+          docker run -d \
+            --name "${PG_CONTAINER}" \
+            --label "moonwitness.ci.run=${GITHUB_RUN_ID}" \
+            --label "moonwitness.ci.attempt=${GITHUB_RUN_ATTEMPT}" \
+            -e POSTGRES_USER="${PG_USER}" \
+            -e POSTGRES_PASSWORD="${PG_PASSWORD}" \
+            -e POSTGRES_DB="${PG_DATABASE}" \
+            -p 127.0.0.1::5432 \
+            postgres:16 >/dev/null
+
+          PG_PORT="$(docker port "${PG_CONTAINER}" 5432/tcp | tail -n 1 | sed -E 's/.*:([0-9]+)$/\1/')"
+          if ! [[ "${PG_PORT}" =~ ^[0-9]+$ ]]; then
+            echo "Unable to determine dynamically allocated PostgreSQL host port."
+            docker ps -a --filter "name=^/${PG_CONTAINER}$"
+            docker logs "${PG_CONTAINER}" || true
+            exit 1
           fi
+
+          echo "PG_PORT=${PG_PORT}" >> "${GITHUB_ENV}"
+          echo "TEST_DATABASE_URL=postgres://${PG_USER}:${PG_PASSWORD}@127.0.0.1:${PG_PORT}/${PG_DATABASE}" >> "${GITHUB_ENV}"
+          echo "PostgreSQL mapped to 127.0.0.1:${PG_PORT}. Waiting for readiness..."
+
+          ready=0
+          for attempt in $(seq 1 30); do
+            if docker exec "${PG_CONTAINER}" pg_isready -U "${PG_USER}" -d "${PG_DATABASE}" >/dev/null 2>&1; then
+              if command -v pg_isready >/dev/null 2>&1; then
+                if pg_isready -h 127.0.0.1 -p "${PG_PORT}" -U "${PG_USER}" -d "${PG_DATABASE}" >/dev/null 2>&1; then
+                  ready=1
+                  break
+                fi
+              else
+                ready=1
+                break
+              fi
+            fi
+            echo "PostgreSQL not ready yet (${attempt}/30)..."
+            sleep 2
+          done
+
+          if [ "${ready}" -ne 1 ]; then
+            echo "PostgreSQL failed readiness gate."
+            docker ps -a --filter "name=^/${PG_CONTAINER}$"
+            docker logs "${PG_CONTAINER}" || true
+            exit 1
+          fi
+
+          echo "PostgreSQL readiness gate passed."
 
       - name: Enable pinned pnpm
         shell: bash
@@ -69,3 +118,20 @@ jobs:
 
       - name: Certify Witness graph on PostgreSQL
         run: pnpm --filter api certify:witness-graph-pg
+
+      - name: PostgreSQL diagnostics on failure
+        if: failure()
+        shell: bash
+        run: |
+          echo "=== PostgreSQL certification diagnostics ==="
+          echo "Container: ${PG_CONTAINER}"
+          echo "Host port: ${PG_PORT:-unresolved}"
+          docker ps -a --filter "name=^/${PG_CONTAINER}$" || true
+          docker logs "${PG_CONTAINER}" || true
+
+      - name: Cleanup PostgreSQL certification container
+        if: always()
+        shell: bash
+        run: |
+          echo "Cleaning PostgreSQL certification container owned by this run: ${PG_CONTAINER}"
+          docker rm -f "${PG_CONTAINER}" >/dev/null 2>&1 || true
