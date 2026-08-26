@@ -39,6 +39,33 @@ export type {
   SourceLineage
 } from './types/ingestion.js'
 
+export type {
+  AnalysisFindingStatus,
+  AnalysisFindingV1,
+  EvidenceRef,
+  EvidenceSummaryStatus,
+  MizanProjectionV1,
+  ReviewGateV1,
+  ScoreResultV1,
+  SemanticProviderMetadata,
+  SourceGroundingV1,
+  WitnessAnalyzeInputV1,
+  WitnessAnalyzeResultV1,
+  WitnessSemanticProvider,
+  WitnessSemanticObservationV1
+} from './types/analyze.js'
+
+export {
+  unavailableSemanticObservation,
+  validateSemanticObservation,
+  WITNESS_ANALYZE_INPUT_V1,
+  WITNESS_ANALYZE_RESULT_V1,
+  WITNESS_SEMANTIC_OBSERVATION_V1
+} from './types/analyze.js'
+
+export { validateAnalyzeResult } from './services/analyze-contract.js'
+export { analyzeWitness } from './services/analyze.js'
+
 export {
   registerAdapter,
   getAdapter,
