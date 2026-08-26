@@ -1,5 +1,6 @@
 import axios from "axios"
 import { API_ENDPOINTS } from "./endpoints"
+import { getAuthToken } from "./auth-token"
 import { mockKnowledgeGraphResponse } from "../db/data/knowledge-graph.db"
 
 // Simulated network delay
@@ -16,9 +17,8 @@ export const apiClient = axios.create({
 // Request Interceptor
 apiClient.interceptors.request.use(
   (config) => {
-    // In a real app, inject Auth Tokens here
-    // const token = useAuthStore.getState().token;
-    // if (token) config.headers.Authorization = `Bearer ${token}`;
+    const token = getAuthToken()
+    if (token) config.headers.Authorization = `Bearer ${token}`
     return config
   },
   (error) => Promise.reject(error)
@@ -50,8 +50,6 @@ apiClient.interceptors.response.use(
         config,
       })
     }
-
-    // TODO: Add other mock endpoints here (Telemetry, Alerts, etc.)
 
     return Promise.reject(error)
   }

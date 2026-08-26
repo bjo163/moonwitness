@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from "axios"
+import { getAuthToken } from "./auth-token"
 
 // Default to Fastify backend port 4000
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"
@@ -15,12 +16,9 @@ export class OdooRpcClient {
       },
     })
 
-    // TODO: Add request interceptor for JWT authentication later
     this.client.interceptors.request.use((config) => {
-      // const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-      // if (token) {
-      //   config.headers.Authorization = `Bearer ${token}`;
-      // }
+      const token = getAuthToken()
+      if (token) config.headers.Authorization = `Bearer ${token}`
       return config
     })
   }
