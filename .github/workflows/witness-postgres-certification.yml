@@ -24,7 +24,7 @@ concurrency:
 jobs:
   certify-postgres:
     name: PostgreSQL 16 Graph Certification
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     timeout-minutes: 20
     services:
       postgres:
