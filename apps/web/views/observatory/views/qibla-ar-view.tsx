@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react"
 /* eslint-disable-next-line no-restricted-imports -- Standard icons for Qibla AR view */
 import { Camera, Compass, MapPin, AlertTriangle } from "lucide-react"
 import { ContextBlock } from "@core/ui"
+import { CelestialQiblaCompass } from "@workspace/ui"
 
 const FULL_CIRCLE_DEGREES = 360
 const ALIGNMENT_TOLERANCE_DEGREES = 5
@@ -214,67 +215,14 @@ export function QiblaArView() {
           </div>
         )}
 
-        {/* Interactive Gyro Compass Scope */}
-        <div className="relative mx-auto flex h-72 w-72 items-center justify-center">
-          {/* Background Highlight when locked */}
-          {isAligned && (
-            <div className="bg-success/20 absolute inset-0 animate-pulse rounded-full blur-xl" />
-          )}
-
-          {/* Outer HUD Rings */}
-          <div
-            className="absolute inset-0 rounded-full border-4 border-dashed border-primary/30"
-            style={{
-              transform: `rotate(${-heading}deg)`,
-              transition: "transform 0.1s linear",
-            }}
-          >
-            {/* North Indicator Fixed to Ring */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-sm bg-primary px-2 py-1 text-xs font-black text-black">
-              N
-            </div>
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 text-[10px] font-bold text-primary/50">
-              S
-            </div>
-            <div className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 text-[10px] font-bold text-primary/50">
-              W
-            </div>
-            <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 text-[10px] font-bold text-primary/50">
-              E
-            </div>
-          </div>
-
-          <div className="absolute inset-8 rounded-full border border-primary/20" />
-
-          {/* Crosshair Target Scope (Device is always pointing UP in the UI) */}
-          <div className="absolute h-[120%] w-0.5 bg-gradient-to-t from-transparent via-primary/50 to-transparent" />
-          <div className="absolute h-0.5 w-full bg-primary/20" />
-
-          {/* Static Device Pointer */}
-          <div className="absolute top-4 h-4 w-4 rotate-45 border-t-2 border-l-2 border-primary" />
-
-          {/* Qibla Target Vector Indicator */}
-          {qiblaTarget !== null && (
-            <div
-              className="absolute flex h-full w-full items-center justify-center"
-              style={{
-                transform: `rotate(${qiblaTarget - heading}deg)`,
-                transition: "transform 0.1s linear",
-              }}
-            >
-              <div className="absolute top-1 flex flex-col items-center">
-                <div
-                  className={`flex h-8 w-8 items-center justify-center text-xl transition-all ${isAligned ? "scale-150 drop-shadow-[0_0_15px_#00FF66]" : ""}`}
-                >
-                  🕋
-                </div>
-                {/* Connecting Line to Center */}
-                <div
-                  className={`mt-2 h-32 w-0.5 ${isAligned ? "bg-success shadow-[0_0_10px_#00FF66]" : "bg-warning/50 border-dashed"}`}
-                />
-              </div>
-            </div>
-          )}
+        {/* Interactive 3D Celestial Qibla Compass */}
+        <div className="py-2">
+          <CelestialQiblaCompass
+            userLatitude={location ? location.lat : -6.1702}
+            userLongitude={location ? location.lng : 106.8315}
+            cityName={location ? "User GPS Position" : "Jakarta, Indonesia"}
+            size={300}
+          />
         </div>
 
         {/* Status Telemetry Dashboard */}

@@ -16,6 +16,7 @@ import {
 import { ContextBlock } from "@core/ui/context-block"
 import { Panel, PanelHeader } from "@core/ui/panel"
 import { Tabs } from "@core/ui/tabs"
+import { SeismicTectonicRadar } from "@workspace/ui"
 
 // ── PLATE DATA ───────────────────────────────────────────
 type TectonicPlate = {
@@ -343,6 +344,9 @@ export function TectonicMapView() {
         onChange={setViewMode}
         accentColor="accent"
       />
+
+      {/* Interactive Seismic Tectonic Live Radar */}
+      <SeismicTectonicRadar height={320} />
 
       {/* Plate grid */}
       <Panel level="level2" accentColor="accent">

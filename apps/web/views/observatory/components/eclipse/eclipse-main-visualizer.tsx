@@ -2,6 +2,7 @@
 
 import React from "react"
 import { Sun, Moon, Compass, Target, MapPin, Clock, Globe } from "lucide-react"
+import { CelestialEclipseSimulator } from "@workspace/ui"
 import type { EclipseData } from "./eclipse-hero-tabs"
 
 interface EclipseMainVisualizerProps {
@@ -12,32 +13,11 @@ interface EclipseMainVisualizerProps {
 export function EclipseMainVisualizer({ eclipse, isSolar }: EclipseMainVisualizerProps) {
   return (
     <div className="space-y-6">
-      {/* 1. Visual Simulation Card */}
-      <div className="relative flex min-h-[280px] flex-col items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#050B16] p-6 shadow-2xl">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-yellow-500/10 via-transparent to-transparent" />
-
-        {/* Orbit Visualization Circle */}
-        <div className="relative flex h-48 w-48 items-center justify-center rounded-full border border-dashed border-white/20">
-          {/* Sun / Moon Spheres */}
-          <div className="absolute h-24 w-24 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 shadow-[0_0_50px_rgba(255,230,0,0.5)]" />
-          <div
-            className={`absolute h-24 w-24 rounded-full transition-all duration-1000 ${
-              isSolar
-                ? "translate-x-2 bg-black/90 shadow-[0_0_20px_rgba(0,0,0,0.8)]"
-                : "translate-x-3 bg-red-900/80 shadow-[0_0_30px_rgba(255,0,85,0.4)]"
-            }`}
-          />
-        </div>
-
-        <div className="relative z-10 mt-4 text-center">
-          <div className="font-mono text-sm font-black text-white uppercase">
-            {eclipse.type}
-          </div>
-          <div className="font-mono text-[10px] text-yellow-400">
-            TOTALITY DURATION: {eclipse.duration} • COVERAGE: {eclipse.coverage}
-          </div>
-        </div>
-      </div>
+      {/* 1. 3D Photometric Eclipse Simulation Deck */}
+      <CelestialEclipseSimulator
+        initialProgress={0.5}
+        eclipseType={isSolar ? "TOTAL_SOLAR" : "TOTAL_LUNAR"}
+      />
 
       {/* 2. Specs & Geographic Path Grid */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 font-mono text-[10px]">

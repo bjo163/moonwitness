@@ -13,6 +13,10 @@ export * from "./components/divider"
 export * from "./components/background"
 export * from "./components/audio-visualizer"
 export * from "./components/celestial-moon-sphere"
+export * from "./components/celestial-qibla-compass"
+export * from "./components/celestial-eclipse-simulator"
+export * from "./components/seismic-tectonic-radar"
+export * from "./components/quran-root-matrix"
 export * from "./components/states"
 
 // Dashboard & Telemetry Widgets
