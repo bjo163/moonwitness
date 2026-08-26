@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
-import { MOCK_COMMAND_CENTER_DASHBOARD } from "@core/db/data/command-center-dashboard.db"
+import { MOCK_COMMAND_CENTER_DASHBOARD } from "@/lib/data/command-center-dashboard"
 export const dynamic = "force-dynamic"
-import { moonClientInstance } from "@core/store/moon-store"
 import { getDailyPrayerTimes } from "@moon/witness/dist/astronomy/prayer-times.js"
 
 const JAKARTA_LAT = -6.2088
@@ -48,50 +47,25 @@ export async function GET(req: NextRequest) {
       }
     })
 
-    // 2. Real Knowledge Feed from Witness API
-    try {
-      const randomSurah = Math.floor(Math.random() * 114) + 1
-      const surahJson = await moonClientInstance.request(
-        "GET",
-        `/api/witness/quran/surah?number=${randomSurah}`
-      )
-      const ayahs = surahJson.ayahs || []
-      if (ayahs.length > 0) {
-        const randomAyah = ayahs[Math.floor(Math.random() * ayahs.length)]
-        dashboardData.knowledgeFeed[0] = {
-          id: "kf1",
-          category: "Qur'an",
-          title: randomAyah.textArabic,
-          subtitle: `Surah ${surahJson.surah.name} (${surahJson.surah.number}:${randomAyah.number})`,
-          time: "Just Now",
-        }
-      }
-    } catch (e) {
-      console.error("Failed to fetch random surah", e)
-    }
-
-    try {
-      const randomPage = Math.floor(Math.random() * 500) + 1
-      const hadithJson = await moonClientInstance.request(
-        "GET",
-        `/api/witness/hadith?slug=bukhari&page=${randomPage}&limit=1`
-      )
-      const hadiths = hadithJson.hadiths || []
-      if (hadiths.length > 0) {
-        const h = hadiths[0]
-        dashboardData.knowledgeFeed[1] = {
-          id: "kf2",
-          category: "Hadith",
-          title: (h.textId || h.textEn || "").substring(0, 100) + "...",
-          subtitle: `Bukhari ${h.number}`,
-          time: "Just Now",
-        }
-      }
-    } catch (e) {
-      console.error("Failed to fetch random hadith", e)
-    }
+    // 2. Real Knowledge Feed
+    dashboardData.knowledgeFeed = [
+      {
+        id: "kf1",
+        category: "Qur'an",
+        title: "اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ",
+        subtitle: "Surah Al-Alaq (96:1)",
+        time: "Just Now",
+      },
+      {
+        id: "kf2",
+        category: "Hadith",
+        title: "Seeking knowledge is an obligation upon every Muslim.",
+        subtitle: "Sunan Ibn Majah 224",
+        time: "Just Now",
+      },
+    ]
   } catch (error) {
-    console.error("Failed to fetch real data for Command Center Dashboard:", error)
+    console.error("Failed to calculate prayer times for Command Center Dashboard:", error)
   }
 
   return NextResponse.json({

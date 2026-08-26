@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import { apiClient } from "@moon/client"
-import { ContextBlock } from "@workspace/ui"
-import { MoonDataTable, CrudColumn } from "@core/widgets/crud"
+import { ContextBlock, MoonDataTable, type CrudColumn } from "@workspace/ui"
 import {
   Users,
   Shield,

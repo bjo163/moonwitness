@@ -1,7 +1,6 @@
 "use client"
 
 import React from "react"
-import { useMoonStore } from "@core/store/moon-store"
 import {
   MapPin,
   Mail,

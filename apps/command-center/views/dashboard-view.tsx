@@ -11,12 +11,14 @@ import {
   Feed,
   ProjectsTasks,
 } from "@workspace/ui"
-import { RightSidebar } from "@core/widgets/command-center-right-sidebar"
-import { ZakatCalculatorWidget } from "@core/widgets/zakat-calculator-widget"
-import { InfaqTrackerWidget } from "@core/widgets/infaq-tracker-widget"
-import { MutabaahWidget } from "@core/widgets/mutabaah-widget"
-import { MosqueRadarWidget } from "@core/widgets/mosque-radar-widget"
-import { SpiritualReportWidget } from "@core/widgets/spiritual-report-widget"
+import {
+  RightSidebar,
+  ZakatCalculatorWidget,
+  InfaqTrackerWidget,
+  MutabaahWidget,
+  MosqueRadarWidget,
+  SpiritualReportWidget,
+} from "@/components/dashboard/dashboard-widgets"
 
 type DashboardData = any
 

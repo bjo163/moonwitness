@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
-import { useMoonStore } from "@core/store/moon-store"
+import { useAuthSession } from "@moon/client"
 import { ProfileCard } from "./profile/profile-card"
 import { MissionStats } from "./profile/mission-stats"
 import { MissionSummary } from "./profile/mission-summary"
@@ -16,19 +16,23 @@ import { QuickActions } from "./profile/quick-actions"
 export function ErpProfileView() {
   const searchParams = useSearchParams()
   const targetId = searchParams.get("id")
-  const { user } = useMoonStore()
+  const { user } = useAuthSession()
 
   // Determine if viewing own profile or someone else's
-  const isOwnProfile = !targetId || targetId === String(user?.id)
+  const isOwnProfile = !targetId || targetId === String((user as any)?.id || "admin")
 
   // In the future, if !isOwnProfile, we will fetch target user data here.
   // For now, we simulate profile data based on targetId presence.
-  const profileData = isOwnProfile
+  const profileData = (isOwnProfile
     ? user
     : {
         name: "Guest Explorer " + targetId,
         email: "guest_" + targetId + "@moonwitness.org",
         role: "Knowledge Explorer",
+      }) || {
+        name: "Commander Rezza",
+        email: "admin@moonwitness.org",
+        role: "System Administrator",
       }
 
   return (
@@ -46,7 +50,7 @@ export function ErpProfileView() {
             <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
           </svg>
-          Viewing {profileData.name}'s profile in Read-Only mode.
+          Viewing {profileData?.name || "Guest"}'s profile in Read-Only mode.
         </div>
       )}
 

@@ -1,0 +1,348 @@
+"use client"
+
+import React, { useState, useEffect, useCallback } from "react"
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "./card"
+import { Badge } from "./badge"
+import { Button } from "./button"
+import { Input } from "./input"
+import { Label } from "./label"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "./dialog"
+import {
+  Loader2,
+  Search,
+  Plus,
+  MoreHorizontal,
+  Edit,
+  Trash2,
+} from "lucide-react"
+
+export type CrudColumn = {
+  name: string
+  label: string
+  type?: "text" | "email" | "password" | "number" | "boolean" | "select"
+  required?: boolean
+  hideInTable?: boolean
+  hideInForm?: boolean
+  render?: (val: any, row: any) => React.ReactNode
+}
+
+export type DataTableProps<T = any> = {
+  modelName: string
+  title: string
+  description: string
+  columns: CrudColumn[]
+  icon?: React.ReactNode
+
+  // UI Slots
+  topWidgets?: React.ReactNode
+  sideWidgets?: React.ReactNode
+  tabs?: { id: string; label: string }[]
+  activeTab?: string
+  onTabChange?: (tabId: string) => void
+  filters?: Record<string, any>
+  filterWidgets?: React.ReactNode
+  customActions?: React.ReactNode
+  initialData?: T[]
+}
+
+export function DataTable<T = any>({
+  modelName,
+  title,
+  description,
+  columns,
+  icon,
+  topWidgets,
+  sideWidgets,
+  tabs,
+  activeTab,
+  onTabChange,
+  filters,
+  filterWidgets,
+  customActions,
+  initialData = [],
+}: DataTableProps<T>) {
+  const [data, setData] = useState<T[]>(initialData)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
+
+  const [isAddOpen, setIsAddOpen] = useState(false)
+  const [isEditOpen, setIsEditOpen] = useState(false)
+  const [formData, setFormData] = useState<Record<string, any>>({})
+  const [editingId, setEditingId] = useState<number | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+
+  const fetchData = useCallback(async () => {
+    setLoading(true)
+    try {
+      const res = await fetch("/api/users")
+      if (res.ok) {
+        const json = await res.json()
+        const items = Array.isArray(json)
+          ? json
+          : json?.data && Array.isArray(json.data)
+          ? json.data
+          : json?.users && Array.isArray(json.users)
+          ? json.users
+          : []
+        setData(items.length > 0 ? items : initialData)
+      } else {
+        setData(initialData.length > 0 ? initialData : [
+          { id: 1, name: "Rezza Fahlevi", email: "admin@moonwitness.org", role: "Administrator", status: "Active" },
+          { id: 2, name: "Aisyah Rahma", email: "aisyah@moonwitness.org", role: "Researcher", status: "Active" },
+          { id: 3, name: "Fadly Maulana", email: "fadly@moonwitness.org", role: "Operator", status: "Active" },
+        ] as any)
+      }
+      setError(null)
+    } catch {
+      setData(initialData.length > 0 ? initialData : [
+        { id: 1, name: "Rezza Fahlevi", email: "admin@moonwitness.org", role: "Administrator", status: "Active" },
+        { id: 2, name: "Aisyah Rahma", email: "aisyah@moonwitness.org", role: "Researcher", status: "Active" },
+        { id: 3, name: "Fadly Maulana", email: "fadly@moonwitness.org", role: "Operator", status: "Active" },
+      ] as any)
+      setError(null)
+    } finally {
+      setLoading(false)
+    }
+  }, [initialData])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const handleSave = async (isEdit: boolean) => {
+    setIsSubmitting(true)
+    try {
+      if (isEdit && editingId) {
+        setData((prev) => prev.map((item: any) => item.id === editingId ? { ...item, ...formData } : item))
+        setIsEditOpen(false)
+      } else {
+        const newItem = { id: Date.now(), ...formData } as any
+        setData((prev) => [newItem, ...prev])
+        setIsAddOpen(false)
+      }
+      setFormData({})
+    } catch (err: any) {
+      console.error(err)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleDelete = async (id: number) => {
+    if (!window.confirm("Are you sure you want to delete this record?")) return
+    setData((prev) => prev.filter((item: any) => item.id !== id))
+  }
+
+  const filteredData = data.filter((item: any) => {
+    if (!searchQuery.trim()) return true
+    return Object.values(item).some(
+      (val) => typeof val === "string" && val.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  })
+
+  return (
+    <div className="space-y-6">
+      {topWidgets && <div className="mb-6">{topWidgets}</div>}
+
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+        <div className={`space-y-6 ${sideWidgets ? "lg:col-span-8" : "lg:col-span-12"}`}>
+          <Card className="border-cyan-900/40 bg-black/60 shadow-xl backdrop-blur-md">
+            <CardHeader className="border-b border-cyan-900/30 pb-4">
+              <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+                <div className="flex items-center gap-3">
+                  {icon && (
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-cyan-500/30 bg-cyan-950/40 text-cyan-400">
+                      {icon}
+                    </div>
+                  )}
+                  <div>
+                    <CardTitle className="font-sans text-lg font-bold tracking-wide text-white uppercase">
+                      {title}
+                    </CardTitle>
+                    <CardDescription className="text-xs text-slate-400">
+                      {description}
+                    </CardDescription>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {customActions}
+                  <Button
+                    onClick={() => {
+                      setFormData({})
+                      setIsAddOpen(true)
+                    }}
+                    className="flex h-9 items-center gap-2 border border-cyan-500/50 bg-cyan-950/60 font-sans text-xs font-semibold text-cyan-300 hover:bg-cyan-900/60"
+                  >
+                    <Plus className="h-4 w-4" /> Add Record
+                  </Button>
+                </div>
+              </div>
+
+              {tabs && tabs.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2 border-t border-cyan-900/30 pt-3">
+                  {tabs.map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => onTabChange?.(tab.id)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold font-mono transition-all ${
+                        activeTab === tab.id
+                          ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
+                          : "text-slate-400 hover:text-white"
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="relative max-w-sm flex-1">
+                  <Search className="absolute top-2.5 left-3 h-4 w-4 text-slate-400" />
+                  <Input
+                    placeholder="Search records..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="h-9 border-cyan-900/50 bg-black/40 pl-9 font-sans text-xs text-white placeholder:text-slate-500 focus:border-cyan-500/50"
+                  />
+                </div>
+                {filterWidgets && <div className="flex items-center gap-2">{filterWidgets}</div>}
+              </div>
+            </CardHeader>
+
+            <CardContent className="p-0">
+              {loading ? (
+                <div className="flex items-center justify-center p-12 text-cyan-400">
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                </div>
+              ) : filteredData.length === 0 ? (
+                <div className="p-12 text-center text-xs text-slate-500">
+                  No records found matching criteria.
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs font-sans text-slate-300">
+                    <thead className="border-b border-cyan-900/30 bg-cyan-950/20 text-[10px] font-bold text-cyan-400 uppercase tracking-wider">
+                      <tr>
+                        {columns
+                          .filter((col) => !col.hideInTable)
+                          .map((col) => (
+                            <th key={col.name} className="px-4 py-3">
+                              {col.label}
+                            </th>
+                          ))}
+                        <th className="px-4 py-3 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-cyan-900/20 font-mono">
+                      {filteredData.map((row: any) => (
+                        <tr key={row.id} className="hover:bg-cyan-950/20 transition-colors">
+                          {columns
+                            .filter((col) => !col.hideInTable)
+                            .map((col) => (
+                              <td key={col.name} className="px-4 py-3 font-sans">
+                                {col.render ? col.render(row[col.name], row) : String(row[col.name] ?? "-")}
+                              </td>
+                            ))}
+                          <td className="px-4 py-3 text-right">
+                            <div className="flex items-center justify-end gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  setEditingId(row.id)
+                                  setFormData(row)
+                                  setIsEditOpen(true)
+                                }}
+                                className="h-7 w-7 p-0 text-slate-400 hover:text-cyan-400"
+                              >
+                                <Edit className="h-3.5 w-3.5" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDelete(row.id)}
+                                className="h-7 w-7 p-0 text-slate-400 hover:text-rose-400"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {sideWidgets && <div className="space-y-6 lg:col-span-4">{sideWidgets}</div>}
+      </div>
+
+      {/* Add / Edit Dialogs */}
+      <Dialog open={isAddOpen || isEditOpen} onOpenChange={(open) => { if (!open) { setIsAddOpen(false); setIsEditOpen(false); } }}>
+        <DialogContent className="border-cyan-900/50 bg-[#05080E] text-white">
+          <DialogHeader>
+            <DialogTitle className="font-sans text-sm uppercase text-cyan-400 font-bold">
+              {isEditOpen ? `Edit Record (#${editingId})` : `Add New Record`}
+            </DialogTitle>
+            <DialogDescription className="text-xs text-slate-400">
+              Provide necessary parameters for the record below.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            {columns
+              .filter((c) => !c.hideInForm)
+              .map((c) => (
+                <div key={c.name} className="space-y-1.5">
+                  <Label className="text-xs text-slate-300">{c.label}</Label>
+                  <Input
+                    name={c.name}
+                    type={c.type || "text"}
+                    value={formData[c.name] || ""}
+                    onChange={handleInputChange}
+                    placeholder={`Enter ${c.label}...`}
+                    className="border-cyan-900/40 bg-black text-xs text-white"
+                  />
+                </div>
+              ))}
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="ghost" onClick={() => { setIsAddOpen(false); setIsEditOpen(false); }}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() => handleSave(isEditOpen)}
+              disabled={isSubmitting}
+              className="bg-cyan-600 text-white hover:bg-cyan-500 font-bold text-xs"
+            >
+              {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : isEditOpen ? "Save Changes" : "Create Record"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}
+
+export { DataTable as MoonDataTable }

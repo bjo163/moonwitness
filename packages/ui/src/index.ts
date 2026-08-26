@@ -38,6 +38,7 @@ export * from "./components/tooltip"
 export * from "./components/input"
 export * from "./components/label"
 export * from "./components/table"
+export * from "./components/data-table"
 export * from "./lib/utils"
 
 
