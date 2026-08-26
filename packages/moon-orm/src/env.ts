@@ -7,6 +7,8 @@ export const ANONYMOUS_ID = 0
 
 export interface Ctx {
   uid: number
+  isSuperuser: boolean
+  isAnonymous: boolean
   context?: Record<string, unknown>
   getModel?: (name: string) => typeof Vertex | undefined
   trx?: Knex.Transaction
@@ -23,6 +25,12 @@ export function createCtx(
 ): Ctx {
   const env: Ctx = {
     uid,
+    get isSuperuser() {
+      return this.uid === SUPERUSER_ID
+    },
+    get isAnonymous() {
+      return this.uid === ANONYMOUS_ID
+    },
     context: context || {},
     getModel,
     trx,
