@@ -13,6 +13,7 @@ export default class WxResearchRun extends Vertex {
   algorithmVersion = fields.Char({ required: true, size: 120 })
   deterministic = fields.Boolean({ required: true, default: true, index: true })
   aiConfigurationFingerprint = fields.Char({ size: 128 })
+  researchReport = fields.Text()
   evidenceIdentity = fields.Text({ required: true })
   conflictCount = fields.Integer({ required: true, default: 0 })
   unresolvedCount = fields.Integer({ required: true, default: 0 })

@@ -32,6 +32,7 @@ export function createResearchHypothesisModule(): WitnessEngineModule<ResearchHy
       const assertions = (await WxAssertion.fetch(WxAssertion, env, [['active', '=', true]], undefined, { limit: 500, order: 'id ASC' })).filter((item) => (!input.predicate || text(value(item, 'predicate')) === input.predicate) && (!input.assertionClass || text(value(item, 'assertionClass', 'assertion_class')) === input.assertionClass))
       let supports = 0; let contradicts = 0; let ambiguous = 0; const findings: EngineResultDraft['findings'] = []; const evidenceCandidates: any[] = []
       for (const assertion of assertions) {
+        const assertionEvidence: any[] = []
         const evidence = await WxEvidence.fetch(WxEvidence, env, [['assertionId', '=', idOf(assertion)], ['active', '=', true]], undefined, { limit: 100, order: 'id ASC' })
         for (const item of evidence) {
           const relation = text(value(item, 'relation')).toUpperCase(); if (relation === 'SUPPORTS') supports++; else if (relation === 'CONTRADICTS') contradicts++; else ambiguous++
@@ -39,9 +40,13 @@ export function createResearchHypothesisModule(): WitnessEngineModule<ResearchHy
           const sourceId = foreignId(assertion, 'sourceId', 'source_id') || foreignId(provenance, 'sourceId', 'source_id')
           const source = sourceId ? (await WxSource.fetch(WxSource, env, [['id', '=', sourceId], ['active', '=', true]]))[0] ?? null : null
           const revision = text(value(provenance, 'sourceRevision', 'source_revision')) || text(value(source, 'revision'))
-          if (provenance && source && revision) evidenceCandidates.push({ evidenceKey: `research-evidence:${idOf(item)}`, relation, authorityClass: 'SOURCE_SUMMARY', sourceRevision: revision, provenanceRef: text(value(provenance, 'stableKey', 'stable_key')) || `provenance:${idOf(provenance)}`, entityId: foreignId(item, 'evidenceEntityId', 'evidence_entity_id') || foreignId(assertion, 'subjectEntityId', 'subject_entity_id') })
+          if (provenance && source && revision) {
+            const candidate = { evidenceKey: `research-evidence:${idOf(item)}`, relation, authorityClass: 'SOURCE_SUMMARY' as const, sourceRevision: revision, provenanceRef: text(value(provenance, 'stableKey', 'stable_key')) || `provenance:${idOf(provenance)}`, entityId: foreignId(item, 'evidenceEntityId', 'evidence_entity_id') || foreignId(assertion, 'subjectEntityId', 'subject_entity_id') }
+            evidenceCandidates.push(candidate)
+            assertionEvidence.push(candidate)
+          }
         }
-        findings.push({ key: `research:${input.hypothesisId}:assertion:${idOf(assertion)}`, statement: `Research observation: ${text(value(assertion, 'predicate'))}.`, authorityClass: 'DERIVED', predicate: text(value(assertion, 'predicate')), objectValue: text(value(assertion, 'objectValue', 'object_value')) || undefined, evidence: evidenceCandidates.filter((candidate) => candidate.evidenceKey.startsWith(`research-evidence:`)), unresolvedReasonCodes: evidence.length ? [] : ['ASSERTION_EVIDENCE_MISSING'] })
+        findings.push({ key: `research:${input.hypothesisId}:assertion:${idOf(assertion)}`, statement: `Research observation: ${text(value(assertion, 'predicate'))}.`, authorityClass: 'DERIVED', predicate: text(value(assertion, 'predicate')), objectValue: text(value(assertion, 'objectValue', 'object_value')) || undefined, evidence: assertionEvidence, unresolvedReasonCodes: evidence.length ? [] : ['ASSERTION_EVIDENCE_MISSING'] })
       }
       const denominator = supports + contradicts + ambiguous
       const status = !denominator ? 'INSUFFICIENT_EVIDENCE' : supports && contradicts ? 'CONFLICTED' : 'PROVISIONAL'
@@ -50,8 +55,19 @@ export function createResearchHypothesisModule(): WitnessEngineModule<ResearchHy
     },
     async explain(_ctx, output) { const finding = output.findings[0]; if (!finding) throw new Error('Research output has no findings'); return { findingKey: finding.key, evidence: finding.evidence, provenanceRefs: finding.provenanceRefs, narrative: 'Research results are derived or hypothesis-class findings; they never promote conclusions to Revelation authority.' } satisfies EngineEvidenceExplanation },
     async afterComplete(ctx, input, run: EngineRunRecord, output, outputChecksum) {
+      const report = [
+        `Research hypothesis run: ${run.runKey}`,
+        `Question: ${input.predicate ?? 'all supported observations'}`,
+        `Method: ${input.algorithmVersion}`,
+        `Source revisions: ${stableSerialize(run.sourceRevisions)}`,
+        `Summary: ${output.summary}`,
+        `Findings: ${output.findings.length}`,
+        `Conflicts: ${output.conflicts.length}`,
+        `Unresolved: ${output.unresolved.length}`,
+        'Authority: conclusions remain DERIVED/HYPOTHESIS and are never canonical Revelation.'
+      ].join('\n')
       await WxResearchRun.spawn(WxResearchRun, ctx as Ctx, {
-        runKey: `research:${run.runKey}`, hypothesisId: input.hypothesisId, engineRunId: Number(run.id), corpusRevisions: stableSerialize(run.sourceRevisions), selectionCriteria: stableSerialize(input.filters ?? {}), methodParameters: stableSerialize({ predicate: input.predicate, assertionClass: input.assertionClass }), algorithmVersion: input.algorithmVersion, deterministic: true, evidenceIdentity: stableSerialize(output.findings.flatMap((finding) => finding.evidence.map((item) => item.evidenceKey)).sort()), conflictCount: output.conflicts.length, unresolvedCount: output.unresolved.length, outputChecksum, createdAt: new Date().toISOString(), active: true
+        runKey: `research:${run.runKey}`, hypothesisId: input.hypothesisId, engineRunId: Number(run.id), corpusRevisions: stableSerialize(run.sourceRevisions), selectionCriteria: stableSerialize(input.filters ?? {}), methodParameters: stableSerialize({ predicate: input.predicate, assertionClass: input.assertionClass }), algorithmVersion: input.algorithmVersion, deterministic: run.deterministic, aiConfigurationFingerprint: run.ai?.configurationFingerprint, evidenceIdentity: stableSerialize(output.findings.flatMap((finding) => finding.evidence.map((item) => item.evidenceKey)).sort()), conflictCount: output.conflicts.length, unresolvedCount: output.unresolved.length, outputChecksum, researchReport: report, createdAt: new Date().toISOString(), active: true
       })
     }
   }
