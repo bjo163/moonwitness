@@ -95,6 +95,11 @@ Security rules for the self-hosted runner:
 
 A failed required CI check blocks promotion to the next long-lived branch.
 
+PostgreSQL graph certification is intentionally not part of the fast pull-request gate. It is
+available through the `Witness PostgreSQL Certification` workflow via manual dispatch and must be
+run for release/database-validation work when a PostgreSQL-capable runner is available. Its
+result must not be treated as a substitute for Foundation CI.
+
 ## Change discipline
 
 Before coding:
