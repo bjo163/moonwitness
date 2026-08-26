@@ -1,5 +1,5 @@
-﻿import type { IncomingMessage, ServerResponse } from 'node:http'
-import { getModel, getDb, createCtx } from '@moon/orm'
+import type { IncomingMessage, ServerResponse } from 'node:http'
+import { getModel, getDb, createCtx, AuthorizationError } from '@moon/orm'
 import { parseBody, sendJson } from '../utils/http.js'
 import { verifyToken } from '../utils/auth.js'
 
@@ -17,24 +17,24 @@ export async function handleRpc(
     const uid = decoded.sub as number
 
     if (!uid) {
-      return sendJson(res, 401, { error: 'Unauthorized' }, req)
+      return sendJson(res, 401, { error: 'Unauthorized', code: 'AUTH_REQUIRED' }, req)
     }
 
     const body = await parseBody(req)
     const { model, method, args, kwargs } = body
 
     if (!model || !method) {
-      return sendJson(res, 400, { error: 'Model and method required' }, req)
+      return sendJson(res, 400, { error: 'Model and method required', code: 'INVALID_REQUEST' }, req)
     }
 
     const ModelClass = getModel(model)
     if (!ModelClass) {
-      return sendJson(res, 404, { error: `Model ${model} not found` }, req)
+      return sendJson(res, 404, { error: `Model ${model} not found`, code: 'MODEL_NOT_FOUND' }, req)
     }
 
     const methodFn = (ModelClass as any)[method]
     if (typeof methodFn !== 'function') {
-      return sendJson(res, 404, { error: `Method ${method} not found on ${model}` }, req)
+      return sendJson(res, 404, { error: `Method ${method} not found on ${model}`, code: 'METHOD_NOT_FOUND' }, req)
     }
 
     const safeArgs = Array.isArray(args) ? args : []
@@ -50,7 +50,11 @@ export async function handleRpc(
 
     return sendJson(res, 200, { result }, req)
   } catch (err: any) {
-    const isAuthError = ['Token expired', 'Invalid token'].includes(err.message)
-    return sendJson(res, isAuthError ? 401 : 500, { error: err.message }, req)
+    if (err instanceof AuthorizationError) {
+      return sendJson(res, err.statusCode, { error: err.message, code: err.code }, req)
+    }
+    const isAuthError = ['Token expired', 'Invalid token', 'Authorization header required'].includes(err?.message)
+    const statusCode = isAuthError ? 401 : (err?.statusCode || 500)
+    return sendJson(res, statusCode, { error: err?.message || 'Internal server error', code: err?.code || (isAuthError ? 'AUTH_REQUIRED' : 'INTERNAL_ERROR') }, req)
   }
 }
