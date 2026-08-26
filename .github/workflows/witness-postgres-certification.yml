@@ -33,7 +33,7 @@ jobs:
     env:
       CI: 'true'
       NODE_ENV: test
-      TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL || 'postgres://postgres:postgres@127.0.0.1:5432/moonwitness_witness_cert' }}
+      TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
 
     steps:
       - name: Checkout
@@ -47,12 +47,30 @@ jobs:
       - name: Ensure PostgreSQL is ready
         shell: bash
         run: |
-          echo "Checking PostgreSQL connection..."
-          if ! pg_isready -h 127.0.0.1 -p 5432 >/dev/null 2>&1; then
-            echo "Starting PostgreSQL container on runner..."
-            docker run -d --rm --name moonwitness-pg-cert -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=moonwitness_witness_cert -p 5432:5432 postgres:16 || true
-            sleep 5
+          if [ -n "${TEST_DATABASE_URL:-}" ]; then
+            echo "Using TEST_DATABASE_URL supplied by repository secret."
+            exit 0
           fi
+          command -v docker >/dev/null || { echo "Docker is required when TEST_DATABASE_URL is not configured."; exit 1; }
+          docker rm -f moonwitness-pg-cert >/dev/null 2>&1 || true
+          echo "Starting isolated PostgreSQL certification container on a dynamic host port..."
+          docker run -d --rm --name moonwitness-pg-cert \
+            -e POSTGRES_USER=postgres \
+            -e POSTGRES_PASSWORD=postgres \
+            -e POSTGRES_DB=moonwitness_witness_cert \
+            -p 127.0.0.1::5432 postgres:16
+          for attempt in $(seq 1 60); do
+            mapped_port="$(docker port moonwitness-pg-cert 5432/tcp | sed -E 's/.*:([0-9]+)$/\1/' | head -n 1)"
+            if [ -n "$mapped_port" ] && pg_isready -h 127.0.0.1 -p "$mapped_port" -U postgres -d moonwitness_witness_cert >/dev/null 2>&1; then
+              echo "PostgreSQL is ready on 127.0.0.1:$mapped_port"
+              echo "TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:$mapped_port/moonwitness_witness_cert" >> "$GITHUB_ENV"
+              echo "MOONWITNESS_PG_STARTED=true" >> "$GITHUB_ENV"
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs moonwitness-pg-cert || true
+          exit 1
 
       - name: Enable pinned pnpm
         shell: bash
@@ -69,3 +87,8 @@ jobs:
 
       - name: Certify Witness graph on PostgreSQL
         run: pnpm --filter api certify:witness-graph-pg
+
+      - name: Stop PostgreSQL certification container
+        if: always()
+        shell: bash
+        run: docker rm -f moonwitness-pg-cert >/dev/null 2>&1 || true
