@@ -79,6 +79,7 @@ export { getSunPosition, getDuhaTime, type SunPositionData, type DuhaTimeData, t
 
 // Routes
 export { registerWitnessRoutes } from './routes.js'
+export { registerWitnessEngineRoutes } from './engine-routes.js'
 
 // Ingestion pipeline exports (#65)
 export type {

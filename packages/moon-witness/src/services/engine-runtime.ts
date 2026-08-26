@@ -121,6 +121,10 @@ export class WitnessEngineRuntime {
     return this.store.getRun(ctx, runId)
   }
 
+  async getResult(ctx: unknown, runId: string): Promise<EngineResultEnvelope | null> {
+    return this.store.getResult(ctx, runId)
+  }
+
   async replayRun(ctx: unknown, runId: string): Promise<EngineResultEnvelope> {
     const historicalRun = await this.store.getRun(ctx, runId)
     if (!historicalRun) throw new Error(`Engine run ${runId} was not found or is inaccessible`)
