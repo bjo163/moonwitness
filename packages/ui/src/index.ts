@@ -12,6 +12,7 @@ export * from "./components/context-block"
 export * from "./components/divider"
 export * from "./components/background"
 export * from "./components/audio-visualizer"
+export * from "./components/celestial-moon-sphere"
 export * from "./components/states"
 
 // Dashboard & Telemetry Widgets

@@ -2,6 +2,7 @@
 
 import React from "react"
 import { Moon, Sun, Clock, Compass, BookOpen, Star, AlertTriangle } from "lucide-react"
+import { CelestialMoonSphere } from "@workspace/ui"
 import type { LunarDayItem } from "./lunar-calendar-grid"
 
 interface LunarTelemetryPanelProps {
@@ -9,15 +10,22 @@ interface LunarTelemetryPanelProps {
 }
 
 export function LunarTelemetryPanel({ day }: LunarTelemetryPanelProps) {
+  const calculatedPhase = ((day.hijriDay - 1) % 30) / 29.53
+
   return (
     <div className="space-y-4">
       {/* Active Phase Card */}
       <div className="relative overflow-hidden rounded-xl border border-amber-500/30 bg-gradient-to-b from-[#141C36] to-[#080E1C] p-6 shadow-xl">
         <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-amber-500/10 blur-2xl" />
 
-        <div className="relative z-10 text-center">
-          <div className="text-5xl">{day.icon}</div>
-          <h2 className="mt-2 font-mono text-lg font-black text-amber-300 uppercase">
+        <div className="relative z-10 text-center flex flex-col items-center">
+          <CelestialMoonSphere
+            phase={calculatedPhase}
+            size={180}
+            interactive={true}
+            showTelemetry={false}
+          />
+          <h2 className="mt-4 font-mono text-lg font-black text-amber-300 uppercase">
             {day.phaseName}
           </h2>
           <div className="font-mono text-xs text-white/50">
