@@ -7,9 +7,9 @@ on:
       - main
   pull_request:
     branches:
-      - feature
       - dev
       - main
+      - 'feature/**'
   workflow_dispatch:
 
 permissions:

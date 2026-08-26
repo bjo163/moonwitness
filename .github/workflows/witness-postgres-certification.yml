@@ -3,9 +3,9 @@ name: Witness PostgreSQL Certification
 on:
   pull_request:
     branches:
-      - feature
       - dev
       - main
+      - 'feature/**'
     paths:
       - 'packages/moon-witness/**'
       - 'packages/moon-orm/**'
