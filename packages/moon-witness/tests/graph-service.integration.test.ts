@@ -211,6 +211,7 @@ describe('WitnessGraphService integration contract', () => {
       relationTypeCode: 'MENTIONS',
       toEntityKey: 'figure:musa',
       ontologyVersion: 'WITNESS_RELATION_V1',
+      sourceKey: 'quran:test:r1',
       sourceRevision: 'quran-r1'
     }))
   })
