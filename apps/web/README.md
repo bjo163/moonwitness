@@ -1,26 +1,23 @@
-# MoonWitness Cosmic HUD (`apps/web`)
+# MoonWitness Web Portal (`apps/web`)
 
-The Next.js 15 frontend application for MoonWitness OS, crafted with a **Deep Space Sci-Fi Divine Observation Terminal** aesthetic.
-
----
-
-## Architectural Principles
-
-- **Odoo-Style Modular System (`@modules/`)**: Self-contained business domains registering navigation, routing, and metadata via `defineModule()`.
-- **Cosmic HUD Design System**: Dark smoked glass (`backdrop-blur`), chamfered military clip-paths, laser data conduits, Orbitron typography, and telemetry scanlines.
-- **Pure Headless Core (`@core/`)**: Headless UI, widgets, state management, and shell navigation isolated from business logic.
+> **Public Cosmic Observation Terminal & Divine Scriptures Hub**  
+> Built with Next.js 16 App Router, `@workspace/ui` Cosmic HUD, and `@moon/client`.
 
 ---
 
-## Commands
+## 🌌 Key Capabilities
+
+- **3D Celestial Observatories**: Photometric Moon Sphere, Qibla AR Gyro Scope, Solar Eclipse Simulator, and Seismix Tectonic Radar.
+- **Divine Scriptures**: Al-Qur'an 114 Surahs with audio player, Tajweed, and Triliteral Arabic Root Word Matrix.
+- **Real-Time Telemetry**: Live prayer schedules, solar telemetry, and SSE intelligence briefings.
+- **Universal Command Palette**: Quick navigation mesh & search (`Cmd+K` / `Ctrl+K`).
+- **Procedural Web Audio**: Built-in Solfeggio 528Hz cosmic chimes & tactical clicks (`M` key toggle).
+
+---
+
+## 🚀 Running Locally
 
 ```bash
-# Start Next.js development server
-pnpm dev
-
-# Build production bundle
-pnpm build
-
-# Start production server
-pnpm start
+# Start Web Portal on Port 3000
+pnpm --filter web dev
 ```
