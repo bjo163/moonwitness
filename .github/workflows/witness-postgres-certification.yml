@@ -1,0 +1,71 @@
+name: Witness PostgreSQL Certification
+
+on:
+  pull_request:
+    branches:
+      - feature
+      - dev
+      - main
+    paths:
+      - 'packages/moon-witness/**'
+      - 'packages/moon-orm/**'
+      - 'packages/moon-base/**'
+      - 'apps/api/**'
+      - '.github/workflows/witness-postgres-certification.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: witness-pg-cert-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  certify-postgres:
+    name: PostgreSQL 16 Graph Certification
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: moonwitness_witness_cert
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d moonwitness_witness_cert"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      CI: 'true'
+      NODE_ENV: test
+      TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/moonwitness_witness_cert
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Enable pinned pnpm
+        shell: bash
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.33.4 --activate
+          pnpm --version
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Moon packages
+        run: pnpm --filter "@moon/*" build
+
+      - name: Certify Witness graph on PostgreSQL
+        run: pnpm --filter api certify:witness-graph-pg
