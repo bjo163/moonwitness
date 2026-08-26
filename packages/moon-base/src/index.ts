@@ -18,10 +18,36 @@ import VxOrg from './vx-org.js'
 import VxCoin from './vx-coin.js'
 import MxMetric from './mx-metric.js'
 import FxSession from './fx-session.js'
+import IrModelData from './ir-model-data.js'
+import IrSequence from './ir-sequence.js'
+import IrConfigParameter from './ir-config-parameter.js'
+import IrAttachment from './ir-attachment.js'
 
 export { loadModels } from '@moon/orm'
 
-export { seedBaseData, loadBaseData, VxZone, VxRole, MxModel, MxGrant, MxRule, VxUser, VxNode, VxOrg, VxCoin, IxLang, IxDict, FxMsg, FxTrack, MxMetric, FxSession }
+export {
+  seedBaseData,
+  loadBaseData,
+  VxZone,
+  VxRole,
+  MxModel,
+  MxGrant,
+  MxRule,
+  VxUser,
+  VxNode,
+  VxOrg,
+  VxCoin,
+  IxLang,
+  IxDict,
+  FxMsg,
+  FxTrack,
+  MxMetric,
+  FxSession,
+  IrModelData,
+  IrSequence,
+  IrConfigParameter,
+  IrAttachment
+}
 
 export const SYSTEM_MODE = 'system'
 export const BOT_MODE = 'bot'
@@ -48,6 +74,11 @@ export const COMPANY_SEED = {
   currencyCode: 'IDR'
 }
 
+const getEnv = (key: string): string | undefined => {
+  const proc = (globalThis as any).process
+  return proc && proc.env ? proc.env[key] : undefined
+}
+
 export const PARTNER_SEED_DATA = {
   company: {
     name: 'MoonWitness',
@@ -59,21 +90,21 @@ export const PARTNER_SEED_DATA = {
       mode: 'system',
       name: 'System',
       email: 'system@local',
-      password: process.env.BOOTSTRAP_SYSTEM_PASSWORD || 'system_internal_service_key',
+      password: getEnv('BOOTSTRAP_SYSTEM_PASSWORD') || 'system_internal_service_key',
       isCompany: false
     },
     {
       mode: 'bot',
       name: 'Bot',
       email: 'bot@local',
-      password: process.env.BOOTSTRAP_BOT_PASSWORD || 'bot_internal_service_key',
+      password: getEnv('BOOTSTRAP_BOT_PASSWORD') || 'bot_internal_service_key',
       isCompany: false
     },
     {
       mode: 'admin',
       name: 'Administrator',
-      email: process.env.BOOTSTRAP_ADMIN_EMAIL || 'admin@moonwitness.org',
-      password: process.env.BOOTSTRAP_ADMIN_PASSWORD || 'admin_dev_password',
+      email: getEnv('BOOTSTRAP_ADMIN_EMAIL') || 'admin@moonwitness.org',
+      password: getEnv('BOOTSTRAP_ADMIN_PASSWORD') || 'admin_dev_password',
       isCompany: false
     }
   ]
@@ -81,7 +112,7 @@ export const PARTNER_SEED_DATA = {
 
 export default {
   name: 'base',
-  description: 'Core base addon',
+  description: 'Core base kernel addon',
   depends: [],
   models: [
     VxUser,
@@ -98,6 +129,10 @@ export default {
     FxMsg,
     FxTrack,
     MxMetric,
-    FxSession
+    FxSession,
+    IrModelData,
+    IrSequence,
+    IrConfigParameter,
+    IrAttachment
   ]
 }
