@@ -128,11 +128,15 @@ A state-of-the-art Deep Space Sci-Fi Divine Operating System interface:
    API_PORT=4000
    ```
 
-4. **Initialize Database & Extensions**:
-   Ensure `pgvector` is enabled in your database:
-   ```sql
-   CREATE EXTENSION IF NOT EXISTS vector;
+4. **Initialize and verify the database**:
+   ```bash
+   pnpm --filter api db:install
+   pnpm --filter api db:verify
    ```
+
+   `db:install` applies immutable migrations and canonical seed data. Runtime startup does not
+   perform schema changes or seed automatically. Use `MOON_BOOTSTRAP_ON_START=true` only for an
+   explicitly controlled development bootstrap.
 
 ---
 
@@ -191,6 +195,9 @@ feature branches  ──►  dev (Integration & CI)  ──►  main (Stable Rel
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Platform principles, layer boundaries & model-first design rules |
 | [DEVELOPMENT.md](DEVELOPMENT.md) | Branch promotion flow, CI gates & definition of done |
 | [ROADMAP.md](ROADMAP.md) | High-level roadmap & milestone phases |
+| [RELEASE.md](RELEASE.md) | Version source of truth and release procedure |
+| [CHANGELOG.md](CHANGELOG.md) | Release history |
+| [SECURITY.md](SECURITY.md) | Vulnerability reporting and secret-handling policy |
 | [AGENTS.md](AGENTS.md) | Design rules, code discipline & architecture constraints |
 | [@moon/orm Documentation](packages/moon-orm/README.md) | Moon ORM API reference & model definitions |
 | [@moon/witness Documentation](packages/moon-witness/README.md) | Domain knowledge graph & engine runtime |
