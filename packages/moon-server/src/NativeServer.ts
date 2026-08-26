@@ -30,7 +30,7 @@ import {
 import { handleDbStatus, handleMetaModels, handleHealth, handleLiveness, handleReadiness } from './handlers/meta.js'
 import { handleRest } from './handlers/rest.js'
 import { handleRpc } from './handlers/rpc.js'
-import { handleSSE, getActiveClientCount } from './handlers/sse.js'
+import { handleSSE, getActiveClientCount, closeAllSSEConnections } from './handlers/sse.js'
 import { renderDashboard, renderSwaggerUI } from './views/dashboard.js'
 import { sendJson, handleCorsPreflight, type CorsConfig } from './utils/http.js'
 
@@ -283,7 +283,7 @@ export class NativeServer {
     }
 
     if (req.method === 'GET' && req.url && req.url.startsWith('/live')) {
-      return handleSSE(req, res)
+      return handleSSE(req, res, { cors: this.config.cors })
     }
 
     const restMatch = req.url?.match(/^\/api\/([a-z0-9.-]+)(?:\/(\d+))?(?:\?.*)?$/)
@@ -370,6 +370,8 @@ export class NativeServer {
       clearInterval(this.metricInterval)
       this.metricInterval = null
     }
+
+    closeAllSSEConnections()
 
     if (this.server) {
       await new Promise<void>((resolve, reject) => {

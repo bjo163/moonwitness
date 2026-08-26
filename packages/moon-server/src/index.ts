@@ -36,7 +36,15 @@ export {
 export { handleDbStatus, handleMetaModels } from './handlers/meta.js'
 export { handleRest } from './handlers/rest.js'
 export { handleRpc } from './handlers/rpc.js'
-export { handleSSE, broadcast, getActiveClientCount } from './handlers/sse.js'
+export {
+  handleSSE,
+  broadcast,
+  getActiveClientCount,
+  closeAllSSEConnections,
+  cleanupClient,
+  type SSEClient,
+  type SSEOptions
+} from './handlers/sse.js'
 
 // Views
 export { renderDashboard, renderSwaggerUI } from './views/dashboard.js'
