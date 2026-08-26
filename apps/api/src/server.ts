@@ -88,6 +88,12 @@ const server = new NativeServer({
   database: process.env.DATABASE_URL || 'postgres://localhost/moonwitness',
   jwtSecret: process.env.JWT_SECRET || 'secret',
   port: Number(process.env.API_PORT || process.env.PORT) || 4000,
+  email: {
+    service: process.env.SMTP_SERVICE || process.env.EMAIL_SERVICE,
+    user: process.env.SMTP_USER || process.env.EMAIL_USER,
+    pass: process.env.SMTP_PASS || process.env.EMAIL_PASS,
+    from: process.env.SMTP_FROM || process.env.EMAIL_FROM
+  },
   addons: [
     ...baseAddons.models,
     ...performanceAddons.models,

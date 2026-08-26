@@ -1,5 +1,5 @@
-﻿import type { IncomingMessage, ServerResponse } from 'node:http'
-import { getModel, createCtx } from '@moon/orm'
+import type { IncomingMessage, ServerResponse } from 'node:http'
+import { getModel, createCtx, AuthorizationError } from '@moon/orm'
 import { parseBody, sendJson, parseUrl } from '../utils/http.js'
 import { verifyToken } from '../utils/auth.js'
 
@@ -23,7 +23,7 @@ export async function handleRest(
 
     const ModelClass = getModel(model) as any
     if (!ModelClass) {
-      return sendJson(res, 404, { error: `Model ${model} not found` }, req)
+      return sendJson(res, 404, { error: `Model ${model} not found`, code: 'MODEL_NOT_FOUND' }, req)
     }
 
     const { searchParams } = parseUrl(req)
@@ -59,7 +59,7 @@ export async function handleRest(
     if (req.method === 'GET' && id) {
       const record = await ModelClass.query(env).where('id', id).first()
       if (!record) {
-        return sendJson(res, 404, { error: 'Record not found' }, req)
+        return sendJson(res, 404, { error: 'Record not found', code: 'RECORD_NOT_FOUND' }, req)
       }
       return sendJson(res, 200, { data: record }, req)
     }
@@ -76,7 +76,7 @@ export async function handleRest(
     // PUT /api/:model/:id - Update record
     if (req.method === 'PUT') {
       if (!id) {
-        return sendJson(res, 400, { error: 'ID required for update' }, req)
+        return sendJson(res, 400, { error: 'ID required for update', code: 'INVALID_REQUEST' }, req)
       }
       const body = await parseBody(req)
       await ModelClass.transaction(env, async (txEnv: any) => {
@@ -89,7 +89,7 @@ export async function handleRest(
     // DELETE /api/:model/:id - Delete record
     if (req.method === 'DELETE') {
       if (!id) {
-        return sendJson(res, 400, { error: 'ID required for delete' }, req)
+        return sendJson(res, 400, { error: 'ID required for delete', code: 'INVALID_REQUEST' }, req)
       }
       await ModelClass.transaction(env, async (txEnv: any) => {
         await ModelClass.purge(ModelClass, txEnv, id)
@@ -97,9 +97,13 @@ export async function handleRest(
       return sendJson(res, 200, { success: true }, req)
     }
 
-    return sendJson(res, 405, { error: 'Method not allowed' }, req)
+    return sendJson(res, 405, { error: 'Method not allowed', code: 'METHOD_NOT_ALLOWED' }, req)
   } catch (err: any) {
-    const isAuthError = ['Token expired', 'Invalid token'].includes(err.message)
-    return sendJson(res, isAuthError ? 401 : 500, { error: err.message }, req)
+    if (err instanceof AuthorizationError) {
+      return sendJson(res, err.statusCode, { error: err.message, code: err.code }, req)
+    }
+    const isAuthError = ['Token expired', 'Invalid token', 'Authorization header required'].includes(err?.message)
+    const statusCode = isAuthError ? 401 : (err?.statusCode || 500)
+    return sendJson(res, statusCode, { error: err?.message || 'Internal server error', code: err?.code || (isAuthError ? 'AUTH_REQUIRED' : 'INTERNAL_ERROR') }, req)
   }
 }

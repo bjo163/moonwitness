@@ -1,4 +1,4 @@
-import { getModel } from '@moon/orm'
+import { createCtx, getDb, getModel, registry, SUPERUSER_ID } from '@moon/orm'
 import bcrypt from 'bcryptjs'
 import {
   DEFAULT_COUNTRY_CODE,
@@ -7,7 +7,6 @@ import {
   COUNTRY_SEED_DATA,
   CURRENCY_SEED_DATA
 } from './index.js'
-import { createCtx, SUPERUSER_ID, getDb } from '@moon/orm'
 
 const BCRYPT_ROUNDS = 10
 
@@ -44,10 +43,16 @@ export async function loadBaseData() {
     adminGroupId = groupRows[0].id as number
   }
 
-  // 2. Seed IrModels
-  const coreModels = ['vx.user', 'vx.role', 'vx.node', 'vx.org', 'vx.zone', 'vx.coin']
+  // 2. Seed explicit model metadata for every registered, non-abstract model.
+  // This mirrors Odoo's ir.model bootstrap behavior while keeping authorization fail-closed:
+  // an unregistered/unknown model still has no metadata and is denied.
+  const securedModels = Array.from(registry.values())
+    .filter((modelClass) => !modelClass._abstract && Boolean(modelClass._name))
+    .map((modelClass) => modelClass._name)
+    .sort()
+
   const modelIds: Record<string, number> = {}
-  for (const m of coreModels) {
+  for (const m of securedModels) {
     const mRows = await MxModel.fetch(MxModel, env, [['model', '=', m]])
     if (!mRows.length) {
       const row = await MxModel.spawn(MxModel, env, { model: m, name: m })
@@ -57,8 +62,8 @@ export async function loadBaseData() {
     }
   }
 
-  // 3. Seed MxGrant (Admin gets full access)
-  for (const m of coreModels) {
+  // 3. Seed MxGrant (Admin gets explicit full access to registered models).
+  for (const m of securedModels) {
     const mId = modelIds[m]
     const accRows = await MxGrant.fetch(MxGrant, env, [['modelId', '=', mId], ['groupId', '=', adminGroupId]])
     if (!accRows.length) {
