@@ -231,4 +231,22 @@ describe('Moon ORM fail-closed authorization', () => {
     expect(error).toBeInstanceOf(Error)
     expect(error.statusCode).toBe(403)
   })
+
+  it('enforces record rules on searchCount and readGroup', async () => {
+    mocks.getDb.mockReturnValue(makeDb({
+      vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
+      mx_model: [{ id: 11, model: 'demo.model' }],
+      ir_rule_res_groups_rel: [{ vx_role_id: 7, ir_rule_id: 10 }],
+      mx_rule: [{
+        id: 10,
+        model_id: 11,
+        name: 'Own records only',
+        domain_force: '[["user_id", "=", "$user.id"]]'
+      }],
+      vx_user: [{ id: 42, name: 'Operator' }],
+    }))
+
+    const ruleDomain = await getRecordRulesDomain(model('demo.model'), createCtx(42))
+    expect(ruleDomain).toEqual([['user_id', '=', 42]])
+  })
 })

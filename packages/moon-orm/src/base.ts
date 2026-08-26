@@ -501,8 +501,21 @@ export class Vertex {
     if (idArray.length === 0) return true
     
     await checkAccessRights(modelClass, env, 'permWrite')
-    
-    const clonedVals = { ...vals }
+
+    const ruleDomain = await getRecordRulesDomain(modelClass, env)
+    if (ruleDomain.length > 0) {
+      const allowedRecords = await this.fetch(modelClass, env, [['id', 'in', idArray]])
+      const allowedIds = new Set(allowedRecords.map((r: any) => r.id))
+      for (const reqId of idArray) {
+        if (!allowedIds.has(reqId)) {
+          throw new AuthorizationError(
+            `Access Denied: Record rule prevents ${modelClass._name} write on record ${reqId}`,
+            'SECURITY_RULE_VIOLATION',
+            403
+          )
+        }
+      }
+    }
 
     if (clonedVals.updatedAt === undefined) clonedVals.updatedAt = new Date().toISOString()
 
@@ -1122,9 +1135,22 @@ export class Vertex {
     ids: number | number[]
   ) {
     const idArray = Array.isArray(ids) ? ids : [ids]
-    if (idArray.length === 0) return true
-
     await checkAccessRights(modelClass, env, 'permUnlink')
+
+    const ruleDomain = await getRecordRulesDomain(modelClass, env)
+    if (ruleDomain.length > 0) {
+      const allowedRecords = await this.fetch(modelClass, env, [['id', 'in', idArray]])
+      const allowedIds = new Set(allowedRecords.map((r: any) => r.id))
+      for (const reqId of idArray) {
+        if (!allowedIds.has(reqId)) {
+          throw new AuthorizationError(
+            `Access Denied: Record rule prevents ${modelClass._name} deletion on record ${reqId}`,
+            'SECURITY_RULE_VIOLATION',
+            403
+          )
+        }
+      }
+    }
     
     if ((modelClass as any).beforeDelete) {
       for (const id of idArray) {
