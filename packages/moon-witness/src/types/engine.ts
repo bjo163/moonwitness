@@ -106,6 +106,11 @@ export interface EngineScoreComponent {
 export interface EngineScoreBreakdown {
   algorithmVersion: string
   components: EngineScoreComponent[]
+  profileCode?: string
+  profileVersion?: string
+  compositeBp?: number
+  coverageBp?: number
+  formulaFingerprint?: string
 }
 
 export interface EngineFindingCandidate {

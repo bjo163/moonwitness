@@ -111,7 +111,12 @@ function findingStatus(
 }
 
 function validateScore(candidate: EngineFindingCandidate): void {
-  for (const component of candidate.score?.components ?? []) {
+  const score = candidate.score
+  if (!score) return
+  if (score.compositeBp !== undefined && (!Number.isInteger(score.compositeBp) || score.compositeBp < 0 || score.compositeBp > 10000)) throw new Error('Score compositeBp requires a 0..10000 basis-point value')
+  if (score.coverageBp !== undefined && (!Number.isInteger(score.coverageBp) || score.coverageBp < 0 || score.coverageBp > 10000)) throw new Error('Score coverageBp requires a 0..10000 basis-point value')
+  if ((score.profileCode && !score.profileVersion) || (!score.profileCode && score.profileVersion)) throw new Error('Score profile code and version must be supplied together')
+  for (const component of score.components) {
     if (!component.code.trim() || !component.algorithmVersion.trim()) throw new Error('Score components require code and algorithmVersion')
     if (component.state === 'AVAILABLE' && (!Number.isInteger(component.valueBp) || component.valueBp! < 0 || component.valueBp! > 10000)) {
       throw new Error(`Available score component ${component.code} requires a 0..10000 basis-point value`)

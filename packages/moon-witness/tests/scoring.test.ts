@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { SCORE_PROFILES, score } from '../src/services/scoring.js'
+import { SCORE_PROFILES, score, toEngineScore } from '../src/services/scoring.js'
 
 describe('Witness scoring kernel (#63)', () => {
   it('keeps not-applicable dimensions distinct from zero and is deterministic', () => {
@@ -22,5 +22,10 @@ describe('Witness scoring kernel (#63)', () => {
     ])
     expect(result.status).toBe('CONFLICTED')
     expect(result.coverage).toBeCloseTo(2 / 3)
+  })
+
+  it('exports a profile-bound engine score without losing vector semantics', () => {
+    const result = score(SCORE_PROFILES.research_hypothesis_v1, [{ code: 'COVERAGE', state: 'AVAILABLE', value: 75, evidenceRefs: ['e1'], reasonCodes: [] }])
+    expect(toEngineScore(result)).toMatchObject({ profileCode: 'research_hypothesis', profileVersion: '1.0.0', compositeBp: 7500, coverageBp: 10000 })
   })
 })

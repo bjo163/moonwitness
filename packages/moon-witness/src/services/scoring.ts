@@ -1,4 +1,5 @@
 import { sha256String, stableSerialize } from './hash.js'
+import type { EngineScoreBreakdown } from '../types/engine.js'
 
 export type WitnessScoreState = 'AVAILABLE' | 'INSUFFICIENT' | 'NOT_APPLICABLE'
 export interface WitnessScoreDimension { code: string; state: WitnessScoreState; value?: number; weight?: number; evidenceRefs: string[]; reasonCodes: string[] }
@@ -26,4 +27,9 @@ export function score(profile: WitnessScoreProfile, dimensions: WitnessScoreDime
   const conflicted = normalized.some((item) => item.code === 'CONFLICT_PENALTY' && item.state === 'AVAILABLE' && item.value! > 0)
   const status = conflicted ? 'CONFLICTED' : coverage < profile.minimumCoverage ? 'INSUFFICIENT' : available.length < applicable.length ? 'PARTIAL' : 'COMPLETE'
   return { profileCode: profile.code, profileVersion: profile.version, dimensions: normalized, composite, coverage, status, formulaFingerprint: sha256String(stableSerialize({ profile, dimensions: normalized.map(({ evidenceRefs, reasonCodes, ...item }) => item) })) }
+}
+
+/** Converts the universal 0..100 vector to the engine's lossless basis-point contract. */
+export function toEngineScore(result: WitnessScoreResult): EngineScoreBreakdown {
+  return { algorithmVersion: result.profileVersion, profileCode: result.profileCode, profileVersion: result.profileVersion, compositeBp: result.composite === undefined ? undefined : Math.round(result.composite * 100), coverageBp: Math.round(result.coverage * 10000), formulaFingerprint: result.formulaFingerprint, components: result.dimensions.map((item) => ({ code: item.code, algorithmVersion: result.profileVersion, valueBp: item.value === undefined ? undefined : Math.round(item.value * 100), evidenceRefs: item.evidenceRefs, state: item.state })) }
 }
