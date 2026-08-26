@@ -15,6 +15,7 @@ import {
 import { createLexicalAnalysisModule } from '../src/engines/lexical-analysis.js'
 import { createConceptEvidenceModule } from '../src/engines/concept-evidence.js'
 import { createDivineExpressionModule } from '../src/engines/divine-expression.js'
+import { createResearchHypothesisModule } from '../src/engines/research-hypothesis.js'
 import type { WitnessEngineModule } from '../src/types/engine.js'
 
 type Row = Record<string, any>
@@ -156,6 +157,7 @@ function seed() {
     ],
     wx_divine_expression: [{ id: 1201, entity_id: 202, language_code: 'ar', lexical_form: 'Allahu', lemma: 'الله', root_id: 610, expression_type: 'NAME', source_id: 501, provenance_id: 401, active: true, is_active: true }],
     wx_divine_expression_occurrence: [{ id: 1202, expression_id: 1201, passage_id: 21, content_id: 701, offset_scheme: 'UNICODE_CODEPOINT', start_offset: 0, end_offset: 6, fragment_checksum: sha256String('Allahu'), source_id: 501, provenance_id: 401, active: true, is_active: true }],
+    wx_research_hypothesis: [{ id: 1301, stable_key: 'research:mercy', title: 'Mercy distribution', statement: 'Mercy evidence is present.', hypothesis_class: 'CONCEPT_DISTRIBUTION', method_version: '1', scope_definition: '{}', created_at: '2026-01-01T00:00:00.000Z', active: true, is_active: true }],
     wx_figure: [],
     wx_concept: [{ id: 1, entity_id: 202, stable_key: 'concept:mercy', name: 'Mercy', language_code: 'en', active: true, is_active: true }]
   }
@@ -261,5 +263,13 @@ describe('Revelation Query and Cross-Scripture engines (#58)', () => {
     expect(result.findings).toHaveLength(1)
     expect(result.findings[0]).toMatchObject({ objectValue: 'Allahu', authorityClass: 'PRIMARY_SOURCE', provenanceRefs: ['prov:quran:original'] })
     expect(result.summary).toMatch(/does not assume any fixed count/)
+  })
+
+  it('returns transparent, non-canonical research findings with contrary evidence visible', async () => {
+    const module = createResearchHypothesisModule()
+    const result = await runtime(module).runModule(env(), { moduleCode: module.code, moduleVersion: module.version, input: { hypothesisId: 1301, predicate: 'HAS_QUALITY', algorithmVersion: 'distribution-v1' } })
+    expect(result.findings.find((finding) => finding.key === 'research:1301:summary')).toMatchObject({ authorityClass: 'HYPOTHESIS', status: 'CONFLICTED' })
+    expect(result.summary).toMatch(/non-canonical/)
+    expect(result.diagnostics).toEqual(expect.arrayContaining(['supports:1', 'contradicts:1', 'denominator:2']))
   })
 })

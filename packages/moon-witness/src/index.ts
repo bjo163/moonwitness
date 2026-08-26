@@ -42,6 +42,8 @@ import WxDivineExpressionOccurrence from './models/wx-divine-expression-occurren
 import WxLegacyMapping from './models/wx-legacy-mapping.js'
 import WxEngineRun from './models/wx-engine-run.js'
 import WxEngineResult from './models/wx-engine-result.js'
+import WxResearchHypothesis from './models/wx-research-hypothesis.js'
+import WxResearchRun from './models/wx-research-run.js'
 
 // Ingestion Data Plane (#65)
 import WxSourcePolicy from './models/wx-source-policy.js'
@@ -187,6 +189,11 @@ export {
   validateDivineExpressionInput,
   type DivineExpressionInput
 } from './engines/divine-expression.js'
+export {
+  createResearchHypothesisModule,
+  validateResearchHypothesisInput,
+  type ResearchHypothesisInput
+} from './engines/research-hypothesis.js'
 
 export {
   planLegacyMigration,
@@ -292,6 +299,8 @@ export {
   WxLegacyMapping,
   WxEngineRun,
   WxEngineResult,
+  WxResearchHypothesis,
+  WxResearchRun,
 
   // Ingestion data plane models (#65)
   WxSourcePolicy,
@@ -370,8 +379,10 @@ export default {
     WxDivineExpression,
     WxDivineExpressionOccurrence,
     WxLegacyMapping,
-    WxEngineRun,
-    WxEngineResult,
+  WxEngineRun,
+  WxEngineResult,
+  WxResearchHypothesis,
+  WxResearchRun,
 
     // Ingestion data plane (#65)
     WxSourcePolicy,
