@@ -11,9 +11,68 @@ import { ReaderVersesGrid } from "../components/reader/reader-verses-grid"
 import { ReaderInsightsSidebar } from "../components/reader/reader-insights-sidebar"
 import { ReaderBottomPanels } from "../components/reader/reader-bottom-panels"
 
+export interface ScriptureBook {
+  id: string | number
+  name: string
+  original_name?: string
+  chapters_count?: number
+  summary?: string
+  meaning?: string
+  audio_url?: string
+}
+
+export interface ScriptureVerse {
+  id: string | number
+  verse_number: number | string
+  text_original?: string
+  text_transliteration?: string
+  text_translated?: string
+  text_tajweed?: string
+  audio_url?: string
+  juz?: number
+}
+
+export interface ScriptureReaderResponse {
+  success: boolean
+  data: {
+    book: ScriptureBook
+    verses: ScriptureVerse[]
+    current_chapter: string | number
+    scripture_name: string
+    scripture_arabic: string
+    scripture_tag: string
+    scripture_desc: string
+    stats: Record<string, any>
+    left_sidebar: { title: string; items: any[] }
+    right_sidebar: { quick_facts: any[]; insights: any[] }
+    bottom_panels?: {
+      themes?: string[]
+      related?: Array<{ ref: string; desc: string }>
+      tafsir_highlight?: { text: string; author: string }
+      science?: string[]
+    }
+  }
+}
+
+export function isScriptureReaderResponse(
+  value: any
+): value is ScriptureReaderResponse {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    value.success === true &&
+    typeof value.data === 'object' &&
+    value.data !== null &&
+    typeof value.data.book === 'object' &&
+    value.data.book !== null &&
+    Array.isArray(value.data.verses)
+  )
+}
+
 function ReaderContent({ id }: { id: string }) {
-  const [data, setData] = useState<any>(null)
+  const [payload, setPayload] = useState<ScriptureReaderResponse | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const audio = useGlobalAudio()
 
   const searchParams = useSearchParams()
@@ -25,17 +84,24 @@ function ReaderContent({ id }: { id: string }) {
   const { user } = useAuthSession()
 
   useEffect(() => {
+    const controller = new AbortController()
+    const signal = controller.signal
+
     setIsLoading(true)
+    setError(null)
     fetch(
-      `/api/scriptures/${id}/read?book=${currentBook}&chapter=${currentChapterStr}`
+      `/api/scriptures/${id}/read?book=${currentBook}&chapter=${currentChapterStr}`,
+      { signal }
     )
       .then((res) => res.json())
       .then((json) => {
-        setData(json.data)
+        if (!isScriptureReaderResponse(json)) {
+          throw new Error('Invalid reader response contract')
+        }
+        setPayload(json)
         setIsLoading(false)
         window.scrollTo(0, 0)
 
-        // Auto-save history if logged in
         if (user && json.data.book?.id) {
           moonClient
             .model("wx.history")
@@ -47,9 +113,16 @@ function ReaderContent({ id }: { id: string }) {
         }
       })
       .catch((err) => {
-        console.error(err)
-        setIsLoading(false)
+        if (err.name !== 'AbortError') {
+          console.error(err)
+          setError(err.message || 'Failed to load scripture')
+          setIsLoading(false)
+        }
       })
+
+    return () => {
+      controller.abort()
+    }
   }, [id, currentBook, currentChapterStr, user, moonClient])
 
   if (isLoading) {
@@ -63,10 +136,10 @@ function ReaderContent({ id }: { id: string }) {
     )
   }
 
-  if (!data) {
+  if (!payload) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center space-y-4 bg-[#040914] text-white">
-        <p>Error loading scripture.</p>
+        <p>{error || 'Error loading scripture.'}</p>
         <button
           onClick={() => router.back()}
           className="rounded bg-white/10 px-4 py-2"
@@ -76,6 +149,8 @@ function ReaderContent({ id }: { id: string }) {
       </div>
     )
   }
+
+  const data = payload.data
 
   const {
     scripture_name,
@@ -92,7 +167,7 @@ function ReaderContent({ id }: { id: string }) {
   } = data
 
   const totalChapters = book.chapters_count || 1
-  const currentChNum = parseInt(current_chapter) || 1
+  const currentChNum = parseInt(String(current_chapter)) || 1
 
   const handleNavigateChapter = (ch: number) => {
     if (ch >= 1 && ch <= totalChapters) {
