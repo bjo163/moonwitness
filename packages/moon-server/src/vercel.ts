@@ -1,8 +1,7 @@
-import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import { setupOrm, getDb, getModel, createCtx, SUPERUSER_ID, Vertex, registerModel, type DbConfig } from '@moon/orm'
 import { getRegistry } from '@moon/orm/dist/registry.js'
-import { issueJwt } from './utils/auth.js'
+import { authenticateRequest, AuthError, issueJwt } from './utils/auth.js'
 
 export interface VercelAdapterConfig {
   database: DbConfig;
@@ -68,19 +67,15 @@ export function createVercelAdapter(config: VercelAdapterConfig) {
         return Response.json({ token, user: { id: user.id, email: user.email, name: user.name, partnerId: user.partner_id } }, { status: 200, headers });
       }
 
-      // 2. RPC Endpoint
+      // 2. RPC Endpoint — use the exact same JWT/session boundary as NativeServer.
       if (req.method === 'POST' && path.endsWith('/rpc')) {
-        const authHeader = req.headers.get('authorization');
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-          return Response.json({ error: 'Missing or invalid token' }, { status: 401, headers });
-        }
-        const token = authHeader.split(' ')[1];
-        if (!token) return Response.json({ error: 'Missing token' }, { status: 401, headers });
-        const decoded = jwt.verify(token, config.jwtSecret, {
-          algorithms: ['HS256', 'HS384', 'HS512']
-        }) as any;
-        const uid = decoded.sub as number;
-        if (!uid) return Response.json({ error: 'Unauthorized' }, { status: 401, headers });
+        const authorization = req.headers.get('authorization') ?? undefined
+        const session = await authenticateRequest(
+          { headers: { authorization } } as any,
+          config.jwtSecret,
+          { allowAnonymous: false }
+        )
+        const uid = session.uid
 
         const body = await req.json();
         const { model, method, args, kwargs } = body;
@@ -92,7 +87,7 @@ export function createVercelAdapter(config: VercelAdapterConfig) {
         const methodFn = (ModelClass as any)[method];
         if (typeof methodFn !== 'function') return Response.json({ error: `Method ${method} not found` }, { status: 404, headers });
 
-        const safeArgs = Array.isArray(args) ? args : [];
+        const safeArgs = Array.isArray(args) ? [...args] : [];
         if (kwargs && Object.keys(kwargs).length > 0) safeArgs.push(kwargs);
 
         const db = getDb();
@@ -125,12 +120,10 @@ export function createVercelAdapter(config: VercelAdapterConfig) {
              const encoder = new TextEncoder();
              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: 'connected' })}\n\n`));
              
-             // Keepalive
              const interval = setInterval(() => {
                controller.enqueue(encoder.encode(`:\n\n`));
              }, 15000);
 
-             // Define the event listener
              const onMoonEvent = (event: any) => {
                const data = `data: ${JSON.stringify(event)}\n\n`;
                controller.enqueue(encoder.encode(data));
@@ -166,7 +159,10 @@ export function createVercelAdapter(config: VercelAdapterConfig) {
       return Response.json({ error: 'Not Found' }, { status: 404, headers });
 
     } catch (err: any) {
-      return Response.json({ error: err.message }, { status: 500, headers });
+      if (err instanceof AuthError) {
+        return Response.json({ error: err.message, code: err.code }, { status: err.statusCode, headers });
+      }
+      return Response.json({ error: 'Internal server error', code: 'INTERNAL_ERROR' }, { status: 500, headers });
     }
   }
 }
