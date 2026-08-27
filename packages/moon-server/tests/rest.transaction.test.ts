@@ -42,8 +42,10 @@ function makeModel() {
   const where = vi.fn(() => ({ first }))
   const query = vi.fn(() => ({ where }))
 
+  const getFieldDefs = vi.fn(() => ({ name: { type: 'string', relation: false } }))
+
   return {
-    model: { transaction, spawn, morph, purge, query },
+    model: { transaction, spawn, morph, purge, query, getFieldDefs },
     transaction,
     spawn,
     morph,
