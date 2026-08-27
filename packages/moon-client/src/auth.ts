@@ -1,66 +1,24 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import {
-  STORAGE_KEYS,
-  type UserProfile,
-  type UserRole,
-  type OperatorClearance,
+import type {
+  UserProfile,
+  UserRole,
+  OperatorClearance,
 } from "@workspace/types"
-import { apiPost } from "./api-client"
+import { apiGet, apiPost, AUTH_INVALIDATED_EVENT } from "./api-client"
 
 export interface AuthSessionState {
   isAuthenticated: boolean
   user: UserProfile | null
-  token: string | null
+  /** Kept for API compatibility; browser code never receives the bearer. */
+  token: null
   clearance: OperatorClearance | null
 }
 
 const AUTH_CHANGE_EVENT = "mw_auth_session_change"
 
-export function getStoredSession(): AuthSessionState {
-  if (typeof window === "undefined") {
-    return {
-      isAuthenticated: false,
-      user: null,
-      token: null,
-      clearance: null,
-    }
-  }
-
-  try {
-    let token = localStorage.getItem(STORAGE_KEYS.SESSION)
-    if (!token) {
-      const match = document.cookie.match(/(?:^|; )mw_session=([^;]*)/)
-      if (match && match[1]) token = decodeURIComponent(match[1])
-    }
-
-    const userDataStr = localStorage.getItem(STORAGE_KEYS.USER_DATA)
-    const user: UserProfile | null = userDataStr ? JSON.parse(userDataStr) : null
-
-    if (token && user) {
-      const level = user.clearanceLevel || (user.role === "superadmin" || user.role === "admin" ? 3 : user.role === "moderator" ? 2 : 1)
-      const clearance: OperatorClearance = {
-        operatorId: user.email || "MW-OPERATOR-01",
-        callsign: user.name || "COMMANDER",
-        level,
-        tier: level === 3 ? "OMEGA" : level === 2 ? "BETA" : "ALPHA",
-        allowedModules: ["portal", "observatory", "command-center", "scriptures", "hadiths"],
-        canApproveRfc: level >= 2,
-        canDeployHotfix: level === 3,
-      }
-
-      return {
-        isAuthenticated: true,
-        user,
-        token,
-        clearance,
-      }
-    }
-  } catch (err) {
-    console.error("[MoonClient:Auth] Error reading stored session:", err)
-  }
-
+function anonymousSession(): AuthSessionState {
   return {
     isAuthenticated: false,
     user: null,
@@ -69,33 +27,56 @@ export function getStoredSession(): AuthSessionState {
   }
 }
 
-export function setStoredSession(user: UserProfile, token: string) {
-  if (typeof window === "undefined") return
-
-  try {
-    localStorage.setItem(STORAGE_KEYS.SESSION, token)
-    localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(user))
-
-    // Set cookie across root domain for cross-app session
-    document.cookie = `mw_session=${encodeURIComponent(token)}; path=/; max-age=86400; SameSite=Lax`
-
-    window.dispatchEvent(new Event(AUTH_CHANGE_EVENT))
-  } catch (err) {
-    console.error("[MoonClient:Auth] Error setting session:", err)
+function clearanceFor(user: UserProfile): OperatorClearance {
+  const level = user.clearanceLevel || (user.role === "superadmin" || user.role === "admin" ? 3 : user.role === "moderator" ? 2 : 1)
+  return {
+    operatorId: user.email || "MW-OPERATOR",
+    callsign: user.name || "OPERATOR",
+    level,
+    tier: level === 3 ? "OMEGA" : level === 2 ? "BETA" : "ALPHA",
+    allowedModules: ["portal", "observatory", "command-center", "scriptures", "hadiths"],
+    canApproveRfc: level >= 2,
+    canDeployHotfix: level === 3,
   }
 }
 
-export function clearStoredSession() {
-  if (typeof window === "undefined") return
+function sessionFromUser(user: UserProfile | null | undefined): AuthSessionState {
+  if (!user) return anonymousSession()
+  return {
+    isAuthenticated: true,
+    user,
+    token: null,
+    clearance: clearanceFor(user),
+  }
+}
 
-  try {
-    localStorage.removeItem(STORAGE_KEYS.SESSION)
-    localStorage.removeItem(STORAGE_KEYS.USER_DATA)
-    document.cookie = "mw_session=; path=/; max-age=0; SameSite=Lax"
+/**
+ * Browser storage is intentionally not an authentication source. The initial
+ * state is anonymous until the same-origin BFF verifies the HttpOnly cookie.
+ */
+export function getStoredSession(): AuthSessionState {
+  return anonymousSession()
+}
 
+/** @deprecated Browser bearer persistence is forbidden. Use refreshSession(). */
+export function setStoredSession(_user: UserProfile, _token?: string): void {
+  if (typeof window !== "undefined") {
     window.dispatchEvent(new Event(AUTH_CHANGE_EVENT))
-  } catch (err) {
-    console.error("[MoonClient:Auth] Error clearing session:", err)
+  }
+}
+
+export function clearStoredSession(): void {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(AUTH_CHANGE_EVENT))
+  }
+}
+
+export async function refreshSession(): Promise<AuthSessionState> {
+  try {
+    const response = await apiGet<{ user?: UserProfile | null }>("/api/auth/session")
+    return sessionFromUser(response?.user)
+  } catch {
+    return anonymousSession()
   }
 }
 
@@ -105,53 +86,47 @@ export async function loginSession(credentials: {
   password?: string
   role?: UserRole
 }): Promise<AuthSessionState> {
+  const response = await apiPost<{ user?: UserProfile }>("/api/auth/session/login", credentials)
+  const session = sessionFromUser(response?.user)
+  if (!session.isAuthenticated) {
+    throw new Error("Authentication failed")
+  }
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(AUTH_CHANGE_EVENT))
+  }
+  return session
+}
+
+export async function logoutSession(): Promise<void> {
   try {
-    // Attempt real login endpoint if server is available
-    const response = await apiPost<any>("/api/auth/session/login", credentials).catch(() => null)
-
-    const user: UserProfile = response?.user || {
-      name: credentials.username ? credentials.username.toUpperCase() : "DIVINE COMMANDER",
-      email: credentials.email || `${credentials.username || "commander"}@moonwitness.os`,
-      title: "Tactical System Operator",
-      role: credentials.role || (credentials.username === "admin" ? "superadmin" : "admin"),
-      level: 3,
-      clearanceLevel: 3,
-      badges: ["ALPHA_CLEARANCE", "COSMIC_OBSERVER"],
+    await apiPost("/api/auth/session/logout")
+  } finally {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new Event(AUTH_INVALIDATED_EVENT))
+      window.dispatchEvent(new Event(AUTH_CHANGE_EVENT))
     }
-
-    const token = response?.token || `mw_jwt_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
-
-    setStoredSession(user, token)
-    return getStoredSession()
-  } catch (err) {
-    console.error("[MoonClient:Auth] Login error:", err)
-    throw err
   }
 }
 
-export function logoutSession(): void {
-  clearStoredSession()
-}
-
-/**
- * Universal React Hook for reactive Auth State in both apps
- */
+/** Universal React hook backed by the server-owned HttpOnly session. */
 export function useAuthSession() {
-  const [session, setSession] = useState<AuthSessionState>(getStoredSession)
+  const [session, setSession] = useState<AuthSessionState>(anonymousSession)
 
-  const syncSession = useCallback(() => {
-    setSession(getStoredSession())
+  const syncSession = useCallback(async () => {
+    setSession(await refreshSession())
   }, [])
 
   useEffect(() => {
-    syncSession()
+    void syncSession()
 
-    window.addEventListener(AUTH_CHANGE_EVENT, syncSession)
-    window.addEventListener("storage", syncSession)
+    const onAuthChange = () => { void syncSession() }
+    const onInvalidated = () => setSession(anonymousSession())
+    window.addEventListener(AUTH_CHANGE_EVENT, onAuthChange)
+    window.addEventListener(AUTH_INVALIDATED_EVENT, onInvalidated)
 
     return () => {
-      window.removeEventListener(AUTH_CHANGE_EVENT, syncSession)
-      window.removeEventListener("storage", syncSession)
+      window.removeEventListener(AUTH_CHANGE_EVENT, onAuthChange)
+      window.removeEventListener(AUTH_INVALIDATED_EVENT, onInvalidated)
     }
   }, [syncSession])
 
@@ -159,6 +134,7 @@ export function useAuthSession() {
     ...session,
     login: loginSession,
     logout: logoutSession,
+    refresh: syncSession,
     hasClearance: (requiredLevel: 1 | 2 | 3) => {
       const level = session.clearance?.level || 0
       return level >= requiredLevel
