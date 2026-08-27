@@ -8,7 +8,6 @@ import {
   CardDescription,
   CardContent,
 } from "./card"
-import { Badge } from "./badge"
 import { Button } from "./button"
 import { Input } from "./input"
 import { Label } from "./label"
@@ -23,7 +22,6 @@ import {
   Loader2,
   Search,
   Plus,
-  MoreHorizontal,
   Edit,
   Trash2,
 } from "lucide-react"
@@ -57,6 +55,27 @@ export type DataTableProps<T = any> = {
   initialData?: T[]
 }
 
+type PageMeta = {
+  total: number
+  page: number
+  pageSize: number
+  lastPage: number
+}
+
+async function readJson(response: Response): Promise<any> {
+  try {
+    return await response.json()
+  } catch {
+    return null
+  }
+}
+
+function apiError(payload: any, status: number): string {
+  if (payload?.error && payload?.code) return `${payload.error} (${payload.code})`
+  if (payload?.error) return String(payload.error)
+  return `Request failed with HTTP ${status}`
+}
+
 export function DataTable<T = any>({
   modelName,
   title,
@@ -83,63 +102,144 @@ export function DataTable<T = any>({
   const [editingId, setEditingId] = useState<number | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
+  const [searchTerm, setSearchTerm] = useState("")
+  const [page, setPage] = useState(1)
+  const pageSize = 50
+  const [meta, setMeta] = useState<PageMeta>({ total: 0, page: 1, pageSize, lastPage: 0 })
+
+  const modelUrl = `/api/backend/api/${encodeURIComponent(modelName)}`
+  const filterSignature = JSON.stringify(filters ?? {})
+  const allowedFilterFields = ["id", ...columns.map((column) => column.name)].join(",")
+  const searchableField =
+    columns.find(
+      (column) =>
+        !column.hideInTable &&
+        column.type !== "password" &&
+        (column.type === undefined ||
+          column.type === "text" ||
+          column.type === "email" ||
+          column.type === "select")
+    )?.name ?? null
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setSearchTerm(searchQuery.trim())
+      setPage(1)
+    }, 250)
+    return () => window.clearTimeout(timer)
+  }, [searchQuery])
+
+  useEffect(() => {
+    setPage(1)
+  }, [filterSignature, modelName])
 
   const fetchData = useCallback(async () => {
     setLoading(true)
+    setError(null)
+
     try {
-      const res = await fetch("/api/users")
-      if (res.ok) {
-        const json = await res.json()
-        const items = Array.isArray(json)
-          ? json
-          : json?.data && Array.isArray(json.data)
-          ? json.data
-          : json?.users && Array.isArray(json.users)
-          ? json.users
-          : []
-        setData(items.length > 0 ? items : initialData)
-      } else {
-        setData(initialData.length > 0 ? initialData : [
-          { id: 1, name: "Rezza Fahlevi", email: "admin@moonwitness.org", role: "Administrator", status: "Active" },
-          { id: 2, name: "Aisyah Rahma", email: "aisyah@moonwitness.org", role: "Researcher", status: "Active" },
-          { id: 3, name: "Fadly Maulana", email: "fadly@moonwitness.org", role: "Operator", status: "Active" },
-        ] as any)
+      const allowed = new Set(allowedFilterFields.split(",").filter(Boolean))
+      const activeFilters = JSON.parse(filterSignature) as Record<string, unknown>
+      const domain: unknown[][] = []
+
+      for (const [field, value] of Object.entries(activeFilters)) {
+        if (value === undefined || value === null || value === "") continue
+        if (!allowed.has(field)) {
+          throw new Error(`Unsupported filter field: ${field}`)
+        }
+        domain.push([field, "=", value])
       }
-      setError(null)
-    } catch {
-      setData(initialData.length > 0 ? initialData : [
-        { id: 1, name: "Rezza Fahlevi", email: "admin@moonwitness.org", role: "Administrator", status: "Active" },
-        { id: 2, name: "Aisyah Rahma", email: "aisyah@moonwitness.org", role: "Researcher", status: "Active" },
-        { id: 3, name: "Fadly Maulana", email: "fadly@moonwitness.org", role: "Operator", status: "Active" },
-      ] as any)
-      setError(null)
+
+      if (searchTerm) {
+        if (!searchableField) {
+          throw new Error("This table has no searchable text field")
+        }
+        domain.push([searchableField, "ilike", `%${searchTerm}%`])
+      }
+
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(pageSize),
+      })
+      if (domain.length > 0) params.set("domain", JSON.stringify(domain))
+
+      const response = await fetch(`${modelUrl}?${params.toString()}`, {
+        method: "GET",
+        headers: { Accept: "application/json" },
+        cache: "no-store",
+      })
+      const payload = await readJson(response)
+
+      if (!response.ok) {
+        throw new Error(apiError(payload, response.status))
+      }
+      if (!Array.isArray(payload?.data)) {
+        throw new Error("Moon API returned an invalid collection response")
+      }
+
+      setData(payload.data as T[])
+      const nextMeta = payload.meta
+      setMeta({
+        total: Number(nextMeta?.total ?? payload.data.length),
+        page: Number(nextMeta?.page ?? page),
+        pageSize: Number(nextMeta?.pageSize ?? pageSize),
+        lastPage: Number(nextMeta?.lastPage ?? (payload.data.length > 0 ? 1 : 0)),
+      })
+    } catch (err: any) {
+      setData([])
+      setMeta({ total: 0, page, pageSize, lastPage: 0 })
+      setError(err?.message || "Failed to load records")
     } finally {
       setLoading(false)
     }
-  }, [initialData])
+  }, [allowedFilterFields, filterSignature, modelUrl, page, pageSize, searchTerm, searchableField])
 
   useEffect(() => {
-    fetchData()
+    void fetchData()
   }, [fetchData])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
+    const column = columns.find((item) => item.name === e.target.name)
+    let value: any = e.target.value
+    if (column?.type === "number" && value !== "") value = Number(value)
+    if (column?.type === "boolean") value = value === "true"
+    setFormData((current) => ({ ...current, [e.target.name]: value }))
+  }
+
+  const getWritePayload = () => {
+    const writable = new Set(columns.filter((column) => !column.hideInForm).map((column) => column.name))
+    return Object.fromEntries(
+      Object.entries(formData).filter(([field]) => writable.has(field))
+    )
   }
 
   const handleSave = async (isEdit: boolean) => {
+    if (isEdit && editingId === null) return
+
     setIsSubmitting(true)
+    setError(null)
     try {
-      if (isEdit && editingId) {
-        setData((prev) => prev.map((item: any) => item.id === editingId ? { ...item, ...formData } : item))
-        setIsEditOpen(false)
-      } else {
-        const newItem = { id: Date.now(), ...formData } as any
-        setData((prev) => [newItem, ...prev])
-        setIsAddOpen(false)
+      const target = isEdit ? `${modelUrl}/${editingId}` : modelUrl
+      const response = await fetch(target, {
+        method: isEdit ? "PATCH" : "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(getWritePayload()),
+      })
+      const payload = await readJson(response)
+      if (!response.ok) {
+        throw new Error(apiError(payload, response.status))
       }
+
       setFormData({})
+      setEditingId(null)
+      setIsAddOpen(false)
+      setIsEditOpen(false)
+      await fetchData()
     } catch (err: any) {
-      console.error(err)
+      setError(err?.message || "Failed to save record")
     } finally {
       setIsSubmitting(false)
     }
@@ -147,15 +247,22 @@ export function DataTable<T = any>({
 
   const handleDelete = async (id: number) => {
     if (!window.confirm("Are you sure you want to delete this record?")) return
-    setData((prev) => prev.filter((item: any) => item.id !== id))
-  }
 
-  const filteredData = data.filter((item: any) => {
-    if (!searchQuery.trim()) return true
-    return Object.values(item).some(
-      (val) => typeof val === "string" && val.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  })
+    setError(null)
+    try {
+      const response = await fetch(`${modelUrl}/${id}`, {
+        method: "DELETE",
+        headers: { Accept: "application/json" },
+      })
+      const payload = await readJson(response)
+      if (!response.ok) {
+        throw new Error(apiError(payload, response.status))
+      }
+      await fetchData()
+    } catch (err: any) {
+      setError(err?.message || "Failed to delete record")
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -187,6 +294,7 @@ export function DataTable<T = any>({
                   <Button
                     onClick={() => {
                       setFormData({})
+                      setEditingId(null)
                       setIsAddOpen(true)
                     }}
                     className="flex h-9 items-center gap-2 border border-cyan-500/50 bg-cyan-950/60 font-sans text-xs font-semibold text-cyan-300 hover:bg-cyan-900/60"
@@ -229,13 +337,19 @@ export function DataTable<T = any>({
             </CardHeader>
 
             <CardContent className="p-0">
+              {error ? (
+                <div role="alert" className="border-b border-rose-900/40 bg-rose-950/20 p-4 text-xs text-rose-300">
+                  {error}
+                </div>
+              ) : null}
+
               {loading ? (
                 <div className="flex items-center justify-center p-12 text-cyan-400">
                   <Loader2 className="h-6 w-6 animate-spin" />
                 </div>
-              ) : filteredData.length === 0 ? (
+              ) : data.length === 0 ? (
                 <div className="p-12 text-center text-xs text-slate-500">
-                  No records found matching criteria.
+                  {error ? "Records could not be loaded." : "No records found matching criteria."}
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -253,7 +367,7 @@ export function DataTable<T = any>({
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-cyan-900/20 font-mono">
-                      {filteredData.map((row: any) => (
+                      {data.map((row: any) => (
                         <tr key={row.id} className="hover:bg-cyan-950/20 transition-colors">
                           {columns
                             .filter((col) => !col.hideInTable)
@@ -269,7 +383,13 @@ export function DataTable<T = any>({
                                 size="sm"
                                 onClick={() => {
                                   setEditingId(row.id)
-                                  setFormData(row)
+                                  setFormData(
+                                    Object.fromEntries(
+                                      columns
+                                        .filter((column) => !column.hideInForm)
+                                        .map((column) => [column.name, row[column.name] ?? ""])
+                                    )
+                                  )
                                   setIsEditOpen(true)
                                 }}
                                 className="h-7 w-7 p-0 text-slate-400 hover:text-cyan-400"
@@ -279,7 +399,7 @@ export function DataTable<T = any>({
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => handleDelete(row.id)}
+                                onClick={() => void handleDelete(row.id)}
                                 className="h-7 w-7 p-0 text-slate-400 hover:text-rose-400"
                               >
                                 <Trash2 className="h-3.5 w-3.5" />
@@ -292,6 +412,30 @@ export function DataTable<T = any>({
                   </table>
                 </div>
               )}
+
+              <div className="flex items-center justify-between border-t border-cyan-900/30 px-4 py-3 text-[11px] text-slate-400">
+                <span>
+                  {meta.total} records · page {meta.page} of {Math.max(meta.lastPage, 1)}
+                </span>
+                <div className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    disabled={loading || page <= 1}
+                    onClick={() => setPage((current) => Math.max(1, current - 1))}
+                  >
+                    Previous
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    disabled={loading || meta.lastPage === 0 || page >= meta.lastPage}
+                    onClick={() => setPage((current) => current + 1)}
+                  >
+                    Next
+                  </Button>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -299,12 +443,20 @@ export function DataTable<T = any>({
         {sideWidgets && <div className="space-y-6 lg:col-span-4">{sideWidgets}</div>}
       </div>
 
-      {/* Add / Edit Dialogs */}
-      <Dialog open={isAddOpen || isEditOpen} onOpenChange={(open) => { if (!open) { setIsAddOpen(false); setIsEditOpen(false); } }}>
+      <Dialog
+        open={isAddOpen || isEditOpen}
+        onOpenChange={(open) => {
+          if (!open) {
+            setIsAddOpen(false)
+            setIsEditOpen(false)
+            setEditingId(null)
+          }
+        }}
+      >
         <DialogContent className="border-cyan-900/50 bg-[#05080E] text-white">
           <DialogHeader>
             <DialogTitle className="font-sans text-sm uppercase text-cyan-400 font-bold">
-              {isEditOpen ? `Edit Record (#${editingId})` : `Add New Record`}
+              {isEditOpen ? `Edit Record (#${editingId})` : "Add New Record"}
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-400">
               Provide necessary parameters for the record below.
@@ -312,31 +464,48 @@ export function DataTable<T = any>({
           </DialogHeader>
           <div className="space-y-4 py-2">
             {columns
-              .filter((c) => !c.hideInForm)
-              .map((c) => (
-                <div key={c.name} className="space-y-1.5">
-                  <Label className="text-xs text-slate-300">{c.label}</Label>
+              .filter((column) => !column.hideInForm)
+              .map((column) => (
+                <div key={column.name} className="space-y-1.5">
+                  <Label className="text-xs text-slate-300">{column.label}</Label>
                   <Input
-                    name={c.name}
-                    type={c.type || "text"}
-                    value={formData[c.name] || ""}
+                    name={column.name}
+                    type={
+                      column.type === "select" || column.type === "boolean"
+                        ? "text"
+                        : column.type || "text"
+                    }
+                    value={formData[column.name] ?? ""}
                     onChange={handleInputChange}
-                    placeholder={`Enter ${c.label}...`}
+                    placeholder={`Enter ${column.label}...`}
                     className="border-cyan-900/40 bg-black text-xs text-white"
                   />
                 </div>
               ))}
           </div>
           <div className="flex justify-end gap-2 pt-4">
-            <Button variant="ghost" onClick={() => { setIsAddOpen(false); setIsEditOpen(false); }}>
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setIsAddOpen(false)
+                setIsEditOpen(false)
+                setEditingId(null)
+              }}
+            >
               Cancel
             </Button>
             <Button
-              onClick={() => handleSave(isEditOpen)}
+              onClick={() => void handleSave(isEditOpen)}
               disabled={isSubmitting}
               className="bg-cyan-600 text-white hover:bg-cyan-500 font-bold text-xs"
             >
-              {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : isEditOpen ? "Save Changes" : "Create Record"}
+              {isSubmitting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : isEditOpen ? (
+                "Save Changes"
+              ) : (
+                "Create Record"
+              )}
             </Button>
           </div>
         </DialogContent>
