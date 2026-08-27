@@ -1,0 +1,63 @@
+name: Repair 97 Lockfile (one-shot)
+
+on:
+  push:
+    branches:
+      - feature/97-lockfile
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repair-97-lockfile
+  cancel-in-progress: true
+
+jobs:
+  repair:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: self-hosted
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/97-lockfile
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Enable pinned pnpm
+        shell: bash
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.33.4 --activate
+          test "$(pnpm --version)" = "10.33.4"
+
+      - name: Regenerate canonical lockfile only
+        shell: bash
+        run: pnpm install --lockfile-only
+
+      - name: Guard expected lockfile change
+        shell: bash
+        run: |
+          git diff -- pnpm-lock.yaml
+          grep -A18 '^  packages/moon-testing:$' pnpm-lock.yaml | grep -F "'@playwright/test':" >/dev/null
+          if git diff --name-only | grep -v '^pnpm-lock.yaml$' | grep -q .; then
+            echo 'Unexpected generated file changes detected' >&2
+            git diff --name-only >&2
+            exit 1
+          fi
+
+      - name: Commit repair and remove one-shot workflow
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add pnpm-lock.yaml
+          git rm .github/workflows/repair-97-lockfile.yml
+          git diff --cached --check
+          git commit -m 'fix(lockfile): sync moon-testing Playwright dependency (#97)'
+          git push origin HEAD:feature/97-lockfile
