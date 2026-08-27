@@ -76,6 +76,11 @@ export class NativeServer {
           '[moon.security] Fatal: In production (NODE_ENV=production), JWT_SECRET must be explicitly set to a strong secret (at least 16 characters).'
         )
       }
+      if (!config.database || config.database.includes('localhost') || config.database.includes('postgres:postgres')) {
+        throw new Error(
+          '[moon.security] Fatal: In production (NODE_ENV=production), DATABASE_URL must be explicitly set to a non-localhost, non-default credential database connection string.'
+        )
+      }
     } else {
       if (!config.jwtSecret || config.jwtSecret === 'secret') {
         logger.warn(
