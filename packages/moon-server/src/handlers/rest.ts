@@ -54,7 +54,6 @@ function applyRelations(query: any, rawWith: string | null, fieldDefs: Record<st
     if (!fieldDef || !['many2one', 'one2many', 'many2many'].includes(fieldDef.type)) {
       return { ok: false, error: `Field '${requested}' is not a relation` }
     }
-    // QueryBuilder carries the authenticated env into relation fetches, so ACL/record rules remain authoritative.
     query.with(field)
   }
   return { ok: true }
@@ -169,17 +168,19 @@ export async function handleRest(
 
     if (req.method === 'POST') {
       const validated = validateWriteBody(await parseBody(req), fieldDefs)
-      if (!validated.ok || Object.keys(validated.ok ? validated.data : {}).length === 0) {
+      if (!validated.ok) {
         return sendJson(res, 400, {
-          error: validated.field ? `Unknown write field: ${validated.field}` : 'Non-empty JSON object body required',
+          error: validated.field ? `Unknown write field: ${validated.field}` : 'JSON object body required',
           code: validated.field ? 'INVALID_WRITE_FIELD' : 'INVALID_REQUEST_BODY'
         }, req)
+      }
+      if (Object.keys(validated.data).length === 0) {
+        return sendJson(res, 400, { error: 'Non-empty JSON object body required', code: 'INVALID_REQUEST_BODY' }, req)
       }
       const record = await ModelClass.transaction(env, async (txEnv: any) => ModelClass.spawn(ModelClass, txEnv, validated.data))
       return sendJson(res, 201, { data: record }, req)
     }
 
-    // PUT and PATCH both use explicit partial-update semantics; omitted fields are preserved.
     if (req.method === 'PUT' || req.method === 'PATCH') {
       if (id === undefined) return sendJson(res, 400, { error: 'ID required for update', code: 'INVALID_REQUEST' }, req)
       const validated = validateWriteBody(await parseBody(req), fieldDefs)
