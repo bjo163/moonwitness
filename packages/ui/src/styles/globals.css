@@ -15,7 +15,7 @@
     --font-sans: var(--font-sans, "Geist", sans-serif);
     --font-arabic: var(--font-arabic, "Amiri", serif);
 
-    /* ── CYBER SEMANTIC COLOR PALETTE (DESIGN BIBLE V9.0) ── */
+    /* ── CYBER SEMANTIC COLOR PALETTE (DESIGN BIBLE V9.5) ── */
     --color-cyber-cyan: #00F0FF;
     --color-cyber-green: #00FF66;
     --color-cyber-yellow: #FFE600;
@@ -23,6 +23,13 @@
     --color-cyber-pink: #FF0055;
     --color-cyber-dark: #05070A;
     --color-cyber-panel: #0A0F17;
+    
+    /* Semantic Intent Mapping */
+    --color-semantic-primary: var(--color-cyber-cyan);
+    --color-semantic-success: var(--color-cyber-green);
+    --color-semantic-warning: var(--color-cyber-yellow);
+    --color-semantic-premium: var(--color-cyber-purple);
+    --color-semantic-danger: var(--color-cyber-pink);
 
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);

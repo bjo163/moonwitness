@@ -31,7 +31,12 @@ if command -v pm2 &> /dev/null; then
     pm2 reload ecosystem.config.cjs --update-env
     echo "✓ PM2 cluster successfully reloaded."
 elif command -v docker-compose &> /dev/null; then
-    docker-compose up -d --build
+    if [[ ! -f .env.production ]]; then
+        echo "✖ Docker Compose deployment requires .env.production. Copy .env.production.example and set every required secret."
+        exit 1
+    fi
+    docker-compose --env-file .env.production config --quiet
+    docker-compose --env-file .env.production up -d --build
     echo "✓ Docker Compose containers successfully updated."
 else
     echo "⚠️  Neither PM2 nor Docker Compose detected. Please restart processes manually."

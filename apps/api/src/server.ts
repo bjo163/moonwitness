@@ -148,6 +148,8 @@ globalRoutes.push({
 })
 
 const apiPort = Number(process.env.API_PORT || process.env.PORT) || 4000
+const demoSeedEnabled =
+  process.env.NODE_ENV !== "production" || process.env.MOON_ENABLE_DEMO_SEED === "true"
 
 const server = new NativeServer({
   database: process.env.DATABASE_URL || "postgres://localhost/moonwitness",
@@ -214,7 +216,15 @@ globalCronRunner.start()
 defineRoute({
   method: "POST",
   path: "/api/system/demo-seed",
+  auth: "admin",
   handler: async () => {
+    if (!demoSeedEnabled) {
+      throw Object.assign(new Error("Demo seeding is disabled in production"), {
+        statusCode: 403,
+        code: "DEMO_SEED_DISABLED",
+      })
+    }
+
     const loaders = [
       { name: "base", fn: loadBaseDemoData },
       { name: "performance", fn: loadPerformanceDemoData },

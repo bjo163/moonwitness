@@ -111,6 +111,11 @@ function parseQueryParams(url: string): Record<string, string> {
  * Auto-handles: error wrapping, CORS, query parsing, body parsing, auth, and Zod schema validation.
  */
 export function defineRoute(def: RouteDefinition): void {
+  const isSystemMutation = def.path.startsWith('/api/system/') && def.method !== 'GET'
+  if (isSystemMutation && def.auth !== 'admin') {
+    throw new Error(`System mutation routes must explicitly require admin authorization: ${def.method} ${def.path}`)
+  }
+
   globalRoutes.push({
     method: def.method,
     path: def.path,
