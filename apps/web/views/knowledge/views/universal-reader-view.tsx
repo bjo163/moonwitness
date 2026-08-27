@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, Suspense } from "react"
+import React, { useState, useEffect, Suspense, useRef } from "react"
 import { BookOpen } from "lucide-react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useGlobalAudio } from "@workspace/state"
@@ -74,6 +74,7 @@ function ReaderContent({ id }: { id: string }) {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const audio = useGlobalAudio()
+  const lastHistoryKeyRef = useRef<string | null>(null)
 
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -103,13 +104,17 @@ function ReaderContent({ id }: { id: string }) {
         window.scrollTo(0, 0)
 
         if (user && json.data.book?.id) {
-          moonClient
-            .model("wx.history")
-            .create({
-              userId: user.id,
-              bookId: json.data.book.id,
-            })
-            .catch(console.error)
+          const historyKey = `${user.id}-${json.data.book.id}`
+          if (lastHistoryKeyRef.current !== historyKey) {
+            lastHistoryKeyRef.current = historyKey
+            moonClient
+              .model("wx.history")
+              .create({
+                userId: user.id,
+                bookId: json.data.book.id,
+              })
+              .catch(console.error)
+          }
         }
       })
       .catch((err) => {
