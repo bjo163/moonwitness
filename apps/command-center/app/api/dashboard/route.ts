@@ -1,16 +1,41 @@
 import { NextRequest, NextResponse } from "next/server"
-import { MOCK_COMMAND_CENTER_DASHBOARD } from "@/lib/data/command-center-dashboard"
 export const dynamic = "force-dynamic"
 import { getDailyPrayerTimes } from "@moon/compute"
 
 const JAKARTA_LAT = -6.2088
 const JAKARTA_LNG = 106.8456
 
-export async function GET(req: NextRequest) {
-  const dashboardData = { ...MOCK_COMMAND_CENTER_DASHBOARD }
+type PrayerItem = { name: string; time: string; status: string; countdown?: string }
+
+export type DashboardResponse = {
+  success: boolean
+  data: {
+    missionStatus: Record<string, any> | null
+    todayMission: any[] | null
+    todayPrayer: PrayerItem[] | null
+    aiBriefing: any[] | null
+    knowledgeFeed: any[] | null
+    activeProjects: any[] | null
+    tasksOverview: any | null
+    moonObservatory: Record<string, any> | null
+    globalMonitoring: any[] | null
+  }
+}
+
+export async function GET(req: NextRequest): Promise<NextResponse<DashboardResponse>> {
+  const data: DashboardResponse["data"] = {
+    missionStatus: null,
+    todayMission: null,
+    todayPrayer: null,
+    aiBriefing: null,
+    knowledgeFeed: null,
+    activeProjects: null,
+    tasksOverview: null,
+    moonObservatory: null,
+    globalMonitoring: null,
+  }
 
   try {
-    // 1. Real Prayer Times from Internal Math Engine (@moon/compute)
     const now = new Date()
     const todayPrayers = getDailyPrayerTimes(JAKARTA_LAT, JAKARTA_LNG, now)
 
@@ -28,7 +53,7 @@ export async function GET(req: NextRequest) {
       { name: "Isha", timeObj: todayPrayers.isha },
     ]
 
-    dashboardData.todayPrayer = prayerSchedule.map((p) => {
+    data.todayPrayer = prayerSchedule.map((p) => {
       const pmins = getMins(p.timeObj)
       let status = "pending"
       if (currentMins >= pmins) status = "done"
@@ -46,30 +71,12 @@ export async function GET(req: NextRequest) {
         countdown: status === "next" ? "LIVE" : undefined,
       }
     })
-
-    // 2. Real Knowledge Feed
-    dashboardData.knowledgeFeed = [
-      {
-        id: "kf1",
-        category: "Qur'an",
-        title: "اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ",
-        subtitle: "Surah Al-Alaq (96:1)",
-        time: "Just Now",
-      },
-      {
-        id: "kf2",
-        category: "Hadith",
-        title: "Seeking knowledge is an obligation upon every Muslim.",
-        subtitle: "Sunan Ibn Majah 224",
-        time: "Just Now",
-      },
-    ]
   } catch (error) {
     console.error("Failed to calculate prayer times for Command Center Dashboard:", error)
   }
 
   return NextResponse.json({
     success: true,
-    data: dashboardData,
+    data,
   })
 }
