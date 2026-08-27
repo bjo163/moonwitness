@@ -324,7 +324,9 @@ export class NativeServer {
       return handleSSE(req, res, { cors: this.config.cors })
     }
 
-    const restMatch = req.url?.match(/^\/api\/([a-z0-9.-]+)(?:\/(\d+))?(?:\?.*)?$/)
+    // Capture any non-slash record-id segment here; handleRest performs the strict
+    // positive-integer validation so malformed IDs deterministically return 400.
+    const restMatch = req.url?.match(/^\/api\/([a-z0-9.-]+)(?:\/([^/?]+))?(?:\?.*)?$/)
     if (restMatch) {
       return handleRest(req, res, restMatch, this.config.jwtSecret)
     }
