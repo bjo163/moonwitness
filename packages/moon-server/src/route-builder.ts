@@ -50,6 +50,22 @@ export interface RouteDefinition<TBody = any, TQuery = Record<string, string>> {
   handler: (ctx: RouteContext & { body: TBody; query: TQuery }) => Promise<unknown>
 }
 
+export type RouteAuthLevel = NonNullable<RouteDefinition['auth']>
+
+/**
+ * Resolve a route's authorization contract.
+ *
+ * Public routes remain backwards compatible, but mutating `/api/system/*`
+ * routes fail closed as administrator-only when auth is accidentally omitted.
+ */
+export function resolveRouteAuthLevel(
+  def: Pick<RouteDefinition, 'method' | 'path' | 'auth'>
+): RouteAuthLevel {
+  if (def.auth) return def.auth
+  if (def.path.startsWith('/api/system/') && def.method !== 'GET') return 'admin'
+  return 'none'
+}
+
 const CORS_HEADERS = {
   'Content-Type': 'application/json',
   'Access-Control-Allow-Origin': '*',
@@ -119,7 +135,7 @@ export function defineRoute(def: RouteDefinition): void {
         // ── AUTH ──
         const jwtSecret = process.env.JWT_SECRET || ''
         let uid = ANONYMOUS_ID
-        const authLevel = def.auth || 'none'
+        const authLevel = resolveRouteAuthLevel(def)
 
         if (authLevel !== 'none') {
           try {
