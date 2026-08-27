@@ -227,6 +227,16 @@ export async function revokeUserSessions(
   await VxUser.morph(VxUser as any, ctx, user.id, {
     tokenVersion: nextVersion
   })
+
+  // Best-effort: tear down any live SSE connections for this user.
+  // Lazy import avoids a static circular dependency with the SSE handler.
+  try {
+    const { revokeUserSseClients } = await import('../handlers/sse.js')
+    revokeUserSseClients(userId)
+  } catch {
+    // SSE layer unavailable — non-fatal for session revocation.
+  }
+
   return nextVersion
 }
 

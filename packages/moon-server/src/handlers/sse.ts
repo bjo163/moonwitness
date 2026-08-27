@@ -3,6 +3,7 @@ import { EventEmitter } from 'node:events'
 import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm'
 import { logger } from '../logger.js'
 import { parseUrl, resolveCorsOrigin, type CorsConfig } from '../utils/http.js'
+import { verifyToken, AuthError, type VerifyTokenOptions } from '../utils/auth.js'
 
 // Global SSE state
 if (!(globalThis as any).moonEmitter) {
@@ -20,6 +21,8 @@ export interface SSEClient {
   req: IncomingMessage
   ipAddress: string
   userAgent: string
+  uid?: number
+  tokenVersion?: number
   topics: Set<string> | null // null means all topics
   keepAliveTimer: NodeJS.Timeout
   createdAt: number
@@ -30,6 +33,9 @@ export interface SSEClient {
 export interface SSEOptions {
   cors?: CorsConfig
   heartbeatIntervalMs?: number
+  jwtSecret?: string
+  allowAnonymous?: boolean
+  verifyTokenOptions?: VerifyTokenOptions
 }
 
 /**
@@ -131,6 +137,38 @@ export function closeAllSSEConnections(reason = 'server_stopping'): void {
 }
 
 /**
+ * Revoke all active SSE connections belonging to a specific user.
+ * Closes each matching connection and emits a `session_revoked` event
+ * before tearing down the stream. Returns the number of clients closed.
+ */
+export function revokeUserSseClients(userId: number): number {
+  const clients = (globalThis as any).moonActiveSSEClients as Map<string, SSEClient>
+  let closed = 0
+
+  for (const [clientId, client] of clients.entries()) {
+    if (client.uid !== userId) continue
+
+    try {
+      safeWrite(
+        client,
+        `event: session_revoked\ndata: ${JSON.stringify({
+          reason: 'revoked',
+          userId,
+          timestamp: Date.now()
+        })}\n\n`
+      )
+    } catch {
+      // Ignored
+    }
+
+    cleanupClient(clientId)
+    closed++
+  }
+
+  return closed
+}
+
+/**
  * Handle SSE (Server-Sent Events) connections
  * Pattern: GET /live[?channels=...,topics=...]
  */
@@ -158,6 +196,32 @@ export function handleSSE(
       if (options.cors?.allowCredentials !== false) {
         headers['Access-Control-Allow-Credentials'] = 'true'
       }
+    }
+  }
+
+  let uid: number | undefined
+  let tokenVersion: number | undefined
+
+  if (options.jwtSecret) {
+    try {
+      const decoded: any = verifyToken(req, options.jwtSecret, options.verifyTokenOptions)
+      if (decoded && decoded.sub && Number(decoded.sub) > 0) {
+        uid = Number(decoded.sub)
+        if (decoded.tokenVersion !== undefined) {
+          tokenVersion = Number(decoded.tokenVersion)
+        }
+      }
+    } catch (err) {
+      if (err instanceof AuthError && !options.allowAnonymous) {
+        const errHeaders: Record<string, string> = {
+          'Content-Type': 'application/json',
+          ...(allowedOrigin ? { 'Access-Control-Allow-Origin': allowedOrigin } : {})
+        }
+        res.writeHead(401, errHeaders)
+        res.end(JSON.stringify({ error: err.code, message: err.message }))
+        return
+      }
+      logger.warn('moon.sse', `Anonymous SSE fallback for unauthenticated request:`, err)
     }
   }
 
@@ -217,6 +281,8 @@ export function handleSSE(
     req,
     ipAddress,
     userAgent,
+    uid,
+    tokenVersion,
     topics: subscribedTopics,
     keepAliveTimer,
     createdAt: Date.now(),
