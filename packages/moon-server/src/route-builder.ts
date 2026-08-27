@@ -52,18 +52,48 @@ export interface RouteDefinition<TBody = any, TQuery = Record<string, string>> {
 
 export type RouteAuthLevel = NonNullable<RouteDefinition['auth']>
 
+type RouteSecurityDefinition = Pick<RouteDefinition, 'method' | 'path' | 'auth'>
+
+function isSystemMutation(def: Pick<RouteDefinition, 'method' | 'path'>): boolean {
+  return def.path.startsWith('/api/system/') && def.method !== 'GET'
+}
+
 /**
  * Resolve a route's authorization contract.
  *
  * Public routes remain backwards compatible, but mutating `/api/system/*`
  * routes fail closed as administrator-only when auth is accidentally omitted.
  */
-export function resolveRouteAuthLevel(
-  def: Pick<RouteDefinition, 'method' | 'path' | 'auth'>
-): RouteAuthLevel {
+export function resolveRouteAuthLevel(def: RouteSecurityDefinition): RouteAuthLevel {
   if (def.auth) return def.auth
-  if (def.path.startsWith('/api/system/') && def.method !== 'GET') return 'admin'
+  if (isSystemMutation(def)) return 'admin'
   return 'none'
+}
+
+/**
+ * Every production system mutation has a deployment capability derived from
+ * its route. `/api/system/demo-seed` -> `MOON_ENABLE_DEMO_SEED`.
+ */
+export function getSystemMutationCapabilityName(
+  def: Pick<RouteDefinition, 'method' | 'path'>
+): string | null {
+  if (!isSystemMutation(def)) return null
+  const suffix = def.path
+    .slice('/api/system/'.length)
+    .replace(/[^a-zA-Z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .toUpperCase()
+  return suffix ? `MOON_ENABLE_${suffix}` : null
+}
+
+export function isProductionSystemMutationAllowed(
+  def: Pick<RouteDefinition, 'method' | 'path'>,
+  env: NodeJS.ProcessEnv = process.env
+): boolean {
+  if (env.NODE_ENV !== 'production') return true
+  const capability = getSystemMutationCapabilityName(def)
+  if (!capability) return true
+  return env[capability] === 'true'
 }
 
 const CORS_HEADERS = {
@@ -157,6 +187,15 @@ export function defineRoute(def: RouteDefinition): void {
             }
             throw error
           }
+        }
+
+        if (!isProductionSystemMutationAllowed(def)) {
+          res.writeHead(403, CORS_HEADERS)
+          res.end(JSON.stringify({
+            error: 'System mutation is disabled in production',
+            code: 'SYSTEM_MUTATION_DISABLED',
+          }))
+          return
         }
 
         // ── PARSE ──
