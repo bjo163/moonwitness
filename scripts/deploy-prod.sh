@@ -36,6 +36,11 @@ elif command -v docker-compose &> /dev/null; then
         exit 1
     fi
     docker-compose --env-file .env.production config --quiet
+    echo "▶ Step 5b/5: Running production readiness check..."
+    node cli/mw.mjs prod-check || {
+        echo "✖ Production readiness check failed. Resolve the reported issues before deploying."
+        exit 1
+    }
     docker-compose --env-file .env.production up -d --build
     echo "✓ Docker Compose containers successfully updated."
 else

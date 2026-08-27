@@ -21,24 +21,51 @@ export async function GET(
     const surah = json.surah
     const ayahs = json.ayahs || []
 
-    // Transform to expected frontend shape
+    const book = {
+      id: surah.id,
+      name: surah.name,
+      original_name: surah.nameOriginal,
+      chapters_count: surah.versesCount,
+      summary: surah.description,
+      meaning: '',
+      audio_url: surah.audioUrl,
+    }
+
+    const verses = ayahs.map((a: any) => ({
+      id: a.number ?? a.id,
+      verse_number: a.number,
+      text_original: a.textArabic,
+      text_transliteration: a.textLatin,
+      text_translated: a.translationId ? String(a.translationId) : undefined,
+      text_tajweed: a.textArabic,
+      audio_url: a.audioUrl,
+      juz: a.juz,
+    }))
+
     return NextResponse.json({
       success: true,
-      meta: {
-        type: "quran",
-        bookName: surah.name,
-        bookNameOriginal: surah.nameOriginal,
-        versesCount: surah.versesCount,
+      data: {
+        book,
+        verses,
+        current_chapter: bookId,
+        scripture_name: surah.name,
+        scripture_arabic: surah.nameOriginal,
+        scripture_tag: 'QURAN',
+        scripture_desc: surah.description,
+        stats: {
+          verses_count: surah.versesCount,
+          revelation_type: surah.revelationType,
+        },
+        left_sidebar: {
+          title: 'Surah',
+          items: [],
+        },
+        right_sidebar: {
+          quick_facts: [],
+          insights: [],
+        },
+        bottom_panels: [],
       },
-      data: ayahs.map((a: any) => ({
-        id: a.number,
-        verse_number: a.number,
-        text_original: a.textArabic,
-        text_latin: a.textLatin,
-        translation_id: a.translationId,
-        audio_url: a.audioUrl,
-        juz: a.juz,
-      })),
     })
   } catch (error: any) {
     console.error("Error reading scripture content:", error)

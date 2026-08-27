@@ -151,8 +151,15 @@ const apiPort = Number(process.env.API_PORT || process.env.PORT) || 4000
 const demoSeedEnabled =
   process.env.NODE_ENV !== "production" || process.env.MOON_ENABLE_DEMO_SEED === "true"
 
+const rawDatabaseUrl = process.env.DATABASE_URL
+if (!rawDatabaseUrl || rawDatabaseUrl.trim() === "") {
+  throw new Error(
+    "[moon.security] Fatal: DATABASE_URL is required. Set it in the environment before starting the API."
+  )
+}
+
 const server = new NativeServer({
-  database: process.env.DATABASE_URL || "postgres://localhost/moonwitness",
+  database: rawDatabaseUrl,
   jwtSecret: process.env.JWT_SECRET || "",
   port: apiPort,
   email: {
