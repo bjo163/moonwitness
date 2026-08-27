@@ -43,6 +43,9 @@ export interface MoonConfig {
   host?: string
   addons?: typeof Vertex[]
   cors?: CorsConfig
+  requestTimeoutMs?: number
+  headersTimeoutMs?: number
+  keepAliveTimeoutMs?: number
   onBoot?: () => Promise<void>
   email?: {
     service?: string
@@ -50,6 +53,36 @@ export interface MoonConfig {
     pass?: string
     from?: string
   }
+}
+
+export interface HttpTimeoutPolicy {
+  requestTimeoutMs: number
+  headersTimeoutMs: number
+  keepAliveTimeoutMs: number
+}
+
+const DEFAULT_REQUEST_TIMEOUT_MS = 30_000
+const DEFAULT_HEADERS_TIMEOUT_MS = 15_000
+const DEFAULT_KEEP_ALIVE_TIMEOUT_MS = 5_000
+
+function resolvePositiveTimeout(name: string, value: number | undefined, fallback: number): number {
+  if (value === undefined) return fallback
+  if (!Number.isSafeInteger(value) || value <= 0) {
+    throw new Error(`[moon.http] ${name} must be a positive integer in milliseconds`)
+  }
+  return value
+}
+
+export function resolveHttpTimeouts(
+  config: Pick<MoonConfig, 'requestTimeoutMs' | 'headersTimeoutMs' | 'keepAliveTimeoutMs'>
+): HttpTimeoutPolicy {
+  const requestTimeoutMs = resolvePositiveTimeout('requestTimeoutMs', config.requestTimeoutMs, DEFAULT_REQUEST_TIMEOUT_MS)
+  const headersTimeoutMs = resolvePositiveTimeout('headersTimeoutMs', config.headersTimeoutMs, DEFAULT_HEADERS_TIMEOUT_MS)
+  const keepAliveTimeoutMs = resolvePositiveTimeout('keepAliveTimeoutMs', config.keepAliveTimeoutMs, DEFAULT_KEEP_ALIVE_TIMEOUT_MS)
+  if (headersTimeoutMs > requestTimeoutMs) {
+    throw new Error('[moon.http] headersTimeoutMs must not exceed requestTimeoutMs')
+  }
+  return { requestTimeoutMs, headersTimeoutMs, keepAliveTimeoutMs }
 }
 
 export function publish(topic: string, payload: any) {
@@ -66,6 +99,7 @@ export class NativeServer {
 
   constructor(config: MoonConfig) {
     this.config = config
+    resolveHttpTimeouts(config)
     const isProduction = process.env.NODE_ENV === 'production'
     if (isProduction) {
       if (!config.jwtSecret || config.jwtSecret === 'secret' || config.jwtSecret.trim().length < 16) {
@@ -395,7 +429,11 @@ export class NativeServer {
         logger.info('moon.rest', `GET, PUT, DEL  /api/${name}/:id`)
       }
 
+      const timeouts = resolveHttpTimeouts(this.config)
       const server = http.createServer((req, res) => this.handleRequest(req, res))
+      server.requestTimeout = timeouts.requestTimeoutMs
+      server.headersTimeout = timeouts.headersTimeoutMs
+      server.keepAliveTimeout = timeouts.keepAliveTimeoutMs
       this.server = server
 
       const port = this.config.port || Number(process.env.API_PORT || process.env.PORT) || 4000
