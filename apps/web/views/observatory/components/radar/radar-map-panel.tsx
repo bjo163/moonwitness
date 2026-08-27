@@ -23,8 +23,7 @@ export function RadarMapPanel({ rainTimestamp }: RadarMapPanelProps) {
       <MapContainer
         center={[-2.5, 118.0]}
         zoom={5}
-        className="h-[420px] w-full"
-        style={{ background: "#050B16" }}
+        className="h-[420px] w-full bg-[#050B16]"
       >
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"

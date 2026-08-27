@@ -3,6 +3,7 @@ import { Vertex, fields } from '@moon/orm'
 export default class KhConversation extends Vertex {
   static _name = 'kh.conversation'
   static _description = 'Khidra Conversation Session'
+  static _rec_name = 'title'
   static _public = false
 
   userId = fields.Many2one({ comodel: 'vx.user', index: true })

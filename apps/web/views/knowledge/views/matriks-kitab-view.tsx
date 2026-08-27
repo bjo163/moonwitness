@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { BookOpen, Scroll, ShieldCheck, Compass } from "lucide-react"
-import { ContextBlock } from "@core/ui"
+import { ContextBlock } from "@workspace/ui"
 
 type ParallelPassage = {
   theme: string

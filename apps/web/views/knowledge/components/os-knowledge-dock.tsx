@@ -14,7 +14,7 @@ import {
   Layers,
   Activity,
 } from "lucide-react"
-import { Section, SectionBadge } from "@core/ui"
+import { Section, SectionBadge } from "@workspace/ui"
 
 export function OSKnowledgeDock() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -237,7 +237,7 @@ export function OSKnowledgeDock() {
                       </div>
                       <div
                         className="mt-0.5 text-xs font-black text-white"
-                        style={{ color: i === 2 ? m.color : "#FFF" }}
+                        style={{ color: i === 2 ? m.color : undefined }}
                       >
                         {s.v}
                       </div>
@@ -398,8 +398,7 @@ export function OSKnowledgeDock() {
               {/* Animated 68% Radial Progress Ring simulation */}
               <div className="relative flex h-28 w-28 shrink-0 items-center justify-center rounded-full border-[6px] border-primary shadow-[0_0_20px_rgba(0,240,255,0.3)]">
                 <div
-                  className="absolute inset-0 -rotate-45 rounded-full border-[6px] border-primary border-t-transparent border-l-transparent"
-                  style={{ filter: "drop-shadow(0 0 6px #00F0FF)" }}
+                  className="absolute inset-0 -rotate-45 rounded-full border-[6px] border-primary border-t-transparent border-l-transparent shadow-[0_0_10px_rgba(0,240,255,0.8)]"
                 />
                 <div className="text-center font-mono">
                   <div className="text-[9px] font-bold tracking-wider text-primary uppercase">

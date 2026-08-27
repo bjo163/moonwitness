@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import { Clock } from "lucide-react"
 
-import { useObservatoryData } from "../../../@core/api/hooks/use-observatory-data"
+import { useObservatoryData } from "@moon/client"
 import { ObservatoryLeftColumn } from "./observatory/observatory-left-column"
 import { ObservatoryCenterColumn } from "./observatory/observatory-center-column"
 import { ObservatoryRightColumn } from "./observatory/observatory-right-column"

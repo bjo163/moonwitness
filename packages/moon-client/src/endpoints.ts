@@ -6,7 +6,42 @@ import type {
   PrayerData,
   ChatMessage,
   CabRfc,
+  HadithListResponse,
+  SurahDetailResponse,
+  SurahListResponse,
+  AsmaulHusnaResponse,
+  DevotionListResponse,
+  MoonPhaseResponse,
+  CabSummaryResponse,
+  HealthResponse,
+  DbStatusResponse,
 } from "@workspace/types"
+
+export const API_ENDPOINTS = {
+  ASTRONOMY: {
+    MOON_PHASE: "/api/astronomy/moon-phase",
+    ECLIPSES: "/api/astronomy/eclipses",
+  },
+  ISLAMIC: {
+    PRAYER_TIMES: "/api/prayer-times",
+    HIJRI_DATE: "/api/islamic/hijri-date",
+    QIBLA: "/api/islamic/qibla",
+  },
+  SYSTEM: {
+    HEALTH: "/api/system/health",
+    METRICS: "/api/system/metrics",
+  },
+  SCRIPTURES: {
+    QURAN_SURAHS: "/api/scriptures/quran/surahs",
+    QURAN_AYAHS: (surahNumber: number) =>
+      `/api/witness/quran/surah?number=${surahNumber}`,
+  },
+  HADITHS: {
+    BOOKS: "/api/hadiths/books",
+    LIST: (bookId: string, page = 1) =>
+      `/api/witness/hadith?slug=${bookId}&page=${page}`,
+  },
+} as const
 
 // ── COMMAND CENTER ENDPOINTS ────────────────────────────────────────────────
 export async function fetchDashboardData(): Promise<any> {
@@ -41,9 +76,50 @@ export async function fetchCabRfcs(): Promise<CabRfc[]> {
   return await apiGet<CabRfc[]>("/api/cab/rfcs")
 }
 
+export async function fetchCabSummary(): Promise<CabSummaryResponse> {
+  return await apiGet<CabSummaryResponse>("/api/cab/summary")
+}
+
 // ── OBSERVATORY & KNOWLEDGE ENDPOINTS ───────────────────────────────────────
 export async function fetchPrayerTimes(city = "Jakarta", country = "Indonesia"): Promise<PrayerData> {
   return await apiGet<PrayerData>(`/api/prayer-times?city=${encodeURIComponent(city)}&country=${encodeURIComponent(country)}`)
+}
+
+export async function fetchMoonPhase(date?: string): Promise<MoonPhaseResponse> {
+  const url = date ? `/api/witness/astronomy/moon-phase?date=${encodeURIComponent(date)}` : "/api/witness/astronomy/moon-phase"
+  return await apiGet<MoonPhaseResponse>(url)
+}
+
+export async function fetchSurahDetail(surahNumber: number): Promise<SurahDetailResponse> {
+  return await apiGet<SurahDetailResponse>(`/api/witness/quran/surah?number=${surahNumber}`)
+}
+
+export async function fetchSurahList(): Promise<SurahListResponse> {
+  return await apiGet<SurahListResponse>("/api/witness/quran/surahs")
+}
+
+export async function fetchHadithList(slug: string, page = 1, limit = 20): Promise<HadithListResponse> {
+  return await apiGet<HadithListResponse>(`/api/witness/hadith?slug=${encodeURIComponent(slug)}&page=${page}&limit=${limit}`)
+}
+
+export async function fetchAsmaulHusna(): Promise<AsmaulHusnaResponse> {
+  return await apiGet<AsmaulHusnaResponse>("/api/witness/asmaul-husna")
+}
+
+export async function fetchDevotions(type?: string, category?: string): Promise<DevotionListResponse> {
+  const params = new URLSearchParams()
+  if (type) params.set("type", type)
+  if (category) params.set("category", category)
+  const qs = params.toString()
+  return await apiGet<DevotionListResponse>(`/api/witness/devotions${qs ? `?${qs}` : ""}`)
+}
+
+export async function fetchSystemHealth(): Promise<HealthResponse> {
+  return await apiGet<HealthResponse>("/api/system/health")
+}
+
+export async function fetchDbStatus(): Promise<DbStatusResponse> {
+  return await apiGet<DbStatusResponse>("/db/status")
 }
 
 export async function fetchAdhkar(): Promise<any[]> {

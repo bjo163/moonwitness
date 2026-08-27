@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai"
 import { NextRequest, NextResponse } from "next/server"
-import { moonClientInstance } from "@core/store/moon-store"
+import { moonClientInstance } from "@moon/client"
 
 const SYSTEM_PROMPT = `
 You are MoonWitness KHIDRA AI (Prophetic Wisdom & Esoteric Scripture Intelligence). 

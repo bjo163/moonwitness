@@ -1,4 +1,14 @@
-# @moon/witness
+# ◈ @moon/witness
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  PACKAGE:        @moon/witness                                           ║
+║  SYSTEM VERSION: MoonWitness OS V9.0 (Divine Operating System Matrix)    ║
+║  PKG VERSION:    9.0.0                                                   ║
+║  CLASSIFICATION: TIER 3 — SACRED KNOWLEDGE GRAPH & REVELATION ENGINE     ║
+║  STATUS:         ████████████████████████████████ ACTIVE (SOVEREIGN)     ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
 
 > **Sacred Divine Knowledge, Canonical Knowledge Graph & Deterministic Engine Runtime**
 
@@ -102,6 +112,20 @@ console.log('Result Summary:', run.result?.summary)
 
 ---
 
-## License
+## 🛡️ Architectural Boundaries
+- Belongs to **Tier 3 (Domain Intelligence & Knowledge Graph)**.
+- Extends `@moon/orm` Vertex models and registers with `@moon/server`.
 
-MIT
+---
+
+## 🧪 Verification
+```bash
+pnpm --filter @moon/witness test
+```
+
+## ??? View Configuration
+
+This package exports declarative view manifests for the **Cosmic Matrix Engine** (src/views.ts):
+- Introspected automatically by `@moon/server` at `GET /api/meta/model/:name`
+- Rendered dynamically in Command Center via `<CosmicModelWorkspace model="..." />`
+- Supported view modes: Kanban Pipeline, Sortable Table, Responsive Form Modal, and Activity Chatter.

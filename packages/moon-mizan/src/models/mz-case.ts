@@ -3,6 +3,7 @@ import { Vertex, fields } from '@moon/orm'
 export default class MzCase extends Vertex {
   static _name = 'mz.case'
   static _description = 'Mizan Learning Case'
+  static _rec_name = 'title'
 
   title = fields.Char({ required: true, size: 180, index: true })
   caseText = fields.Text({ required: true })

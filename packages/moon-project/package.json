@@ -1,0 +1,23 @@
+{
+  "name": "@moon/project",
+  "version": "0.1.0",
+  "description": "Project management, task tracking, sprints, milestones and kanban stages",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "src", "README.md"],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@moon/orm": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  },
+  "peerDependencies": {
+    "@moon/base": "workspace:*"
+  }
+}

@@ -1,8 +1,8 @@
 "use client"
 
-import { useLanguage } from "@core/contexts"
+import { useLanguage } from "@workspace/state"
 import { ShieldCheck, CheckCircle2 } from "lucide-react"
-import { ContextBlock, Panel, PanelHeader, Button } from "@core/ui"
+import { ContextBlock, Panel, PanelHeader, Button } from "@workspace/ui"
 
 type PropheticToolkit = {
   id: string
@@ -149,9 +149,8 @@ export function ToolkitRasulullahView() {
                     </div>
                     <div className="mt-3">
                       <Button
-                        variant="primary"
-                        accentColor="success"
-                        className="w-full py-1.5 text-[10px]"
+                        variant="default"
+                        className="w-full py-1.5 text-[10px] bg-emerald-600 hover:bg-emerald-500 text-white"
                       >
                         EKSEKUSI TOOLKIT →
                       </Button>

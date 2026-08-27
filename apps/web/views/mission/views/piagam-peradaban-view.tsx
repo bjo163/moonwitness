@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { useLanguage } from "@core/contexts"
+import { useLanguage } from "@workspace/state"
 import { Search } from "lucide-react"
-import { ContextBlock } from "@core/ui"
+import { ContextBlock } from "@workspace/ui"
 
 type CovenantEntry = {
   id: string

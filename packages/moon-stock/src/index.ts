@@ -4,6 +4,8 @@ import StockPicking from './stock-picking.js'
 import StockMove from './stock-move.js'
 import StockQuant from './stock-quant.js'
 
+export { loadDemoData } from './demo-data.js'
+export { views } from './views.js'
 export {
   StockLocation,
   StockWarehouse,

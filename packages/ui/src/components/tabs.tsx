@@ -76,4 +76,58 @@ function TabsContent({ className, ...props }: TabsPrimitive.Panel.Props) {
   )
 }
 
+export type TabItem = {
+  id: string
+  label: string
+  count?: number
+  icon?: React.ComponentType<{ className?: string }>
+}
+
+export function SimpleTabs({
+  tabs,
+  activeTab,
+  onChange,
+  accentColor = "cyan",
+  className,
+}: {
+  tabs: TabItem[]
+  activeTab: string
+  onChange: (id: string) => void
+  accentColor?: string
+  className?: string
+}) {
+  return (
+    <div className={cn("flex flex-wrap gap-1 border-b border-primary/20 pb-2", className)}>
+      {tabs.map((t) => {
+        const isActive = t.id === activeTab
+        const Icon = t.icon
+        return (
+          <button
+            key={t.id}
+            type="button"
+            onClick={() => onChange(t.id)}
+            className={cn(
+              "tag-clip flex items-center gap-1.5 border px-3 py-1.5 font-mono text-xs font-bold tracking-wider uppercase transition-all",
+              isActive
+                ? "border-primary bg-primary/20 text-white shadow-[0_0_10px_rgba(0,240,255,0.3)]"
+                : "border-transparent text-slate-400 hover:bg-white/5 hover:text-white"
+            )}
+          >
+            {Icon && <Icon className="size-3.5" />}
+            <span>{t.label}</span>
+            {typeof t.count === "number" && (
+              <span className="rounded bg-black/40 px-1 py-0.5 text-[9px] text-primary">
+                {t.count}
+              </span>
+            )}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+/** @deprecated Use SimpleTabs */
+export const HUDTabs = SimpleTabs
+
 export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants }

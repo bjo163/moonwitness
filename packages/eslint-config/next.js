@@ -66,22 +66,6 @@ export const nextJsConfig = [
     },
   },
   {
-    files: ["**/@core/**"],
-    rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: [
-            {
-              group: ["@views/*", "**/views/*", "**/app/*", "**/components/*", "@/components/*"],
-              message: "Architectural Boundary Violation: @core is the lowest foundation layer and must NEVER import from components, views, or app layers."
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
     files: ["**/components/**"],
     rules: {
       "no-restricted-imports": [
@@ -93,8 +77,8 @@ export const nextJsConfig = [
               message: "Architectural Boundary Violation: reusable components must NOT import from @views or app routing layers."
             },
             {
-              group: ["@/components/ui/hud-*", "@/lib/hud-*"],
-              message: "Semantic Naming Violation: Do not use legacy hud-* import paths. Use clean imports from @core/ui or @core/tokens."
+              group: ["@/components/ui/hud-*", "@/lib/hud-*", "**/hud-*"],
+              message: "Semantic Naming Violation: Do not use legacy hud-* import paths. Use canonical packages (@workspace/ui, @workspace/hooks, @workspace/error)."
             }
           ]
         }
@@ -102,24 +86,19 @@ export const nextJsConfig = [
     }
   },
   {
-    files: ["**/@core/**", "**/components/**", "**/views/**", "**/app/**"],
+    files: ["**/components/**", "**/views/**", "**/app/**"],
     rules: {
       "no-restricted-syntax": [
-        "warn",
+        "error",
         {
-          selector: "JSXAttribute[name.name='className'] Literal[value=/bg-\\[#|text-\\[#|border-\\[#|hud-|cyber-|rpg|gaming/i]",
-          message: "Enterprise Semantic Violation: Avoid hardcoded hex colors (e.g. bg-[#...], text-[#...]) and non-semantic terminology (hud, cyber, rpg, gaming). Use semantic design tokens and typography primitives from @core/ui."
-        },
-        {
-          selector: "Identifier[name=/^(HUD_TOKENS|HudAccentColor|HudPanelLevel|HUDPanel|HUDBreadcrumb)$/]",
-          message: "Enterprise Semantic Violation: Do not use legacy HUD_* naming. Use clean Enterprise UI variants (e.g. THEME_TOKENS, Panel, Breadcrumb)."
+          selector: "Identifier[name=/^(HUD_TOKENS|HudAccentColor|HudPanelLevel|HUDPanel|HUDBreadcrumb|HUDResourceTable|HUDErrorBoundary|useHUDModal)$/]",
+          message: "Enterprise Semantic Violation: Do not use legacy HUD_* naming. Use clean Enterprise UI variants (e.g. THEME_TOKENS, Panel, Breadcrumb, ResourceTable, ErrorBoundary, useModal)."
         },
         {
           selector: "VariableDeclarator[id.name=/^(mock|fake|dummy|MOCK|FAKE|DUMMY).*/i] > ArrayExpression",
-          message: "Architecture Violation: Do not hardcode mockup arrays inside UI components. Use the @core/api client and Fake DB pattern."
+          message: "Architecture Violation: Do not hardcode mockup arrays inside UI components. Use @moon/client typed helpers and useResource."
         }
       ]
     }
   }
 ]
-

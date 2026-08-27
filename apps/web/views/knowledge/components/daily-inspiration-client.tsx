@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { useLanguage } from "@core/contexts"
-import { useGlobalAudio } from "@core/contexts"
+import { useLanguage } from "@workspace/state"
+import { useGlobalAudio } from "@workspace/state"
 import { AsbabunNuzulModal } from "./modals/asbabun-nuzul-modal"
 import { WordByWordModal } from "./modals/word-by-word-modal"
-import { AudioWaveformVisualizer } from "@core/ui"
+import { AudioWaveformVisualizer } from "@workspace/ui"
 import { HifzTrainerModal } from "./modals/hifz-trainer-modal"
 import { toPng } from "html-to-image"
 import {
@@ -591,10 +591,8 @@ export function DailyInspirationClient() {
   const [copiedUrl, setCopiedUrl] = useState(false)
 
   function getCoolShareUrl(): string {
-    if (!data)
-      return typeof window !== "undefined"
-        ? window.location.origin
-        : "http://localhost:3000"
+    if (typeof window === "undefined") return ""
+    if (!data) return window.location.origin
     const s = data.ayah.surahNumber
     const a = data.ayah.ayahNumber
     const period = data.prayerPeriod?.code || "maghrib"

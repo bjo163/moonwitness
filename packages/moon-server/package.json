@@ -13,6 +13,7 @@
   "dependencies": {
     "@moon/base": "workspace:*",
     "@moon/orm": "workspace:*",
+    "@moon/protocol": "workspace:*",
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.5",
     "jsonwebtoken": "^9.0.2",

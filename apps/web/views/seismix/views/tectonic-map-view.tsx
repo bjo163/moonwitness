@@ -13,9 +13,9 @@ import {
   Move,
   TrendingUp,
 } from "lucide-react"
-import { ContextBlock } from "@core/ui/context-block"
-import { Panel, PanelHeader } from "@core/ui/panel"
-import { Tabs } from "@core/ui/tabs"
+import { ContextBlock } from "@workspace/ui"
+import { Panel, PanelHeader } from "@workspace/ui"
+import { HUDTabs } from "@workspace/ui"
 import { SeismicTectonicRadar } from "@workspace/ui"
 
 // ── PLATE DATA ───────────────────────────────────────────
@@ -338,7 +338,7 @@ export function TectonicMapView() {
         accentColor="accent"
       />
 
-      <Tabs
+      <HUDTabs
         tabs={viewTabs}
         activeTab={viewMode}
         onChange={setViewMode}

@@ -1,35 +1,63 @@
-# @workspace/types
+# ◈ @workspace/types
 
-> **Canonical Domain Models, System Constants & Navigation Mesh for MoonWitness OS**
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  PACKAGE:        @workspace/types                                        ║
+║  SYSTEM VERSION: MoonWitness OS V9.0 (Divine Operating System Matrix)    ║
+║  PKG VERSION:    9.0.0                                                   ║
+║  CLASSIFICATION: TIER 1 — CANONICAL DOMAIN MODELS & SYSTEM CONSTANTS    ║
+║  STATUS:         ████════════════════════════════ ACTIVE (SOVEREIGN)     ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+## 🌌 Overview
+`@workspace/types` is the universal TypeScript domain definition hub for MoonWitness OS. It provides zero-dependency type models, system constants, port registries, and the master navigation mesh shared between `apps/web`, `apps/command-center`, and all internal packages.
 
 ---
 
-## 📦 Contents
+## 📦 Canonical Exports
 
-### 1. Domain Types
-- **`auth.types.ts`**: `UserProfile`, `UserRole`, `OperatorClearance`, `SessionState`.
-- **`hadith.types.ts`**: `HadithEntry`, `HadithBook`, `SanadNode`.
-- **`quran.types.ts`**: `QuranSurahItem`, `QuranAyahItem`, `TajweedRule`.
-- **`celestial.types.ts`**: `MoonPhaseData`, `EclipseEvent`, `PrayerTimeItem`.
-
-### 2. Navigation Mesh (`navigation.types.ts`)
-- **`NAVIGATION_MESH`**: Master registry of all public portal routes and tactical command center endpoints with labels, icons, clearance levels, and active routes.
-
-### 3. System Constants (`constants.ts`)
-- **`DEFAULT_COORDINATES`**: Makkah Ka'bah, Madinah, Jerusalem, Jakarta, Cairo, Istanbul.
-- **`APP_PORTS`**: Web (`3000`), Command Center (`3001`), API (`4000`).
-- **`STORAGE_KEYS`**: Session tokens, user profiles, offline caches.
-- **`SYSTEM_CONSTANTS`**: Version, codename, audio frequencies.
+| Category | File | Key Exports |
+|---|---|---|
+| **Constants** | `constants.ts` | `APP_PORTS`, `DEFAULT_COORDINATES`, `STORAGE_KEYS`, `OS_VERSION` |
+| **Navigation** | `navigation.types.ts` | `NAVIGATION_MESH`, `NavModuleItem`, `NavFamily` |
+| **Auth Models** | `auth.types.ts` | `UserProfile`, `UserRole`, `OperatorClearance`, `SessionState` |
+| **Witness Models**| `witness.types.ts` | `WitnessVerse`, `HadithEntry`, `AsmaulHusnaItem` |
+| **Celestial** | `celestial.types.ts` | `MoonPhaseData`, `PrayerTimesData`, `SunPositionData` |
 
 ---
 
 ## 🚀 Usage
 
-```tsx
-import { 
-  DEFAULT_COORDINATES, 
-  STORAGE_KEYS, 
-  NAVIGATION_MESH, 
-  type HadithEntry 
-} from "@workspace/types"
+```typescript
+import { APP_PORTS, DEFAULT_COORDINATES, OS_VERSION } from "@workspace/types"
+import type { WitnessVerse, UserProfile, OperatorClearance } from "@workspace/types"
+
+// Dynamic local port resolution
+const apiEndpoint = `http://127.0.0.1:${APP_PORTS.API_BACKEND}`
+
+// Accessing default Ka'bah coordinates
+const { lat, lng } = DEFAULT_COORDINATES.MAKKAH
+
+// Strongly typed operator session
+const operator: UserProfile = {
+  id: "op-77",
+  name: "Ibn Battuta",
+  clearance: "CHIEF_OBSERVER",
+  roles: ["SCHOLAR", "OPERATOR"],
+}
+```
+
+---
+
+## 🛡️ Architectural Boundaries & Dependencies
+- **Tier 1 (Foundation)**: 0 internal monorepo dependencies.
+- May be imported freely by **ANY** package or application in the monorepo.
+- Never imports from `@workspace/ui`, `@moon/client`, or `apps/*`.
+
+---
+
+## 🧪 Verification
+```bash
+pnpm --filter @workspace/types typecheck
 ```

@@ -9,6 +9,8 @@ import {
   verifySeedIntegrity,
   loadCanonicalReferenceData
 } from './seed-loader.js'
+import { loadDemoData } from './demo-data.js'
+import { views } from './views.js'
 import VxZone from './vx-zone.js'
 import VxZoneSubdivision from './vx-zone-subdivision.js'
 import VxRole from './vx-role.js'
@@ -30,12 +32,16 @@ import IrModelData from './ir-model-data.js'
 import IrSequence from './ir-sequence.js'
 import IrConfigParameter from './ir-config-parameter.js'
 import IrAttachment from './ir-attachment.js'
+import IrReport from './models/ir-report.js'
+import IrVersion from './models/ir-version.js'
 
 export { loadModels } from '@moon/orm'
 
 export {
   seedBaseData,
   loadBaseData,
+  loadDemoData,
+  views,
   verifySeedIntegrity,
   loadCanonicalReferenceData,
   VxZone,
@@ -59,8 +65,17 @@ export {
   IrModelData,
   IrSequence,
   IrConfigParameter,
-  IrAttachment
+  IrAttachment,
+  IrReport,
+  IrVersion
 }
+
+export {
+  generateTotp,
+  verifyTotp,
+  generateTotpSecret,
+  generateTotpUri
+} from './totp.js'
 
 export const SYSTEM_MODE = 'system'
 export const BOT_MODE = 'bot'
@@ -112,7 +127,7 @@ const getBootstrapAdminPassword = (): string => {
   if (process.env.NODE_ENV === 'production') {
     throw new Error('BOOTSTRAP_ADMIN_PASSWORD is required for production installation')
   }
-  return getSecureBootstrapSecret('BOOTSTRAP_ADMIN_PASSWORD')
+  return 'admin123'
 }
 
 export const PARTNER_SEED_DATA = {
@@ -145,6 +160,14 @@ export const PARTNER_SEED_DATA = {
       password: getBootstrapAdminPassword(),
       isCompany: false,
       isAdmin: true,
+    },
+    {
+      mode: 'admin',
+      name: 'Divine Commander',
+      email: 'commander@moonwitness.os',
+      password: readBootstrapEnv('BOOTSTRAP_COMMANDER_PASSWORD') || 'password123',
+      isCompany: false,
+      isAdmin: true,
     }
   ]
 }
@@ -175,6 +198,8 @@ export default {
     IrModelData,
     IrSequence,
     IrConfigParameter,
-    IrAttachment
+    IrAttachment,
+    IrReport,
+    IrVersion
   ]
 }

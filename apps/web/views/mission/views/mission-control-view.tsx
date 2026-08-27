@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Target, AlertTriangle, Info, Globe, ShieldAlert } from "lucide-react"
-import { ContextBlock } from "@core/ui"
+import { ContextBlock } from "@workspace/ui"
 import dynamic from "next/dynamic"
 import "leaflet/dist/leaflet.css"
 

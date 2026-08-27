@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Moon } from "lucide-react"
-import { Modal } from "@core/ui/modal"
-import { ModalTrigger } from "@core/ui"
+import { Modal } from "@workspace/ui"
+import { ModalTrigger } from "@workspace/ui"
 
 export function Interactive3DMoonOrreryModal() {
   const [mounted, setMounted] = useState(false)

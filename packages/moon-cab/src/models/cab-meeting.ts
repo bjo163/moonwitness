@@ -3,6 +3,7 @@ import { Vertex, fields } from '@moon/orm'
 export default class CabMeeting extends Vertex {
   static _name = 'cab.meeting'
   static _description = 'CAB Review Meeting'
+  static _rec_name = 'title'
 
   title = fields.Char({ required: true, size: 180, index: true })
   scheduledFor = fields.DateTime({ required: true, index: true })

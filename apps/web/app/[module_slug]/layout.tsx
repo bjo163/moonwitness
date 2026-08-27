@@ -1,7 +1,6 @@
 import React, { Suspense } from "react"
-import { Navbar } from "@workspace/ui"
-import { NAVIGATION_MESH } from "@workspace/types"
-import { AutoBreadcrumb } from "@core/ui/breadcrumb"
+import { ModuleGuard } from "@workspace/error"
+import { AutoBreadcrumb } from "../../components/layouts/auto-breadcrumb"
 
 export default async function ModuleLayout({
   children,
@@ -19,16 +18,13 @@ export default async function ModuleLayout({
 
   // Standard Public Portal Layout
   return (
-    <>
-      <Suspense fallback={null}>
-        <Navbar navLinks={NAVIGATION_MESH.portal} />
+    <div className="flex min-h-screen flex-col pt-16">
+      <Suspense fallback={<div className="h-6"></div>}>
+        <AutoBreadcrumb className="px-6 pt-6 pb-2" />
       </Suspense>
-      <main className="flex min-h-screen flex-col pt-16">
-        <Suspense fallback={<div className="h-6"></div>}>
-          <AutoBreadcrumb className="px-6 pt-6 pb-2" />
-        </Suspense>
+      <ModuleGuard moduleId={module_slug}>
         {children}
-      </main>
-    </>
+      </ModuleGuard>
+    </div>
   )
 }

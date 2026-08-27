@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { PROPHETIC_EVENTS } from "../../../@core/db/data/prophetic-events.db"
+import { PROPHETIC_EVENTS } from "@/lib/data/prophetic-events.db"
 
 export async function GET() {
   try {

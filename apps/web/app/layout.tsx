@@ -2,15 +2,15 @@ import { Suspense } from "react"
 import { Orbitron, JetBrains_Mono, Geist, Amiri } from "next/font/google"
 
 import "@workspace/ui/globals.css"
-import { Taskbar, PwaRegister, Cosmic3DBackground } from "@core/shell"
-import { LanguageProvider, AudioProvider, ToastProvider } from "@core/contexts"
+import { Navbar, Taskbar, PwaRegister, Cosmic3DBackground } from "../components/shell"
+import { MoonProvider } from "@workspace/state"
 import {
   FlyingPropheticAIWidget,
   OnboardingWizard,
   GlobalTickerWidget,
-} from "@core/widgets"
-import { TacticalToastContainer } from "@core/ui"
-import { CommandPalette, CosmicAudioToggle } from "@workspace/ui"
+  CommandPalette,
+  CosmicAudioToggle,
+} from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
 
 const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" })
@@ -72,29 +72,27 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <LanguageProvider>
-          <ToastProvider>
-            <AudioProvider>
-              <Suspense fallback={null}>
-                <GlobalTickerWidget />
-              </Suspense>
-              <main id="main-content" className="h-full w-full flex-1">
-                {children}
-              </main>
-              <Suspense fallback={null}>
-                <Taskbar />
-              </Suspense>
-              <Suspense fallback={null}>
-                <FlyingPropheticAIWidget />
-              </Suspense>
-              <Suspense fallback={null}>
-                <OnboardingWizard />
-              </Suspense>
-              <PwaRegister />
-            </AudioProvider>
-          </ToastProvider>
-        </LanguageProvider>
-        <TacticalToastContainer />
+        <MoonProvider>
+          <Suspense fallback={null}>
+            <Navbar />
+          </Suspense>
+          <Suspense fallback={null}>
+            <GlobalTickerWidget />
+          </Suspense>
+          <main id="main-content" className="h-full w-full flex-1">
+            {children}
+          </main>
+          <Suspense fallback={null}>
+            <Taskbar />
+          </Suspense>
+          <Suspense fallback={null}>
+            <FlyingPropheticAIWidget />
+          </Suspense>
+          <Suspense fallback={null}>
+            <OnboardingWizard />
+          </Suspense>
+          <PwaRegister />
+        </MoonProvider>
         <CommandPalette />
         <div className="fixed bottom-14 right-4 z-40 hidden sm:block">
           <CosmicAudioToggle />

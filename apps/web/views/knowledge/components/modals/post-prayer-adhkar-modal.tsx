@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { Sparkles } from "lucide-react"
-import { Modal } from "@core/ui/modal"
-import { ModalTrigger } from "@core/ui"
+import { Modal } from "@workspace/ui"
+import { ModalTrigger } from "@workspace/ui"
 
 type DhikrStep = {
   title: string

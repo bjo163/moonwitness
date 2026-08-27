@@ -13,8 +13,8 @@ import {
   Download,
   Maximize2,
 } from "lucide-react"
-import { ContextBlock } from "@core/ui/context-block"
-import { Panel, PanelHeader } from "@core/ui/panel"
+import { ContextBlock } from "@workspace/ui"
+import { Panel, PanelHeader } from "@workspace/ui"
 
 // ── CONSTANTS ────────────────────────────────────────────
 const LAB_CANVAS_HEIGHT = 280

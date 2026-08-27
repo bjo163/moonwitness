@@ -1,20 +1,17 @@
 import { NextResponse } from "next/server"
-import { moonClientInstance } from "@core/store/moon-store"
+import { apiGet } from "@moon/client"
+import type { ScriptureListResponse } from "@workspace/types"
+
 export const dynamic = "force-dynamic"
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    // Fetch all scriptures from the Witness API Gateway
-    const json = await moonClientInstance.request(
-      "GET",
-      "/api/witness/scriptures"
-    )
+    const json = await apiGet<ScriptureListResponse>("/api/witness/scriptures")
 
-    // Map new API shape to what the frontend expects
     return NextResponse.json({
       success: true,
       total: json.scriptures?.length || 0,
-      data: json.scriptures,
+      data: json.scriptures || [],
     })
   } catch (error: any) {
     console.error("Error fetching universal scriptures:", error)

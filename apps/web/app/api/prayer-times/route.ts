@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getDailyPrayerTimes } from "@moon/witness/dist/astronomy/prayer-times.js"
+import { getDailyPrayerTimes } from "@moon/compute"
 
 const CITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
   "Makkah, Saudi Arabia": { lat: 21.3891, lng: 39.8579 },

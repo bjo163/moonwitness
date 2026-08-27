@@ -11,7 +11,7 @@ import {
   Sparkles,
   ShieldCheck,
 } from "lucide-react"
-import { Section, SectionBadge } from "@core/ui"
+import { Section, SectionBadge } from "@workspace/ui"
 
 export function OSMissionControlOverview() {
   const [clockWIB, setClockWIB] = useState("06:50:16 WIB")
@@ -252,7 +252,7 @@ export function OSMissionControlOverview() {
                   </div>
                   <div
                     className="my-1.5 font-mono text-xl font-black tracking-wider text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]"
-                    style={{ color: idx === 3 ? "#00F0FF" : card.color }}
+                    style={{ color: idx === 3 ? "var(--color-cyber-cyan)" : card.color }}
                   >
                     {card.val}
                   </div>

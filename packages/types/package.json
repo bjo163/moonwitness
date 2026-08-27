@@ -6,6 +6,9 @@
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@moon/protocol": "workspace:*"
+  },
   "devDependencies": {
     "@types/react": "^19.2.15",
     "@workspace/typescript-config": "workspace:*",

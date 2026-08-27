@@ -4,8 +4,13 @@
     "paths": {
       "@/*": ["./*"],
       "@workspace/types/*": ["../../packages/types/src/*"],
+      "@workspace/hooks/*": ["../../packages/hooks/src/*"],
+      "@workspace/state/*": ["../../packages/state/src/*"],
+      "@workspace/i18n/*": ["../../packages/i18n/src/*"],
       "@workspace/ui/*": ["../../packages/ui/src/*"],
       "@workspace/ui": ["../../packages/ui/src/index.ts"],
+      "@moon/client": ["../../packages/moon-client/src/index.ts"],
+      "@moon/client/*": ["../../packages/moon-client/src/*"],
       "@moon/time": ["../../packages/moon-time/src/index.ts"]
     },
     "plugins": [

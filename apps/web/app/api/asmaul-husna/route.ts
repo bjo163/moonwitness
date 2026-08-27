@@ -1,21 +1,19 @@
 import { NextResponse } from "next/server"
-import { moonClientInstance } from "@core/store/moon-store"
+import { fetchAsmaulHusna } from "@moon/client"
+
 export const dynamic = "force-dynamic"
 
 export async function GET() {
   try {
-    const json = await moonClientInstance.request(
-      "GET",
-      "/api/witness/asmaul-husna"
-    )
-    const data = json.data || []
+    const json = await fetchAsmaulHusna()
+    const rawNames = json?.names || (json as any)?.data || []
 
-    const processedData = data.map((item: any) => ({
+    const processedData = rawNames.map((item: any) => ({
       id: item.number,
       number: item.number,
       arabic: item.arabic,
-      latin: item.latin,
-      meaning: item.translationId,
+      latin: item.transliteration || item.latin,
+      meaning: item.meaning || item.translationId,
       meaning_en: item.translationEn,
     }))
 

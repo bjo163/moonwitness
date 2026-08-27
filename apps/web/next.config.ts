@@ -1,8 +1,12 @@
 import type { NextConfig } from "next"
+import path from "path"
 import withSerwistInit from "@serwist/next"
 
 if (process.env.WEB_PORT) {
   process.env.PORT = process.env.WEB_PORT
+}
+if (!process.env.NODE_OPTIONS?.includes("--no-deprecation")) {
+  process.env.NODE_OPTIONS = `${process.env.NODE_OPTIONS || ""} --no-deprecation`.trim()
 }
 
 const withSerwist = withSerwistInit({
@@ -12,7 +16,7 @@ const withSerwist = withSerwistInit({
 })
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@workspace/ui", "@moon/witness", "@moon/time"],
+  transpilePackages: ["@workspace/ui", "@moon/compute", "@moon/time"],
 
   images: {
     formats: ["image/avif", "image/webp"],
@@ -57,7 +61,9 @@ const nextConfig: NextConfig = {
     )
     return config
   },
-  turbopack: {},
+  turbopack: {
+    root: path.resolve(__dirname, "../../"),
+  },
 }
 
 export default withSerwist(nextConfig)

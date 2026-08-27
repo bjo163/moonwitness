@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react"
 import { MoonClient } from "@moon/client"
-import { useLanguage, useToast } from "@core/contexts"
-import { useAchievementStore } from "@core/store/achievement-store"
+import { useLanguage, useToast } from "@workspace/state"
+import { useAchievementStore } from "@workspace/state"
 import {
   Shield,
   Sun,

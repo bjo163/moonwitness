@@ -21,6 +21,8 @@ import {
 } from "lucide-react"
 import { NAVIGATION_MESH } from "@workspace/types"
 
+import { APP_PORTS } from "@workspace/types"
+
 export interface CommandPaletteProps {
   isOpen?: boolean
   onClose?: () => void
@@ -30,7 +32,7 @@ export interface CommandPaletteProps {
 export function CommandPalette({
   isOpen: controlledIsOpen,
   onClose: controlledOnClose,
-  commandCenterUrl = "http://localhost:3001",
+  commandCenterUrl = `http://localhost:${APP_PORTS.COMMAND_CENTER}`,
 }: CommandPaletteProps) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState("")
@@ -105,6 +107,31 @@ export function CommandPalette({
     { label: "Surah Al-Mulk (67:1-30)", href: "/knowledge/kitab?surah=67", category: "Scripture Hub" },
   ]
 
+  const matrixModels: CommandItem[] = [
+    { label: "Tasks & Backlog (pj.task)", href: "/matrix/pj.task", category: "Matrix Workspace" },
+    { label: "Projects & Milestones (pj.project)", href: "/matrix/pj.project", category: "Matrix Workspace" },
+    { label: "Support Tickets (hd.ticket)", href: "/matrix/hd.ticket", category: "Matrix Workspace" },
+    { label: "CAB RFC Governance (cab.change)", href: "/matrix/cab.change", category: "Matrix Workspace" },
+    { label: "Background Scheduled Jobs (ir.cron)", href: "/matrix/ir.cron", category: "Matrix Workspace" },
+    { label: "Worker Queue & Jobs (ir.queue.job)", href: "/matrix/ir.queue.job", category: "Matrix Workspace" },
+    { label: "Cron Execution Logs (ir.cron.log)", href: "/matrix/ir.cron.log", category: "Matrix Workspace" },
+    { label: "CRM Outreach Leads (crm.lead)", href: "/matrix/crm.lead", category: "Matrix Workspace" },
+    { label: "Product Catalog (product.template)", href: "/matrix/product.template", category: "Matrix Workspace" },
+    { label: "Warehouses (stock.warehouse)", href: "/matrix/stock.warehouse", category: "Matrix Workspace" },
+    { label: "Inventory Moves (stock.move)", href: "/matrix/stock.move", category: "Matrix Workspace" },
+    { label: "Financial Ledger (account.account)", href: "/matrix/account.account", category: "Matrix Workspace" },
+    { label: "Ethical Cases (mz.case)", href: "/matrix/mz.case", category: "Matrix Workspace" },
+    { label: "AI Conversations (kh.conversation)", href: "/matrix/kh.conversation", category: "Matrix Workspace" },
+    { label: "Operations Log (sg.operation)", href: "/matrix/sg.operation", category: "Matrix Workspace" },
+    { label: "System Telemetry & Requests (px.request)", href: "/matrix/px.request", category: "Matrix Workspace" },
+    { label: "Observatory Cities (geo.city)", href: "/matrix/geo.city", category: "Matrix Workspace" },
+    { label: "Automation Rules (ir.automation)", href: "/matrix/ir.automation", category: "Matrix Workspace" },
+    { label: "Outbound Webhooks (ir.webhook)", href: "/matrix/ir.webhook", category: "Matrix Workspace" },
+    { label: "Webhook Dispatch Logs (ir.webhook.log)", href: "/matrix/ir.webhook.log", category: "Matrix Workspace" },
+    { label: "Report Templates (ir.report)", href: "/matrix/ir.report", category: "Matrix Workspace" },
+    { label: "Dashboard Widgets (ir.dashboard.widget)", href: "/matrix/ir.dashboard.widget", category: "Matrix Workspace" },
+  ]
+
   const hadiths: CommandItem[] = [
     { label: "Shahih Al-Bukhari (7,563 Hadiths)", href: "/knowledge/hadits?book=bukhari", category: "Hadith Compendiums" },
     { label: "Shahih Muslim (3,033 Hadiths)", href: "/knowledge/hadits?book=muslim", category: "Hadith Compendiums" },
@@ -112,7 +139,7 @@ export function CommandPalette({
     { label: "Jami' At-Tirmidzi", href: "/knowledge/hadits?book=tirmidzi", category: "Hadith Compendiums" },
   ]
 
-  const allItems: CommandItem[] = [...portalLinks, ...commandCenterLinks, ...scriptures, ...hadiths]
+  const allItems: CommandItem[] = [...portalLinks, ...commandCenterLinks, ...matrixModels, ...scriptures, ...hadiths]
 
   const filteredItems = filterText
     ? allItems.filter(

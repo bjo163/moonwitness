@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { ExternalLink, ImageOff, ScrollText, ShieldAlert } from "lucide-react"
-import { useMoonStore } from "@core/store/moon-store"
+import { moonClientInstance } from "@moon/client"
 
 type Operation = {
   id: number
@@ -15,7 +15,7 @@ type Operation = {
 }
 
 export function ShootgunPublicView() {
-  const { client } = useMoonStore()
+  const client = moonClientInstance
   const [operations, setOperations] = useState<Operation[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -23,8 +23,8 @@ export function ShootgunPublicView() {
     client
       .model<Operation>("sg.operation")
       .fetch()
-      .then((result) => setOperations(Array.isArray(result) ? result : []))
-      .catch((error) => console.error("Unable to load operations:", error))
+      .then((result: any) => setOperations(Array.isArray(result) ? result : []))
+      .catch((error: any) => console.error("Unable to load operations:", error))
       .finally(() => setLoading(false))
   }, [client])
 
@@ -98,7 +98,7 @@ export function ShootgunPublicView() {
                     <a
                       href={operation.targetUrl}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 text-cyan-300 hover:text-cyan-100"
                     >
                       Target <ExternalLink className="size-3.5" />

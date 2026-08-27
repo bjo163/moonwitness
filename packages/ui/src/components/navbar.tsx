@@ -25,11 +25,13 @@ const EQUALIZER_MOD_FACTOR = 3
 const EQUALIZER_MAX_HEIGHT = 12
 const EQUALIZER_DELAY_STEP_MS = 150
 
+import { APP_PORTS } from "@workspace/types"
+
 export function Navbar({
   navLinks = NAVIGATION_MESH.portal,
   user,
   onLogout,
-  commandCenterUrl = "http://localhost:3001",
+  commandCenterUrl = `http://localhost:${APP_PORTS.COMMAND_CENTER}`,
 }: {
   navLinks?: readonly NavLinkConfig[]
   user?: UserProfile | null
@@ -60,8 +62,6 @@ export function Navbar({
         "hero",
         "observatory",
         "knowledge",
-        "history",
-        "astronomy",
         "analytics",
         "mission",
       ]
@@ -253,7 +253,7 @@ export function Navbar({
                       </Link>
 
                       <a
-                        href="http://localhost:3001/dashboard"
+                        href={`${commandCenterUrl}/dashboard`}
                         onClick={() => setProfileDropdownOpen(false)}
                         className="flex items-center gap-3 rounded-lg px-3 py-2 text-[10px] font-bold text-fuchsia-400 transition-colors hover:bg-fuchsia-500/10 hover:text-fuchsia-300"
                       >
@@ -261,7 +261,7 @@ export function Navbar({
                       </a>
 
                       <a
-                        href="http://localhost:3001/terminal"
+                        href={`${commandCenterUrl}/terminal`}
                         onClick={() => setProfileDropdownOpen(false)}
                         className="flex items-center gap-3 rounded-lg px-3 py-2 text-[10px] font-bold text-emerald-400 transition-colors hover:bg-emerald-500/10 hover:text-emerald-300"
                       >

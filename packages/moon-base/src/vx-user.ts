@@ -15,6 +15,9 @@ export default class VxUser extends Vertex {
   githubUrl = fields.Char({ size: 100 })
   groupsId = fields.Many2many({ comodel: 'vx.role', relation: 'vx_user_vx_role_rel' })
   tokenVersion = fields.Integer({ default: 1 })
+  twoFactorEnabled = fields.Boolean({ default: false, index: true, help: 'Enforce TOTP 2-Factor Authentication on login' })
+  twoFactorSecret = fields.Char({ size: 64, help: 'Base32 encoded TOTP cryptographic secret key' })
+  recoveryCodes = fields.Text({ help: 'JSON array of hashed one-time recovery codes' })
 
   static async beforeSave(modelClass: any, env: any, vals: Record<string, any>, id?: number) {
     if (vals.login && typeof vals.login === 'string') {

@@ -1,0 +1,38 @@
+{
+  "name": "@workspace/state",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@workspace/error": "workspace:*",
+    "@workspace/hooks": "workspace:*",
+    "@workspace/types": "workspace:*",
+    "howler": "^2.2.4",
+    "lucide-react": "^1.27.0",
+    "next-themes": "^0.4.6",
+    "zustand": "^5.0.14"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/howler": "^2.2.13",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@workspace/typescript-config": "workspace:*",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "typescript": "^5"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./stores": "./src/stores/index.ts",
+    "./providers": "./src/providers/index.ts",
+    "./bus": "./src/bus/index.ts"
+  }
+}

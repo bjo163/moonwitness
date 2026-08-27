@@ -4,10 +4,12 @@ export type UserRole = "superadmin" | "admin" | "moderator" | "editor" | "schola
 export type UserStatus = "active" | "pending" | "disabled" | "banned"
 
 export interface UserProfile {
+  id?: string | number
   name?: string
   email?: string
   title?: string
   role?: UserRole | string
+  avatar?: string
   avatarUrl?: string
   level?: number
   clearanceLevel?: number

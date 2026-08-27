@@ -35,6 +35,9 @@ importers:
 
   apps/api:
     dependencies:
+      '@moon/account':
+        specifier: workspace:*
+        version: link:../../packages/moon-account
       '@moon/base':
         specifier: workspace:*
         version: link:../../packages/moon-base
@@ -44,9 +47,24 @@ importers:
       '@moon/client':
         specifier: workspace:*
         version: link:../../packages/moon-client
+      '@moon/crm':
+        specifier: workspace:*
+        version: link:../../packages/moon-crm
+      '@moon/cron':
+        specifier: workspace:*
+        version: link:../../packages/moon-cron
+      '@moon/geo':
+        specifier: workspace:*
+        version: link:../../packages/moon-geo
+      '@moon/helpdesk':
+        specifier: workspace:*
+        version: link:../../packages/moon-helpdesk
       '@moon/khidra':
         specifier: workspace:*
         version: link:../../packages/moon-khidra
+      '@moon/mail':
+        specifier: workspace:*
+        version: link:../../packages/moon-mail
       '@moon/mizan':
         specifier: workspace:*
         version: link:../../packages/moon-mizan
@@ -56,12 +74,21 @@ importers:
       '@moon/performance':
         specifier: workspace:*
         version: link:../../packages/moon-performance
+      '@moon/product':
+        specifier: workspace:*
+        version: link:../../packages/moon-product
+      '@moon/project':
+        specifier: workspace:*
+        version: link:../../packages/moon-project
       '@moon/server':
         specifier: workspace:*
         version: link:../../packages/moon-server
       '@moon/shootgun':
         specifier: workspace:*
         version: link:../../packages/moon-shootgun
+      '@moon/stock':
+        specifier: workspace:*
+        version: link:../../packages/moon-stock
       '@moon/witness':
         specifier: workspace:*
         version: link:../../packages/moon-witness
@@ -105,6 +132,9 @@ importers:
       '@moon/client':
         specifier: workspace:*
         version: link:../../packages/moon-client
+      '@moon/compute':
+        specifier: workspace:*
+        version: link:../../packages/moon-compute
       '@moon/khidra':
         specifier: workspace:*
         version: link:../../packages/moon-khidra
@@ -120,6 +150,18 @@ importers:
       '@workspace/auto-avatar':
         specifier: workspace:*
         version: link:../../packages/auto-avatar
+      '@workspace/error':
+        specifier: workspace:*
+        version: link:../../packages/error
+      '@workspace/hooks':
+        specifier: workspace:*
+        version: link:../../packages/hooks
+      '@workspace/i18n':
+        specifier: workspace:*
+        version: link:../../packages/i18n
+      '@workspace/state':
+        specifier: workspace:*
+        version: link:../../packages/state
       '@workspace/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -227,12 +269,12 @@ importers:
       '@moon/client':
         specifier: workspace:*
         version: link:../../packages/moon-client
+      '@moon/compute':
+        specifier: workspace:*
+        version: link:../../packages/moon-compute
       '@moon/khidra':
         specifier: workspace:*
         version: link:../../packages/moon-khidra
-      '@moon/server':
-        specifier: workspace:*
-        version: link:../../packages/moon-server
       '@moon/time':
         specifier: workspace:*
         version: link:../../packages/moon-time
@@ -248,6 +290,18 @@ importers:
       '@workspace/auto-avatar':
         specifier: workspace:*
         version: link:../../packages/auto-avatar
+      '@workspace/error':
+        specifier: workspace:*
+        version: link:../../packages/error
+      '@workspace/hooks':
+        specifier: workspace:*
+        version: link:../../packages/hooks
+      '@workspace/i18n':
+        specifier: workspace:*
+        version: link:../../packages/i18n
+      '@workspace/state':
+        specifier: workspace:*
+        version: link:../../packages/state
       '@workspace/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -370,6 +424,30 @@ importers:
         specifier: ^5
         version: 5.9.3
 
+  packages/error:
+    devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.19.41
+      '@types/react':
+        specifier: ^19
+        version: 19.2.15
+      '@types/react-dom':
+        specifier: ^19
+        version: 19.2.3(@types/react@19.2.15)
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      react:
+        specifier: 19.2.4
+        version: 19.2.4
+      react-dom:
+        specifier: 19.2.4
+        version: 19.2.4(react@19.2.4)
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+
   packages/eslint-config:
     devDependencies:
       '@eslint/js':
@@ -415,6 +493,50 @@ importers:
         specifier: ^8.60.0
         version: 8.60.0(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.3)
 
+  packages/hooks:
+    dependencies:
+      '@moon/compute':
+        specifier: workspace:*
+        version: link:../moon-compute
+      '@workspace/types':
+        specifier: workspace:*
+        version: link:../types
+    devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.19.41
+      '@types/react':
+        specifier: ^19
+        version: 19.2.15
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      react:
+        specifier: 19.2.4
+        version: 19.2.4
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+
+  packages/i18n:
+    dependencies:
+      '@workspace/types':
+        specifier: workspace:*
+        version: link:../types
+    devDependencies:
+      '@types/react':
+        specifier: ^19
+        version: 19.2.15
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      react:
+        specifier: 19.2.4
+        version: 19.2.4
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+
   packages/moon-account:
     dependencies:
       '@moon/base':
@@ -455,6 +577,9 @@ importers:
       '@moon/orm':
         specifier: workspace:*
         version: link:../moon-orm
+      '@moon/project':
+        specifier: workspace:*
+        version: link:../moon-project
       '@moon/server':
         specifier: workspace:*
         version: link:../moon-server
@@ -474,6 +599,9 @@ importers:
 
   packages/moon-client:
     dependencies:
+      '@moon/protocol':
+        specifier: workspace:*
+        version: link:../moon-protocol
       '@workspace/types':
         specifier: workspace:*
         version: link:../types
@@ -481,14 +609,36 @@ importers:
         specifier: ^1.7.9
         version: 1.18.1
     devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.19.41
       '@types/react':
         specifier: ^19
         version: 19.2.15
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
       react:
         specifier: 19.2.4
         version: 19.2.4
       typescript:
         specifier: ^5.5.4
+        version: 5.9.3
+
+  packages/moon-compute:
+    dependencies:
+      adhan:
+        specifier: ^4.4.4
+        version: 4.4.4
+    devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.19.41
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      typescript:
+        specifier: ^5
         version: 5.9.3
 
   packages/moon-crm:
@@ -507,6 +657,25 @@ importers:
         specifier: ^5.5.4
         version: 5.9.3
 
+  packages/moon-cron:
+    dependencies:
+      '@moon/base':
+        specifier: workspace:*
+        version: link:../moon-base
+      '@moon/orm':
+        specifier: workspace:*
+        version: link:../moon-orm
+    devDependencies:
+      '@types/node':
+        specifier: ^20.19.41
+        version: 20.19.41
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      typescript:
+        specifier: ^5.5.4
+        version: 5.9.3
+
   packages/moon-geo:
     dependencies:
       '@moon/base':
@@ -519,6 +688,22 @@ importers:
       '@types/node':
         specifier: ^20.17.0
         version: 20.19.41
+      typescript:
+        specifier: ^5.5.4
+        version: 5.9.3
+
+  packages/moon-helpdesk:
+    dependencies:
+      '@moon/base':
+        specifier: workspace:*
+        version: link:../moon-base
+      '@moon/orm':
+        specifier: workspace:*
+        version: link:../moon-orm
+      '@moon/project':
+        specifier: workspace:*
+        version: link:../moon-project
+    devDependencies:
       typescript:
         specifier: ^5.5.4
         version: 5.9.3
@@ -622,6 +807,35 @@ importers:
         specifier: ^5.5.4
         version: 5.9.3
 
+  packages/moon-project:
+    dependencies:
+      '@moon/base':
+        specifier: workspace:*
+        version: link:../moon-base
+      '@moon/orm':
+        specifier: workspace:*
+        version: link:../moon-orm
+    devDependencies:
+      typescript:
+        specifier: ^5.5.4
+        version: 5.9.3
+
+  packages/moon-protocol:
+    dependencies:
+      zod:
+        specifier: ^3.25.67
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.19.41
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+
   packages/moon-server:
     dependencies:
       '@moon/base':
@@ -630,6 +844,9 @@ importers:
       '@moon/orm':
         specifier: workspace:*
         version: link:../moon-orm
+      '@moon/protocol':
+        specifier: workspace:*
+        version: link:../moon-protocol
       bcryptjs:
         specifier: ^3.0.2
         version: 3.0.3
@@ -699,6 +916,15 @@ importers:
 
   packages/moon-testing:
     dependencies:
+      '@moon/compute':
+        specifier: workspace:*
+        version: link:../moon-compute
+      '@moon/protocol':
+        specifier: workspace:*
+        version: link:../moon-protocol
+      '@workspace/error':
+        specifier: workspace:*
+        version: link:../error
       '@workspace/types':
         specifier: workspace:*
         version: link:../types
@@ -724,6 +950,9 @@ importers:
       '@moon/cache':
         specifier: workspace:*
         version: link:../moon-cache
+      '@moon/compute':
+        specifier: workspace:*
+        version: link:../moon-compute
       '@moon/orm':
         specifier: workspace:*
         version: link:../moon-orm
@@ -747,7 +976,60 @@ importers:
         specifier: ^5.0.0
         version: 5.9.3
 
+  packages/state:
+    dependencies:
+      '@workspace/error':
+        specifier: workspace:*
+        version: link:../error
+      '@workspace/hooks':
+        specifier: workspace:*
+        version: link:../hooks
+      '@workspace/types':
+        specifier: workspace:*
+        version: link:../types
+      howler:
+        specifier: ^2.2.4
+        version: 2.2.4
+      lucide-react:
+        specifier: ^1.27.0
+        version: 1.27.0(react@19.2.4)
+      next-themes:
+        specifier: ^0.4.6
+        version: 0.4.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      zustand:
+        specifier: ^5.0.14
+        version: 5.0.14(@types/react@19.2.15)(immer@11.1.15)(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
+    devDependencies:
+      '@types/howler':
+        specifier: ^2.2.13
+        version: 2.2.13
+      '@types/node':
+        specifier: ^20
+        version: 20.19.41
+      '@types/react':
+        specifier: ^19
+        version: 19.2.15
+      '@types/react-dom':
+        specifier: ^19
+        version: 19.2.3(@types/react@19.2.15)
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      react:
+        specifier: 19.2.4
+        version: 19.2.4
+      react-dom:
+        specifier: 19.2.4
+        version: 19.2.4(react@19.2.4)
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+
   packages/types:
+    dependencies:
+      '@moon/protocol':
+        specifier: workspace:*
+        version: link:../moon-protocol
     devDependencies:
       '@types/react':
         specifier: ^19.2.15
@@ -766,12 +1048,27 @@ importers:
       '@base-ui/react':
         specifier: ^1.6.0
         version: 1.6.0(@date-fns/tz@1.5.0)(@types/react@19.2.15)(date-fns@4.4.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@moon/client':
+        specifier: workspace:*
+        version: link:../moon-client
       '@shadcn/react':
         specifier: ^0.2.1
         version: 0.2.1(@types/react@19.2.15)(react@19.2.4)
+      '@workspace/error':
+        specifier: workspace:*
+        version: link:../error
+      '@workspace/hooks':
+        specifier: workspace:*
+        version: link:../hooks
+      '@workspace/state':
+        specifier: workspace:*
+        version: link:../state
       '@workspace/types':
         specifier: workspace:*
         version: link:../types
+      ai:
+        specifier: ^3.4.33
+        version: 3.4.33(react@19.2.4)(sswr@2.2.0(svelte@5.56.8(@typescript-eslint/types@8.60.0)))(svelte@5.56.8(@typescript-eslint/types@8.60.0))(vue@3.5.40(typescript@5.9.3))(zod@4.4.3)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -787,9 +1084,15 @@ importers:
       embla-carousel-react:
         specifier: ^8.6.0
         version: 8.6.0(react@19.2.4)
+      html-to-image:
+        specifier: ^1.11.13
+        version: 1.11.13
       input-otp:
         specifier: ^1.4.2
         version: 1.4.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      leaflet:
+        specifier: ^1.9.4
+        version: 1.9.4
       lucide-react:
         specifier: ^1.27.0
         version: 1.27.0(react@19.2.4)
@@ -808,6 +1111,9 @@ importers:
       react-dom:
         specifier: 19.2.4
         version: 19.2.4(react@19.2.4)
+      react-leaflet:
+        specifier: ^5.0.0
+        version: 5.0.0(leaflet@1.9.4)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react-resizable-panels:
         specifier: ^4.12.2
         version: 4.12.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -833,6 +1139,9 @@ importers:
       '@turbo/gen':
         specifier: ^2.9.15
         version: 2.9.15(@types/node@20.19.41)
+      '@types/leaflet':
+        specifier: ^1.9.21
+        version: 1.9.21
       '@types/node':
         specifier: ^20
         version: 20.19.41
@@ -6373,6 +6682,15 @@ snapshots:
     optionalDependencies:
       zod: 3.25.76
 
+  '@ai-sdk/provider-utils@1.0.22(zod@4.4.3)':
+    dependencies:
+      '@ai-sdk/provider': 0.0.26
+      eventsource-parser: 1.1.2
+      nanoid: 3.3.12
+      secure-json-parse: 2.7.0
+    optionalDependencies:
+      zod: 4.4.3
+
   '@ai-sdk/provider@0.0.24':
     dependencies:
       json-schema: 0.4.0
@@ -6391,6 +6709,16 @@ snapshots:
       react: 19.2.4
       zod: 3.25.76
 
+  '@ai-sdk/react@0.0.70(react@19.2.4)(zod@4.4.3)':
+    dependencies:
+      '@ai-sdk/provider-utils': 1.0.22(zod@4.4.3)
+      '@ai-sdk/ui-utils': 0.0.50(zod@4.4.3)
+      swr: 2.4.2(react@19.2.4)
+      throttleit: 2.1.0
+    optionalDependencies:
+      react: 19.2.4
+      zod: 4.4.3
+
   '@ai-sdk/solid@0.0.54(zod@3.25.76)':
     dependencies:
       '@ai-sdk/provider-utils': 1.0.22(zod@3.25.76)
@@ -6398,10 +6726,27 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
+  '@ai-sdk/solid@0.0.54(zod@4.4.3)':
+    dependencies:
+      '@ai-sdk/provider-utils': 1.0.22(zod@4.4.3)
+      '@ai-sdk/ui-utils': 0.0.50(zod@4.4.3)
+    transitivePeerDependencies:
+      - zod
+
   '@ai-sdk/svelte@0.0.57(svelte@5.56.8(@typescript-eslint/types@8.60.0))(zod@3.25.76)':
     dependencies:
       '@ai-sdk/provider-utils': 1.0.22(zod@3.25.76)
       '@ai-sdk/ui-utils': 0.0.50(zod@3.25.76)
+      sswr: 2.2.0(svelte@5.56.8(@typescript-eslint/types@8.60.0))
+    optionalDependencies:
+      svelte: 5.56.8(@typescript-eslint/types@8.60.0)
+    transitivePeerDependencies:
+      - zod
+
+  '@ai-sdk/svelte@0.0.57(svelte@5.56.8(@typescript-eslint/types@8.60.0))(zod@4.4.3)':
+    dependencies:
+      '@ai-sdk/provider-utils': 1.0.22(zod@4.4.3)
+      '@ai-sdk/ui-utils': 0.0.50(zod@4.4.3)
       sswr: 2.2.0(svelte@5.56.8(@typescript-eslint/types@8.60.0))
     optionalDependencies:
       svelte: 5.56.8(@typescript-eslint/types@8.60.0)
@@ -6418,10 +6763,30 @@ snapshots:
     optionalDependencies:
       zod: 3.25.76
 
+  '@ai-sdk/ui-utils@0.0.50(zod@4.4.3)':
+    dependencies:
+      '@ai-sdk/provider': 0.0.26
+      '@ai-sdk/provider-utils': 1.0.22(zod@4.4.3)
+      json-schema: 0.4.0
+      secure-json-parse: 2.7.0
+      zod-to-json-schema: 3.25.2(zod@4.4.3)
+    optionalDependencies:
+      zod: 4.4.3
+
   '@ai-sdk/vue@0.0.59(vue@3.5.40(typescript@5.9.3))(zod@3.25.76)':
     dependencies:
       '@ai-sdk/provider-utils': 1.0.22(zod@3.25.76)
       '@ai-sdk/ui-utils': 0.0.50(zod@3.25.76)
+      swrv: 1.2.0(vue@3.5.40(typescript@5.9.3))
+    optionalDependencies:
+      vue: 3.5.40(typescript@5.9.3)
+    transitivePeerDependencies:
+      - zod
+
+  '@ai-sdk/vue@0.0.59(vue@3.5.40(typescript@5.9.3))(zod@4.4.3)':
+    dependencies:
+      '@ai-sdk/provider-utils': 1.0.22(zod@4.4.3)
+      '@ai-sdk/ui-utils': 0.0.50(zod@4.4.3)
       swrv: 1.2.0(vue@3.5.40(typescript@5.9.3))
     optionalDependencies:
       vue: 3.5.40(typescript@5.9.3)
@@ -8370,6 +8735,30 @@ snapshots:
       sswr: 2.2.0(svelte@5.56.8(@typescript-eslint/types@8.60.0))
       svelte: 5.56.8(@typescript-eslint/types@8.60.0)
       zod: 3.25.76
+    transitivePeerDependencies:
+      - solid-js
+      - vue
+
+  ai@3.4.33(react@19.2.4)(sswr@2.2.0(svelte@5.56.8(@typescript-eslint/types@8.60.0)))(svelte@5.56.8(@typescript-eslint/types@8.60.0))(vue@3.5.40(typescript@5.9.3))(zod@4.4.3):
+    dependencies:
+      '@ai-sdk/provider': 0.0.26
+      '@ai-sdk/provider-utils': 1.0.22(zod@4.4.3)
+      '@ai-sdk/react': 0.0.70(react@19.2.4)(zod@4.4.3)
+      '@ai-sdk/solid': 0.0.54(zod@4.4.3)
+      '@ai-sdk/svelte': 0.0.57(svelte@5.56.8(@typescript-eslint/types@8.60.0))(zod@4.4.3)
+      '@ai-sdk/ui-utils': 0.0.50(zod@4.4.3)
+      '@ai-sdk/vue': 0.0.59(vue@3.5.40(typescript@5.9.3))(zod@4.4.3)
+      '@opentelemetry/api': 1.9.0
+      eventsource-parser: 1.1.2
+      json-schema: 0.4.0
+      jsondiffpatch: 0.6.0
+      secure-json-parse: 2.7.0
+      zod-to-json-schema: 3.25.2(zod@4.4.3)
+    optionalDependencies:
+      react: 19.2.4
+      sswr: 2.2.0(svelte@5.56.8(@typescript-eslint/types@8.60.0))
+      svelte: 5.56.8(@typescript-eslint/types@8.60.0)
+      zod: 4.4.3
     transitivePeerDependencies:
       - solid-js
       - vue
@@ -11633,7 +12022,6 @@ snapshots:
   zod-to-json-schema@3.25.2(zod@4.4.3):
     dependencies:
       zod: 4.4.3
-    optional: true
 
   zod-validation-error@4.0.2(zod@4.4.3):
     dependencies:

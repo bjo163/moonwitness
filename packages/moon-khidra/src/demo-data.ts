@@ -1,0 +1,119 @@
+import { createCtx, getModel, SUPERUSER_ID } from '@moon/orm'
+
+export async function loadDemoData() {
+  const Conversation = getModel('kh.conversation')
+  const Message = getModel('kh.message')
+  const IrAutomation = getModel('ir.automation')
+  const IrWebhook = getModel('ir.webhook')
+  const IrWebhookLog = getModel('ir.webhook.log')
+
+  if (!Conversation || !Message) return
+
+  const env = createCtx(SUPERUSER_ID, {}, getModel)
+
+  const demoConversations = [
+    {
+      sessionId: 'demo-session-spiritual-routine',
+      title: 'Balancing Spiritual Routine with High-Tempo Space Research',
+      messages: [
+        {
+          role: 'user',
+          content: 'Bagaimana cara menjaga konsistensi wirid harian dan shalat malam saat jadwal observasi hilal dan riset astronomi berlangsung padat di malam hari?'
+        },
+        {
+          role: 'model',
+          content: 'Observasi keteraturan ciptaan Allah di langit malam itu sendiri adalah bentuk tafakkur yang bernilai ibadah agung (QS Ali Imran: 190-191). Anda dapat menggabungkan dzikir lisan saat mengamati instrumen, dan membagi waktu istirahat secara proporsional agar qiyamul lail tetap terlaksana walau dua rakaat ringkas.'
+        }
+      ]
+    },
+    {
+      sessionId: 'demo-session-prophetic-diplomacy',
+      title: 'Prophetic Diplomacy: Insights from Treaty of Hudaybiyyah',
+      messages: [
+        {
+          role: 'user',
+          content: 'Pelajaran apa yang dapat diambil dari Perjanjian Hudaibiyah terkait resolusi konflik dan negosiasi strategis?'
+        },
+        {
+          role: 'model',
+          content: 'Perjanjian Hudaibiyah mengajarkan pentingnya visi jangka panjang (strategic patience), fleksibilitas dalam klausul redaksional demi maslahat substansial, serta komitmen penuh terhadap perdamaian (Fathan Mubina).'
+        }
+      ]
+    }
+  ]
+
+  for (const c of demoConversations) {
+    const convRows = await Conversation.fetch(Conversation, env, [['sessionId', '=', c.sessionId]])
+    let convId: number
+    if (!convRows.length) {
+      const row = await Conversation.spawn(Conversation, env, {
+        sessionId: c.sessionId,
+        title: c.title,
+        messageCount: c.messages.length,
+        lastActivityAt: new Date().toISOString()
+      })
+      convId = row.id as number
+    } else {
+      convId = convRows[0].id as number
+    }
+
+    const msgRows = await Message.fetch(Message, env, [['conversationId', '=', convId]])
+    if (!msgRows.length) {
+      for (const m of c.messages) {
+        await Message.spawn(Message, env, {
+          conversationId: convId,
+          role: m.role,
+          content: m.content,
+          tokenCount: Math.round(m.content.length / 4)
+        })
+      }
+    }
+  }
+
+  // Seed sample automation rules
+  if (IrAutomation) {
+    await (IrAutomation as any).spawn(IrAutomation, env, {
+      name: 'Auto-Schedule SLA Review on Critical Ticket',
+      model: 'hd.ticket',
+      trigger: 'on_create',
+      domain: JSON.stringify({ priority: 'critical' }),
+      actionType: 'create_activity',
+      actionData: JSON.stringify({ summary: 'Emergency SLA Triage Required (2h window)' }),
+      active: true,
+    })
+
+    await (IrAutomation as any).spawn(IrAutomation, env, {
+      name: 'Broadcast CAB RFC Approval to Outbound Mesh',
+      model: 'cab.change',
+      trigger: 'on_update',
+      domain: JSON.stringify({ status: 'approved' }),
+      actionType: 'enqueue_job',
+      actionData: JSON.stringify({ jobName: 'Dispatch RFC Approved Webhook', queueName: 'automations' }),
+      active: true,
+    })
+  }
+
+  // Seed sample webhook & log
+  if (IrWebhook && IrWebhookLog) {
+    const hook = await (IrWebhook as any).spawn(IrWebhook, env, {
+      name: 'Cosmic Council Security Dispatcher',
+      url: 'https://security.moonwitness.org/api/hooks/telemetry',
+      eventTrigger: 'record.created',
+      active: true,
+    })
+
+    if (hook) {
+      await (IrWebhookLog as any).spawn(IrWebhookLog, env, {
+        webhookId: hook.id,
+        event: 'ticket.created',
+        status: 'success',
+        responseCode: 200,
+        durationMs: 38.4,
+        payload: JSON.stringify({ event: 'ticket.created', id: 104, priority: 'high' }),
+        responseBody: '{"acknowledged": true, "receiptId": "MW-SEC-991"}',
+      })
+    }
+  }
+
+  console.log('[moon-khidra] Demo data loaded: Conversations, Automations, and Webhook logs')
+}

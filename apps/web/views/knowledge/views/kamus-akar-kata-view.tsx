@@ -1,6 +1,6 @@
 "use client"
 
-import { ContextBlock } from "@core/ui"
+import { ContextBlock } from "@workspace/ui"
 import { QuranRootMatrix } from "@workspace/ui"
 
 export function KamusAkarKataView() {

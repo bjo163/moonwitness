@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { THEME_TOKENS } from "@core/tokens/theme-tokens"
+import { THEME_TOKENS } from "@workspace/ui"
 import {
   BookOpen,
   Orbit,
@@ -12,8 +12,8 @@ import {
   Globe,
   Cpu,
 } from "lucide-react"
-import { Panel } from "@core/ui"
-import { Section, SectionBadge } from "@core/ui"
+import { Panel } from "@workspace/ui"
+import { Section, SectionBadge } from "@workspace/ui"
 
 export function MoonwitnessKnowledgeFramework() {
   const fw = THEME_TOKENS.framework

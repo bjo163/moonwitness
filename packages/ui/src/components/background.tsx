@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers -- Three.js procedural spatial and geometric animations rely on numerical coordinates and timing constants */
 "use client"
+/* eslint-disable @typescript-eslint/no-magic-numbers -- Three.js procedural spatial and geometric animations rely on numerical coordinates and timing constants */
 
 import React, { useEffect, useRef } from "react"
 

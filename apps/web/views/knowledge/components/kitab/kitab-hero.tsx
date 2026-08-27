@@ -2,7 +2,7 @@
 
 import React from "react"
 import { BookOpen, Book, Star, Globe2, Network, BrainCircuit, Play, Pause } from "lucide-react"
-import { useGlobalAudio } from "@core/contexts/audio-context"
+import { useGlobalAudio } from "@workspace/state"
 
 interface KitabHeroProps {
   totalScriptures: number

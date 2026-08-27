@@ -21,7 +21,11 @@ export function AutoAvatar({ seed, size = 40, className = "" }: AutoAvatarProps)
         hairColor: ["000000", "1e293b", "ffffff", "d946ef", "0891b2"], // Black, gray, white, or dyed cyan/magenta
         radius: 50,
       })
-      return avatar.toString() 
+      const svgStr = avatar.toString()
+      // Strip any malicious script/event handlers
+      return svgStr
+        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+        .replace(/\bon\w+\s*=\s*(?:'[^']*'|"[^"]*"|[^\s>]+)/gi, "")
     } catch (e) {
       console.error("Failed to generate avatar:", e)
       return ""

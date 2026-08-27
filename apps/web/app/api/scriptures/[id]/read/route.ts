@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { moonClientInstance } from "@core/store/moon-store"
+import { apiGet } from "@moon/client"
 
 export const dynamic = "force-dynamic"
 
@@ -12,8 +12,7 @@ export async function GET(
     const bookId = searchParams.get("book") || "1" // Default to book 1
     const { id } = await params
 
-    const json = await moonClientInstance.request(
-      "GET",
+    const json = await apiGet<any>(
       `/api/witness/quran/surah?number=${bookId}`
     )
 

@@ -10,8 +10,8 @@ import {
   Trash2,
   X,
 } from "lucide-react"
-import { ContextBlock } from "@core/ui"
-import { useMoonStore } from "@core/store/moon-store"
+import { ContextBlock } from "@workspace/ui"
+import { moonClientInstance } from "@moon/client"
 
 type Operation = {
   id: number
@@ -45,8 +45,8 @@ const emptyOperation = {
   verseIds: [] as number[],
 }
 
-export function ErpShootgunView() {
-  const { client } = useMoonStore()
+export function ERPShootgunView() {
+  const client = moonClientInstance
   const [operations, setOperations] = useState<Operation[]>([])
   const [verses, setVerses] = useState<Verse[]>([])
   const [scriptures, setScriptures] = useState<Scripture[]>([])
@@ -204,7 +204,7 @@ export function ErpShootgunView() {
                         <a
                           href={operation.targetUrl}
                           target="_blank"
-                          rel="noreferrer"
+                          rel="noopener noreferrer"
                           className="p-1.5 text-slate-400 hover:text-cyan-300"
                           title="Open target"
                         >

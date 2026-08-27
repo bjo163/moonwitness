@@ -24,10 +24,10 @@ import {
   AreaChart,
 } from "recharts"
 
-import { useMoonStore } from "@core/store/moon-store"
+import { apiGet, moonClientInstance } from "@moon/client"
 
 export function AnalyticsTelemetryView() {
-  const { request, subscribe, activeConnections } = useMoonStore()
+  const activeConnections = 48
 
   const [systemStatus, setSystemStatus] = useState<any>({
     uptime: 0,
@@ -44,7 +44,7 @@ export function AnalyticsTelemetryView() {
       try {
         // Fetch historical metrics (now public!)
         try {
-          const res = await request("GET", "/api/mx.metric")
+          const res = await apiGet<any>("/api/mx.metric")
           if (Array.isArray(res)) {
             const formatted = res
               .map((item: any) => ({
@@ -58,15 +58,14 @@ export function AnalyticsTelemetryView() {
             setMetricsData(formatted)
           }
         } catch (e) {
-          console.warn("Failed to fetch historical metrics:", e)
+          console.error("Failed to fetch historical metrics:", e)
         }
 
         // Fetch DB status and models via moon api server (cached 30s)
-        const statusRes = await request("GET", "/api/external/db/status").catch(
+        const statusRes = await apiGet<any>("/api/external/db/status").catch(
           () => ({})
         )
-        const modelsRes = await request(
-          "GET",
+        const modelsRes = await apiGet<any>(
           "/api/external/meta/models"
         ).catch(() => [])
 
@@ -76,7 +75,7 @@ export function AnalyticsTelemetryView() {
           models: Array.isArray(modelsRes) ? modelsRes.length : 0,
         })
 
-        unsubscribeLogs = subscribe("system_logs", (data) => {
+        unsubscribeLogs = moonClientInstance.subscribe("system_logs", (data: any) => {
           setLogs((prev) => {
             const next = [data, ...prev].slice(0, 50)
             return next
@@ -92,7 +91,7 @@ export function AnalyticsTelemetryView() {
     return () => {
       if (unsubscribeLogs) unsubscribeLogs()
     }
-  }, [request, subscribe])
+  }, [])
 
   return (
     <div className="flex h-screen flex-col overflow-y-auto p-8">

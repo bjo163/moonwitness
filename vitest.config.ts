@@ -17,6 +17,10 @@ export default defineConfig({
       '@moon/crm': path.resolve(__dirname, 'packages/moon-crm/src/index.ts'),
       '@moon/geo': path.resolve(__dirname, 'packages/moon-geo/src/index.ts'),
       '@moon/server': path.resolve(__dirname, 'packages/moon-server/src/index.ts'),
+      '@moon/protocol': path.resolve(__dirname, 'packages/moon-protocol/src/index.ts'),
+      '@moon/compute': path.resolve(__dirname, 'packages/moon-compute/src/index.ts'),
+      '@workspace/error': path.resolve(__dirname, 'packages/error/src/index.ts'),
+      '@workspace/types': path.resolve(__dirname, 'packages/types/src/index.ts'),
     }
   }
 })

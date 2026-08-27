@@ -1,4 +1,14 @@
-# @moon/performance
+# ◈ @moon/performance
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  PACKAGE:        @moon/performance                                       ║
+║  SYSTEM VERSION: MoonWitness OS V9.0 (Divine Operating System Matrix)    ║
+║  PKG VERSION:    9.0.0                                                   ║
+║  CLASSIFICATION: TIER 3 — TELEMETRY & SYSTEM PERFORMANCE ANALYTICS       ║
+║  STATUS:         ████████████████████████████████ ACTIVE (SOVEREIGN)     ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
 
 Performance monitoring and metrics tracking addon for Moonwitness Engine.
 
@@ -194,6 +204,22 @@ await PxRequest.search(PxRequest, env, [['timestamp', '<', cutoff.toISOString()]
   .then(records => PxRequest.unlink(PxRequest, env, records.map(r => r.id)))
 ```
 
-## License
+---
 
-Part of Moonwitness monorepo.
+## 🛡️ Architectural Boundaries
+- Belongs to **Tier 3 (Telemetry & Analytics Engine)**.
+- Consumes `@moon/orm` and `@moon/server`.
+
+---
+
+## 🧪 Verification
+```bash
+pnpm --filter @moon/performance typecheck
+```
+
+## ??? View Configuration
+
+This package exports declarative view manifests for the **Cosmic Matrix Engine** (src/views.ts):
+- Introspected automatically by `@moon/server` at `GET /api/meta/model/:name`
+- Rendered dynamically in Command Center via `<CosmicModelWorkspace model="..." />`
+- Supported view modes: Kanban Pipeline, Sortable Table, Responsive Form Modal, and Activity Chatter.

@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { MapPin } from "lucide-react"
-import { ContextBlock } from "@core/ui"
+import { ContextBlock } from "@workspace/ui"
 
 type SirahEvent = {
   yearStr: string

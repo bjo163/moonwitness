@@ -21,35 +21,35 @@ import {
   DollarSign,
 } from "lucide-react"
 
-import { useOSStore } from "@core/store/os-store"
+import { useOSStore } from "@workspace/state"
 
 // Monitoring Widgets (Categorized)
-import { GlobalStatusWidget } from "@core/widgets/monitoring/global-status-widget"
-import { RootCauseWidget } from "@core/widgets/monitoring/root-cause-widget"
-import { LiveWorldMapWidget } from "@core/widgets/monitoring/map/live-world-map-widget"
-import { PlanetarySeismicWidget } from "@core/widgets/monitoring/seismic/planetary-seismic-widget"
-import { AviationTrafficWidget } from "@core/widgets/monitoring/aviation/aviation-traffic-widget"
-import { SpaceWeatherWidget } from "@core/widgets/monitoring/space-weather/space-weather-widget"
-import { GlobalPrayerNetworkWidget } from "@core/widgets/monitoring/spiritual/global-prayer-network-widget"
-import { MaritimeTrafficWidget } from "@core/widgets/monitoring/maritime/maritime-traffic-widget"
-import { GlobalClimateWidget } from "@core/widgets/monitoring/climate/global-climate-widget"
-import { FinancialMarketsWidget } from "@core/widgets/monitoring/economy/financial-markets-widget"
+import { GlobalStatusWidget } from "@workspace/ui"
+import { RootCauseWidget } from "@workspace/ui"
+import { LiveWorldMapWidget } from "@workspace/ui"
+import { PlanetarySeismicWidget } from "@workspace/ui"
+import { AviationTrafficWidget } from "@workspace/ui"
+import { SpaceWeatherWidget } from "@workspace/ui"
+import { GlobalPrayerNetworkWidget } from "@workspace/ui"
+import { MaritimeTrafficWidget } from "@workspace/ui"
+import { GlobalClimateWidget } from "@workspace/ui"
+import { FinancialMarketsWidget } from "@workspace/ui"
 
 // Humanity & Cyber Widgets
-import { GlobalPopulationWidget } from "@core/widgets/monitoring/demographic/global-population-widget"
-import { DigitalConsciousnessWidget } from "@core/widgets/monitoring/internet/digital-consciousness-widget"
-import { TrendingTopicsWidget } from "@core/widgets/monitoring/internet/trending-topics-widget"
-import { SocialMediaTrendsWidget } from "@core/widgets/monitoring/internet/social-media-trends-widget"
-import { CyberThreatMonitorWidget } from "@core/widgets/monitoring/cyber/cyber-threat-monitor-widget"
+import { GlobalPopulationWidget } from "@workspace/ui"
+import { DigitalConsciousnessWidget } from "@workspace/ui"
+import { TrendingTopicsWidget } from "@workspace/ui"
+import { SocialMediaTrendsWidget } from "@workspace/ui"
+import { CyberThreatMonitorWidget } from "@workspace/ui"
 
 // Management Widgets
-import { ActionCenterWidget } from "@core/widgets/management/action-center-widget"
-import { ProjectPortfolioWidget } from "@core/widgets/management/project-portfolio-widget"
-import { TaskCenterWidget } from "@core/widgets/management/task-center-widget"
-import { MissionCommandWidget } from "@core/widgets/management/mission-command-widget"
-import { RecommendationEngineWidget } from "@core/widgets/intelligence/recommendation-engine-widget"
-import { KhidraCommandWidget } from "@core/widgets/intelligence/khidra-command-widget"
-import { IntelBriefingWidget } from "@core/widgets/intelligence/intel-briefing-widget"
+import { ActionCenterWidget } from "@workspace/ui"
+import { ProjectPortfolioWidget } from "@workspace/ui"
+import { TaskCenterWidget } from "@workspace/ui"
+import { MissionCommandWidget } from "@workspace/ui"
+import { RecommendationEngineWidget } from "@workspace/ui"
+import { KhidraCommandWidget } from "@workspace/ui"
+import { IntelBriefingWidget } from "@workspace/ui"
 
 const PROGRESS_SEGMENTS = 20
 
@@ -66,7 +66,7 @@ type MonitoringCategory =
   | "CYBER"
   | "ECONOMY"
 
-import { useGlobalMonitoring } from "@core/api/hooks/use-global-monitoring"
+import { useGlobalMonitoring } from "@moon/client"
 
 export function GlobalMonitoringView() {
   const [clockWIB, setClockWIB] = useState("00:00:00")

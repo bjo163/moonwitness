@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { MOCK_COMMAND_CENTER_DASHBOARD } from "@/lib/data/command-center-dashboard"
 export const dynamic = "force-dynamic"
-import { getDailyPrayerTimes } from "@moon/witness/dist/astronomy/prayer-times.js"
+import { getDailyPrayerTimes } from "@moon/compute"
 
 const JAKARTA_LAT = -6.2088
 const JAKARTA_LNG = 106.8456
@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   const dashboardData = { ...MOCK_COMMAND_CENTER_DASHBOARD }
 
   try {
-    // 1. Real Prayer Times from Internal Math Engine (@moon/witness)
+    // 1. Real Prayer Times from Internal Math Engine (@moon/compute)
     const now = new Date()
     const todayPrayers = getDailyPrayerTimes(JAKARTA_LAT, JAKARTA_LNG, now)
 

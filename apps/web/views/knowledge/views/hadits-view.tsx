@@ -1,6 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState } from "react"
+import { useResource } from "@workspace/hooks"
+import { fetchHadithList } from "@moon/client"
 import { HaditsCompendiumsBar } from "../components/hadits/hadits-compendiums-bar"
 import { HaditsItemCard, type FormattedHadithItem } from "../components/hadits/hadits-item-card"
 import { HaditsAnalyticsPanel } from "../components/hadits/hadits-analytics-panel"
@@ -10,49 +12,51 @@ export function HaditsPortalView() {
   const [activeId, setActiveId] = useState("0")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedGrade, setSelectedGrade] = useState("ALL")
-  const [hadithData, setHadithData] = useState<FormattedHadithItem[]>([])
-  const [totalHadiths, setTotalHadiths] = useState(187642)
-  const [isLoading, setIsLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const PAGE_LIMIT = 20
 
-  useEffect(() => {
-    setIsLoading(true)
-    fetch(`/api/hadiths?page=${currentPage}&limit=${PAGE_LIMIT}`)
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.success && json.data) {
-          const formatted: FormattedHadithItem[] = json.data.map((item: any) => {
-            const g = (item.grade || "").toLowerCase()
-            let c = "emerald"
-            if (g.includes("hasan")) c = "blue"
-            else if (g.includes("daif") || g.includes("weak")) c = "amber"
-            else if (g.includes("mawdhu") || g.includes("fabricated")) c = "red"
+  const { data: hadithResponse, loading } = useResource<{
+    data: FormattedHadithItem[]
+    total: number
+  }>(
+    async () => {
+      const res = await fetchHadithList("bukhari", currentPage, PAGE_LIMIT)
+      const rawList = res.items || []
 
-            return {
-              id: item.id?.toString() || "0",
-              grade: item.grade || "SAHIH",
-              arabic: item.text_ar || item.text_arabic || "...",
-              translation:
-                item.matan_id || item.text_en || item.text_id || "...",
-              ref: `${(item.book_slug || "Book").replace(/-/g, " ")} • ${item.number || "?"}`,
-              topic: "General Topic",
-              quran: "—",
-              color: c,
-              raw: item,
-            }
-          })
-          setHadithData(formatted)
-          setTotalHadiths(json.total || 187642)
-          if (formatted.length > 0 && formatted[0]) setActiveId(formatted[0].id)
+      const formatted: FormattedHadithItem[] = rawList.map((item: any) => {
+        const g = (item.grade || "").toLowerCase()
+        let c = "emerald"
+        if (g.includes("hasan")) c = "blue"
+        else if (g.includes("daif") || g.includes("weak")) c = "amber"
+        else if (g.includes("mawdhu") || g.includes("fabricated")) c = "red"
+
+        return {
+          id: item.id?.toString() || String(item.number || "0"),
+          grade: item.grade || "SAHIH",
+          arabic: item.textArabic || item.text_ar || item.arabicText || "...",
+          translation:
+            item.textId || item.textEn || item.matan_id || item.translation || "...",
+          ref: `${(res.book?.name || "Bukhari").replace(/-/g, " ")} • ${item.number || "?"}`,
+          topic: item.topic || "General Topic",
+          quran: "—",
+          color: c,
+          raw: item,
         }
-        setIsLoading(false)
       })
-      .catch((err) => {
-        console.error("Error fetching hadiths:", err)
-        setIsLoading(false)
-      })
-  }, [currentPage])
+
+      return {
+        data: formatted,
+        total: res.book?.totalItems || 7563,
+      }
+    },
+    {
+      deps: [currentPage],
+      initialData: { data: [], total: 187642 },
+    }
+  )
+
+  const hadithData = hadithResponse?.data || []
+  const totalHadiths = hadithResponse?.total || 187642
 
   const filteredHadiths = hadithData.filter((item) => {
     const matchesSearch =
@@ -114,7 +118,7 @@ export function HaditsPortalView() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* LEFT: Hadith Cards List */}
           <div className="space-y-4 lg:col-span-2">
-            {isLoading ? (
+            {loading && hadithData.length === 0 ? (
               <div className="flex h-64 items-center justify-center rounded-xl border border-white/5 bg-[#080E1C] font-mono text-xs text-cyan-400">
                 SYNCHRONIZING HADITH TELEMETRY...
               </div>

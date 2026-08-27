@@ -1,13 +1,13 @@
 "use client"
 import { Suspense } from "react"
-import { ContextBlock } from "@core/ui"
-import { EmptyState } from "@core/ui/empty-state"
+import { ContextBlock } from "@workspace/ui"
+import { EmptyState } from "@workspace/ui"
 
-import { useMoonStore } from "@core/store/moon-store"
+import { useAuthSession } from "@moon/client"
 import { LogOut } from "lucide-react"
 
 export function ProfileView() {
-  const { user, logout } = useMoonStore()
+  const { user, logout } = useAuthSession()
 
   const handleLogout = () => {
     if (confirm("Are you sure you want to log out?")) {
@@ -81,8 +81,7 @@ export function ProfileView() {
         ) : (
           <EmptyState
             title="PROFILE NOT FOUND"
-            message="No active session detected. Please login to access clearance levels."
-            variant="warning"
+            description="No active session detected. Please login to access clearance levels."
           />
         )}
       </div>

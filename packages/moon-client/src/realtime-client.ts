@@ -235,3 +235,15 @@ export class MoonClient {
     }
   }
 }
+
+declare const process: { env: Record<string, string | undefined> } | undefined
+
+import { APP_PORTS } from "@workspace/types"
+
+export const moonClientInstance = new MoonClient({
+  baseUrl:
+    typeof window === "undefined"
+      ? (typeof process !== "undefined" ? process.env?.MOON_API_URL || process.env?.NEXT_PUBLIC_API_URL : undefined) ||
+        `http://127.0.0.1:${APP_PORTS.API_BACKEND}`
+      : "/api/backend",
+})

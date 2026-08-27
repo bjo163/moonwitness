@@ -3,6 +3,8 @@ import ProductTemplate from './product-template.js'
 import ProductProduct from './product-product.js'
 import ProductPricelist from './product-pricelist.js'
 
+export { loadDemoData } from './demo-data.js'
+export { views } from './views.js'
 export {
   ProductCategory,
   ProductTemplate,

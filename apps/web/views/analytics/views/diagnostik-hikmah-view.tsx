@@ -1,7 +1,7 @@
 "use client"
 
-import { useLanguage } from "@core/contexts"
-import { PropheticAIChatTerminal } from "@core/chat"
+import { useLanguage } from "@workspace/state"
+import { PropheticAIChatTerminal } from "@workspace/ui"
 import { Sparkles, Database, Radio } from "lucide-react"
 
 export function DiagnostikHikmahView() {

@@ -17,7 +17,7 @@ import {
   Cloudy,
   Target,
 } from "lucide-react"
-import { QiblaRadarWidget } from "@core/widgets"
+import { QiblaRadarWidget } from "@workspace/ui"
 
 export function OSDivineAstronomy() {
   const [clockWIB, setClockWIB] = useState("06:50:16 WIB")
@@ -153,7 +153,7 @@ export function OSDivineAstronomy() {
                     >
                       <item.icon
                         className="h-4 w-4"
-                        style={{ color: item.active ? item.color : "#708090" }}
+                        style={{ color: item.active ? item.color : "var(--color-muted)" }}
                       />
                     </div>
                     <div>

@@ -229,7 +229,7 @@ export function OSPropheticTimeline() {
                   {/* The dot on the line */}
                   <div
                     className={`border-panel absolute -bottom-[22px] z-20 h-4 w-4 rounded-full border-4 ${era.isDashed ? "border-dashed" : ""}`}
-                    style={{ backgroundColor: era.c, borderColor: "#02050B" }}
+                    style={{ backgroundColor: era.c, borderColor: "var(--color-cyber-dark)" }}
                   />
                   {era.isNow && (
                     <div className="absolute -bottom-[42px] flex flex-col items-center">

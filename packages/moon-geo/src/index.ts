@@ -7,6 +7,8 @@ import GeoHistory from './models/geo-history.js'
 import GeoSourceSnapshot from './models/geo-source-snapshot.js'
 import GeoCandidate from './models/geo-candidate.js'
 
+export { loadDemoData } from './demo-data.js'
+export { views } from './views.js'
 export {
   GeoProvince,
   GeoCity,

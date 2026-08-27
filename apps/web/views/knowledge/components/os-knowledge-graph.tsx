@@ -1,12 +1,12 @@
 "use client"
 
 import React from "react"
-import { useOSStore } from "@core/store/os-store"
+import { useOSStore } from "@workspace/state"
 
-import { GraphSidebarWidget } from "@core/widgets/graph/graph-sidebar-widget"
-import { GraphCanvasWidget } from "@core/widgets/graph/graph-canvas-widget"
-import { GraphEntityPanelWidget } from "@core/widgets/graph/graph-entity-panel-widget"
-import { GraphAnalyticsWidget } from "@core/widgets/graph/graph-analytics-widget"
+import { GraphSidebarWidget } from "@workspace/ui"
+import { GraphCanvasWidget } from "@workspace/ui"
+import { GraphEntityPanelWidget } from "@workspace/ui"
+import { GraphAnalyticsWidget } from "@workspace/ui"
 
 export function OSKnowledgeGraph() {
   // Using global Zustand store instead of local useState/useEffect

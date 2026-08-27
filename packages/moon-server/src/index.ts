@@ -1,5 +1,6 @@
 export { NativeServer, publish, type MoonConfig } from './NativeServer.js'
 export { Controller, Get, Post, Put, Delete, registerController } from './router.js'
+export { defineRoute, type RouteContext, type RouteDefinition } from './route-builder.js'
 export { logger } from './logger.js'
 export { ExternalCache, createProxyHandler, type ProxyOptions } from './proxy.js'
 
@@ -43,7 +44,17 @@ export {
   handleGetSession,
   type AuthConfig,
 } from './handlers/auth.js'
-export { handleDbStatus, handleMetaModels } from './handlers/meta.js'
+export {
+  handleDbStatus,
+  handleMetaModels,
+  handleMetaModel,
+  registerViewManifests,
+  getViewManifest,
+  type ViewManifest,
+  type FieldMeta,
+  type MatrixViewMode,
+  type MatrixAccentColor,
+} from './handlers/meta.js'
 export { handleRest } from './handlers/rest.js'
 export { handleRpc } from './handlers/rpc.js'
 export {

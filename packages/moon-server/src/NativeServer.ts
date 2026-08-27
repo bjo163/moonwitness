@@ -11,6 +11,7 @@ import {
   Vertex,
   registerModel,
   registry,
+  checkDbConnection,
   type DbConfig
 } from '@moon/orm'
 import { globalRoutes, HttpHandler } from './router.js'
@@ -27,7 +28,7 @@ import {
   handleGetSession,
   type AuthConfig
 } from './handlers/auth.js'
-import { handleDbStatus, handleMetaModels, handleHealth, handleLiveness, handleReadiness } from './handlers/meta.js'
+import { handleDbStatus, handleMetaModels, handleMetaModel, handleHealth, handleLiveness, handleReadiness } from './handlers/meta.js'
 import { handleRest } from './handlers/rest.js'
 import { handleRpc } from './handlers/rpc.js'
 import { handleSSE, getActiveClientCount, closeAllSSEConnections } from './handlers/sse.js'
@@ -309,6 +310,12 @@ export class NativeServer {
       return handleMetaModels(req, res)
     }
 
+    // Cosmic Matrix Engine: Rich single-model schema introspection
+    const metaModelMatch = req.url?.match(/^\/api\/meta\/model\/([a-z0-9.-]+)(?:\?.*)?$/)
+    if (req.method === 'GET' && metaModelMatch) {
+      return handleMetaModel(req, res, metaModelMatch[1]!)
+    }
+
     if (req.method === 'GET' && req.url && req.url.startsWith('/live')) {
       if (!(await this.requireAdmin(req, res))) return
       return handleSSE(req, res, { cors: this.config.cors })
@@ -324,8 +331,31 @@ export class NativeServer {
 
   public async start() {
     try {
-      const { applied } = await forge()
-      logger.info('moon.schema', `Schema sync: ${applied.length} applied, ${getLastPending().length} pending`)
+      const dbHealth = await checkDbConnection()
+      if (dbHealth.ok) {
+        logger.info(
+          'moon.db',
+          `Database connection established: [${dbHealth.dialect}] ${dbHealth.version || 'Connected'} (${dbHealth.latencyMs}ms)`
+        )
+      } else {
+        logger.error(
+          'moon.db',
+          `Database connection failed: ${dbHealth.error} (${dbHealth.latencyMs}ms)`
+        )
+      }
+
+      const { applied, summary } = await forge()
+      if (applied.length > 0) {
+        logger.info(
+          'moon.schema',
+          `Schema auto-sync: ${applied.length} changes applied (${summary.tablesCreated} tables, ${summary.columnsAdded} cols, ${summary.foreignKeysAdded} FKs, ${summary.indexesCreated} indexes)`
+        )
+      } else {
+        logger.info(
+          'moon.schema',
+          `Schema verified & up-to-date: ${summary.totalModels} models (${summary.totalColumns} fields synchronized with PostgreSQL)`
+        )
+      }
 
       if (this.config.onBoot) {
         await this.config.onBoot()

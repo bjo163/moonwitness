@@ -71,6 +71,8 @@ export {
   type FigureMentionResult
 } from './graph/domain-queries.js'
 export { seedWitnessGraphCore } from './seed/graph-core.js'
+export { loadDemoData } from './demo-data.js'
+export { views } from './views.js'
 
 // Astronomy (pure compute — no DB)
 export { getMoonData, type MoonData } from './astronomy/moon-phase.js'

@@ -6,7 +6,25 @@ import { createCtx, getDb, getModel, SUPERUSER_ID, Ctx } from '@moon/orm'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
-const dataDir = join(__dirname, 'data')
+
+function getDataDir(): string {
+  const possiblePaths = [
+    join(__dirname, 'data'),
+    join(__dirname, '../src/data'),
+    join(__dirname, '../dist/data'),
+    join(__dirname, '../data'),
+    join(process.cwd(), 'packages/moon-base/src/data'),
+    join(process.cwd(), 'packages/moon-base/dist/data'),
+  ]
+  for (const p of possiblePaths) {
+    if (existsSync(join(p, 'manifest.json'))) {
+      return p
+    }
+  }
+  return join(__dirname, 'data')
+}
+
+const dataDir = getDataDir()
 
 export interface ManifestFile {
   filename: string

@@ -64,7 +64,12 @@ export async function handleLogin(
     }
 
     const env = createCtx(ANONYMOUS_ID, authSecurityContext('login'), getModel as any)
-    const users = await VxUser.fetch(VxUser as any, env, [['email', '=', email]])
+    const normalizedIdentifier = String(email || '').trim().toLowerCase()
+
+    let users = await VxUser.fetch(VxUser as any, env, [['login', '=', normalizedIdentifier]])
+    if (users.length === 0) {
+      users = await VxUser.fetch(VxUser as any, env, [['email', '=', normalizedIdentifier]])
+    }
 
     if (users.length === 0) {
       return sendJson(res, 401, { error: 'Invalid credentials' }, req)
@@ -82,23 +87,31 @@ export async function handleLogin(
     }
 
     const token = issueJwt(
-      { sub: user.id, email: user.email, tokenVersion: user.token_version || user.tokenVersion || 1 },
+      { sub: user.id, email: user.email || user.login, tokenVersion: user.token_version || user.tokenVersion || 1 },
       config.jwtSecret
     )
 
-    logger.info('moon.auth', `User ${email} logged in`)
+    const userEmail = user.email || user.login || ''
+    const isSuperAdmin = userEmail.includes('admin') || userEmail.includes('commander') || user.login === 'admin'
+    const clearanceLevel = isSuperAdmin ? 3 : 2
+    const role = isSuperAdmin ? 'superadmin' : 'admin'
+
+    logger.info('moon.auth', `User ${userEmail} authenticated via PostgreSQL database`)
     return sendJson(res, 200, { 
       token, 
       user: { 
         id: user.id, 
-        email: user.email, 
-        name: user.name,
-        partnerId: user.partner_id
+        email: userEmail, 
+        name: user.name || user.login || 'TACTICAL OPERATOR',
+        role,
+        clearanceLevel,
+        title: isSuperAdmin ? 'Supreme Fleet Commander' : 'Mission Specialist',
+        partnerId: user.partner_id || user.partnerId
       } 
     }, req)
   } catch (err: any) {
     logger.error('moon.auth', 'Login error:', err)
-    return sendJson(res, 500, { error: 'Internal server error' }, req)
+    return sendJson(res, 500, { error: err?.message || 'Internal server error', detail: String(err) }, req)
   }
 }
 

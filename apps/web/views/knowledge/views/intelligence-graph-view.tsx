@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Network, Search, Scan, Activity } from "lucide-react"
-import { ContextBlock } from "@core/ui"
+import { ContextBlock } from "@workspace/ui"
 
 type Node = {
   id: string
@@ -216,12 +216,12 @@ const KNOWLEDGE_EDGES: Edge[] = [
   { source: "n17", target: "n3", strength: 0.6 },
 ]
 
-import { useMoonStore } from "@core/store/moon-store"
+import { moonClientInstance } from "@moon/client"
 
 export function IntelligenceGraphView() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [hoveredNode, setHoveredNode] = useState<Node | null>(null)
-  const { client } = useMoonStore()
+  const client = moonClientInstance
 
   const [nodes, setNodes] = useState<Node[]>(KNOWLEDGE_NODES)
   const [edges, setEdges] = useState<Edge[]>(KNOWLEDGE_EDGES)

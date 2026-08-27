@@ -1,26 +1,25 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useMoonStore } from "@core/store/moon-store"
+import { apiGet } from "@moon/client"
 import { RadarHeroStats } from "../components/radar/radar-hero-stats"
 import { RadarMapPanel } from "../components/radar/radar-map-panel"
 import { RadarWarningFeed } from "../components/radar/radar-warning-feed"
 
 export function AtmosphericRadarView() {
-  const { request } = useMoonStore()
   const [mounted, setMounted] = useState(false)
   const [rainTimestamp, setRainTimestamp] = useState<number>(0)
 
   useEffect(() => {
     setMounted(true)
-    request("GET", "/api/external/rainviewer")
+    apiGet<any>("/api/external/rainviewer")
       .then((data: any) => {
         if (data?.radar?.past?.length > 0) {
           setRainTimestamp(data.radar.past[data.radar.past.length - 1].time)
         }
       })
       .catch((err: any) => console.error("RainViewer API failed:", err))
-  }, [request])
+  }, [])
 
   if (!mounted) {
     return (

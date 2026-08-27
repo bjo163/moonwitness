@@ -1,28 +1,28 @@
-// MOONWITNESS OS V6.5 — CENTRALIZED DESIGN TOKENS & SYSTEM SCHEMAS
+// MOONWITNESS OS V9.0 — CENTRALIZED DESIGN TOKENS & SYSTEM SCHEMAS
 
 export const THEME_TOKENS = {
-  // ── ENTERPRISE SEMANTIC COLOR ALIASES (VUEXY / MONOREPO STANDARD) ─────────
+  // ── ENTERPRISE SEMANTIC COLOR ALIASES (DESIGN BIBLE V9.0) ──────────────────
   colors: {
-    // Core Semantic States & Actions
+    // Core Semantic Cyber Palette
     primary: "#00F0FF", // Brand Primary (System Cyan)
-    secondary: "#0088FF", // Brand Secondary (Navigation Blue)
-    success: "#00FF66", // Positive, verified, online, complete
-    warning: "#FF9900", // Caution, pending sync, alert
-    danger: "#FF0055", // Critical error, offline, security breach
-    info: "#0088FF", // Telemetry, data, guidance
-    muted: "#8B9BB0", // Technical slate gray / disabled text
-    accent: "#FFE600", // Highlight, celestial yellow
+    secondary: "#0A1224", // Deep Navy Surface
+    success: "#00FF66", // Mission Green (Positive, verified, online)
+    warning: "#FFE600", // Celestial Yellow (Observatory, alerts)
+    danger: "#FF0055", // Critical Error (Faults, alerts)
+    info: "#00F0FF", // Telemetry Cyan
+    muted: "#8B9BB0", // Technical Steel Gray
+    accent: "#A100FF", // Knowledge / AI Purple
 
-    // Legacy / Domain Mapping (Zero-Breakage Compatibility)
-    system: "#00F0FF", // Cyan: System diagnostics, default UI
-    navigation: "#0088FF", // Blue: Navigation, routes, links
-    astronomy: "#FFE600", // Yellow: Celestial, Moon phase, solar, eclipses
-    knowledge: "#A100FF", // Purple: Scriptures, Tafsir, Sanad, sciences
-    knowledgeLight: "#d477ff", // Purple lighter variant for text accents/hover
-    critical: "#FF0055", // Alias for danger
+    // Semantic Family Mapping
+    system: "#00F0FF", // Scripture & System Core
+    mission: "#00FF66", // Divine Unity Command
+    celestial: "#FFE600", // Observatory Telemetry
+    knowledge: "#A100FF", // Intelligence & Analytics
+    knowledgeLight: "#d477ff", // Light purple hover accent
+    critical: "#FF0055", // Faults & Danger
     textPrimary: "#F5F5F5", // Crisp light text
-    textMuted: "#8B9BB0", // Technical slate gray text
-    background: "#05070A", // Deep space dark background
+    textMuted: "#8B9BB0", // Muted steel text
+    background: "#05070A", // Deep space dark void
     panelBg: "#0A0F17", // Command panel dark background
     panelBorder: "rgba(0, 240, 255, 0.25)",
   },
@@ -61,8 +61,7 @@ export const THEME_TOKENS = {
   shadows: {
     soft: "shadow-[0_4px_14px_rgba(0,23,25,0.5)]",
     glow: "shadow-[0_0_20px_rgba(0,240,255,0.5)]",
-    neon: "shadow-[0_0_30px_rgba(0,255,163,0.6)]",
-    hud: "shadow-[0_0_40px_rgba(100,85,247,0.4)]",
+    neon: "shadow-[0_0_30px_rgba(0,255,102,0.6)]",
     terminal: "shadow-[0_0_1px_rgba(0,240,255,0.3)]",
   },
 
@@ -137,9 +136,9 @@ export const THEME_TOKENS = {
   // ── SYSTEM METADATA DEFAULTS  ────────────────────────────────────
   metadata: {
     systemName: "MOONWITNESS OS",
-    version: "V6.5",
-    build: "BUILD-2026.07",
-    protocol: "COSMIC-QUANTUM-v6",
+    version: "V9.0",
+    build: "BUILD-2026.08",
+    protocol: "COSMIC-MATRIX-V9",
     defaultStatus: "ONLINE",
   },
 

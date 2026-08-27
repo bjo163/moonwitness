@@ -11,7 +11,7 @@ import {
 import { Input } from "@workspace/ui/components/input"
 import { Label } from "@workspace/ui/components/label"
 import { Button } from "@workspace/ui/components/button"
-import { useUserProfile } from "@core/hooks"
+import { useUserProfile } from "@moon/client"
 
 export type UserProfile = {
   email: string
@@ -48,8 +48,8 @@ export function UserProfileModal({
     if (profile) {
       setTimeout(() => setEmail(profile.email || ""), 0)
       setName(profile.name || "")
-      setRole(profile.role || "public")
-      setAvatar(profile.avatar || "🌙")
+      setRole(profile.role === "admin" ? "admin" : "public")
+      setAvatar((profile as any).avatar || (profile as any).avatarUrl || "🌙")
     }
   }, [profile, isOpen])
 

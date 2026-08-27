@@ -3,6 +3,8 @@ import MailActivity from './mail-activity.js'
 import { MailMessage, FxMsgAlias } from './mail-message.js'
 import { MailTrackingValue, FxTrackAlias } from './mail-tracking-value.js'
 
+export { loadDemoData } from './demo-data.js'
+export { views } from './views.js'
 export {
   MailActivityType,
   MailActivity,

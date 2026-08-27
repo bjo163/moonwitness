@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
 import Link from "next/link"
-import { playWarpSound, playClickSound } from "@core/utils/sound-feedback"
-import { useLanguage } from "@core/contexts"
+import { playWarpSound, playClickSound } from "@moon/client"
+import { useLanguage } from "@workspace/state"
 import { Copy, Check, Volume2, Square } from "lucide-react"
 
 type RandomInspirationData = {
@@ -192,8 +192,7 @@ export function RandomWarpGenerator() {
         createPortal(
           <div className="bg-space/95 fixed inset-0 z-[99999] flex items-center justify-center p-4 font-mono backdrop-blur-2xl">
             <div
-              className="corner-box relative my-auto flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden border border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.35)] card-clip"
-              style={{ backgroundColor: "#0A0F17" }}
+              className="corner-box bg-[#0A0F17] relative my-auto flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden border border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.35)] card-clip"
             >
               <div className="holo-scan-bar" />
 

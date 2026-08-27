@@ -1,15 +1,15 @@
 {
+  "extends": "@workspace/typescript-config/base.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "jsx": "react-jsx",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "target": "ES2022",
-    "declaration": true,
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "lib": ["DOM", "ES2022"]
+    "jsx": "react-jsx",
+    "paths": {
+      "@moon/client/*": ["./src/*"],
+      "@workspace/types/*": ["../types/src/*"],
+      "@workspace/hooks/*": ["../hooks/src/*"]
+    }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

@@ -99,9 +99,19 @@ export const MOCK_COMMAND_CENTER_DASHBOARD = {
     },
   ],
   tasksOverview: {
-    total: 24,
-    completed: 19,
-    pending: 5,
+    stats: {
+      total: 24,
+      today: 8,
+      tomorrow: 4,
+      overdue: 2,
+      completed: 19,
+    },
+    list: [
+      { id: "t1", title: "Review Lunar Observation Logs", due: "Today", status: "done" },
+      { id: "t2", title: "Verify Qur'an Root Concordance", due: "Today", status: "pending" },
+      { id: "t3", title: "Run Seismic Waveform Diagnostics", due: "Tomorrow", status: "pending" },
+      { id: "t4", title: "Analyze Planetary Telemetry Feed", due: "Overdue", status: "pending" },
+    ],
   },
   moonObservatory: {
     phase: "Waxing Gibbous",

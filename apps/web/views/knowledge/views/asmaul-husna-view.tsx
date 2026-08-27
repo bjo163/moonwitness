@@ -1,47 +1,46 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
+import { useResource } from "@workspace/hooks"
+import { fetchAsmaulHusna } from "@moon/client"
+import { STORAGE_KEYS } from "@workspace/types"
 import { AsmaulHusnaHero } from "../components/asmaul-husna/asmaul-husna-hero"
 import { AsmaulHusnaCardItem, type FormattedAsmaulHusnaItem } from "../components/asmaul-husna/asmaul-husna-card-item"
 import { AsmaulHusnaActivePanel } from "../components/asmaul-husna/asmaul-husna-active-panel"
 
 export function AsmaulHusnaView() {
-  const [mounted, setMounted] = useState(false)
   const [activeId, setActiveId] = useState("01")
   const [now, setNow] = useState(new Date())
   const [searchQuery, setSearchQuery] = useState("")
-  const [asmaulHusnaData, setAsmaulHusnaData] = useState<FormattedAsmaulHusnaItem[]>([])
-  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    setMounted(true)
     const interval = setInterval(() => setNow(new Date()), 1000)
-
-    fetch("/api/asmaul-husna")
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.success && json.data) {
-          const formattedData: FormattedAsmaulHusnaItem[] = json.data.map((item: any) => ({
-            id: item.number.toString().padStart(2, "0"),
-            arabic: item.name_arabic,
-            transliteration: item.name_latin,
-            meaning: item.translation_id || "—",
-            ref: item.quran_reference || "Asmaul Husna",
-            root: "—",
-          }))
-          setAsmaulHusnaData(formattedData)
-        }
-        setIsLoading(false)
-      })
-      .catch((err) => {
-        console.error(err)
-        setIsLoading(false)
-      })
-
     return () => clearInterval(interval)
   }, [])
 
-  if (!mounted || isLoading) {
+  const { data: asmaulHusnaData, loading } = useResource<FormattedAsmaulHusnaItem[]>(
+    async () => {
+      const json = await fetchAsmaulHusna()
+      const rawNames = json?.names || (json as any)?.data || []
+
+      return rawNames.map((item: any) => ({
+        id: (item.number ?? 1).toString().padStart(2, "0"),
+        arabic: item.arabic || item.name_arabic || "—",
+        transliteration: item.transliteration || item.name_latin || item.latin || "—",
+        meaning: item.meaning || item.translation_id || item.translationId || "—",
+        ref: item.ref || item.quran_reference || "Asmaul Husna",
+        root: item.root || "—",
+      }))
+    },
+    {
+      initialData: [],
+      storageKey: STORAGE_KEYS.ASMAUL_HUSNA,
+    }
+  )
+
+  const items = asmaulHusnaData || []
+
+  if (loading && items.length === 0) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#020813] font-mono text-sm tracking-widest text-indigo-400">
         SYNCHRONIZING ASMAUL HUSNA ONTOLOGY...
@@ -52,9 +51,9 @@ export function AsmaulHusnaView() {
   const timeString =
     (now.toISOString().split("T")[1] || "").split(".")[0] || "00:00:00"
   const activeItem =
-    asmaulHusnaData.find((x) => x.id === activeId) || asmaulHusnaData[0]
+    items.find((x) => x.id === activeId) || items[0]
 
-  const filteredData = asmaulHusnaData.filter((item) => {
+  const filteredData = items.filter((item) => {
     if (!searchQuery) return true
     const q = searchQuery.toLowerCase()
     return (
@@ -69,7 +68,7 @@ export function AsmaulHusnaView() {
       <div className="mx-auto max-w-[1800px] space-y-6 px-4 pt-6 lg:px-6">
         {/* 1. Header Hero & Search Toolbar */}
         <AsmaulHusnaHero
-          totalCount={asmaulHusnaData.length}
+          totalCount={items.length}
           timeString={timeString}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}

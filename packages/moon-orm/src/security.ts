@@ -15,6 +15,7 @@ const AUTH_SCOPE_CONTEXT_KEY = '__moonInternalAuthScope'
 const AUTH_SCOPE_RULES: Record<AuthSecurityScope, Partial<Record<string, PermissionOperation[]>>> = {
   login: {
     'vx.user': ['permRead'],
+    'vx.node': ['permRead'],
   },
   register: {
     'vx.user': ['permRead', 'permCreate'],

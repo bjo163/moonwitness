@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import {
   getSunPosition,
   getDuhaTime,
-} from "@moon/witness/dist/astronomy/sun-position.js"
-import { getDailyPrayerTimes } from "@moon/witness/dist/astronomy/prayer-times.js"
+  getDailyPrayerTimes,
+} from "@moon/compute"
 
 /**
  * GET /api/sun-position?lat=...&lng=...

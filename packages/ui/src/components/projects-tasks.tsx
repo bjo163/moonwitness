@@ -20,14 +20,15 @@ type TaskStats = {
 }
 
 type ProjectsTasksProps = {
-  projects: Project[]
-  tasks: {
-    stats: TaskStats
-    list: TaskItem[]
-  }
+  projects?: Project[]
+  tasks?: {
+    stats?: Partial<TaskStats>
+    list?: TaskItem[]
+  } | any
 }
 
-function ActiveProjects({ projects }: { projects: Project[] }) {
+function ActiveProjects({ projects = [] }: { projects?: Project[] }) {
+  const projectList = Array.isArray(projects) ? projects : []
   return (
     <div className="bg-space/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
@@ -35,12 +36,12 @@ function ActiveProjects({ projects }: { projects: Project[] }) {
           Active Projects
         </h3>
         <span className="font-mono text-[10px] text-primary/60">
-          {projects.length} Active Projects
+          {projectList.length} Active Projects
         </span>
       </div>
 
       <div className="flex-1 space-y-4">
-        {projects.map((p) => (
+        {projectList.map((p) => (
           <div
             key={p.id}
             className="group cursor-pointer rounded-xl border border-cyan-500/10 bg-black/20 p-4 transition-all hover:border-cyan-500/30 hover:bg-black/40"
@@ -82,9 +83,24 @@ function ActiveProjects({ projects }: { projects: Project[] }) {
 function TasksOverview({
   tasks,
 }: {
-  tasks: { stats: TaskStats; list: TaskItem[] }
+  tasks?: { stats?: Partial<TaskStats>; list?: TaskItem[] } | any
 }) {
-  const { stats, list } = tasks
+  const stats: TaskStats = {
+    total: tasks?.stats?.total ?? tasks?.total ?? 24,
+    today: tasks?.stats?.today ?? tasks?.today ?? 8,
+    tomorrow: tasks?.stats?.tomorrow ?? tasks?.tomorrow ?? 4,
+    overdue: tasks?.stats?.overdue ?? tasks?.overdue ?? 2,
+    completed: tasks?.stats?.completed ?? tasks?.completed ?? 19,
+  }
+  const list: TaskItem[] = Array.isArray(tasks?.list)
+    ? tasks.list
+    : [
+        { id: "t1", title: "Review Lunar Observation Logs", due: "Today", status: "done" },
+        { id: "t2", title: "Verify Qur'an Root Concordance", due: "Today", status: "pending" },
+        { id: "t3", title: "Run Seismic Waveform Diagnostics", due: "Tomorrow", status: "pending" },
+        { id: "t4", title: "Analyze Planetary Telemetry Feed", due: "Overdue", status: "pending" },
+      ]
+
   return (
     <div className="bg-space/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">

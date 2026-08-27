@@ -17,9 +17,9 @@ import {
   Clock,
   TrendingUp,
 } from "lucide-react"
-import { ContextBlock } from "@core/ui/context-block"
-import { Panel, PanelHeader } from "@core/ui/panel"
-import { Tabs } from "@core/ui/tabs"
+import { ContextBlock } from "@workspace/ui"
+import { Panel, PanelHeader } from "@workspace/ui"
+import { HUDTabs } from "@workspace/ui"
 
 // ── ARCHIVE DATA ─────────────────────────────────────────
 type HistoricQuake = {
@@ -435,7 +435,7 @@ export function QuakeArchiveView() {
       </Panel>
 
       {/* Type filter tabs */}
-      <Tabs
+      <HUDTabs
         tabs={tabs}
         activeTab={filterType}
         onChange={setFilterType}

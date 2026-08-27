@@ -1,3 +1,9 @@
+export type WidgetHint =
+  | 'input' | 'textarea' | 'number' | 'toggle' | 'datepicker'
+  | 'select' | 'badge' | 'autocomplete' | 'stages' | 'tags'
+  | 'progress' | 'avatar' | 'url' | 'email' | 'color' | 'priority'
+  | 'monetary' | 'percentage' | 'image' | 'statusbar'
+
 export interface FieldDef<T extends string = string> {
   type: T
   required?: boolean
@@ -22,6 +28,16 @@ export interface FieldDef<T extends string = string> {
   validate?: (val: any) => string | boolean
   inverse?: string
   help?: string
+  /** Human-readable label for UI display (auto-inferred from field name if omitted) */
+  label?: string
+  /** Preferred rendering widget hint for the Cosmic Matrix Engine */
+  widget?: WidgetHint
+  /** Field is read-only in form views */
+  readonly?: boolean
+  /** Field is hidden from default views */
+  invisible?: boolean
+  /** Aggregation operator for metrics/group-by views */
+  groupOperator?: 'sum' | 'avg' | 'count' | 'min' | 'max'
 }
 
 const FIELD_TYPES = new Set([

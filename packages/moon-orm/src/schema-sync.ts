@@ -11,9 +11,9 @@ interface ColumnInfo {
   vector_dimension: number | null
 }
 
-interface PendingChange {
+export interface PendingChange {
   model: string
-  type: 'create_table' | 'add_column' | 'alter_column' | 'drop_column' | 'drop_table' | 'add_fk' | 'create_m2m'
+  type: 'create_table' | 'add_column' | 'alter_column' | 'drop_column' | 'drop_table' | 'add_fk' | 'create_m2m' | 'create_index'
   detail: string
   safe: boolean
 }
@@ -39,29 +39,56 @@ export interface MigrationCommand {
   down: string
 }
 
-export async function forge(options: { dryRun?: boolean } = {}): Promise<{
+export interface SchemaSyncResult {
   applied: PendingChange[]
   pending: PendingChange[]
   migrations: MigrationCommand[]
-}> {
+  summary: {
+    totalModels: number
+    totalColumns: number
+    tablesCreated: number
+    columnsAdded: number
+    columnsAltered: number
+    foreignKeysAdded: number
+    indexesCreated: number
+    m2mTablesCreated: number
+  }
+}
+
+export async function forge(options: { dryRun?: boolean; silent?: boolean } = {}): Promise<SchemaSyncResult> {
   const { getRegistry } = await import('./registry.js')
   const registry = getRegistry()
   const applied: PendingChange[] = []
   const migrations: MigrationCommand[] = []
   lastPending = []
 
-  // PRODUCTION SAFETY GUARD
-  if (process.env.NODE_ENV === 'production' && !options.dryRun) {
-    console.warn("⚠️ [DANGER] Schema sync aborted! Auto-sync is strictly prohibited in production.")
-    return { applied, pending: [], migrations }
+  const summary = {
+    totalModels: 0,
+    totalColumns: 0,
+    tablesCreated: 0,
+    columnsAdded: 0,
+    columnsAltered: 0,
+    foreignKeysAdded: 0,
+    indexesCreated: 0,
+    m2mTablesCreated: 0,
   }
 
-  // Initialize pgvector
+  // PRODUCTION SAFETY GUARD (bypassable with MOON_AUTO_SYNC=true)
+  if (process.env.NODE_ENV === 'production' && !options.dryRun && process.env.MOON_AUTO_SYNC !== 'true') {
+    if (!options.silent) {
+      console.warn("⚠️ [DANGER] Schema sync aborted! Auto-sync is disabled in production without MOON_AUTO_SYNC=true.")
+    }
+    return { applied, pending: [], migrations, summary }
+  }
+
+  // Initialize pgvector extension
   try {
     const db = getDb()
     await db.raw('CREATE EXTENSION IF NOT EXISTS vector')
   } catch (err: any) {
-    console.warn('Failed to initialize pgvector extension:', err.message)
+    if (!options.silent) {
+      console.warn('[moon.schema] Note: pgvector extension not installed in database:', err.message)
+    }
   }
 
   const deferredFks: DeferredFK[] = []
@@ -70,7 +97,8 @@ export async function forge(options: { dryRun?: boolean } = {}): Promise<{
 
   // Pass 1: Tables and physical columns
   for (const [name, ModelClass] of registry) {
-    if ((ModelClass as any)._abstract) continue;
+    if ((ModelClass as any)._abstract) continue
+    summary.totalModels++
 
     const table = ModelClass.tableName(ModelClass)
     const fieldDefs = ModelClass.getFieldDefs(ModelClass)
@@ -89,17 +117,18 @@ export async function forge(options: { dryRun?: boolean } = {}): Promise<{
         }
         continue
       }
-      
+
       if (fieldDef.compute && !fieldDef.store) {
         continue // Computed fields are not physical columns unless store=true
       }
-      
+
       physicalFields[fieldName] = fieldDef
+      summary.totalColumns++
 
       if (fieldDef.type === 'many2one' && fieldDef.comodel) {
         deferredFks.push({ table, colName: toSnakeCase(fieldName), comodel: fieldDef.comodel, modelName: name })
       }
-      
+
       if (fieldDef.index || fieldDef.type === 'vector') {
         deferredIndexes.push({
           table,
@@ -113,12 +142,17 @@ export async function forge(options: { dryRun?: boolean } = {}): Promise<{
     const exists = await tableExists(table)
     if (!exists) {
       await createTable(table, physicalFields, options.dryRun, migrations)
-      applied.push({
+      summary.tablesCreated++
+      const change: PendingChange = {
         model: name,
         type: 'create_table',
-        detail: `Created table ${table}`,
+        detail: `Created table ${table} (${Object.keys(physicalFields).length} fields)`,
         safe: true
-      })
+      }
+      applied.push(change)
+      if (!options.silent) {
+        console.log(`\x1b[32m[moon.schema]\x1b[0m [+] Table created: \x1b[1m${table}\x1b[0m (${Object.keys(physicalFields).length} fields)`)
+      }
       continue
     }
 
@@ -132,13 +166,18 @@ export async function forge(options: { dryRun?: boolean } = {}): Promise<{
       const colType = mapFieldType(fieldDef)
 
       if (!existingColNames.has(colName)) {
-        await addColumn(table, colName, colType, options.dryRun, migrations)
-        applied.push({
+        await addColumn(table, colName, fieldDef, options.dryRun, migrations)
+        summary.columnsAdded++
+        const change: PendingChange = {
           model: name,
           type: 'add_column',
-          detail: `Added column ${colName} to ${table}`,
+          detail: `Added column ${colName} to ${table} (${colType})`,
           safe: true
-        })
+        }
+        applied.push(change)
+        if (!options.silent) {
+          console.log(`\x1b[32m[moon.schema]\x1b[0m [+] Column added: \x1b[1m${table}.${colName}\x1b[0m (${colType})`)
+        }
         continue
       }
 
@@ -153,12 +192,17 @@ export async function forge(options: { dryRun?: boolean } = {}): Promise<{
           options.dryRun,
           migrations
         )
-        applied.push({
+        summary.columnsAltered++
+        const change: PendingChange = {
           model: name,
           type: 'alter_column',
-          detail: `Altered column ${colName} in ${table}`,
+          detail: `Altered column ${colName} in ${table} -> ${colType}`,
           safe: true
-        })
+        }
+        applied.push(change)
+        if (!options.silent) {
+          console.log(`\x1b[33m[moon.schema]\x1b[0m [~] Column altered: \x1b[1m${table}.${colName}\x1b[0m ➔ ${colType}`)
+        }
       }
     }
   }
@@ -168,19 +212,26 @@ export async function forge(options: { dryRun?: boolean } = {}): Promise<{
     const Comodel = registry.get(fk.comodel)
     if (!Comodel) continue
     const refTable = Comodel.tableName(Comodel)
-    
+
     const exists = await hasForeignKey(fk.table, fk.colName, refTable)
     if (!exists) {
       try {
         await addForeignKey(fk.table, fk.colName, refTable, options.dryRun, migrations)
-        applied.push({
+        summary.foreignKeysAdded++
+        const change: PendingChange = {
           model: fk.modelName,
           type: 'add_fk',
           detail: `Added foreign key ${fk.table}(${fk.colName}) -> ${refTable}(id)`,
           safe: true
-        })
+        }
+        applied.push(change)
+        if (!options.silent) {
+          console.log(`\x1b[32m[moon.schema]\x1b[0m [+] Foreign key added: \x1b[1m${fk.table}(${fk.colName})\x1b[0m ➔ ${refTable}(id)`)
+        }
       } catch (err: any) {
-        console.warn(`Failed to add foreign key for ${fk.table}(${fk.colName}):`, err.message)
+        if (!options.silent) {
+          console.warn(`[moon.schema] Note: Foreign key for ${fk.table}(${fk.colName}) deferred:`, err.message)
+        }
       }
     }
   }
@@ -190,12 +241,17 @@ export async function forge(options: { dryRun?: boolean } = {}): Promise<{
     const exists = await tableExists(m2m.relTable)
     if (!exists) {
       await createM2MTable(m2m.relTable, m2m.table1, m2m.table2, options.dryRun, migrations)
-      applied.push({
+      summary.m2mTablesCreated++
+      const change: PendingChange = {
         model: m2m.modelName,
         type: 'create_m2m',
-        detail: `Created many2many table ${m2m.relTable}`,
+        detail: `Created many2many table ${m2m.relTable} (${m2m.table1} <-> ${m2m.table2})`,
         safe: true
-      })
+      }
+      applied.push(change)
+      if (!options.silent) {
+        console.log(`\x1b[32m[moon.schema]\x1b[0m [+] M2M Table created: \x1b[1m${m2m.relTable}\x1b[0m (${m2m.table1} <-> ${m2m.table2})`)
+      }
     }
   }
 
@@ -206,40 +262,26 @@ export async function forge(options: { dryRun?: boolean } = {}): Promise<{
     if (!exists) {
       try {
         await createIndex(idx.table, idx.colName, idxName, idx.isVector ?? false, options.dryRun, migrations)
-        applied.push({
+        summary.indexesCreated++
+        const change: PendingChange = {
           model: idx.modelName,
-          type: 'add_column',
+          type: 'create_index',
           detail: `Created ${idx.isVector ? 'HNSW vector ' : ''}index ${idxName} on ${idx.table}(${idx.colName})`,
           safe: true
-        })
+        }
+        applied.push(change)
+        if (!options.silent) {
+          console.log(`\x1b[32m[moon.schema]\x1b[0m [+] Index created: \x1b[1m${idxName}\x1b[0m on ${idx.table}(${idx.colName})`)
+        }
       } catch (err: any) {
-        console.warn(`Failed to create index for ${idx.table}(${idx.colName}):`, err.message)
+        if (!options.silent) {
+          console.warn(`[moon.schema] Note: Index creation for ${idx.table}(${idx.colName}) deferred:`, err.message)
+        }
       }
     }
   }
 
-  return { applied, pending: lastPending, migrations }
-}
-
-async function hasIndex(indexName: string): Promise<boolean> {
-  const db = getDb()
-  const rows = await db
-    .select(db.raw('1'))
-    .from('pg_indexes')
-    .where({ indexname: indexName })
-  return rows.length > 0
-}
-
-async function createIndex(table: string, colName: string, indexName: string, isVector: boolean = false, dryRun: boolean = false, migrations: MigrationCommand[] = []) {
-  const db = getDb()
-  const sql = isVector
-    ? `CREATE INDEX ${sqlIdentifier(indexName)} ON ${sqlIdentifier(table)} USING hnsw (${sqlIdentifier(colName)} vector_cosine_ops)`
-    : `CREATE INDEX ${sqlIdentifier(indexName)} ON ${sqlIdentifier(table)} (${sqlIdentifier(colName)})`
-  if (dryRun) {
-    migrations.push({ up: sql, down: `DROP INDEX IF EXISTS ${sqlIdentifier(indexName)}` })
-  } else {
-    await db.raw(sql)
-  }
+  return { applied, pending: lastPending, migrations, summary }
 }
 
 export function getLastPending(): PendingChange[] {
@@ -266,9 +308,36 @@ async function hasForeignKey(table: string, colName: string, refTable: string): 
       AND kcu.table_name = ?
       AND kcu.column_name = ?
   `, [table, colName])
-  // Knex raw output format differs by dialect, try rows or direct array
-  const rows = result.rows || result
+  const rows = result?.rows || result
   return Array.isArray(rows) && rows.length > 0
+}
+
+async function hasIndex(indexName: string): Promise<boolean> {
+  const db = getDb()
+  const rows = await db
+    .select(db.raw('1'))
+    .from('pg_indexes')
+    .where({ indexname: indexName })
+  return rows.length > 0
+}
+
+async function createIndex(
+  table: string,
+  colName: string,
+  indexName: string,
+  isVector: boolean = false,
+  dryRun: boolean = false,
+  migrations: MigrationCommand[] = []
+) {
+  const db = getDb()
+  const sql = isVector
+    ? `CREATE INDEX ${sqlIdentifier(indexName)} ON ${sqlIdentifier(table)} USING hnsw (${sqlIdentifier(colName)} vector_cosine_ops)`
+    : `CREATE INDEX ${sqlIdentifier(indexName)} ON ${sqlIdentifier(table)} (${sqlIdentifier(colName)})`
+  if (dryRun) {
+    migrations.push({ up: sql, down: `DROP INDEX IF EXISTS ${sqlIdentifier(indexName)}` })
+  } else {
+    await db.raw(sql)
+  }
 }
 
 async function getColumns(table: string): Promise<ColumnInfo[]> {
@@ -286,6 +355,31 @@ async function getColumns(table: string): Promise<ColumnInfo[]> {
   return resultRows as unknown as ColumnInfo[]
 }
 
+function buildColumnSql(colName: string, fieldDef: FieldDef): string {
+  const colType = mapFieldType(fieldDef)
+  const parts = [sqlIdentifier(colName), colType]
+
+  if (fieldDef.default !== undefined && fieldDef.default !== null) {
+    if (typeof fieldDef.default === 'string') {
+      parts.push(`DEFAULT '${fieldDef.default.replace(/'/g, "''")}'`)
+    } else if (typeof fieldDef.default === 'boolean' || typeof fieldDef.default === 'number') {
+      parts.push(`DEFAULT ${fieldDef.default}`)
+    }
+  } else if (fieldDef.autoNowAdd || fieldDef.autoNow) {
+    parts.push('DEFAULT CURRENT_TIMESTAMP')
+  }
+
+  if (fieldDef.required) {
+    parts.push('NOT NULL')
+  }
+
+  if (fieldDef.unique) {
+    parts.push('UNIQUE')
+  }
+
+  return parts.join(' ')
+}
+
 async function createTable(
   table: string,
   fieldDefs: Record<string, FieldDef>,
@@ -293,18 +387,9 @@ async function createTable(
   migrations: MigrationCommand[] = []
 ) {
   const cols: string[] = ['id SERIAL PRIMARY KEY']
-  for (const [fieldName, fieldDef] of Object.entries(
-    fieldDefs
-  )) {
+  for (const [fieldName, fieldDef] of Object.entries(fieldDefs)) {
     const colName = toSnakeCase(fieldName)
-    const colType = mapFieldType(fieldDef)
-    const nullable = fieldDef.required
-      ? 'NOT NULL'
-      : ''
-    const unique = fieldDef.unique ? 'UNIQUE' : ''
-    cols.push(
-      `${colName} ${colType} ${nullable} ${unique}`.trim()
-    )
+    cols.push(buildColumnSql(colName, fieldDef))
   }
   const db = getDb()
   const sql = `CREATE TABLE ${sqlIdentifier(table)} (${cols.join(', ')})`
@@ -318,14 +403,15 @@ async function createTable(
 async function addColumn(
   table: string,
   colName: string,
-  colType: string,
+  fieldDef: FieldDef,
   dryRun: boolean = false,
   migrations: MigrationCommand[] = []
 ) {
   const db = getDb()
-  const sql = `ALTER TABLE ${sqlIdentifier(table)} ADD COLUMN ${colName} ${colType}`
+  const colDefSql = buildColumnSql(colName, fieldDef)
+  const sql = `ALTER TABLE ${sqlIdentifier(table)} ADD COLUMN ${colDefSql}`
   if (dryRun) {
-    migrations.push({ up: sql, down: `ALTER TABLE ${sqlIdentifier(table)} DROP COLUMN ${colName}` })
+    migrations.push({ up: sql, down: `ALTER TABLE ${sqlIdentifier(table)} DROP COLUMN ${sqlIdentifier(colName)}` })
   } else {
     await db.raw(sql)
   }
@@ -340,7 +426,7 @@ async function alterColumn(
 ) {
   const db = getDb()
   validateAutomaticAlteration(colType, table, colName)
-  const sql = `ALTER TABLE ${sqlIdentifier(table)} ALTER COLUMN ${colName} TYPE ${colType}`
+  const sql = `ALTER TABLE ${sqlIdentifier(table)} ALTER COLUMN ${sqlIdentifier(colName)} TYPE ${colType}`
   if (dryRun) {
     migrations.push({ up: sql, down: `-- Manual intervention required to down-migrate column type alteration for ${table}.${colName}` })
   } else {
@@ -354,27 +440,42 @@ export function validateAutomaticAlteration(colType: string, table = 'table', co
   }
 }
 
-async function addForeignKey(table: string, colName: string, refTable: string, dryRun: boolean = false, migrations: MigrationCommand[] = []) {
+async function addForeignKey(
+  table: string,
+  colName: string,
+  refTable: string,
+  dryRun: boolean = false,
+  migrations: MigrationCommand[] = []
+) {
   const db = getDb()
+  const constraintName = `${table}_${colName}_fkey`
   const sql = `
     ALTER TABLE ${sqlIdentifier(table)}
-    ADD CONSTRAINT ${sqlIdentifier(`${table}_${colName}_fkey`)}
+    ADD CONSTRAINT ${sqlIdentifier(constraintName)}
     FOREIGN KEY (${sqlIdentifier(colName)}) REFERENCES ${sqlIdentifier(refTable)}(id) ON DELETE SET NULL
   `
   if (dryRun) {
-    migrations.push({ up: sql, down: `ALTER TABLE ${sqlIdentifier(table)} DROP CONSTRAINT ${sqlIdentifier(`${table}_${colName}_fkey`)}` })
+    migrations.push({ up: sql, down: `ALTER TABLE ${sqlIdentifier(table)} DROP CONSTRAINT ${sqlIdentifier(constraintName)}` })
   } else {
     await db.raw(sql)
   }
 }
 
-async function createM2MTable(relTable: string, table1: string, table2: string, dryRun: boolean = false, migrations: MigrationCommand[] = []) {
+async function createM2MTable(
+  relTable: string,
+  table1: string,
+  table2: string,
+  dryRun: boolean = false,
+  migrations: MigrationCommand[] = []
+) {
   const db = getDb()
+  const col1 = `${table1}_id`
+  const col2 = `${table2}_id`
   const sql = `
     CREATE TABLE ${sqlIdentifier(relTable)} (
-      ${sqlIdentifier(table1 + '_id')} INTEGER REFERENCES ${sqlIdentifier(table1)}(id) ON DELETE CASCADE,
-      ${sqlIdentifier(table2 + '_id')} INTEGER REFERENCES ${sqlIdentifier(table2)}(id) ON DELETE CASCADE,
-      PRIMARY KEY (${sqlIdentifier(table1 + '_id')}, ${sqlIdentifier(table2 + '_id')})
+      ${sqlIdentifier(col1)} INTEGER REFERENCES ${sqlIdentifier(table1)}(id) ON DELETE CASCADE,
+      ${sqlIdentifier(col2)} INTEGER REFERENCES ${sqlIdentifier(table2)}(id) ON DELETE CASCADE,
+      PRIMARY KEY (${sqlIdentifier(col1)}, ${sqlIdentifier(col2)})
     )
   `
   if (dryRun) {
@@ -409,7 +510,7 @@ function mapFieldType(field: FieldDef): string {
       return 'integer'
     case 'one2many':
     case 'many2many':
-      return 'text' // should not be used for physical cols anymore
+      return 'text' // Virtual relational fields
     case 'vector':
       return `vector(${field.dim ?? 1536})`
     default:

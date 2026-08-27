@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import { Globe } from "lucide-react"
-import { useNasaFeeds } from "@core/hooks/use-nasa-feeds"
+import { useNasaFeeds } from "@moon/client"
 
 const POPULATION_GROWTH_PER_SEC = 2.4
 

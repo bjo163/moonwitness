@@ -1,11 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useLanguage } from "@core/contexts"
-import { playClickSound } from "@core/utils/sound-feedback"
+import { useLanguage } from "@workspace/state"
+import { playClickSound, moonClientInstance, useAuthSession } from "@moon/client"
 import { Target, Award, RotateCcw } from "lucide-react"
-import { ContextBlock } from "@core/ui"
-import { useMoonStore } from "@core/store/moon-store"
+import { ContextBlock } from "@workspace/ui"
 
 type ZikrPreset = {
   id: string
@@ -43,7 +42,8 @@ const ZIKR_PRESETS: ZikrPreset[] = [
 
 export function TasbihView() {
   const { t } = useLanguage()
-  const { user, client: moonClient } = useMoonStore()
+  const { user } = useAuthSession()
+  const moonClient = moonClientInstance
 
   const [activeZikr, setActiveZikr] = useState<ZikrPreset>(ZIKR_PRESETS[0]!)
   const [count, setCount] = useState(0)

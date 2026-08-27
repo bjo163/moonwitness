@@ -31,7 +31,14 @@ import {
   ChevronDown,
   ChevronRight,
   Terminal,
+  Ticket,
+  Handshake,
+  Package,
+  Warehouse,
+  BookText,
+  Map,
 } from "lucide-react"
+import { APP_PORTS } from "@workspace/types"
 
 export type SidebarItem = {
   label: string
@@ -91,18 +98,130 @@ function getIcon(name?: string) {
       return <Database {...props} />
     case "Terminal":
       return <Terminal {...props} />
+    case "Ticket":
+      return <Ticket {...props} />
+    case "Handshake":
+      return <Handshake {...props} />
+    case "Package":
+      return <Package {...props} />
+    case "Warehouse":
+      return <Warehouse {...props} />
+    case "BookText":
+      return <BookText {...props} />
+    case "Map":
+      return <Map {...props} />
     default:
       return <LayoutDashboard {...props} />
   }
 }
 
 const DEFAULT_SIDEBAR_ITEMS: SidebarItem[] = [
-  { label: "Dashboard", href: "/dashboard", icon: "LayoutDashboard" },
-  { label: "Hadith Database", href: "/hadiths", icon: "ScrollText" },
-  { label: "Scripture Hub", href: "/scriptures", icon: "BookOpen" },
-  { label: "User Access", href: "/users", icon: "Users" },
-  { label: "CAB Governance", href: "/cab", icon: "ShieldCheck" },
-  { label: "Operator Profile", href: "/profile", icon: "User" },
+  { label: "Matrix Control", href: "/dashboard", icon: "LayoutDashboard" },
+  {
+    label: "Work Management",
+    href: "/matrix/pj.task",
+    icon: "FolderKanban",
+    subLinks: [
+      { label: "Task Pipeline", href: "/matrix/pj.task", icon: "CheckSquare" },
+      { label: "Projects", href: "/matrix/pj.project", icon: "FolderKanban" },
+      { label: "Sprints", href: "/matrix/pj.sprint", icon: "Clock" },
+      { label: "Milestones", href: "/matrix/pj.milestone", icon: "Target" },
+    ],
+  },
+  {
+    label: "Support Desk",
+    href: "/matrix/hd.ticket",
+    icon: "Ticket",
+    subLinks: [
+      { label: "Tickets", href: "/matrix/hd.ticket", icon: "Ticket" },
+      { label: "Teams", href: "/matrix/hd.team", icon: "Users" },
+      { label: "SLA Policies", href: "/matrix/hd.sla", icon: "Clock" },
+    ],
+  },
+  {
+    label: "CAB Governance",
+    href: "/matrix/cab.change",
+    icon: "ShieldCheck",
+    subLinks: [
+      { label: "Change Requests", href: "/matrix/cab.change", icon: "ShieldCheck" },
+      { label: "Review Meetings", href: "/matrix/cab.meeting", icon: "Users" },
+      { label: "Decisions", href: "/matrix/cab.decision", icon: "Scale" },
+    ],
+  },
+  {
+    label: "Outreach & CRM",
+    href: "/matrix/crm.lead",
+    icon: "Handshake",
+    subLinks: [
+      { label: "Partnership Leads", href: "/matrix/crm.lead", icon: "Handshake" },
+      { label: "Outreach Teams", href: "/matrix/crm.team", icon: "Users" },
+    ],
+  },
+  {
+    label: "Operations & ERP",
+    href: "/matrix/product.template",
+    icon: "Package",
+    subLinks: [
+      { label: "Product Catalog", href: "/matrix/product.template", icon: "Package" },
+      { label: "Warehouses", href: "/matrix/stock.warehouse", icon: "Warehouse" },
+      { label: "Inventory Moves", href: "/matrix/stock.move", icon: "Activity" },
+      { label: "Financial Ledger", href: "/matrix/account.account", icon: "BookText" },
+    ],
+  },
+  {
+    label: "Intelligence & AI",
+    href: "/matrix/mz.case",
+    icon: "Brain",
+    subLinks: [
+      { label: "Ethical Cases", href: "/matrix/mz.case", icon: "Scale" },
+      { label: "AI Dialogues", href: "/matrix/kh.conversation", icon: "Brain" },
+      { label: "Operations Log", href: "/matrix/sg.operation", icon: "Crosshair" },
+    ],
+  },
+  {
+    label: "Telemetry & Logs",
+    href: "/matrix/px.request",
+    icon: "BarChart3",
+    subLinks: [
+      { label: "Request Monitor", href: "/matrix/px.request", icon: "Activity" },
+      { label: "Query Benchmarks", href: "/matrix/px.query", icon: "Database" },
+      { label: "Dashboard Widgets", href: "/matrix/ir.dashboard.widget", icon: "LayoutDashboard" },
+      { label: "System Telemetry", href: "/analytics", icon: "BarChart3" },
+    ],
+  },
+  {
+    label: "Background Jobs",
+    href: "/matrix/ir.cron",
+    icon: "Clock",
+    subLinks: [
+      { label: "Scheduled Actions", href: "/matrix/ir.cron", icon: "Clock" },
+      { label: "Worker Queue & Jobs", href: "/matrix/ir.queue.job", icon: "Layers" },
+      { label: "Execution Logs", href: "/matrix/ir.cron.log", icon: "Activity" },
+    ],
+  },
+  {
+    label: "Automations & Mesh",
+    href: "/matrix/ir.automation",
+    icon: "Zap",
+    subLinks: [
+      { label: "Automation Rules", href: "/matrix/ir.automation", icon: "Zap" },
+      { label: "Outbound Webhooks", href: "/matrix/ir.webhook", icon: "Globe" },
+      { label: "Webhook Logs", href: "/matrix/ir.webhook.log", icon: "Activity" },
+      { label: "Report Templates", href: "/matrix/ir.report", icon: "FileText" },
+    ],
+  },
+  {
+    label: "Reference Geodata",
+    href: "/matrix/geo.province",
+    icon: "Map",
+    subLinks: [
+      { label: "Provinces", href: "/matrix/geo.province", icon: "Map" },
+      { label: "Observatory Cities", href: "/matrix/geo.city", icon: "Globe" },
+    ],
+  },
+  { label: "Hadith Archive", href: "/hadiths", icon: "BookOpen" },
+  { label: "Scripture DB", href: "/scriptures", icon: "ScrollText" },
+  { label: "Identity & Access", href: "/users", icon: "Users" },
   { label: "Dev Terminal", href: "/terminal", icon: "Terminal" },
 ]
 
@@ -110,7 +229,7 @@ export function Sidebar({
   items = DEFAULT_SIDEBAR_ITEMS,
   brandTitle = "COMMAND CENTER",
   brandSubtitle = "SYS-VER 1.0",
-  deckUrl = "http://localhost:3000",
+  deckUrl = `http://localhost:${APP_PORTS.PUBLIC_PORTAL}`,
   onLogout,
 }: {
   items?: SidebarItem[]

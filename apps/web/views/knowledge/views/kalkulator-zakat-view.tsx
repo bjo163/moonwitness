@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Calculator, Coins, TrendingUp, ShieldCheck } from "lucide-react"
-import { ContextBlock } from "@core/ui"
+import { ContextBlock } from "@workspace/ui"
 
 // Simulasi harga emas global (real-time API can be hooked here)
 const MOCK_GOLD_PRICE_PER_GRAM = 1350000 // Rupiah

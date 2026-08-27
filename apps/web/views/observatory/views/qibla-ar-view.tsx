@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 /* eslint-disable-next-line no-restricted-imports -- Standard icons for Qibla AR view */
 import { Camera, Compass, MapPin, AlertTriangle } from "lucide-react"
-import { ContextBlock } from "@core/ui"
+import { ContextBlock } from "@workspace/ui"
 import { CelestialQiblaCompass } from "@workspace/ui"
 
 const FULL_CIRCLE_DEGREES = 360

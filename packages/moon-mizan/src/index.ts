@@ -5,6 +5,8 @@ import MzReference from './models/mz-reference.js'
 
 import { chooseMethod, PRIMARY_FILTERS, SECONDARY_FILTERS, validateAssessment } from './engine.js'
 export { registerMizanRoutes } from './routes.js'
+export { loadDemoData } from './demo-data.js'
+export { views } from './views.js'
 
 export { chooseMethod, PRIMARY_FILTERS, SECONDARY_FILTERS, validateAssessment }
 export type { AssessmentDecision, AssessmentInput, AssessmentMethod, MethodDecision, MethodInput } from './engine.js'

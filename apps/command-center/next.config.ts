@@ -1,7 +1,22 @@
 import type { NextConfig } from "next"
+import path from "path"
+
+if (!process.env.NODE_OPTIONS?.includes("--no-deprecation")) {
+  process.env.NODE_OPTIONS = `${process.env.NODE_OPTIONS || ""} --no-deprecation`.trim()
+}
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@workspace/ui", "@moon/witness", "@moon/time"],
+  transpilePackages: [
+    "@workspace/ui",
+    "@workspace/state",
+    "@workspace/hooks",
+    "@workspace/error",
+    "@workspace/types",
+    "@moon/client",
+    "@moon/compute",
+    "@moon/witness",
+    "@moon/time",
+  ],
   images: {
     formats: ["image/avif", "image/webp"],
   },
@@ -30,6 +45,9 @@ const nextConfig: NextConfig = {
       "mariadb/callback"
     )
     return config
+  },
+  turbopack: {
+    root: path.resolve(__dirname, "../../"),
   },
 }
 

@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react"
 import { AlertTriangle, LoaderCircle, Send, Sprout } from "lucide-react"
-import { ContextBlock, Panel, PanelHeader } from "@core/ui"
+import { ContextBlock, Panel, PanelHeader } from "@workspace/ui"
 import { GARDEN_BRAINSTORM_CONFIG } from "../data/garden-brainstorm.config"
 import {
   BrainstormTask,

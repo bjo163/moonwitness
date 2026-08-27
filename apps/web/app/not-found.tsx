@@ -1,8 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { EmptyState, Button } from "@core/ui"
-import { ContentWrapper } from "@core/layouts/content-wrapper"
+import { EmptyState, Button } from "@workspace/ui"
+import { ContentWrapper } from "@/components/layouts/content-wrapper"
 import { Compass } from "lucide-react"
 
 export default function NotFound() {
@@ -16,7 +16,7 @@ export default function NotFound() {
         />
         <div className="mt-6 flex justify-center">
           <Link href="/">
-            <Button variant="primary">RETURN TO MISSION CONTROL</Button>
+            <Button variant="default">RETURN TO MISSION CONTROL</Button>
           </Link>
         </div>
       </div>

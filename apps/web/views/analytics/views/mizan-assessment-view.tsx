@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import { useMoonStore } from "@core/store/moon-store"
+import { apiGet } from "@moon/client"
 import { Scale, Activity, ShieldAlert, Cpu, Sparkles } from "lucide-react"
 
 type MethodDecision = {
@@ -16,7 +16,6 @@ export function MizanAssessmentView() {
     useState(false)
   const [decision, setDecision] = useState<MethodDecision | null>(null)
   const [isResolving, setIsResolving] = useState(true)
-  const { request } = useMoonStore()
 
   useEffect(() => {
     let mounted = true
@@ -27,7 +26,7 @@ export function MizanAssessmentView() {
     })
 
     setIsResolving(true)
-    request("GET", `/api/mizan/decision?${query.toString()}`)
+    apiGet<{ decision: MethodDecision }>(`/api/mizan/decision?${query.toString()}`)
       .then((data: { decision: MethodDecision }) => {
         if (mounted) setDecision(data.decision)
       })
@@ -41,7 +40,7 @@ export function MizanAssessmentView() {
     return () => {
       mounted = false
     }
-  }, [balanceSatisfied, generalSufficient, internalReferenceVerified, request])
+  }, [balanceSatisfied, generalSufficient, internalReferenceVerified])
 
   const method = decision?.method
   const limitation = decision?.limitation
@@ -80,7 +79,7 @@ export function MizanAssessmentView() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 px-4 pb-20 md:px-0">
-      {/* HUD Context Block Alternative if ContextBlock from @core/ui is not enough */}
+      {/* HUD Context Block */}
       <div className="rounded-lg border border-[#A100FF]/30 bg-[#0A0F17]/80 p-6 shadow-[0_0_20px_rgba(161,0,255,0.15)] backdrop-blur-md">
         <div className="mb-4 flex items-start justify-between">
           <div>

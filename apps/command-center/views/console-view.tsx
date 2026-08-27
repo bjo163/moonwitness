@@ -1,25 +1,10 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from "react"
-/* eslint-disable-next-line no-restricted-imports -- Standard icons for command console */
-import {
-  Terminal,
-  Cpu,
-  Database,
-  Network,
-  Activity,
-  ShieldCheck,
-  Zap,
-  Sparkles,
-} from "lucide-react"
+import React, { useState } from "react"
+import { Terminal, Zap, Sparkles } from "lucide-react"
 import { Button } from "@workspace/ui"
-
-type LogItem = {
-  id: string
-  timestamp: string
-  sender: "SYSTEM" | "KHIDRA_AI" | "USER" | "SUCCESS" | "WARN" | "CRITICAL"
-  message: string
-}
+import { TerminalLogViewer, type LogItem } from "./console/terminal-log-viewer"
+import { SystemDiagnosticsSidebar } from "./console/system-diagnostics-sidebar"
 
 const INITIAL_LOGS: LogItem[] = [
   {
@@ -44,8 +29,7 @@ const INITIAL_LOGS: LogItem[] = [
     id: "4",
     timestamp: "00:00:04",
     sender: "KHIDRA_AI",
-    message:
-      "Greetings, Explorer. Terminal interactive interface is ready. Type 'help' to list available commands.",
+    message: "Greetings, Explorer. Terminal interactive interface is ready. Type 'help' to list available commands.",
   },
 ]
 
@@ -57,27 +41,9 @@ const QUICK_COMMANDS = [
   { label: "CLEAR", cmd: "clear", desc: "Reset log viewer" },
 ]
 
-const TELEMETRY_METRIC_COUNT = 4
 const RADIX_BASE = 36
 const ID_LENGTH = 9
 const COMMAND_DELAY_MS = 250
-
-function getLogSenderStyle(sender: LogItem["sender"]) {
-  switch (sender) {
-    case "SYSTEM":
-      return "text-cyan-400 font-bold border border-cyan-500/30 bg-cyan-500/10 px-1.5 py-0.5 rounded text-[10px]"
-    case "KHIDRA_AI":
-      return "text-purple-400 font-bold border border-purple-500/30 bg-purple-500/10 px-1.5 py-0.5 rounded text-[10px]"
-    case "SUCCESS":
-      return "text-emerald-400 font-bold border border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0.5 rounded text-[10px]"
-    case "WARN":
-      return "text-amber-400 font-bold border border-amber-500/30 bg-amber-500/10 px-1.5 py-0.5 rounded text-[10px]"
-    case "CRITICAL":
-      return "text-rose-500 font-bold border border-rose-500/30 bg-rose-500/10 px-1.5 py-0.5 rounded text-[10px]"
-    case "USER":
-      return "text-white font-bold px-1.5 py-0.5 rounded text-[10px] bg-black/60 border border-white/20"
-  }
-}
 
 function ConsoleHeader() {
   return (
@@ -120,11 +86,7 @@ function ConsoleHeader() {
   )
 }
 
-function ConsoleQuickCommands({
-  onSelect,
-}: {
-  onSelect: (cmd: string) => void
-}) {
+function ConsoleQuickCommands({ onSelect }: { onSelect: (cmd: string) => void }) {
   return (
     <div className="flex flex-wrap items-center gap-2 border-b border-cyan-500/20 bg-black/40 px-4 py-2.5">
       <span className="mr-2 font-mono text-[10px] tracking-widest text-cyan-400/60 uppercase">
@@ -142,44 +104,6 @@ function ConsoleQuickCommands({
             ({item.desc})
           </span>
         </button>
-      ))}
-    </div>
-  )
-}
-
-function TerminalLogViewer({ logs }: { logs: LogItem[] }) {
-  const scrollRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    }
-  }, [logs.length])
-
-  return (
-    <div
-      ref={scrollRef}
-      className="scrollbar-thin scrollbar-thumb-cyan-500/30 scrollbar-track-transparent max-h-[560px] min-h-[400px] flex-1 space-y-3 overflow-y-auto p-5 font-mono text-xs"
-    >
-      {logs.map((item) => (
-        <div
-          key={item.id}
-          className="group flex flex-col gap-1.5 rounded-lg border border-transparent p-2 transition-colors hover:border-white/10 hover:bg-black/30 sm:flex-row sm:items-start sm:gap-3"
-        >
-          <div className="flex shrink-0 items-center gap-2">
-            <span className="font-mono text-[10px] text-primary/50">
-              [{item.timestamp}]
-            </span>
-            <span className={getLogSenderStyle(item.sender)}>
-              {item.sender}
-            </span>
-          </div>
-          <p
-            className={`font-mono leading-relaxed break-words ${item.sender === "USER" ? "font-semibold text-cyan-300" : "text-gray-300"}`}
-          >
-            {item.message}
-          </p>
-        </div>
       ))}
     </div>
   )
@@ -205,96 +129,7 @@ function TerminalWindowHeader() {
   )
 }
 
-function SystemDiagnosticsSidebar() {
-  const metrics = [
-    {
-      label: "CORE CPU LOAD",
-      val: "38.2%",
-      icon: Cpu,
-      color: "text-cyan-400",
-      bg: "bg-cyan-500/10",
-      border: "border-cyan-500/30",
-    },
-    {
-      label: "MEMORY BUFFER",
-      val: "1.4 / 4.0 GB",
-      icon: Database,
-      color: "text-purple-400",
-      bg: "bg-purple-500/10",
-      border: "border-purple-500/30",
-    },
-    {
-      label: "NET LATENCY",
-      val: "14.2 ms",
-      icon: Network,
-      color: "text-emerald-400",
-      bg: "bg-emerald-500/10",
-      border: "border-emerald-500/30",
-    },
-    {
-      label: "ENTROPY FLICKER",
-      val: "0.0034 eV",
-      icon: Activity,
-      color: "text-amber-400",
-      bg: "bg-amber-500/10",
-      border: "border-amber-500/30",
-    },
-  ]
-
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="rounded-xl border border-cyan-500/30 bg-black/60 p-5 shadow-[0_0_25px_rgba(6,182,212,0.08)] backdrop-blur-md">
-        <h3 className="mb-4 flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-white uppercase">
-          <ShieldCheck className="h-4 w-4 text-cyan-400" />
-          Hardware Telemetry ({TELEMETRY_METRIC_COUNT} Nodes)
-        </h3>
-        <div className="space-y-3">
-          {metrics.map((m) => {
-            const Icon = m.icon
-            return (
-              <div
-                key={m.label}
-                className={`flex items-center justify-between rounded-lg border ${m.border} ${m.bg} p-3 transition-transform hover:scale-[1.01]`}
-              >
-                <div className="flex items-center gap-3">
-                  <Icon className={`h-5 w-5 ${m.color}`} />
-                  <span className="font-mono text-xs tracking-wider text-primary/80">
-                    {m.label}
-                  </span>
-                </div>
-                <span className={`font-mono text-sm font-bold ${m.color}`}>
-                  {m.val}
-                </span>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
-      <div className="rounded-xl border border-purple-500/30 bg-black/60 p-5 shadow-[0_0_25px_rgba(168,85,247,0.08)] backdrop-blur-md">
-        <div className="flex items-center justify-between">
-          <span className="font-mono text-[11px] tracking-widest text-purple-300 uppercase">
-            AI SAFETY ENFORCEMENT
-          </span>
-          <span className="h-2 w-2 animate-ping rounded-full bg-emerald-400" />
-        </div>
-        <p className="mt-2 font-mono text-xs leading-relaxed text-primary/70">
-          Neural network safeguards prevent destructive orbital system
-          operations. Root execution requires higher clearance.
-        </p>
-        <div className="mt-4 flex items-center justify-between border-t border-purple-500/20 pt-3 font-mono text-[10px] text-purple-400/80">
-          <span>CLEARED_LEVEL: 7</span>
-          <span>KHIDRA_SYNC: ENGAGED</span>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-export { TerminalView as ConsoleView }
-
-
-export function TerminalView() {
+export function ConsoleView() {
   const [logs, setLogs] = useState<LogItem[]>(INITIAL_LOGS)
   const [input, setInput] = useState("")
 
@@ -320,37 +155,22 @@ export function TerminalView() {
     setTimeout(() => {
       switch (trimmed) {
         case "help":
-          appendLog(
-            "SYSTEM",
-            "SUPPORTED COMMANDS: help, status, scan, matrix, clear"
-          )
+          appendLog("SYSTEM", "SUPPORTED COMMANDS: help, status, scan, matrix, clear")
           break
         case "status":
-          appendLog(
-            "SUCCESS",
-            "MOONWITNESS CORE DIAGNOSTIC: Observatory GPS locked. Islamic Lunar calendar engine in optimal sync. Database throughput normal."
-          )
+          appendLog("SUCCESS", "MOONWITNESS CORE DIAGNOSTIC: Observatory GPS locked. Islamic Lunar calendar engine in optimal sync. Database throughput normal.")
           break
         case "scan":
-          appendLog(
-            "KHIDRA_AI",
-            "Commencing orbital sky sweep... Identified 3 astronomical anomaly targets in Waxing Gibbous quadrant. No hazards found."
-          )
+          appendLog("KHIDRA_AI", "Commencing orbital sky sweep... Identified 3 astronomical anomaly targets in Waxing Gibbous quadrant. No hazards found.")
           break
         case "matrix":
-          appendLog(
-            "SYSTEM",
-            "01001101 01001111 01001111 01001110 01010111 01001001 01010100 01001110 01000101 01010011 01010011 - Quantum Stream Verified."
-          )
+          appendLog("SYSTEM", "01001101 01001111 01001111 01001110 01010111 01001001 01010100 01001110 01000101 01010011 01010011 - Quantum Stream Verified.")
           break
         case "clear":
           setLogs([])
           break
         default:
-          appendLog(
-            "WARN",
-            `Directive unregistered in current clearance: '${cmdText}'. Consult 'help' for valid protocol syntax.`
-          )
+          appendLog("WARN", `Directive unregistered in current clearance: '${cmdText}'. Consult 'help' for valid protocol syntax.`)
           break
       }
     }, COMMAND_DELAY_MS)
@@ -416,3 +236,5 @@ export function TerminalView() {
     </div>
   )
 }
+
+export const ErpConsoleView = ConsoleView

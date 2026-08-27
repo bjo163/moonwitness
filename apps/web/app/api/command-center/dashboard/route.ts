@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
-import { MOCK_COMMAND_CENTER_DASHBOARD } from "@core/db/data/command-center-dashboard.db"
+import { MOCK_COMMAND_CENTER_DASHBOARD } from "@/lib/data/command-center-dashboard.db"
 export const dynamic = "force-dynamic"
-import { moonClientInstance } from "@core/store/moon-store"
-import { getDailyPrayerTimes } from "@moon/witness/dist/astronomy/prayer-times.js"
+import { getDailyPrayerTimes } from "@moon/compute"
+import { moonClientInstance } from "@moon/client"
 
 const JAKARTA_LAT = -6.2088
 const JAKARTA_LNG = 106.8456

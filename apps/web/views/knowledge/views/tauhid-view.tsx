@@ -1,7 +1,7 @@
 "use client"
 
-import { useLanguage } from "@core/contexts"
-import { ContextBlock } from "@core/ui"
+import { useLanguage } from "@workspace/state"
+import { ContextBlock } from "@workspace/ui"
 
 export function TauhidPortalView() {
   const { t } = useLanguage()
@@ -44,7 +44,7 @@ export function TauhidPortalView() {
           )}
           operation="TAUHID-PILLARS-SYNC"
           status="ONLINE"
-          accentColor="astronomy"
+          accentColor="knowledge"
         />
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">

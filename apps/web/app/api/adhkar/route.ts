@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { moonClientInstance } from "@core/store/moon-store"
+import { moonClientInstance } from "@moon/client"
 export const dynamic = "force-dynamic"
 
 export async function GET(request: NextRequest) {

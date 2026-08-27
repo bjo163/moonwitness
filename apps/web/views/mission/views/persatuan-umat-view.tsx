@@ -2,9 +2,9 @@
 
 import { useState } from "react"
 import { Sparkles, Heart, Users, CheckCircle2 } from "lucide-react"
-import { useLanguage } from "@core/contexts"
-import { GlobalPrayerWallWidget } from "@core/widgets"
-import { ContextBlock } from "@core/ui"
+import { useLanguage } from "@workspace/state"
+import { GlobalPrayerWallWidget } from "@workspace/ui"
+import { ContextBlock } from "@workspace/ui"
 
 type CovenantPillar = {
   number: string

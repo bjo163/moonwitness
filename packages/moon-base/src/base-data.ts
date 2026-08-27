@@ -175,6 +175,7 @@ export async function loadBaseData() {
           const uRow = await User.spawn(User, env, {
             name: u.name,
             email: u.email,
+            login: u.email,
             password: hashedPassword,
             partnerId,
             companyId: actualCompanyId
@@ -183,9 +184,10 @@ export async function loadBaseData() {
         } else {
           const existingUser = userRows[0] as { id: number; password: string }
           userId = existingUser.id
-          if (!isBcryptHash(existingUser.password)) {
-            await User.morph(User, env, existingUser.id, { password: hashedPassword })
-          }
+          await conn('vx_user').where({ id: existingUser.id }).update({
+            password: hashedPassword,
+            login: u.email
+          })
         }
 
         if (u.isAdmin) {

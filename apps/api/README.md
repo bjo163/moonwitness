@@ -1,33 +1,44 @@
-# MoonWitness API Service (`apps/api`)
+# ◈ apps/api — Backend Transport Engine & Domain Services
 
-The primary backend service for MoonWitness OS, powered by `@moon/server`, `@moon/orm`, and core domain addons (`@moon/witness`, `@moon/base`, `@moon/mizan`, `@moon/khidra`, `@moon/cab`).
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  APPLICATION:    apps/api                                                ║
+║  SYSTEM VERSION: MoonWitness OS V9.0 (Divine Operating System Matrix)    ║
+║  APP VERSION:    9.0.0                                                   ║
+║  PORT:           4000 (APP_PORTS.API_BACKEND)                            ║
+║  CLASSIFICATION: TIER 6 — BACKEND REST, RPC & SSE TELEMETRY SERVICE      ║
+║  STATUS:         ████████████████████████████████ ACTIVE (SOVEREIGN)     ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+The primary backend engine and real-time telemetry service for MoonWitness OS, powered by `@moon/server`, `@moon/orm`, and the core domain engines (`@moon/witness`, `@moon/base`, `@moon/mizan`, `@moon/khidra`, `@moon/cab`, `@moon/performance`).
 
 ---
 
-## Commands
+## 🚀 Running Locally
 
 ```bash
-# Start development server with live watch
-pnpm dev
+# Start API Service on Port 4000 with hot reload
+pnpm --filter api dev
 
-# Build TypeScript output
-pnpm build
-
-# Start production server
-pnpm start
-
-# Run PostgreSQL graph certification suite
-pnpm run certify:witness-graph-pg
+# Seed database and knowledge graph core
+pnpm db:seed
 ```
 
 ---
 
-## Environment Variables
+## ⚙️ Environment Variables
 
 | Variable | Description | Default |
 |---|---|---|
-| `DATABASE_URL` | PostgreSQL connection string | `postgres://postgres:password@localhost:5432/moonwitness` |
+| `DATABASE_URL` | PostgreSQL connection string with pgvector | `postgres://localhost:5432/moonwitness` |
 | `JWT_SECRET` | Secret key for signing and verifying tokens | `your-secret-key` |
-| `API_PORT` | Port for the HTTP API | `4000` |
-| `BOOTSTRAP_ADMIN_EMAIL` | Superuser bootstrap email | `admin@moonwitness.org` |
-| `BOOTSTRAP_ADMIN_PASSWORD` | Superuser bootstrap password (required in production) | Set a unique secret |
+| `API_PORT` | Port for the HTTP / SSE API | `4000` |
+| `BOOTSTRAP_ADMIN_EMAIL` | Superuser bootstrap email | `operator@moonwitness.org` |
+
+---
+
+## 🧪 Verification
+```bash
+pnpm --filter api typecheck
+```

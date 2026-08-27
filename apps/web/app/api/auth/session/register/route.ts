@@ -3,7 +3,7 @@ import {
   isTrustedSameOrigin,
   requestApi,
   setSessionCookie,
-} from "@core/api/web-session"
+} from "@/lib/web-session"
 
 export const dynamic = "force-dynamic"
 

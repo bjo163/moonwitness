@@ -1,8 +1,18 @@
-# @moon/server
+# ◈ @moon/server
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  PACKAGE:        @moon/server                                            ║
+║  SYSTEM VERSION: MoonWitness OS V9.0 (Divine Operating System Matrix)    ║
+║  PKG VERSION:    9.0.0                                                   ║
+║  CLASSIFICATION: TIER 4 — TRANSPORT RUNTIME, DECLARATIVE RPC & SSE       ║
+║  STATUS:         ████████████████████████████████ ACTIVE (SOVEREIGN)     ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
 
 > **Transport & Runtime Boundary Layer for MoonWitness OS**
 
-`@moon/server` provides HTTP, RPC, SSE, authentication, and routing infrastructure for MoonWitness applications.
+`@moon/server` provides HTTP, RPC, SSE, authentication, and declarative routing infrastructure for MoonWitness applications.
 
 ---
 
@@ -44,6 +54,13 @@ server.listen(() => {
 
 ---
 
-## License
+## 🛡️ Architectural Boundaries
+- Belongs to **Tier 4 (Transport Layer)**.
+- Consumes `@moon/base`, `@moon/orm`, and `@moon/protocol`.
 
-MIT
+---
+
+## 🧪 Verification
+```bash
+pnpm --filter @moon/server test
+```

@@ -72,8 +72,10 @@ export const NAVIGATION_MESH = {
         { label: "Lunar Calendar", href: "/observatory/lunar-calendar", icon: "Moon" },
         { label: "Eclipse Tracker", href: "/observatory/eclipse-tracker", icon: "Eclipse" },
         { label: "Qibla AR Scope", href: "/observatory/qibla-ar", icon: "Compass" },
-        { label: "Atmospheric Radar", href: "/observatory/atmospheric-radar", icon: "Radio" },
+        { label: "Orbital Mechanics", href: "/astronomy/divine-astronomy", icon: "Orbit" },
+        { label: "Solar Telemetry", href: "/astronomy/sun-position", icon: "Sun" },
         { label: "Celestial Star Map", href: "/observatory/celestial-star-map", icon: "Sparkles" },
+        { label: "Atmospheric Radar", href: "/observatory/atmospheric-radar", icon: "Radio" },
       ],
     },
     {
@@ -83,27 +85,12 @@ export const NAVIGATION_MESH = {
       subLinks: [
         { label: "Holy Qur'an Matrix", href: "/knowledge/quran-matrix", icon: "BookOpen" },
         { label: "Hadith Compendiums", href: "/knowledge/hadith-compendiums", icon: "ScrollText" },
-        { label: "Tafsir Deep Reader", href: "/knowledge/tafsir-reader", icon: "BookMarked" },
-        { label: "Asmaul Husna", href: "/knowledge/asmaul-husna", icon: "Sparkles" },
-        { label: "Root Concordance", href: "/knowledge/root-concordance", icon: "Search" },
-      ],
-    },
-    {
-      label: "ASTRONOMY",
-      href: "/astronomy",
-      icon: "Sun",
-      subLinks: [
-        { label: "Orbital Mechanics", href: "/astronomy/orbital-mechanics", icon: "Orbit" },
-        { label: "Solar Telemetry", href: "/astronomy/solar-telemetry", icon: "Sun" },
-      ],
-    },
-    {
-      label: "HISTORY",
-      href: "/history",
-      icon: "Clock",
-      subLinks: [
         { label: "Sirah Chronology", href: "/history/sirah-chronology", icon: "MapPin" },
         { label: "Civilization Timeline", href: "/history/civilization-timeline", icon: "History" },
+        { label: "Tafsir Deep Reader", href: "/knowledge/tafsir-reader", icon: "BookMarked" },
+        { label: "Asmaul Husna", href: "/knowledge/asmaul-husna", icon: "Sparkles" },
+        { label: "Science Miracles", href: "/history/mukjizat-sains", icon: "Sparkles" },
+        { label: "Root Concordance", href: "/knowledge/root-concordance", icon: "Search" },
       ],
     },
     {
@@ -112,7 +99,9 @@ export const NAVIGATION_MESH = {
       icon: "BarChart3",
       subLinks: [
         { label: "Tabayyun Verification", href: "/analytics/tabayyun-truth", icon: "ShieldCheck" },
+        { label: "Mizan Assessment", href: "/analytics/mizan-assessment", icon: "Scale" },
         { label: "Global Zakat Engine", href: "/analytics/zakat-engine", icon: "Scale" },
+        { label: "Psychology of Soul", href: "/analytics/psikologi-jiwa", icon: "Brain" },
       ],
     },
     {
@@ -121,8 +110,9 @@ export const NAVIGATION_MESH = {
       icon: "Target",
       subLinks: [
         { label: "Rasulullah Toolkit", href: "/mission/toolkit-rasulullah", icon: "Crosshair" },
-        { label: "Global Human Unity", href: "/mission/global-human-unity", icon: "Globe" },
-        { label: "Ambassador Identity", href: "/mission/ambassador-identity", icon: "Award" },
+        { label: "Prophetic Diplomacy", href: "/mission/diplomasi-profetik", icon: "Award" },
+        { label: "Global Human Unity", href: "/mission/persatuan-umat", icon: "Globe" },
+        { label: "Civilization Charter", href: "/mission/piagam-peradaban", icon: "ScrollText" },
       ],
     },
   ],

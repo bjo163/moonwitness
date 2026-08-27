@@ -1,8 +1,8 @@
 "use client"
 
-import { useLanguage } from "@core/contexts"
+import { useLanguage } from "@workspace/state"
 import { Atom } from "lucide-react"
-import { ContextBlock, Panel, PanelHeader } from "@core/ui"
+import { ContextBlock, Panel, PanelHeader } from "@workspace/ui"
 
 type ScienceMiracle = {
   id: string

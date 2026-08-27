@@ -104,6 +104,48 @@ function TableCaption({
   )
 }
 
+export function SimpleTable({
+  headers,
+  rows,
+  accentColor = "cyan",
+  className,
+}: {
+  headers: string[]
+  rows: React.ReactNode[][]
+  accentColor?: string
+  className?: string
+}) {
+  return (
+    <div className={cn("overflow-x-auto font-mono text-xs", className)}>
+      <table className="w-full text-left">
+        <thead>
+          <tr className="border-b border-primary/20 bg-primary/5 text-[10px] font-bold tracking-wider text-primary uppercase">
+            {headers.map((h, i) => (
+              <th key={i} className="px-3 py-2">
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-primary/10">
+          {rows.map((row, rIdx) => (
+            <tr key={rIdx} className="transition-colors hover:bg-primary/5">
+              {row.map((cell, cIdx) => (
+                <td key={cIdx} className="px-3 py-2 text-slate-300">
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+/** @deprecated Use SimpleTable */
+export const HUDTable = SimpleTable
+
 export {
   Table,
   TableHeader,

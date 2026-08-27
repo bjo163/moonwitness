@@ -1,7 +1,7 @@
-import { Suspense } from "react"
 import { Orbitron, JetBrains_Mono, Geist } from "next/font/google"
 import "@workspace/ui/globals.css"
-import { Sidebar, Topbar, CommandPalette, CosmicAudioToggle } from "@workspace/ui"
+import { MoonProvider } from "@workspace/state"
+import { CommandCenterShell } from "@/components/shell"
 
 const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" })
 const jetBrainsMono = JetBrains_Mono({
@@ -24,25 +24,15 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${orbitron.variable} ${jetBrainsMono.variable} ${geist.variable} dark`}
+      suppressHydrationWarning
     >
-      <body className="bg-[#030508] font-sans text-white antialiased selection:bg-cyber-purple/30 selection:text-white">
-        <div className="flex min-h-screen">
-          <Suspense fallback={null}>
-            <Sidebar />
-          </Suspense>
-          <div className="flex flex-1 flex-col pl-64">
-            <Suspense fallback={null}>
-              <Topbar />
-            </Suspense>
-            <main className="flex-1 overflow-x-hidden p-6 lg:p-8">
-              {children}
-            </main>
-          </div>
-        </div>
-        <CommandPalette />
-        <div className="fixed bottom-4 right-4 z-40 hidden sm:block">
-          <CosmicAudioToggle />
-        </div>
+      <body
+        className="bg-[#030508] font-sans text-white antialiased selection:bg-cyber-purple/30 selection:text-white"
+        suppressHydrationWarning
+      >
+        <MoonProvider>
+          <CommandCenterShell>{children}</CommandCenterShell>
+        </MoonProvider>
       </body>
     </html>
   )

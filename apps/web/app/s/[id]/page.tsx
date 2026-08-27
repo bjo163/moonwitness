@@ -2,10 +2,8 @@ import { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { InspirationCommentsClient } from "@/views/knowledge/components/inspiration-comments-client"
-import { cleanHadithText } from "@core/utils/hadith-cleaner"
-import { ContextBlock } from "@core/ui"
-import { moonClientInstance } from "@core/store/moon-store"
-import { VerseInsightTooltip } from "@core/widgets"
+import { cleanHadithText, apiGet } from "@moon/client"
+import { ContextBlock, VerseInsightTooltip } from "@workspace/ui"
 
 type PageProps = {
   params: Promise<{
@@ -57,11 +55,10 @@ export async function generateMetadata({
 
   let surahName = `Surah ${surahNum}`
   try {
-    const json = await moonClientInstance.request(
-      "GET",
+    const json = await apiGet<any>(
       `/api/witness/quran/surah?number=${surahNum}`
     )
-    if (json.surah?.name) surahName = json.surah.name
+    if (json?.surah?.name) surahName = json.surah.name
   } catch {}
 
   return {
@@ -70,7 +67,7 @@ export async function generateMetadata({
     openGraph: {
       title: `Inspiration Q.S ${surahName} (${surahNum}:${ayahNum})`,
       description: `MoonWitness Short Link — Q.S ${surahName} Ayah ${ayahNum}, Prophetic Hadiths & Cosmic Lore Transmission.`,
-      url: `http://localhost:3000/s/${id}`,
+      url: `/s/${id}`,
     },
   }
 }
@@ -101,12 +98,11 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
   let ayahData: any = null
   let surahName = `Surah ${surahNum}`
   try {
-    const json = await moonClientInstance.request(
-      "GET",
+    const json = await apiGet<any>(
       `/api/witness/quran/surah?number=${surahNum}`
     )
-    surahName = json.surah?.name || surahName
-    const ayahs = json.ayahs || []
+    surahName = json?.surah?.name || surahName
+    const ayahs = json?.ayahs || []
     ayahData = ayahs.find((a: any) => a.number === ayahNum) || ayahs[0]
   } catch (e) {
     console.error(e)
@@ -120,11 +116,10 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
   let asmaulSurah = null
   let asmaulAyah = null
   try {
-    const json = await moonClientInstance.request(
-      "GET",
+    const json = await apiGet<any>(
       `/api/witness/asmaul-husna`
     )
-    const data = json.data || []
+    const data = json?.data || []
     asmaulSurah = data[(surahNum - 1) % 99] || null
     asmaulAyah = data[(ayahNum - 1) % 99] || null
   } catch (e) {
@@ -135,11 +130,10 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
   let hadithData: any = null
   let bookName = "Shahih Bukhari"
   try {
-    const json = await moonClientInstance.request(
-      "GET",
+    const json = await apiGet<any>(
       `/api/witness/hadith?slug=bukhari&limit=1&page=${ayahNum % 500}`
     )
-    hadithData = (json.hadiths || [])[0]
+    hadithData = (json?.hadiths || [])[0]
   } catch (e) {}
 
   // 5. Fetch Scripture Wisdom
@@ -149,7 +143,7 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
     notes: "Khazanah Kitab Suci Global",
   }
 
-  const shortUrl = `http://localhost:3000/s/${id}`
+  const shortUrl = `${process.env.NEXT_PUBLIC_APP_URL || ""}/s/${id}`
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 px-4 sm:px-6">

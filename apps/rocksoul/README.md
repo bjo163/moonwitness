@@ -1,4 +1,14 @@
-# Rocksoul — Celitereal Chronicles
+# ◈ apps/rocksoul — Celitereal Chronicles Engine
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  APPLICATION:    apps/rocksoul                                           ║
+║  SYSTEM VERSION: MoonWitness OS V9.0 (Divine Operating System Matrix)    ║
+║  APP VERSION:    9.0.0                                                   ║
+║  CLASSIFICATION: TIER 6 — COMPANION WEB EXPERIMENTAL GAME RUNTIME        ║
+║  STATUS:         ████████████████████████████████ ACTIVE (SOVEREIGN)     ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
 
 A cosmic MMORPG adventure set in the Celitereal — a realm of floating rock islands suspended in cosmic energy. Gather the twelve Sacred Soul Rocks, battle the Void Devourer, and restore balance to the Celitereal.
 
@@ -91,3 +101,10 @@ The production build outputs to the `dist` folder.
 ## Created by MoonWitness
 
 Rocksoul is part of the MoonWitness OS ecosystem — a modular, cosmic-themed application platform.
+
+---
+
+## 🧪 Verification
+```bash
+pnpm --filter rocksoul build
+```

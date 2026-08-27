@@ -5,10 +5,8 @@ import {
   UserProfileModal,
   type UserProfile,
 } from "../../auth/components/modals/user-profile-modal"
-import { useLanguage } from "@core/contexts"
-import { useMoonStore } from "@core/store/moon-store"
-import { queueOfflineSync } from "@core/utils/offline-sync"
-import { useUserProfile } from "@core/hooks"
+import { useLanguage } from "@workspace/state"
+import { moonClientInstance, queueOfflineSync, useUserProfile } from "@moon/client"
 
 type CommentItem = {
   id: string
@@ -70,13 +68,11 @@ export function InspirationCommentsClient({
   useEffect(() => {
     fetchComments()
 
-    // Set up real-time listener via MoonStore
-    const unsubscribe = useMoonStore
-      .getState()
-      .subscribe("fx.msg", (msgData) => {
-        // Refresh comments when a new message is broadcasted
-        fetchComments()
-      })
+    // Set up real-time listener via MoonClient
+    const unsubscribe = moonClientInstance.subscribe("fx.msg", (_msgData: any) => {
+      // Refresh comments when a new message is broadcasted
+      fetchComments()
+    })
 
     return () => {
       unsubscribe()

@@ -128,3 +128,32 @@ export function Modal({
   if (typeof window === "undefined") return null
   return createPortal(ModalContent, document.body)
 }
+
+export function ModalTrigger({
+  icon: Icon,
+  label,
+  color = "cyan",
+  title,
+  onClick,
+  hideLabelOnMobile,
+  className = "",
+}: {
+  icon?: React.ElementType
+  label: string
+  color?: string
+  title?: string
+  onClick?: () => void
+  hideLabelOnMobile?: boolean
+  className?: string
+}) {
+  return (
+    <button
+      onClick={onClick}
+      title={title}
+      className={`inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-xs text-foreground transition-all hover:border-cyan-500/50 hover:bg-cyan-500/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-500 ${className}`}
+    >
+      {Icon && <Icon className="h-3.5 w-3.5 text-cyan-400" />}
+      <span className={hideLabelOnMobile ? "hidden sm:inline" : ""}>{label}</span>
+    </button>
+  )
+}

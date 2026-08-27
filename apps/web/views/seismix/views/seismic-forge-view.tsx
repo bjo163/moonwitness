@@ -15,10 +15,10 @@ import {
   ChevronRight,
   Radio,
 } from "lucide-react"
-import { ContextBlock } from "@core/ui/context-block"
-import { Panel, PanelHeader } from "@core/ui/panel"
-import { Stat } from "@core/ui/stat"
-import { Tabs } from "@core/ui/tabs"
+import { ContextBlock } from "@workspace/ui"
+import { Panel, PanelHeader } from "@workspace/ui"
+import { Stat } from "@workspace/ui"
+import { HUDTabs } from "@workspace/ui"
 
 // ── SEISMIC CONSTANTS ────────────────────────────────────
 const CANVAS_HEIGHT = 200
@@ -363,7 +363,7 @@ function PulseRing() {
           boxShadow: "0 0 30px rgba(255, 230, 0, 0.25)",
         }}
       >
-        <Activity className="h-6 w-6" style={{ color: "#FFE600" }} />
+        <Activity className="h-6 w-6 text-cyber-yellow" />
       </div>
     </div>
   )
@@ -466,10 +466,10 @@ export function SeismicForgeView() {
         />
 
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <Tabs
+          <HUDTabs
             tabs={waveTabs}
             activeTab={activeWave}
-            onChange={(id) =>
+            onChange={(id: string) =>
               setActiveWave(id as "pWave" | "sWave" | "surface")
             }
             accentColor="accent"

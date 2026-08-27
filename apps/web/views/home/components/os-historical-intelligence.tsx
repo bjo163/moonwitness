@@ -13,7 +13,7 @@ import {
   Scroll,
   Milestone,
 } from "lucide-react"
-import { Panel } from "@core/ui"
+import { Panel } from "@workspace/ui"
 
 export function OSHistoricalIntelligence() {
   const [timelineSearch, setTimelineSearch] = useState("")

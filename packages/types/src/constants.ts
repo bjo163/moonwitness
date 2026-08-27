@@ -6,6 +6,7 @@ export const STORAGE_KEYS = {
   USER_DATA: "mw_user_profile",
   VERSES: "mw_erp_quran_verses_data",
   HADITHS: "mw_erp_hadiths_data",
+  ASMAUL_HUSNA: "mw_asmaul_husna_data",
   SETTINGS: "mw_tactical_settings",
   RAMADAN_MODE: "mw_ramadan_mode_active",
 } as const
@@ -30,7 +31,7 @@ export const DEFAULT_COORDINATES = {
 } as const
 
 export const SYSTEM_CONSTANTS = {
-  OS_VERSION: "MoonWitness OS v3.0",
+  OS_VERSION: "MoonWitness OS V9.0",
   OS_CODENAME: "DEEP SPACE SCI-FI DIVINE OPERATING SYSTEM",
   MAX_PAGE_ANIMATIONS: 5,
   MAX_BLUR_ELEMENTS: 2,

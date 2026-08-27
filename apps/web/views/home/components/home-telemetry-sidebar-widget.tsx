@@ -1,12 +1,12 @@
 "use client"
-import { useMounted } from "@core/hooks"
+import { useMounted } from "@workspace/hooks"
 
 import React, { useState, useEffect } from "react"
-import { getMoonData } from "@moon/witness/dist/astronomy/moon-phase.js"
 import {
+  getMoonData,
   getIslamicData,
-  PrayerData,
-} from "@moon/witness/dist/astronomy/prayer-times.js"
+  type PrayerData,
+} from "@moon/compute"
 
 const SECONDS_PER_MINUTE = 60
 const MINUTES_PER_HOUR = 60

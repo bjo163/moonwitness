@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { MoonwitnessAuthFlow } from "@core/widgets/auth/moonwitness-auth-flow"
+import { MoonwitnessAuthFlow } from "@workspace/ui"
 
 export function LoginView() {
   return (

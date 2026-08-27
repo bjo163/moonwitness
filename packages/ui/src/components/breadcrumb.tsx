@@ -111,6 +111,36 @@ function BreadcrumbEllipsis({
   )
 }
 
+export interface BreadcrumbPath {
+  label: string
+  href?: string
+}
+
+export function BreadcrumbTrail({
+  paths = [],
+  className = "",
+}: {
+  paths: BreadcrumbPath[]
+  className?: string
+}) {
+  return (
+    <nav className={`flex items-center gap-1 font-mono text-[10px] tracking-widest uppercase ${className}`}>
+      {paths.map((p, i) => (
+        <React.Fragment key={i}>
+          {i > 0 && <span className="text-slate-600">/</span>}
+          {p.href ? (
+            <a href={p.href} className="text-slate-400 hover:text-cyan-400 transition-colors">
+              {p.label}
+            </a>
+          ) : (
+            <span className="font-bold text-cyan-400">{p.label}</span>
+          )}
+        </React.Fragment>
+      ))}
+    </nav>
+  )
+}
+
 export {
   Breadcrumb,
   BreadcrumbList,

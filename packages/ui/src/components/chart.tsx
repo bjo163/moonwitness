@@ -363,6 +363,51 @@ function getPayloadConfigFromPayload(
   return configLabelKey in config ? config[configLabelKey] : config[key]
 }
 
+export type MetricChartDatum = {
+  label: string
+  value: number
+}
+
+export function MetricChart({
+  title,
+  subtitle,
+  data,
+  accentColor = "cyan",
+  height = 128,
+  className,
+}: {
+  title?: string
+  subtitle?: string
+  data: MetricChartDatum[]
+  accentColor?: string
+  height?: number | string
+  className?: string
+}) {
+  const maxVal = Math.max(...data.map((d) => d.value), 1)
+
+  return (
+    <div className={cn("panel-box border border-primary/20 p-4 font-mono", className)}>
+      {title && <div className="text-xs font-bold tracking-wider text-primary uppercase">{title}</div>}
+      {subtitle && <div className="text-[10px] text-slate-400">{subtitle}</div>}
+      <div className="mt-3 flex items-end gap-2" style={{ height: typeof height === "number" ? `${height}px` : undefined }}>
+        {data.map((item, idx) => {
+          const pct = Math.min(100, Math.round((item.value / maxVal) * 100))
+          return (
+            <div key={idx} className="flex flex-1 flex-col items-center gap-1">
+              <div className="text-[8px] text-slate-400">{item.value}</div>
+              <div className="w-full rounded-t bg-primary/20 hover:bg-primary/40 transition-all" style={{ height: `${pct}%` }} />
+              <div className="text-[8px] tracking-widest text-primary truncate max-w-full">{item.label}</div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+/** @deprecated Use MetricChart */
+export const HUDChart = MetricChart
+
 export {
   ChartContainer,
   ChartTooltip,

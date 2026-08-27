@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Bot, X, Radio } from "lucide-react"
-import { PropheticAIChatTerminal } from "@core/chat"
+import { PropheticAIChatTerminal } from "@workspace/ui"
 import { createPortal } from "react-dom"
 
 export function PropheticAIConsultantModal() {

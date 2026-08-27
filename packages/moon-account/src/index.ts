@@ -3,6 +3,8 @@ import AccountJournal from './account-journal.js'
 import AccountMove from './account-move.js'
 import AccountMoveLine from './account-move-line.js'
 
+export { loadDemoData } from './demo-data.js'
+export { views } from './views.js'
 export {
   AccountAccount,
   AccountJournal,

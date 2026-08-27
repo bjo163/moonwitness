@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react"
 import { MapPin } from "lucide-react"
 import {
   getIslamicData,
-  PrayerData,
-} from "@moon/witness/dist/astronomy/prayer-times.js"
+  type PrayerData,
+} from "@moon/compute"
 
 const FALLBACK_LAT = -6.2088
 const FALLBACK_LNG = 106.8456

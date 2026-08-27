@@ -1,8 +1,8 @@
 "use client"
 
-import { useLanguage } from "@core/contexts"
+import { useLanguage } from "@workspace/state"
 import { Flame } from "lucide-react"
-import { ContextBlock, Panel, PanelHeader, Table, Chart } from "@core/ui"
+import { ContextBlock, Panel, PanelHeader, SimpleTable, MetricChart } from "@workspace/ui"
 
 type TrendTopic = {
   id: string
@@ -67,16 +67,16 @@ export function AnalisisTrenView() {
           )}
           operation="TABAYYUN-VERIFY-ENGINE"
           status="ONLINE"
-          accentColor="astronomy"
+          accentColor="celestial"
         />
 
         {/* Trend Visualizations */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <Chart
+          <MetricChart
             title="TABAYYUN INDEX DISTRIBUTION"
             subtitle="Haqq vs Batil verification ratio over 30 days"
-            accentColor="astronomy"
-            height="h-32"
+            accentColor="celestial"
+            height={128}
             data={[
               { label: "W1", value: 65 },
               { label: "W2", value: 45 },
@@ -85,7 +85,7 @@ export function AnalisisTrenView() {
             ]}
           />
 
-          <Chart
+          <MetricChart
             title="VIRALITY VELOCITY"
             subtitle="Speed of information propagation by category"
             accentColor="critical"
@@ -100,24 +100,24 @@ export function AnalisisTrenView() {
         </div>
 
         {/* Live Trends Catalog */}
-        <Panel level="level2" accentColor="astronomy">
+        <Panel level="level2" accentColor="celestial">
           <PanelHeader
             title="// VIRAL TRENDS & TABAYYUN VERIFICATION MATRIX"
             status="ACTIVE"
             icon={Flame}
-            accentColor="astronomy"
+            accentColor="celestial"
             subtitle="Verified information telemetry filtered through Quranic ethics (Q.S Al-Hujurat 49:6)."
           />
 
           <div className="mt-4">
-            <Table
+            <SimpleTable
               headers={[
                 "CATEGORY / TOPIC",
                 "QURANIC GUIDANCE",
                 "HAQQ INDEX",
                 "STATUS",
               ]}
-              accentColor="astronomy"
+              accentColor="celestial"
               rows={LIVE_VIRAL_TRENDS.map((tr) => [
                 <div key="1" className="flex max-w-xs flex-col gap-1">
                   <span className="text-[9px] font-bold tracking-wider text-accent">

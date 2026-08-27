@@ -77,3 +77,62 @@ export async function teardownOrm(): Promise<void> {
 }
 
 export const closeDb = teardownOrm
+
+export interface DbHealthStatus {
+  ok: boolean
+  dialect: string
+  version?: string
+  latencyMs: number
+  error?: string
+}
+
+export async function checkDbConnection(): Promise<DbHealthStatus> {
+  if (!dbInstance) {
+    return {
+      ok: false,
+      dialect: 'unknown',
+      latencyMs: 0,
+      error: 'ORM has not been initialized. Call setupOrm(config) first.'
+    }
+  }
+
+  const start = performance.now()
+  try {
+    await dbInstance.raw('SELECT 1 as ping')
+    const latencyMs = Number((performance.now() - start).toFixed(2))
+
+    let version: string | undefined
+    try {
+      const vResult = await dbInstance.raw('SELECT version() as version')
+      const rows = vResult?.rows || vResult
+      const row = Array.isArray(rows) && rows.length > 0 ? rows[0] : undefined
+      if (row && typeof row === 'object' && 'version' in row && row.version) {
+        const firstLine = String(row.version).split('\n')[0]
+        if (firstLine) {
+          version = firstLine.trim()
+        }
+      }
+    } catch {
+      // Ignored if dialect does not support SELECT version()
+    }
+
+    const dialect = (dbInstance.client as any)?.dialect || (dbInstance.client as any)?.driverName || 'pg'
+
+    return {
+      ok: true,
+      dialect,
+      version,
+      latencyMs
+    }
+  } catch (err: any) {
+    const latencyMs = Number((performance.now() - start).toFixed(2))
+    const dialect = (dbInstance.client as any)?.dialect || 'pg'
+    return {
+      ok: false,
+      dialect,
+      latencyMs,
+      error: err?.message || String(err)
+    }
+  }
+}
+

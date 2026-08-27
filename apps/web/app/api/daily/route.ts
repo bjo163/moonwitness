@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getDailyPrayerTimes } from "@moon/witness/dist/astronomy/prayer-times.js"
+import { getDailyPrayerTimes } from "@moon/compute"
 export const dynamic = "force-dynamic"
-import { cleanHadithText } from "@core/utils/hadith-cleaner"
-import { moonClientInstance } from "@core/store/moon-store"
+import { cleanHadithText } from "@moon/client"
+import { moonClientInstance } from "@moon/client"
 
 function getSeedHash(seedStr: string): number {
   let hash = 0
@@ -150,7 +150,6 @@ export async function GET(req: NextRequest) {
   const remainingCount = Math.max(0, totalAyahCount - globalSeenCount)
 
   try {
-    const baseUrl = "http://localhost:4000/api/witness"
     let ayahData: any = null
     let asmaulSurahData: any = null
     let asmaulAyahData: any = null

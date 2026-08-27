@@ -2,14 +2,16 @@ import { Vertex, fields } from '@moon/orm'
 
 export default class CabChange extends Vertex {
   static _name = 'cab.change'
-  static _description = 'CAB Change Request'
+  static _description = 'CAB Change Request / RFC'
+  static _rec_name = 'title'
 
   reference = fields.Char({ required: true, size: 32, unique: true, index: true })
   title = fields.Char({ required: true, size: 180, index: true })
   description = fields.Text({ required: true })
-  projectId = fields.Many2one({ comodel: 'cab.project', required: true, index: true })
+  projectId = fields.Many2one({ comodel: 'pj.project', index: true })
   requesterId = fields.Many2one({ comodel: 'vx.user', index: true })
   ownerId = fields.Many2one({ comodel: 'vx.user', index: true })
+  ticketId = fields.Many2one({ comodel: 'hd.ticket', index: true })
   risk = fields.Selection({
     selection: [['low', 'Low'], ['medium', 'Medium'], ['high', 'High'], ['critical', 'Critical']],
     default: 'medium',
@@ -21,6 +23,5 @@ export default class CabChange extends Vertex {
     index: true
   })
   scheduledFor = fields.DateTime({ index: true })
-  taskIds = fields.One2many({ comodel: 'cab.task', inverse: 'changeId' })
   decisionIds = fields.One2many({ comodel: 'cab.decision', inverse: 'changeId' })
 }

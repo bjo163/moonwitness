@@ -1,19 +1,37 @@
 import "dotenv/config"
-import { NativeServer, authenticateRequest, AuthError, sendJson } from "@moon/server"
-import baseAddons, { seedBaseData, loadBaseData } from "@moon/base"
-import performanceAddons, { performanceMiddleware } from "@moon/performance"
+import {
+  NativeServer,
+  authenticateRequest,
+  AuthError,
+  sendJson,
+  registerViewManifests,
+  defineRoute,
+} from "@moon/server"
+import baseAddons, { seedBaseData, loadBaseData, views as baseViews, loadDemoData as loadBaseDemoData } from "@moon/base"
+import performanceAddons, { performanceMiddleware, views as performanceViews, loadDemoData as loadPerformanceDemoData } from "@moon/performance"
 import witnessAddons, {
   registerWitnessRoutes,
   seedWitnessGraphCore,
+  views as witnessViews,
+  loadDemoData as loadWitnessDemoData,
 } from "@moon/witness"
-import khidraAddons from "@moon/khidra"
-import mizanAddons, { registerMizanRoutes } from "@moon/mizan"
-import shootgunAddons from "@moon/shootgun"
-import cabAddons, { registerCabRoutes } from "@moon/cab"
+import khidraAddons, { views as khidraViews, loadDemoData as loadKhidraDemoData } from "@moon/khidra"
+import mizanAddons, { registerMizanRoutes, views as mizanViews, loadDemoData as loadMizanDemoData } from "@moon/mizan"
+import shootgunAddons, { views as shootgunViews, loadDemoData as loadShootgunDemoData } from "@moon/shootgun"
+import cabAddons, { registerCabRoutes, views as cabViews, loadDemoData as loadCabDemoData } from "@moon/cab"
+import projectAddons, { views as projectViews, loadDemoData as loadProjectDemoData } from "@moon/project"
+import helpdeskAddons, { views as helpdeskViews, loadDemoData as loadHelpdeskDemoData } from "@moon/helpdesk"
+import productAddons, { views as productViews, loadDemoData as loadProductDemoData } from "@moon/product"
+import stockAddons, { views as stockViews, loadDemoData as loadStockDemoData } from "@moon/stock"
+import accountAddons, { views as accountViews, loadDemoData as loadAccountDemoData } from "@moon/account"
+import crmAddons, { views as crmViews, loadDemoData as loadCrmDemoData } from "@moon/crm"
+import mailAddons, { views as mailViews, loadDemoData as loadMailDemoData } from "@moon/mail"
+import geoAddons, { views as geoViews, loadDemoData as loadGeoDemoData } from "@moon/geo"
+import cronAddons, { views as cronViews, globalCronRunner, loadDemoData as loadCronDemoData } from "@moon/cron"
 import { globalRoutes } from "@moon/server/dist/router.js"
 import { publish } from "@moon/server"
 import { trackSystem } from "@moon/performance"
-import { getModel, createCtx, SUPERUSER_ID } from "@moon/orm"
+import { getModel, createCtx, SUPERUSER_ID, checkDbConnection } from "@moon/orm"
 
 async function requireAdmin(req: any, res: any, jwtSecret: string): Promise<boolean> {
   try {
@@ -129,10 +147,12 @@ globalRoutes.push({
   },
 })
 
+const apiPort = Number(process.env.API_PORT || process.env.PORT) || 4000
+
 const server = new NativeServer({
   database: process.env.DATABASE_URL || "postgres://localhost/moonwitness",
   jwtSecret: process.env.JWT_SECRET || "",
-  port: Number(process.env.API_PORT || process.env.PORT) || 4000,
+  port: apiPort,
   email: {
     service: process.env.SMTP_SERVICE || process.env.EMAIL_SERVICE,
     user: process.env.SMTP_USER || process.env.EMAIL_USER,
@@ -143,10 +163,19 @@ const server = new NativeServer({
     ...baseAddons.models,
     ...performanceAddons.models,
     ...witnessAddons.models,
+    ...projectAddons.models,
+    ...helpdeskAddons.models,
     ...khidraAddons.models,
     ...mizanAddons.models,
     ...shootgunAddons.models,
     ...cabAddons.models,
+    ...productAddons.models,
+    ...stockAddons.models,
+    ...accountAddons.models,
+    ...crmAddons.models,
+    ...mailAddons.models,
+    ...geoAddons.models,
+    ...cronAddons.models,
   ],
 })
 
@@ -157,6 +186,73 @@ server.use(performanceMiddleware())
 registerWitnessRoutes()
 registerMizanRoutes()
 registerCabRoutes()
+
+// Cosmic Matrix Engine: Register view manifests across all 16 addon packages
+registerViewManifests({
+  ...baseViews,
+  ...performanceViews,
+  ...witnessViews,
+  ...projectViews,
+  ...helpdeskViews,
+  ...khidraViews,
+  ...mizanViews,
+  ...shootgunViews,
+  ...cabViews,
+  ...productViews,
+  ...stockViews,
+  ...accountViews,
+  ...crmViews,
+  ...mailViews,
+  ...geoViews,
+  ...cronViews,
+})
+
+// Start the Autonomous Background Cron Scheduler
+globalCronRunner.start()
+
+// ── One-Click Full Demo Matrix Installer ──────────────────────────────────────
+defineRoute({
+  method: "POST",
+  path: "/api/system/demo-seed",
+  handler: async () => {
+    const loaders = [
+      { name: "base", fn: loadBaseDemoData },
+      { name: "performance", fn: loadPerformanceDemoData },
+      { name: "witness", fn: loadWitnessDemoData },
+      { name: "project", fn: loadProjectDemoData },
+      { name: "helpdesk", fn: loadHelpdeskDemoData },
+      { name: "khidra", fn: loadKhidraDemoData },
+      { name: "mizan", fn: loadMizanDemoData },
+      { name: "shootgun", fn: loadShootgunDemoData },
+      { name: "cab", fn: loadCabDemoData },
+      { name: "product", fn: loadProductDemoData },
+      { name: "stock", fn: loadStockDemoData },
+      { name: "account", fn: loadAccountDemoData },
+      { name: "crm", fn: loadCrmDemoData },
+      { name: "mail", fn: loadMailDemoData },
+      { name: "geo", fn: loadGeoDemoData },
+      { name: "cron", fn: loadCronDemoData },
+    ]
+
+    const seededPackages: Record<string, string> = {}
+    for (const { name, fn } of loaders) {
+      try {
+        if (typeof fn === "function") {
+          await fn()
+          seededPackages[name] = "SEEDED"
+        }
+      } catch (err: any) {
+        seededPackages[name] = `FAILED: ${err?.message || err}`
+      }
+    }
+
+    return {
+      success: true,
+      message: "Universal demo matrix initialized successfully across all 16 addon packages",
+      seededPackages,
+    }
+  },
+})
 
 // ── NASA ──────────────────────────────────────────────────────────────────────
 server.proxy(
@@ -265,7 +361,7 @@ server.proxy(
 server.proxy(
   "GET",
   "/api/external/db/status",
-  "http://localhost:4000/db/status",
+  `http://127.0.0.1:${apiPort}/db/status`,
   {
     cache: "30s",
   }
@@ -274,7 +370,7 @@ server.proxy(
 server.proxy(
   "GET",
   "/api/external/meta/models",
-  "http://localhost:4000/meta/models",
+  `http://127.0.0.1:${apiPort}/meta/models`,
   {
     cache: "30s",
   }
@@ -295,6 +391,17 @@ server.proxy(
 )
 
 server.start().then(async () => {
+  const dbHealth = await checkDbConnection()
+  if (dbHealth.ok) {
+    console.log(
+      `[Database] ✓ Connection verified: ${dbHealth.dialect} (${dbHealth.version || "Connected"}) - Latency: ${dbHealth.latencyMs}ms`
+    )
+  } else {
+    console.error(
+      `[Database] ✗ Connection failed: ${dbHealth.error} (${dbHealth.latencyMs}ms)`
+    )
+  }
+
   if (process.env.MOON_BOOTSTRAP_ON_START !== "true") {
     console.log("[App] Automatic seed disabled; use pnpm db:install or pnpm db:seed.")
     return

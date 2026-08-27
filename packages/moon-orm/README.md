@@ -1,4 +1,14 @@
-# @moon/orm
+# ◈ @moon/orm
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  PACKAGE:        @moon/orm                                               ║
+║  SYSTEM VERSION: MoonWitness OS V9.0 (Divine Operating System Matrix)    ║
+║  PKG VERSION:    9.0.0                                                   ║
+║  CLASSIFICATION: TIER 2 — VERTEX ORM, RELATIONAL GRAPH & PGVECTOR        ║
+║  STATUS:         ████████████████████████████████ ACTIVE (SOVEREIGN)     ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
 
 > **Advanced Vertex-Based ORM with Row-Level Security, Magic Tuples & pgvector Integration for Node.js & TypeScript**
 
@@ -99,6 +109,13 @@ const results = await Document.fetch(Document, env, [['charCount', '>', 10]])
 
 ---
 
-## License
+## 🛡️ Architectural Boundaries
+- Belongs to **Tier 2 (Core Infrastructure & ORM)**.
+- Consumes `@workspace/types` and `@workspace/error`.
 
-MIT
+---
+
+## 🧪 Verification
+```bash
+pnpm --filter @moon/orm test
+```

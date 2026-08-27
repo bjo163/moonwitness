@@ -248,6 +248,10 @@ export class Vertex {
           }
           continue; 
         }
+        if (def && def.type === 'many2one' && typeof v === 'object' && v !== null) {
+          sqlVals[k] = (v as any).id ?? null
+          continue;
+        }
       }
       sqlVals[k] = v
     }

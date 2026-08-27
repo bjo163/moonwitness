@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { useNasaFeeds } from "@core/hooks/use-nasa-feeds"
+import { useNasaFeeds } from "@moon/client"
 
 const FEED_REFRESH_INTERVAL_MS = 300000
 

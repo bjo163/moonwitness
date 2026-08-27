@@ -1,7 +1,7 @@
 "use client"
 
-import { useLanguage } from "@core/contexts"
-import { ContextBlock } from "@core/ui"
+import { useLanguage } from "@workspace/state"
+import { ContextBlock } from "@workspace/ui"
 
 type ScholarNode = {
   generation: string
