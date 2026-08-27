@@ -7,6 +7,7 @@ import {
   resolveCorsOrigin,
   UnsupportedMediaTypeError,
 } from '../src/utils/http.js'
+import { resolveHttpTimeouts } from '../src/NativeServer.js'
 
 function mockReq(method = 'POST', headers: Record<string, string> = {}, chunks: string[] = []): IncomingMessage {
   const req = new EventEmitter() as any
@@ -73,5 +74,20 @@ describe('HTTP boundary regression (#16)', () => {
     expect(status()).toBe(204)
     expect(headers()['Access-Control-Allow-Origin']).toBe('*')
     expect(headers()['Access-Control-Allow-Credentials']).toBeUndefined()
+  })
+
+  it('uses bounded request/header/keep-alive timeout defaults', () => {
+    expect(resolveHttpTimeouts({})).toEqual({
+      requestTimeoutMs: 30_000,
+      headersTimeoutMs: 15_000,
+      keepAliveTimeoutMs: 5_000,
+    })
+  })
+
+  it('rejects invalid timeout policy instead of silently weakening the boundary', () => {
+    expect(() => resolveHttpTimeouts({ requestTimeoutMs: 10_000, headersTimeoutMs: 20_000 }))
+      .toThrow(/headersTimeoutMs/)
+    expect(() => resolveHttpTimeouts({ requestTimeoutMs: 0 }))
+      .toThrow(/requestTimeoutMs/)
   })
 })
