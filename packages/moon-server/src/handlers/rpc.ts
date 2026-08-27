@@ -1,16 +1,9 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import { z } from 'zod'
 import { getModel, getDb, createCtx, AuthorizationError, ANONYMOUS_ID } from '@moon/orm'
 import { parseBody, sendJson } from '../utils/http.js'
 import { authenticateRequest, AuthError } from '../utils/auth.js'
 import { logger } from '../logger.js'
-
-const RpcRequestSchema = z.object({
-  model: z.string().min(1),
-  method: z.string().min(1),
-  args: z.array(z.any()).optional(),
-  kwargs: z.record(z.any()).optional()
-})
+import { RpcRequestSchema } from '@moon/protocol'
 
 const METHOD_NAME_REGEX = /^[a-zA-Z0-9_]+$/
 
