@@ -1,30 +1,33 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import { resolveCorsOrigin, type CorsConfig } from '../utils/http.js'
+import {
+  DEFAULT_CORS_HEADERS,
+  DEFAULT_CORS_METHODS,
+  handleCorsPreflight,
+  resolveCorsOrigin,
+  type CorsConfig
+} from '../utils/http.js'
 
-/**
- * CORS middleware supporting origin whitelisting and safe credentials
- */
+/** CORS middleware using the same fail-closed policy as NativeServer. */
 export function corsMiddleware(
   config?: CorsConfig
 ): (req: IncomingMessage, res: ServerResponse, next: () => Promise<void>) => Promise<void> | void {
   return (req: IncomingMessage, res: ServerResponse, next: () => Promise<void>) => {
-    const reqOrigin = req.headers.origin as string | undefined
-    const allowedOrigin = resolveCorsOrigin(reqOrigin, config)
+    if (req.method === 'OPTIONS') {
+      handleCorsPreflight(req, res, config)
+      return
+    }
 
+    const allowedOrigin = resolveCorsOrigin(req.headers.origin as string | undefined, config)
     if (allowedOrigin) {
       res.setHeader('Access-Control-Allow-Origin', allowedOrigin)
+      res.setHeader('Access-Control-Allow-Methods', (config?.allowedMethods || [...DEFAULT_CORS_METHODS]).join(', '))
+      res.setHeader('Access-Control-Allow-Headers', (config?.allowedHeaders || [...DEFAULT_CORS_HEADERS]).join(', '))
       if (allowedOrigin !== '*') {
         res.setHeader('Vary', 'Origin')
         if (config?.allowCredentials !== false) {
           res.setHeader('Access-Control-Allow-Credentials', 'true')
         }
       }
-      const reqHeaders =
-        (req.headers['access-control-request-headers'] as string) ||
-        'Content-Type, Authorization, X-Requested-With, Accept, Origin, Cache-Control, Last-Event-ID'
-      res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST, GET, PUT, DELETE, PATCH')
-      res.setHeader('Access-Control-Allow-Headers', reqHeaders)
-      res.setHeader('Access-Control-Max-Age', '86400')
     }
 
     res.setHeader('X-Content-Type-Options', 'nosniff')
@@ -34,14 +37,6 @@ export function corsMiddleware(
       res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
     }
 
-    // Handle preflight
-    if (req.method === 'OPTIONS') {
-      res.writeHead(204)
-      res.end()
-      return
-    }
-
     return next()
   }
 }
-
