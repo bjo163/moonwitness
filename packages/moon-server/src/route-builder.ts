@@ -9,6 +9,7 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 import { globalRoutes } from './router.js'
 import { authenticateRequest, AuthError } from './utils/auth.js'
 import { createCtx, getModel, SUPERUSER_ID, ANONYMOUS_ID, AuthorizationError } from '@moon/orm'
+import { resolveCorsOrigin, getSecurityHeaders, getCorsConfig } from './utils/http.js'
 
 // ── ROUTE CONTEXT ─────────────────────────────────────────────
 export interface RouteContext {
@@ -50,9 +51,26 @@ export interface RouteDefinition<TBody = any, TQuery = Record<string, string>> {
   handler: (ctx: RouteContext & { body: TBody; query: TQuery }) => Promise<unknown>
 }
 
-const CORS_HEADERS = {
-  'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': '*',
+function buildHeaders(req: IncomingMessage): Record<string, string> {
+  const headers = getSecurityHeaders()
+  headers['Content-Type'] = 'application/json'
+  const reqOrigin = req.headers.origin as string | undefined
+  const corsConfig = getCorsConfig()
+  const allowedOrigin = resolveCorsOrigin(reqOrigin, corsConfig)
+  if (allowedOrigin) {
+    headers['Access-Control-Allow-Origin'] = allowedOrigin
+    if (allowedOrigin !== '*') {
+      headers['Vary'] = 'Origin'
+      if (corsConfig?.allowCredentials !== false) {
+        headers['Access-Control-Allow-Credentials'] = 'true'
+      }
+    }
+    headers['Access-Control-Allow-Methods'] = 'OPTIONS, POST, GET, PUT, DELETE, PATCH'
+    headers['Access-Control-Allow-Headers'] =
+      (req.headers['access-control-request-headers'] as string) ||
+      'Content-Type, Authorization, X-Requested-With, Accept, Origin, Cache-Control, Last-Event-ID'
+  }
+  return headers
 }
 
 /**
@@ -134,13 +152,13 @@ export function defineRoute(def: RouteDefinition): void {
             uid = session.uid
 
             if (authLevel === 'admin' && uid !== SUPERUSER_ID) {
-              res.writeHead(403, CORS_HEADERS)
+              res.writeHead(403, buildHeaders(req))
               res.end(JSON.stringify({ error: 'Administrator access required', code: 'AUTH_FORBIDDEN' }))
               return
             }
           } catch (error) {
             if (error instanceof AuthError) {
-              res.writeHead(error.statusCode, CORS_HEADERS)
+              res.writeHead(error.statusCode, buildHeaders(req))
               res.end(JSON.stringify({ error: error.message, code: error.code }))
               return
             }
@@ -159,7 +177,7 @@ export function defineRoute(def: RouteDefinition): void {
           if (def.schema.query) {
             const parsedQuery = def.schema.query.safeParse(query)
             if (!parsedQuery.success) {
-              res.writeHead(400, CORS_HEADERS)
+              res.writeHead(400, buildHeaders(req))
               res.end(JSON.stringify({
                 error: 'Invalid query parameters',
                 code: 'VALIDATION_ERROR',
@@ -173,7 +191,7 @@ export function defineRoute(def: RouteDefinition): void {
           if (def.schema.body && (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH')) {
             const parsedBody = def.schema.body.safeParse(body)
             if (!parsedBody.success) {
-              res.writeHead(400, CORS_HEADERS)
+              res.writeHead(400, buildHeaders(req))
               res.end(JSON.stringify({
                 error: 'Invalid request body',
                 code: 'VALIDATION_ERROR',
@@ -192,26 +210,26 @@ export function defineRoute(def: RouteDefinition): void {
         if (res.writableEnded) return
 
         // ── RESPOND ──
-        res.writeHead(200, CORS_HEADERS)
+        res.writeHead(200, buildHeaders(req))
         res.end(JSON.stringify(result))
       } catch (err: any) {
         // Don't double-send if already responded
         if (res.writableEnded) return
 
         if (err instanceof AuthError) {
-          res.writeHead(err.statusCode, CORS_HEADERS)
+          res.writeHead(err.statusCode, buildHeaders(req))
           res.end(JSON.stringify({ error: err.message, code: err.code }))
           return
         }
         if (err instanceof AuthorizationError) {
-          res.writeHead(err.statusCode, CORS_HEADERS)
+          res.writeHead(err.statusCode, buildHeaders(req))
           res.end(JSON.stringify({ error: err.message, code: err.code }))
           return
         }
 
         const statusCode = err?.statusCode || 500
         const code = err?.code || 'INTERNAL_ERROR'
-        res.writeHead(statusCode, CORS_HEADERS)
+        res.writeHead(statusCode, buildHeaders(req))
         res.end(JSON.stringify({ error: err?.message || 'Internal server error', code }))
       }
     },

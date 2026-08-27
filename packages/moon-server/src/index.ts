@@ -5,7 +5,7 @@ export { logger } from './logger.js'
 export { ExternalCache, createProxyHandler, type ProxyOptions } from './proxy.js'
 
 // Utilities
-export { parseBody, sendJson, parseUrl } from './utils/http.js'
+export { parseBody, sendJson, parseUrl, setCorsConfig, getCorsConfig, getSecurityHeaders } from './utils/http.js'
 export {
   verifyToken,
   issueJwt,

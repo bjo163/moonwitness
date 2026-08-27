@@ -1,5 +1,36 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 
+export interface CorsConfig {
+  allowedOrigins?: string[] | ((origin: string) => boolean)
+  allowCredentials?: boolean
+}
+
+const DEFAULT_CORS_CONFIG: CorsConfig = {}
+
+let _corsConfig: CorsConfig = DEFAULT_CORS_CONFIG
+
+export function setCorsConfig(config: CorsConfig): void {
+  _corsConfig = config
+}
+
+export function getCorsConfig(): CorsConfig {
+  return _corsConfig
+}
+
+export const SECURITY_HEADERS: Record<string, string> = {
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'SAMEORIGIN',
+  'Referrer-Policy': 'strict-origin-when-cross-origin'
+}
+
+export function getSecurityHeaders(): Record<string, string> {
+  const headers: Record<string, string> = { ...SECURITY_HEADERS }
+  if (process.env.NODE_ENV === 'production') {
+    headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+  }
+  return headers
+}
+
 export class HttpError extends Error {
   statusCode: number
   code?: string
@@ -77,11 +108,6 @@ export async function parseBody(
   })
 }
 
-export interface CorsConfig {
-  allowedOrigins?: string[] | ((origin: string) => boolean)
-  allowCredentials?: boolean
-}
-
 /**
  * Resolve allowed origin based on whitelist
  */
@@ -119,13 +145,7 @@ export function sendJson(
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'SAMEORIGIN',
-    'Referrer-Policy': 'strict-origin-when-cross-origin'
-  }
-
-  if (process.env.NODE_ENV === 'production') {
-    headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+    ...getSecurityHeaders()
   }
 
   if (allowedOrigin) {
@@ -158,15 +178,7 @@ export function handleCorsPreflight(
     const reqOrigin = req.headers.origin as string | undefined
     const allowedOrigin = resolveCorsOrigin(reqOrigin, corsConfig)
 
-    const headers: Record<string, string> = {
-      'X-Content-Type-Options': 'nosniff',
-      'X-Frame-Options': 'SAMEORIGIN',
-      'Referrer-Policy': 'strict-origin-when-cross-origin'
-    }
-
-    if (process.env.NODE_ENV === 'production') {
-      headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
-    }
+    const headers: Record<string, string> = getSecurityHeaders()
 
     if (allowedOrigin) {
       headers['Access-Control-Allow-Origin'] = allowedOrigin

@@ -33,7 +33,7 @@ import { handleRest } from './handlers/rest.js'
 import { handleRpc } from './handlers/rpc.js'
 import { handleSSE, getActiveClientCount, closeAllSSEConnections } from './handlers/sse.js'
 import { renderDashboard, renderSwaggerUI } from './views/dashboard.js'
-import { sendJson, handleCorsPreflight, type CorsConfig } from './utils/http.js'
+import { sendJson, handleCorsPreflight, setCorsConfig, type CorsConfig } from './utils/http.js'
 import { authenticateRequest, AuthError, issueJwt } from './utils/auth.js'
 
 export interface MoonConfig {
@@ -66,6 +66,9 @@ export class NativeServer {
 
   constructor(config: MoonConfig) {
     this.config = config
+    if (config.cors) {
+      setCorsConfig(config.cors)
+    }
     const isProduction = process.env.NODE_ENV === 'production'
     if (isProduction) {
       if (!config.jwtSecret || config.jwtSecret === 'secret' || config.jwtSecret.trim().length < 16) {

@@ -7,6 +7,7 @@ const MAX_LIMIT = 100
 const DEFAULT_LIMIT = 80
 const VALID_ORDER_REGEX = /^[a-zA-Z0-9_]+(\s+(asc|desc|ASC|DESC))?(\s*,\s*[a-zA-Z0-9_]+(\s+(asc|desc|ASC|DESC))?)*$/
 const VALID_PARAM_KEY_REGEX = /^[a-zA-Z0-9_]+$/
+const VALID_MODEL_REGEX = /^[a-z][a-z0-9.]*$/
 
 /**
  * Handle REST API requests for models
@@ -23,6 +24,11 @@ export async function handleRest(
     const uid = auth.uid
 
     const model = match[1] as string
+
+    if (!VALID_MODEL_REGEX.test(model)) {
+      return sendJson(res, 400, { error: `Invalid model name: ${model}`, code: 'INVALID_MODEL' }, req)
+    }
+
     const idStr = match[2]
     const id = idStr ? parseInt(idStr, 10) : undefined
 
