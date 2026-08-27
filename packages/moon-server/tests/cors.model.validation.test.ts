@@ -16,23 +16,6 @@ vi.mock('knex', () => ({
   }))
 }))
 
-vi.mock('zod', () => ({
-  z: {
-    object: (schema: any) => ({
-      safeParse: (data: any) => {
-        for (const key of Object.keys(schema)) {
-          if (schema[key]._check && !schema[key]._check(data[key])) {
-            return { success: false, error: { format: () => ({}) } }
-          }
-        }
-        return { success: true, data }
-      }
-    }),
-    string: () => ({ _check: (v: any) => typeof v === 'string' }),
-    number: () => ({ _check: (v: any) => typeof v === 'number' }),
-  }
-}))
-
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import {
   setCorsConfig,

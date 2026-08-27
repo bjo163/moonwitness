@@ -8,7 +8,7 @@
  *         Astronomy, Bookmarks, History, Traditions, Graph Engine
  */
 import { z } from 'zod'
-import type { EndpointDef } from '../envelopes'
+import type { EndpointDef } from '../envelopes.js'
 
 // ═══════════════════════════════════════════
 // 📖 SCRIPTURE & QURAN SCHEMAS

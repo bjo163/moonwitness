@@ -6,10 +6,12 @@
  * optional auth check, runtime Zod schema validation, and clean RouteContext for handlers.
  */
 import type { IncomingMessage, ServerResponse } from 'node:http'
+import { z } from 'zod'
 import { globalRoutes } from './router.js'
 import { authenticateRequest, AuthError } from './utils/auth.js'
 import { createCtx, getModel, SUPERUSER_ID, ANONYMOUS_ID, AuthorizationError } from '@moon/orm'
 import { resolveCorsOrigin, getSecurityHeaders, getCorsConfig } from './utils/http.js'
+import { defineEndpoint } from '@moon/protocol'
 
 // ── ROUTE CONTEXT ─────────────────────────────────────────────
 export interface RouteContext {
@@ -47,6 +49,13 @@ export interface RouteDefinition<TBody = any, TQuery = Record<string, string>> {
   auth?: 'none' | 'user' | 'admin'
   /** Optional Zod runtime validation schemas for body, query, or params */
   schema?: RouteSchemas
+  /** OpenAPI group(s). Defaults to a tag derived from the path. */
+  tags?: string[]
+  /** Human-readable summary/description for the generated OpenAPI document. */
+  summary?: string
+  description?: string
+  /** Optional Zod response schema; surfaced in the generated OpenAPI document. */
+  response?: z.ZodTypeAny
   /** Handler receives clean context, returns data to be JSON-serialized */
   handler: (ctx: RouteContext & { body: TBody; query: TQuery }) => Promise<unknown>
 }
@@ -133,6 +142,21 @@ export function defineRoute(def: RouteDefinition): void {
   if (isSystemMutation && def.auth !== 'admin') {
     throw new Error(`System mutation routes must explicitly require admin authorization: ${def.method} ${def.path}`)
   }
+
+  // Register the canonical contract so the generated OpenAPI document and
+  // contract tests read the same source of truth as the runtime handler.
+  defineEndpoint({
+    method: def.method,
+    path: def.path,
+    auth: def.auth || 'none',
+    tags: def.tags,
+    description: def.description || def.summary,
+    query: def.schema?.query as any,
+    body: def.schema?.body as any,
+    params: def.schema?.params as any,
+    response: def.response || (z.unknown() as any),
+    successStatus: def.method === 'POST' ? 200 : 200,
+  })
 
   globalRoutes.push({
     method: def.method,

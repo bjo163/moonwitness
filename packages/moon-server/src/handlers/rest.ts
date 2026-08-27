@@ -2,15 +2,20 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 import { getModel, createCtx, AuthorizationError } from '@moon/orm'
 import { parseBody, sendJson, parseUrl } from '../utils/http.js'
 import { authenticateRequest, AuthError } from '../utils/auth.js'
+import {
+  MAX_LIMIT,
+  DEFAULT_LIMIT,
+  MAX_RELATIONS,
+  ORDER_REGEX,
+  DOMAIN_OPERATOR_SET,
+  RESERVED_REST_PARAMS,
+} from '@moon/protocol'
 
-const MAX_LIMIT = 100
-const DEFAULT_LIMIT = 80
-const MAX_RELATIONS = 5
-const VALID_ORDER_REGEX = /^[a-zA-Z0-9_]+(\s+(asc|desc|ASC|DESC))?(\s*,\s*[a-zA-Z0-9_]+(\s+(asc|desc|ASC|DESC))?)*$/
 const VALID_PARAM_KEY_REGEX = /^[a-zA-Z0-9_]+$/
 const VALID_MODEL_REGEX = /^[a-z][a-z0-9.]*$/
-const VALID_DOMAIN_OPERATORS = new Set(['=', '!=', '>', '>=', '<', '<=', 'in', 'not in', 'like', 'ilike'])
-const RESERVED_PARAMS = new Set(['page', 'limit', 'with', 'order', 'sort', 'domain'])
+const RESERVED_PARAMS = new Set<string>(RESERVED_REST_PARAMS)
+const VALID_ORDER_REGEX = ORDER_REGEX
+const VALID_DOMAIN_OPERATORS = DOMAIN_OPERATOR_SET
 
 function parsePositiveInteger(value: string | null, fallback?: number): number | null {
   if (value === null) return fallback ?? null
