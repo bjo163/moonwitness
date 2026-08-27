@@ -237,7 +237,7 @@ export class NativeServer {
     if (req.method === 'GET' && (req.url === '/' || req.url === '')) {
       const session = await this.requireAdmin(req, res)
       if (!session) return
-      const sessionToken = issueJwt({ sub: session.uid, email: session.email, tokenVersion: session.tokenVersion }, this.config.jwtSecret)
+      const sessionToken = issueJwt({ sub: session.uid, email: session.email, tokenVersion: session.tokenVersion, role: 'superadmin', clearanceLevel: 3 }, this.config.jwtSecret)
       const cookieFlags = process.env.NODE_ENV === 'production' ? '; Secure' : ''
       const html = renderDashboard()
       res.writeHead(200, {

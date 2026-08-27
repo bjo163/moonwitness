@@ -15,6 +15,7 @@ import {
   revokeUserSessions,
   verifyToken,
   authenticateRequest,
+  resolveUserRole,
   AuthError,
 } from '../utils/auth.js'
 
@@ -86,16 +87,14 @@ export async function handleLogin(
       return sendJson(res, 401, { error: 'Invalid credentials' }, req)
     }
 
+    const { role, clearanceLevel } = await resolveUserRole(user.id, env)
+
     const token = issueJwt(
-      { sub: user.id, email: user.email || user.login, tokenVersion: user.token_version || user.tokenVersion || 1 },
+      { sub: user.id, email: user.email || user.login, tokenVersion: user.token_version || user.tokenVersion || 1, role, clearanceLevel },
       config.jwtSecret
     )
 
     const userEmail = user.email || user.login || ''
-    const isSuperAdmin = userEmail.includes('admin') || userEmail.includes('commander') || user.login === 'admin'
-    const clearanceLevel = isSuperAdmin ? 3 : 2
-    const role = isSuperAdmin ? 'superadmin' : 'admin'
-
     logger.info('moon.auth', `User ${userEmail} authenticated via PostgreSQL database`)
     return sendJson(res, 200, { 
       token, 
@@ -105,7 +104,7 @@ export async function handleLogin(
         name: user.name || user.login || 'TACTICAL OPERATOR',
         role,
         clearanceLevel,
-        title: isSuperAdmin ? 'Supreme Fleet Commander' : 'Mission Specialist',
+        title: clearanceLevel >= 3 ? 'Supreme Fleet Commander' : 'Mission Specialist',
         partnerId: user.partner_id || user.partnerId
       } 
     }, req)
@@ -169,8 +168,10 @@ export async function handleRegister(
       })
     })
 
+    const { role, clearanceLevel } = await resolveUserRole(user.id, env)
+
     const token = issueJwt(
-      { sub: user.id, email: user.email, tokenVersion: 1 },
+      { sub: user.id, email: user.email, tokenVersion: 1, role, clearanceLevel },
       config.jwtSecret
     )
 
@@ -181,7 +182,9 @@ export async function handleRegister(
         id: user.id, 
         email: user.email, 
         name: user.name,
-        partnerId: user.partner_id
+        partnerId: user.partner_id,
+        role,
+        clearanceLevel
       } 
     }, req)
   } catch (err: any) {
