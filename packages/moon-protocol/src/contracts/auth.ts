@@ -49,6 +49,9 @@ export const UserProfileSchema = z.object({
   level: z.number().optional(),
   clearanceLevel: z.number().optional(),
   badges: z.array(z.string()).optional(),
+  phone: z.string().nullable().optional(),
+  lastLogin: z.string().nullable().optional(),
+  preferences: z.string().nullable().optional(),
 })
 
 export const AuthResponseSchema = z.object({
@@ -97,6 +100,9 @@ export const UserEntitySchema = z.object({
   lastActive: z.string().optional(),
   team: z.string().optional(),
   createdAt: z.string().optional(),
+  phone: z.string().optional(),
+  lastLogin: z.string().optional(),
+  preferences: z.string().optional(),
 })
 
 // ═══════════════════════════════════════════

@@ -6,15 +6,17 @@ export const views: Record<string, ViewManifest> = {
     accentColor: 'cyan',
     icon: 'UserCog',
     table: {
-      columns: ['name', 'email', 'login', 'isActive'],
+      columns: ['name', 'email', 'login', 'phone', 'level', 'isActive'],
       defaultSort: { field: 'name', direction: 'asc' },
-      searchKeys: ['name', 'email', 'login'],
+      searchKeys: ['name', 'email', 'login', 'phone'],
     },
     form: {
       title: 'OPERATOR PROFILE',
       sections: [
         { title: 'Identity', columns: 2, fields: ['name', 'email', 'login'] },
-        { title: 'Status', columns: 2, fields: ['isActive'] },
+        { title: 'Contact', columns: 2, fields: ['phone', 'avatarUrl'] },
+        { title: 'Status & Level', columns: 2, fields: ['isActive', 'level', 'lastLogin'] },
+        { title: 'Preferences', columns: 1, fields: ['preferences'] },
       ],
     },
   },

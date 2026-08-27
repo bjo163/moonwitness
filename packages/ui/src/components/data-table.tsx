@@ -27,6 +27,7 @@ import {
   Edit,
   Trash2,
 } from "lucide-react"
+import { useMoonModel } from "@moon/client"
 
 export type CrudColumn = {
   name: string
@@ -45,7 +46,6 @@ export type DataTableProps<T = any> = {
   columns: CrudColumn[]
   icon?: React.ReactNode
 
-  // UI Slots
   topWidgets?: React.ReactNode
   sideWidgets?: React.ReactNode
   tabs?: { id: string; label: string }[]
@@ -54,7 +54,6 @@ export type DataTableProps<T = any> = {
   filters?: Record<string, any>
   filterWidgets?: React.ReactNode
   customActions?: React.ReactNode
-  initialData?: T[]
 }
 
 export function DataTable<T = any>({
@@ -71,56 +70,20 @@ export function DataTable<T = any>({
   filters,
   filterWidgets,
   customActions,
-  initialData = [],
 }: DataTableProps<T>) {
-  const [data, setData] = useState<T[]>(initialData)
-  const [loading, setLoading] = useState<boolean>(true)
-  const [error, setError] = useState<string | null>(null)
-
+  const [searchQuery, setSearchQuery] = useState("")
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [formData, setFormData] = useState<Record<string, any>>({})
-  const [editingId, setEditingId] = useState<number | null>(null)
+  const [editingId, setEditingId] = useState<number | string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
-  const fetchData = useCallback(async () => {
-    setLoading(true)
-    try {
-      const res = await fetch("/api/users")
-      if (res.ok) {
-        const json = await res.json()
-        const items = Array.isArray(json)
-          ? json
-          : json?.data && Array.isArray(json.data)
-          ? json.data
-          : json?.users && Array.isArray(json.users)
-          ? json.users
-          : []
-        setData(items.length > 0 ? items : initialData)
-      } else {
-        setData(initialData.length > 0 ? initialData : [
-          { id: 1, name: "Rezza Fahlevi", email: "admin@moonwitness.org", role: "Administrator", status: "Active" },
-          { id: 2, name: "Aisyah Rahma", email: "aisyah@moonwitness.org", role: "Researcher", status: "Active" },
-          { id: 3, name: "Fadly Maulana", email: "fadly@moonwitness.org", role: "Operator", status: "Active" },
-        ] as any)
-      }
-      setError(null)
-    } catch {
-      setData(initialData.length > 0 ? initialData : [
-        { id: 1, name: "Rezza Fahlevi", email: "admin@moonwitness.org", role: "Administrator", status: "Active" },
-        { id: 2, name: "Aisyah Rahma", email: "aisyah@moonwitness.org", role: "Researcher", status: "Active" },
-        { id: 3, name: "Fadly Maulana", email: "fadly@moonwitness.org", role: "Operator", status: "Active" },
-      ] as any)
-      setError(null)
-    } finally {
-      setLoading(false)
-    }
-  }, [initialData])
+  const { data, loading, error, fetch, create, update, remove } = useMoonModel<T>(modelName, filters)
 
   useEffect(() => {
-    fetchData()
-  }, [fetchData])
+    fetch(filters)
+  }, [filters, fetch])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -128,26 +91,30 @@ export function DataTable<T = any>({
 
   const handleSave = async (isEdit: boolean) => {
     setIsSubmitting(true)
+    setSubmitError(null)
     try {
-      if (isEdit && editingId) {
-        setData((prev) => prev.map((item: any) => item.id === editingId ? { ...item, ...formData } : item))
-        setIsEditOpen(false)
+      if (isEdit && editingId != null) {
+        await update(editingId, formData as Partial<T>)
       } else {
-        const newItem = { id: Date.now(), ...formData } as any
-        setData((prev) => [newItem, ...prev])
-        setIsAddOpen(false)
+        await create(formData as Partial<T>)
       }
       setFormData({})
+      setIsAddOpen(false)
+      setIsEditOpen(false)
     } catch (err: any) {
-      console.error(err)
+      setSubmitError(err.message || "Save failed")
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: number | string) => {
     if (!window.confirm("Are you sure you want to delete this record?")) return
-    setData((prev) => prev.filter((item: any) => item.id !== id))
+    try {
+      await remove(id)
+    } catch (err: any) {
+      console.error(err)
+    }
   }
 
   const filteredData = data.filter((item: any) => {
@@ -187,6 +154,7 @@ export function DataTable<T = any>({
                   <Button
                     onClick={() => {
                       setFormData({})
+                      setEditingId(null)
                       setIsAddOpen(true)
                     }}
                     className="flex h-9 items-center gap-2 border border-cyan-500/50 bg-cyan-950/60 font-sans text-xs font-semibold text-cyan-300 hover:bg-cyan-900/60"
@@ -229,7 +197,19 @@ export function DataTable<T = any>({
             </CardHeader>
 
             <CardContent className="p-0">
-              {loading ? (
+              {error ? (
+                <div className="flex items-center justify-center gap-2 p-12 text-xs text-rose-400">
+                  <span>Failed to load {modelName} records.</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => fetch(filters)}
+                    className="text-cyan-400 hover:text-cyan-300"
+                  >
+                    Retry
+                  </Button>
+                </div>
+              ) : loading ? (
                 <div className="flex items-center justify-center p-12 text-cyan-400">
                   <Loader2 className="h-6 w-6 animate-spin" />
                 </div>
@@ -299,8 +279,12 @@ export function DataTable<T = any>({
         {sideWidgets && <div className="space-y-6 lg:col-span-4">{sideWidgets}</div>}
       </div>
 
+      {submitError && (
+        <div className="text-xs text-rose-400">{submitError}</div>
+      )}
+
       {/* Add / Edit Dialogs */}
-      <Dialog open={isAddOpen || isEditOpen} onOpenChange={(open) => { if (!open) { setIsAddOpen(false); setIsEditOpen(false); } }}>
+      <Dialog open={isAddOpen || isEditOpen} onOpenChange={(open) => { if (!open) { setIsAddOpen(false); setIsEditOpen(false); setSubmitError(null); } }}>
         <DialogContent className="border-cyan-900/50 bg-[#05080E] text-white">
           <DialogHeader>
             <DialogTitle className="font-sans text-sm uppercase text-cyan-400 font-bold">
@@ -328,7 +312,7 @@ export function DataTable<T = any>({
               ))}
           </div>
           <div className="flex justify-end gap-2 pt-4">
-            <Button variant="ghost" onClick={() => { setIsAddOpen(false); setIsEditOpen(false); }}>
+            <Button variant="ghost" onClick={() => { setIsAddOpen(false); setIsEditOpen(false); setSubmitError(null); }}>
               Cancel
             </Button>
             <Button

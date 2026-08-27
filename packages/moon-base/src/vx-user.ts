@@ -18,6 +18,11 @@ export default class VxUser extends Vertex {
   twoFactorEnabled = fields.Boolean({ default: false, index: true, help: 'Enforce TOTP 2-Factor Authentication on login' })
   twoFactorSecret = fields.Char({ size: 64, help: 'Base32 encoded TOTP cryptographic secret key' })
   recoveryCodes = fields.Text({ help: 'JSON array of hashed one-time recovery codes' })
+  lastLogin = fields.DateTime({ help: 'Timestamp of the user last successful login' })
+  phone = fields.Char({ size: 30, help: 'Contact phone number' })
+  avatarUrl = fields.Char({ size: 255, help: 'URL to user avatar image' })
+  preferences = fields.Text({ help: 'JSON blob of user preferences/settings' })
+  level = fields.Integer({ default: 1, min: 1, help: 'User level/rank for gamification or clearance' })
 
   static async beforeSave(modelClass: any, env: any, vals: Record<string, any>, id?: number) {
     if (vals.login && typeof vals.login === 'string') {
