@@ -6,7 +6,7 @@ import {
   issueJwt,
   resolveUserRole,
 } from '../src/utils/auth.ts'
-import { handleLogin, handleRegister } from '../src/handlers/auth.ts'
+import { handleLogin, handleRegister } from '../src/handlers/auth.js'
 import { registerModel, setupOrm, Vertex, fields, ANONYMOUS_ID, SUPERUSER_ID, createCtx, getModel } from '@moon/orm'
 
 const TEST_SECRET = 'super-secret-jwt-key-for-unit-testing-32chars!'

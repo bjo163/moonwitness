@@ -5,8 +5,8 @@ import {
   WITNESS_ANALYZE_RESULT_V1,
   WITNESS_SEMANTIC_OBSERVATION_V1
 } from '../src/types/analyze.ts'
-import { validateAnalyzeResult } from '../src/services/analyze-contract.ts'
-import { analyzeWitness } from '../src/services/analyze.ts'
+import { validateAnalyzeResult } from '../src/services/analyze-contract.js'
+import { analyzeWitness } from '../src/services/analyze.js'
 
 const metadata = {
   provider: 'fixture',

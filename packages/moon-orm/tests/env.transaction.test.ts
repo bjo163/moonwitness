@@ -8,7 +8,7 @@ vi.mock('../src/config.ts', () => ({
   getDb: () => ({ transaction: mocks.transaction }),
 }))
 
-import { createCtx } from '../src/env.ts'
+import { createCtx } from '../src/env.js'
 
 describe('Moon ORM transaction context', () => {
   beforeEach(() => {

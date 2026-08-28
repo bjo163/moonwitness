@@ -13,11 +13,11 @@ import {
   reloadCanonicalJwtPolicy,
   AuthError,
 } from '../src/utils/auth.ts'
-import { handleLogout, handleGetSession, handleResetPassword } from '../src/handlers/auth.ts'
-import { handleRest } from '../src/handlers/rest.ts'
-import { handleRpc } from '../src/handlers/rpc.ts'
-import { renderDashboard } from '../src/views/dashboard.ts'
-import { NativeServer } from '../src/NativeServer.ts'
+import { handleLogout, handleGetSession, handleResetPassword } from '../src/handlers/auth.js'
+import { handleRest } from '../src/handlers/rest.js'
+import { handleRpc } from '../src/handlers/rpc.js'
+import { renderDashboard } from '../src/views/dashboard.js'
+import { NativeServer } from '../src/NativeServer.js'
 import { registerModel, setupOrm, Vertex, fields, ANONYMOUS_ID, SUPERUSER_ID, createCtx, getModel } from '@moon/orm'
 
 const TEST_SECRET = 'super-secret-jwt-key-for-unit-testing-32chars!'

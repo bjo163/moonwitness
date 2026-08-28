@@ -25,13 +25,13 @@ import {
   validateNormalized,
   executeImport
 } from '../src/services/ingestion.ts'
-import { FixtureAdapter, fixtureAdapter } from '../src/adapters/fixture-adapter.ts'
-import type { ImportContext, NormalizedArtifact } from '../src/types/ingestion.ts'
+import { FixtureAdapter, fixtureAdapter } from '../src/adapters/fixture-adapter.js'
+import type { ImportContext, NormalizedArtifact } from '../src/types/ingestion.js'
 import { createCtx, setupOrm, registerModel, SUPERUSER_ID } from '@moon/orm'
-import WxSourcePolicy from '../src/models/wx-source-policy.ts'
-import WxSourceManifest from '../src/models/wx-source-manifest.ts'
-import WxSourceArtifact from '../src/models/wx-source-artifact.ts'
-import WxSourceSnapshot from '../src/models/wx-source-snapshot.ts'
+import WxSourcePolicy from '../src/models/wx-source-policy.js'
+import WxSourceManifest from '../src/models/wx-source-manifest.js'
+import WxSourceArtifact from '../src/models/wx-source-artifact.js'
+import WxSourceSnapshot from '../src/models/wx-source-snapshot.js'
 
 // Setup temp test workspace
 const TEST_DIR = join(process.cwd(), 'scratch_test_ingestion')

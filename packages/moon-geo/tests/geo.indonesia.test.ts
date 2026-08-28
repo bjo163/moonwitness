@@ -12,7 +12,7 @@ import {
   computeGeoSemanticDiff,
   runGeoSourceMonitoring
 } from '../src/index.ts'
-import geoAddon from '../src/index.ts'
+import geoAddon from '../src/index.js'
 import { createCtx, setupOrm, registerModel, SUPERUSER_ID } from '@moon/orm'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'

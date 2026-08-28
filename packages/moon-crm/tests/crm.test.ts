@@ -4,7 +4,7 @@ import {
   CrmTeam,
   CrmLead
 } from '../src/index.ts'
-import crmAddon from '../src/index.ts'
+import crmAddon from '../src/index.js'
 
 describe('@moon/crm Addon (#24)', () => {
   it('exports addon manifest with base and mail dependencies', () => {

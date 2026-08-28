@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isRuntimeSchemaSyncAllowed } from '../src/runtime-schema.ts'
+import { isRuntimeSchemaSyncAllowed } from '../src/runtime-schema.js'
 
 describe('runtime schema lifecycle (#20)', () => {
   it('allows development runtime sync', () => {

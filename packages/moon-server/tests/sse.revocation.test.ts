@@ -6,7 +6,7 @@ import {
   getActiveClientCount,
   closeAllSSEConnections
 } from '../src/handlers/sse.ts'
-import { issueJwt } from '../src/utils/auth.ts'
+import { issueJwt } from '../src/utils/auth.js'
 
 const JWT_SECRET = 'revocation-test-secret'
 

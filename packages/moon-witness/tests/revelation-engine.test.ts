@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { createCtx, setupOrm, SUPERUSER_ID } from '@moon/orm'
-import { checksumEngineResult } from '../src/services/engine-evidence.ts'
-import { sha256String } from '../src/services/hash.ts'
-import { InMemoryEngineRunStore } from '../src/services/engine-store.ts'
-import { WitnessEngineRegistry, WitnessEngineRuntime } from '../src/services/engine-runtime.ts'
+import { checksumEngineResult } from '../src/services/engine-evidence.js'
+import { sha256String } from '../src/services/hash.js'
+import { InMemoryEngineRunStore } from '../src/services/engine-store.js'
+import { WitnessEngineRegistry, WitnessEngineRuntime } from '../src/services/engine-runtime.js'
 import {
   buildCrossScriptureEvidenceMatrix,
   createCrossScriptureComparisonModule
@@ -12,11 +12,11 @@ import {
   createRevelationQueryModule,
   resolveRevelationPassageContext
 } from '../src/engines/revelation-query.ts'
-import { createLexicalAnalysisModule } from '../src/engines/lexical-analysis.ts'
-import { createConceptEvidenceModule } from '../src/engines/concept-evidence.ts'
-import { createDivineExpressionModule } from '../src/engines/divine-expression.ts'
-import { createAiResearchSynthesisModule, createResearchHypothesisModule } from '../src/engines/research-hypothesis.ts'
-import type { WitnessEngineModule } from '../src/types/engine.ts'
+import { createLexicalAnalysisModule } from '../src/engines/lexical-analysis.js'
+import { createConceptEvidenceModule } from '../src/engines/concept-evidence.js'
+import { createDivineExpressionModule } from '../src/engines/divine-expression.js'
+import { createAiResearchSynthesisModule, createResearchHypothesisModule } from '../src/engines/research-hypothesis.js'
+import type { WitnessEngineModule } from '../src/types/engine.js'
 
 type Row = Record<string, any>
 let mockDb: Record<string, Row[]> = {}

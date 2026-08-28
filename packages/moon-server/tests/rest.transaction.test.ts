@@ -30,7 +30,7 @@ vi.mock('../src/utils/auth.ts', async (importOriginal) => {
   }
 })
 
-import { handleRest } from '../src/handlers/rest.ts'
+import { handleRest } from '../src/handlers/rest.js'
 
 function makeModel() {
   const txEnv = { uid: 42, trx: { id: 'real-transaction' } }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { PRIMARY_FILTERS, SECONDARY_FILTERS, chooseMethod, validateAssessment } from './engine.ts'
+import { PRIMARY_FILTERS, SECONDARY_FILTERS, chooseMethod, validateAssessment } from './engine.js'
 
 const validAssessment = {
   primaryFilterPassed: true,
