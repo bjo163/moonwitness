@@ -157,5 +157,19 @@ describe('OpenAPI canonical generation (#116)', () => {
       const live = findOperation(doc, '/live', 'get')
       expect(live.description).toMatch(/admin/i)
     })
+
+    it('NativeServer.registerRoute entries carry auth metadata in OpenAPI', () => {
+      defineEndpoint({
+        method: 'GET',
+        path: '/api/external/test-proxy',
+        description: 'Test proxy route',
+        auth: 'user',
+      })
+
+      const doc = generateOpenApi()
+      const op = findOperation(doc, '/api/external/test-proxy', 'get')
+      expect(op, '/api/external/test-proxy missing in OpenAPI doc').toBeDefined()
+      expect(op.security, 'proxy route must require auth').toEqual(bearer)
+    })
   })
 })

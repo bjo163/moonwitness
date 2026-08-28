@@ -14,6 +14,7 @@ import {
   checkDbConnection,
   type DbConfig
 } from '@moon/orm'
+import { defineEndpoint, EndpointDef } from '@moon/protocol'
 import { globalRoutes, HttpHandler } from './router.js'
 import { createProxyHandler } from './proxy.js'
 import { logger } from './logger.js'
@@ -135,7 +136,7 @@ export class NativeServer {
     }
   }
 
-  private registerRoute(method: string, path: string, handler: HttpHandler) {
+  private registerRoute(method: string, path: string, handler: HttpHandler, auth: 'none' | 'user' | 'admin' = 'none') {
     const wrapped = this.buildHandlerChain(handler)
     globalRoutes.push({
       method,
@@ -143,22 +144,29 @@ export class NativeServer {
       handler: wrapped,
       params: path.includes(':') ? path.match(/:([^/]+)/g)?.map(p => p.slice(1)) : undefined
     })
+
+    defineEndpoint({
+      method: method as EndpointDef['method'],
+      path,
+      description: `Dynamic route ${method} ${path}`,
+      auth,
+    })
   }
 
-  public get(path: string, handler: HttpHandler) {
-    this.registerRoute('GET', path, handler)
+  public get(path: string, handler: HttpHandler, auth: 'none' | 'user' | 'admin' = 'none') {
+    this.registerRoute('GET', path, handler, auth)
   }
 
-  public post(path: string, handler: HttpHandler) {
-    this.registerRoute('POST', path, handler)
+  public post(path: string, handler: HttpHandler, auth: 'none' | 'user' | 'admin' = 'none') {
+    this.registerRoute('POST', path, handler, auth)
   }
 
-  public put(path: string, handler: HttpHandler) {
-    this.registerRoute('PUT', path, handler)
+  public put(path: string, handler: HttpHandler, auth: 'none' | 'user' | 'admin' = 'none') {
+    this.registerRoute('PUT', path, handler, auth)
   }
 
-  public delete(path: string, handler: HttpHandler) {
-    this.registerRoute('DELETE', path, handler)
+  public delete(path: string, handler: HttpHandler, auth: 'none' | 'user' | 'admin' = 'none') {
+    this.registerRoute('DELETE', path, handler, auth)
   }
 
   public proxy(method: string, path: string, targetUrl: string, options?: {
@@ -166,12 +174,12 @@ export class NativeServer {
     query?: string[]
     headers?: Record<string, string>
     apiKey?: string
-  }) {
+  }, auth: 'none' | 'user' | 'admin' = 'user') {
     const handler = createProxyHandler({
       targetUrl,
       ...options
     })
-    this.registerRoute(method, path, handler)
+    this.registerRoute(method, path, handler, auth)
   }
 
   private matchParamRoute(req: http.IncomingMessage, route: { path: string; handler: HttpHandler }): { handler: HttpHandler; params: Record<string, string> } | null {
