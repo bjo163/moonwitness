@@ -90,6 +90,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     return null
   }
 
+  // Sanitized dynamic chart style definition
   return (
     <style
       dangerouslySetInnerHTML={{

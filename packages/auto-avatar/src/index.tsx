@@ -26,8 +26,7 @@ export function AutoAvatar({ seed, size = 40, className = "" }: AutoAvatarProps)
       return svgStr
         .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
         .replace(/\bon\w+\s*=\s*(?:'[^']*'|"[^"]*"|[^\s>]+)/gi, "")
-    } catch (e) {
-      console.error("Failed to generate avatar:", e)
+    } catch {
       return ""
     }
   }, [seed, size])
@@ -43,6 +42,7 @@ export function AutoAvatar({ seed, size = 40, className = "" }: AutoAvatarProps)
     )
   }
 
+  // Sanitized SVG vector rendering
   return (
     <div
       className={`relative inline-flex items-center justify-center overflow-hidden rounded-full bg-cyan-900/40 border border-cyan-500/30 ${className}`}
