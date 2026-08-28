@@ -18,8 +18,8 @@ import {
   RpcRequestSchema,
   RpcResponseSchema,
 } from '@moon/protocol'
-import { generateOpenApi, operationFromDef } from '../src/openapi-schema.js'
-import { globalRoutes } from '../src/router.js'
+import { generateOpenApi, operationFromDef } from '../src/openapi-schema.ts'
+import { globalRoutes } from '../src/router.ts'
 
 const bearer = [{ bearerAuth: [] }]
 

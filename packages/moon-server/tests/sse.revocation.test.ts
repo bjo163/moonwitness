@@ -5,8 +5,8 @@ import {
   revokeUserSseClients,
   getActiveClientCount,
   closeAllSSEConnections
-} from '../src/handlers/sse.js'
-import { issueJwt } from '../src/utils/auth.js'
+} from '../src/handlers/sse.ts'
+import { issueJwt } from '../src/utils/auth.ts'
 
 const JWT_SECRET = 'revocation-test-secret'
 

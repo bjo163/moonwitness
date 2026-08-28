@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { GARDEN_BRAINSTORM_PROMPT } from "./prompt.js"
+import { GARDEN_BRAINSTORM_PROMPT } from "./prompt.ts"
 
 describe("GARDEN_BRAINSTORM_PROMPT", () => {
   it("requires exactly ten prioritized tasks with constrained fields", () => {

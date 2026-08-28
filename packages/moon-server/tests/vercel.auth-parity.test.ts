@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 
-const source = readFileSync(new URL('../src/vercel.js', import.meta.url), 'utf8')
+const source = readFileSync(new URL('../src/vercel.ts', import.meta.url), 'utf8')
 
 describe('Vercel auth adapter parity (#15)', () => {
   it('does not implement a parallel jwt.verify policy', () => {

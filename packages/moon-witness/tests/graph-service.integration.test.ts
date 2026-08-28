@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { createCtx, setupOrm, SUPERUSER_ID } from '@moon/orm'
-import { WitnessGraphService } from '../src/graph/service.js'
-import { canonicalRelationKey } from '../src/graph/identity.js'
+import { WitnessGraphService } from '../src/graph/service.ts'
+import { canonicalRelationKey } from '../src/graph/identity.ts'
 
 type Row = Record<string, any>
 let mockDb: Record<string, Row[]> = {}

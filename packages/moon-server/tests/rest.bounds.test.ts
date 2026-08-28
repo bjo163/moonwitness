@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import { handleRest } from '../src/handlers/rest.js'
+import { handleRest } from '../src/handlers/rest.ts'
 import { registerModel, setupOrm, Vertex, fields } from '@moon/orm'
 import jwt from 'jsonwebtoken'
 

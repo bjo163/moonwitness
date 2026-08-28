@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { verifySeedIntegrity, loadCanonicalReferenceData } from '../src/seed-loader.js'
+import { verifySeedIntegrity, loadCanonicalReferenceData } from '../src/seed-loader.ts'
 import { createCtx, setupOrm, registerModel, SUPERUSER_ID } from '@moon/orm'
-import VxZone from '../src/vx-zone.js'
-import VxCoin from '../src/vx-coin.js'
-import IxLang from '../src/ix-lang.js'
-import IxTimezone from '../src/ix-timezone.js'
-import VxRole from '../src/vx-role.js'
-import IrConfigParameter from '../src/ir-config-parameter.js'
-import IrSequence from '../src/ir-sequence.js'
+import VxZone from '../src/vx-zone.ts'
+import VxCoin from '../src/vx-coin.ts'
+import IxLang from '../src/ix-lang.ts'
+import IxTimezone from '../src/ix-timezone.ts'
+import VxRole from '../src/vx-role.ts'
+import IrConfigParameter from '../src/ir-config-parameter.ts'
+import IrSequence from '../src/ir-sequence.ts'
 
 let mockDb: Record<string, any[]> = {}
 

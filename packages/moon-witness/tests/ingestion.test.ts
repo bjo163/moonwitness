@@ -9,12 +9,12 @@ import {
   computeRecordsChecksum,
   computeNormalizedChecksum,
   validateArtifactPath
-} from '../src/services/hash.js'
+} from '../src/services/hash.ts'
 import {
   createReport,
   addFinding,
   runBuiltinValidation
-} from '../src/services/validation.js'
+} from '../src/services/validation.ts'
 import {
   registerAdapter,
   getAdapter,
@@ -24,14 +24,14 @@ import {
   normalizeArtifact,
   validateNormalized,
   executeImport
-} from '../src/services/ingestion.js'
-import { FixtureAdapter, fixtureAdapter } from '../src/adapters/fixture-adapter.js'
-import type { ImportContext, NormalizedArtifact } from '../src/types/ingestion.js'
+} from '../src/services/ingestion.ts'
+import { FixtureAdapter, fixtureAdapter } from '../src/adapters/fixture-adapter.ts'
+import type { ImportContext, NormalizedArtifact } from '../src/types/ingestion.ts'
 import { createCtx, setupOrm, registerModel, SUPERUSER_ID } from '@moon/orm'
-import WxSourcePolicy from '../src/models/wx-source-policy.js'
-import WxSourceManifest from '../src/models/wx-source-manifest.js'
-import WxSourceArtifact from '../src/models/wx-source-artifact.js'
-import WxSourceSnapshot from '../src/models/wx-source-snapshot.js'
+import WxSourcePolicy from '../src/models/wx-source-policy.ts'
+import WxSourceManifest from '../src/models/wx-source-manifest.ts'
+import WxSourceArtifact from '../src/models/wx-source-artifact.ts'
+import WxSourceSnapshot from '../src/models/wx-source-snapshot.ts'
 
 // Setup temp test workspace
 const TEST_DIR = join(process.cwd(), 'scratch_test_ingestion')

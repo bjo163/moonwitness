@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { createCtx, setupOrm, registerModel, SUPERUSER_ID } from '../src/index.js'
-import IrModelData from '../../moon-base/src/ir-model-data.js'
-import IrSequence from '../../moon-base/src/ir-sequence.js'
-import IrConfigParameter from '../../moon-base/src/ir-config-parameter.js'
-import IrAttachment from '../../moon-base/src/ir-attachment.js'
+import { createCtx, setupOrm, registerModel, SUPERUSER_ID } from '../src/index.ts'
+import IrModelData from '../../moon-base/src/ir-model-data.ts'
+import IrSequence from '../../moon-base/src/ir-sequence.ts'
+import IrConfigParameter from '../../moon-base/src/ir-config-parameter.ts'
+import IrAttachment from '../../moon-base/src/ir-attachment.ts'
 
 let mockDb: Record<string, any[]> = {}
 

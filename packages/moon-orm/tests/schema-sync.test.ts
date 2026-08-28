@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { validateAutomaticAlteration } from '../src/index.js'
+import { validateAutomaticAlteration } from '../src/index.ts'
 
 describe('schema synchronization safety', () => {
   it('refuses automatic pgvector dimension changes', () => {

@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import WxAssertion from '../src/models/wx-assertion.js'
-import WxContent from '../src/models/wx-content.js'
-import WxFigure from '../src/models/wx-figure.js'
-import WxLexicalOccurrence from '../src/models/wx-lexical-occurrence.js'
-import WxPassage from '../src/models/wx-passage.js'
-import WxScripture from '../src/models/wx-scripture.js'
-import WxTraditionUnit from '../src/models/wx-tradition-unit.js'
-import WxTransmissionLink from '../src/models/wx-transmission-link.js'
-import { sha256String } from '../src/services/hash.js'
+import WxAssertion from '../src/models/wx-assertion.ts'
+import WxContent from '../src/models/wx-content.ts'
+import WxFigure from '../src/models/wx-figure.ts'
+import WxLexicalOccurrence from '../src/models/wx-lexical-occurrence.ts'
+import WxPassage from '../src/models/wx-passage.ts'
+import WxScripture from '../src/models/wx-scripture.ts'
+import WxTraditionUnit from '../src/models/wx-tradition-unit.ts'
+import WxTransmissionLink from '../src/models/wx-transmission-link.ts'
+import { sha256String } from '../src/services/hash.ts'
 
 const asContext = (getModel: (name: string) => unknown) => ({ getModel }) as any
 

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { planLegacyMigration } from '../src/services/legacy-migration.js'
-import { executeLegacyMigration } from '../src/services/legacy-migration-executor.js'
-import type { LegacyRecordBatch } from '../src/types/migration.js'
+import { planLegacyMigration } from '../src/services/legacy-migration.ts'
+import { executeLegacyMigration } from '../src/services/legacy-migration-executor.ts'
+import type { LegacyRecordBatch } from '../src/types/migration.ts'
 
 const batches: LegacyRecordBatch[] = [
   {

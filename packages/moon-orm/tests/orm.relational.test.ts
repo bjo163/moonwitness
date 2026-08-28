@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { Vertex, fields, createCtx, registerModel, setupOrm, SUPERUSER_ID } from '../src/index.js'
+import { Vertex, fields, createCtx, registerModel, setupOrm, SUPERUSER_ID } from '../src/index.ts'
 
 let mockDbTables: Record<string, any[]> = {}
 

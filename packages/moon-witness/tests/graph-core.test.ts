@@ -3,7 +3,7 @@ import {
   canonicalRelationKey,
   canonicalizeSymmetricEntities,
   validateRelationCandidate
-} from '../src/graph/identity.js'
+} from '../src/graph/identity.ts'
 
 const policy = {
   code: 'MENTIONS',
