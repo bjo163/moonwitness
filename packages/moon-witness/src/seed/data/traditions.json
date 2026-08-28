@@ -1,0 +1,86 @@
+[
+  {
+    "slug": "islam",
+    "name": "Islam",
+    "description": "Islamic tradition based on the Holy Quran and authentic Sunnah.",
+    "traditionFamily": "Abrahamic",
+    "isMajor": true
+  },
+  {
+    "slug": "christianity",
+    "name": "Christianity",
+    "description": "Christian tradition centered on the life and teachings of Jesus Christ and the Holy Bible.",
+    "traditionFamily": "Abrahamic",
+    "isMajor": true
+  },
+  {
+    "slug": "judaism",
+    "name": "Judaism",
+    "description": "Jewish tradition centered on the Tanakh (Hebrew Bible) and Rabbinic ethical-legal tradition.",
+    "traditionFamily": "Abrahamic",
+    "isMajor": true
+  },
+  {
+    "slug": "hinduism",
+    "name": "Hinduism",
+    "description": "Sanatana Dharma traditions based on the Vedas, Upanishads, and the Bhagavad Gita.",
+    "traditionFamily": "Dharmic",
+    "isMajor": true
+  },
+  {
+    "slug": "buddhism",
+    "name": "Buddhism",
+    "description": "Buddhist tradition based on the Teachings of Gautama Buddha preserved in the Pali Canon.",
+    "traditionFamily": "Dharmic",
+    "isMajor": true
+  },
+  {
+    "slug": "sikhism",
+    "name": "Sikhism",
+    "description": "Sikh tradition founded by Guru Nanak Dev Ji centered on the Guru Granth Sahib.",
+    "traditionFamily": "Dharmic",
+    "isMajor": true
+  },
+  {
+    "slug": "jainism",
+    "name": "Jainism",
+    "description": "Jain tradition of non-violence (Ahimsa) and truth based on the Tirthankaras and Agamas.",
+    "traditionFamily": "Dharmic",
+    "isMajor": false
+  },
+  {
+    "slug": "taoism",
+    "name": "Taoism",
+    "description": "Philosophical and spiritual tradition centered on living in harmony with the Tao (Tao Te Ching).",
+    "traditionFamily": "East Asian",
+    "isMajor": false
+  },
+  {
+    "slug": "confucianism",
+    "name": "Confucianism",
+    "description": "Ethical and philosophical tradition centered on benevolence (Ren) and ritual propriety (Li).",
+    "traditionFamily": "East Asian",
+    "isMajor": false
+  },
+  {
+    "slug": "shinto",
+    "name": "Shinto",
+    "description": "Indigenous spiritual tradition of Japan centered on reverence for the Kami and nature.",
+    "traditionFamily": "East Asian",
+    "isMajor": false
+  },
+  {
+    "slug": "zoroastrianism",
+    "name": "Zoroastrianism",
+    "description": "Ancient monotheistic tradition founded by Zarathustra centered on the Avesta and Gathas.",
+    "traditionFamily": "Persian",
+    "isMajor": false
+  },
+  {
+    "slug": "bahai",
+    "name": "Bahá'í Faith",
+    "description": "Global monotheistic faith emphasizing the spiritual unity of all humankind and progressive revelation.",
+    "traditionFamily": "Abrahamic",
+    "isMajor": false
+  }
+]
