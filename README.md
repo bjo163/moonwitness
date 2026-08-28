@@ -62,8 +62,7 @@ moonwitness/
 ├── apps/
 │   ├── web/                  # Cosmic Dashboard Next.js 16 frontend (:3000)
 │   ├── command-center/       # Tactical Governance & Administrative Console (:3001)
-│   ├── api/                  # MoonWitness backend service & worker queue (:4000)
-│   └── rocksoul/             # Companion web experimental runtime
+│   └── api/                  # MoonWitness backend service & worker queue (:4000)
 ├── packages/
 │   ├── ui/                   # @workspace/ui (Master Cosmic Design System & CME 3-View Engine)
 │   ├── types/                # @workspace/types (Domain types, constants, NAVIGATION_MESH)
