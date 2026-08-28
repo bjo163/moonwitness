@@ -44,8 +44,6 @@ export async function loadBaseData() {
   }
 
   // 2. Seed explicit model metadata for every registered, non-abstract model.
-  // This mirrors Odoo's ir.model bootstrap behavior while keeping authorization fail-closed:
-  // an unregistered/unknown model still has no metadata and is denied.
   const securedModels = Array.from(registry.values())
     .filter((modelClass) => !modelClass._abstract && Boolean(modelClass._name))
     .map((modelClass) => modelClass._name)
@@ -184,10 +182,13 @@ export async function loadBaseData() {
         } else {
           const existingUser = userRows[0] as { id: number; password: string }
           userId = existingUser.id
-          await conn('vx_user').where({ id: existingUser.id }).update({
-            password: hashedPassword,
-            login: u.email
-          })
+          const needsPasswordUpdate = !isBcryptHash(existingUser.password) || existingUser.password !== hashedPassword
+          if (needsPasswordUpdate) {
+            await conn('vx_user').where({ id: existingUser.id }).update({
+              password: hashedPassword,
+              login: u.email
+            })
+          }
         }
 
         if (u.isAdmin) {

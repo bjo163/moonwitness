@@ -149,6 +149,8 @@ export async function loadCanonicalReferenceData(env?: Ctx): Promise<void> {
       const existing = await Role.fetch(Role, activeEnv, [['name', '=', r.name]])
       if (existing.length === 0) {
         await Role.spawn(Role, activeEnv, r)
+      } else {
+        await Role.morph(Role, activeEnv, existing[0].id, r)
       }
     }
   }
@@ -158,6 +160,8 @@ export async function loadCanonicalReferenceData(env?: Ctx): Promise<void> {
       const existing = await ConfigParam.fetch(ConfigParam, activeEnv, [['key', '=', p.key]])
       if (existing.length === 0) {
         await ConfigParam.spawn(ConfigParam, activeEnv, p)
+      } else {
+        await ConfigParam.morph(ConfigParam, activeEnv, existing[0].id, p)
       }
     }
   }
@@ -167,6 +171,8 @@ export async function loadCanonicalReferenceData(env?: Ctx): Promise<void> {
       const existing = await Sequence.fetch(Sequence, activeEnv, [['code', '=', s.code]])
       if (existing.length === 0) {
         await Sequence.spawn(Sequence, activeEnv, s)
+      } else {
+        await Sequence.morph(Sequence, activeEnv, existing[0].id, s)
       }
     }
   }
