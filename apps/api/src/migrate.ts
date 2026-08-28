@@ -100,28 +100,24 @@ async function run() {
     ],
   })
 
-  async function syncSchema() {
-    const prev = process.env.NODE_ENV
-    process.env.NODE_ENV = 'development'
-    try {
+  async function full() {
+    await up()
+    const integrity = verifySeedIntegrity()
+    if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
+    if (process.env.NODE_ENV !== 'production') {
       const result = await forge({ silent: true })
       if (result.applied.length > 0) {
         console.log(`Schema sync: ${result.applied.length} changes applied (${result.summary.tablesCreated} tables, ${result.summary.columnsAdded} cols, ${result.summary.indexesCreated} indexes)`)
       }
-    } finally {
-      if (prev === undefined) {
-        delete process.env.NODE_ENV
-      } else {
-        process.env.NODE_ENV = prev
+    } else {
+      const result = await diff()
+      if (result.applied.length > 0) {
+        throw new Error(
+          `Production schema drift detected: ${result.applied.length} pending changes (${result.summary.tablesCreated} tables, ${result.summary.columnsAdded} cols, ${result.summary.indexesCreated} indexes). Committed migrations are incomplete.`
+        )
       }
+      console.log('Schema sync: zero drift detected in production.')
     }
-  }
-
-  async function fullInstall() {
-    await up()
-    const integrity = verifySeedIntegrity()
-    if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
-    await syncSchema()
     await loadBaseData()
     await seedWitnessGraphCore()
     await loadAllDemoData()
@@ -130,26 +126,15 @@ async function run() {
 
   const cmd = process.argv[2]
 
-  if (cmd === "diff") {
-    await diff()
-  } else if (cmd === "up" || cmd === "migrate") {
-    await up()
-  } else if (cmd === "down" || cmd === "rollback") {
-    await down()
-  } else if (cmd === "status" || cmd === "dry-run") {
-    console.table(await status())
-  } else if (cmd === "check") {
-    await check()
-    console.log("Migration integrity check passed.")
-  } else if (cmd === "install" || cmd === "seed" || cmd === "demo") {
-    await fullInstall()
+  if (cmd === "full" || cmd === "install" || cmd === "seed" || cmd === "demo") {
+    await full()
   } else if (cmd === "verify") {
     await check()
     const integrity = verifySeedIntegrity()
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
     console.log("Database migration and canonical seed integrity checks passed.")
   } else {
-    console.log("Usage: pnpm tsx src/migrate.ts <diff|up|down|status|check|install|seed|demo|verify>")
+    console.log("Usage: pnpm tsx src/migrate.ts <full|verify>")
   }
 
   process.exit(0)
