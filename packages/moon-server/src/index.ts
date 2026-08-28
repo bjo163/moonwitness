@@ -58,6 +58,15 @@ export {
 export { handleRest } from './handlers/rest.js'
 export { handleRpc } from './handlers/rpc.js'
 export {
+  defineProcedure,
+  getRegisteredProcedure,
+  getAllRegisteredProcedures,
+  isAllowedRpcMethod,
+  validateRpcMethod,
+  resolveRpcHandler,
+  type RpcProcedure,
+} from './rpc-registry.js'
+export {
   handleSSE,
   broadcast,
   getActiveClientCount,

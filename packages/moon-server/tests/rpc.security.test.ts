@@ -14,6 +14,7 @@ import {
 } from '@moon/orm'
 import { handleRpc } from '../src/handlers/rpc.js'
 import { logger } from '../src/logger.js'
+import { validateRpcMethod, isAllowedRpcMethod, defineProcedure, getRegisteredProcedure, getAllRegisteredProcedures } from '../src/rpc-registry.js'
 
 const TEST_SECRET = 'super-secret-jwt-key-for-rpc-security-test-32chars!'
 
@@ -108,7 +109,7 @@ function createMockRes(): { res: ServerResponse; getResult: () => { status: numb
   }
 }
 
-describe('RPC Security (#114)', () => {
+describe('RPC Registry (#114)', () => {
   beforeEach(() => {
     setupOrm(makeDb({
       vx_user: [
@@ -199,7 +200,7 @@ describe('RPC Security (#114)', () => {
 
       expect(result.status).toBe(403)
       expect(result.body.code).toBe('FORBIDDEN_METHOD')
-      expect(result.body.error).toBe(`Forbidden method: ${method}`)
+      expect(result.body.error).toBe(`Method ${method} is not registered for RPC access`)
     }
   })
 
@@ -227,6 +228,19 @@ describe('RPC Security (#114)', () => {
       model: 'vx.user',
       method: 'fetch'
     })
+  })
+
+  it('rejects unregistered methods even if they exist on the model', async () => {
+    const token = jwt.sign({ sub: 42 }, TEST_SECRET, { algorithm: 'HS256' })
+    const req = createMockRpcReq({ model: 'vx.user', method: 'customUnregistered', args: [] }, `Bearer ${token}`)
+    const { res, getResult } = createMockRes()
+
+    await handleRpc(req, res, TEST_SECRET)
+    const result = getResult()
+
+    expect(result.status).toBe(403)
+    expect(result.body.code).toBe('FORBIDDEN_METHOD')
+    expect(result.body.error).toBe('Method customUnregistered is not registered for RPC access')
   })
 
   it('rejects invalid body schema with Zod validation', async () => {
@@ -273,7 +287,7 @@ describe('RPC Security (#114)', () => {
     expect(result.body.code).toBe('MODEL_NOT_FOUND')
   })
 
-  it('rejects method not found on model', async () => {
+  it('rejects method not found on model with 403 for unregistered methods', async () => {
     const token = jwt.sign({ sub: 42 }, TEST_SECRET, { algorithm: 'HS256' })
     const req = createMockRpcReq({ model: 'vx.user', method: 'nonexistent' }, `Bearer ${token}`)
     const { res, getResult } = createMockRes()
@@ -281,8 +295,9 @@ describe('RPC Security (#114)', () => {
     await handleRpc(req, res, TEST_SECRET)
     const result = getResult()
 
-    expect(result.status).toBe(404)
-    expect(result.body.code).toBe('METHOD_NOT_FOUND')
+    expect(result.status).toBe(403)
+    expect(result.body.code).toBe('FORBIDDEN_METHOD')
+    expect(result.body.error).toBe('Method nonexistent is not registered for RPC access')
   })
 
   it('audits successful RPC execution with uid, model, and method', async () => {
@@ -297,5 +312,42 @@ describe('RPC Security (#114)', () => {
       model: 'vx.user',
       method: 'fetch'
     })
+  })
+})
+
+describe('RPC Registry (#114)', () => {
+  it('allows safe readonly methods by default', () => {
+    expect(isAllowedRpcMethod('fetch')).toBe(true)
+    expect(isAllowedRpcMethod('count')).toBe(true)
+    expect(isAllowedRpcMethod('searchCount')).toBe(true)
+    expect(isAllowedRpcMethod('readGroup')).toBe(true)
+  })
+
+  it('blocks dangerous methods by default', () => {
+    expect(isAllowedRpcMethod('spawn')).toBe(false)
+    expect(isAllowedRpcMethod('morph')).toBe(false)
+    expect(isAllowedRpcMethod('purge')).toBe(false)
+    expect(isAllowedRpcMethod('processRelationalTuples')).toBe(false)
+    expect(isAllowedRpcMethod('validateData')).toBe(false)
+  })
+
+  it('validates method names with explicit error messages', () => {
+    expect(validateRpcMethod('bad!').error).toBe('Invalid method name format: bad!')
+    expect(validateRpcMethod('__init__').error).toBe('Dunder methods are not allowed: __init__')
+    expect(validateRpcMethod('_private').error).toBe('Private methods are not allowed: _private')
+    expect(validateRpcMethod('spawn').error).toBe('Method spawn is not registered for RPC access')
+    expect(validateRpcMethod('nonexistent').error).toBe('Method nonexistent is not registered for RPC access')
+    expect(validateRpcMethod('fetch').ok).toBe(true)
+  })
+
+  it('supports explicit procedure registration via defineProcedure', () => {
+    defineProcedure({
+      name: 'custom.fetch',
+      description: 'Custom fetch procedure',
+    })
+
+    const procedures = getAllRegisteredProcedures()
+    expect(procedures.some(p => p.name === 'custom.fetch')).toBe(true)
+    expect(getRegisteredProcedure('custom.fetch')?.name).toBe('custom.fetch')
   })
 })

@@ -4,39 +4,10 @@ import { parseBody, sendJson } from '../utils/http.js'
 import { authenticateRequest, AuthError } from '../utils/auth.js'
 import { logger } from '../logger.js'
 import { RpcRequestSchema } from '@moon/protocol'
-
-const METHOD_NAME_REGEX = /^[a-zA-Z0-9_]+$/
-
-const DANGEROUS_METHODS = new Set([
-  'spawn',
-  'morph',
-  'purge',
-  'destroy',
-  'unlink',
-  'create',
-  'write',
-  'update',
-  'delete',
-  'transaction',
-  'emitEvent',
-  'getFieldDefs',
-  'tableName'
-])
+import { validateRpcMethod, resolveRpcHandler } from '../rpc-registry.js'
 
 function validateMethodName(method: string): { ok: boolean; error?: string } {
-  if (!METHOD_NAME_REGEX.test(method)) {
-    return { ok: false, error: `Invalid method name format: ${method}` }
-  }
-  if (method.includes('__')) {
-    return { ok: false, error: `Dunder methods are not allowed: ${method}` }
-  }
-  if (method.startsWith('_')) {
-    return { ok: false, error: `Private methods are not allowed: ${method}` }
-  }
-  if (DANGEROUS_METHODS.has(method)) {
-    return { ok: false, error: `Forbidden method: ${method}` }
-  }
-  return { ok: true }
+  return validateRpcMethod(method)
 }
 
 /**
@@ -72,7 +43,7 @@ export async function handleRpc(
       return sendJson(res, 404, { error: `Model ${model} not found`, code: 'MODEL_NOT_FOUND' }, req)
     }
 
-    const methodFn = (ModelClass as any)[method]
+    const methodFn = resolveRpcHandler(model, method)
     if (typeof methodFn !== 'function') {
       return sendJson(res, 404, { error: `Method ${method} not found on ${model}`, code: 'METHOD_NOT_FOUND' }, req)
     }
