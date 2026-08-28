@@ -1,16 +1,14 @@
-name: Witness PostgreSQL Certification
+name: Production PostgreSQL Certification
 
 on:
+  pull_request:
+    branches:
+      - dev
+      - main
   push:
     branches:
       - dev
       - main
-    paths:
-      - "packages/moon-witness/**"
-      - "packages/moon-orm/**"
-      - "packages/moon-base/**"
-      - "apps/api/**"
-      - ".github/workflows/witness-postgres-certification.yml"
   schedule:
     - cron: "17 3 * * 1"
   workflow_dispatch:
@@ -19,76 +17,162 @@ permissions:
   contents: read
 
 concurrency:
-  group: witness-pg-cert-${{ github.workflow }}-${{ github.ref }}
+  group: production-pg-cert-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
   certify-postgres:
-    name: PostgreSQL 16 Graph Certification
+    name: Production PostgreSQL 16 Certification
     runs-on: self-hosted
-    timeout-minutes: 30
+    timeout-minutes: 45
     env:
       CI: "true"
-      NODE_ENV: test
-      JWT_SECRET: certification-only-test-secret
+      NODE_ENV: production
+      JWT_SECRET: certification-only-test-secret-32chars
+      BOOTSTRAP_ADMIN_EMAIL: cert-admin@invalid.example
+      BOOTSTRAP_ADMIN_PASSWORD: certification-only-admin-password
       CERT_NETWORK: moonwitness-cert-${{ github.run_id }}
       CERT_PG_CONTAINER: moonwitness-pg-cert-${{ github.run_id }}
       CERT_APP_CONTAINER: moonwitness-app-cert-${{ github.run_id }}
       CERT_IMAGE: moonwitness-api-cert:${{ github.run_id }}
+      CERT_DB: moonwitness_release_cert
+      CERT_RESTORE_DB: moonwitness_release_restore
 
     steps:
-      - name: Checkout
+      - name: Checkout exact candidate SHA
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
-      - name: Start isolated PostgreSQL certification network
+      - name: Verify candidate identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "candidate_sha=$(git rev-parse HEAD)"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA" || {
+            echo "Checkout does not match the GitHub release-candidate SHA."
+            exit 1
+          }
+
+      - name: Start isolated PostgreSQL 16
         shell: bash
         run: |
           set -euo pipefail
           command -v docker >/dev/null || { echo "Docker is required on the self-hosted runner."; exit 1; }
-          docker network create "$CERT_NETWORK"
+          docker network inspect "$CERT_NETWORK" >/dev/null 2>&1 || docker network create "$CERT_NETWORK"
           docker run -d --rm \
             --name "$CERT_PG_CONTAINER" \
             --network "$CERT_NETWORK" \
             --network-alias postgres \
             -e POSTGRES_USER=postgres \
             -e POSTGRES_PASSWORD=postgres \
-            -e POSTGRES_DB=moonwitness_witness_cert \
-            postgres:16
+            -e POSTGRES_DB="$CERT_DB" \
+            postgres:16-alpine
 
           for attempt in $(seq 1 60); do
-            if docker exec "$CERT_PG_CONTAINER" \
-              pg_isready -U postgres -d moonwitness_witness_cert >/dev/null 2>&1; then
+            if docker exec "$CERT_PG_CONTAINER" pg_isready -U postgres -d "$CERT_DB" >/dev/null 2>&1; then
               echo "PostgreSQL is healthy inside $CERT_NETWORK."
               exit 0
             fi
-            echo "Waiting for PostgreSQL health check (attempt $attempt/60)..."
             sleep 1
           done
           docker logs "$CERT_PG_CONTAINER" || true
           exit 1
 
-      - name: Build certification image
+      - name: Build exact-candidate API image
         shell: bash
-        run: docker build --file apps/api/Dockerfile --tag "$CERT_IMAGE" .
+        run: docker build --file apps/api/Dockerfile --pull --tag "$CERT_IMAGE" .
 
-      - name: Verify migrations, seed, and Witness graph
+      - name: Clean install, canonical seed, and verify
         shell: bash
         run: |
+          set -euo pipefail
+          COMMON_ENV="-e CI=true -e NODE_ENV=production -e JWT_SECRET=$JWT_SECRET -e BOOTSTRAP_ADMIN_EMAIL=$BOOTSTRAP_ADMIN_EMAIL -e BOOTSTRAP_ADMIN_PASSWORD=$BOOTSTRAP_ADMIN_PASSWORD -e DATABASE_URL=postgres://postgres:postgres@postgres:5432/$CERT_DB -e TEST_DATABASE_URL=postgres://postgres:postgres@postgres:5432/$CERT_DB"
+
+          docker run --rm --network "$CERT_NETWORK" $COMMON_ENV "$CERT_IMAGE" \
+            sh -lc 'pnpm --filter api db:install'
+
+          docker run --rm --network "$CERT_NETWORK" $COMMON_ENV "$CERT_IMAGE" \
+            sh -lc 'pnpm --filter api db:verify'
+
+      - name: Witness relation and PostgreSQL graph certification
+        shell: bash
+        run: |
+          set -euo pipefail
           docker run --rm \
-            --name "$CERT_APP_CONTAINER" \
             --network "$CERT_NETWORK" \
             -e CI=true \
-            -e NODE_ENV=test \
+            -e NODE_ENV=production \
             -e JWT_SECRET="$JWT_SECRET" \
-            -e TEST_DATABASE_URL=postgres://postgres:postgres@postgres:5432/moonwitness_witness_cert \
-            -e DATABASE_URL=postgres://postgres:postgres@postgres:5432/moonwitness_witness_cert \
+            -e BOOTSTRAP_ADMIN_EMAIL="$BOOTSTRAP_ADMIN_EMAIL" \
+            -e BOOTSTRAP_ADMIN_PASSWORD="$BOOTSTRAP_ADMIN_PASSWORD" \
+            -e DATABASE_URL="postgres://postgres:postgres@postgres:5432/$CERT_DB" \
+            -e TEST_DATABASE_URL="postgres://postgres:postgres@postgres:5432/$CERT_DB" \
             "$CERT_IMAGE" \
-            sh -lc 'pnpm --filter api db:verify && pnpm --filter api certify:witness-graph-pg'
+            sh -lc 'pnpm --filter api certify:witness-graph-pg'
 
-      - name: Clean certification containers and network
+      - name: Backup and restore smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          DUMP_FILE="$RUNNER_TEMP/moonwitness-cert-${GITHUB_RUN_ID}.sql"
+          docker exec "$CERT_PG_CONTAINER" pg_dump -U postgres -d "$CERT_DB" --no-owner --no-privileges > "$DUMP_FILE"
+          docker exec "$CERT_PG_CONTAINER" createdb -U postgres "$CERT_RESTORE_DB"
+          docker exec -i "$CERT_PG_CONTAINER" psql -U postgres -d "$CERT_RESTORE_DB" < "$DUMP_FILE" >/dev/null
+          docker exec "$CERT_PG_CONTAINER" psql -U postgres -d "$CERT_RESTORE_DB" -Atc \
+            "SELECT count(*) > 0 FROM information_schema.tables WHERE table_schema='public';" | grep -qx t
+          rm -f "$DUMP_FILE"
+
+      - name: Production API boot and health smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run -d --rm \
+            --name "$CERT_APP_CONTAINER" \
+            --network "$CERT_NETWORK" \
+            --network-alias api \
+            -e CI=true \
+            -e NODE_ENV=production \
+            -e JWT_SECRET="$JWT_SECRET" \
+            -e BOOTSTRAP_ADMIN_EMAIL="$BOOTSTRAP_ADMIN_EMAIL" \
+            -e BOOTSTRAP_ADMIN_PASSWORD="$BOOTSTRAP_ADMIN_PASSWORD" \
+            -e DATABASE_URL="postgres://postgres:postgres@postgres:5432/$CERT_DB" \
+            -e TEST_DATABASE_URL="postgres://postgres:postgres@postgres:5432/$CERT_DB" \
+            "$CERT_IMAGE"
+
+          for attempt in $(seq 1 60); do
+            if docker run --rm --network "$CERT_NETWORK" curlimages/curl:8.11.0 \
+              --fail --silent --show-error http://api:4000/health/ready >/dev/null 2>&1; then
+              echo "Production API readiness smoke passed."
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs "$CERT_APP_CONTAINER" || true
+          exit 1
+
+      - name: Candidate quality and security regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          COMMON_ENV="-e CI=true -e NODE_ENV=production -e JWT_SECRET=$JWT_SECRET -e BOOTSTRAP_ADMIN_EMAIL=$BOOTSTRAP_ADMIN_EMAIL -e BOOTSTRAP_ADMIN_PASSWORD=$BOOTSTRAP_ADMIN_PASSWORD -e DATABASE_URL=postgres://postgres:postgres@postgres:5432/$CERT_DB -e TEST_DATABASE_URL=postgres://postgres:postgres@postgres:5432/$CERT_DB"
+          docker run --rm $COMMON_ENV "$CERT_IMAGE" sh -lc \
+            'pnpm audit:rules && pnpm test && pnpm typecheck'
+
+      - name: Capture sanitized diagnostics on failure
+        if: failure()
+        shell: bash
+        run: |
+          echo "candidate_sha=$GITHUB_SHA"
+          echo "workflow_run=$GITHUB_RUN_ID"
+          docker logs "$CERT_APP_CONTAINER" 2>&1 | tail -n 200 || true
+          docker logs "$CERT_PG_CONTAINER" 2>&1 | tail -n 200 || true
+
+      - name: Clean certification resources
         if: always()
         shell: bash
         run: |
+          rm -f "$RUNNER_TEMP/moonwitness-cert-${GITHUB_RUN_ID}.sql" || true
           docker rm -f "$CERT_APP_CONTAINER" >/dev/null 2>&1 || true
           docker rm -f "$CERT_PG_CONTAINER" >/dev/null 2>&1 || true
           docker network rm "$CERT_NETWORK" >/dev/null 2>&1 || true
