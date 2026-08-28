@@ -68,7 +68,7 @@ export function UsersView() {
     {
       name: "level",
       label: "Level",
-      type: "integer",
+      type: "number",
       render: (_, row) => {
         const level = row.level ?? "Unavailable"
         return (
@@ -146,7 +146,7 @@ export function UsersView() {
       <MetricWidget label="Total Users" value={String(totalUsers)} sub={totalUsers > 0 ? `${activeUsers} active` : "No data"} color="cyan" icon={<Users className="h-4 w-4" />} />
       <MetricWidget label="Active Users" value={String(activeUsers)} sub={totalUsers > 0 ? `${Math.round((activeUsers / totalUsers) * 100)}% of total` : "No data"} color="emerald" icon={<MonitorPlay className="h-4 w-4" />} />
       <MetricWidget label="2FA Enabled" value={String(twoFactorUsers)} sub={totalUsers > 0 ? `${Math.round((twoFactorUsers / totalUsers) * 100)}% of total` : "No data"} color="purple" icon={<Shield className="h-4 w-4" />} />
-      <MetricWidget label="Avg Level" value={totalUsers > 0 ? Math.round(users.reduce((sum: number, u: any) => sum + (u.level || 0), 0) / totalUsers) : "0"} sub="Average user level" color="amber" icon={<Clock className="h-4 w-4" />} />
+      <MetricWidget label="Avg Level" value={String(totalUsers > 0 ? Math.round(users.reduce((sum: number, u: any) => sum + (u.level || 0), 0) / totalUsers) : 0)} sub="Average user level" color="amber" icon={<Clock className="h-4 w-4" />} />
     </div>
   )
 

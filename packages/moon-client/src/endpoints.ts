@@ -134,12 +134,12 @@ export async function fetchEarthquakes(): Promise<any> {
   return await apiGet("/api/external/usgs/earthquakes")
 }
 
-export async function fetchGoogleTrends(): Promise<any[]> {
-  return await apiGet<any[]>("/api/external/trends")
+export async function fetchGoogleTrends(): Promise<any> {
+  return await apiGet<any>("/api/external/trends")
 }
 
-export async function fetchExternalWeather(latitude = "-6.2", longitude = "106.8"): Promise<any> {
-  return await apiGet(`/api/external/weather?latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}`)
+export async function fetchExternalWeather(latitude: string | number = "-6.2", longitude: string | number = "106.8"): Promise<any> {
+  return await apiGet(`/api/external/weather?latitude=${encodeURIComponent(String(latitude))}&longitude=${encodeURIComponent(String(longitude))}`)
 }
 
 export async function fetchSolarCme(startDate?: string): Promise<any> {

@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react"
 import { Target, AlertTriangle, Info, Globe, ShieldAlert } from "lucide-react"
 import { ContextBlock } from "@workspace/ui"
+import { useResource } from "@workspace/hooks"
+import { fetchEarthquakes } from "@moon/client"
 import dynamic from "next/dynamic"
 import "leaflet/dist/leaflet.css"
 
@@ -89,6 +91,33 @@ const MISSION_TARGETS: CrisisMarker[] = [
 export function MissionControlView() {
   const [mounted, setMounted] = useState(false)
   const [activeTarget, setActiveTarget] = useState<CrisisMarker | null>(null)
+
+  const { data: quakeData } = useResource(fetchEarthquakes, {
+    storageKey: "mw_mission_quakes",
+  })
+
+  const liveQuakeMarkers: CrisisMarker[] = quakeData?.features
+    ? quakeData.features
+        .filter((f: any) => (f.properties?.mag || 0) >= 4.5)
+        .slice(0, 10)
+        .map((f: any, idx: number) => {
+          const mag = f.properties?.mag || 0
+          const place = f.properties?.place || "Earthquake Epicenter"
+          const lng = f.geometry?.coordinates?.[0] || 0
+          const lat = f.geometry?.coordinates?.[1] || 0
+          return {
+            id: f.id || `eq-${idx + 1}`,
+            lat,
+            lng,
+            title: `SEISMIC ANOMALY M${mag.toFixed(1)} — ${String(place).toUpperCase()}`,
+            severity: mag >= 6.0 ? ("CRITICAL" as const) : mag >= 5.0 ? ("HIGH" as const) : ("MEDIUM" as const),
+            type: "CONFLICT" as const,
+            description: `USGS real-time telemetry detected magnitude ${mag.toFixed(1)} event at depth ${Math.round(f.geometry?.coordinates?.[2] || 10)} km.`,
+          }
+        })
+    : []
+
+  const allTargets = [...MISSION_TARGETS, ...liveQuakeMarkers]
 
   useEffect(() => {
     setMounted(true)
@@ -177,7 +206,7 @@ export function MissionControlView() {
                   attribution="&copy; CARTO"
                 />
 
-                {MISSION_TARGETS.map((target) => (
+                {allTargets.map((target) => (
                   <Marker
                     key={target.id}
                     position={[target.lat, target.lng]}
@@ -280,14 +309,14 @@ export function MissionControlView() {
             <div className="mb-2 flex items-center justify-between text-xs">
               <span className="text-white">Active Zones</span>
               <span className="font-mono font-bold text-accent">
-                {MISSION_TARGETS.length}
+                {allTargets.length}
               </span>
             </div>
             <div className="mb-2 flex items-center justify-between text-xs">
               <span className="text-white">Critical Threats</span>
               <span className="font-mono font-bold text-destructive">
                 {
-                  MISSION_TARGETS.filter((t) => t.severity === "CRITICAL")
+                  allTargets.filter((t) => t.severity === "CRITICAL")
                     .length
                 }
               </span>

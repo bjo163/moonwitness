@@ -66,9 +66,11 @@ const nextConfig: NextConfig = {
       new webpack.NormalModuleReplacementPlugin(
         /^(?:\.\/|\.\.\/).*\.js$/,
         (resource: any) => {
+          if (!resource || typeof resource.request !== "string") return
           const fs = require("fs")
           const path = require("path")
-          const context = resource.context || path.dirname(resource.resource || "")
+          const context = resource.context || (resource.resource ? path.dirname(resource.resource) : "")
+          if (!context) return
           const tsPath = path.join(context, resource.request.slice(0, -3) + ".ts")
           if (fs.existsSync(tsPath)) {
             resource.request = resource.request.replace(/\.js$/, ".ts")
