@@ -11,6 +11,7 @@
     "build": "tsc"
   },
   "dependencies": {
+    "@opentelemetry/api": "^1.1.0",
     "knex": "^3.1.0"
   },
   "devDependencies": {

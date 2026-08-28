@@ -17,6 +17,8 @@ import {
   authenticateRequest,
   AuthError,
 } from '../utils/auth.js'
+import { withDomainSpan } from '../telemetry.js'
+import { SpanStatusCode } from '@opentelemetry/api'
 
 export interface AuthConfig {
   jwtSecret: string
@@ -50,69 +52,81 @@ export async function handleLogin(
   res: ServerResponse,
   config: AuthConfig
 ): Promise<void> {
-  try {
-    const body = await parseBody(req)
-    const { email, password } = body
+  return withDomainSpan('auth.login', async (span) => {
+    try {
+      const body = await parseBody(req)
+      const { email, password } = body
 
-    if (!email || !password) {
-      return sendJson(res, 400, { error: 'Email and password required' }, req)
+      if (!email || !password) {
+        span?.setStatus({ code: SpanStatusCode.OK })
+        return sendJson(res, 400, { error: 'Email and password required' }, req)
+      }
+
+      const VxUser = getModel('vx.user')
+      if (!VxUser) {
+        span?.setStatus({ code: SpanStatusCode.OK })
+        return sendJson(res, 500, { error: 'User model not found' }, req)
+      }
+
+      const env = createCtx(ANONYMOUS_ID, authSecurityContext('login'), getModel as any)
+      const normalizedIdentifier = String(email || '').trim().toLowerCase()
+
+      let users = await VxUser.fetch(VxUser as any, env, [['login', '=', normalizedIdentifier]])
+      if (users.length === 0) {
+        users = await VxUser.fetch(VxUser as any, env, [['email', '=', normalizedIdentifier]])
+      }
+
+      if (users.length === 0) {
+        span?.setStatus({ code: SpanStatusCode.OK })
+        return sendJson(res, 401, { error: 'Invalid credentials' }, req)
+      }
+
+      const user = users[0]
+      
+      if (!user.password) {
+        span?.setStatus({ code: SpanStatusCode.OK })
+        return sendJson(res, 401, { error: 'Invalid credentials' }, req)
+      }
+
+      const valid = await bcrypt.compare(password, user.password)
+      if (!valid) {
+        span?.setStatus({ code: SpanStatusCode.OK })
+        return sendJson(res, 401, { error: 'Invalid credentials' }, req)
+      }
+
+      const token = issueJwt(
+        { sub: user.id, email: user.email || user.login, tokenVersion: user.token_version || user.tokenVersion || 1 },
+        config.jwtSecret
+      )
+
+      const userEmail = user.email || user.login || ''
+      const isSuperAdmin = userEmail.includes('admin') || userEmail.includes('commander') || user.login === 'admin'
+      const clearanceLevel = isSuperAdmin ? 3 : 2
+      const role = isSuperAdmin ? 'superadmin' : 'admin'
+
+      span?.setAttribute('auth.user_id', user.id)
+      span?.setAttribute('auth.role', role)
+      span?.setStatus({ code: SpanStatusCode.OK })
+      logger.info('moon.auth', `User ${userEmail} authenticated via PostgreSQL database`)
+      return sendJson(res, 200, { 
+        token, 
+        user: { 
+          id: user.id, 
+          email: userEmail, 
+          name: user.name || user.login || 'TACTICAL OPERATOR',
+          role,
+          clearanceLevel,
+          title: isSuperAdmin ? 'Supreme Fleet Commander' : 'Mission Specialist',
+          partnerId: user.partner_id || user.partnerId
+        } 
+      }, req)
+    } catch (err: any) {
+      span?.setStatus({ code: SpanStatusCode.ERROR, message: err?.message || String(err) })
+      span?.recordException(err instanceof Error ? err : new Error(String(err)))
+      logger.error('moon.auth', 'Login error:', err)
+      return sendJson(res, 500, { error: err?.message || 'Internal server error', detail: String(err) }, req)
     }
-
-    const VxUser = getModel('vx.user')
-    if (!VxUser) {
-      return sendJson(res, 500, { error: 'User model not found' }, req)
-    }
-
-    const env = createCtx(ANONYMOUS_ID, authSecurityContext('login'), getModel as any)
-    const normalizedIdentifier = String(email || '').trim().toLowerCase()
-
-    let users = await VxUser.fetch(VxUser as any, env, [['login', '=', normalizedIdentifier]])
-    if (users.length === 0) {
-      users = await VxUser.fetch(VxUser as any, env, [['email', '=', normalizedIdentifier]])
-    }
-
-    if (users.length === 0) {
-      return sendJson(res, 401, { error: 'Invalid credentials' }, req)
-    }
-
-    const user = users[0]
-    
-    if (!user.password) {
-      return sendJson(res, 401, { error: 'Invalid credentials' }, req)
-    }
-
-    const valid = await bcrypt.compare(password, user.password)
-    if (!valid) {
-      return sendJson(res, 401, { error: 'Invalid credentials' }, req)
-    }
-
-    const token = issueJwt(
-      { sub: user.id, email: user.email || user.login, tokenVersion: user.token_version || user.tokenVersion || 1 },
-      config.jwtSecret
-    )
-
-    const userEmail = user.email || user.login || ''
-    const isSuperAdmin = userEmail.includes('admin') || userEmail.includes('commander') || user.login === 'admin'
-    const clearanceLevel = isSuperAdmin ? 3 : 2
-    const role = isSuperAdmin ? 'superadmin' : 'admin'
-
-    logger.info('moon.auth', `User ${userEmail} authenticated via PostgreSQL database`)
-    return sendJson(res, 200, { 
-      token, 
-      user: { 
-        id: user.id, 
-        email: userEmail, 
-        name: user.name || user.login || 'TACTICAL OPERATOR',
-        role,
-        clearanceLevel,
-        title: isSuperAdmin ? 'Supreme Fleet Commander' : 'Mission Specialist',
-        partnerId: user.partner_id || user.partnerId
-      } 
-    }, req)
-  } catch (err: any) {
-    logger.error('moon.auth', 'Login error:', err)
-    return sendJson(res, 500, { error: err?.message || 'Internal server error', detail: String(err) }, req)
-  }
+  })
 }
 
 /**
@@ -480,19 +494,26 @@ export async function handleLogout(
   res: ServerResponse,
   config: AuthConfig
 ): Promise<void> {
-  try {
-    const auth = await authenticateRequest(req, config.jwtSecret, { allowAnonymous: false })
-    await revokeUserSessions(auth.uid)
-    logger.info('moon.auth', `User id ${auth.uid} logged out (session revoked)`)
+  return withDomainSpan('auth.logout', async (span) => {
+    try {
+      const auth = await authenticateRequest(req, config.jwtSecret, { allowAnonymous: false })
+      await revokeUserSessions(auth.uid)
+      span?.setAttribute('auth.user_id', auth.uid)
+      span?.setStatus({ code: SpanStatusCode.OK })
+      logger.info('moon.auth', `User id ${auth.uid} logged out (session revoked)`)
 
-    return sendJson(res, 200, { message: 'Logged out successfully' }, req)
-  } catch (err: any) {
-    if (err instanceof AuthError) {
-      return sendJson(res, err.statusCode, { error: err.message, code: err.code }, req)
+      return sendJson(res, 200, { message: 'Logged out successfully' }, req)
+    } catch (err: any) {
+      if (err instanceof AuthError) {
+        span?.setStatus({ code: SpanStatusCode.OK })
+        return sendJson(res, err.statusCode, { error: err.message, code: err.code }, req)
+      }
+      span?.setStatus({ code: SpanStatusCode.ERROR, message: err?.message || String(err) })
+      span?.recordException(err instanceof Error ? err : new Error(String(err)))
+      logger.error('moon.auth', 'Logout error:', err)
+      return sendJson(res, 500, { error: 'Internal server error', code: 'INTERNAL_ERROR' }, req)
     }
-    logger.error('moon.auth', 'Logout error:', err)
-    return sendJson(res, 500, { error: 'Internal server error', code: 'INTERNAL_ERROR' }, req)
-  }
+  })
 }
 
 /**

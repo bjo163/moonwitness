@@ -19,6 +19,12 @@ import { createProxyHandler } from './proxy.js'
 import { logger } from './logger.js'
 import { generateOpenApi } from './openapi.js'
 import {
+  bootstrapTelemetry,
+  shutdownTelemetry,
+  isTelemetryEnabled,
+  withDomainSpan,
+} from './telemetry.js'
+import {
   handleLogin,
   handleRegister,
   handleForgotPassword,
@@ -331,6 +337,8 @@ export class NativeServer {
 
   public async start() {
     try {
+      await bootstrapTelemetry()
+
       const dbHealth = await checkDbConnection()
       if (dbHealth.ok) {
         logger.info(
@@ -344,7 +352,10 @@ export class NativeServer {
         )
       }
 
-      const { applied, summary } = await forge()
+      const syncResult = await withDomainSpan('schema.sync', async () => {
+        return await forge()
+      })
+      const { applied, summary } = syncResult
       if (applied.length > 0) {
         logger.info(
           'moon.schema',
@@ -439,5 +450,6 @@ export class NativeServer {
     }
 
     await teardownOrm()
+    await shutdownTelemetry()
   }
 }

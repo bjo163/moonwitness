@@ -3,6 +3,8 @@ import { EventEmitter } from 'node:events'
 import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm'
 import { logger } from '../logger.js'
 import { parseUrl, resolveCorsOrigin, type CorsConfig } from '../utils/http.js'
+import { startDomainSpan } from '../telemetry.js'
+import { SpanStatusCode } from '@opentelemetry/api'
 
 // Global SSE state
 if (!(globalThis as any).moonEmitter) {
@@ -226,6 +228,13 @@ export function handleSSE(
 
   clients.set(clientId, client)
 
+  const span = startDomainSpan('sse.connection', {
+    attributes: {
+      'sse.client_id': clientId,
+      'sse.topics': JSON.stringify(subscribedTopics ? Array.from(subscribedTopics) : ['*']),
+    }
+  })
+
   // Send initial connection handshake event
   safeWrite(
     client,
@@ -295,6 +304,8 @@ export function handleSSE(
     req.removeListener('close', onDisconnect)
     req.removeListener('error', onDisconnect)
     cleanupClient(clientId)
+    span?.setStatus({ code: SpanStatusCode.OK })
+    span?.end()
   }
 
   req.on('close', onDisconnect)
