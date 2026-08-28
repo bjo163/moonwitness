@@ -183,6 +183,7 @@ export async function up(knex: Knex): Promise<void> {
       table.boolean("is_company").defaultTo(false)
       table.timestamp("created_at").defaultTo(knex.fn.now())
       table.timestamp("updated_at").defaultTo(knex.fn.now())
+      table.timestamp("deleted_at")
       table.foreign("country_id").references("id").inTable("vx_zone")
       table.foreign("parent_id").references("id").inTable("vx_node")
     })
