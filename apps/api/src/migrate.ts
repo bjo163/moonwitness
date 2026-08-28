@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { check, diff, down, status, up } from "@moon/orm"
+import { check, diff, down, status, up, forge } from "@moon/orm"
 import { NativeServer } from "@moon/server"
 import baseAddons, {
   loadBaseData,
@@ -103,6 +103,23 @@ async function run() {
     ],
   })
 
+  async function syncSchema() {
+    const prev = process.env.NODE_ENV
+    process.env.NODE_ENV = 'development'
+    try {
+      const result = await forge({ silent: true })
+      if (result.applied.length > 0) {
+        console.log(`Schema sync: ${result.applied.length} changes applied (${result.summary.tablesCreated} tables, ${result.summary.columnsAdded} cols, ${result.summary.indexesCreated} indexes)`)
+      }
+    } finally {
+      if (prev === undefined) {
+        delete process.env.NODE_ENV
+      } else {
+        process.env.NODE_ENV = prev
+      }
+    }
+  }
+
   const cmd = process.argv[2]
   const isDemo = process.argv.includes("--demo")
 
@@ -120,6 +137,7 @@ async function run() {
   } else if (cmd === "seed") {
     const integrity = verifySeedIntegrity()
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
+    await syncSchema()
     await loadBaseData()
     await seedWitnessGraphCore()
     console.log("Canonical seed completed.")
@@ -129,6 +147,7 @@ async function run() {
   } else if (cmd === "demo") {
     const integrity = verifySeedIntegrity()
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
+    await syncSchema()
     await loadBaseData()
     await seedWitnessGraphCore()
     await loadAllDemoData()
@@ -136,6 +155,7 @@ async function run() {
     await up()
     const integrity = verifySeedIntegrity()
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
+    await syncSchema()
     await loadBaseData()
     await seedWitnessGraphCore()
     console.log("Database install completed.")
