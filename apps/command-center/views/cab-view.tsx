@@ -43,7 +43,7 @@ export function ErpCabView() {
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
-      <div className="hud-clip-hero border border-yellow-400/20 bg-black/60 p-5">
+      <div className="clip-hero border border-yellow-400/20 bg-black/60 p-5">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="font-mono text-[9px] tracking-widest text-yellow-400/50 uppercase">
@@ -69,7 +69,7 @@ export function ErpCabView() {
         <div className="mt-4 flex items-center gap-2 overflow-x-auto">
           <span className="font-mono text-[9px] text-yellow-400/60">ALLAH</span>
           <span className="font-mono text-[9px] text-white/20">→</span>
-          <span className="hud-clip-tag border border-white/20 px-2 py-0.5 font-mono text-[9px] text-white/60">
+          <span className="clip-tag border border-white/20 px-2 py-0.5 font-mono text-[9px] text-white/60">
             BRIDGE / SHADOW
           </span>
           <span className="font-mono text-[9px] text-white/20">→</span>
@@ -94,7 +94,7 @@ export function ErpCabView() {
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={[
-              "hud-clip-btn flex items-center gap-2 border px-4 py-2 font-mono text-[10px] font-bold tracking-widest uppercase transition-all duration-200",
+              "clip-btn flex items-center gap-2 border px-4 py-2 font-mono text-[10px] font-bold tracking-widest uppercase transition-all duration-200",
               activeTab === tab.id
                 ? "border-yellow-400/50 bg-yellow-400/8 text-yellow-300 shadow-[0_0_15px_rgba(255,230,0,0.15)]"
                 : "border-white/10 text-white/40 hover:border-white/25 hover:text-white/70",

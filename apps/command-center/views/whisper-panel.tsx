@@ -178,7 +178,7 @@ export function MercyButton({ requestId, onMercySent }: MercyButtonProps) {
     <button
       onClick={handleMercy}
       title="Kirim MERCY — DIVINE whisper rahmat"
-      className={`group hud-clip-btn flex items-center gap-1.5 border px-3 py-1.5 font-mono text-[9px] font-bold tracking-widest uppercase transition-all duration-300 ${
+      className={`group clip-btn flex items-center gap-1.5 border px-3 py-1.5 font-mono text-[9px] font-bold tracking-widest uppercase transition-all duration-300 ${
         glowing
           ? "border-yellow-300/80 bg-yellow-400/20 text-yellow-200 shadow-[0_0_20px_rgba(255,230,0,0.4)]"
           : sent
@@ -384,7 +384,7 @@ function WhisperBubble({
 
       {/* Bubble */}
       <div
-        className={`hud-clip-card relative max-w-[85%] border px-3 py-2 ${cfg.border} ${cfg.bg} `}
+        className={`clip-card relative max-w-[85%] border px-3 py-2 ${cfg.border} ${cfg.bg} `}
       >
         <p className={`font-mono text-xs ${cfg.color} leading-relaxed`}>
           {whisper.content}
@@ -498,7 +498,7 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
           <MessageCircle className="h-3.5 w-3.5" />
           WHISPER CHANNEL
           {activeCount > 0 && (
-            <span className="hud-clip-tag border border-yellow-400/30 px-1.5 py-0.5 text-[8px] text-yellow-400">
+            <span className="clip-tag border border-yellow-400/30 px-1.5 py-0.5 text-[8px] text-yellow-400">
               {activeCount}
             </span>
           )}
@@ -585,7 +585,7 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
                 <button
                   key={tier}
                   onClick={() => setSelectedTier(tier)}
-                  className={`hud-clip-btn flex flex-1 items-center justify-center gap-1 border px-2 py-1.5 font-mono text-[8px] font-bold tracking-widest uppercase transition-all ${
+                  className={`clip-btn flex flex-1 items-center justify-center gap-1 border px-2 py-1.5 font-mono text-[8px] font-bold tracking-widest uppercase transition-all ${
                     selectedTier === tier
                       ? `${cfg.border} ${cfg.color} ${cfg.bg}`
                       : "border-white/10 text-white/25 hover:border-white/20"
@@ -614,7 +614,7 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
             <button
               onClick={handleSend}
               disabled={!inputValue.trim()}
-              className="hud-clip-btn border border-yellow-400/30 bg-yellow-400/8 px-3 py-2 text-yellow-400 transition-all hover:bg-yellow-400/15 hover:shadow-[0_0_10px_rgba(255,230,0,0.15)] disabled:cursor-not-allowed disabled:opacity-30"
+              className="clip-btn border border-yellow-400/30 bg-yellow-400/8 px-3 py-2 text-yellow-400 transition-all hover:bg-yellow-400/15 hover:shadow-[0_0_10px_rgba(255,230,0,0.15)] disabled:cursor-not-allowed disabled:opacity-30"
             >
               <Send className="h-3.5 w-3.5" />
             </button>

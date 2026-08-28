@@ -120,7 +120,7 @@ export function OSCabGovernance() {
             <div
               key={feat.code}
               className={[
-                "group hud-clip-card relative flex cursor-default flex-col gap-4 border p-5 transition-all duration-300",
+                "group clip-card relative flex cursor-default flex-col gap-4 border p-5 transition-all duration-300",
                 feat.borderClass,
                 feat.glowClass,
                 feat.bgClass,
@@ -143,7 +143,7 @@ export function OSCabGovernance() {
               {/* Icon + code */}
               <div className="flex items-start justify-between">
                 <div
-                  className={`flex h-10 w-10 items-center justify-center border ${feat.borderClass} hud-clip-btn`}
+                  className={`flex h-10 w-10 items-center justify-center border ${feat.borderClass} clip-btn`}
                 >
                   <Icon className={`h-5 w-5 ${feat.accentClass}`} />
                 </div>
@@ -170,7 +170,7 @@ export function OSCabGovernance() {
         })}
 
         {/* CTA Card */}
-        <div className="group border-cyber-purple/20 bg-cyber-purple/5 hud-clip-card hover:border-cyber-purple/50 hover:bg-cyber-purple/10 relative flex flex-col items-center justify-center gap-4 border p-5 transition-all duration-300 hover:shadow-[0_0_30px_rgba(161,0,255,0.2)]">
+        <div className="group border-cyber-purple/20 bg-cyber-purple/5 clip-card hover:border-cyber-purple/50 hover:bg-cyber-purple/10 relative flex flex-col items-center justify-center gap-4 border p-5 transition-all duration-300 hover:shadow-[0_0_30px_rgba(161,0,255,0.2)]">
           <ShieldCheck className="text-cyber-purple/60 group-hover:text-cyber-purple h-10 w-10 transition-colors" />
           <div className="text-center">
             <p className="text-cyber-purple font-mono text-xs font-black tracking-widest uppercase">
@@ -182,7 +182,7 @@ export function OSCabGovernance() {
           </div>
           <Link
             href="/command-center/cab"
-            className="hud-clip-btn border-cyber-purple text-cyber-purple hover:bg-cyber-purple flex items-center gap-2 border px-4 py-2 text-xs font-bold tracking-widest uppercase transition-all duration-200 hover:text-black"
+            className="clip-btn border-cyber-purple text-cyber-purple hover:bg-cyber-purple flex items-center gap-2 border px-4 py-2 text-xs font-bold tracking-widest uppercase transition-all duration-200 hover:text-black"
           >
             [ OPEN CAB ] <ArrowRight className="h-3 w-3" />
           </Link>

@@ -5,7 +5,7 @@ import React from "react"
 export function BridgeLogTab() {
   return (
     <div className="flex flex-col gap-4">
-      <div className="hud-clip-hero border border-yellow-400/25 bg-black/60 p-6">
+      <div className="clip-hero border border-yellow-400/25 bg-black/60 p-6">
         <div className="mb-4 text-center">
           <div className="mb-2 font-mono text-4xl text-yellow-300/90">∞</div>
           <p className="font-mono text-[9px] tracking-widest text-yellow-400/50 uppercase">
@@ -17,7 +17,7 @@ export function BridgeLogTab() {
           <div className="h-8 w-px bg-gradient-to-b from-yellow-400/30 to-white/5" />
         </div>
 
-        <div className="hud-clip-card mx-auto my-3 max-w-sm rounded-none border border-white/20 bg-white/5 p-3 text-center">
+        <div className="clip-card mx-auto my-3 max-w-sm rounded-none border border-white/20 bg-white/5 p-3 text-center">
           <p className="font-mono text-[9px] tracking-widest text-white/40 uppercase">
             ◈ Bridge / Shadow
           </p>
@@ -40,7 +40,7 @@ export function BridgeLogTab() {
         </div>
       </div>
 
-      <div className="hud-clip-card border border-white/10 bg-black/40 p-1">
+      <div className="clip-card border border-white/10 bg-black/40 p-1">
         <div className="border-b border-white/5 p-3">
           <p className="font-mono text-[10px] tracking-widest text-white/40 uppercase">
             ◈ Bridge Decision Log
@@ -95,7 +95,7 @@ export function BridgeLogTab() {
                 </p>
               </div>
               <span
-                className={`hud-clip-tag shrink-0 border px-2 py-0.5 font-mono text-[8px] font-bold tracking-widest uppercase ${
+                className={`clip-tag shrink-0 border px-2 py-0.5 font-mono text-[8px] font-bold tracking-widest uppercase ${
                   log.status === "CONFIRMED"
                     ? "border-cyber-green/30 text-cyber-green"
                     : "border-yellow-400/30 text-yellow-400"

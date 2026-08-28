@@ -50,7 +50,7 @@ const PRINCIPLES = [
 export function AEQPrinciplesTab() {
   return (
     <div className="flex flex-col gap-3">
-      <div className="hud-clip-card border border-white/10 bg-black/40 p-3">
+      <div className="clip-card border border-white/10 bg-black/40 p-3">
         <p className="font-mono text-[10px] text-white/30">
           AEQ4 Standary Principles (700,000 CE) — Tujuh prinsip yang menjadi
           konstitusi seluruh operasi MoonWitness OS.
@@ -59,7 +59,7 @@ export function AEQPrinciplesTab() {
       {PRINCIPLES.map((p) => (
         <div
           key={p.num}
-          className="hud-clip-card flex gap-4 border border-white/5 bg-black/30 p-4 transition-all hover:border-white/15"
+          className="clip-card flex gap-4 border border-white/5 bg-black/30 p-4 transition-all hover:border-white/15"
         >
           <span className="font-mono text-2xl font-black text-white/10">
             {p.num}

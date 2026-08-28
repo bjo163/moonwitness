@@ -8,7 +8,7 @@ export function EightLevelsTab() {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="hud-clip-card border border-white/10 bg-black/40 p-3">
+      <div className="clip-card border border-white/10 bg-black/40 p-3">
         <p className="font-mono text-[10px] text-white/30">
           8 Level Pengembangan Kesadaran Manusia · Q4Q Standard (700,000 CE) —
           Empat Kitab sebagai fondasi setiap level
@@ -23,7 +23,7 @@ export function EightLevelsTab() {
           <button
             key={lvl.level}
             onClick={() => setSelected(isSelected ? null : lvl.level)}
-            className={`hud-clip-card w-full border text-left transition-all duration-200 hover:translate-y-[-1px] ${
+            className={`clip-card w-full border text-left transition-all duration-200 hover:translate-y-[-1px] ${
               isSelected
                 ? `${lvl.border} bg-black/70 shadow-[0_0_20px_rgba(0,0,0,0.5)]`
                 : "border-white/5 bg-black/30 hover:border-white/15"
@@ -31,7 +31,7 @@ export function EightLevelsTab() {
           >
             <div className="flex items-center gap-3 p-3">
               <div
-                className={`hud-clip-tag flex h-8 w-8 shrink-0 items-center justify-center border ${lvl.border}`}
+                className={`clip-tag flex h-8 w-8 shrink-0 items-center justify-center border ${lvl.border}`}
               >
                 <LvlIcon className={`h-4 w-4 ${lvl.color}`} />
               </div>
@@ -107,7 +107,7 @@ export function EightLevelsTab() {
                   ].map((s) => (
                     <div
                       key={s.tag}
-                      className={`hud-clip-card border ${s.border} bg-black/40 p-2`}
+                      className={`clip-card border ${s.border} bg-black/40 p-2`}
                     >
                       <p
                         className={`mb-1 font-mono text-[8px] font-bold ${s.color}`}
