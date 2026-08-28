@@ -43,27 +43,24 @@ export function QiblaArView() {
     )
   }, [])
 
-  // 2. Fetch Arah Kiblat dari Aladhan API
+  // 2. Calculate Great-Circle Qibla Direction to Kaaba (Makkah: 21.4225° N, 39.8262° E)
   useEffect(() => {
     if (!location) return
 
-    const fetchQibla = async () => {
-      try {
-        const res = await fetch(
-          `http://api.aladhan.com/v1/qibla/${location.lat}/${location.lng}`
-        )
-        const json = await res.json()
-        if (json.data && json.data.direction) {
-          setQiblaTarget(json.data.direction)
-          setStatusMsg("QIBLA VECTOR ACQUIRED. CALIBRATING GYROSCOPE...")
-        } else {
-          setError("FAILED TO CALCULATE QIBLA DIRECTION FROM SATELLITE")
-        }
-      } catch (e: any) {
-        setError(`QIBLA API ERROR: ${e.message.toUpperCase()}`)
-      }
+    try {
+      const phi1 = (location.lat * Math.PI) / 180
+      const phi2 = (21.4225 * Math.PI) / 180
+      const deltaLambda = ((39.8262 - location.lng) * Math.PI) / 180
+      const y = Math.sin(deltaLambda)
+      const x = Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(deltaLambda)
+      const qiblaAngle = (Math.atan2(y, x) * 180) / Math.PI
+      const normalizedAngle = (qiblaAngle + 360) % 360
+
+      setQiblaTarget(Number(normalizedAngle.toFixed(1)))
+      setStatusMsg("QIBLA VECTOR ACQUIRED. CALIBRATING GYROSCOPE...")
+    } catch {
+      setError("FAILED TO CALCULATE QIBLA VECTOR")
     }
-    fetchQibla()
   }, [location])
 
   // 3. Sensor Kompas (Device Orientation)

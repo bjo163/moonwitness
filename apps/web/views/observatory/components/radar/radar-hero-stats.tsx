@@ -2,6 +2,8 @@
 
 import React from "react"
 import { Radio, Wind, Droplets, ThermometerSun, AlertTriangle } from "lucide-react"
+import { useResource } from "@workspace/hooks"
+import { fetchExternalWeather } from "@moon/client"
 
 interface RadarHeroStatsProps {
   systemStatus: string
@@ -12,11 +14,44 @@ export function RadarHeroStats({
   systemStatus,
   activeStations
 }: RadarHeroStatsProps) {
+  const { data: weatherData } = useResource(
+    () => fetchExternalWeather(-6.2, 106.8),
+    { storageKey: "mw_radar_weather" }
+  )
+
+  const currentTemp = weatherData?.current_weather?.temperature ?? 28.4
+  const windSpeed = weatherData?.current_weather?.windspeed ?? 14.2
+  const windDirection = weatherData?.current_weather?.winddirection ?? 210
+
   const metrics = [
-    { label: "WIND SPEED", val: "14.2 kt", sub: "SSW • Calm", icon: Wind, color: "text-cyan-400" },
-    { label: "HUMIDITY", val: "78%", sub: "Dew Point 22°C", icon: Droplets, color: "text-blue-400" },
-    { label: "UV INDEX", val: "8.4 UV", sub: "High • Noon Peak", icon: ThermometerSun, color: "text-amber-400" },
-    { label: "RADAR ARRAY", val: `${activeStations} STATIONS`, sub: "Doppler Online", icon: Radio, color: "text-emerald-400" },
+    {
+      label: "WIND SPEED",
+      val: `${windSpeed} km/h`,
+      sub: `Vector ${windDirection}° • Calibrated`,
+      icon: Wind,
+      color: "text-cyan-400",
+    },
+    {
+      label: "TEMPERATURE",
+      val: `${currentTemp}°C`,
+      sub: "Surface Heat Telemetry",
+      icon: Droplets,
+      color: "text-blue-400",
+    },
+    {
+      label: "UV INDEX",
+      val: "8.4 UV",
+      sub: "Solar Influx • Active",
+      icon: ThermometerSun,
+      color: "text-amber-400",
+    },
+    {
+      label: "RADAR ARRAY",
+      val: `${activeStations} STATIONS`,
+      sub: "Doppler Online",
+      icon: Radio,
+      color: "text-emerald-400",
+    },
   ]
 
   return (

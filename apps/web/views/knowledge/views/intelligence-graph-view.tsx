@@ -227,31 +227,50 @@ export function IntelligenceGraphView() {
   const [edges, setEdges] = useState<Edge[]>(KNOWLEDGE_EDGES)
 
   useEffect(() => {
-    client
-      .model("wx.scripture.book")
-      .fetch()
-      .then((books: any[]) => {
-        const bookNodes: Node[] = books.map((b, i) => ({
-          id: `book_${b.id}`,
-          label: b.name,
-          type: "book",
-          x: Math.random() * 800,
-          y: Math.random() * 600,
-          vx: (Math.random() - 0.5) * 1,
-          vy: (Math.random() - 0.5) * 1,
-          radius: 28,
-        }))
+    Promise.allSettled([
+      client.model("wx.scripture.book").fetch(),
+      client.model("wx.figure").fetch(),
+    ]).then(([booksRes, figuresRes]) => {
+      const books = booksRes.status === "fulfilled" && Array.isArray(booksRes.value) ? booksRes.value : []
+      const figures = figuresRes.status === "fulfilled" && Array.isArray(figuresRes.value) ? figuresRes.value : []
 
-        const bookEdges: Edge[] = books.map((b) => ({
-          source: "n12", // Connecting to Makkah/Madinah conceptually
-          target: `book_${b.id}`,
-          strength: 0.6,
-        }))
+      const dynamicBookNodes: Node[] = books.map((b) => ({
+        id: `book_${b.id}`,
+        label: b.name || "Canonical Book",
+        type: "book" as const,
+        x: Math.random() * 800,
+        y: Math.random() * 600,
+        vx: (Math.random() - 0.5) * 1,
+        vy: (Math.random() - 0.5) * 1,
+        radius: 28,
+      }))
 
-        setNodes([...KNOWLEDGE_NODES, ...bookNodes])
-        setEdges([...KNOWLEDGE_EDGES, ...bookEdges])
-      })
-      .catch(console.error)
+      const dynamicFigureNodes: Node[] = figures.slice(0, 10).map((f) => ({
+        id: `fig_${f.id}`,
+        label: f.name || "Scholar",
+        type: "person" as const,
+        x: Math.random() * 800,
+        y: Math.random() * 600,
+        vx: (Math.random() - 0.5) * 1,
+        vy: (Math.random() - 0.5) * 1,
+        radius: 24,
+      }))
+
+      const bookEdges: Edge[] = books.map((b) => ({
+        source: "n12",
+        target: `book_${b.id}`,
+        strength: 0.6,
+      }))
+
+      const figureEdges: Edge[] = figures.slice(0, 10).map((f) => ({
+        source: "n1",
+        target: `fig_${f.id}`,
+        strength: 0.5,
+      }))
+
+      setNodes([...KNOWLEDGE_NODES, ...dynamicBookNodes, ...dynamicFigureNodes])
+      setEdges([...KNOWLEDGE_EDGES, ...bookEdges, ...figureEdges])
+    }).catch(() => {})
   }, [client])
 
   useEffect(() => {

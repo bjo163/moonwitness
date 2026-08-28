@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useResource } from "@workspace/hooks"
+import { fetchSolarCme } from "@moon/client"
 import {
   EclipseHeroTabs,
   UPCOMING_ECLIPSES,
@@ -15,6 +17,10 @@ import {
 export function EclipseTrackerView() {
   const [activeTab, setActiveTab] = useState<"SOLAR" | "LUNAR">("SOLAR")
   const [now, setNow] = useState<number>(Date.now())
+  const { data: cmeData } = useResource(() => fetchSolarCme(), {
+    storageKey: "mw_solar_cme",
+  })
+
   const [astroData, setAstroData] = useState<AstroLiveTelemetry>({
     flux: 143,
     kp: 1.33,
@@ -24,16 +30,21 @@ export function EclipseTrackerView() {
   })
 
   useEffect(() => {
+    if (Array.isArray(cmeData) && cmeData.length > 0) {
+      const latest = cmeData[cmeData.length - 1]
+      const speed = latest?.cmeAnalyses?.[0]?.speed || 450
+      setAstroData((prev) => ({
+        ...prev,
+        speed: Math.round(speed),
+        flux: 150 + (cmeData.length * 2),
+      }))
+    }
+  }, [cmeData])
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setNow(Date.now())
-      setAstroData((prev) => ({
-        flux: prev.flux + (Math.random() > 0.5 ? 1 : -1) * Math.floor(Math.random() * 3),
-        kp: +(prev.kp + (Math.random() > 0.5 ? 0.02 : -0.02)).toFixed(2),
-        sunspot: Math.max(0, prev.sunspot + (Math.random() > 0.8 ? 1 : Math.random() < 0.2 ? -1 : 0)),
-        speed: prev.speed + (Math.random() > 0.5 ? 1 : -1) * Math.floor(Math.random() * 4),
-        bz: +(prev.bz + (Math.random() > 0.5 ? 0.1 : -0.1)).toFixed(1),
-      }))
-    }, 2000)
+    }, 1000)
 
     return () => clearInterval(interval)
   }, [])

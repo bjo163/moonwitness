@@ -18,7 +18,7 @@ export function AtmosphericRadarView() {
           setRainTimestamp(data.radar.past[data.radar.past.length - 1].time)
         }
       })
-      .catch((err: any) => console.error("RainViewer API failed:", err))
+      .catch(() => {})
   }, [])
 
   if (!mounted) {
