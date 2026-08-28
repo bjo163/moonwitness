@@ -100,7 +100,8 @@ async function hasForeignKey(
   `,
     [table, column, target]
   )
-  return (result.rows?.length ?? 0) > 0
+  const rows = (result as any)?.rows || result
+  return Array.isArray(rows) && rows.length > 0
 }
 
 async function main() {
