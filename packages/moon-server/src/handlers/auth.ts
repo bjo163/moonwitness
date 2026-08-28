@@ -100,11 +100,9 @@ export async function handleLogin(
         config.jwtSecret
       )
 
-      const userEmail = user.email || user.login || ''
-      const isSuperAdmin = userEmail.includes('admin') || userEmail.includes('commander') || user.login === 'admin'
-      const clearanceLevel = isSuperAdmin ? 3 : 2
-      const role = isSuperAdmin ? 'superadmin' : 'admin'
+      const { role, clearanceLevel } = await resolveUserRole(user.id, env)
 
+      const userEmail = user.email || user.login || ''
       span?.setAttribute('auth.user_id', user.id)
       span?.setAttribute('auth.role', role)
       span?.setStatus({ code: SpanStatusCode.OK })
@@ -117,7 +115,7 @@ export async function handleLogin(
           name: user.name || user.login || 'TACTICAL OPERATOR',
           role,
           clearanceLevel,
-          title: isSuperAdmin ? 'Supreme Fleet Commander' : 'Mission Specialist',
+          title: clearanceLevel >= 3 ? 'Supreme Fleet Commander' : 'Mission Specialist',
           partnerId: user.partner_id || user.partnerId
         } 
       }, req)
@@ -127,7 +125,7 @@ export async function handleLogin(
       logger.error('moon.auth', 'Login error:', err)
       return sendJson(res, 500, { error: err?.message || 'Internal server error', detail: String(err) }, req)
     }
-  }
+  })
 }
 
 /**

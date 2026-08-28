@@ -5,6 +5,8 @@ import { authenticateRequest, AuthError } from '../utils/auth.js'
 import { logger } from '../logger.js'
 import { RpcRequestSchema } from '@moon/protocol'
 import { validateRpcMethod, resolveRpcHandler } from '../rpc-registry.js'
+import { withDomainSpan } from '../telemetry.js'
+import { SpanStatusCode } from '@opentelemetry/api'
 
 function validateMethodName(method: string): { ok: boolean; error?: string } {
   return validateRpcMethod(method)
