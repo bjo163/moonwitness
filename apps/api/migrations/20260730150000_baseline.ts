@@ -424,9 +424,57 @@ export async function up(knex: Knex): Promise<void> {
       table.foreign("user_id").references("id").inTable("vx_user")
     })
   }
+
+  if (!(await exists("vx_user_vx_role_rel"))) {
+    await knex.schema.createTable("vx_user_vx_role_rel", (table) => {
+      table.increments("id").primary()
+      table.integer("vx_user_id").unsigned().notNullable().index()
+      table.integer("vx_role_id").unsigned().notNullable().index()
+      table.foreign("vx_user_id").references("id").inTable("vx_user").onDelete("CASCADE")
+      table.foreign("vx_role_id").references("id").inTable("vx_role").onDelete("CASCADE")
+      table.unique(["vx_user_id", "vx_role_id"])
+    })
+  }
+
+  if (!(await exists("vx_user_vx_org_rel"))) {
+    await knex.schema.createTable("vx_user_vx_org_rel", (table) => {
+      table.increments("id").primary()
+      table.integer("vx_user_id").unsigned().notNullable().index()
+      table.integer("vx_org_id").unsigned().notNullable().index()
+      table.foreign("vx_user_id").references("id").inTable("vx_user").onDelete("CASCADE")
+      table.foreign("vx_org_id").references("id").inTable("vx_org").onDelete("CASCADE")
+      table.unique(["vx_user_id", "vx_org_id"])
+    })
+  }
+
+  if (!(await exists("mx_rule_vx_role_rel"))) {
+    await knex.schema.createTable("mx_rule_vx_role_rel", (table) => {
+      table.increments("id").primary()
+      table.integer("mx_rule_id").unsigned().notNullable().index()
+      table.integer("vx_role_id").unsigned().notNullable().index()
+      table.foreign("mx_rule_id").references("id").inTable("mx_rule").onDelete("CASCADE")
+      table.foreign("vx_role_id").references("id").inTable("vx_role").onDelete("CASCADE")
+      table.unique(["mx_rule_id", "vx_role_id"])
+    })
+  }
+
+  if (!(await exists("vx_role_vx_user_rel"))) {
+    await knex.schema.createTable("vx_role_vx_user_rel", (table) => {
+      table.increments("id").primary()
+      table.integer("vx_role_id").unsigned().notNullable().index()
+      table.integer("vx_user_id").unsigned().notNullable().index()
+      table.foreign("vx_role_id").references("id").inTable("vx_role").onDelete("CASCADE")
+      table.foreign("vx_user_id").references("id").inTable("vx_user").onDelete("CASCADE")
+      table.unique(["vx_role_id", "vx_user_id"])
+    })
+  }
 }
 
 export async function down(knex: Knex): Promise<void> {
+  await knex.schema.dropTableIfExists("vx_role_vx_user_rel")
+  await knex.schema.dropTableIfExists("mx_rule_vx_role_rel")
+  await knex.schema.dropTableIfExists("vx_user_vx_org_rel")
+  await knex.schema.dropTableIfExists("vx_user_vx_role_rel")
   await knex.schema.dropTableIfExists("ir_version")
   await knex.schema.dropTableIfExists("ir_attachment")
   await knex.schema.dropTableIfExists("ir_sequence")
