@@ -4,7 +4,7 @@ import {
   ProductTemplate,
   ProductProduct,
   ProductPricelist
-} from '../src/index.ts'
+} from '../src/index.js'
 import productAddon from '../src/index.js'
 
 describe('@moon/product Addon (#21)', () => {

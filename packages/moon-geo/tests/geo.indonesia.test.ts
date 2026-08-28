@@ -11,7 +11,7 @@ import {
   ingestSourceSnapshot,
   computeGeoSemanticDiff,
   runGeoSourceMonitoring
-} from '../src/index.ts'
+} from '../src/index.js'
 import geoAddon from '../src/index.js'
 import { createCtx, setupOrm, registerModel, SUPERUSER_ID } from '@moon/orm'
 import { fileURLToPath } from 'node:url'

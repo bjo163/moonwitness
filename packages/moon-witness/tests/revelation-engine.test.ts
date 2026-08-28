@@ -7,11 +7,11 @@ import { WitnessEngineRegistry, WitnessEngineRuntime } from '../src/services/eng
 import {
   buildCrossScriptureEvidenceMatrix,
   createCrossScriptureComparisonModule
-} from '../src/engines/cross-scripture.ts'
+} from '../src/engines/cross-scripture.js'
 import {
   createRevelationQueryModule,
   resolveRevelationPassageContext
-} from '../src/engines/revelation-query.ts'
+} from '../src/engines/revelation-query.js'
 import { createLexicalAnalysisModule } from '../src/engines/lexical-analysis.js'
 import { createConceptEvidenceModule } from '../src/engines/concept-evidence.js'
 import { createDivineExpressionModule } from '../src/engines/divine-expression.js'

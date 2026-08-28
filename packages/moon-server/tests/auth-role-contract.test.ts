@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs'
 import {
   issueJwt,
   resolveUserRole,
-} from '../src/utils/auth.ts'
+} from '../src/utils/auth.js'
 import { handleLogin, handleRegister } from '../src/handlers/auth.js'
 import { registerModel, setupOrm, Vertex, fields, ANONYMOUS_ID, SUPERUSER_ID, createCtx, getModel } from '@moon/orm'
 

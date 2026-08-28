@@ -8,7 +8,7 @@ import {
   handleCorsPreflight,
   PayloadTooLargeError,
   InvalidJsonError
-} from '../src/utils/http.ts'
+} from '../src/utils/http.js'
 import { corsMiddleware } from '../src/middleware/cors.js'
 
 function createMockReq(dataChunks: (string | Buffer)[], headers: Record<string, string> = {}): IncomingMessage {

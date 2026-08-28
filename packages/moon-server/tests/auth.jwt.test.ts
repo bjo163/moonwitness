@@ -12,7 +12,7 @@ import {
   resolveJwtPolicy,
   reloadCanonicalJwtPolicy,
   AuthError,
-} from '../src/utils/auth.ts'
+} from '../src/utils/auth.js'
 import { handleLogout, handleGetSession, handleResetPassword } from '../src/handlers/auth.js'
 import { handleRest } from '../src/handlers/rest.js'
 import { handleRpc } from '../src/handlers/rpc.js'

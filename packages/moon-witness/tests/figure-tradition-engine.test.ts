@@ -8,7 +8,7 @@ import {
   createTraditionTransmissionModule,
   validateFigureAnalysisInput,
   validateTraditionAnalysisInput
-} from '../src/engines/figure-tradition.ts'
+} from '../src/engines/figure-tradition.js'
 
 type Row = Record<string, any>
 let mockDb: Record<string, Row[]> = {}

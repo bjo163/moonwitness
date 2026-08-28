@@ -5,7 +5,7 @@ import {
   StockPicking,
   StockMove,
   StockQuant
-} from '../src/index.ts'
+} from '../src/index.js'
 import stockAddon from '../src/index.js'
 
 describe('@moon/stock Addon (#23)', () => {

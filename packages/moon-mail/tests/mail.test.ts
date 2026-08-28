@@ -6,7 +6,7 @@ import {
   MailTrackingValue,
   FxMsgAlias,
   FxTrackAlias
-} from '../src/index.ts'
+} from '../src/index.js'
 import mailAddon from '../src/index.js'
 
 describe('@moon/mail Addon (#32)', () => {

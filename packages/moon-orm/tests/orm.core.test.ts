@@ -11,7 +11,7 @@ import {
   getModel,
   registry,
   authSecurityContext,
-} from '../src/index.ts'
+} from '../src/index.js'
 
 class MockModel extends Vertex {
   static override _name = 'mock.model'

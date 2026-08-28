@@ -4,7 +4,7 @@ const mocks = vi.hoisted(() => ({
   transaction: vi.fn(),
 }))
 
-vi.mock('../src/config.ts', () => ({
+vi.mock('../src/config.js', () => ({
   getDb: () => ({ transaction: mocks.transaction }),
 }))
 

@@ -4,7 +4,7 @@ const mocks = vi.hoisted(() => ({
   getDb: vi.fn(),
 }))
 
-vi.mock('../src/config.ts', () => ({
+vi.mock('../src/config.js', () => ({
   getDb: mocks.getDb,
 }))
 
@@ -14,7 +14,7 @@ import {
   authSecurityContext,
   checkAccessRights,
   getRecordRulesDomain,
-} from '../src/security.ts'
+} from '../src/security.js'
 import type { Vertex } from '../src/base.js'
 
 type Row = Record<string, unknown>
