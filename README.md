@@ -48,7 +48,7 @@ MoonWitness follows a strict **Model-First & Enterprise Standard** architecture 
                                       │ Knex / Native SQL
                                       ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                    POSTGRESQL 16+ & REDIS INFRASTRUCTURE                    │
+│                    POSTGRESQL 18+ & REDIS INFRASTRUCTURE                    │
 │                 Relational Storage · pgvector 0.8+ · High-Speed Cache       │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```

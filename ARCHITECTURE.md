@@ -26,7 +26,7 @@ BACKEND TRANSPORT (@moon/server: defineRoute, Auth JWT, SSE)
 DOMAIN ENGINES & ORM (@moon/witness, @moon/compute, @moon/orm)
    |
    v
-POSTGRESQL 16+ INFRASTRUCTURE (pgvector 0.8+)
+POSTGRESQL 18+ INFRASTRUCTURE (pgvector 0.8+)
 ```
 
 ---
