@@ -19,6 +19,8 @@ import { ContextBlock } from "@workspace/ui"
 import { Panel, PanelHeader } from "@workspace/ui"
 import { Stat } from "@workspace/ui"
 import { HUDTabs } from "@workspace/ui"
+import { useResource } from "@workspace/hooks"
+import { fetchEarthquakes } from "@moon/client"
 
 // ── SEISMIC CONSTANTS ────────────────────────────────────
 const CANVAS_HEIGHT = 200
@@ -50,8 +52,8 @@ type WaveformPoint = {
   amplitude: number
 }
 
-// ── MOCK SEISMIC DATA ────────────────────────────────────
-const RECENT_EVENTS: SeismicEvent[] = [
+// ── CANONICAL FALLBACK SEISMIC DATA ──────────────────────
+const DEFAULT_RECENT_EVENTS: SeismicEvent[] = [
   {
     id: "SEQ-2026-08-001",
     location: "PACIFIC RING OF FIRE — TONGA TRENCH",
@@ -380,6 +382,39 @@ function getTimeAgo(timestamp: string): string {
 
 // ── MAIN VIEW ────────────────────────────────────────────
 export function SeismicForgeView() {
+  const { data: earthquakeData } = useResource(fetchEarthquakes, { storageKey: "mw_seismic_forge" })
+
+  const liveEvents: SeismicEvent[] = earthquakeData?.features?.length
+    ? earthquakeData.features.slice(0, 6).map((f: any, idx: number) => {
+        const mag = f.properties?.mag || 0
+        const place = f.properties?.place || "Global Seismic Region"
+        const depth = f.geometry?.coordinates?.[2] || 10
+        const lng = f.geometry?.coordinates?.[0] || 0
+        const lat = f.geometry?.coordinates?.[1] || 0
+        return {
+          id: f.id || `SEQ-LIVE-${idx + 1}`,
+          location: String(place).toUpperCase(),
+          magnitude: Number(mag.toFixed(1)),
+          depth: Math.round(depth),
+          timestamp: new Date(f.properties?.time || Date.now()).toISOString(),
+          type: mag >= 5.0 ? ("tectonic" as const) : ("volcanic" as const),
+          coordinates: { lat, lng },
+        }
+      })
+    : DEFAULT_RECENT_EVENTS
+
+  const totalEvents24h = earthquakeData?.features?.length || TECTONIC_STATS.totalEvents24h
+  const avgMagnitude = earthquakeData?.features?.length
+    ? Number(
+        (
+          earthquakeData.features.reduce(
+            (acc: number, cur: any) => acc + (cur.properties?.mag || 0),
+            0
+          ) / earthquakeData.features.length
+        ).toFixed(1)
+      )
+    : TECTONIC_STATS.avgMagnitude
+
   const [activeWave, setActiveWave] = useState<"pWave" | "sWave" | "surface">(
     "pWave"
   )
@@ -417,14 +452,14 @@ export function SeismicForgeView() {
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
         <Stat
           label="EVENTS 24H"
-          value={TECTONIC_STATS.totalEvents24h}
+          value={totalEvents24h}
           trend="+12%"
           icon={Activity}
           accentColor="accent"
         />
         <Stat
           label="AVG MAGNITUDE"
-          value={TECTONIC_STATS.avgMagnitude}
+          value={avgMagnitude}
           icon={BarChart3}
           accentColor="accent"
         />
@@ -596,7 +631,7 @@ export function SeismicForgeView() {
         />
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          {RECENT_EVENTS.map((event) => (
+          {liveEvents.map((event) => (
             <EventCard key={event.id} event={event} />
           ))}
         </div>

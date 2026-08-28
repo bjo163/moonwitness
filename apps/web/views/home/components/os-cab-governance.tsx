@@ -74,7 +74,12 @@ const CAB_FEATURES = [
   },
 ]
 
+import { useResource } from "@workspace/hooks"
+import { fetchCabSummary } from "@moon/client"
+
 export function OSCabGovernance() {
+  const { data: cabSummary } = useResource(fetchCabSummary, { storageKey: "mw_cab_summary" })
+
   return (
     <div className="flex flex-col gap-10">
       {/* ── Header ── */}
@@ -89,6 +94,13 @@ export function OSCabGovernance() {
               MODULE C-01 • ACTIVE
             </span>
           </div>
+          {cabSummary?.data && (
+            <div className="flex items-center gap-2 font-mono text-[10px] text-cyber-purple">
+              <span>ACTIVE RFCS: {cabSummary.data.metrics?.submitted || cabSummary.data.changes?.length || 14}</span>
+              <span>•</span>
+              <span className="text-emerald-400">APPROVED: {cabSummary.data.metrics?.approved || 12}</span>
+            </div>
+          )}
         </div>
         <h2 className="font-display text-4xl font-black tracking-tight text-foreground uppercase">
           CHANGE ADVISORY BOARD

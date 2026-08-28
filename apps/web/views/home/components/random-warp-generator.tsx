@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
 import Link from "next/link"
-import { playWarpSound, playClickSound } from "@moon/client"
+import { playWarpSound, playClickSound, fetchSurahDetail } from "@moon/client"
 import { useLanguage } from "@workspace/state"
 import { Copy, Check, Volume2, Square } from "lucide-react"
 
@@ -86,7 +86,7 @@ export function RandomWarpGenerator() {
       textArabic:
         "هُوَ اللَّهُ الَّذِي لَا إِلَٰهَ إِلَّا هُوَ الْمَلِكُ الْقُدُّوسُ السَّلَامُ",
       textLatin:
-        "Huwallāhullażī lā ilāha illā huwa, al-malikul-quddūsus-salām.",
+        "Huwallāhul-lażī lā ilāha illā huw, al-malikul-quddūsus-salāmu.",
       translationId:
         "Dialah Allah tidak ada tuhan selain Dia. Maharaja, Yang Mahasuci, Yang Mahasejahtera.",
       asmaulName: "As-Salam (Maha Memberi Kesejahteraan)",
@@ -138,18 +138,42 @@ export function RandomWarpGenerator() {
     }
   }
 
-  function triggerWarp() {
+  async function triggerWarp() {
     stopAudio()
     playWarpSound()
     setWarping(true)
     setIsOpen(true)
 
-    setTimeout(() => {
-      const randomIdx = Math.floor(Math.random() * sampleVerses.length)
-      const selected = sampleVerses[randomIdx] ?? sampleVerses[0] ?? null
-      setWarpData(selected)
-      setWarping(false)
-    }, 450)
+    try {
+      // Pick random surah between 1 and 114
+      const randomSurah = Math.floor(Math.random() * 114) + 1
+      const surahData = await fetchSurahDetail(randomSurah)
+      if (surahData && surahData.ayahs && surahData.ayahs.length > 0) {
+        const randomAyahIdx = Math.floor(Math.random() * surahData.ayahs.length)
+        const ayah = surahData.ayahs[randomAyahIdx]!
+        setWarpData({
+          surahNumber: surahData.surah.number,
+          surahName: surahData.surah.name,
+          ayahNumber: ayah.number,
+          textArabic: ayah.textArabic || "",
+          textLatin: ayah.textLatin || "",
+          translationId: ayah.translationId || "Kalamullah yang penuh hikmah dan petunjuk.",
+          asmaulName: "Al-Hakeem (Maha Bijaksana)",
+          asmaulArabic: "الْحَكِيمُ",
+          hadithText: `QS. ${surahData.surah.name} Ayat ${ayah.number} — Wahyu Suci Al-Qur'anul Karim.`,
+          audioUrl: ayah.audioUrl || `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${ayah.number}.mp3`,
+        })
+        setWarping(false)
+        return
+      }
+    } catch {
+      // Graceful fallback to rich sample verses
+    }
+
+    const randomIdx = Math.floor(Math.random() * sampleVerses.length)
+    const selected = sampleVerses[randomIdx] ?? sampleVerses[0] ?? null
+    setWarpData(selected)
+    setWarping(false)
   }
 
   function copyTransmissionLink() {
