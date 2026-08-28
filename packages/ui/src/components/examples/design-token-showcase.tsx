@@ -1,3 +1,5 @@
+"use client"
+
 /**
  * ◈ MoonWitness OS — Design Token Showcase
  * 
@@ -6,8 +8,6 @@
  * 
  * @module @workspace/ui/components/examples/design-token-showcase
  */
-
-"use client";
 
 import React from 'react';
 import {
@@ -174,7 +174,7 @@ export function SemanticTokenCard({ intent = 'primary' }: { intent?: 'primary' |
       <div className={tokens.conduitClass + ' mb-4'} />
       <button
         className={`${btnClip.className} ${tokens.glowClass} px-4 py-2 font-mono text-sm tracking-widest uppercase`}
-        style={{ backgroundColor: tokens.color, color: '#05070A' }}
+        style={{ backgroundColor: tokens.color, color: 'var(--cyber-dark)' }}
       >
         {intent} Action
       </button>
@@ -213,7 +213,7 @@ export function AlertBanner({
     >
       <div 
         className={`${tagClip.className} px-2 py-1 text-xs font-mono tracking-widest`}
-        style={{ backgroundColor: tokens.color, color: '#05070A' }}
+        style={{ backgroundColor: tokens.color, color: 'var(--cyber-dark)' }}
       >
         {type.toUpperCase()}
       </div>

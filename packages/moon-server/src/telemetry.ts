@@ -21,15 +21,15 @@ export async function bootstrapTelemetry(config: TelemetryConfig = {}): Promise<
   }
 
   const serviceName = config.serviceName || process.env.OTEL_SERVICE_NAME || 'moon-server'
-  const traceEndpoint = config.otlpTraceEndpoint || process.env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT || 'http://localhost:4318/v1/traces'
-  const metricEndpoint = config.otlpMetricEndpoint || process.env.OTEL_EXPORTER_OTLP_METRICS_ENDPOINT || 'http://localhost:4318/v1/metrics'
+  const traceEndpoint = config.otlpTraceEndpoint || process.env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+  const metricEndpoint = config.otlpMetricEndpoint || process.env.OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
 
   sdk = new NodeSDK({
     serviceName,
-    traceExporter: new OTLPTraceExporter({ url: traceEndpoint }),
+    traceExporter: new OTLPTraceExporter(traceEndpoint ? { url: traceEndpoint } : undefined),
     metricReaders: [
       new PeriodicExportingMetricReader({
-        exporter: new OTLPMetricExporter({ url: metricEndpoint }),
+        exporter: new OTLPMetricExporter(metricEndpoint ? { url: metricEndpoint } : undefined),
         exportIntervalMillis: 60000,
       }),
     ],
