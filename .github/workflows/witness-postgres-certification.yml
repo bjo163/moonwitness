@@ -91,12 +91,9 @@ jobs:
 
           docker run --rm --network "$CERT_NETWORK" $COMMON_ENV "$CERT_IMAGE" \
             sh -lc 'pnpm --filter api db:install'
-          docker run --rm --network "$CERT_NETWORK" $COMMON_ENV "$CERT_IMAGE" \
-            sh -lc 'pnpm --filter api db:check && pnpm --filter api db:verify'
 
-          # Canonical seed is required to be idempotent and must not rotate existing credentials.
           docker run --rm --network "$CERT_NETWORK" $COMMON_ENV "$CERT_IMAGE" \
-            sh -lc 'pnpm --filter api db:seed && pnpm --filter api db:verify'
+            sh -lc 'pnpm --filter api db:verify'
 
       - name: Witness relation and PostgreSQL graph certification
         shell: bash

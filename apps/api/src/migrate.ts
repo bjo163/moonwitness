@@ -23,12 +23,10 @@ import geoAddons from "@moon/geo"
 async function loadAllDemoData() {
   console.log("=== Loading Demo Data across all 15 Addon Packages ===")
 
-  // Level 0: Base
   console.log("[Level 0] Seeding @moon/base demo data...")
   const { loadDemoData: loadBaseDemo } = await import("@moon/base")
   await loadBaseDemo()
 
-  // Level 1: Independent packages depending only on base
   console.log("[Level 1] Seeding independent addon demo data...")
   const [witnessM, perfM, projectM, productM, accountM, mailM, geoM] = await Promise.all([
     import("@moon/witness"),
@@ -49,7 +47,6 @@ async function loadAllDemoData() {
     geoM.loadDemoData(),
   ])
 
-  // Level 2: Packages depending on Level 1 (e.g. cab on project, helpdesk on project, mizan on witness)
   console.log("[Level 2] Seeding higher-tier addon demo data...")
   const [cabM, helpdeskM, mizanM, khidraM, stockM, crmM, shootgunM] = await Promise.all([
     import("@moon/cab"),
@@ -120,6 +117,17 @@ async function run() {
     }
   }
 
+  async function fullInstall() {
+    await up()
+    const integrity = verifySeedIntegrity()
+    if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
+    await syncSchema()
+    await loadBaseData()
+    await seedWitnessGraphCore()
+    await loadAllDemoData()
+    console.log("Database install completed.")
+  }
+
   const cmd = process.argv[2]
 
   if (cmd === "diff") {
@@ -133,37 +141,15 @@ async function run() {
   } else if (cmd === "check") {
     await check()
     console.log("Migration integrity check passed.")
-  } else if (cmd === "seed") {
-    const integrity = verifySeedIntegrity()
-    if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
-    await syncSchema()
-    await loadBaseData()
-    await seedWitnessGraphCore()
-    await loadAllDemoData()
-    console.log("Canonical seed completed.")
-  } else if (cmd === "demo") {
-    const integrity = verifySeedIntegrity()
-    if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
-    await syncSchema()
-    await loadBaseData()
-    await seedWitnessGraphCore()
-    await loadAllDemoData()
-  } else if (cmd === "install") {
-    await up()
-    const integrity = verifySeedIntegrity()
-    if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
-    await syncSchema()
-    await loadBaseData()
-    await seedWitnessGraphCore()
-    await loadAllDemoData()
-    console.log("Database install completed.")
+  } else if (cmd === "install" || cmd === "seed" || cmd === "demo") {
+    await fullInstall()
   } else if (cmd === "verify") {
     await check()
     const integrity = verifySeedIntegrity()
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
     console.log("Database migration and canonical seed integrity checks passed.")
   } else {
-    console.log("Usage: pnpm tsx src/migrate.ts <diff|up|down|status|check|seed|demo|install|verify>")
+    console.log("Usage: pnpm tsx src/migrate.ts <diff|up|down|status|check|install|seed|demo|verify>")
   }
 
   process.exit(0)
