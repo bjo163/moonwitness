@@ -4,7 +4,7 @@ import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http'
 import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics'
 import { defaultResource } from '@opentelemetry/resources'
-import { trace, type Span, SpanStatusCode } from '@opentelemetry/api'
+import { trace, type Span, type SpanOptions, SpanStatusCode } from '@opentelemetry/api'
 
 let sdk: NodeSDK | null = null
 
@@ -21,13 +21,11 @@ export async function bootstrapTelemetry(config: TelemetryConfig = {}): Promise<
   }
 
   const serviceName = config.serviceName || process.env.OTEL_SERVICE_NAME || 'moon-server'
-  const serviceVersion = config.serviceVersion || process.env.OTEL_SERVICE_VERSION || '0.1.0'
   const traceEndpoint = config.otlpTraceEndpoint || process.env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT || 'http://localhost:4318/v1/traces'
   const metricEndpoint = config.otlpMetricEndpoint || process.env.OTEL_EXPORTER_OTLP_METRICS_ENDPOINT || 'http://localhost:4318/v1/metrics'
 
   sdk = new NodeSDK({
     serviceName,
-    serviceVersion,
     traceExporter: new OTLPTraceExporter({ url: traceEndpoint }),
     metricReaders: [
       new PeriodicExportingMetricReader({
@@ -55,20 +53,20 @@ export function isTelemetryEnabled(): boolean {
 
 const tracer = trace.getTracer('moon-server')
 
-export function startDomainSpan(name: string, options?: { attributes?: Record<string, unknown> }): Span | null {
+export function startDomainSpan(name: string, options?: SpanOptions): Span | null {
   if (!isTelemetryEnabled()) return null
-  return tracer.startSpan(name, { attributes: options?.attributes })
+  return tracer.startSpan(name, options)
 }
 
 export function withDomainSpan<R>(
   name: string,
   fn: (span: Span | null) => Promise<R>,
-  options?: { attributes?: Record<string, unknown> }
+  options?: SpanOptions
 ): Promise<R> {
   if (!isTelemetryEnabled()) {
     return fn(null)
   }
-  return tracer.startActiveSpan(name, options, async (span) => {
+  const handler = async (span: Span): Promise<R> => {
     try {
       return await fn(span)
     } catch (err: any) {
@@ -76,5 +74,10 @@ export function withDomainSpan<R>(
       span.recordException(err instanceof Error ? err : new Error(String(err)))
       throw err
     }
-  })
+  }
+
+  if (options) {
+    return tracer.startActiveSpan(name, options, handler) as Promise<R>
+  }
+  return tracer.startActiveSpan(name, handler) as Promise<R>
 }

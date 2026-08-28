@@ -63,18 +63,18 @@ export class FastifyAdapter {
 
   private async requireAdmin(req: FastifyRequest, res: FastifyReply) {
     try {
-      const session = await authenticateRequest(req as any, this.config.jwtSecret, { allowAnonymous: false })
+      const session = await authenticateRequest(req.raw as any, this.config.jwtSecret, { allowAnonymous: false })
       if (session.uid !== SUPERUSER_ID) {
-        await sendJson(res, 403, { error: 'Administrator access required', code: 'AUTH_FORBIDDEN' }, req as any, this.config.cors)
+        await sendJson(res.raw as any, 403, { error: 'Administrator access required', code: 'AUTH_FORBIDDEN' }, req.raw as any, this.config.cors)
         return null
       }
       return session
     } catch (error) {
       if (error instanceof AuthError) {
-        await sendJson(res, error.statusCode, { error: error.message, code: error.code }, req as any, this.config.cors)
+        await sendJson(res.raw as any, error.statusCode, { error: error.message, code: error.code }, req.raw as any, this.config.cors)
         return null
       }
-      await sendJson(res, 500, { error: 'Internal server error', code: 'INTERNAL_ERROR' }, req as any, this.config.cors)
+      await sendJson(res.raw as any, 500, { error: 'Internal server error', code: 'INTERNAL_ERROR' }, req.raw as any, this.config.cors)
       return null
     }
   }
@@ -174,7 +174,7 @@ export class FastifyAdapter {
       })
 
       app.get('/openapi.json', async (req: FastifyRequest, res: FastifyReply) => {
-        return sendJson(res, 200, generateOpenApi(), req as any, this.config.cors)
+        return sendJson(res.raw as any, 200, generateOpenApi(), req.raw as any, this.config.cors)
       })
 
       app.get('/docs', async (req: FastifyRequest, res: FastifyReply) => {
@@ -214,30 +214,30 @@ export class FastifyAdapter {
 
       app.get('/api/:model([a-z0-9.-]+)', async (req: FastifyRequest, res: FastifyReply) => {
         const model = (req as any).params.model
-        return handleRest(req as any, res as any, { groups: [model], id: undefined }, this.config.jwtSecret)
+        return handleRest(req.raw as any, res.raw as any, ['', model] as unknown as RegExpMatchArray, this.config.jwtSecret)
       })
 
       app.get('/api/:model([a-z0-9.-]+)/:id', async (req: FastifyRequest, res: FastifyReply) => {
         const model = (req as any).params.model
         const id = (req as any).params.id
-        return handleRest(req as any, res as any, { groups: [model], id }, this.config.jwtSecret)
+        return handleRest(req.raw as any, res.raw as any, ['', model, String(id)] as unknown as RegExpMatchArray, this.config.jwtSecret)
       })
 
       app.post('/api/:model([a-z0-9.-]+)', async (req: FastifyRequest, res: FastifyReply) => {
         const model = (req as any).params.model
-        return handleRest(req as any, res as any, { groups: [model], id: undefined }, this.config.jwtSecret)
+        return handleRest(req.raw as any, res.raw as any, ['', model] as unknown as RegExpMatchArray, this.config.jwtSecret)
       })
 
       app.put('/api/:model([a-z0-9.-]+)/:id', async (req: FastifyRequest, res: FastifyReply) => {
         const model = (req as any).params.model
         const id = (req as any).params.id
-        return handleRest(req as any, res as any, { groups: [model], id }, this.config.jwtSecret)
+        return handleRest(req.raw as any, res.raw as any, ['', model, String(id)] as unknown as RegExpMatchArray, this.config.jwtSecret)
       })
 
       app.delete('/api/:model([a-z0-9.-]+)/:id', async (req: FastifyRequest, res: FastifyReply) => {
         const model = (req as any).params.model
         const id = (req as any).params.id
-        return handleRest(req as any, res as any, { groups: [model], id }, this.config.jwtSecret)
+        return handleRest(req.raw as any, res.raw as any, ['', model, String(id)] as unknown as RegExpMatchArray, this.config.jwtSecret)
       })
 
       const builtinRoutes = [

@@ -4,7 +4,7 @@ import * as path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import type { Knex } from 'knex'
 import { getDb } from './config.js'
-import { forge } from './schema-sync.js'
+import { forge, type MigrationCommand } from './schema-sync.js'
 
 const MIGRATION_LOCK_KEY = 'moonwitness:migrations:v1'
 
@@ -39,8 +39,8 @@ export async function initMigrationTable(db: Knex = getDb()) {
       table.string('checksum', 64).notNullable()
       table.integer('batch').notNullable()
       table.timestamp('run_at').defaultTo(db.fn.now())
+      table.index(['batch'], 'moon_migrations_batch_index')
     })
-    await db('moon_migrations').index('batch')
     return
   }
 
@@ -51,13 +51,12 @@ export async function initMigrationTable(db: Knex = getDb()) {
     })
   }
 
-  const hasBatchIndex = await db.schema.hasIndex('moon_migrations', 'moon_migrations_batch_index')
-  if (!hasBatchIndex) {
-    try {
-      await db('moon_migrations').index('batch')
-    } catch {
-      // index may already exist under a different name
-    }
+  try {
+    await db.schema.alterTable('moon_migrations', (table) => {
+      table.index(['batch'], 'moon_migrations_batch_index')
+    })
+  } catch {
+    // index may already exist under a different name
   }
 }
 

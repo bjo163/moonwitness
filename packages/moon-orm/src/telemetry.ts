@@ -19,7 +19,7 @@ export function withDbSpan<R>(
   if (!isOtelEnabled()) {
     return fn(null)
   }
-  return tracer.startActiveSpan(name, options, async (span) => {
+  const handler = async (span: Span): Promise<R> => {
     try {
       return await fn(span)
     } catch (err: any) {
@@ -27,7 +27,12 @@ export function withDbSpan<R>(
       span.recordException(err instanceof Error ? err : new Error(String(err)))
       throw err
     }
-  })
+  }
+
+  if (options) {
+    return tracer.startActiveSpan(name, options, handler) as Promise<R>
+  }
+  return tracer.startActiveSpan(name, handler) as Promise<R>
 }
 
 export function sanitizeSql(sql: string): string {
