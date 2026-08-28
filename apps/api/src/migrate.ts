@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { check, diff, down, status, up } from "@moon/orm"
+import { bootstrap, check, diff, down, status, up } from "@moon/orm"
 import { NativeServer } from "@moon/server"
 import baseAddons, {
   loadBaseData,
@@ -110,6 +110,8 @@ async function run() {
     await diff()
   } else if (cmd === "up" || cmd === "migrate") {
     await up()
+  } else if (cmd === "bootstrap") {
+    await bootstrap()
   } else if (cmd === "down" || cmd === "rollback") {
     await down()
   } else if (cmd === "status" || cmd === "dry-run") {
@@ -148,7 +150,7 @@ async function run() {
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
     console.log("Database migration and canonical seed integrity checks passed.")
   } else {
-    console.log("Usage: pnpm tsx src/migrate.ts <diff|up|down|status|check|seed|demo|install|verify> [--demo]")
+    console.log("Usage: pnpm tsx src/migrate.ts <diff|up|down|bootstrap|status|check|seed|demo|install|verify> [--demo]")
   }
 
   process.exit(0)

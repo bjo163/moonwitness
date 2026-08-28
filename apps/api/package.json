@@ -10,6 +10,7 @@
     "start": "node dist/server.js",
     "db:install": "tsx src/migrate.ts install",
     "db:migrate": "tsx src/migrate.ts up",
+    "db:bootstrap": "tsx src/migrate.ts bootstrap",
     "db:check": "tsx src/migrate.ts check",
     "db:seed": "tsx src/migrate.ts seed",
     "db:demo": "tsx src/migrate.ts demo",

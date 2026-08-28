@@ -344,17 +344,36 @@ export class NativeServer {
         )
       }
 
-      const { applied, summary } = await forge()
-      if (applied.length > 0) {
-        logger.info(
-          'moon.schema',
-          `Schema auto-sync: ${applied.length} changes applied (${summary.tablesCreated} tables, ${summary.columnsAdded} cols, ${summary.foreignKeysAdded} FKs, ${summary.indexesCreated} indexes)`
-        )
+      if (process.env.MOON_AUTO_SYNC === 'true') {
+        const { applied, summary } = await forge()
+        if (applied.length > 0) {
+          logger.info(
+            'moon.schema',
+            `Schema auto-sync (MOON_AUTO_SYNC): ${applied.length} changes applied (${summary.tablesCreated} tables, ${summary.columnsAdded} cols, ${summary.foreignKeysAdded} FKs, ${summary.indexesCreated} indexes)`
+          )
+        } else {
+          logger.info(
+            'moon.schema',
+            `Schema verified & up-to-date: ${summary.totalModels} models (${summary.totalColumns} fields synchronized with PostgreSQL)`
+          )
+        }
       } else {
-        logger.info(
-          'moon.schema',
-          `Schema verified & up-to-date: ${summary.totalModels} models (${summary.totalColumns} fields synchronized with PostgreSQL)`
-        )
+        // Verify-only: runtime schema repair is intentionally disabled. A zero-state
+        // install must be made migration-complete by the migration runner (`up`/`bootstrap`)
+        // instead of mutating schema at server boot.
+        const { migrations, summary } = await forge({ dryRun: true })
+        if (migrations.length > 0) {
+          logger.warn(
+            'moon.schema',
+            `Schema drift detected (${migrations.length} pending changes across ${summary.totalModels} models). ` +
+            'Runtime repair is disabled; run the migration runner (db:migrate / bootstrap) to reach migration-completeness.'
+          )
+        } else {
+          logger.info(
+            'moon.schema',
+            `Schema verified & up-to-date: ${summary.totalModels} models (${summary.totalColumns} fields synchronized with PostgreSQL)`
+          )
+        }
       }
 
       if (this.config.onBoot) {
