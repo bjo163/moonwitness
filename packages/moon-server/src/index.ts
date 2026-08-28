@@ -1,4 +1,5 @@
 export { NativeServer, publish, type MoonConfig } from './NativeServer.js'
+export { FastifyAdapter, type FastifyAdapterConfig } from './fastify-adapter.js'
 export { Controller, Get, Post, Put, Delete, registerController } from './router.js'
 export { defineRoute, type RouteContext, type RouteDefinition } from './route-builder.js'
 export { logger } from './logger.js'
