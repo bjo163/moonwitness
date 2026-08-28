@@ -58,6 +58,35 @@ feature
 
 Do not skip `dev` for ordinary work.
 
+## Database workflow
+
+MoonWitness uses a single canonical database setup command:
+
+```text
+pnpm db:install
+```
+
+This command runs the complete setup pipeline:
+1. Apply all pending migrations
+2. Verify seed integrity
+3. Sync schema (development only; production rejects drift)
+4. Seed canonical base data (operators, observatories, reports)
+5. Seed witness graph core (scriptures, entities, relations, religions)
+6. Seed full demo data across all 15 addon packages
+
+After completion, a comprehensive summary is printed showing:
+- Duration and migration count
+- Schema sync status
+- Base seed counts (operators, observatories, reports)
+- Witness domain counts (scriptures, verses, figures, traditions, etc.)
+- Addon demo counts (projects, tasks, accounts, tickets, RFCs, etc.)
+- Total database tables
+
+For integrity-only verification:
+```text
+pnpm db:verify
+```
+
 ## CI policy
 
 MoonWitness uses the repository owner's **self-hosted GitHub Actions runner** as the canonical CI execution environment.
