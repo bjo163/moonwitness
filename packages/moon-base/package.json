@@ -5,7 +5,7 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node -e \"const fs=require('fs');const src='src/data',dst='dist/data';if(fs.existsSync(src)){if(fs.existsSync(dst))fs.rmSync(dst,{recursive:true});fs.cpSync(src,dst,{recursive:true})}\"",
     "seed:verify": "node src/scripts/verify-seed.mjs"
   },
   "dependencies": {
