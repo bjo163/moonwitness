@@ -57,8 +57,8 @@ export function DailyTransmissionView() {
           setTotalCount(json.totalPeriodsElapsed || json.history.length)
         }
       }
-    } catch (err) {
-      console.warn("Failed to fetch history:", err)
+    } catch {
+      // Graceful fallback
     } finally {
       setLoading(false)
     }

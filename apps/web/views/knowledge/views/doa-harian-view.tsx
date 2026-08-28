@@ -32,8 +32,7 @@ export function DoaHarianView() {
         }
         setIsLoading(false)
       })
-      .catch((err) => {
-        console.error(err)
+      .catch(() => {
         setIsLoading(false)
       })
   }, [])
