@@ -51,7 +51,7 @@ export async function initMigrationTable(db: Knex = getDb()) {
 export async function getMigrationFiles(dir: string): Promise<string[]> {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
   return fs.readdirSync(dir)
-    .filter((file) => file.endsWith('.js') || file.endsWith('.js'))
+    .filter((file) => file.endsWith('.ts') || file.endsWith('.js'))
     .sort()
 }
 
