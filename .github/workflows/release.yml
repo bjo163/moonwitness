@@ -17,7 +17,7 @@ concurrency:
 jobs:
   verify:
     name: Verify Release
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 30
     env:
       CI: 'true'
@@ -55,7 +55,7 @@ jobs:
 
   publish:
     name: Publish to npm (Dry Run)
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 20
     needs: verify
     env:
@@ -114,7 +114,7 @@ jobs:
 
   release-notes:
     name: Generate Release Notes
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 10
     needs: verify
     if: success()

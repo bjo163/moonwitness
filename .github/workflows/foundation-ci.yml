@@ -20,7 +20,7 @@ concurrency:
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 15
     continue-on-error: true
     env:
@@ -62,7 +62,7 @@ jobs:
 
   typecheck:
     name: Typecheck
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 15
     continue-on-error: true
     env:
@@ -105,7 +105,7 @@ jobs:
 
   test:
     name: Test
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 20
     env:
       CI: 'true'
@@ -147,7 +147,7 @@ jobs:
 
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 30
     env:
       CI: 'true'
@@ -186,7 +186,7 @@ jobs:
 
   report:
     name: Report
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 5
     needs: [lint, typecheck, test, build]
     if: always() && github.event_name == 'pull_request'
