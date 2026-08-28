@@ -3,20 +3,24 @@
 import { useState } from "react"
 import { Calculator, Coins, TrendingUp, ShieldCheck } from "lucide-react"
 import { ContextBlock } from "@workspace/ui"
+import { useResource } from "@workspace/hooks"
+import { fetchGoldPrice } from "@moon/client"
 
-// Simulasi harga emas global (real-time API can be hooked here)
-const MOCK_GOLD_PRICE_PER_GRAM = 1350000 // Rupiah
+const DEFAULT_GOLD_PRICE_PER_GRAM = 1350000 // Rupiah fallback
 const NISAB_GOLD_GRAMS = 85
-const NISAB_VALUE = MOCK_GOLD_PRICE_PER_GRAM * NISAB_GOLD_GRAMS
 const ZAKAT_RATE = 0.025 // 2.5%
 
 export function KalkulatorZakatView() {
+  const { data: goldData } = useResource(fetchGoldPrice, { storageKey: "mw_gold_price" })
+  const goldPricePerGram = goldData?.pricePerGramIdr || DEFAULT_GOLD_PRICE_PER_GRAM
+  const nisabValue = goldPricePerGram * NISAB_GOLD_GRAMS
+
   const [savings, setSavings] = useState<number>(0)
   const [investments, setInvestments] = useState<number>(0)
   const [goldSilver, setGoldSilver] = useState<number>(0)
 
   const totalWealth = savings + investments + goldSilver
-  const isEligible = totalWealth >= NISAB_VALUE
+  const isEligible = totalWealth >= nisabValue
   const zakatAmount = isEligible ? totalWealth * ZAKAT_RATE : 0
 
   const formatCurrency = (val: number) => {
@@ -115,10 +119,10 @@ export function KalkulatorZakatView() {
             <div className="space-y-3">
               <div className="flex items-center justify-between border-b border-primary/10 pb-2">
                 <span className="text-[10px] text-primary/50">
-                  HARGA EMAS / GRAM
+                  HARGA EMAS / GRAM (PAXG)
                 </span>
                 <span className="font-mono text-xs font-bold text-foreground">
-                  {formatCurrency(MOCK_GOLD_PRICE_PER_GRAM)}
+                  {formatCurrency(goldPricePerGram)}
                 </span>
               </div>
               <div className="flex items-center justify-between border-b border-primary/10 pb-2">
@@ -126,7 +130,7 @@ export function KalkulatorZakatView() {
                   BATAS NISAB (85 GRAM)
                 </span>
                 <span className="text-warning font-mono text-xs font-bold">
-                  {formatCurrency(NISAB_VALUE)}
+                  {formatCurrency(nisabValue)}
                 </span>
               </div>
             </div>

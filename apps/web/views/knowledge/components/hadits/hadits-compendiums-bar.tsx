@@ -2,8 +2,10 @@
 
 import React from "react"
 import { Database } from "lucide-react"
+import { useResource } from "@workspace/hooks"
+import { fetchHadithBooks } from "@moon/client"
 
-export const HADITH_COMPENDIUMS = [
+const DEFAULT_HADITH_COMPENDIUMS = [
   { n: "Sahih al-Bukhari", v: "7,275", c: "bg-emerald-500" },
   { n: "Sahih Muslim", v: "4,341", c: "bg-emerald-500" },
   { n: "Sunan Abu Dawud", v: "4,804", c: "bg-blue-500" },
@@ -11,20 +13,25 @@ export const HADITH_COMPENDIUMS = [
   { n: "Sunan an-Nasa'i", v: "5,618", c: "bg-blue-500" },
   { n: "Sunan Ibn Majah", v: "4,256", c: "bg-blue-500" },
   { n: "Muwatta Malik", v: "2,363", c: "bg-emerald-500" },
-  { n: "Sunan ad-Darimi", v: "3,401", c: "bg-blue-500" },
-  { n: "Musnad Ahmad", v: "29,750", c: "bg-red-500" },
-  { n: "Sunan al-Bayhaqi", v: "15,125", c: "bg-amber-500" },
-  { n: "Sunan ad-Daraqutni", v: "5,277", c: "bg-red-500" },
-  { n: "Sunan al-Kubra (Nasa'i)", v: "10,327", c: "bg-blue-500" },
-  { n: "Jami' Ibn Hibban", v: "8,957", c: "bg-emerald-500" },
-  { n: "Mustadrak al-Hakim", v: "6,666", c: "bg-amber-500" },
 ]
+
+export const HADITH_COMPENDIUMS = DEFAULT_HADITH_COMPENDIUMS
 
 interface HaditsCompendiumsBarProps {
   totalHadiths: number
 }
 
 export function HaditsCompendiumsBar({ totalHadiths }: HaditsCompendiumsBarProps) {
+  const { data } = useResource(fetchHadithBooks, { storageKey: "mw_hadith_books" })
+
+  const compendiums = data?.books?.length
+    ? data.books.map((b: any, i: number) => ({
+        n: b.name,
+        v: (b.totalItems || 0).toLocaleString(),
+        c: ["bg-emerald-500", "bg-blue-500", "bg-amber-500", "bg-cyan-500"][i % 4],
+      }))
+    : DEFAULT_HADITH_COMPENDIUMS
+
   return (
     <div className="border-b border-white/10 bg-[#070D1E] py-2 px-4 shadow-inner">
       <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-4 overflow-x-auto text-[10px] text-white/50 no-scrollbar">
@@ -34,7 +41,7 @@ export function HaditsCompendiumsBar({ totalHadiths }: HaditsCompendiumsBarProps
           <span className="font-bold text-white">{totalHadiths.toLocaleString()} HADITHS</span>
         </div>
         <div className="flex shrink-0 items-center gap-4 border-l border-white/10 pl-4 font-mono">
-          {HADITH_COMPENDIUMS.slice(0, 7).map((c, i) => (
+          {compendiums.slice(0, 7).map((c, i) => (
             <div key={i} className="flex items-center gap-1.5 whitespace-nowrap">
               <div className={`h-1.5 w-1.5 rounded-full ${c.c}`} />
               <span className="text-white/70">{c.n}</span>

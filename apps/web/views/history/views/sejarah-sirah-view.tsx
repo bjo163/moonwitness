@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { MapPin } from "lucide-react"
 import { ContextBlock } from "@workspace/ui"
+import { useModelRecords } from "@workspace/hooks"
 
 type SirahEvent = {
   yearStr: string
@@ -14,7 +15,7 @@ type SirahEvent = {
   category: string
 }
 
-const SIRAH_EVENTS: SirahEvent[] = [
+const DEFAULT_SIRAH_EVENTS: SirahEvent[] = [
   {
     yearStr: "610 M (1 Sebelum Hijriyah)",
     title: "Turunnya Wahyu Pertama di Gua Hira",
@@ -58,18 +59,32 @@ const SIRAH_EVENTS: SirahEvent[] = [
   {
     yearStr: "630 M (20 Ramadan 8 H)",
     title: "Fathu Makkah (Pembebasan Kota Makkah)",
-    location: "Makkah Al-Mukarramah",
+    location: "Kota Makkah Al-Mukarramah",
     geoCoordinates: "21.4225° N, 39.8262° E",
     description:
-      "Pembebasan Makkah damai tanpa pertumpahan darah, penghancuran 360 berhala di sekeliling Ka'bah, dan pengampunan umum.",
-    scriptureRef: "Q.S An-Nasr (110:1-3) & Al-Fath (48:1)",
-    category: "KEMENANGAN",
+      "Pembebasan damai kota suci Makkah dan pembersihan Ka'bah dari 360 berhala tanpa pertumpahan darah besar.",
+    scriptureRef: "Q.S An-Nasr (110:1-3)",
+    category: "PEMBEBASAN",
   },
 ]
 
 export function SejarahSirahView() {
+  const { records: eventRecords } = useModelRecords("wx.figure", { limit: 10 })
+
+  const sirahEvents: SirahEvent[] = eventRecords.length > 0
+    ? eventRecords.map((e: any, idx: number) => ({
+        yearStr: e.lifeStart ? `${e.lifeStart} – ${e.lifeEnd || "M"}` : (DEFAULT_SIRAH_EVENTS[idx]?.yearStr || "Era Sirah"),
+        title: e.name || DEFAULT_SIRAH_EVENTS[idx]?.title || "Peristiwa Sejarah",
+        location: e.notes ? e.notes.split(",")[0] : (DEFAULT_SIRAH_EVENTS[idx]?.location || "Makkah / Madinah"),
+        geoCoordinates: DEFAULT_SIRAH_EVENTS[idx]?.geoCoordinates || "21.4225° N, 39.8262° E",
+        description: e.notes || (DEFAULT_SIRAH_EVENTS[idx]?.description || "Catatan peristiwa sejarah peradaban."),
+        scriptureRef: DEFAULT_SIRAH_EVENTS[idx]?.scriptureRef || "Q.S Al-Ahzab",
+        category: DEFAULT_SIRAH_EVENTS[idx]?.category || "SEJARAH",
+      }))
+    : DEFAULT_SIRAH_EVENTS
+
   const [selectedEvent, setSelectedEvent] = useState<SirahEvent>(
-    SIRAH_EVENTS[0]!
+    sirahEvents[0]!
   )
 
   return (
@@ -140,8 +155,8 @@ export function SejarahSirahView() {
           </div>
 
           <div className="space-y-2.5">
-            {SIRAH_EVENTS.map((ev, idx) => {
-              const isSelected = selectedEvent.title === ev.title
+            {sirahEvents.map((ev, idx) => {
+              const isSelected = selectedEvent?.title === ev.title
               return (
                 <button
                   key={idx}

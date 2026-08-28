@@ -2,6 +2,7 @@
 
 import { useLanguage } from "@workspace/state"
 import { ContextBlock } from "@workspace/ui"
+import { useModelRecords } from "@workspace/hooks"
 
 type ScholarNode = {
   generation: string
@@ -11,7 +12,7 @@ type ScholarNode = {
   role: string
 }
 
-const SCHOLAR_SANAD_NODES: ScholarNode[] = [
+const DEFAULT_SCHOLAR_SANAD_NODES: ScholarNode[] = [
   {
     generation: "ERA 0 (SUMBER WAHYU)",
     name: "PROPHET MUHAMMAD SAW",
@@ -51,6 +52,17 @@ const SCHOLAR_SANAD_NODES: ScholarNode[] = [
 
 export function SanadKeilmuanView() {
   const { t } = useLanguage()
+  const { records: figureRecords } = useModelRecords("wx.figure", { limit: 10 })
+
+  const scholarNodes: ScholarNode[] = figureRecords.length > 0
+    ? figureRecords.map((f: any, idx: number) => ({
+        generation: `GEN ${idx + 1} (${f.tradition || "TRANSMISI"})`,
+        name: String(f.name || "").toUpperCase(),
+        title: f.notes ? f.notes.split(".")[0] : (DEFAULT_SCHOLAR_SANAD_NODES[idx]?.title || "Ulama & Sanad"),
+        era: f.lifeStart ? `${f.lifeStart} – ${f.lifeEnd || "M"}` : (DEFAULT_SCHOLAR_SANAD_NODES[idx]?.era || "Era Klasik"),
+        role: f.notes || (DEFAULT_SCHOLAR_SANAD_NODES[idx]?.role || "Transmisi Keilmuan Shahih"),
+      }))
+    : DEFAULT_SCHOLAR_SANAD_NODES
 
   return (
     <div
@@ -68,7 +80,7 @@ export function SanadKeilmuanView() {
 
         {/* Sanad Nodes Timeline */}
         <div className="before:bg-success/30 relative space-y-4 before:absolute before:top-2 before:bottom-2 before:left-4 before:w-0.5">
-          {SCHOLAR_SANAD_NODES.map((node, idx) => (
+          {scholarNodes.map((node, idx) => (
             <div key={idx} className="relative pl-10">
               <div className="bg-success border-panel absolute top-3 left-2 h-4 w-4 animate-pulse rounded-full border-2" />
 

@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useLanguage } from "@workspace/state"
-import { playClickSound, moonClientInstance, useAuthSession } from "@moon/client"
+import { playClickSound, moonClientInstance, useAuthSession, fetchDevotions } from "@moon/client"
+import { useResource } from "@workspace/hooks"
 import { Target, Award, RotateCcw } from "lucide-react"
 import { ContextBlock } from "@workspace/ui"
 
@@ -13,7 +14,7 @@ type ZikrPreset = {
   translation: string
 }
 
-const ZIKR_PRESETS: ZikrPreset[] = [
+const DEFAULT_ZIKR_PRESETS: ZikrPreset[] = [
   {
     id: "subhanallah",
     arabic: "سُبْحَانَ اللَّهِ",
@@ -45,7 +46,18 @@ export function TasbihView() {
   const { user } = useAuthSession()
   const moonClient = moonClientInstance
 
-  const [activeZikr, setActiveZikr] = useState<ZikrPreset>(ZIKR_PRESETS[0]!)
+  const { data: devotionsData } = useResource(() => fetchDevotions("dhikr"), { storageKey: "mw_tasbih_presets" })
+
+  const zikrPresets: ZikrPreset[] = devotionsData?.devotions?.length
+    ? devotionsData.devotions.map((d: any) => ({
+        id: String(d.id || d.number),
+        arabic: d.textArabic || d.textOriginal || "",
+        latin: d.transliteration || d.textTransliteration || d.title || "",
+        translation: d.translationId || d.translationEn || "",
+      }))
+    : DEFAULT_ZIKR_PRESETS
+
+  const [activeZikr, setActiveZikr] = useState<ZikrPreset>(DEFAULT_ZIKR_PRESETS[0]!)
   const [count, setCount] = useState(0)
   const [targetCount, setTargetCount] = useState(33)
   const [completedLoops, setCompletedLoops] = useState(0)
@@ -132,7 +144,7 @@ export function TasbihView() {
 
         {/* Zikr Presets Selection */}
         <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-          {ZIKR_PRESETS.map((item) => {
+          {zikrPresets.map((item) => {
             const isSelected = activeZikr.id === item.id
             return (
               <button

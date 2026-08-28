@@ -12,84 +12,101 @@ import {
   BookOpen,
   Scroll,
   Milestone,
+  Droplets,
+  Wind,
 } from "lucide-react"
 import { Panel } from "@workspace/ui"
+import { useModelRecords } from "@workspace/hooks"
+
+const DEFAULT_PROPHETS = [
+  {
+    num: "01",
+    name: "ĀDAM AS",
+    era: "-4000 BCE",
+    title: "FIRST HUMAN",
+    sub: "FIRST PROPHET",
+    icon: Globe,
+    color: "#10B981",
+    img: "/assets/history_adam.png",
+  },
+  {
+    num: "02",
+    name: "NUH AS",
+    era: "-3100 BCE",
+    title: "THE FLOOD",
+    sub: "THE GREAT ARK",
+    icon: Droplets,
+    color: "#00F0FF",
+    img: "/assets/history_nuh.png",
+  },
+  {
+    num: "03",
+    name: "IBRAHIM AS",
+    era: "-2000 BCE",
+    title: "FATHER OF",
+    sub: "MONOTHEISM",
+    icon: Database,
+    color: "#F59E0B",
+    img: "/assets/history_ibrahim.png",
+  },
+  {
+    num: "04",
+    name: "MUSA AS",
+    era: "-1300 BCE",
+    title: "DELIVERER FROM",
+    sub: "TYRANNY",
+    icon: Scroll,
+    color: "#3B82F6",
+    img: "/assets/history_musa.png",
+  },
+  {
+    num: "05",
+    name: "ISA AS",
+    era: "~30 CE",
+    title: "SPIRIT & WORD",
+    sub: "FROM ALLAH",
+    icon: Wind,
+    color: "#A855F7",
+    img: "/assets/history_isa.png",
+  },
+  {
+    num: "06",
+    name: "MUHAMMAD ﷺ",
+    era: "610 CE",
+    title: "THE SEAL OF",
+    sub: "PROPHETS",
+    icon: BookOpen,
+    color: "#10B981",
+    img: "/assets/history_muhammad.png",
+  },
+  {
+    num: "07",
+    name: "RIGHTLY GUIDED",
+    era: "632 - 661 CE",
+    title: "JUST LEADERSHIP",
+    sub: "& EXPANSION",
+    icon: Milestone,
+    color: "#F59E0B",
+    img: "/assets/history_caliphs.png",
+  },
+]
 
 export function OSHistoricalIntelligence() {
   const [timelineSearch, setTimelineSearch] = useState("")
+  const { records: figureRecords, loading } = useModelRecords("wx.figure", { limit: 12 })
 
-  const prophets = [
-    {
-      num: "01",
-      name: "ĀDAM AS",
-      era: "-4000 BCE",
-      title: "FIRST HUMAN",
-      sub: "FIRST PROPHET",
-      icon: Globe,
-      color: "#10B981",
-      img: "/assets/history_adam.png",
-    },
-    {
-      num: "02",
-      name: "NUH AS",
-      era: "-3100 BCE",
-      title: "THE FLOOD",
-      sub: "THE GREAT ARK",
-      icon: DropletsIcon,
-      color: "#00F0FF",
-      img: "/assets/history_nuh.png",
-    },
-    {
-      num: "03",
-      name: "IBRAHIM AS",
-      era: "-2000 BCE",
-      title: "FATHER OF",
-      sub: "MONOTHEISM",
-      icon: BoxIcon,
-      color: "#F59E0B",
-      img: "/assets/history_ibrahim.png",
-    },
-    {
-      num: "04",
-      name: "MUSA AS",
-      era: "-1300 BCE",
-      title: "DELIVERER FROM",
-      sub: "TYRANNY",
-      icon: Scroll,
-      color: "#3B82F6",
-      img: "/assets/history_musa.png",
-    },
-    {
-      num: "05",
-      name: "ISA AS",
-      era: "~30 CE",
-      title: "SPIRIT & WORD",
-      sub: "FROM ALLAH",
-      icon: WindIcon,
-      color: "#A855F7",
-      img: "/assets/history_isa.png",
-    },
-    {
-      num: "06",
-      name: "MUHAMMAD ﷺ",
-      era: "610 CE",
-      title: "THE SEAL OF",
-      sub: "PROPHETS",
-      icon: BookOpen,
-      color: "#10B981",
-      img: "/assets/history_muhammad.png",
-    },
-    {
-      num: "07",
-      name: "RIGHTLY GUIDED",
-      era: "632 - 661 CE",
-      title: "JUST LEADERSHIP",
-      sub: "& EXPANSION",
-      icon: Milestone,
-      color: "#F59E0B",
-      img: "/assets/history_caliphs.png",
-    },
-  ]
+  const prophets = figureRecords.length > 0
+    ? figureRecords.slice(0, 7).map((f: any, i: number) => ({
+        num: String(i + 1).padStart(2, "0"),
+        name: String(f.name || "").toUpperCase(),
+        era: f.lifeStart ? `${f.lifeStart} ${f.lifeEnd ? `– ${f.lifeEnd}` : ""}` : (DEFAULT_PROPHETS[i]?.era || "BCE"),
+        title: f.notes ? f.notes.split(".")[0].toUpperCase() : (DEFAULT_PROPHETS[i]?.title || "PROPHET"),
+        sub: f.notes ? (f.notes.split(".")[1] || "").trim().toUpperCase() : (DEFAULT_PROPHETS[i]?.sub || "PEACE BE UPON HIM"),
+        icon: DEFAULT_PROPHETS[i]?.icon || Globe,
+        color: DEFAULT_PROPHETS[i]?.color || "#10B981",
+        img: DEFAULT_PROPHETS[i]?.img || "/assets/history_adam.png",
+      }))
+    : DEFAULT_PROPHETS
 
   const civilizations = [
     { name: "ANCIENT EGYPT", era: "-3100 - 30 BCE", color: "#F59E0B" },
@@ -509,14 +526,3 @@ export function OSHistoricalIntelligence() {
     </section>
   )
 }
-
-function DropletsIcon(props: any) {
-  return <Droplets {...props} />
-}
-function BoxIcon(props: any) {
-  return <Database {...props} />
-}
-function WindIcon(props: any) {
-  return <Wind {...props} />
-}
-import { Droplets, Wind } from "lucide-react"

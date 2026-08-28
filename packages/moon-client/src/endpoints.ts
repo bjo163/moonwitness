@@ -122,16 +122,40 @@ export async function fetchDbStatus(): Promise<DbStatusResponse> {
   return await apiGet<DbStatusResponse>("/db/status")
 }
 
-export async function fetchAdhkar(): Promise<any[]> {
-  return await apiGet<any[]>("/api/adhkar")
+export async function fetchFigures(): Promise<any> {
+  return await apiGet("/api/wx.figure?limit=100&order=id%20asc")
 }
 
-export async function fetchComments(targetId: string): Promise<any[]> {
-  return await apiGet<any[]>(`/api/comments?targetId=${encodeURIComponent(targetId)}`)
+export async function fetchHadithBooks(): Promise<{ books: any[] }> {
+  return await apiGet<{ books: any[] }>("/api/witness/hadith/books")
 }
 
-export async function postComment(data: { targetId: string; author: string; content: string }): Promise<any> {
-  return await apiPost("/api/comments", data)
+export async function fetchEarthquakes(): Promise<any> {
+  return await apiGet("/api/external/usgs/earthquakes")
+}
+
+export async function fetchGoogleTrends(): Promise<any[]> {
+  return await apiGet<any[]>("/api/external/trends")
+}
+
+export async function fetchExternalWeather(latitude = "-6.2", longitude = "106.8"): Promise<any> {
+  return await apiGet(`/api/external/weather?latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}`)
+}
+
+export async function fetchSolarCme(startDate?: string): Promise<any> {
+  const url = startDate ? `/api/external/nasa/donki/cme?startDate=${encodeURIComponent(startDate)}` : "/api/external/nasa/donki/cme"
+  return await apiGet(url)
+}
+
+export async function fetchGoldPrice(): Promise<{ pricePerGramIdr: number; symbol: string; lastPrice: string }> {
+  try {
+    const ticker = await apiGet<any>("/api/external/binance/ticker?symbol=PAXGUSDT")
+    const priceUsd = parseFloat(ticker?.lastPrice || "2400")
+    const pricePerGramIdr = Math.round((priceUsd / 31.1035) * 16200)
+    return { pricePerGramIdr: pricePerGramIdr || 1350000, symbol: "PAXGUSDT", lastPrice: ticker?.lastPrice || "2400" }
+  } catch {
+    return { pricePerGramIdr: 1350000, symbol: "FALLBACK", lastPrice: "2400" }
+  }
 }
 
 export async function sendChatMessage(messages: ChatMessage[]): Promise<ChatMessage> {
