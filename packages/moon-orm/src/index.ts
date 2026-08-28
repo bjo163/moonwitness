@@ -20,9 +20,8 @@ export {
   type PermissionOperation,
 } from './security.js'
 export { registry, getModel, loadModels, registerModel } from './registry.js'
-export { forge, isRuntimeSchemaSyncAllowed } from './runtime-schema.js'
-export { getLastPending, validateAutomaticAlteration } from './schema-sync.js'
-export { diff, up, down, status, check } from './migrator.js'
+export { forge, getLastPending, validateAutomaticAlteration } from './schema-sync.js'
+export { diff, up, down, status, check, snapshot, bootstrap } from './migrator.js'
 export type { MigrationStatus } from './migrator.js'
 export { setupOrm, getDb, teardownOrm, closeDb, checkDbConnection } from './config.js'
 export type { DbConfig, DbHealthStatus } from './config.js'

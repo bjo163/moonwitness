@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { check, diff, down, status, up, forge, getDb } from "@moon/orm"
+import { bootstrap, check, diff, down, status, up, forge, getDb } from "@moon/orm"
 import { NativeServer } from "@moon/server"
 import baseAddons, {
   loadBaseData,
@@ -109,7 +109,7 @@ async function run() {
     const lastBatch = Math.max(...migrationStatus.map((m: any) => m.batch))
     stats.migrations = migrationStatus.filter((m: any) => m.batch === lastBatch).length
 
-    const integrity = verifySeedIntegrity()
+    await loadBaseData()
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
     stats.seedIntegrity = 1
 
@@ -234,13 +234,24 @@ async function run() {
 
   if (cmd === "full" || cmd === "install" || cmd === "seed" || cmd === "demo") {
     await full()
+  } else if (cmd === "bootstrap") {
+    await bootstrap()
+  } else if (cmd === "down" || cmd === "rollback") {
+    await down()
+  } else if (cmd === "up") {
+    await up()
+  } else if (cmd === "status" || cmd === "dry-run") {
+    console.table(await status())
+  } else if (cmd === "check") {
+    await check()
+    console.log("Migration integrity check passed.")
   } else if (cmd === "verify") {
     await check()
     const integrity = verifySeedIntegrity()
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
     console.log("Database migration and canonical seed integrity checks passed.")
   } else {
-    console.log("Usage: pnpm tsx src/migrate.ts <full|verify>")
+    console.log("Usage: pnpm tsx src/migrate.ts <diff|up|down|bootstrap|status|check|seed|demo|install|verify> [--demo]")
   }
 
   process.exit(0)
