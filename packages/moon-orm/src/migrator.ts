@@ -8,8 +8,10 @@ import { forge } from './schema-sync.js'
 
 const MIGRATION_LOCK_KEY = 'moonwitness:migrations:v1'
 
+const MIGRATION_FILE_RE = /^\d{14}_[a-zA-Z0-9_-]+\.(ts|js)$/
+
 type MigrationModule = {
-  up?: (db: Knex) => Promise<void>
+  up: (db: Knex) => Promise<void>
   down?: (db: Knex) => Promise<void>
   nonReversible?: boolean
 }
@@ -25,7 +27,7 @@ export type MigrationStatus = {
   name: string
   checksum: string
   batch?: number
-  state: 'applied' | 'pending' | 'checksum_mismatch'
+  state: 'applied' | 'pending' | 'checksum_mismatch' | 'missing'
 }
 
 export async function initMigrationTable(db: Knex = getDb()) {
@@ -38,20 +40,31 @@ export async function initMigrationTable(db: Knex = getDb()) {
       table.integer('batch').notNullable()
       table.timestamp('run_at').defaultTo(db.fn.now())
     })
+    await db('moon_migrations').index('batch')
     return
   }
 
-  if (!(await db.schema.hasColumn('moon_migrations', 'checksum'))) {
+  const hasChecksum = await db.schema.hasColumn('moon_migrations', 'checksum')
+  if (!hasChecksum) {
     await db.schema.alterTable('moon_migrations', (table) => {
       table.string('checksum', 64).nullable()
     })
+  }
+
+  const hasBatchIndex = await db.schema.hasIndex('moon_migrations', 'moon_migrations_batch_index')
+  if (!hasBatchIndex) {
+    try {
+      await db('moon_migrations').index('batch')
+    } catch {
+      // index may already exist under a different name
+    }
   }
 }
 
 export async function getMigrationFiles(dir: string): Promise<string[]> {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
   return fs.readdirSync(dir)
-    .filter((file) => file.endsWith('.ts') || file.endsWith('.js'))
+    .filter((file) => MIGRATION_FILE_RE.test(file))
     .sort()
 }
 
@@ -63,22 +76,41 @@ async function loadMigration(filePath: string): Promise<MigrationModule> {
   if (!fs.existsSync(filePath)) throw new Error(`Migration file is missing: ${filePath}`)
   const source = fs.readFileSync(filePath, 'utf8')
   const fileChecksum = createHash('sha256').update(source).digest('hex')
-  const mod = await import(`${pathToFileURL(filePath).href}?checksum=${fileChecksum}`) as MigrationModule
+  const fileUrl = pathToFileURL(filePath).href
+  const mod = await import(`${fileUrl}?checksum=${fileChecksum}`) as MigrationModule
   if (typeof mod.up !== 'function') {
     throw new Error(`Migration ${path.basename(filePath)} is missing required up() function`)
   }
-  return { ...mod, nonReversible: source.includes('Manual intervention required') }
+  return {
+    up: mod.up,
+    down: mod.down,
+    nonReversible: mod.nonReversible ?? source.includes('Manual intervention required')
+  }
 }
 
 async function withMigrationLock<T>(fn: (db: Knex) => Promise<T>): Promise<T> {
   const db = getDb()
   const client = String((db.client.config as { client?: string }).client || '')
-  if (!client.includes('pg')) return fn(db)
+  if (client.includes('pg')) {
+    return db.transaction(async (trx) => {
+      await trx.raw('SELECT pg_advisory_xact_lock(hashtext(?))', [MIGRATION_LOCK_KEY])
+      return fn(trx)
+    })
+  }
 
-  return db.transaction(async (trx) => {
-    await trx.raw('SELECT pg_advisory_xact_lock(hashtext(?))', [MIGRATION_LOCK_KEY])
-    return fn(trx)
-  })
+  if (client.includes('sqlite')) {
+    return db.transaction(async (trx) => {
+      await trx.raw('PRAGMA journal_mode=WAL')
+      await trx('moon_migrations').insert({ name: '__migration_lock__', checksum: '', batch: 0 }).onConflict('name').ignore()
+      try {
+        return fn(trx)
+      } finally {
+        await trx('moon_migrations').where({ name: '__migration_lock__' }).delete()
+      }
+    })
+  }
+
+  return fn(db)
 }
 
 async function readApplied(db: Knex): Promise<AppliedMigration[]> {
@@ -109,19 +141,23 @@ export async function status(
   const result: MigrationStatus[] = []
 
   for (const file of files) {
-    const fileChecksum = checksum(path.join(migrationsDir, file))
+    const filePath = path.join(migrationsDir, file)
+    const fileChecksum = checksum(filePath)
     const row = applied.get(file)
-    result.push({
-      name: file,
-      checksum: fileChecksum,
-      batch: row?.batch,
-      state: !row ? 'pending' : row.checksum && row.checksum !== fileChecksum ? 'checksum_mismatch' : 'applied',
-    })
+    if (!row) {
+      result.push({ name: file, checksum: fileChecksum, state: 'pending' })
+      continue
+    }
+    if (row.checksum && row.checksum !== fileChecksum) {
+      result.push({ name: file, checksum: fileChecksum, batch: row.batch, state: 'checksum_mismatch' })
+    } else {
+      result.push({ name: file, checksum: fileChecksum, batch: row.batch, state: 'applied' })
+    }
   }
 
   for (const row of applied.values()) {
     if (!files.includes(row.name)) {
-      result.push({ name: row.name, checksum: row.checksum || '', batch: row.batch, state: 'checksum_mismatch' })
+      result.push({ name: row.name, checksum: row.checksum || '', batch: row.batch, state: 'missing' })
     }
   }
   return result
@@ -131,9 +167,9 @@ export async function check(
   migrationsDir: string = path.join(process.cwd(), 'migrations')
 ): Promise<MigrationStatus[]> {
   const current = await status(migrationsDir)
-  const invalid = current.filter((item) => item.state === 'checksum_mismatch')
+  const invalid = current.filter((item) => item.state === 'checksum_mismatch' || item.state === 'missing')
   if (invalid.length > 0) {
-    throw new Error(`Migration integrity check failed: ${invalid.map((item) => item.name).join(', ')}`)
+    throw new Error(`Migration integrity check failed: ${invalid.map((item) => `${item.name} (${item.state})`).join(', ')}`)
   }
   return current
 }

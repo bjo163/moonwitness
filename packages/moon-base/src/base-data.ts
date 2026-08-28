@@ -38,6 +38,7 @@ export async function loadBaseData() {
     adminGroupId = groupRows[0].id as number
   }
 
+  // 2. Seed explicit model metadata for every registered, non-abstract model.
   const securedModels = Array.from(registry.values())
     .filter((modelClass) => !modelClass._abstract && Boolean(modelClass._name))
     .map((modelClass) => modelClass._name)

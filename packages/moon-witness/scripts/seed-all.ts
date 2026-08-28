@@ -6,6 +6,9 @@
  *
  * New canonical graph data is seeded first. Legacy flat scripture/tradition
  * seeds remain temporarily for migration compatibility until #55.
+ *
+ * External API-dependent seeds (Quran, Hadith) are gated behind --with-external
+ * to keep canonical seeding deterministic and offline-capable.
  */
 import { initSeedDb } from './seed-utils.js'
 import { seedWitnessGraphCore } from './seed-graph-core.js'
@@ -16,41 +19,44 @@ import { seedAsmaulHusna } from './seed-asmaul-husna.js'
 import { seedTraditions } from './seed-traditions.js'
 import { seedDevotions } from './seed-devotions.js'
 
+const withExternal = process.argv.includes('--with-external')
+
 async function seedAll() {
-  console.log('🌙 ══════════════════════════════════════════')
-  console.log('   Moon Witness — Full Data Seed')
-  console.log('══════════════════════════════════════════════\n')
+  console.log('Moon Witness — Full Data Seed')
+  console.log('================================\n')
 
   await initSeedDb()
 
-  // Phase 0: canonical relation ontology with stable external IDs.
-  console.log('🕸️  Phase 0: Witness Graph Core...')
+  console.log('[Phase 0] Witness Graph Core...')
   const graph = await seedWitnessGraphCore()
-  console.log(`  ✅ ${graph.relationTypeCount} relation types (${graph.ontologyVersion})`)
+  console.log(`  ${graph.relationTypeCount} relation types (${graph.ontologyVersion})`)
 
-  // Legacy phases below remain until #51/#53/#54/#55 replace/migrate them.
-  console.log('\n📖 Legacy Phase 1: Scriptures Metadata...')
+  console.log('\n[Phase 1] Scriptures Metadata...')
   await seedScriptures()
 
-  console.log('\n📖 Legacy Phase 2: Quran Surahs & Ayahs...')
-  await seedQuranSurahsAyahs()
-
-  console.log('\n📜 Legacy Phase 3: Hadith Books...')
-  await seedHadithBooks()
-  console.log('  ℹ️  Full legacy hadith seeding remains a separate migration source.')
-
-  console.log('\n✨ Legacy Phase 4: Fixed Asma list (migration fixture only)...')
+  console.log('\n[Phase 2] Asmaul Husna...')
   await seedAsmaulHusna()
 
-  console.log('\n📜 Legacy Phase 5: Traditions...')
+  console.log('\n[Phase 3] Traditions...')
   await seedTraditions()
 
-  console.log('\n🤲 Legacy Phase 6: Devotional Content...')
+  console.log('\n[Phase 4] Devotional Content...')
   await seedDevotions()
 
-  console.log('\n══════════════════════════════════════════════')
-  console.log('🎉 ALL DATA SEEDED SUCCESSFULLY!')
-  console.log('══════════════════════════════════════════════')
+  if (withExternal) {
+    console.log('\n[Phase 5] Quran Surahs & Ayahs (external API)...')
+    await seedQuranSurahsAyahs()
+
+    console.log('\n[Phase 6] Hadith Books...')
+    await seedHadithBooks()
+    console.log('  Full legacy hadith seeding remains a separate migration source.')
+  } else {
+    console.log('\n[Phase 5-6] Skipped external API seeds (use --with-external to enable)')
+  }
+
+  console.log('\n================================')
+  console.log('ALL DATA SEEDED SUCCESSFULLY!')
+  console.log('================================')
 }
 
 seedAll().catch(console.error).finally(() => process.exit())

@@ -12,8 +12,4 @@ export default {
   description: 'Change Advisory Board governance, RFC review, and decision records',
   depends: ['base', 'project'],
   models: [CabChange, CabMeeting, CabDecision]
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> issue-122-zero-state-migrations
