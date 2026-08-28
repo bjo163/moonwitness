@@ -143,6 +143,9 @@ pnpm install
 # Run development servers (Web :3000, Command Center :3001, API :4000)
 pnpm dev
 
+# Full database setup: migrations + canonical seed + demo data
+pnpm db:install
+
 # Run workspace typecheck (100% pass)
 pnpm turbo typecheck
 
