@@ -30,7 +30,16 @@ if (Get-Command pm2 -ErrorAction SilentlyContinue) {
     pm2 reload ecosystem.config.cjs --update-env
     Write-Host "✓ PM2 cluster successfully reloaded." -ForegroundColor Green
 } elseif (Get-Command docker-compose -ErrorAction SilentlyContinue) {
-    docker-compose up -d --build
+    if (-not (Test-Path -LiteralPath ".env.production" -PathType Leaf)) {
+        throw "Docker Compose deployment requires .env.production. Copy .env.production.example and set every required secret."
+    }
+    docker-compose --env-file .env.production config --quiet
+    Write-Host "▶ Step 5b/5: Running production readiness check..." -ForegroundColor Yellow
+    node cli/mw.mjs prod-check | Out-Host
+    if ($LASTEXITCODE -ne 0) {
+        throw "Production readiness check failed. Resolve the reported issues before deploying."
+    }
+    docker-compose --env-file .env.production up -d --build
     Write-Host "✓ Docker Compose containers successfully updated." -ForegroundColor Green
 } else {
     Write-Host "⚠️  Neither PM2 nor Docker Compose detected. Please restart services manually." -ForegroundColor Yellow

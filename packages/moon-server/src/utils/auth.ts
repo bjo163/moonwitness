@@ -1,7 +1,7 @@
 import type { IncomingMessage } from 'node:http'
 import jwt from 'jsonwebtoken'
 import { randomInt, createHash } from 'node:crypto'
-import { ANONYMOUS_ID, SUPERUSER_ID, createCtx, getModel, authSecurityContext, type Ctx } from '@moon/orm'
+import { ANONYMOUS_ID, SUPERUSER_ID, createCtx, getModel, getDb, authSecurityContext, type Ctx } from '@moon/orm'
 
 export const ALLOWED_JWT_ALGORITHMS = ['HS256', 'HS384', 'HS512'] as const
 export type AllowedJwtAlgorithm = (typeof ALLOWED_JWT_ALGORITHMS)[number]
@@ -117,6 +117,8 @@ export interface JwtClaims {
   sub: number
   email?: string
   tokenVersion?: number
+  role?: string
+  clearanceLevel?: number
   [key: string]: any
 }
 
@@ -227,7 +229,92 @@ export async function revokeUserSessions(
   await VxUser.morph(VxUser as any, ctx, user.id, {
     tokenVersion: nextVersion
   })
+
+  // Best-effort: tear down any live SSE connections for this user.
+  // Lazy import avoids a static circular dependency with the SSE handler.
+  try {
+    const { revokeUserSseClients } = await import('../handlers/sse.js')
+    revokeUserSseClients(userId)
+  } catch {
+    // SSE layer unavailable — non-fatal for session revocation.
+  }
+
   return nextVersion
+}
+
+/**
+ * Resolve highest clearance role for a user via vx.role + vx_user_vx_role_rel.
+ * Falls back to { role: 'user', clearanceLevel: 1 } if no roles or tables missing.
+ */
+export async function resolveUserRole(
+  userId: number,
+  env: Ctx
+): Promise<{ role: string; clearanceLevel: number }> {
+  const ROLE_CLEARANCE: Record<string, number> = {
+    superadmin: 3,
+    admin: 2,
+    moderator: 2,
+    editor: 1,
+    scholar: 1,
+    explorer: 1,
+    user: 1,
+  }
+
+  const ROLE_PRIORITY = ['superadmin', 'admin', 'moderator', 'editor', 'scholar', 'explorer', 'user']
+
+  try {
+    const VxRole = getModel('vx.role')
+    if (!VxRole) {
+      return { role: 'user', clearanceLevel: 1 }
+    }
+
+    const db = getDb()
+    const conn = env?.trx || db
+
+    let rows: any[]
+    try {
+      rows = await conn('vx_user_vx_role_rel')
+        .where('vx_user_id', userId)
+        .select('vx_role_id')
+    } catch {
+      return { role: 'user', clearanceLevel: 1 }
+    }
+
+    if (!rows.length) {
+      return { role: 'user', clearanceLevel: 1 }
+    }
+
+    const roleIds = rows.map((r: any) => r.vx_role_id)
+
+    const superEnv = createCtx(SUPERUSER_ID, env?.context ?? {}, getModel as any, env?.trx)
+
+    let roles: any[]
+    try {
+      roles = await VxRole.fetch(VxRole as any, superEnv, [['id', 'in', roleIds]])
+    } catch {
+      return { role: 'user', clearanceLevel: 1 }
+    }
+
+    if (!roles.length) {
+      return { role: 'user', clearanceLevel: 1 }
+    }
+
+    let bestRole = 'user'
+    let bestClearance = 1
+
+    for (const r of roles) {
+      const name = String(r.name || '').toLowerCase()
+      const clearance = ROLE_CLEARANCE[name] || 1
+      if (clearance > bestClearance || (clearance === bestClearance && ROLE_PRIORITY.indexOf(name) < ROLE_PRIORITY.indexOf(bestRole))) {
+        bestRole = name
+        bestClearance = clearance
+      }
+    }
+
+    return { role: bestRole, clearanceLevel: bestClearance }
+  } catch {
+    return { role: 'user', clearanceLevel: 1 }
+  }
 }
 
 /**

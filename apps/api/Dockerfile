@@ -5,15 +5,16 @@ RUN corepack enable && corepack prepare pnpm@10.33.4 --activate
 # Copy all source files
 COPY . .
 
-# Install dependencies
+# Install dependencies (includes devDependencies for seed/certification commands)
 RUN pnpm install --frozen-lockfile=true
 
-# Build API and its dependencies
+# Build API and its dependencies (copies canonical seed artifacts to dist/data)
 RUN pnpm run build --filter=api...
 
-# Default API port
 ENV API_PORT=4000
-EXPOSE ${API_PORT}
+ENV PORT=4000
+ENV HOSTNAME="0.0.0.0"
+EXPOSE 4000
 
-# Start API
-CMD ["pnpm", "--filter", "api", "run", "start"]
+# Start API server
+CMD ["pnpm", "--filter=api", "start"]

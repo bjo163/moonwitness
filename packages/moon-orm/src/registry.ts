@@ -7,19 +7,19 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const MODELS_DIR = __dirname
 
 const INFRA_FILES = new Set([
-  'base.ts',
   'base.js',
-  'fields.ts',
+  'base.js',
   'fields.js',
-  'index.ts',
+  'fields.js',
   'index.js',
-  'registry.ts',
+  'index.js',
   'registry.js',
-  'schema-sync.ts',
+  'registry.js',
   'schema-sync.js',
-  'manifest.ts',
+  'schema-sync.js',
   'manifest.js',
-  'seed.ts',
+  'manifest.js',
+  'seed.js',
   'seed.js'
 ])
 
@@ -33,7 +33,7 @@ function walk(dir: string): string[] {
     if (statSync(fullPath).isDirectory()) {
       results = results.concat(walk(fullPath))
     } else if (
-      (entry.endsWith('.ts') || entry.endsWith('.js')) &&
+      (entry.endsWith('.js') || entry.endsWith('.js')) &&
       !INFRA_FILES.has(entry)
     ) {
       results.push(fullPath)

@@ -1,17 +1,41 @@
 import { NextRequest, NextResponse } from "next/server"
-import { MOCK_COMMAND_CENTER_DASHBOARD } from "@/lib/data/command-center-dashboard.db"
 export const dynamic = "force-dynamic"
 import { getDailyPrayerTimes } from "@moon/compute"
-import { moonClientInstance } from "@moon/client"
 
 const JAKARTA_LAT = -6.2088
 const JAKARTA_LNG = 106.8456
 
-export async function GET(req: NextRequest) {
-  const dashboardData = { ...MOCK_COMMAND_CENTER_DASHBOARD }
+type PrayerItem = { name: string; time: string; status: string; countdown?: string }
+
+export type DashboardResponse = {
+  success: boolean
+  data: {
+    missionStatus: Record<string, any> | null
+    todayMission: any[] | null
+    todayPrayer: PrayerItem[] | null
+    aiBriefing: any[] | null
+    knowledgeFeed: any[] | null
+    activeProjects: any[] | null
+    tasksOverview: any | null
+    moonObservatory: Record<string, any> | null
+    globalMonitoring: any[] | null
+  }
+}
+
+export async function GET(req: NextRequest): Promise<NextResponse<DashboardResponse>> {
+  const data: DashboardResponse["data"] = {
+    missionStatus: null,
+    todayMission: null,
+    todayPrayer: null,
+    aiBriefing: null,
+    knowledgeFeed: null,
+    activeProjects: null,
+    tasksOverview: null,
+    moonObservatory: null,
+    globalMonitoring: null,
+  }
 
   try {
-    // 1. Real Prayer Times from Internal Math Engine (@moon/witness)
     const now = new Date()
     const todayPrayers = getDailyPrayerTimes(JAKARTA_LAT, JAKARTA_LNG, now)
 
@@ -29,7 +53,7 @@ export async function GET(req: NextRequest) {
       { name: "Isha", timeObj: todayPrayers.isha },
     ]
 
-    dashboardData.todayPrayer = prayerSchedule.map((p) => {
+    data.todayPrayer = prayerSchedule.map((p) => {
       const pmins = getMins(p.timeObj)
       let status = "pending"
       if (currentMins >= pmins) status = "done"
@@ -47,55 +71,12 @@ export async function GET(req: NextRequest) {
         countdown: status === "next" ? "LIVE" : undefined,
       }
     })
-
-    // 2. Real Knowledge Feed from Witness API
-    try {
-      const randomSurah = Math.floor(Math.random() * 114) + 1
-      const surahJson = await moonClientInstance.request(
-        "GET",
-        `/api/witness/quran/surah?number=${randomSurah}`
-      )
-      const ayahs = surahJson.ayahs || []
-      if (ayahs.length > 0) {
-        const randomAyah = ayahs[Math.floor(Math.random() * ayahs.length)]
-        dashboardData.knowledgeFeed[0] = {
-          id: "kf1",
-          category: "Qur'an",
-          title: randomAyah.textArabic,
-          subtitle: `Surah ${surahJson.surah.name} (${surahJson.surah.number}:${randomAyah.number})`,
-          time: "Just Now",
-        }
-      }
-    } catch (e) {
-      console.error("Failed to fetch random surah", e)
-    }
-
-    try {
-      const randomPage = Math.floor(Math.random() * 500) + 1
-      const hadithJson = await moonClientInstance.request(
-        "GET",
-        `/api/witness/hadith?slug=bukhari&page=${randomPage}&limit=1`
-      )
-      const hadiths = hadithJson.hadiths || []
-      if (hadiths.length > 0) {
-        const h = hadiths[0]
-        dashboardData.knowledgeFeed[1] = {
-          id: "kf2",
-          category: "Hadith",
-          title: (h.textId || h.textEn || "").substring(0, 100) + "...",
-          subtitle: `Bukhari ${h.number}`,
-          time: "Just Now",
-        }
-      }
-    } catch (e) {
-      console.error("Failed to fetch random hadith", e)
-    }
   } catch (error) {
     console.error("Failed to fetch real data for Command Center Dashboard:", error)
   }
 
   return NextResponse.json({
     success: true,
-    data: dashboardData,
+    data,
   })
 }

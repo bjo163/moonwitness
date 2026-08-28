@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { APP_PORTS } from "@workspace/types"
 
-export const SESSION_COOKIE = "mw_session"
+export const SESSION_COOKIE = "moon_session"
 
 const apiBaseUrl =
   process.env.MOON_API_URL ||
@@ -21,11 +21,10 @@ export function setSessionCookie(response: NextResponse, token: string): void {
   response.cookies.set({
     name: SESSION_COOKIE,
     value: token,
-    httpOnly: false, // Accessible for client-side cross-tab/cross-app detection
+    httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: "strict",
     path: "/",
-    maxAge: 86400 * 7,
   })
 }
 
@@ -33,9 +32,9 @@ export function clearSessionCookie(response: NextResponse): void {
   response.cookies.set({
     name: SESSION_COOKIE,
     value: "",
-    httpOnly: false,
+    httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: "strict",
     path: "/",
     maxAge: 0,
   })

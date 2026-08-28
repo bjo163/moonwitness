@@ -1,21 +1,6 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios"
-import { STORAGE_KEYS } from "@workspace/types"
 
-function getAuthToken(): string | null {
-  if (typeof window === "undefined") return null
-  try {
-    // 1. Check localStorage
-    const localToken = localStorage.getItem(STORAGE_KEYS.SESSION)
-    if (localToken) return localToken
-
-    // 2. Check Cookie (mw_session)
-    const match = document.cookie.match(/(?:^|; )mw_session=([^;]*)/)
-    if (match && match[1]) return decodeURIComponent(match[1])
-  } catch {
-    // ignore
-  }
-  return null
-}
+export const AUTH_INVALIDATED_EVENT = "mw_auth_session_invalidated"
 
 export const apiClient: AxiosInstance = axios.create({
   timeout: 15000,
@@ -25,25 +10,13 @@ export const apiClient: AxiosInstance = axios.create({
   },
 })
 
-// Request Interceptor (Inject Auth Token)
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = getAuthToken()
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
-  },
-  (error) => Promise.reject(error)
-)
-
-// Response Interceptor
+// Browser JavaScript never reads or injects the upstream bearer. Authentication
+// is carried only by the server-owned HttpOnly session cookie to same-origin BFFs.
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401 && typeof window !== "undefined") {
-      // Optional: Handle redirect or broadcast session expiry
-      console.warn("[MoonClient] Session expired or unauthorized.")
+      window.dispatchEvent(new Event(AUTH_INVALIDATED_EVENT))
     }
     return Promise.reject(error)
   }

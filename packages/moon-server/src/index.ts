@@ -1,11 +1,21 @@
 export { NativeServer, publish, type MoonConfig } from './NativeServer.js'
-export { Controller, Get, Post, Put, Delete, registerController } from './router.js'
+export { FastifyAdapter, type FastifyAdapterConfig } from './fastify-adapter.js'
 export { defineRoute, type RouteContext, type RouteDefinition } from './route-builder.js'
 export { logger } from './logger.js'
 export { ExternalCache, createProxyHandler, type ProxyOptions } from './proxy.js'
 
+// Telemetry
+export {
+  bootstrapTelemetry,
+  shutdownTelemetry,
+  isTelemetryEnabled,
+  startDomainSpan,
+  withDomainSpan,
+  type TelemetryConfig,
+} from './telemetry.js'
+
 // Utilities
-export { parseBody, sendJson, parseUrl } from './utils/http.js'
+export { parseBody, sendJson, parseUrl, setCorsConfig, getCorsConfig, getSecurityHeaders } from './utils/http.js'
 export {
   verifyToken,
   issueJwt,
@@ -57,6 +67,15 @@ export {
 } from './handlers/meta.js'
 export { handleRest } from './handlers/rest.js'
 export { handleRpc } from './handlers/rpc.js'
+export {
+  defineProcedure,
+  getRegisteredProcedure,
+  getAllRegisteredProcedures,
+  isAllowedRpcMethod,
+  validateRpcMethod,
+  resolveRpcHandler,
+  type RpcProcedure,
+} from './rpc-registry.js'
 export {
   handleSSE,
   broadcast,

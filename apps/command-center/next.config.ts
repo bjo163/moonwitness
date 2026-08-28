@@ -1,5 +1,7 @@
 import type { NextConfig } from "next"
 import path from "path"
+// @ts-ignore
+import webpack from "webpack"
 
 if (!process.env.NODE_OPTIONS?.includes("--no-deprecation")) {
   process.env.NODE_OPTIONS = `${process.env.NODE_OPTIONS || ""} --no-deprecation`.trim()
@@ -16,6 +18,7 @@ const nextConfig: NextConfig = {
     "@moon/compute",
     "@moon/witness",
     "@moon/time",
+    "@moon/protocol",
   ],
   images: {
     formats: ["image/avif", "image/webp"],
@@ -44,6 +47,22 @@ const nextConfig: NextConfig = {
       "oracledb",
       "mariadb/callback"
     )
+
+    config.plugins.push(
+      new webpack.NormalModuleReplacementPlugin(
+        /^(?:\.\/|\.\.\/).*\.js$/,
+        (resource: any) => {
+          const fs = require("fs")
+          const path = require("path")
+          const context = resource.context || path.dirname(resource.resource || "")
+          const tsPath = path.join(context, resource.request.slice(0, -3) + ".ts")
+          if (fs.existsSync(tsPath)) {
+            resource.request = resource.request.replace(/\.js$/, ".ts")
+          }
+        }
+      )
+    )
+
     return config
   },
   turbopack: {

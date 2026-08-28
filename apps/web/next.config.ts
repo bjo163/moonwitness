@@ -1,6 +1,8 @@
 import type { NextConfig } from "next"
 import path from "path"
 import withSerwistInit from "@serwist/next"
+// @ts-ignore
+import webpack from "webpack"
 
 if (process.env.WEB_PORT) {
   process.env.PORT = process.env.WEB_PORT
@@ -16,7 +18,7 @@ const withSerwist = withSerwistInit({
 })
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@workspace/ui", "@moon/compute", "@moon/time"],
+  transpilePackages: ["@workspace/ui", "@moon/compute", "@moon/time", "@moon/protocol"],
 
   images: {
     formats: ["image/avif", "image/webp"],
@@ -59,6 +61,22 @@ const nextConfig: NextConfig = {
       "oracledb",
       "mariadb/callback"
     )
+
+    config.plugins.push(
+      new webpack.NormalModuleReplacementPlugin(
+        /^(?:\.\/|\.\.\/).*\.js$/,
+        (resource: any) => {
+          const fs = require("fs")
+          const path = require("path")
+          const context = resource.context || path.dirname(resource.resource || "")
+          const tsPath = path.join(context, resource.request.slice(0, -3) + ".ts")
+          if (fs.existsSync(tsPath)) {
+            resource.request = resource.request.replace(/\.js$/, ".ts")
+          }
+        }
+      )
+    )
+
     return config
   },
   turbopack: {

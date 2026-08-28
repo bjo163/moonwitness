@@ -26,7 +26,6 @@ export const ROUTE_MAP: Record<string, ComponentType<any>> = {
   "knowledge/kamus-akar-kata": Views.KamusAkarKataView,
   "knowledge/kalkulator-zakat": Views.KalkulatorZakatView,
   "knowledge/adhkar": Views.AdhkarCommandView,
-  "knowledge/universal-reader": Views.UniversalReaderView,
 
   // Astronomy
   "astronomy/divine-astronomy": Views.DivineAstronomyView,

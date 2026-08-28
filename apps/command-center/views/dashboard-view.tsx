@@ -20,7 +20,31 @@ import {
   SpiritualReportWidget,
 } from "@/components/dashboard/dashboard-widgets"
 
-type DashboardData = any
+type DashboardResponse = {
+  success: boolean
+  data: {
+    missionStatus: Record<string, any> | null
+    todayMission: any[] | null
+    todayPrayer: any[] | null
+    aiBriefing: any[] | null
+    knowledgeFeed: any[] | null
+    activeProjects: any[] | null
+    tasksOverview: any | null
+    moonObservatory: Record<string, any> | null
+    globalMonitoring: any[] | null
+  }
+}
+
+type DashboardData = DashboardResponse["data"]
+
+type MoonData = {
+  phase: string
+  illumination: string
+  azimuth: string
+  altitude: string
+  distance: string
+  visibility: string
+}
 
 export function DashboardView() {
   const [data, setData] = useState<DashboardData | null>(null)
@@ -29,10 +53,9 @@ export function DashboardView() {
   useEffect(() => {
     async function loadDashboard() {
       try {
-        const response = await apiClient.get<{
-          success: boolean
-          data: DashboardData
-        }>("/api/command-center/dashboard")
+        const response = await apiClient.get<DashboardResponse>(
+          "/api/command-center/dashboard"
+        )
         if (response.data?.success) {
           setData(response.data.data)
         }
@@ -58,6 +81,21 @@ export function DashboardView() {
     )
   }
 
+  const missions = data.todayMission ?? []
+  const prayers = data.todayPrayer ?? []
+  const briefings = data.aiBriefing ?? []
+  const moon = (data.moonObservatory ?? {
+    phase: "",
+    illumination: "",
+    azimuth: "",
+    altitude: "",
+    distance: "",
+    visibility: "",
+  }) as MoonData
+  const feed = data.knowledgeFeed ?? []
+  const projects = data.activeProjects ?? []
+  const tasks = data.tasksOverview ?? {}
+
   return (
     <>
       {/* 
@@ -69,25 +107,25 @@ export function DashboardView() {
         {/* Main Center Column (xl:col-span-8) */}
         <main className="space-y-6 xl:col-span-8">
           {/* Row 1: Hero Banner */}
-          <HeroBanner profile={data.missionStatus} />
+          <HeroBanner profile={data.missionStatus ?? undefined} />
 
           {/* Row 2: Daily Metrics (Mission, Prayer, AI, Moon) */}
           <DailyMetrics
-            missions={data.todayMission}
-            prayers={data.todayPrayer}
-            briefings={data.aiBriefing}
-            moon={data.moonObservatory}
+            missions={missions}
+            prayers={prayers}
+            briefings={briefings}
+            moon={moon}
           />
 
           {/* Row 3: Grid for Feed and Projects/Tasks */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
             <div className="lg:col-span-5">
-              <Feed feed={data.knowledgeFeed} />
+              <Feed feed={feed} />
             </div>
             <div className="lg:col-span-7">
               <ProjectsTasks
-                projects={data.activeProjects}
-                tasks={data.tasksOverview}
+                projects={projects}
+                tasks={tasks}
               />
             </div>
           </div>
@@ -108,9 +146,9 @@ export function DashboardView() {
         <aside className="xl:col-span-4">
           <div className="w-full shrink-0 xl:w-96">
             <RightSidebar
-              moon={data.moonObservatory}
-              monitoring={data.globalMonitoring}
-              status={data.missionStatus}
+              moon={moon}
+              monitoring={data.globalMonitoring ?? []}
+              status={data.missionStatus ?? undefined}
             />
           </div>
         </aside>

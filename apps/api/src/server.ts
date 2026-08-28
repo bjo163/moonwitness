@@ -148,9 +148,18 @@ globalRoutes.push({
 })
 
 const apiPort = Number(process.env.API_PORT || process.env.PORT) || 4000
+const demoSeedEnabled =
+  process.env.NODE_ENV !== "production" || process.env.MOON_ENABLE_DEMO_SEED === "true"
+
+const rawDatabaseUrl = process.env.DATABASE_URL
+if (!rawDatabaseUrl || rawDatabaseUrl.trim() === "") {
+  throw new Error(
+    "[moon.security] Fatal: DATABASE_URL is required. Set it in the environment before starting the API."
+  )
+}
 
 const server = new NativeServer({
-  database: process.env.DATABASE_URL || "postgres://localhost/moonwitness",
+  database: rawDatabaseUrl,
   jwtSecret: process.env.JWT_SECRET || "",
   port: apiPort,
   email: {
@@ -214,7 +223,15 @@ globalCronRunner.start()
 defineRoute({
   method: "POST",
   path: "/api/system/demo-seed",
+  auth: "admin",
   handler: async () => {
+    if (!demoSeedEnabled) {
+      throw Object.assign(new Error("Demo seeding is disabled in production"), {
+        statusCode: 403,
+        code: "DEMO_SEED_DISABLED",
+      })
+    }
+
     const loaders = [
       { name: "base", fn: loadBaseDemoData },
       { name: "performance", fn: loadPerformanceDemoData },
@@ -263,7 +280,8 @@ server.proxy(
     cache: "5m",
     query: ["start_date", "end_date"],
     apiKey: "DEMO_KEY",
-  }
+  },
+  "user"
 )
 
 server.proxy(
@@ -274,7 +292,8 @@ server.proxy(
     cache: "30m",
     query: ["startDate"],
     apiKey: "DEMO_KEY",
-  }
+  },
+  "user"
 )
 
 server.proxy(
@@ -284,7 +303,8 @@ server.proxy(
   {
     cache: "1h",
     apiKey: "DEMO_KEY",
-  }
+  },
+  "user"
 )
 
 // ── Weather (Open-Meteo) — lat & lng forwarded from query ─────────────────────
@@ -295,7 +315,8 @@ server.proxy(
   {
     cache: "10m",
     query: ["latitude", "longitude", "current_weather"],
-  }
+  },
+  "user"
 )
 
 // ── Geophysics ────────────────────────────────────────────────────────────────
@@ -305,7 +326,8 @@ server.proxy(
   "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson",
   {
     cache: "5m",
-  }
+  },
+  "user"
 )
 
 server.proxy(
@@ -314,7 +336,8 @@ server.proxy(
   "https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json",
   {
     cache: "10m",
-  }
+  },
+  "user"
 )
 
 // ── Space ──────────────────────────────────────────────────────────────────────
@@ -324,7 +347,8 @@ server.proxy(
   "https://api.wheretheiss.at/v1/satellites/25544",
   {
     cache: "10s",
-  }
+  },
+  "user"
 )
 
 server.proxy(
@@ -333,7 +357,8 @@ server.proxy(
   "https://api.rainviewer.com/public/weather-maps.json",
   {
     cache: "2m",
-  }
+  },
+  "user"
 )
 
 // ── Flights ───────────────────────────────────────────────────────────────────
@@ -343,7 +368,8 @@ server.proxy(
   "https://opensky-network.org/api/states/all?lamin=35&lomin=-10&lamax=60&lomax=30",
   {
     cache: "1m",
-  }
+  },
+  "user"
 )
 
 // ── Markets ───────────────────────────────────────────────────────────────────
@@ -354,7 +380,8 @@ server.proxy(
   {
     cache: "30s",
     query: ["symbol"],
-  }
+  },
+  "user"
 )
 
 // ── System Status (Internal) ──────────────────────────────────────────────────
@@ -364,7 +391,8 @@ server.proxy(
   `http://127.0.0.1:${apiPort}/db/status`,
   {
     cache: "30s",
-  }
+  },
+  "user"
 )
 
 server.proxy(
@@ -373,7 +401,8 @@ server.proxy(
   `http://127.0.0.1:${apiPort}/meta/models`,
   {
     cache: "30s",
-  }
+  },
+  "user"
 )
 
 // ── Trends (Google) ───────────────────────────────────────────────────────────
@@ -387,7 +416,8 @@ server.proxy(
       "User-Agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     },
-  }
+  },
+  "user"
 )
 
 server.start().then(async () => {

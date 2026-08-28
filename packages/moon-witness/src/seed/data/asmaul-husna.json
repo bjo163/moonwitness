@@ -1,0 +1,893 @@
+[
+  {
+    "number": 1,
+    "nameArabic": "الرَّحْمَنُ",
+    "nameLatin": "Ar-Rahman",
+    "translationId": "Yang Maha Pengasih",
+    "translationEn": "The Most Gracious",
+    "meaning": "Maha Pengasih kepada seluruh makhluk-Nya tanpa terkecuali.",
+    "quranReference": "QS 1:1, 55:1"
+  },
+  {
+    "number": 2,
+    "nameArabic": "الرَّحِيمُ",
+    "nameLatin": "Ar-Rahim",
+    "translationId": "Yang Maha Penyayang",
+    "translationEn": "The Most Merciful",
+    "meaning": "Maha Penyayang khususnya kepada hamba-hamba-Nya yang beriman.",
+    "quranReference": "QS 1:1, 2:163"
+  },
+  {
+    "number": 3,
+    "nameArabic": "الْمَلِكُ",
+    "nameLatin": "Al-Malik",
+    "translationId": "Yang Maha Merajai",
+    "translationEn": "The King",
+    "meaning": "Raja yang memiliki kerajaan langit dan bumi serta segala isinya.",
+    "quranReference": "QS 20:114, 59:23"
+  },
+  {
+    "number": 4,
+    "nameArabic": "الْقُدُّوسُ",
+    "nameLatin": "Al-Quddus",
+    "translationId": "Yang Maha Suci",
+    "translationEn": "The Most Holy",
+    "meaning": "Maha Suci dari segala kekurangan dan kelemahan.",
+    "quranReference": "QS 59:23, 62:1"
+  },
+  {
+    "number": 5,
+    "nameArabic": "السَّلَامُ",
+    "nameLatin": "As-Salam",
+    "translationId": "Yang Maha Memberi Keselamatan",
+    "translationEn": "The Source of Peace",
+    "meaning": "Yang memberi keselamatan dan kesejahteraan kepada makhluk-Nya.",
+    "quranReference": "QS 59:23"
+  },
+  {
+    "number": 6,
+    "nameArabic": "الْمُؤْمِنُ",
+    "nameLatin": "Al-Mu'min",
+    "translationId": "Yang Maha Memberi Keamanan",
+    "translationEn": "The Guardian of Faith",
+    "meaning": "Yang memberi rasa aman dan perlindungan kepada seluruh makhluk.",
+    "quranReference": "QS 59:23"
+  },
+  {
+    "number": 7,
+    "nameArabic": "الْمُهَيْمِنُ",
+    "nameLatin": "Al-Muhaymin",
+    "translationId": "Yang Maha Memelihara",
+    "translationEn": "The Protector",
+    "meaning": "Yang Maha Berkuasa dan mengawasi segala sesuatu.",
+    "quranReference": "QS 59:23"
+  },
+  {
+    "number": 8,
+    "nameArabic": "الْعَزِيزُ",
+    "nameLatin": "Al-Aziz",
+    "translationId": "Yang Maha Perkasa",
+    "translationEn": "The Almighty",
+    "meaning": "Yang Maha Perkasa, tidak ada yang dapat mengalahkan-Nya.",
+    "quranReference": "QS 3:6, 59:23"
+  },
+  {
+    "number": 9,
+    "nameArabic": "الْجَبَّارُ",
+    "nameLatin": "Al-Jabbar",
+    "translationId": "Yang Maha Memaksa",
+    "translationEn": "The Compeller",
+    "meaning": "Yang memaksa kehendak-Nya atas segala sesuatu.",
+    "quranReference": "QS 59:23"
+  },
+  {
+    "number": 10,
+    "nameArabic": "الْمُتَكَبِّرُ",
+    "nameLatin": "Al-Mutakabbir",
+    "translationId": "Yang Maha Memiliki Kebesaran",
+    "translationEn": "The Greatest",
+    "meaning": "Yang memiliki segala keagungan dan kebesaran.",
+    "quranReference": "QS 59:23"
+  },
+  {
+    "number": 11,
+    "nameArabic": "الْخَالِقُ",
+    "nameLatin": "Al-Khaliq",
+    "translationId": "Yang Maha Pencipta",
+    "translationEn": "The Creator",
+    "meaning": "Yang menciptakan segala sesuatu dari tiada menjadi ada.",
+    "quranReference": "QS 6:102, 13:16, 59:24"
+  },
+  {
+    "number": 12,
+    "nameArabic": "الْبَارِئُ",
+    "nameLatin": "Al-Bari'",
+    "translationId": "Yang Maha Mengadakan",
+    "translationEn": "The Maker of Order",
+    "meaning": "Yang menciptakan makhluk-Nya tanpa contoh sebelumnya.",
+    "quranReference": "QS 2:54, 59:24"
+  },
+  {
+    "number": 13,
+    "nameArabic": "الْمُصَوِّرُ",
+    "nameLatin": "Al-Musawwir",
+    "translationId": "Yang Maha Membentuk Rupa",
+    "translationEn": "The Fashioner",
+    "meaning": "Yang membentuk rupa dan wujud segala ciptaan-Nya.",
+    "quranReference": "QS 59:24"
+  },
+  {
+    "number": 14,
+    "nameArabic": "الْغَفَّارُ",
+    "nameLatin": "Al-Ghaffar",
+    "translationId": "Yang Maha Pengampun",
+    "translationEn": "The All-Forgiving",
+    "meaning": "Yang mengampuni dosa-dosa hamba-Nya yang bertaubat.",
+    "quranReference": "QS 20:82, 38:66, 71:10"
+  },
+  {
+    "number": 15,
+    "nameArabic": "الْقَهَّارُ",
+    "nameLatin": "Al-Qahhar",
+    "translationId": "Yang Maha Menundukkan",
+    "translationEn": "The Subduer",
+    "meaning": "Yang Maha Menundukkan dan mengalahkan segala sesuatu.",
+    "quranReference": "QS 12:39, 13:16, 38:65"
+  },
+  {
+    "number": 16,
+    "nameArabic": "الْوَهَّابُ",
+    "nameLatin": "Al-Wahhab",
+    "translationId": "Yang Maha Pemberi Karunia",
+    "translationEn": "The Bestower",
+    "meaning": "Yang memberi tanpa batas dan tanpa mengharap balasan.",
+    "quranReference": "QS 3:8, 38:9, 38:35"
+  },
+  {
+    "number": 17,
+    "nameArabic": "الرَّزَّاقُ",
+    "nameLatin": "Ar-Razzaq",
+    "translationId": "Yang Maha Pemberi Rezeki",
+    "translationEn": "The Provider",
+    "meaning": "Yang memberi rezeki kepada seluruh makhluk-Nya.",
+    "quranReference": "QS 51:58"
+  },
+  {
+    "number": 18,
+    "nameArabic": "الْفَتَّاحُ",
+    "nameLatin": "Al-Fattah",
+    "translationId": "Yang Maha Pembuka",
+    "translationEn": "The Opener",
+    "meaning": "Yang membuka pintu rahmat dan memecahkan segala kesulitan.",
+    "quranReference": "QS 34:26"
+  },
+  {
+    "number": 19,
+    "nameArabic": "الْعَلِيمُ",
+    "nameLatin": "Al-Alim",
+    "translationId": "Yang Maha Mengetahui",
+    "translationEn": "The All-Knowing",
+    "meaning": "Yang mengetahui segala sesuatu yang tersembunyi dan yang nyata.",
+    "quranReference": "QS 2:29, 6:13, 34:26"
+  },
+  {
+    "number": 20,
+    "nameArabic": "الْقَابِضُ",
+    "nameLatin": "Al-Qabidh",
+    "translationId": "Yang Maha Menyempitkan",
+    "translationEn": "The Constrictor",
+    "meaning": "Yang menyempitkan rezeki bagi siapa yang dikehendaki-Nya.",
+    "quranReference": "QS 2:245"
+  },
+  {
+    "number": 21,
+    "nameArabic": "الْبَاسِطُ",
+    "nameLatin": "Al-Basit",
+    "translationId": "Yang Maha Melapangkan",
+    "translationEn": "The Expander",
+    "meaning": "Yang melapangkan rezeki bagi siapa yang dikehendaki-Nya.",
+    "quranReference": "QS 2:245"
+  },
+  {
+    "number": 22,
+    "nameArabic": "الْخَافِضُ",
+    "nameLatin": "Al-Khafidh",
+    "translationId": "Yang Maha Merendahkan",
+    "translationEn": "The Abaser",
+    "meaning": "Yang merendahkan orang-orang yang sombong dan durhaka.",
+    "quranReference": "QS 56:3"
+  },
+  {
+    "number": 23,
+    "nameArabic": "الرَّافِعُ",
+    "nameLatin": "Ar-Rafi'",
+    "translationId": "Yang Maha Meninggikan",
+    "translationEn": "The Exalter",
+    "meaning": "Yang mengangkat derajat hamba-hamba-Nya yang beriman.",
+    "quranReference": "QS 56:3, 6:83"
+  },
+  {
+    "number": 24,
+    "nameArabic": "الْمُعِزُّ",
+    "nameLatin": "Al-Mu'izz",
+    "translationId": "Yang Maha Memuliakan",
+    "translationEn": "The Bestower of Honour",
+    "meaning": "Yang memberikan kemuliaan dan kekuasaan kepada siapa yang dikehendaki.",
+    "quranReference": "QS 3:26"
+  },
+  {
+    "number": 25,
+    "nameArabic": "الْمُذِلُّ",
+    "nameLatin": "Al-Mudzill",
+    "translationId": "Yang Maha Menghinakan",
+    "translationEn": "The Humiliator",
+    "meaning": "Yang menghinakan orang yang dikehendaki-Nya karena hikmah-Nya.",
+    "quranReference": "QS 3:26"
+  },
+  {
+    "number": 26,
+    "nameArabic": "السَّمِيعُ",
+    "nameLatin": "As-Sami'",
+    "translationId": "Yang Maha Mendengar",
+    "translationEn": "The All-Hearing",
+    "meaning": "Yang Maha Mendengar semua suara dan doa.",
+    "quranReference": "QS 2:127, 17:1"
+  },
+  {
+    "number": 27,
+    "nameArabic": "الْبَصِيرُ",
+    "nameLatin": "Al-Basir",
+    "translationId": "Yang Maha Melihat",
+    "translationEn": "The All-Seeing",
+    "meaning": "Yang Maha Melihat segala sesuatu yang tersembunyi dan nyata.",
+    "quranReference": "QS 17:1, 42:11"
+  },
+  {
+    "number": 28,
+    "nameArabic": "الْحَكَمُ",
+    "nameLatin": "Al-Hakam",
+    "translationId": "Yang Maha Memutuskan Hukum",
+    "translationEn": "The Judge",
+    "meaning": "Yang Maha Menghakimi dengan adil di antara makhluk-Nya.",
+    "quranReference": "QS 6:114, 40:48"
+  },
+  {
+    "number": 29,
+    "nameArabic": "الْعَدْلُ",
+    "nameLatin": "Al-'Adl",
+    "translationId": "Yang Maha Adil",
+    "translationEn": "The Just",
+    "meaning": "Yang Maha Adil, tidak pernah menzalimi siapa pun.",
+    "quranReference": "QS 6:115"
+  },
+  {
+    "number": 30,
+    "nameArabic": "اللَّطِيفُ",
+    "nameLatin": "Al-Latif",
+    "translationId": "Yang Maha Lembut",
+    "translationEn": "The Subtle One",
+    "meaning": "Yang Maha Lembut terhadap hamba-hamba-Nya.",
+    "quranReference": "QS 6:103, 22:63, 67:14"
+  },
+  {
+    "number": 31,
+    "nameArabic": "الْخَبِيرُ",
+    "nameLatin": "Al-Khabir",
+    "translationId": "Yang Maha Mengenal",
+    "translationEn": "The All-Aware",
+    "meaning": "Yang Maha Mengetahui segala sesuatu sampai yang terkecil.",
+    "quranReference": "QS 6:18, 17:30"
+  },
+  {
+    "number": 32,
+    "nameArabic": "الْحَلِيمُ",
+    "nameLatin": "Al-Halim",
+    "translationId": "Yang Maha Penyantun",
+    "translationEn": "The Forbearing",
+    "meaning": "Yang Maha Penyantun, tidak segera menghukum.",
+    "quranReference": "QS 2:225, 2:235, 17:44"
+  },
+  {
+    "number": 33,
+    "nameArabic": "الْعَظِيمُ",
+    "nameLatin": "Al-Azim",
+    "translationId": "Yang Maha Agung",
+    "translationEn": "The Magnificent",
+    "meaning": "Yang Maha Agung dalam zat, sifat, dan perbuatan-Nya.",
+    "quranReference": "QS 2:255, 42:4, 56:74"
+  },
+  {
+    "number": 34,
+    "nameArabic": "الْغَفُورُ",
+    "nameLatin": "Al-Ghafur",
+    "translationId": "Yang Maha Pengampun",
+    "translationEn": "The Forgiving",
+    "meaning": "Yang mengampuni dosa hamba-hamba-Nya yang bertaubat.",
+    "quranReference": "QS 2:173, 8:69, 16:110"
+  },
+  {
+    "number": 35,
+    "nameArabic": "الشَّكُورُ",
+    "nameLatin": "Ash-Shakur",
+    "translationId": "Yang Maha Pembalas Budi",
+    "translationEn": "The Most Appreciative",
+    "meaning": "Yang Maha Mensyukuri dan membalas kebaikan hamba-Nya.",
+    "quranReference": "QS 35:30, 35:34, 42:23"
+  },
+  {
+    "number": 36,
+    "nameArabic": "الْعَلِيُّ",
+    "nameLatin": "Al-Aliyy",
+    "translationId": "Yang Maha Tinggi",
+    "translationEn": "The Most High",
+    "meaning": "Yang Maha Tinggi di atas segala sesuatu.",
+    "quranReference": "QS 2:255, 4:34, 42:4"
+  },
+  {
+    "number": 37,
+    "nameArabic": "الْكَبِيرُ",
+    "nameLatin": "Al-Kabir",
+    "translationId": "Yang Maha Besar",
+    "translationEn": "The Most Great",
+    "meaning": "Yang Maha Besar dalam zat, sifat, dan af'al-Nya.",
+    "quranReference": "QS 4:34, 13:9, 22:62"
+  },
+  {
+    "number": 38,
+    "nameArabic": "الْحَفِيظُ",
+    "nameLatin": "Al-Hafiz",
+    "translationId": "Yang Maha Memelihara",
+    "translationEn": "The Preserver",
+    "meaning": "Yang memelihara dan menjaga segala sesuatu.",
+    "quranReference": "QS 11:57, 34:21, 42:6"
+  },
+  {
+    "number": 39,
+    "nameArabic": "الْمُقِيتُ",
+    "nameLatin": "Al-Muqit",
+    "translationId": "Yang Maha Pemberi Kecukupan",
+    "translationEn": "The Nourisher",
+    "meaning": "Yang memberi makan dan memelihara seluruh makhluk.",
+    "quranReference": "QS 4:85"
+  },
+  {
+    "number": 40,
+    "nameArabic": "الْحَسِيبُ",
+    "nameLatin": "Al-Hasib",
+    "translationId": "Yang Maha Menghitung",
+    "translationEn": "The Reckoner",
+    "meaning": "Yang Maha Memperhitungkan segala amal perbuatan.",
+    "quranReference": "QS 4:6, 4:86, 33:39"
+  },
+  {
+    "number": 41,
+    "nameArabic": "الْجَلِيلُ",
+    "nameLatin": "Al-Jalil",
+    "translationId": "Yang Maha Mulia",
+    "translationEn": "The Majestic",
+    "meaning": "Yang memiliki keluhuran dan keagungan yang tiada tara.",
+    "quranReference": "QS 55:27, 55:78"
+  },
+  {
+    "number": 42,
+    "nameArabic": "الْكَرِيمُ",
+    "nameLatin": "Al-Karim",
+    "translationId": "Yang Maha Mulia",
+    "translationEn": "The Most Generous",
+    "meaning": "Yang Maha Murah dan dermawan kepada hamba-hamba-Nya.",
+    "quranReference": "QS 23:116, 27:40, 82:6"
+  },
+  {
+    "number": 43,
+    "nameArabic": "الرَّقِيبُ",
+    "nameLatin": "Ar-Raqib",
+    "translationId": "Yang Maha Mengawasi",
+    "translationEn": "The Watchful",
+    "meaning": "Yang mengawasi dan memperhatikan segala sesuatu.",
+    "quranReference": "QS 4:1, 5:117"
+  },
+  {
+    "number": 44,
+    "nameArabic": "الْمُجِيبُ",
+    "nameLatin": "Al-Mujib",
+    "translationId": "Yang Maha Mengabulkan",
+    "translationEn": "The Responsive",
+    "meaning": "Yang mengabulkan doa dan permohonan hamba-Nya.",
+    "quranReference": "QS 11:61"
+  },
+  {
+    "number": 45,
+    "nameArabic": "الْوَاسِعُ",
+    "nameLatin": "Al-Wasi'",
+    "translationId": "Yang Maha Luas",
+    "translationEn": "The All-Encompassing",
+    "meaning": "Yang Maha Luas rahmat dan ilmu-Nya.",
+    "quranReference": "QS 2:115, 2:247, 3:73"
+  },
+  {
+    "number": 46,
+    "nameArabic": "الْحَكِيمُ",
+    "nameLatin": "Al-Hakim",
+    "translationId": "Yang Maha Bijaksana",
+    "translationEn": "The Perfectly Wise",
+    "meaning": "Yang Maha Bijaksana dalam segala ketentuan-Nya.",
+    "quranReference": "QS 2:32, 2:129, 31:27"
+  },
+  {
+    "number": 47,
+    "nameArabic": "الْوَدُودُ",
+    "nameLatin": "Al-Wadud",
+    "translationId": "Yang Maha Mencintai",
+    "translationEn": "The Most Loving",
+    "meaning": "Yang mencintai hamba-hamba-Nya yang shalih.",
+    "quranReference": "QS 11:90, 85:14"
+  },
+  {
+    "number": 48,
+    "nameArabic": "الْمَجِيدُ",
+    "nameLatin": "Al-Majid",
+    "translationId": "Yang Maha Mulia",
+    "translationEn": "The Most Glorious",
+    "meaning": "Yang Maha Mulia dan agung.",
+    "quranReference": "QS 11:73, 85:15"
+  },
+  {
+    "number": 49,
+    "nameArabic": "الْبَاعِثُ",
+    "nameLatin": "Al-Ba'ith",
+    "translationId": "Yang Maha Membangkitkan",
+    "translationEn": "The Resurrector",
+    "meaning": "Yang membangkitkan manusia dari kubur pada hari kiamat.",
+    "quranReference": "QS 22:7"
+  },
+  {
+    "number": 50,
+    "nameArabic": "الشَّهِيدُ",
+    "nameLatin": "Ash-Shahid",
+    "translationId": "Yang Maha Menyaksikan",
+    "translationEn": "The Witness",
+    "meaning": "Yang menjadi saksi atas segala sesuatu.",
+    "quranReference": "QS 3:98, 4:79, 5:117"
+  },
+  {
+    "number": 51,
+    "nameArabic": "الْحَقُّ",
+    "nameLatin": "Al-Haqq",
+    "translationId": "Yang Maha Benar",
+    "translationEn": "The Truth",
+    "meaning": "Yang benar dalam zat, sifat, perbuatan, dan firman-Nya.",
+    "quranReference": "QS 6:62, 22:6, 23:116"
+  },
+  {
+    "number": 52,
+    "nameArabic": "الْوَكِيلُ",
+    "nameLatin": "Al-Wakil",
+    "translationId": "Yang Maha Memelihara",
+    "translationEn": "The Trustee",
+    "meaning": "Yang menjadi pelindung dan penolong bagi hamba-Nya.",
+    "quranReference": "QS 3:173, 4:81, 33:3"
+  },
+  {
+    "number": 53,
+    "nameArabic": "الْقَوِيُّ",
+    "nameLatin": "Al-Qawiyy",
+    "translationId": "Yang Maha Kuat",
+    "translationEn": "The Most Strong",
+    "meaning": "Yang memiliki kekuatan yang sempurna.",
+    "quranReference": "QS 11:66, 22:40, 42:19"
+  },
+  {
+    "number": 54,
+    "nameArabic": "الْمَتِينُ",
+    "nameLatin": "Al-Matin",
+    "translationId": "Yang Maha Kukuh",
+    "translationEn": "The Firm",
+    "meaning": "Yang Maha Kokoh dan tidak goyah.",
+    "quranReference": "QS 51:58"
+  },
+  {
+    "number": 55,
+    "nameArabic": "الْوَلِيُّ",
+    "nameLatin": "Al-Waliyy",
+    "translationId": "Yang Maha Melindungi",
+    "translationEn": "The Protecting Friend",
+    "meaning": "Yang menjadi penolong dan pelindung bagi orang beriman.",
+    "quranReference": "QS 2:257, 3:68, 42:9"
+  },
+  {
+    "number": 56,
+    "nameArabic": "الْحَمِيدُ",
+    "nameLatin": "Al-Hamid",
+    "translationId": "Yang Maha Terpuji",
+    "translationEn": "The Praiseworthy",
+    "meaning": "Yang Maha Terpuji dalam segala perbuatan-Nya.",
+    "quranReference": "QS 2:267, 14:1, 31:12"
+  },
+  {
+    "number": 57,
+    "nameArabic": "الْمُحْصِي",
+    "nameLatin": "Al-Muhsi",
+    "translationId": "Yang Maha Menghitung",
+    "translationEn": "The Appraiser",
+    "meaning": "Yang menghitung semua amal perbuatan makhluk-Nya.",
+    "quranReference": "QS 19:94, 36:12, 72:28"
+  },
+  {
+    "number": 58,
+    "nameArabic": "الْمُبْدِئُ",
+    "nameLatin": "Al-Mubdi'",
+    "translationId": "Yang Maha Memulai",
+    "translationEn": "The Originator",
+    "meaning": "Yang memulai penciptaan dari tiada.",
+    "quranReference": "QS 10:4, 10:34, 27:64"
+  },
+  {
+    "number": 59,
+    "nameArabic": "الْمُعِيدُ",
+    "nameLatin": "Al-Mu'id",
+    "translationId": "Yang Maha Mengembalikan",
+    "translationEn": "The Restorer",
+    "meaning": "Yang mengembalikan makhluk setelah kematian.",
+    "quranReference": "QS 10:4, 10:34, 27:64"
+  },
+  {
+    "number": 60,
+    "nameArabic": "الْمُحْيِي",
+    "nameLatin": "Al-Muhyi",
+    "translationId": "Yang Maha Menghidupkan",
+    "translationEn": "The Giver of Life",
+    "meaning": "Yang memberi kehidupan kepada segala yang mati.",
+    "quranReference": "QS 2:258, 3:156, 7:158"
+  },
+  {
+    "number": 61,
+    "nameArabic": "الْمُمِيتُ",
+    "nameLatin": "Al-Mumit",
+    "translationId": "Yang Maha Mematikan",
+    "translationEn": "The Taker of Life",
+    "meaning": "Yang mencabut nyawa dan mematikan makhluk.",
+    "quranReference": "QS 2:258, 3:156, 7:158"
+  },
+  {
+    "number": 62,
+    "nameArabic": "الْحَيُّ",
+    "nameLatin": "Al-Hayy",
+    "translationId": "Yang Maha Hidup",
+    "translationEn": "The Ever-Living",
+    "meaning": "Yang Maha Hidup dan tidak pernah mati.",
+    "quranReference": "QS 2:255, 3:2, 20:111"
+  },
+  {
+    "number": 63,
+    "nameArabic": "الْقَيُّومُ",
+    "nameLatin": "Al-Qayyum",
+    "translationId": "Yang Maha Berdiri Sendiri",
+    "translationEn": "The Self-Subsisting",
+    "meaning": "Yang berdiri sendiri dan tidak membutuhkan siapa pun.",
+    "quranReference": "QS 2:255, 3:2, 20:111"
+  },
+  {
+    "number": 64,
+    "nameArabic": "الْوَاجِدُ",
+    "nameLatin": "Al-Wajid",
+    "translationId": "Yang Maha Menemukan",
+    "translationEn": "The Finder",
+    "meaning": "Yang menemukan segala sesuatu dan tidak ada yang luput dari-Nya.",
+    "quranReference": "QS 93:6-8"
+  },
+  {
+    "number": 65,
+    "nameArabic": "الْمَاجِدُ",
+    "nameLatin": "Al-Majid",
+    "translationId": "Yang Maha Mulia",
+    "translationEn": "The Glorious",
+    "meaning": "Yang Maha Mulia dan memiliki kemuliaan yang sempurna.",
+    "quranReference": "QS 11:73"
+  },
+  {
+    "number": 66,
+    "nameArabic": "الْوَاحِدُ",
+    "nameLatin": "Al-Wahid",
+    "translationId": "Yang Maha Esa",
+    "translationEn": "The One",
+    "meaning": "Yang Maha Esa dan tiada sekutu bagi-Nya.",
+    "quranReference": "QS 2:133, 5:73, 14:52"
+  },
+  {
+    "number": 67,
+    "nameArabic": "الصَّمَدُ",
+    "nameLatin": "As-Samad",
+    "translationId": "Yang Maha Dibutuhkan",
+    "translationEn": "The Eternal",
+    "meaning": "Tempat bergantung segala sesuatu.",
+    "quranReference": "QS 112:2"
+  },
+  {
+    "number": 68,
+    "nameArabic": "الْقَادِرُ",
+    "nameLatin": "Al-Qadir",
+    "translationId": "Yang Maha Kuasa",
+    "translationEn": "The All-Powerful",
+    "meaning": "Yang Maha Kuasa atas segala sesuatu.",
+    "quranReference": "QS 6:65, 17:99, 36:81"
+  },
+  {
+    "number": 69,
+    "nameArabic": "الْمُقْتَدِرُ",
+    "nameLatin": "Al-Muqtadir",
+    "translationId": "Yang Maha Menentukan",
+    "translationEn": "The Creator of All Power",
+    "meaning": "Yang menentukan segala sesuatu dengan kekuasaan-Nya.",
+    "quranReference": "QS 18:45, 54:42, 54:55"
+  },
+  {
+    "number": 70,
+    "nameArabic": "الْمُقَدِّمُ",
+    "nameLatin": "Al-Muqaddim",
+    "translationId": "Yang Maha Mendahulukan",
+    "translationEn": "The Expediter",
+    "meaning": "Yang mendahulukan segala sesuatu sesuai hikmah-Nya.",
+    "quranReference": "QS 50:28"
+  },
+  {
+    "number": 71,
+    "nameArabic": "الْمُؤَخِّرُ",
+    "nameLatin": "Al-Mu'akhkhir",
+    "translationId": "Yang Maha Mengakhirkan",
+    "translationEn": "The Delayer",
+    "meaning": "Yang mengakhirkan segala sesuatu sesuai hikmah-Nya.",
+    "quranReference": "QS 14:42, 71:4"
+  },
+  {
+    "number": 72,
+    "nameArabic": "الأَوَّلُ",
+    "nameLatin": "Al-Awwal",
+    "translationId": "Yang Maha Awal",
+    "translationEn": "The First",
+    "meaning": "Yang pertama, tiada sesuatu sebelum-Nya.",
+    "quranReference": "QS 57:3"
+  },
+  {
+    "number": 73,
+    "nameArabic": "الآخِرُ",
+    "nameLatin": "Al-Akhir",
+    "translationId": "Yang Maha Akhir",
+    "translationEn": "The Last",
+    "meaning": "Yang terakhir, tiada sesuatu setelah-Nya.",
+    "quranReference": "QS 57:3"
+  },
+  {
+    "number": 74,
+    "nameArabic": "الظَّاهِرُ",
+    "nameLatin": "Az-Zahir",
+    "translationId": "Yang Maha Nyata",
+    "translationEn": "The Manifest",
+    "meaning": "Yang nyata keberadaan-Nya melalui tanda-tanda-Nya.",
+    "quranReference": "QS 57:3"
+  },
+  {
+    "number": 75,
+    "nameArabic": "الْبَاطِنُ",
+    "nameLatin": "Al-Batin",
+    "translationId": "Yang Maha Tersembunyi",
+    "translationEn": "The Hidden",
+    "meaning": "Yang tersembunyi dari penglihatan makhluk.",
+    "quranReference": "QS 57:3"
+  },
+  {
+    "number": 76,
+    "nameArabic": "الْوَالِي",
+    "nameLatin": "Al-Wali",
+    "translationId": "Yang Maha Mengurus",
+    "translationEn": "The Governor",
+    "meaning": "Yang mengurus dan menguasai segala urusan makhluk-Nya.",
+    "quranReference": "QS 13:11"
+  },
+  {
+    "number": 77,
+    "nameArabic": "الْمُتَعَالِ",
+    "nameLatin": "Al-Muta'ali",
+    "translationId": "Yang Maha Tinggi",
+    "translationEn": "The Most Exalted",
+    "meaning": "Yang Maha Tinggi dalam zat, sifat, dan kekuasaan-Nya.",
+    "quranReference": "QS 13:9"
+  },
+  {
+    "number": 78,
+    "nameArabic": "الْبَرُّ",
+    "nameLatin": "Al-Barr",
+    "translationId": "Yang Maha Baik",
+    "translationEn": "The Source of Goodness",
+    "meaning": "Yang Maha Baik dan Dermawan kepada makhluk-Nya.",
+    "quranReference": "QS 52:28"
+  },
+  {
+    "number": 79,
+    "nameArabic": "التَّوَّابُ",
+    "nameLatin": "At-Tawwab",
+    "translationId": "Yang Maha Penerima Taubat",
+    "translationEn": "The Acceptor of Repentance",
+    "meaning": "Yang menerima taubat hamba-Nya.",
+    "quranReference": "QS 2:37, 2:128, 4:64"
+  },
+  {
+    "number": 80,
+    "nameArabic": "الْمُنْتَقِمُ",
+    "nameLatin": "Al-Muntaqim",
+    "translationId": "Yang Maha Penyiksa",
+    "translationEn": "The Avenger",
+    "meaning": "Yang membalas kejahatan dengan hukuman yang setimpal.",
+    "quranReference": "QS 32:22, 43:41, 44:16"
+  },
+  {
+    "number": 81,
+    "nameArabic": "الْعَفُوُّ",
+    "nameLatin": "Al-Afuww",
+    "translationId": "Yang Maha Pemaaf",
+    "translationEn": "The Pardoner",
+    "meaning": "Yang Maha Pemaaf, menghapus dosa hamba-Nya.",
+    "quranReference": "QS 4:43, 4:99, 4:149"
+  },
+  {
+    "number": 82,
+    "nameArabic": "الرَّؤُوفُ",
+    "nameLatin": "Ar-Ra'uf",
+    "translationId": "Yang Maha Pengasih",
+    "translationEn": "The Compassionate",
+    "meaning": "Yang memiliki kasih sayang dan kelembutan kepada hamba-Nya.",
+    "quranReference": "QS 2:207, 3:30, 9:117"
+  },
+  {
+    "number": 83,
+    "nameArabic": "مَالِكُ الْمُلْكِ",
+    "nameLatin": "Malik al-Mulk",
+    "translationId": "Yang Maha Pemilik Kerajaan",
+    "translationEn": "The Owner of Sovereignty",
+    "meaning": "Yang memiliki kerajaan langit dan bumi serta segala isinya.",
+    "quranReference": "QS 3:26"
+  },
+  {
+    "number": 84,
+    "nameArabic": "ذُو الْجَلَالِ وَالإِكْرَامِ",
+    "nameLatin": "Dzul Jalali wal Ikram",
+    "translationId": "Yang Memiliki Keagungan dan Kemuliaan",
+    "translationEn": "The Lord of Majesty and Generosity",
+    "meaning": "Yang memiliki keagungan dan kemuliaan yang sempurna.",
+    "quranReference": "QS 55:27, 55:78"
+  },
+  {
+    "number": 85,
+    "nameArabic": "الْمُقْسِطُ",
+    "nameLatin": "Al-Muqsit",
+    "translationId": "Yang Maha Mengumpulkan",
+    "translationEn": "The Equitable",
+    "meaning": "Yang Maha Adil dalam menghakimi.",
+    "quranReference": "QS 3:18, 21:47"
+  },
+  {
+    "number": 86,
+    "nameArabic": "الْجَامِعُ",
+    "nameLatin": "Al-Jami'",
+    "translationId": "Yang Maha Mengumpulkan",
+    "translationEn": "The Gatherer",
+    "meaning": "Yang mengumpulkan seluruh manusia pada hari kiamat.",
+    "quranReference": "QS 3:9, 4:140, 42:29"
+  },
+  {
+    "number": 87,
+    "nameArabic": "الْغَنِيُّ",
+    "nameLatin": "Al-Ghaniyy",
+    "translationId": "Yang Maha Kaya",
+    "translationEn": "The Self-Sufficient",
+    "meaning": "Yang Maha Kaya dan tidak membutuhkan siapa pun.",
+    "quranReference": "QS 2:263, 3:97, 47:38"
+  },
+  {
+    "number": 88,
+    "nameArabic": "الْمُغْنِي",
+    "nameLatin": "Al-Mughni",
+    "translationId": "Yang Maha Pemberi Kekayaan",
+    "translationEn": "The Enricher",
+    "meaning": "Yang memperkaya dan mencukupi kebutuhan makhluk-Nya.",
+    "quranReference": "QS 9:28, 93:8"
+  },
+  {
+    "number": 89,
+    "nameArabic": "الْمَانِعُ",
+    "nameLatin": "Al-Mani'",
+    "translationId": "Yang Maha Mencegah",
+    "translationEn": "The Preventer of Harm",
+    "meaning": "Yang menahan kebaikan dari siapa yang dikehendaki.",
+    "quranReference": "QS 23:88, 67:21"
+  },
+  {
+    "number": 90,
+    "nameArabic": "الضَّارُّ",
+    "nameLatin": "Ad-Darr",
+    "translationId": "Yang Maha Memberi Mudharat",
+    "translationEn": "The Distresser",
+    "meaning": "Yang memberi kemudaratan kepada siapa yang dikehendaki.",
+    "quranReference": "QS 6:17, 48:11"
+  },
+  {
+    "number": 91,
+    "nameArabic": "النَّافِعُ",
+    "nameLatin": "An-Nafi'",
+    "translationId": "Yang Maha Memberi Manfaat",
+    "translationEn": "The Propitious",
+    "meaning": "Yang memberi manfaat kepada siapa yang dikehendaki.",
+    "quranReference": "QS 30:37, 48:11"
+  },
+  {
+    "number": 92,
+    "nameArabic": "النُّورُ",
+    "nameLatin": "An-Nur",
+    "translationId": "Yang Maha Bercahaya",
+    "translationEn": "The Light",
+    "meaning": "Yang menerangi langit dan bumi dengan cahaya-Nya.",
+    "quranReference": "QS 24:35"
+  },
+  {
+    "number": 93,
+    "nameArabic": "الْهَادِي",
+    "nameLatin": "Al-Hadi",
+    "translationId": "Yang Maha Memberi Petunjuk",
+    "translationEn": "The Guide",
+    "meaning": "Yang memberi petunjuk kepada siapa yang dikehendaki.",
+    "quranReference": "QS 22:54, 25:31"
+  },
+  {
+    "number": 94,
+    "nameArabic": "الْبَدِيعُ",
+    "nameLatin": "Al-Badi'",
+    "translationId": "Yang Maha Pencipta yang Baru",
+    "translationEn": "The Originator",
+    "meaning": "Yang menciptakan sesuatu yang belum pernah ada sebelumnya.",
+    "quranReference": "QS 2:117, 6:101"
+  },
+  {
+    "number": 95,
+    "nameArabic": "الْبَاقِي",
+    "nameLatin": "Al-Baqi",
+    "translationId": "Yang Maha Kekal",
+    "translationEn": "The Everlasting",
+    "meaning": "Yang kekal abadi dan tidak pernah binasa.",
+    "quranReference": "QS 20:73, 55:27"
+  },
+  {
+    "number": 96,
+    "nameArabic": "الْوَارِثُ",
+    "nameLatin": "Al-Warith",
+    "translationId": "Yang Maha Mewarisi",
+    "translationEn": "The Inheritor",
+    "meaning": "Yang mewariskan segala sesuatu setelah kefanaan makhluk.",
+    "quranReference": "QS 15:23, 19:40"
+  },
+  {
+    "number": 97,
+    "nameArabic": "الرَّشِيدُ",
+    "nameLatin": "Ar-Rashid",
+    "translationId": "Yang Maha Pandai",
+    "translationEn": "The Guide to the Right Path",
+    "meaning": "Yang membimbing dan menunjukkan jalan yang benar.",
+    "quranReference": "QS 2:256, 11:87, 72:10"
+  },
+  {
+    "number": 98,
+    "nameArabic": "الصَّبُورُ",
+    "nameLatin": "As-Sabur",
+    "translationId": "Yang Maha Sabar",
+    "translationEn": "The Patient",
+    "meaning": "Yang Maha Sabar dan tidak tergesa-gesa dalam menghukum.",
+    "quranReference": "QS 2:153, 3:200"
+  },
+  {
+    "number": 99,
+    "nameArabic": "الأَحَدُ",
+    "nameLatin": "Al-Ahad",
+    "translationId": "Yang Maha Tunggal",
+    "translationEn": "The Unique",
+    "meaning": "Yang tiada sesuatu pun yang serupa dengan-Nya.",
+    "quranReference": "QS 112:1"
+  }
+]

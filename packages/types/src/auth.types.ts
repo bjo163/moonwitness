@@ -14,6 +14,9 @@ export interface UserProfile {
   level?: number
   clearanceLevel?: number
   badges?: string[]
+  phone?: string
+  lastLogin?: string
+  preferences?: string
 }
 
 export interface UserEntity {
@@ -25,6 +28,9 @@ export interface UserEntity {
   lastActive?: string
   team?: string
   createdAt?: string
+  phone?: string
+  lastLogin?: string
+  preferences?: string
 }
 
 export interface OperatorClearance {

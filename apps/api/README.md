@@ -21,8 +21,11 @@ The primary backend engine and real-time telemetry service for MoonWitness OS, p
 # Start API Service on Port 4000 with hot reload
 pnpm --filter api dev
 
-# Seed database and knowledge graph core
-pnpm db:seed
+# Full database setup: migrations + canonical seed + demo data
+pnpm db:install
+
+# Verify migrations and seed integrity
+pnpm db:verify
 ```
 
 ---

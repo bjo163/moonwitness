@@ -12,4 +12,4 @@ export default {
   description: 'Change Advisory Board governance, RFC review, and decision records',
   depends: ['base', 'project'],
   models: [CabChange, CabMeeting, CabDecision]
-}
+}

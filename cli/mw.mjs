@@ -140,37 +140,115 @@ function runDoctor() {
 }
 
 function runProdCheck() {
-  import('node:fs').then(({ existsSync }) => {
-    console.log('◈ RUNNING ENTERPRISE PRODUCTION PRE-FLIGHT INSPECTION...\n')
+  import('node:fs').then(({ existsSync, readFileSync, accessSync, constants }) => {
+    import('node:path').then(({ join }) => {
+      import('node:child_process').then(({ execSync }) => {
+        console.log('◈ RUNNING ENTERPRISE PRODUCTION PRE-FLIGHT INSPECTION...\n')
 
-    const checks = [
-      { name: 'Multi-Stage Dockerfile', path: './Dockerfile' },
-      { name: 'Docker Compose Stack', path: './docker-compose.yml' },
-      { name: 'PM2 Cluster Config', path: './ecosystem.config.cjs' },
-      { name: 'Production Env Blueprint', path: './.env.production.example' },
-      { name: 'Nginx Reverse Proxy Config', path: './deploy/nginx/moonwitness.conf' },
-      { name: 'Automated Deployment Script (POSIX)', path: './scripts/deploy-prod.sh' },
-      { name: 'Automated Deployment Script (Windows)', path: './scripts/deploy-prod.ps1' },
-      { name: 'Git Line-Ending Normalizer', path: './.gitattributes' },
-    ]
+        const root = process.cwd()
+        const failures = []
+        const warnings = []
 
-    let allOk = true
-    for (const c of checks) {
-      if (existsSync(c.path)) {
-        console.log(`  [✓] ${c.name.padEnd(38)}: VERIFIED (${c.path})`)
-      } else {
-        console.log(`  [✖] ${c.name.padEnd(38)}: MISSING (${c.path})`)
-        allOk = false
-      }
-    }
+        const fileChecks = [
+          { name: 'Multi-Stage Dockerfile', path: join(root, 'Dockerfile') },
+          { name: 'Docker Compose Stack', path: join(root, 'docker-compose.yml') },
+          { name: 'PM2 Cluster Config', path: join(root, 'ecosystem.config.cjs') },
+          { name: 'Production Env Blueprint', path: join(root, '.env.production.example') },
+          { name: 'Nginx Reverse Proxy Config', path: join(root, 'deploy', 'nginx', 'moonwitness.conf') },
+          { name: 'Automated Deployment Script (POSIX)', path: join(root, 'scripts', 'deploy-prod.sh') },
+          { name: 'Automated Deployment Script (Windows)', path: join(root, 'scripts', 'deploy-prod.ps1') },
+          { name: 'Git Line-Ending Normalizer', path: join(root, '.gitattributes') },
+        ]
 
-    console.log(`\n  [✓] Node Engine Compliance             : ${process.version} (>= 20.0.0 Required)`)
-    console.log(`  [✓] Port Isolation Guarantee           : 3000 (Web), 3001 (Gov), 4000 (API)`)
+        for (const c of fileChecks) {
+          if (existsSync(c.path)) {
+            console.log(`  [✓] ${c.name.padEnd(38)}: VERIFIED (${c.path})`)
+          } else {
+            console.log(`  [✖] ${c.name.padEnd(38)}: MISSING (${c.path})`)
+            failures.push(c.name)
+          }
+        }
 
-    if (allOk) {
-      console.log('\n🎉 PRODUCTION PRE-FLIGHT AUDIT: 100% READY FOR DEPLOYMENT.\n')
-    } else {
-      console.log('\n⚠️  SOME PRODUCTION ASSETS ARE MISSING.\n')
-    }
+        const nodeVersion = process.version
+        const nodeMajor = Number(nodeVersion.replace('v', '').split('.')[0])
+        if (nodeMajor >= 20) {
+          console.log(`\n  [✓] Node Engine Compliance             : ${nodeVersion} (>= 20.0.0 Required)`)
+        } else {
+          console.log(`\n  [✖] Node Engine Compliance             : ${nodeVersion} (>= 20.0.0 Required)`)
+          failures.push('Node Engine Compliance')
+        }
+
+        let pnpmOk = false
+        try {
+          const pnpmVersion = execSync('pnpm --version', { encoding: 'utf8' }).trim()
+          console.log(`  [✓] pnpm Availability                  : ${pnpmVersion}`)
+          pnpmOk = true
+        } catch {
+          console.log(`  [✖] pnpm Availability                  : NOT FOUND`)
+          failures.push('pnpm Availability')
+        }
+
+        const envProduction = join(root, '.env.production')
+        if (existsSync(envProduction)) {
+          const envContent = readFileSync(envProduction, 'utf8')
+          const placeholders = envContent.match(/REPLACE_WITH_[^\n]*/g) || []
+          if (placeholders.length > 0) {
+            console.log(`  [✖] Production Env Placeholders        : ${placeholders.length} unreplaced token(s)`)
+            failures.push('Production Env Placeholders')
+          } else {
+            console.log(`  [✓] Production Env Placeholders        : 0 unreplaced tokens`)
+          }
+        } else {
+          console.log(`  [i] Production Env File                : .env.production not present (expected for clean source)`)
+          warnings.push('Production Env File Missing')
+        }
+
+        const composePath = join(root, 'docker-compose.yml')
+        if (existsSync(composePath)) {
+          const composeContent = readFileSync(composePath, 'utf8')
+          const exposedPatterns = [
+            /ports:\s*\n\s*-\s*"?5432"?/,
+            /ports:\s*\n\s*-\s*"?6379"?/,
+            /"5432"/,
+            /"6379"/,
+          ]
+          const exposed = exposedPatterns.some((re) => re.test(composeContent))
+          if (exposed) {
+            console.log(`  [✖] Private Service Exposure Policy    : DB/Redis ports detected in Compose`)
+            failures.push('Private Service Exposure Policy')
+          } else {
+            console.log(`  [✓] Private Service Exposure Policy    : No host-published DB/Redis ports`)
+          }
+        }
+
+        const deployScript = join(root, 'scripts', 'deploy-prod.sh')
+        if (existsSync(deployScript)) {
+          try {
+            accessSync(deployScript, constants.X_OK)
+            console.log(`  [✓] Deploy Script Permissions          : executable`)
+          } catch {
+            console.log(`  [✖] Deploy Script Permissions          : not executable`)
+            warnings.push('Deploy Script Permissions')
+          }
+        }
+
+        console.log(`\n  [i] Canonical Port Isolation           : 3000 (Web), 3001 (Gov), 4000 (API)`)
+
+        if (failures.length === 0 && warnings.length === 0) {
+          console.log('\n🎉 PRODUCTION PRE-FLIGHT AUDIT: PASSED — Evidence-backed checks are green.\n')
+          process.exitCode = 0
+        } else {
+          console.log('\n❌ PRODUCTION PRE-FLIGHT AUDIT: FAILED')
+          if (failures.length > 0) {
+            console.log(`   Failures (${failures.length}): ${failures.join(', ')}`)
+          }
+          if (warnings.length > 0) {
+            console.log(`   Warnings (${warnings.length}): ${warnings.join(', ')}`)
+          }
+          console.log('')
+          process.exitCode = 1
+        }
+      })
+    })
   })
 }

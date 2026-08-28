@@ -9,6 +9,12 @@ are acknowledged as soon as practical and coordinated fixes are preferred before
 Operational requirements:
 
 - Set a unique `JWT_SECRET` and production bootstrap credentials outside source control.
+- For Docker Compose production deployments, copy `.env.production.example` to
+  `.env.production`, replace every `REPLACE_WITH_*` value, and deploy only through
+  `scripts/deploy-prod.sh` or `scripts/deploy-prod.ps1`. The stack deliberately
+  refuses to start when required database, Redis, or JWT secrets are absent.
+- PostgreSQL and Redis are intentionally not host-published. Reach them only from
+  the API container or through a separately authenticated, temporary maintenance path.
 - Apply migrations through `pnpm --filter api db:migrate` or `db:install`; do not rely on startup DDL.
 - Back up PostgreSQL before production migrations. Validate restoration in a separate environment
   using `pg_restore`, then run `pnpm --filter api db:verify`.

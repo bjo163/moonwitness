@@ -1,6 +1,17 @@
 import knex, { type Knex } from 'knex'
+import { SpanStatusCode } from '@opentelemetry/api'
+import {
+  isOtelEnabled,
+  startDbSpan,
+  withDbSpan,
+  sanitizeSql,
+  shouldSampleQuery,
+  resetQuerySampler,
+  trackAttribute,
+} from './telemetry.js'
 
 let dbInstance: Knex | null = null
+const pendingQuerySpans = new Map<string, any>()
 
 export type DbConfig = string | Knex | { client: string, connection: any }
 
@@ -58,6 +69,61 @@ export function setupOrm(config: DbConfig) {
       queryTimes.delete(query.__knexQueryUid)
     }
   })
+
+  if (isOtelEnabled()) {
+    const rawTransaction = dbInstance.transaction.bind(dbInstance)
+    dbInstance.transaction = function (callback: any) {
+      return withDbSpan('db.transaction', async (span) => {
+        span?.setAttribute('db.system', 'postgresql')
+        try {
+          const result = await rawTransaction(callback)
+          span?.setStatus({ code: SpanStatusCode.OK })
+          return result
+        } catch (err: any) {
+          span?.setStatus({ code: SpanStatusCode.ERROR, message: err?.message || String(err) })
+          span?.recordException(err instanceof Error ? err : new Error(String(err)))
+          throw err
+        }
+      })
+    }
+
+    dbInstance.on('query', (query) => {
+      if (!shouldSampleQuery()) return
+      const uid = query.__knexQueryUid
+      if (!uid) return
+      const span = startDbSpan('db.query', {
+        attributes: {
+          'db.system': 'postgresql',
+          'db.query.text': sanitizeSql(query.sql),
+          'db.query.bindings_count': Array.isArray(query.bindings) ? query.bindings.length : 0,
+        },
+      })
+      if (span) {
+        pendingQuerySpans.set(uid, span)
+      }
+    })
+
+    dbInstance.on('query-response', (_response, query) => {
+      const uid = query.__knexQueryUid
+      const span = pendingQuerySpans.get(uid)
+      if (span) {
+        pendingQuerySpans.delete(uid)
+        span.setStatus({ code: SpanStatusCode.OK })
+        span.end()
+      }
+    })
+
+    dbInstance.on('query-error', (error, query) => {
+      const uid = query.__knexQueryUid
+      const span = pendingQuerySpans.get(uid)
+      if (span) {
+        pendingQuerySpans.delete(uid)
+        span.setStatus({ code: SpanStatusCode.ERROR, message: error?.message || String(error) })
+        span.recordException(error instanceof Error ? error : new Error(String(error)))
+        span.end()
+      }
+    })
+  }
 }
 
 export function getDb(): Knex {
@@ -96,6 +162,10 @@ export async function checkDbConnection(): Promise<DbHealthStatus> {
     }
   }
 
+  const span = startDbSpan('db.connection_check', {
+    attributes: { 'db.system': 'postgresql' }
+  })
+
   const start = performance.now()
   try {
     await dbInstance.raw('SELECT 1 as ping')
@@ -118,6 +188,13 @@ export async function checkDbConnection(): Promise<DbHealthStatus> {
 
     const dialect = (dbInstance.client as any)?.dialect || (dbInstance.client as any)?.driverName || 'pg'
 
+    span?.setStatus({ code: SpanStatusCode.OK })
+    span?.setAttribute('db.dialect', dialect)
+    if (version) {
+      span?.setAttribute('db.version', version)
+    }
+    span?.end()
+
     return {
       ok: true,
       dialect,
@@ -127,6 +204,9 @@ export async function checkDbConnection(): Promise<DbHealthStatus> {
   } catch (err: any) {
     const latencyMs = Number((performance.now() - start).toFixed(2))
     const dialect = (dbInstance.client as any)?.dialect || 'pg'
+    span?.setStatus({ code: SpanStatusCode.ERROR, message: err?.message || String(err) })
+    span?.recordException(err instanceof Error ? err : new Error(String(err)))
+    span?.end()
     return {
       ok: false,
       dialect,

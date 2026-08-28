@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { check, diff, down, status, up } from "@moon/orm"
+import { bootstrap, check, diff, down, status, up } from "@moon/orm"
 import { NativeServer } from "@moon/server"
 import baseAddons, {
   loadBaseData,
@@ -23,12 +23,10 @@ import geoAddons from "@moon/geo"
 async function loadAllDemoData() {
   console.log("=== Loading Demo Data across all 15 Addon Packages ===")
 
-  // Level 0: Base
   console.log("[Level 0] Seeding @moon/base demo data...")
   const { loadDemoData: loadBaseDemo } = await import("@moon/base")
   await loadBaseDemo()
 
-  // Level 1: Independent packages depending only on base
   console.log("[Level 1] Seeding independent addon demo data...")
   const [witnessM, perfM, projectM, productM, accountM, mailM, geoM] = await Promise.all([
     import("@moon/witness"),
@@ -49,7 +47,6 @@ async function loadAllDemoData() {
     geoM.loadDemoData(),
   ])
 
-  // Level 2: Packages depending on Level 1 (e.g. cab on project, helpdesk on project, mizan on witness)
   console.log("[Level 2] Seeding higher-tier addon demo data...")
   const [cabM, helpdeskM, mizanM, khidraM, stockM, crmM, shootgunM] = await Promise.all([
     import("@moon/cab"),
@@ -105,6 +102,7 @@ async function run() {
 
   const cmd = process.argv[2]
   const isDemo = process.argv.includes("--demo")
+  const withExternal = process.argv.includes("--with-external")
 
   if (cmd === "diff") {
     await diff()
@@ -117,13 +115,15 @@ async function run() {
   } else if (cmd === "check") {
     await check()
     console.log("Migration integrity check passed.")
+  } else if (cmd === "bootstrap") {
+    await bootstrap()
   } else if (cmd === "seed") {
     const integrity = verifySeedIntegrity()
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
     await loadBaseData()
     await seedWitnessGraphCore()
     console.log("Canonical seed completed.")
-    if (isDemo) {
+    if (isDemo || withExternal) {
       await loadAllDemoData()
     }
   } else if (cmd === "demo") {
@@ -139,7 +139,7 @@ async function run() {
     await loadBaseData()
     await seedWitnessGraphCore()
     console.log("Database install completed.")
-    if (isDemo) {
+    if (isDemo || withExternal) {
       await loadAllDemoData()
     }
   } else if (cmd === "verify") {
@@ -148,7 +148,7 @@ async function run() {
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
     console.log("Database migration and canonical seed integrity checks passed.")
   } else {
-    console.log("Usage: pnpm tsx src/migrate.ts <diff|up|down|status|check|seed|demo|install|verify> [--demo]")
+    console.log("Usage: pnpm tsx src/migrate.ts <diff|up|down|bootstrap|status|check|seed|demo|install|verify> [--demo] [--with-external]")
   }
 
   process.exit(0)

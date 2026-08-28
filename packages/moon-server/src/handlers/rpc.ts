@@ -2,6 +2,15 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 import { getModel, getDb, createCtx, AuthorizationError, ANONYMOUS_ID } from '@moon/orm'
 import { parseBody, sendJson } from '../utils/http.js'
 import { authenticateRequest, AuthError } from '../utils/auth.js'
+import { logger } from '../logger.js'
+import { RpcRequestSchema } from '@moon/protocol'
+import { validateRpcMethod, resolveRpcHandler } from '../rpc-registry.js'
+import { withDomainSpan } from '../telemetry.js'
+import { SpanStatusCode } from '@opentelemetry/api'
+
+function validateMethodName(method: string): { ok: boolean; error?: string } {
+  return validateRpcMethod(method)
+}
 
 /**
  * Handle RPC (Remote Procedure Call) requests
@@ -12,47 +21,62 @@ export async function handleRpc(
   res: ServerResponse,
   jwtSecret: string
 ): Promise<void> {
-  try {
-    const auth = await authenticateRequest(req, jwtSecret, { allowAnonymous: false })
-    const uid = auth.uid
+  return withDomainSpan('rpc.dispatch', async (span) => {
+    try {
+      const auth = await authenticateRequest(req, jwtSecret, { allowAnonymous: false })
+      const uid = auth.uid
 
-    const body = await parseBody(req)
-    const { model, method, args, kwargs } = body
+      const body = await parseBody(req)
+      const validation = RpcRequestSchema.safeParse(body)
+      if (!validation.success) {
+        logger.warn('moon.rpc.audit', 'Invalid RPC body', { uid, error: validation.error.message })
+        return sendJson(res, 400, { error: 'Invalid RPC body', code: 'INVALID_REQUEST' }, req)
+      }
 
-    if (!model || !method) {
-      return sendJson(res, 400, { error: 'Model and method required', code: 'INVALID_REQUEST' }, req)
+      const { model, method, args, kwargs } = validation.data
+
+      const methodValidation = validateMethodName(method)
+      if (!methodValidation.ok) {
+        logger.warn('moon.rpc.audit', 'Forbidden method', { uid, model, method, reason: methodValidation.error })
+        return sendJson(res, 403, { error: methodValidation.error, code: 'FORBIDDEN_METHOD' }, req)
+      }
+
+      const ModelClass = getModel(model)
+      if (!ModelClass) {
+        return sendJson(res, 404, { error: `Model ${model} not found`, code: 'MODEL_NOT_FOUND' }, req)
+      }
+
+      const methodFn = resolveRpcHandler(model, method)
+      if (typeof methodFn !== 'function') {
+        return sendJson(res, 404, { error: `Method ${method} not found on ${model}`, code: 'METHOD_NOT_FOUND' }, req)
+      }
+
+      const safeArgs = Array.isArray(args) ? args : []
+      if (kwargs && Object.keys(kwargs).length > 0) {
+        safeArgs.push(kwargs)
+      }
+
+      const db = getDb()
+      const result = await db.transaction(async (trx) => {
+        const env = createCtx(uid, {}, getModel, trx)
+        return await methodFn.call(ModelClass, ModelClass, env, ...safeArgs)
+      })
+
+      span?.setAttribute('rpc.model', model)
+      span?.setAttribute('rpc.method', method)
+      span?.setAttribute('auth.user_id', uid)
+      span?.setStatus({ code: SpanStatusCode.OK })
+      logger.info('moon.rpc.audit', 'RPC executed', { uid, model, method })
+      return sendJson(res, 200, { result }, req)
+    } catch (err: any) {
+      if (err instanceof AuthError) {
+        return sendJson(res, err.statusCode, { error: err.message, code: err.code }, req)
+      }
+      if (err instanceof AuthorizationError) {
+        return sendJson(res, err.statusCode, { error: err.message, code: err.code }, req)
+      }
+      const statusCode = err?.statusCode || 500
+      return sendJson(res, statusCode, { error: err?.message || 'Internal server error', code: err?.code || 'INTERNAL_ERROR' }, req)
     }
-
-    const ModelClass = getModel(model)
-    if (!ModelClass) {
-      return sendJson(res, 404, { error: `Model ${model} not found`, code: 'MODEL_NOT_FOUND' }, req)
-    }
-
-    const methodFn = (ModelClass as any)[method]
-    if (typeof methodFn !== 'function') {
-      return sendJson(res, 404, { error: `Method ${method} not found on ${model}`, code: 'METHOD_NOT_FOUND' }, req)
-    }
-
-    const safeArgs = Array.isArray(args) ? args : []
-    if (kwargs && Object.keys(kwargs).length > 0) {
-      safeArgs.push(kwargs)
-    }
-
-    const db = getDb()
-    const result = await db.transaction(async (trx) => {
-      const env = createCtx(uid, {}, getModel, trx)
-      return await methodFn.call(ModelClass, ModelClass, env, ...safeArgs)
-    })
-
-    return sendJson(res, 200, { result }, req)
-  } catch (err: any) {
-    if (err instanceof AuthError) {
-      return sendJson(res, err.statusCode, { error: err.message, code: err.code }, req)
-    }
-    if (err instanceof AuthorizationError) {
-      return sendJson(res, err.statusCode, { error: err.message, code: err.code }, req)
-    }
-    const statusCode = err?.statusCode || 500
-    return sendJson(res, statusCode, { error: err?.message || 'Internal server error', code: err?.code || 'INTERNAL_ERROR' }, req)
-  }
+  })
 }

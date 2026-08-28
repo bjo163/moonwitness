@@ -1,0 +1,166 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+      - 'v*.*.*-*'
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: release-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify Release
+    runs-on: self-hosted
+    timeout-minutes: 30
+    env:
+      CI: 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Enable pinned pnpm
+        shell: bash
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.33.4 --activate
+          pnpm --version
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Moon packages
+        run: pnpm --filter "@moon/*" build
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build All
+        run: pnpm build
+
+  publish:
+    name: Publish to npm (Dry Run)
+    runs-on: self-hosted
+    timeout-minutes: 20
+    needs: verify
+    env:
+      CI: 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Enable pinned pnpm
+        shell: bash
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.33.4 --activate
+          pnpm --version
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build All Packages
+        run: pnpm build
+
+      - name: Dry Run Publish
+        shell: bash
+        run: |
+          echo "=== MoonWitness Release Dry Run ==="
+          echo "Tag: ${{ github.ref_name }}"
+          echo ""
+
+          for pkg in packages/*/; do
+            if [ -f "$pkg/package.json" ]; then
+              name=$(node -p "require('./$pkg/package.json').name")
+              version=$(node -p "require('./$pkg/package.json').version")
+              private=$(node -p "require('./$pkg/package.json').private || false")
+
+              if [ "$private" == "true" ]; then
+                echo "SKIP  $name@$version (private)"
+              else
+                echo "DRY   $name@$version"
+                cd "$pkg"
+                pnpm publish --dry-run --no-git-checks 2>&1 | head -20 || true
+                cd -
+              fi
+            fi
+          done
+
+          echo ""
+          echo "=== Dry Run Complete ==="
+          echo "No packages were published. Remove --dry-run flag to enable actual publishing."
+
+  release-notes:
+    name: Generate Release Notes
+    runs-on: self-hosted
+    timeout-minutes: 10
+    needs: verify
+    if: success()
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate Changelog
+        id: changelog
+        shell: bash
+        run: |
+          TAG="${{ github.ref_name }}"
+          PREV_TAG=$(git describe --tags --abbrev=0 "$TAG^" 2>/dev/null || echo "")
+
+          if [ -z "$PREV_TAG" ]; then
+            COMMITS=$(git log --oneline --no-decorate "$TAG" | head -50)
+          else
+            COMMITS=$(git log --oneline --no-decorate "$PREV_TAG..$TAG" | head -50)
+          fi
+
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$COMMITS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "MoonWitness ${{ github.ref_name }}"
+          body: |
+            ## Release ${{ github.ref_name }}
+
+            ### Changes
+            ${{ steps.changelog.outputs.changelog }}
+
+            ### Verification
+            - ✅ All packages built
+            - ✅ Typecheck passed
+            - ✅ Tests passed
+
+            ### Promotion Path
+            This release was promoted through: feature → dev → main → tag
+
+            — *MoonWitness CI/CD Pipeline*
+          draft: true
+          prerelease: ${{ contains(github.ref_name, '-') }}

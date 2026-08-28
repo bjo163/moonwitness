@@ -10,10 +10,6 @@ import {
 
 const BCRYPT_ROUNDS = 10
 
-function isBcryptHash(value: string): boolean {
-  return /^\$2[aby]\$\d{2}\$/.test(value)
-}
-
 export async function loadBaseData() {
   const Country = getModel('vx.zone')
   const Currency = getModel('vx.coin')
@@ -33,7 +29,6 @@ export async function loadBaseData() {
   const db = getDb()
   const conn = env.trx || db
 
-  // 1. Seed Groups
   let adminGroupId: number
   const groupRows = await Groups.fetch(Groups, env, [['name', '=', 'Admin']])
   if (!groupRows.length) {
@@ -44,8 +39,6 @@ export async function loadBaseData() {
   }
 
   // 2. Seed explicit model metadata for every registered, non-abstract model.
-  // This mirrors Odoo's ir.model bootstrap behavior while keeping authorization fail-closed:
-  // an unregistered/unknown model still has no metadata and is denied.
   const securedModels = Array.from(registry.values())
     .filter((modelClass) => !modelClass._abstract && Boolean(modelClass._name))
     .map((modelClass) => modelClass._name)
@@ -62,7 +55,6 @@ export async function loadBaseData() {
     }
   }
 
-  // 3. Seed MxGrant (Admin gets explicit full access to registered models).
   for (const m of securedModels) {
     const mId = modelIds[m]
     const accRows = await MxGrant.fetch(MxGrant, env, [['modelId', '=', mId], ['groupId', '=', adminGroupId]])
@@ -79,7 +71,6 @@ export async function loadBaseData() {
     }
   }
 
-  // 4. Seed Languages
   const langs = [
     { code: 'en_US', name: 'English (US)', isoCode: 'en', urlCode: 'en', direction: 'ltr' },
     { code: 'id_ID', name: 'Indonesian', isoCode: 'id', urlCode: 'id', direction: 'ltr' }
@@ -134,7 +125,6 @@ export async function loadBaseData() {
   }
 
   let actualCompanyId: number | undefined
-
   if (companyPartnerId) {
     const companyRows = await Company.fetch(Company, env, [['partnerId', '=', companyPartnerId]])
     if (!companyRows.length) {
@@ -155,10 +145,7 @@ export async function loadBaseData() {
       const partnerRows = await Partner.fetch(Partner, env, [['name', '=', u.name], ['isCompany', '=', u.isCompany]])
       let partnerId: number | undefined
       if (!partnerRows.length) {
-        const vals: Record<string, unknown> = {
-          name: u.name,
-          isCompany: u.isCompany
-        }
+        const vals: Record<string, unknown> = { name: u.name, isCompany: u.isCompany }
         if (defaultCountryId) vals.countryId = defaultCountryId
         vals.companyId = actualCompanyId
         const row = await Partner.spawn(Partner, env, vals)
@@ -169,9 +156,9 @@ export async function loadBaseData() {
 
       if (partnerId) {
         const userRows = await User.fetch(User, env, [['email', '=', u.email]])
-        const hashedPassword = await bcrypt.hash(u.password, BCRYPT_ROUNDS)
         let userId: number
         if (!userRows.length) {
+          const hashedPassword = await bcrypt.hash(u.password, BCRYPT_ROUNDS)
           const uRow = await User.spawn(User, env, {
             name: u.name,
             email: u.email,
@@ -182,12 +169,11 @@ export async function loadBaseData() {
           })
           userId = uRow.id as number
         } else {
-          const existingUser = userRows[0] as { id: number; password: string }
+          const existingUser = userRows[0] as { id: number }
           userId = existingUser.id
-          await conn('vx_user').where({ id: existingUser.id }).update({
-            password: hashedPassword,
-            login: u.email
-          })
+          // Canonical seed may repair non-secret metadata, but must never rotate or
+          // reset an operator-managed credential on an existing human account.
+          await conn('vx_user').where({ id: existingUser.id }).update({ login: u.email })
         }
 
         if (u.isAdmin) {

@@ -7,27 +7,35 @@ services:
     container_name: mw_postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      POSTGRES_DB: ${POSTGRES_DB:-moonwitness}
-    ports:
-      - "5432:5432"
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER must be set in .env.production}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in .env.production}
+      POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB must be set in .env.production}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - data
 
   redis:
     image: redis:7-alpine
     container_name: mw_redis
     restart: unless-stopped
-    ports:
-      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:?REDIS_PASSWORD must be set in .env.production}"]
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?REDIS_PASSWORD must be set in .env.production}
     volumes:
       - redis_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli --no-auth-warning -a \"$$REDIS_PASSWORD\" ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - data
 
   # ── MOONWITNESS BACKEND SERVICE ──────────────────────────────────────────────
   api:
@@ -41,14 +49,19 @@ services:
     environment:
       NODE_ENV: production
       PORT: 4000
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/moonwitness
-      JWT_SECRET: ${JWT_SECRET:-production_secure_matrix_secret_1449}
-      REDIS_URL: redis://redis:6379
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL must be set in .env.production}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set in .env.production}
+      REDIS_URL: ${REDIS_URL:?REDIS_URL must be set in .env.production}
     ports:
-      - "4000:4000"
+      - "127.0.0.1:${PORT_API:-4000}:4000"
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - app
+      - data
 
   # ── COMMAND CENTER PORTAL ───────────────────────────────────────────────────
   command-center:
@@ -64,9 +77,11 @@ services:
       PORT: 3001
       NEXT_PUBLIC_API_URL: http://api:4000
     ports:
-      - "3001:3001"
+      - "127.0.0.1:${PORT_COMMAND_CENTER:-3001}:3001"
     depends_on:
       - api
+    networks:
+      - app
 
   # ── PUBLIC COSMIC PORTAL ────────────────────────────────────────────────────
   web:
@@ -82,10 +97,17 @@ services:
       PORT: 3000
       NEXT_PUBLIC_API_URL: http://api:4000
     ports:
-      - "3000:3000"
+      - "127.0.0.1:${PORT_WEB:-3000}:3000"
     depends_on:
       - api
+    networks:
+      - app
 
 volumes:
   postgres_data:
   redis_data:
+
+networks:
+  app:
+  data:
+    internal: true

@@ -1,14 +1,7 @@
 import { randomBytes } from 'node:crypto'
-import {
-  seedBaseData
-} from './seed.js'
-import {
-  loadBaseData
-} from './base-data.js'
-import {
-  verifySeedIntegrity,
-  loadCanonicalReferenceData
-} from './seed-loader.js'
+import { seedBaseData } from './seed.js'
+import { loadBaseData } from './base-data.js'
+import { verifySeedIntegrity, loadCanonicalReferenceData } from './seed-loader.js'
 import { loadDemoData } from './demo-data.js'
 import { views } from './views.js'
 import VxZone from './vx-zone.js'
@@ -127,7 +120,9 @@ const getBootstrapAdminPassword = (): string => {
   if (process.env.NODE_ENV === 'production') {
     throw new Error('BOOTSTRAP_ADMIN_PASSWORD is required for production installation')
   }
-  return 'admin123'
+  // Development installs may proceed without a reusable source-known credential.
+  // Operators who need to log in must provide BOOTSTRAP_ADMIN_PASSWORD explicitly.
+  return randomBytes(32).toString('base64url')
 }
 
 export const PARTNER_SEED_DATA = {
@@ -158,14 +153,6 @@ export const PARTNER_SEED_DATA = {
       name: 'Administrator',
       email: getBootstrapAdminEmail(),
       password: getBootstrapAdminPassword(),
-      isCompany: false,
-      isAdmin: true,
-    },
-    {
-      mode: 'admin',
-      name: 'Divine Commander',
-      email: 'commander@moonwitness.os',
-      password: readBootstrapEnv('BOOTSTRAP_COMMANDER_PASSWORD') || 'password123',
       isCompany: false,
       isAdmin: true,
     }

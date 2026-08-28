@@ -3,6 +3,9 @@ import { EventEmitter } from 'node:events'
 import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm'
 import { logger } from '../logger.js'
 import { parseUrl, resolveCorsOrigin, type CorsConfig } from '../utils/http.js'
+import { verifyToken, AuthError, validateUserSession, type VerifyTokenOptions } from '../utils/auth.js'
+import { startDomainSpan } from '../telemetry.js'
+import { SpanStatusCode } from '@opentelemetry/api'
 
 // Global SSE state
 if (!(globalThis as any).moonEmitter) {
@@ -20,8 +23,11 @@ export interface SSEClient {
   req: IncomingMessage
   ipAddress: string
   userAgent: string
+  uid?: number
+  tokenVersion?: number
   topics: Set<string> | null // null means all topics
   keepAliveTimer: NodeJS.Timeout
+  authTimer: NodeJS.Timeout
   createdAt: number
   lastEventId?: string
   sessionRecordId?: number | null
@@ -30,6 +36,9 @@ export interface SSEClient {
 export interface SSEOptions {
   cors?: CorsConfig
   heartbeatIntervalMs?: number
+  jwtSecret?: string
+  allowAnonymous?: boolean
+  verifyTokenOptions?: VerifyTokenOptions
 }
 
 /**
@@ -76,6 +85,7 @@ export function cleanupClient(clientId: string): void {
   if (!client) return
 
   clearInterval(client.keepAliveTimer)
+  clearInterval(client.authTimer)
   clients.delete(clientId)
 
   // Update session record in DB if exists
@@ -131,6 +141,38 @@ export function closeAllSSEConnections(reason = 'server_stopping'): void {
 }
 
 /**
+ * Revoke all active SSE connections belonging to a specific user.
+ * Closes each matching connection and emits a `session_revoked` event
+ * before tearing down the stream. Returns the number of clients closed.
+ */
+export function revokeUserSseClients(userId: number): number {
+  const clients = (globalThis as any).moonActiveSSEClients as Map<string, SSEClient>
+  let closed = 0
+
+  for (const [clientId, client] of clients.entries()) {
+    if (client.uid !== userId) continue
+
+    try {
+      safeWrite(
+        client,
+        `event: session_revoked\ndata: ${JSON.stringify({
+          reason: 'revoked',
+          userId,
+          timestamp: Date.now()
+        })}\n\n`
+      )
+    } catch {
+      // Ignored
+    }
+
+    cleanupClient(clientId)
+    closed++
+  }
+
+  return closed
+}
+
+/**
  * Handle SSE (Server-Sent Events) connections
  * Pattern: GET /live[?channels=...,topics=...]
  */
@@ -158,6 +200,32 @@ export function handleSSE(
       if (options.cors?.allowCredentials !== false) {
         headers['Access-Control-Allow-Credentials'] = 'true'
       }
+    }
+  }
+
+  let uid: number | undefined
+  let tokenVersion: number | undefined
+
+  if (options.jwtSecret) {
+    try {
+      const decoded: any = verifyToken(req, options.jwtSecret, options.verifyTokenOptions)
+      if (decoded && decoded.sub && Number(decoded.sub) > 0) {
+        uid = Number(decoded.sub)
+        if (decoded.tokenVersion !== undefined) {
+          tokenVersion = Number(decoded.tokenVersion)
+        }
+      }
+    } catch (err) {
+      if (err instanceof AuthError && !options.allowAnonymous) {
+        const errHeaders: Record<string, string> = {
+          'Content-Type': 'application/json',
+          ...(allowedOrigin ? { 'Access-Control-Allow-Origin': allowedOrigin } : {})
+        }
+        res.writeHead(401, errHeaders)
+        res.end(JSON.stringify({ error: err.code, message: err.message }))
+        return
+      }
+      logger.warn('moon.sse', `Anonymous SSE fallback for unauthenticated request:`, err)
     }
   }
 
@@ -211,20 +279,65 @@ export function handleSSE(
     )
   }, heartbeatInterval)
 
+  // Session revalidation timer
+  let authTimer: NodeJS.Timeout
+  if (uid !== undefined) {
+    const authInterval = 60000
+    authTimer = setInterval(async () => {
+      if (!clients.has(clientId)) {
+        clearInterval(authTimer)
+        return
+      }
+
+      try {
+        const authEnv = createCtx(SUPERUSER_ID, {}, getModel as any)
+        await validateUserSession(authEnv, uid, tokenVersion)
+      } catch (err) {
+        if (err instanceof AuthError) {
+          logger.warn('moon.sse', `Session revalidation failed for client ${clientId}:`, err.message)
+          safeWrite(
+            client,
+            `event: session_revoked\ndata: ${JSON.stringify({
+              reason: 'revoked',
+              userId: uid,
+              timestamp: Date.now(),
+              message: err.message
+            })}\n\n`
+          )
+          cleanupClient(clientId)
+        } else {
+          logger.error('moon.sse', `Unexpected error during session revalidation for client ${clientId}:`, err)
+        }
+      }
+    }, authInterval)
+  } else {
+    authTimer = setInterval(() => {}, 60000)
+  }
+
   const client: SSEClient = {
     id: clientId,
     res,
     req,
     ipAddress,
     userAgent,
+    uid,
+    tokenVersion,
     topics: subscribedTopics,
     keepAliveTimer,
+    authTimer,
     createdAt: Date.now(),
     lastEventId,
     sessionRecordId: null
   }
 
   clients.set(clientId, client)
+
+  const span = startDomainSpan('sse.connection', {
+    attributes: {
+      'sse.client_id': clientId,
+      'sse.topics': JSON.stringify(subscribedTopics ? Array.from(subscribedTopics) : ['*']),
+    }
+  })
 
   // Send initial connection handshake event
   safeWrite(
@@ -291,10 +404,13 @@ export function handleSSE(
 
   // Disconnect listener
   const onDisconnect = () => {
+    clearInterval(authTimer)
     emitter.removeListener('moon_event', onEvent)
     req.removeListener('close', onDisconnect)
     req.removeListener('error', onDisconnect)
     cleanupClient(clientId)
+    span?.setStatus({ code: SpanStatusCode.OK })
+    span?.end()
   }
 
   req.on('close', onDisconnect)

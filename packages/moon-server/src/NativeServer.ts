@@ -14,10 +14,17 @@ import {
   checkDbConnection,
   type DbConfig
 } from '@moon/orm'
+import { defineEndpoint, EndpointDef } from '@moon/protocol'
 import { globalRoutes, HttpHandler } from './router.js'
 import { createProxyHandler } from './proxy.js'
 import { logger } from './logger.js'
 import { generateOpenApi } from './openapi.js'
+import {
+  bootstrapTelemetry,
+  shutdownTelemetry,
+  isTelemetryEnabled,
+  withDomainSpan,
+} from './telemetry.js'
 import {
   handleLogin,
   handleRegister,
@@ -33,7 +40,7 @@ import { handleRest } from './handlers/rest.js'
 import { handleRpc } from './handlers/rpc.js'
 import { handleSSE, getActiveClientCount, closeAllSSEConnections } from './handlers/sse.js'
 import { renderDashboard, renderSwaggerUI } from './views/dashboard.js'
-import { sendJson, handleCorsPreflight, type CorsConfig } from './utils/http.js'
+import { sendJson, handleCorsPreflight, setCorsConfig, type CorsConfig } from './utils/http.js'
 import { authenticateRequest, AuthError, issueJwt } from './utils/auth.js'
 
 export interface MoonConfig {
@@ -66,11 +73,19 @@ export class NativeServer {
 
   constructor(config: MoonConfig) {
     this.config = config
+    if (config.cors) {
+      setCorsConfig(config.cors)
+    }
     const isProduction = process.env.NODE_ENV === 'production'
     if (isProduction) {
       if (!config.jwtSecret || config.jwtSecret === 'secret' || config.jwtSecret.trim().length < 16) {
         throw new Error(
           '[moon.security] Fatal: In production (NODE_ENV=production), JWT_SECRET must be explicitly set to a strong secret (at least 16 characters).'
+        )
+      }
+      if (!config.database || String(config.database).includes('localhost')) {
+        throw new Error(
+          '[moon.security] Fatal: In production (NODE_ENV=production), DATABASE_URL must be explicitly set to a non-localhost database connection string.'
         )
       }
     } else {
@@ -127,7 +142,7 @@ export class NativeServer {
     }
   }
 
-  private registerRoute(method: string, path: string, handler: HttpHandler) {
+  private registerRoute(method: string, path: string, handler: HttpHandler, auth: 'none' | 'user' | 'admin' = 'none') {
     const wrapped = this.buildHandlerChain(handler)
     globalRoutes.push({
       method,
@@ -135,22 +150,29 @@ export class NativeServer {
       handler: wrapped,
       params: path.includes(':') ? path.match(/:([^/]+)/g)?.map(p => p.slice(1)) : undefined
     })
+
+    defineEndpoint({
+      method: method as EndpointDef['method'],
+      path,
+      description: `Dynamic route ${method} ${path}`,
+      auth,
+    })
   }
 
-  public get(path: string, handler: HttpHandler) {
-    this.registerRoute('GET', path, handler)
+  public get(path: string, handler: HttpHandler, auth: 'none' | 'user' | 'admin' = 'none') {
+    this.registerRoute('GET', path, handler, auth)
   }
 
-  public post(path: string, handler: HttpHandler) {
-    this.registerRoute('POST', path, handler)
+  public post(path: string, handler: HttpHandler, auth: 'none' | 'user' | 'admin' = 'none') {
+    this.registerRoute('POST', path, handler, auth)
   }
 
-  public put(path: string, handler: HttpHandler) {
-    this.registerRoute('PUT', path, handler)
+  public put(path: string, handler: HttpHandler, auth: 'none' | 'user' | 'admin' = 'none') {
+    this.registerRoute('PUT', path, handler, auth)
   }
 
-  public delete(path: string, handler: HttpHandler) {
-    this.registerRoute('DELETE', path, handler)
+  public delete(path: string, handler: HttpHandler, auth: 'none' | 'user' | 'admin' = 'none') {
+    this.registerRoute('DELETE', path, handler, auth)
   }
 
   public proxy(method: string, path: string, targetUrl: string, options?: {
@@ -158,12 +180,12 @@ export class NativeServer {
     query?: string[]
     headers?: Record<string, string>
     apiKey?: string
-  }) {
+  }, auth: 'none' | 'user' | 'admin' = 'user') {
     const handler = createProxyHandler({
       targetUrl,
       ...options
     })
-    this.registerRoute(method, path, handler)
+    this.registerRoute(method, path, handler, auth)
   }
 
   private matchParamRoute(req: http.IncomingMessage, route: { path: string; handler: HttpHandler }): { handler: HttpHandler; params: Record<string, string> } | null {
@@ -237,7 +259,7 @@ export class NativeServer {
     if (req.method === 'GET' && (req.url === '/' || req.url === '')) {
       const session = await this.requireAdmin(req, res)
       if (!session) return
-      const sessionToken = issueJwt({ sub: session.uid, email: session.email, tokenVersion: session.tokenVersion }, this.config.jwtSecret)
+      const sessionToken = issueJwt({ sub: session.uid, email: session.email, tokenVersion: session.tokenVersion, role: 'superadmin', clearanceLevel: 3 }, this.config.jwtSecret)
       const cookieFlags = process.env.NODE_ENV === 'production' ? '; Secure' : ''
       const html = renderDashboard()
       res.writeHead(200, {
@@ -321,7 +343,9 @@ export class NativeServer {
       return handleSSE(req, res, { cors: this.config.cors })
     }
 
-    const restMatch = req.url?.match(/^\/api\/([a-z0-9.-]+)(?:\/(\d+))?(?:\?.*)?$/)
+    // Capture any non-slash record-id segment here; handleRest performs the strict
+    // positive-integer validation so malformed IDs deterministically return 400.
+    const restMatch = req.url?.match(/^\/api\/([a-z0-9.-]+)(?:\/([^/?]+))?(?:\?.*)?$/)
     if (restMatch) {
       return handleRest(req, res, restMatch, this.config.jwtSecret)
     }
@@ -331,6 +355,8 @@ export class NativeServer {
 
   public async start() {
     try {
+      await bootstrapTelemetry()
+
       const dbHealth = await checkDbConnection()
       if (dbHealth.ok) {
         logger.info(
@@ -344,17 +370,36 @@ export class NativeServer {
         )
       }
 
-      const { applied, summary } = await forge()
-      if (applied.length > 0) {
-        logger.info(
-          'moon.schema',
-          `Schema auto-sync: ${applied.length} changes applied (${summary.tablesCreated} tables, ${summary.columnsAdded} cols, ${summary.foreignKeysAdded} FKs, ${summary.indexesCreated} indexes)`
-        )
+      if (process.env.MOON_AUTO_SYNC === 'true') {
+        const { applied, summary } = await forge()
+        if (applied.length > 0) {
+          logger.info(
+            'moon.schema',
+            `Schema auto-sync (MOON_AUTO_SYNC): ${applied.length} changes applied (${summary.tablesCreated} tables, ${summary.columnsAdded} cols, ${summary.foreignKeysAdded} FKs, ${summary.indexesCreated} indexes)`
+          )
+        } else {
+          logger.info(
+            'moon.schema',
+            `Schema verified & up-to-date: ${summary.totalModels} models (${summary.totalColumns} fields synchronized with PostgreSQL)`
+          )
+        }
       } else {
-        logger.info(
-          'moon.schema',
-          `Schema verified & up-to-date: ${summary.totalModels} models (${summary.totalColumns} fields synchronized with PostgreSQL)`
-        )
+        // Verify-only: runtime schema repair is intentionally disabled. A zero-state
+        // install must be made migration-complete by the migration runner (`up`/`bootstrap`)
+        // instead of mutating schema at server boot.
+        const { migrations, summary } = await forge({ dryRun: true })
+        if (migrations.length > 0) {
+          logger.warn(
+            'moon.schema',
+            `Schema drift detected (${migrations.length} pending changes across ${summary.totalModels} models). ` +
+            'Runtime repair is disabled; run the migration runner (db:migrate / bootstrap) to reach migration-completeness.'
+          )
+        } else {
+          logger.info(
+            'moon.schema',
+            `Schema verified & up-to-date: ${summary.totalModels} models (${summary.totalColumns} fields synchronized with PostgreSQL)`
+          )
+        }
       }
 
       if (this.config.onBoot) {
@@ -439,5 +484,6 @@ export class NativeServer {
     }
 
     await teardownOrm()
+    await shutdownTelemetry()
   }
 }

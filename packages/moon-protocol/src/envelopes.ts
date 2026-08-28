@@ -67,8 +67,14 @@ export interface EndpointDef<
   method: HttpMethod
   path: string
   description?: string
+  /** Logical group for OpenAPI. Defaults to a tag derived from the path. */
+  tags?: string[]
+  /** Auth policy. Drives OpenAPI `security`. Must match runtime behavior. */
   auth?: 'none' | 'user' | 'admin'
   query?: TQuery
   body?: TBody
-  response: TResponse
+  params?: TQuery
+  response?: TResponse
+  /** Success HTTP status. Defaults to 200 (201 for creates via builders). */
+  successStatus?: number
 }
