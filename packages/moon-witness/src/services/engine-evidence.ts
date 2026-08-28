@@ -1,4 +1,4 @@
-import { sha256String, stableSerialize } from './hash.ts'
+import { sha256String, stableSerialize } from './hash.js'
 import {
   WITNESS_ENGINE_RESULT_V1,
   type EngineConflict,
@@ -11,7 +11,7 @@ import {
   type EngineResultEnvelope,
   type EngineScope,
   type EngineUnresolved
-} from '../types/engine.ts'
+} from '../types/engine.js'
 
 interface FinalizeOptions {
   runId: string

@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs'
 import { setupOrm, getDb, getModel, createCtx, SUPERUSER_ID, Vertex, registerModel, type DbConfig } from '@moon/orm'
-import { getRegistry } from '@moon/orm/dist/registry.ts'
-import { authenticateRequest, AuthError, issueJwt } from './utils/auth.ts'
+import { getRegistry } from '@moon/orm/dist/registry.js'
+import { authenticateRequest, AuthError, issueJwt } from './utils/auth.js'
 
 export interface VercelAdapterConfig {
   database: DbConfig;

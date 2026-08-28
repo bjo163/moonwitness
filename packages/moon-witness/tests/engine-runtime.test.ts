@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { checksumEngineResult } from '../src/services/engine-evidence.ts'
-import { InMemoryEngineRunStore } from '../src/services/engine-store.ts'
-import { WitnessEngineRegistry, WitnessEngineRuntime } from '../src/services/engine-runtime.ts'
-import type { EngineEvidenceCandidate, WitnessEngineModule } from '../src/types/engine.ts'
+import { checksumEngineResult } from '../src/services/engine-evidence.js'
+import { InMemoryEngineRunStore } from '../src/services/engine-store.js'
+import { WitnessEngineRegistry, WitnessEngineRuntime } from '../src/services/engine-runtime.js'
+import type { EngineEvidenceCandidate, WitnessEngineModule } from '../src/types/engine.js'
 
 const ctx = { actor: 'test-user' }
 

@@ -1,5 +1,5 @@
-import { sha256String, stableSerialize } from './hash.ts'
-import { validateAnalyzeResult } from './analyze-contract.ts'
+import { sha256String, stableSerialize } from './hash.js'
+import { validateAnalyzeResult } from './analyze-contract.js'
 import {
   unavailableSemanticObservation,
   validateSemanticObservation,
@@ -7,7 +7,7 @@ import {
   type WitnessAnalyzeInputV1,
   type WitnessAnalyzeResultV1,
   type WitnessSemanticProvider
-} from '../types/analyze.ts'
+} from '../types/analyze.js'
 
 function validateInput(input: WitnessAnalyzeInputV1): void {
   if (!input || input.protocol !== 'WITNESS_ANALYZE_INPUT_V1') {

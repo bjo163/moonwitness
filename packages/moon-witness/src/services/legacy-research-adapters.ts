@@ -1,4 +1,4 @@
-import { sha256String, stableSerialize } from './hash.ts'
+import { sha256String, stableSerialize } from './hash.js'
 
 export type LegacyResearchSource = 'COSMIC' | 'PROPETIC' | 'DIVINE_TEXT' | 'CRAYON_RGBL'
 export type LegacyMappingKind = 'ONTOLOGY_EVIDENCE' | 'FIGURE_PROJECTION' | 'TEXTUAL_WITNESS' | 'UNKNOWN'

@@ -1,7 +1,7 @@
 import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm'
-import type IrCron from './models/ir-cron.ts'
-import type IrCronLog from './models/ir-cron-log.ts'
-import type IrQueueJob from './models/ir-queue-job.ts'
+import type IrCron from './models/ir-cron.js'
+import type IrCronLog from './models/ir-cron-log.js'
+import type IrQueueJob from './models/ir-queue-job.js'
 
 export async function loadDemoData(): Promise<void> {
   const IrCronModel = getModel('ir.cron') as typeof IrCron

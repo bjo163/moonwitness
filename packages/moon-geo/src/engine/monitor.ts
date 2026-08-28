@@ -1,5 +1,5 @@
-import { ingestSourceSnapshot } from './watcher.ts'
-import { computeGeoSemanticDiff, DiffResult } from './diff.ts'
+import { ingestSourceSnapshot } from './watcher.js'
+import { computeGeoSemanticDiff, DiffResult } from './diff.js'
 import { Ctx, createCtx, getModel, SUPERUSER_ID } from '@moon/orm'
 import { readFileSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'

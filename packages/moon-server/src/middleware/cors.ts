@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import { resolveCorsOrigin, type CorsConfig } from '../utils/http.ts'
+import { resolveCorsOrigin, type CorsConfig } from '../utils/http.js'
 
 /**
  * CORS middleware supporting origin whitelisting and safe credentials

@@ -2,7 +2,7 @@ import { Vertex, fields } from '@moon/orm'
 import {
   SOURCE_CAPABILITY_SELECTION,
   SOURCE_CLASS_SELECTION
-} from '../graph/contracts.ts'
+} from '../graph/contracts.js'
 
 /**
  * wx.source — provenance/source registry for Witness graph records.

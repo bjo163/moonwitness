@@ -1,62 +1,62 @@
-import WxEntity from './models/wx-entity.ts'
-import WxEntityAlias from './models/wx-entity-alias.ts'
-import WxEntityIdentifier from './models/wx-entity-identifier.ts'
-import WxSource from './models/wx-source.ts'
-import WxProvenance from './models/wx-provenance.ts'
-import WxRelationType from './models/wx-relation-type.ts'
-import WxRelation from './models/wx-relation.ts'
-import WxReligion from './models/wx-religion.ts'
-import WxCommunity from './models/wx-community.ts'
-import WxScripture from './models/wx-scripture.ts'
-import WxScriptureBook from './models/wx-scripture-book.ts'
-import WxScriptureVerse from './models/wx-scripture-verse.ts'
-import WxTradition from './models/wx-tradition.ts'
-import WxTraditionItem from './models/wx-tradition-item.ts'
-import WxDevotion from './models/wx-devotion.ts'
-import WxAsmaulHusna from './models/wx-asmaul-husna.ts'
-import WxBookmark from './models/wx-bookmark.ts'
-import WxHistory from './models/wx-history.ts'
-import WxPassage from './models/wx-passage.ts'
-import WxTextEdition from './models/wx-text-edition.ts'
-import WxContent from './models/wx-content.ts'
-import WxRoot from './models/wx-root.ts'
-import WxLexeme from './models/wx-lexeme.ts'
-import WxLexicalOccurrence from './models/wx-lexical-occurrence.ts'
-import WxRevelationEvent from './models/wx-revelation-event.ts'
-import WxRevelationEventPassage from './models/wx-revelation-event-passage.ts'
-import WxFigure from './models/wx-figure.ts'
-import WxFigureName from './models/wx-figure-name.ts'
-import WxFigureRole from './models/wx-figure-role.ts'
-import WxTraditionCorpus from './models/wx-tradition-corpus.ts'
-import WxTraditionUnit from './models/wx-tradition-unit.ts'
-import WxTraditionReference from './models/wx-tradition-reference.ts'
-import WxTraditionAttribution from './models/wx-tradition-attribution.ts'
-import WxTransmissionChain from './models/wx-transmission-chain.ts'
-import WxTransmissionLink from './models/wx-transmission-link.ts'
-import WxTraditionAssessment from './models/wx-tradition-assessment.ts'
-import WxConcept from './models/wx-concept.ts'
-import WxAssertion from './models/wx-assertion.ts'
-import WxEvidence from './models/wx-evidence.ts'
-import WxDivineExpression from './models/wx-divine-expression.ts'
-import WxDivineExpressionOccurrence from './models/wx-divine-expression-occurrence.ts'
-import WxLegacyMapping from './models/wx-legacy-mapping.ts'
-import WxEngineRun from './models/wx-engine-run.ts'
-import WxEngineResult from './models/wx-engine-result.ts'
-import WxResearchHypothesis from './models/wx-research-hypothesis.ts'
-import WxResearchRun from './models/wx-research-run.ts'
-import WxScoreResult from './models/wx-score-result.ts'
+import WxEntity from './models/wx-entity.js'
+import WxEntityAlias from './models/wx-entity-alias.js'
+import WxEntityIdentifier from './models/wx-entity-identifier.js'
+import WxSource from './models/wx-source.js'
+import WxProvenance from './models/wx-provenance.js'
+import WxRelationType from './models/wx-relation-type.js'
+import WxRelation from './models/wx-relation.js'
+import WxReligion from './models/wx-religion.js'
+import WxCommunity from './models/wx-community.js'
+import WxScripture from './models/wx-scripture.js'
+import WxScriptureBook from './models/wx-scripture-book.js'
+import WxScriptureVerse from './models/wx-scripture-verse.js'
+import WxTradition from './models/wx-tradition.js'
+import WxTraditionItem from './models/wx-tradition-item.js'
+import WxDevotion from './models/wx-devotion.js'
+import WxAsmaulHusna from './models/wx-asmaul-husna.js'
+import WxBookmark from './models/wx-bookmark.js'
+import WxHistory from './models/wx-history.js'
+import WxPassage from './models/wx-passage.js'
+import WxTextEdition from './models/wx-text-edition.js'
+import WxContent from './models/wx-content.js'
+import WxRoot from './models/wx-root.js'
+import WxLexeme from './models/wx-lexeme.js'
+import WxLexicalOccurrence from './models/wx-lexical-occurrence.js'
+import WxRevelationEvent from './models/wx-revelation-event.js'
+import WxRevelationEventPassage from './models/wx-revelation-event-passage.js'
+import WxFigure from './models/wx-figure.js'
+import WxFigureName from './models/wx-figure-name.js'
+import WxFigureRole from './models/wx-figure-role.js'
+import WxTraditionCorpus from './models/wx-tradition-corpus.js'
+import WxTraditionUnit from './models/wx-tradition-unit.js'
+import WxTraditionReference from './models/wx-tradition-reference.js'
+import WxTraditionAttribution from './models/wx-tradition-attribution.js'
+import WxTransmissionChain from './models/wx-transmission-chain.js'
+import WxTransmissionLink from './models/wx-transmission-link.js'
+import WxTraditionAssessment from './models/wx-tradition-assessment.js'
+import WxConcept from './models/wx-concept.js'
+import WxAssertion from './models/wx-assertion.js'
+import WxEvidence from './models/wx-evidence.js'
+import WxDivineExpression from './models/wx-divine-expression.js'
+import WxDivineExpressionOccurrence from './models/wx-divine-expression-occurrence.js'
+import WxLegacyMapping from './models/wx-legacy-mapping.js'
+import WxEngineRun from './models/wx-engine-run.js'
+import WxEngineResult from './models/wx-engine-result.js'
+import WxResearchHypothesis from './models/wx-research-hypothesis.js'
+import WxResearchRun from './models/wx-research-run.js'
+import WxScoreResult from './models/wx-score-result.js'
 
 // Ingestion Data Plane (#65)
-import WxSourcePolicy from './models/wx-source-policy.ts'
-import WxSourceManifest from './models/wx-source-manifest.ts'
-import WxSourceArtifact from './models/wx-source-artifact.ts'
-import WxSourceSnapshot from './models/wx-source-snapshot.ts'
+import WxSourcePolicy from './models/wx-source-policy.js'
+import WxSourceManifest from './models/wx-source-manifest.js'
+import WxSourceArtifact from './models/wx-source-artifact.js'
+import WxSourceSnapshot from './models/wx-source-snapshot.js'
 
 // Graph core
-export * from './graph/contracts.ts'
-export * from './graph/identity.ts'
-export * from './graph/relation-ontology.ts'
-export { WitnessGraphService } from './graph/service.ts'
+export * from './graph/contracts.js'
+export * from './graph/identity.js'
+export * from './graph/relation-ontology.js'
+export { WitnessGraphService } from './graph/service.js'
 export {
   findEntities,
   entityProfile,
@@ -69,19 +69,19 @@ export {
   type EntityProfile,
   type PassageTree,
   type FigureMentionResult
-} from './graph/domain-queries.ts'
-export { seedWitnessGraphCore } from './seed/graph-core.ts'
-export { loadDemoData } from './demo-data.ts'
-export { views } from './views.ts'
+} from './graph/domain-queries.js'
+export { seedWitnessGraphCore } from './seed/graph-core.js'
+export { loadDemoData } from './demo-data.js'
+export { views } from './views.js'
 
 // Astronomy (pure compute — no DB)
-export { getMoonData, type MoonData } from './astronomy/moon-phase.ts'
-export { getIslamicData, getDailyPrayerTimes, type PrayerData, type DailyPrayerTimes } from './astronomy/prayer-times.ts'
-export { getSunPosition, getDuhaTime, type SunPositionData, type DuhaTimeData, type DuhaStatus } from './astronomy/sun-position.ts'
+export { getMoonData, type MoonData } from './astronomy/moon-phase.js'
+export { getIslamicData, getDailyPrayerTimes, type PrayerData, type DailyPrayerTimes } from './astronomy/prayer-times.js'
+export { getSunPosition, getDuhaTime, type SunPositionData, type DuhaTimeData, type DuhaStatus } from './astronomy/sun-position.js'
 
 // Routes
-export { registerWitnessRoutes } from './routes.ts'
-export { registerWitnessEngineRoutes } from './engine-routes.ts'
+export { registerWitnessRoutes } from './routes.js'
+export { registerWitnessEngineRoutes } from './engine-routes.js'
 
 // Ingestion pipeline exports (#65)
 export type {
@@ -98,7 +98,7 @@ export type {
   AllowedEngineUse,
   RevelationFamily,
   SourceLineage
-} from './types/ingestion.ts'
+} from './types/ingestion.js'
 
 export type {
   AnalysisFindingStatus,
@@ -114,7 +114,7 @@ export type {
   WitnessAnalyzeResultV1,
   WitnessSemanticProvider,
   WitnessSemanticObservationV1
-} from './types/analyze.ts'
+} from './types/analyze.js'
 
 export {
   unavailableSemanticObservation,
@@ -122,10 +122,10 @@ export {
   WITNESS_ANALYZE_INPUT_V1,
   WITNESS_ANALYZE_RESULT_V1,
   WITNESS_SEMANTIC_OBSERVATION_V1
-} from './types/analyze.ts'
+} from './types/analyze.js'
 
-export { validateAnalyzeResult } from './services/analyze-contract.ts'
-export { analyzeWitness } from './services/analyze.ts'
+export { validateAnalyzeResult } from './services/analyze-contract.js'
+export { analyzeWitness } from './services/analyze.js'
 
 // Reusable engine kernel (#57)
 export type {
@@ -146,12 +146,12 @@ export type {
   EngineScopeInput,
   EngineSourceRevision,
   WitnessEngineModule
-} from './types/engine.ts'
-export { WITNESS_ENGINE_RESULT_V1, WITNESS_ENGINE_RUNTIME_VERSION } from './types/engine.ts'
-export { resolveEngineScope, checksumEngineScope } from './services/engine-scope.ts'
-export { finalizeEngineResult, checksumEngineResult } from './services/engine-evidence.ts'
-export { SCORE_PROFILES, getScoreProfile, score, scoreEntity, scoreRelation, scoreAssertion, scoreEvidence, scoreFinding, toEngineScore, independentEvidence, type EvidenceIndependenceInput, type WitnessScoreDimension, type WitnessScoreProfile, type WitnessScoreResult } from './services/scoring.ts'
-export { persistScoreResult, type PersistScoreInput } from './services/score-store.ts'
+} from './types/engine.js'
+export { WITNESS_ENGINE_RESULT_V1, WITNESS_ENGINE_RUNTIME_VERSION } from './types/engine.js'
+export { resolveEngineScope, checksumEngineScope } from './services/engine-scope.js'
+export { finalizeEngineResult, checksumEngineResult } from './services/engine-evidence.js'
+export { SCORE_PROFILES, getScoreProfile, score, scoreEntity, scoreRelation, scoreAssertion, scoreEvidence, scoreFinding, toEngineScore, independentEvidence, type EvidenceIndependenceInput, type WitnessScoreDimension, type WitnessScoreProfile, type WitnessScoreResult } from './services/scoring.js'
+export { persistScoreResult, type PersistScoreInput } from './services/score-store.js'
 export {
   mapLegacyResearchRecord,
   adaptLegacyResearchRecord,
@@ -162,10 +162,10 @@ export {
   type LegacyResearchRecord,
   type LegacyResearchSource,
   type WitnessLegacyCandidate
-} from './services/legacy-research-adapters.ts'
-export { distribution, type ResearchDistribution, type ResearchObservation } from './services/research-patterns.ts'
-export { InMemoryEngineRunStore, MoonOrmEngineRunStore } from './services/engine-store.ts'
-export { WitnessEngineRegistry, WitnessEngineRuntime } from './services/engine-runtime.ts'
+} from './services/legacy-research-adapters.js'
+export { distribution, type ResearchDistribution, type ResearchObservation } from './services/research-patterns.js'
+export { InMemoryEngineRunStore, MoonOrmEngineRunStore } from './services/engine-store.js'
+export { WitnessEngineRegistry, WitnessEngineRuntime } from './services/engine-runtime.js'
 export {
   REVELATION_FAMILIES,
   createRevelationQueryModule,
@@ -174,7 +174,7 @@ export {
   type RevelationContentWitness,
   type RevelationPassageContext,
   type RevelationQueryInput
-} from './engines/revelation-query.ts'
+} from './engines/revelation-query.js'
 export {
   buildCrossScriptureEvidenceMatrix,
   createCrossScriptureComparisonModule,
@@ -183,7 +183,7 @@ export {
   type CrossScriptureEvidenceClass,
   type CrossScriptureEvidenceEntry,
   type CrossScriptureEvidenceMatrix
-} from './engines/cross-scripture.ts'
+} from './engines/cross-scripture.js'
 export {
   createFigureAnalysisModule,
   createTraditionTransmissionModule,
@@ -191,38 +191,38 @@ export {
   validateTraditionAnalysisInput,
   type FigureAnalysisInput,
   type TraditionAnalysisInput
-} from './engines/figure-tradition.ts'
+} from './engines/figure-tradition.js'
 export {
   createLexicalAnalysisModule,
   validateLexicalAnalysisInput,
   type LexicalAnalysisInput
-} from './engines/lexical-analysis.ts'
+} from './engines/lexical-analysis.js'
 export {
   createConceptEvidenceModule,
   validateConceptEvidenceInput,
   type ConceptEvidenceInput
-} from './engines/concept-evidence.ts'
+} from './engines/concept-evidence.js'
 export {
   createDivineExpressionModule,
   validateDivineExpressionInput,
   type DivineExpressionInput
-} from './engines/divine-expression.ts'
+} from './engines/divine-expression.js'
 export {
   createResearchHypothesisModule,
   createAiResearchSynthesisModule,
   validateResearchHypothesisInput,
   type ResearchHypothesisInput
-} from './engines/research-hypothesis.ts'
+} from './engines/research-hypothesis.js'
 
 export {
   planLegacyMigration,
   DEFAULT_ADAPTER_VERSION
-} from './services/legacy-migration.ts'
+} from './services/legacy-migration.js'
 export {
   executeLegacyMigration,
   type LegacyMigrationExecution,
   type LegacyMigrationExecutionOptions
-} from './services/legacy-migration-executor.ts'
+} from './services/legacy-migration-executor.js'
 
 export type {
   LegacyWitnessModel,
@@ -232,7 +232,7 @@ export type {
   LegacyMigrationOperation,
   LegacyMigrationPlan,
   MigrationOperationStatus
-} from './types/migration.ts'
+} from './types/migration.js'
 
 export {
   registerAdapter,
@@ -243,7 +243,7 @@ export {
   normalizeArtifact,
   validateNormalized,
   executeImport
-} from './services/ingestion.ts'
+} from './services/ingestion.js'
 
 export {
   sha256Buffer,
@@ -253,15 +253,15 @@ export {
   computeRecordsChecksum,
   stableSerialize,
   validateArtifactPath
-} from './services/hash.ts'
+} from './services/hash.js'
 
 export {
   runBuiltinValidation,
   createReport,
   addFinding
-} from './services/validation.ts'
+} from './services/validation.js'
 
-export { FixtureAdapter, fixtureAdapter } from './adapters/fixture-adapter.ts'
+export { FixtureAdapter, fixtureAdapter } from './adapters/fixture-adapter.js'
 
 // Models export
 export {

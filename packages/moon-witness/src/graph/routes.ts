@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { createCtx, getModel } from '@moon/orm'
 import { verifyToken } from '@moon/server'
-import { globalRoutes } from '@moon/server/dist/router.ts'
+import { globalRoutes } from '@moon/server/dist/router.js'
 import {
   entityProfile,
   figureMentions,
@@ -9,7 +9,7 @@ import {
   passageByReference,
   passageContent,
   passageTree
-} from './domain-queries.ts'
+} from './domain-queries.js'
 
 const HEADERS = {
   'Content-Type': 'application/json',

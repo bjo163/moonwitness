@@ -12,8 +12,8 @@ import {
   createCtx,
   getModel,
 } from '@moon/orm'
-import { handleRpc } from '../src/handlers/rpc.ts'
-import { logger } from '../src/logger.ts'
+import { handleRpc } from '../src/handlers/rpc.js'
+import { logger } from '../src/logger.js'
 
 const TEST_SECRET = 'super-secret-jwt-key-for-rpc-security-test-32chars!'
 

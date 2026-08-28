@@ -2,7 +2,7 @@
  * Seed 99 Asmaul Husna into wx_asmaul_husna
  * Source: Hardcoded canonical data
  */
-import { initSeedDb, batchInsert } from './seed-utils.ts'
+import { initSeedDb, batchInsert } from './seed-utils.js'
 
 const ASMAUL_HUSNA = [
   { number: 1, name_arabic: 'الرَّحْمَنُ', name_latin: 'Ar-Rahman', translation_id: 'Maha Pengasih', quran_reference: 'QS. Al-Fatihah: 1' },

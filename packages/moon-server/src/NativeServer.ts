@@ -14,10 +14,10 @@ import {
   checkDbConnection,
   type DbConfig
 } from '@moon/orm'
-import { globalRoutes, HttpHandler } from './router.ts'
-import { createProxyHandler } from './proxy.ts'
-import { logger } from './logger.ts'
-import { generateOpenApi } from './openapi.ts'
+import { globalRoutes, HttpHandler } from './router.js'
+import { createProxyHandler } from './proxy.js'
+import { logger } from './logger.js'
+import { generateOpenApi } from './openapi.js'
 import {
   handleLogin,
   handleRegister,
@@ -27,14 +27,14 @@ import {
   handleLogout,
   handleGetSession,
   type AuthConfig
-} from './handlers/auth.ts'
-import { handleDbStatus, handleMetaModels, handleMetaModel, handleHealth, handleLiveness, handleReadiness } from './handlers/meta.ts'
-import { handleRest } from './handlers/rest.ts'
-import { handleRpc } from './handlers/rpc.ts'
-import { handleSSE, getActiveClientCount, closeAllSSEConnections } from './handlers/sse.ts'
-import { renderDashboard, renderSwaggerUI } from './views/dashboard.ts'
-import { sendJson, handleCorsPreflight, setCorsConfig, type CorsConfig } from './utils/http.ts'
-import { authenticateRequest, AuthError, issueJwt } from './utils/auth.ts'
+} from './handlers/auth.js'
+import { handleDbStatus, handleMetaModels, handleMetaModel, handleHealth, handleLiveness, handleReadiness } from './handlers/meta.js'
+import { handleRest } from './handlers/rest.js'
+import { handleRpc } from './handlers/rpc.js'
+import { handleSSE, getActiveClientCount, closeAllSSEConnections } from './handlers/sse.js'
+import { renderDashboard, renderSwaggerUI } from './views/dashboard.js'
+import { sendJson, handleCorsPreflight, setCorsConfig, type CorsConfig } from './utils/http.js'
+import { authenticateRequest, AuthError, issueJwt } from './utils/auth.js'
 
 export interface MoonConfig {
   database: DbConfig

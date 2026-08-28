@@ -1,5 +1,5 @@
 import { Vertex, fields, type Ctx } from '@moon/orm'
-import { AUTHORITY_CLASS_SELECTION, normalizeRevelationFamilyCode, RECORD_STATUS_SELECTION, SOURCE_CLASS_SELECTION } from '../graph/contracts.ts'
+import { AUTHORITY_CLASS_SELECTION, normalizeRevelationFamilyCode, RECORD_STATUS_SELECTION, SOURCE_CLASS_SELECTION } from '../graph/contracts.js'
 
 /**
  * wx.scripture — Universal Divine Scripture

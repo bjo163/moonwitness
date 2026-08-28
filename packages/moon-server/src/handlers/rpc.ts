@@ -1,8 +1,8 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { getModel, getDb, createCtx, AuthorizationError, ANONYMOUS_ID } from '@moon/orm'
-import { parseBody, sendJson } from '../utils/http.ts'
-import { authenticateRequest, AuthError } from '../utils/auth.ts'
-import { logger } from '../logger.ts'
+import { parseBody, sendJson } from '../utils/http.js'
+import { authenticateRequest, AuthError } from '../utils/auth.js'
+import { logger } from '../logger.js'
 import { RpcRequestSchema } from '@moon/protocol'
 
 const METHOD_NAME_REGEX = /^[a-zA-Z0-9_]+$/

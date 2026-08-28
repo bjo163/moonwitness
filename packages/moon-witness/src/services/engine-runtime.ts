@@ -1,7 +1,7 @@
-import { sha256String, stableSerialize } from './hash.ts'
-import { checksumEngineResult, finalizeEngineResult } from './engine-evidence.ts'
-import { checksumEngineScope, resolveEngineScope } from './engine-scope.ts'
-import WxScoreResult from '../models/wx-score-result.ts'
+import { sha256String, stableSerialize } from './hash.js'
+import { checksumEngineResult, finalizeEngineResult } from './engine-evidence.js'
+import { checksumEngineScope, resolveEngineScope } from './engine-scope.js'
+import WxScoreResult from '../models/wx-score-result.js'
 import {
   WITNESS_ENGINE_RUNTIME_VERSION,
   type EngineEvidenceExplanation,
@@ -14,7 +14,7 @@ import {
   type EngineScopeInput,
   type EngineSourceRevision,
   type WitnessEngineModule
-} from '../types/engine.ts'
+} from '../types/engine.js'
 
 const SEMVER = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/
 const CODE = /^[a-z][a-z0-9._-]{1,79}$/

@@ -36,8 +36,8 @@ import type {
   ValidationReport,
   ValidationFinding,
   SourceLineage
-} from '../types/ingestion.ts'
-import { computeRecordsChecksum } from '../services/hash.ts'
+} from '../types/ingestion.js'
+import { computeRecordsChecksum } from '../services/hash.js'
 
 // ═══════════════════════════════════════════
 // FIXTURE DATA TYPES

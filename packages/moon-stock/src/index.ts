@@ -1,11 +1,11 @@
-import StockLocation from './stock-location.ts'
-import StockWarehouse from './stock-warehouse.ts'
-import StockPicking from './stock-picking.ts'
-import StockMove from './stock-move.ts'
-import StockQuant from './stock-quant.ts'
+import StockLocation from './stock-location.js'
+import StockWarehouse from './stock-warehouse.js'
+import StockPicking from './stock-picking.js'
+import StockMove from './stock-move.js'
+import StockQuant from './stock-quant.js'
 
-export { loadDemoData } from './demo-data.ts'
-export { views } from './views.ts'
+export { loadDemoData } from './demo-data.js'
+export { views } from './views.js'
 export {
   StockLocation,
   StockWarehouse,

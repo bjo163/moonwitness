@@ -1,10 +1,10 @@
-import CabChange from './models/cab-change.ts'
-import CabMeeting from './models/cab-meeting.ts'
-import CabDecision from './models/cab-decision.ts'
+import CabChange from './models/cab-change.js'
+import CabMeeting from './models/cab-meeting.js'
+import CabDecision from './models/cab-decision.js'
 
-export { registerCabRoutes } from './routes.ts'
-export { loadDemoData } from './demo-data.ts'
-export { views } from './views.ts'
+export { registerCabRoutes } from './routes.js'
+export { loadDemoData } from './demo-data.js'
+export { views } from './views.js'
 export { CabChange, CabMeeting, CabDecision }
 
 export default {

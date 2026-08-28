@@ -13,7 +13,7 @@ import {
   EndpointDef,
   moonResponse,
   MoonErrorSchema,
-} from './envelopes.ts'
+} from './envelopes.js'
 import {
   LoginRequestSchema,
   RegisterRequestSchema,
@@ -23,13 +23,13 @@ import {
   AuthResponseSchema,
   SessionResponseSchema,
   AuthSuccessSchema,
-} from './contracts/auth.ts'
+} from './contracts/auth.js'
 import {
   HealthResponseSchema,
   DbStatusResponseSchema,
   MetaModelsResponseSchema,
-} from './contracts/system.ts'
-import { RpcRequestSchema, RpcResponseSchema } from './contracts/rpc.ts'
+} from './contracts/system.js'
+import { RpcRequestSchema, RpcResponseSchema } from './contracts/rpc.js'
 
 // ── REGISTRY ──────────────────────────────────────────────────────
 const endpointRegistry: EndpointDef[] = []

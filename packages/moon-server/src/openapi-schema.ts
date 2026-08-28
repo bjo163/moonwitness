@@ -13,7 +13,7 @@ import {
   restEndpointDefs,
 } from '@moon/protocol'
 import { registry } from '@moon/orm'
-import { globalRoutes } from './router.ts'
+import { globalRoutes } from './router.js'
 
 // ── ZOD → OPENAPI SCHEMA CONVERTER ──────────────────────────────
 type JsonSchema = Record<string, any>

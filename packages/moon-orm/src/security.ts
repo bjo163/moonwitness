@@ -1,6 +1,6 @@
-import { getDb } from './config.ts'
-import type { Ctx } from './env.ts'
-import type { Vertex } from './base.ts'
+import { getDb } from './config.js'
+import type { Ctx } from './env.js'
+import type { Vertex } from './base.js'
 
 export type PermissionOperation = 'permRead' | 'permWrite' | 'permCreate' | 'permUnlink'
 export type AuthSecurityScope = 'login' | 'register' | 'password-recovery'

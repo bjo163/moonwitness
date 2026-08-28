@@ -1,9 +1,9 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { EventEmitter } from 'node:events'
 import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm'
-import { logger } from '../logger.ts'
-import { parseUrl, resolveCorsOrigin, type CorsConfig } from '../utils/http.ts'
-import { verifyToken, AuthError, type VerifyTokenOptions } from '../utils/auth.ts'
+import { logger } from '../logger.js'
+import { parseUrl, resolveCorsOrigin, type CorsConfig } from '../utils/http.js'
+import { verifyToken, AuthError, type VerifyTokenOptions } from '../utils/auth.js'
 
 // Global SSE state
 if (!(globalThis as any).moonEmitter) {

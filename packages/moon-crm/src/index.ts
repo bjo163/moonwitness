@@ -1,9 +1,9 @@
-import CrmStage from './crm-stage.ts'
-import CrmTeam from './crm-team.ts'
-import CrmLead from './crm-lead.ts'
+import CrmStage from './crm-stage.js'
+import CrmTeam from './crm-team.js'
+import CrmLead from './crm-lead.js'
 
-export { loadDemoData } from './demo-data.ts'
-export { views } from './views.ts'
+export { loadDemoData } from './demo-data.js'
+export { views } from './views.js'
 export {
   CrmStage,
   CrmTeam,

@@ -1,13 +1,13 @@
 import type { Ctx } from '@moon/orm'
-import WxAssertion from '../models/wx-assertion.ts'
-import WxEvidence from '../models/wx-evidence.ts'
-import WxProvenance from '../models/wx-provenance.ts'
-import WxResearchHypothesis from '../models/wx-research-hypothesis.ts'
-import WxResearchRun from '../models/wx-research-run.ts'
-import WxSource from '../models/wx-source.ts'
-import { stableSerialize } from '../services/hash.ts'
-import type { Loose } from '../graph/service.ts'
-import type { EngineEvidenceExplanation, EngineResultDraft, EngineRunRecord, EngineScopeInput, EngineValidationResult, RevelationFamily, WitnessEngineModule } from '../types/engine.ts'
+import WxAssertion from '../models/wx-assertion.js'
+import WxEvidence from '../models/wx-evidence.js'
+import WxProvenance from '../models/wx-provenance.js'
+import WxResearchHypothesis from '../models/wx-research-hypothesis.js'
+import WxResearchRun from '../models/wx-research-run.js'
+import WxSource from '../models/wx-source.js'
+import { stableSerialize } from '../services/hash.js'
+import type { Loose } from '../graph/service.js'
+import type { EngineEvidenceExplanation, EngineResultDraft, EngineRunRecord, EngineScopeInput, EngineValidationResult, RevelationFamily, WitnessEngineModule } from '../types/engine.js'
 
 export interface ResearchHypothesisInput { hypothesisId: number; predicate?: string; assertionClass?: string; algorithmVersion: string; filters?: Record<string, string> }
 const REVISION_FAMILIES = new Set(['QURAN', 'TAWRAT', 'ZABUR', 'INJIL'])

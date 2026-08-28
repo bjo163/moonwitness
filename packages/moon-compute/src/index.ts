@@ -9,6 +9,6 @@
  * @module @moon/compute
  */
 
-export * from './moon-phase.ts'
-export * from './prayer-times.ts'
-export * from './sun-position.ts'
+export * from './moon-phase.js'
+export * from './prayer-times.js'
+export * from './sun-position.js'

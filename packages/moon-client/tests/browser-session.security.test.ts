@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 
-const authSource = readFileSync(new URL('../src/auth.ts', import.meta.url), 'utf8')
-const apiSource = readFileSync(new URL('../src/api-client.ts', import.meta.url), 'utf8')
+const authSource = readFileSync(new URL('../src/auth.js', import.meta.url), 'utf8')
+const apiSource = readFileSync(new URL('../src/api-client.js', import.meta.url), 'utf8')
 
 describe('browser session authority (#89)', () => {
   it('does not fabricate browser JWTs or fallback privileged users', () => {

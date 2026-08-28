@@ -4,7 +4,7 @@ import {
   type ReviewDecision,
   type ScoreDimensionState,
   type WitnessAnalyzeResultV1
-} from '../types/analyze.ts'
+} from '../types/analyze.js'
 
 const ANALYSIS_STATUSES = new Set([
   'ESTABLISHED',

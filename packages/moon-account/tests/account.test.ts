@@ -4,8 +4,8 @@ import {
   AccountJournal,
   AccountMove,
   AccountMoveLine
-} from '../src/index.ts'
-import accountAddon from '../src/index.ts'
+} from '../src/index.js'
+import accountAddon from '../src/index.js'
 
 describe('@moon/account Addon (#22)', () => {
   it('exports addon manifest with base dependency', () => {

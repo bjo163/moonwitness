@@ -1,5 +1,5 @@
 import { Vertex, fields, type Ctx } from '@moon/orm'
-import { sha256String } from '../services/hash.ts'
+import { sha256String } from '../services/hash.js'
 
 const OFFSET_SCHEME_SELECTION: Array<[string, string]> = [
   ['UNICODE_CODEPOINT', 'Unicode Code Point'],

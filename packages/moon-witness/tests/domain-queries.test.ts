@@ -7,7 +7,7 @@ import {
   passageByReference,
   passageContent,
   passageTree
-} from '../src/graph/domain-queries.ts'
+} from '../src/graph/domain-queries.js'
 
 type Row = Record<string, any>
 let mockDb: Record<string, Row[]> = {}

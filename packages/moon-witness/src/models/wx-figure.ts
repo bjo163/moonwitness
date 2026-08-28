@@ -1,5 +1,5 @@
 import { Vertex, fields } from '@moon/orm'
-import { RECORD_STATUS_SELECTION } from '../graph/contracts.ts'
+import { RECORD_STATUS_SELECTION } from '../graph/contracts.js'
 
 /** Canonical person/figure identity shared by Scripture, tradition, and research. */
 export default class WxFigure extends Vertex {

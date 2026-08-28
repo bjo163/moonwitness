@@ -1,15 +1,15 @@
-import MzCase from './models/mz-case.ts'
-import MzAssessment from './models/mz-assessment.ts'
-import MzFilter from './models/mz-filter.ts'
-import MzReference from './models/mz-reference.ts'
+import MzCase from './models/mz-case.js'
+import MzAssessment from './models/mz-assessment.js'
+import MzFilter from './models/mz-filter.js'
+import MzReference from './models/mz-reference.js'
 
-import { chooseMethod, PRIMARY_FILTERS, SECONDARY_FILTERS, validateAssessment } from './engine.ts'
-export { registerMizanRoutes } from './routes.ts'
-export { loadDemoData } from './demo-data.ts'
-export { views } from './views.ts'
+import { chooseMethod, PRIMARY_FILTERS, SECONDARY_FILTERS, validateAssessment } from './engine.js'
+export { registerMizanRoutes } from './routes.js'
+export { loadDemoData } from './demo-data.js'
+export { views } from './views.js'
 
 export { chooseMethod, PRIMARY_FILTERS, SECONDARY_FILTERS, validateAssessment }
-export type { AssessmentDecision, AssessmentInput, AssessmentMethod, MethodDecision, MethodInput } from './engine.ts'
+export type { AssessmentDecision, AssessmentInput, AssessmentMethod, MethodDecision, MethodInput } from './engine.js'
 export { MzCase, MzAssessment, MzFilter, MzReference }
 
 export default {

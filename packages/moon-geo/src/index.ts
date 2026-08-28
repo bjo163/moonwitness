@@ -1,14 +1,14 @@
-import GeoProvince from './models/geo-province.ts'
-import GeoCity from './models/geo-city.ts'
-import GeoDistrict from './models/geo-district.ts'
-import GeoVillage from './models/geo-village.ts'
-import GeoPostal from './models/geo-postal.ts'
-import GeoHistory from './models/geo-history.ts'
-import GeoSourceSnapshot from './models/geo-source-snapshot.ts'
-import GeoCandidate from './models/geo-candidate.ts'
+import GeoProvince from './models/geo-province.js'
+import GeoCity from './models/geo-city.js'
+import GeoDistrict from './models/geo-district.js'
+import GeoVillage from './models/geo-village.js'
+import GeoPostal from './models/geo-postal.js'
+import GeoHistory from './models/geo-history.js'
+import GeoSourceSnapshot from './models/geo-source-snapshot.js'
+import GeoCandidate from './models/geo-candidate.js'
 
-export { loadDemoData } from './demo-data.ts'
-export { views } from './views.ts'
+export { loadDemoData } from './demo-data.js'
+export { views } from './views.js'
 export {
   GeoProvince,
   GeoCity,
@@ -20,9 +20,9 @@ export {
   GeoCandidate
 }
 
-export * from './engine/watcher.ts'
-export * from './engine/diff.ts'
-export * from './engine/monitor.ts'
+export * from './engine/watcher.js'
+export * from './engine/diff.js'
+export * from './engine/monitor.js'
 
 export default {
   name: 'geo',

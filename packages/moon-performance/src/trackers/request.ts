@@ -1,5 +1,5 @@
 import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm'
-import type { RequestMetrics } from '../types/index.ts'
+import type { RequestMetrics } from '../types/index.js'
 
 /**
  * Track HTTP request performance

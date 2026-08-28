@@ -1,19 +1,19 @@
-import PxRequest from './models/px-request.ts'
-import PxCache from './models/px-cache.ts'
-import PxQuery from './models/px-query.ts'
-import PxSystem from './models/px-system.ts'
-import IrDashboardWidget from './models/ir-dashboard-widget.ts'
+import PxRequest from './models/px-request.js'
+import PxCache from './models/px-cache.js'
+import PxQuery from './models/px-query.js'
+import PxSystem from './models/px-system.js'
+import IrDashboardWidget from './models/ir-dashboard-widget.js'
 
 // Trackers
-export { trackRequest } from './trackers/request.ts'
-export { trackQuery } from './trackers/query.ts'
-export { trackSystem } from './trackers/system.ts'
-export { updateCacheStats } from './trackers/cache.ts'
-export { loadDemoData } from './demo-data.ts'
-export { views } from './views.ts'
+export { trackRequest } from './trackers/request.js'
+export { trackQuery } from './trackers/query.js'
+export { trackSystem } from './trackers/system.js'
+export { updateCacheStats } from './trackers/cache.js'
+export { loadDemoData } from './demo-data.js'
+export { views } from './views.js'
 
 // Middleware
-export { performanceMiddleware } from './middleware/performance.ts'
+export { performanceMiddleware } from './middleware/performance.js'
 
 // Types
 export type {
@@ -21,7 +21,7 @@ export type {
   QueryMetrics,
   SystemMetrics,
   CacheStatsUpdate
-} from './types/index.ts'
+} from './types/index.js'
 
 // Models export
 export {

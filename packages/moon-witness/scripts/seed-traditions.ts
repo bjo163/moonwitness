@@ -4,7 +4,7 @@
  * For Taurat (Mishna Pirkei Avot), Zabur (Tasbih Daud), Injil (Didache)
  * Source: Hardcoded canonical data from quran-core
  */
-import { initSeedDb } from './seed-utils.ts'
+import { initSeedDb } from './seed-utils.js'
 
 const TRADITIONS_DATA = [
   // TAURAT — Mishna Pirkei Avot

@@ -1,5 +1,5 @@
 import { Vertex, fields } from '@moon/orm'
-import { RELATION_POLARITY_SELECTION } from '../graph/contracts.ts'
+import { RELATION_POLARITY_SELECTION } from '../graph/contracts.js'
 
 const EVIDENCE_RELATION_SELECTION: Array<[string, string]> = [
   ['SUPPORTS', 'Supports'],

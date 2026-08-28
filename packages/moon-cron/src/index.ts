@@ -1,12 +1,12 @@
-import IrCron from './models/ir-cron.ts'
-import IrCronLog from './models/ir-cron-log.ts'
-import IrQueueJob from './models/ir-queue-job.ts'
+import IrCron from './models/ir-cron.js'
+import IrCronLog from './models/ir-cron-log.js'
+import IrQueueJob from './models/ir-queue-job.js'
 
-export { loadDemoData } from './demo-data.ts'
-export { views } from './views.ts'
-export { CronRunner, globalCronRunner, computeNextCallDate } from './runner.ts'
-export { CosmicQueue, CosmicWorker } from './queue.ts'
-export type { Job, JobOptions, JobProcessor } from './queue.ts'
+export { loadDemoData } from './demo-data.js'
+export { views } from './views.js'
+export { CronRunner, globalCronRunner, computeNextCallDate } from './runner.js'
+export { CosmicQueue, CosmicWorker } from './queue.js'
+export type { Job, JobOptions, JobProcessor } from './queue.js'
 export { IrCron, IrCronLog, IrQueueJob }
 
 export default {

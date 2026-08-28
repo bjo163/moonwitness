@@ -1,5 +1,5 @@
 import { Vertex, fields } from '@moon/orm'
-import { RECORD_STATUS_SELECTION } from '../graph/contracts.ts'
+import { RECORD_STATUS_SELECTION } from '../graph/contracts.js'
 
 /** Evidence-backed role assignment; role is not inferred from religion membership. */
 export default class WxFigureRole extends Vertex {

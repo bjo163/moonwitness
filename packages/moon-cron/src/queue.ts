@@ -1,5 +1,5 @@
 import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm'
-import type IrQueueJob from './models/ir-queue-job.ts'
+import type IrQueueJob from './models/ir-queue-job.js'
 
 export interface JobOptions {
   priority?: number

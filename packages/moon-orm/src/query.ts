@@ -1,5 +1,5 @@
-import { Ctx } from './env.ts'
-import { Vertex, Recordset, ModelRecord } from './base.ts'
+import { Ctx } from './env.js'
+import { Vertex, Recordset, ModelRecord } from './base.js'
 
 export class QueryBuilder<M extends typeof Vertex, W extends string = never> {
   private _modelClass: M

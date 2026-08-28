@@ -1,7 +1,7 @@
 import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm'
-import type IrAutomation from '../models/ir-automation.ts'
-import type IrWebhook from '../models/ir-webhook.ts'
-import type IrWebhookLog from '../models/ir-webhook-log.ts'
+import type IrAutomation from '../models/ir-automation.js'
+import type IrWebhook from '../models/ir-webhook.js'
+import type IrWebhookLog from '../models/ir-webhook-log.js'
 
 export async function evaluateAutomations(
   modelName: string,

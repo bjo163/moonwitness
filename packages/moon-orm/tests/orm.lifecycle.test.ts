@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { setupOrm, getDb, teardownOrm, closeDb } from '../src/index.ts'
+import { setupOrm, getDb, teardownOrm, closeDb } from '../src/index.js'
 
 describe('Database Connection Lifecycle & Teardown (#20)', () => {
   it('initializes DB, retrieves instance, and cleanly tears down pool', async () => {

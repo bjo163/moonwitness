@@ -1,6 +1,6 @@
 import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm'
-import type IrCron from './models/ir-cron.ts'
-import type IrCronLog from './models/ir-cron-log.ts'
+import type IrCron from './models/ir-cron.js'
+import type IrCronLog from './models/ir-cron-log.js'
 
 /**
  * Calculate the next execution date based on interval settings.

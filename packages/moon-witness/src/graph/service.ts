@@ -1,12 +1,12 @@
 import type { Ctx } from '@moon/orm'
-import WxEntity from '../models/wx-entity.ts'
-import WxEntityAlias from '../models/wx-entity-alias.ts'
-import WxProvenance from '../models/wx-provenance.ts'
-import WxRelation from '../models/wx-relation.ts'
-import WxRelationType from '../models/wx-relation-type.ts'
-import WxSource from '../models/wx-source.ts'
-import { canonicalRelationKey, canonicalizeSymmetricEntities, validateRelationCandidate } from './identity.ts'
-import * as queries from './queries.ts'
+import WxEntity from '../models/wx-entity.js'
+import WxEntityAlias from '../models/wx-entity-alias.js'
+import WxProvenance from '../models/wx-provenance.js'
+import WxRelation from '../models/wx-relation.js'
+import WxRelationType from '../models/wx-relation-type.js'
+import WxSource from '../models/wx-source.js'
+import { canonicalRelationKey, canonicalizeSymmetricEntities, validateRelationCandidate } from './identity.js'
+import * as queries from './queries.js'
 
 type Loose = Record<string, any>
 export type { Loose }

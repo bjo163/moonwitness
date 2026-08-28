@@ -15,14 +15,14 @@ vi.mock('@moon/orm', () => ({
   createCtx: mocks.createCtx,
 }))
 
-vi.mock('../src/utils/http.ts', () => ({
+vi.mock('../src/utils/http.js', () => ({
   parseBody: mocks.parseBody,
   parseUrl: mocks.parseUrl,
   sendJson: mocks.sendJson,
 }))
 
-vi.mock('../src/utils/auth.ts', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('../src/utils/auth.ts')>()
+vi.mock('../src/utils/auth.js', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../src/utils/auth.js')>()
   return {
     ...actual,
     authenticateRequest: mocks.authenticateRequest,
@@ -30,7 +30,7 @@ vi.mock('../src/utils/auth.ts', async (importOriginal) => {
   }
 })
 
-import { handleRest } from '../src/handlers/rest.ts'
+import { handleRest } from '../src/handlers/rest.js'
 
 function makeModel() {
   const txEnv = { uid: 42, trx: { id: 'real-transaction' } }

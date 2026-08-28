@@ -6,7 +6,7 @@ import {
   PARTNER_SEED_DATA,
   COUNTRY_SEED_DATA,
   CURRENCY_SEED_DATA
-} from './index.ts'
+} from './index.js'
 
 const BCRYPT_ROUNDS = 10
 

@@ -1,15 +1,15 @@
 import type { Ctx } from '@moon/orm'
-import WxContent from '../models/wx-content.ts'
-import WxLexicalOccurrence from '../models/wx-lexical-occurrence.ts'
-import WxPassage from '../models/wx-passage.ts'
-import WxProvenance from '../models/wx-provenance.ts'
-import WxRevelationEvent from '../models/wx-revelation-event.ts'
-import WxRevelationEventPassage from '../models/wx-revelation-event-passage.ts'
-import WxScripture from '../models/wx-scripture.ts'
-import WxSource from '../models/wx-source.ts'
-import WxTextEdition from '../models/wx-text-edition.ts'
-import { passageByReference } from '../graph/domain-queries.ts'
-import type { Loose } from '../graph/service.ts'
+import WxContent from '../models/wx-content.js'
+import WxLexicalOccurrence from '../models/wx-lexical-occurrence.js'
+import WxPassage from '../models/wx-passage.js'
+import WxProvenance from '../models/wx-provenance.js'
+import WxRevelationEvent from '../models/wx-revelation-event.js'
+import WxRevelationEventPassage from '../models/wx-revelation-event-passage.js'
+import WxScripture from '../models/wx-scripture.js'
+import WxSource from '../models/wx-source.js'
+import WxTextEdition from '../models/wx-text-edition.js'
+import { passageByReference } from '../graph/domain-queries.js'
+import type { Loose } from '../graph/service.js'
 import type {
   EngineEvidenceCandidate,
   EngineEvidenceExplanation,
@@ -22,7 +22,7 @@ import type {
   EngineValidationResult,
   RevelationFamily,
   WitnessEngineModule
-} from '../types/engine.ts'
+} from '../types/engine.js'
 
 export const REVELATION_FAMILIES: RevelationFamily[] = ['QURAN', 'TAWRAT', 'ZABUR', 'INJIL']
 

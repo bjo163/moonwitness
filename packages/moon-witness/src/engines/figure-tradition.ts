@@ -1,19 +1,19 @@
 import type { Ctx } from '@moon/orm'
-import WxEntity from '../models/wx-entity.ts'
-import WxFigure from '../models/wx-figure.ts'
-import WxFigureName from '../models/wx-figure-name.ts'
-import WxFigureRole from '../models/wx-figure-role.ts'
-import WxProvenance from '../models/wx-provenance.ts'
-import WxSource from '../models/wx-source.ts'
-import WxTraditionAssessment from '../models/wx-tradition-assessment.ts'
-import WxTraditionAttribution from '../models/wx-tradition-attribution.ts'
-import WxTraditionCorpus from '../models/wx-tradition-corpus.ts'
-import WxTraditionReference from '../models/wx-tradition-reference.ts'
-import WxTraditionUnit from '../models/wx-tradition-unit.ts'
-import WxTransmissionChain from '../models/wx-transmission-chain.ts'
-import WxTransmissionLink from '../models/wx-transmission-link.ts'
-import { figureMentions } from '../graph/domain-queries.ts'
-import type { Loose } from '../graph/service.ts'
+import WxEntity from '../models/wx-entity.js'
+import WxFigure from '../models/wx-figure.js'
+import WxFigureName from '../models/wx-figure-name.js'
+import WxFigureRole from '../models/wx-figure-role.js'
+import WxProvenance from '../models/wx-provenance.js'
+import WxSource from '../models/wx-source.js'
+import WxTraditionAssessment from '../models/wx-tradition-assessment.js'
+import WxTraditionAttribution from '../models/wx-tradition-attribution.js'
+import WxTraditionCorpus from '../models/wx-tradition-corpus.js'
+import WxTraditionReference from '../models/wx-tradition-reference.js'
+import WxTraditionUnit from '../models/wx-tradition-unit.js'
+import WxTransmissionChain from '../models/wx-transmission-chain.js'
+import WxTransmissionLink from '../models/wx-transmission-link.js'
+import { figureMentions } from '../graph/domain-queries.js'
+import type { Loose } from '../graph/service.js'
 import type {
   EngineEvidenceCandidate,
   EngineEvidenceExplanation,
@@ -25,7 +25,7 @@ import type {
   EngineSourceRevision,
   EngineValidationResult,
   WitnessEngineModule
-} from '../types/engine.ts'
+} from '../types/engine.js'
 
 export interface FigureAnalysisInput { figureId?: number; entityId?: number }
 export interface TraditionAnalysisInput { unitId?: number; entityId?: number; reference?: string; figureId?: number }

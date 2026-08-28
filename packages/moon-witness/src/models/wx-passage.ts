@@ -1,5 +1,5 @@
 import { Vertex, fields, type Ctx } from '@moon/orm'
-import { PASSAGE_TYPE_SELECTION } from '../graph/contracts.ts'
+import { PASSAGE_TYPE_SELECTION } from '../graph/contracts.js'
 
 function relationId(value: unknown): number | null {
   if (typeof value === 'number') return value

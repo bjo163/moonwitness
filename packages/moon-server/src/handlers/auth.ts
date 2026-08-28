@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import nodemailer from 'nodemailer'
 import { getModel, createCtx, ANONYMOUS_ID, authSecurityContext } from '@moon/orm'
-import { logger } from '../logger.ts'
-import { parseBody, sendJson } from '../utils/http.ts'
+import { logger } from '../logger.js'
+import { parseBody, sendJson } from '../utils/http.js'
 import {
   generateSecureOtp,
   hashOtpToken,
@@ -17,7 +17,7 @@ import {
   authenticateRequest,
   resolveUserRole,
   AuthError,
-} from '../utils/auth.ts'
+} from '../utils/auth.js'
 
 export interface AuthConfig {
   jwtSecret: string

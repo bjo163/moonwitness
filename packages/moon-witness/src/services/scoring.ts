@@ -1,5 +1,5 @@
-import { sha256String, stableSerialize } from './hash.ts'
-import type { EngineScoreBreakdown } from '../types/engine.ts'
+import { sha256String, stableSerialize } from './hash.js'
+import type { EngineScoreBreakdown } from '../types/engine.js'
 
 export type WitnessScoreState = 'AVAILABLE' | 'INSUFFICIENT' | 'NOT_APPLICABLE'
 export interface WitnessScoreDimension { code: string; state: WitnessScoreState; value?: number; weight?: number; evidenceRefs: string[]; reasonCodes: string[] }

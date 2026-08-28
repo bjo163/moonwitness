@@ -1,4 +1,4 @@
-import { SUPERUSER_ID } from './env.ts'
+import { SUPERUSER_ID } from './env.js'
 
 export type RbacOperation = 'read' | 'write' | 'create' | 'unlink'
 

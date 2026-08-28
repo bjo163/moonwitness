@@ -1,5 +1,5 @@
 import { Vertex, fields } from '@moon/orm'
-import { RECORD_STATUS_SELECTION } from '../graph/contracts.ts'
+import { RECORD_STATUS_SELECTION } from '../graph/contracts.js'
 
 /** Sourced revelation event; event identity is distinct from passage identity. */
 export default class WxRevelationEvent extends Vertex {

@@ -7,14 +7,14 @@
  * New canonical graph data is seeded first. Legacy flat scripture/tradition
  * seeds remain temporarily for migration compatibility until #55.
  */
-import { initSeedDb } from './seed-utils.ts'
-import { seedWitnessGraphCore } from './seed-graph-core.ts'
-import { seedScriptures } from './seed-scriptures.ts'
-import { seedQuranSurahsAyahs } from './seed-quran.ts'
-import { seedHadithBooks } from './seed-hadiths.ts'
-import { seedAsmaulHusna } from './seed-asmaul-husna.ts'
-import { seedTraditions } from './seed-traditions.ts'
-import { seedDevotions } from './seed-devotions.ts'
+import { initSeedDb } from './seed-utils.js'
+import { seedWitnessGraphCore } from './seed-graph-core.js'
+import { seedScriptures } from './seed-scriptures.js'
+import { seedQuranSurahsAyahs } from './seed-quran.js'
+import { seedHadithBooks } from './seed-hadiths.js'
+import { seedAsmaulHusna } from './seed-asmaul-husna.js'
+import { seedTraditions } from './seed-traditions.js'
+import { seedDevotions } from './seed-devotions.js'
 
 async function seedAll() {
   console.log('🌙 ══════════════════════════════════════════')

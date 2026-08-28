@@ -1,6 +1,6 @@
 import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm'
-import { getDailyPrayerTimes } from '@moon/witness/dist/astronomy/prayer-times.ts'
-import { getMoonData } from '@moon/witness/dist/astronomy/moon-phase.ts'
+import { getDailyPrayerTimes } from '@moon/witness/dist/astronomy/prayer-times.js'
+import { getMoonData } from '@moon/witness/dist/astronomy/moon-phase.js'
 
 function env() {
   return createCtx(SUPERUSER_ID, {}, getModel as any)

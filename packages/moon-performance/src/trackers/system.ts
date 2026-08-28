@@ -1,5 +1,5 @@
 import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm'
-import type { SystemMetrics } from '../types/index.ts'
+import type { SystemMetrics } from '../types/index.js'
 
 /**
  * Track system metrics

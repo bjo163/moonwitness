@@ -1,5 +1,5 @@
 import { Vertex, fields } from '@moon/orm'
-import { OPERATIONAL_STATUS_SELECTION, SOURCE_CLASS_SELECTION } from '../graph/contracts.ts'
+import { OPERATIONAL_STATUS_SELECTION, SOURCE_CLASS_SELECTION } from '../graph/contracts.js'
 
 const ASSERTION_CLASS_SELECTION: Array<[string, string]> = [
   ['EXPLICIT_SOURCE', 'Explicit Source'],

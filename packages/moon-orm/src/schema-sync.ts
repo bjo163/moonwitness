@@ -1,6 +1,6 @@
-import { getDb } from './config.ts'
-import type { Vertex } from './base.ts'
-import type { FieldDef } from './fields.ts'
+import { getDb } from './config.js'
+import type { Vertex } from './base.js'
+import type { FieldDef } from './fields.js'
 
 interface ColumnInfo {
   column_name: string
@@ -56,7 +56,7 @@ export interface SchemaSyncResult {
 }
 
 export async function forge(options: { dryRun?: boolean; silent?: boolean } = {}): Promise<SchemaSyncResult> {
-  const { getRegistry } = await import('./registry.ts')
+  const { getRegistry } = await import('./registry.js')
   const registry = getRegistry()
   const applied: PendingChange[] = []
   const migrations: MigrationCommand[] = []

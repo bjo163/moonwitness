@@ -1,11 +1,11 @@
-import HdTeam from './models/hd-team.ts'
-import HdStage from './models/hd-stage.ts'
-import HdTicket from './models/hd-ticket.ts'
-import HdSla from './models/hd-sla.ts'
-import HdTag from './models/hd-tag.ts'
+import HdTeam from './models/hd-team.js'
+import HdStage from './models/hd-stage.js'
+import HdTicket from './models/hd-ticket.js'
+import HdSla from './models/hd-sla.js'
+import HdTag from './models/hd-tag.js'
 
-export { loadDemoData } from './demo-data.ts'
-export { views } from './views.ts'
+export { loadDemoData } from './demo-data.js'
+export { views } from './views.js'
 export { HdTeam, HdStage, HdTicket, HdSla, HdTag }
 
 export default {

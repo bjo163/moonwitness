@@ -4,14 +4,14 @@ const mocks = vi.hoisted(() => ({
   getDb: vi.fn(),
 }))
 
-vi.mock('../src/config.ts', () => ({
+vi.mock('../src/config.js', () => ({
   getDb: mocks.getDb,
 }))
 
-import { createCtx } from '../src/env.ts'
-import { Vertex, Recordset } from '../src/base.ts'
-import { fields } from '../src/fields.ts'
-import { AuthorizationError } from '../src/security.ts'
+import { createCtx } from '../src/env.js'
+import { Vertex, Recordset } from '../src/base.js'
+import { fields } from '../src/fields.js'
+import { AuthorizationError } from '../src/security.js'
 
 type Row = Record<string, any>
 type Tables = Record<string, Row[]>

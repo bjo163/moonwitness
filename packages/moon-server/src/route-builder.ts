@@ -7,10 +7,10 @@
  */
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { z } from 'zod'
-import { globalRoutes } from './router.ts'
-import { authenticateRequest, AuthError } from './utils/auth.ts'
+import { globalRoutes } from './router.js'
+import { authenticateRequest, AuthError } from './utils/auth.js'
 import { createCtx, getModel, SUPERUSER_ID, ANONYMOUS_ID, AuthorizationError } from '@moon/orm'
-import { resolveCorsOrigin, getSecurityHeaders, getCorsConfig } from './utils/http.ts'
+import { resolveCorsOrigin, getSecurityHeaders, getCorsConfig } from './utils/http.js'
 import { defineEndpoint } from '@moon/protocol'
 
 // ── ROUTE CONTEXT ─────────────────────────────────────────────

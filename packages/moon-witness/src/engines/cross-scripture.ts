@@ -1,15 +1,15 @@
 import type { Ctx } from '@moon/orm'
-import WxAssertion from '../models/wx-assertion.ts'
-import WxConcept from '../models/wx-concept.ts'
-import WxEntity from '../models/wx-entity.ts'
-import WxFigure from '../models/wx-figure.ts'
-import WxPassage from '../models/wx-passage.ts'
-import WxProvenance from '../models/wx-provenance.ts'
-import WxRevelationEvent from '../models/wx-revelation-event.ts'
-import WxRelationType from '../models/wx-relation-type.ts'
-import WxScripture from '../models/wx-scripture.ts'
-import WxSource from '../models/wx-source.ts'
-import { WitnessGraphService, type Loose } from '../graph/service.ts'
+import WxAssertion from '../models/wx-assertion.js'
+import WxConcept from '../models/wx-concept.js'
+import WxEntity from '../models/wx-entity.js'
+import WxFigure from '../models/wx-figure.js'
+import WxPassage from '../models/wx-passage.js'
+import WxProvenance from '../models/wx-provenance.js'
+import WxRevelationEvent from '../models/wx-revelation-event.js'
+import WxRelationType from '../models/wx-relation-type.js'
+import WxScripture from '../models/wx-scripture.js'
+import WxSource from '../models/wx-source.js'
+import { WitnessGraphService, type Loose } from '../graph/service.js'
 import type {
   EngineEvidenceCandidate,
   EngineEvidenceExplanation,
@@ -23,8 +23,8 @@ import type {
   EngineValidationResult,
   RevelationFamily,
   WitnessEngineModule
-} from '../types/engine.ts'
-import { REVELATION_FAMILIES } from './revelation-query.ts'
+} from '../types/engine.js'
+import { REVELATION_FAMILIES } from './revelation-query.js'
 
 export interface CrossScriptureComparisonInput {
   entityId?: number

@@ -4,7 +4,7 @@
  * Source: hadis-api-id.vercel.app
  * Data: 9 Kutubut Tis'ah, ~38,500 Hadiths
  */
-import { initSeedDb, batchInsert, progress } from './seed-utils.ts'
+import { initSeedDb, batchInsert, progress } from './seed-utils.js'
 
 const HADITH_API = 'https://hadis-api-id.vercel.app/hadith'
 
