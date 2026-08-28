@@ -3,7 +3,7 @@ import { EventEmitter } from 'node:events'
 import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm'
 import { logger } from '../logger.js'
 import { parseUrl, resolveCorsOrigin, type CorsConfig } from '../utils/http.js'
-import { verifyToken, AuthError, type VerifyTokenOptions } from '../utils/auth.js'
+import { verifyToken, AuthError, validateUserSession, type VerifyTokenOptions } from '../utils/auth.js'
 
 // Global SSE state
 if (!(globalThis as any).moonEmitter) {
@@ -25,6 +25,7 @@ export interface SSEClient {
   tokenVersion?: number
   topics: Set<string> | null // null means all topics
   keepAliveTimer: NodeJS.Timeout
+  authTimer: NodeJS.Timeout
   createdAt: number
   lastEventId?: string
   sessionRecordId?: number | null
@@ -82,6 +83,7 @@ export function cleanupClient(clientId: string): void {
   if (!client) return
 
   clearInterval(client.keepAliveTimer)
+  clearInterval(client.authTimer)
   clients.delete(clientId)
 
   // Update session record in DB if exists
@@ -275,6 +277,41 @@ export function handleSSE(
     )
   }, heartbeatInterval)
 
+  // Session revalidation timer
+  let authTimer: NodeJS.Timeout
+  if (uid !== undefined) {
+    const authInterval = 60000
+    authTimer = setInterval(async () => {
+      if (!clients.has(clientId)) {
+        clearInterval(authTimer)
+        return
+      }
+
+      try {
+        const authEnv = createCtx(SUPERUSER_ID, {}, getModel as any)
+        await validateUserSession(authEnv, uid, tokenVersion)
+      } catch (err) {
+        if (err instanceof AuthError) {
+          logger.warn('moon.sse', `Session revalidation failed for client ${clientId}:`, err.message)
+          safeWrite(
+            client,
+            `event: session_revoked\ndata: ${JSON.stringify({
+              reason: 'revoked',
+              userId: uid,
+              timestamp: Date.now(),
+              message: err.message
+            })}\n\n`
+          )
+          cleanupClient(clientId)
+        } else {
+          logger.error('moon.sse', `Unexpected error during session revalidation for client ${clientId}:`, err)
+        }
+      }
+    }, authInterval)
+  } else {
+    authTimer = setInterval(() => {}, 60000)
+  }
+
   const client: SSEClient = {
     id: clientId,
     res,
@@ -285,6 +322,7 @@ export function handleSSE(
     tokenVersion,
     topics: subscribedTopics,
     keepAliveTimer,
+    authTimer,
     createdAt: Date.now(),
     lastEventId,
     sessionRecordId: null
@@ -357,6 +395,7 @@ export function handleSSE(
 
   // Disconnect listener
   const onDisconnect = () => {
+    clearInterval(authTimer)
     emitter.removeListener('moon_event', onEvent)
     req.removeListener('close', onDisconnect)
     req.removeListener('error', onDisconnect)
