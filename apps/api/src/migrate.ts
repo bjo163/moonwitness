@@ -121,7 +121,6 @@ async function run() {
   }
 
   const cmd = process.argv[2]
-  const isDemo = process.argv.includes("--demo")
 
   if (cmd === "diff") {
     await diff()
@@ -140,10 +139,8 @@ async function run() {
     await syncSchema()
     await loadBaseData()
     await seedWitnessGraphCore()
+    await loadAllDemoData()
     console.log("Canonical seed completed.")
-    if (isDemo) {
-      await loadAllDemoData()
-    }
   } else if (cmd === "demo") {
     const integrity = verifySeedIntegrity()
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
@@ -158,17 +155,15 @@ async function run() {
     await syncSchema()
     await loadBaseData()
     await seedWitnessGraphCore()
+    await loadAllDemoData()
     console.log("Database install completed.")
-    if (isDemo) {
-      await loadAllDemoData()
-    }
   } else if (cmd === "verify") {
     await check()
     const integrity = verifySeedIntegrity()
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
     console.log("Database migration and canonical seed integrity checks passed.")
   } else {
-    console.log("Usage: pnpm tsx src/migrate.ts <diff|up|down|status|check|seed|demo|install|verify> [--demo]")
+    console.log("Usage: pnpm tsx src/migrate.ts <diff|up|down|status|check|seed|demo|install|verify>")
   }
 
   process.exit(0)
