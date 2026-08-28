@@ -2,7 +2,7 @@
  * Seed Other Divine Scriptures (Taurat, Zabur, Injil) into wx_scripture
  * Source: Hardcoded metadata
  */
-import { initSeedDb } from './seed-utils.js'
+import { initSeedDb } from './seed-utils.ts'
 
 const SCRIPTURES = [
   {

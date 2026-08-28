@@ -1,11 +1,11 @@
-import { getDb } from './config.js'
-import { QueryBuilder } from './query.js'
-import type { FieldDef, InferFieldType } from './fields.js'
-import { isFieldDef as isFieldDefFn, fields } from './fields.js'
-import type { Ctx } from './env.js'
-import { createCtx } from './env.js'
-import { checkAccessRights, getRecordRulesDomain, AuthorizationError } from './security.js'
-import type { PermissionOperation } from './security.js'
+import { getDb } from './config.ts'
+import { QueryBuilder } from './query.ts'
+import type { FieldDef, InferFieldType } from './fields.ts'
+import { isFieldDef as isFieldDefFn, fields } from './fields.ts'
+import type { Ctx } from './env.ts'
+import { createCtx } from './env.ts'
+import { checkAccessRights, getRecordRulesDomain, AuthorizationError } from './security.ts'
+import type { PermissionOperation } from './security.ts'
 
 export type ModelFields<M extends typeof Vertex> = {
   [K in keyof InstanceType<M> as InstanceType<M>[K] extends FieldDef<any> ? K : never]: InferFieldType<InstanceType<M>[K]>

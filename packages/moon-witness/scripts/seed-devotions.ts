@@ -2,7 +2,7 @@
  * Seed Devotional Content (Adhkar / Doa / Dzikir) into wx_devotion
  * Source: Hardcoded canonical data
  */
-import { initSeedDb, batchInsert } from './seed-utils.js'
+import { initSeedDb, batchInsert } from './seed-utils.ts'
 
 const ADHKAR_DATA = [
   { type: 'dhikr', title: 'Istighfar', text_original: 'أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ', text_transliteration: "Astaghfirullaahal 'Azhiim", translation_id: 'Aku memohon ampunan kepada Allah Yang Maha Agung', category: 'Harian', timing: 'Pagi & Petang', source: 'HR. Bukhari & Muslim', benefit: 'Penghapus dosa dan pembuka rezeki' },

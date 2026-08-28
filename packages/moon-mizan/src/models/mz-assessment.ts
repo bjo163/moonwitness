@@ -1,5 +1,5 @@
 import { Vertex, fields } from '@moon/orm'
-import { validateAssessment, type AssessmentInput } from '../engine.js'
+import { validateAssessment, type AssessmentInput } from '../engine.ts'
 
 export default class MzAssessment extends Vertex {
   static _name = 'mz.assessment'

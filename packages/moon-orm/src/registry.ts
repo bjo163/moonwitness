@@ -1,26 +1,26 @@
 import { readdirSync, statSync } from 'node:fs'
 import { dirname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { Vertex } from './base.js'
+import type { Vertex } from './base.ts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const MODELS_DIR = __dirname
 
 const INFRA_FILES = new Set([
   'base.ts',
-  'base.js',
+  'base.ts',
   'fields.ts',
-  'fields.js',
+  'fields.ts',
   'index.ts',
-  'index.js',
+  'index.ts',
   'registry.ts',
-  'registry.js',
+  'registry.ts',
   'schema-sync.ts',
-  'schema-sync.js',
+  'schema-sync.ts',
   'manifest.ts',
-  'manifest.js',
+  'manifest.ts',
   'seed.ts',
-  'seed.js'
+  'seed.ts'
 ])
 
 export const registry = new Map<string, typeof Vertex>()
@@ -33,7 +33,7 @@ function walk(dir: string): string[] {
     if (statSync(fullPath).isDirectory()) {
       results = results.concat(walk(fullPath))
     } else if (
-      (entry.endsWith('.ts') || entry.endsWith('.js')) &&
+      (entry.endsWith('.ts') || entry.endsWith('.ts')) &&
       !INFRA_FILES.has(entry)
     ) {
       results.push(fullPath)

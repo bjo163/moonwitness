@@ -1,4 +1,4 @@
-import { HttpHandler } from './router.js'
+import { HttpHandler } from './router.ts'
 
 export interface ProxyOptions {
   targetUrl: string

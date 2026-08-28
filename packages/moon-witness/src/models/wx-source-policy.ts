@@ -1,5 +1,5 @@
 import { Vertex, fields } from '@moon/orm'
-import { SOURCE_POLICY_ROLE_SELECTION } from '../graph/contracts.js'
+import { SOURCE_POLICY_ROLE_SELECTION } from '../graph/contracts.ts'
 
 /**
  * wx.source.policy — Source Classification & Authority Gate

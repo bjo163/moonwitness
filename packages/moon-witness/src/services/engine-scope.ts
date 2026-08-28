@@ -1,11 +1,11 @@
-import { sha256String, stableSerialize } from './hash.js'
+import { sha256String, stableSerialize } from './hash.ts'
 import type {
   EngineOutputAuthorityClass,
   EngineScope,
   EngineScopeInput,
   EngineSourceRevision,
   RevelationFamily
-} from '../types/engine.js'
+} from '../types/engine.ts'
 
 const REVELATION_FAMILIES = new Set<RevelationFamily>(['QURAN', 'TAWRAT', 'ZABUR', 'INJIL'])
 const AUTHORITY_CLASSES = new Set<EngineOutputAuthorityClass>([

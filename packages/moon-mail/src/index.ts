@@ -1,10 +1,10 @@
-import MailActivityType from './mail-activity-type.js'
-import MailActivity from './mail-activity.js'
-import { MailMessage, FxMsgAlias } from './mail-message.js'
-import { MailTrackingValue, FxTrackAlias } from './mail-tracking-value.js'
+import MailActivityType from './mail-activity-type.ts'
+import MailActivity from './mail-activity.ts'
+import { MailMessage, FxMsgAlias } from './mail-message.ts'
+import { MailTrackingValue, FxTrackAlias } from './mail-tracking-value.ts'
 
-export { loadDemoData } from './demo-data.js'
-export { views } from './views.js'
+export { loadDemoData } from './demo-data.ts'
+export { views } from './views.ts'
 export {
   MailActivityType,
   MailActivity,

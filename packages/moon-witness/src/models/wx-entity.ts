@@ -5,7 +5,7 @@ import {
   EPISTEMIC_LANE_SELECTION,
   OPERATIONAL_STATUS_SELECTION,
   SOURCE_CLASS_SELECTION
-} from '../graph/contracts.js'
+} from '../graph/contracts.ts'
 
 /**
  * wx.entity — canonical graph anchor.

@@ -3,7 +3,7 @@ import {
   createRevelationQueryModule,
   validateRevelationQueryInput,
   REVELATION_FAMILIES
-} from '../src/engines/revelation-query.js'
+} from '../src/engines/revelation-query.ts'
 
 describe('revelation query engine', () => {
   it('defines canonical revelation families', () => {

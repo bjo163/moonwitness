@@ -1,7 +1,7 @@
-import SgOperation from './models/sg-operation.js'
+import SgOperation from './models/sg-operation.ts'
 
-export { loadDemoData } from './demo-data.js'
-export { views } from './views.js'
+export { loadDemoData } from './demo-data.ts'
+export { views } from './views.ts'
 export { SgOperation }
 
 export default {

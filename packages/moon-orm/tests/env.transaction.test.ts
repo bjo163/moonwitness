@@ -4,11 +4,11 @@ const mocks = vi.hoisted(() => ({
   transaction: vi.fn(),
 }))
 
-vi.mock('../src/config.js', () => ({
+vi.mock('../src/config.ts', () => ({
   getDb: () => ({ transaction: mocks.transaction }),
 }))
 
-import { createCtx } from '../src/env.js'
+import { createCtx } from '../src/env.ts'
 
 describe('Moon ORM transaction context', () => {
   beforeEach(() => {

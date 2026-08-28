@@ -3,8 +3,8 @@ import * as fs from 'node:fs'
 import * as path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import type { Knex } from 'knex'
-import { getDb } from './config.js'
-import { forge } from './schema-sync.js'
+import { getDb } from './config.ts'
+import { forge } from './schema-sync.ts'
 
 const MIGRATION_LOCK_KEY = 'moonwitness:migrations:v1'
 
@@ -51,7 +51,7 @@ export async function initMigrationTable(db: Knex = getDb()) {
 export async function getMigrationFiles(dir: string): Promise<string[]> {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
   return fs.readdirSync(dir)
-    .filter((file) => file.endsWith('.ts') || file.endsWith('.js'))
+    .filter((file) => file.endsWith('.ts') || file.endsWith('.ts'))
     .sort()
 }
 

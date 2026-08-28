@@ -1,6 +1,6 @@
 import type { Knex } from 'knex'
-import type { Vertex } from './base.js'
-import { getDb } from './config.js'
+import type { Vertex } from './base.ts'
+import { getDb } from './config.ts'
 
 export const SUPERUSER_ID = 1
 export const ANONYMOUS_ID = 0

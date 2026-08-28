@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { getModel, createCtx, AuthorizationError } from '@moon/orm'
-import { parseBody, sendJson, parseUrl } from '../utils/http.js'
-import { authenticateRequest, AuthError } from '../utils/auth.js'
+import { parseBody, sendJson, parseUrl } from '../utils/http.ts'
+import { authenticateRequest, AuthError } from '../utils/auth.ts'
 import {
   MAX_LIMIT,
   DEFAULT_LIMIT,

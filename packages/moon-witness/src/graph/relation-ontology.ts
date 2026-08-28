@@ -1,4 +1,4 @@
-import { serializeKindList } from './contracts.js'
+import { serializeKindList } from './contracts.ts'
 
 export interface RelationTypeSeed {
   code: string

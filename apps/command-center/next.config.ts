@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
     "@moon/compute",
     "@moon/witness",
     "@moon/time",
+    "@moon/protocol",
   ],
   images: {
     formats: ["image/avif", "image/webp"],

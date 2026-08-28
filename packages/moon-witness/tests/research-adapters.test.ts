@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { getLegacyResearchAdapter, legacyIdempotencyKey, mapLegacyResearchRecord } from '../src/services/legacy-research-adapters.js'
-import { distribution } from '../src/services/research-patterns.js'
+import { getLegacyResearchAdapter, legacyIdempotencyKey, mapLegacyResearchRecord } from '../src/services/legacy-research-adapters.ts'
+import { distribution } from '../src/services/research-patterns.ts'
 
 describe('research and legacy adapter contracts (#61/#66)', () => {
   it('preserves origin identity and never promotes legacy AI output', () => {

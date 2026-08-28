@@ -6,7 +6,7 @@ import {
   getActiveClientCount,
   closeAllSSEConnections,
   cleanupClient,
-} from '../src/handlers/sse.js'
+} from '../src/handlers/sse.ts'
 
 function createMockReqRes(options: {
   url?: string

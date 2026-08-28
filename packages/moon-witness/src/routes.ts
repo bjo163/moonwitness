@@ -8,8 +8,8 @@ import { defineRoute } from '@moon/server'
 import { getModel } from '@moon/orm'
 import { getMoonData, getIslamicData, getDailyPrayerTimes } from '@moon/compute'
 import { cache } from '@moon/cache'
-import { registerWitnessGraphRoutes } from './graph/routes.js'
-import { registerWitnessEngineRoutes } from './engine-routes.js'
+import { registerWitnessGraphRoutes } from './graph/routes.ts'
+import { registerWitnessEngineRoutes } from './engine-routes.ts'
 
 // ═══════════════════════════════════════════
 // 📖 SCRIPTURE ROUTES

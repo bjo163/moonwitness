@@ -1,13 +1,13 @@
 import { IrModelData } from '@moon/base'
 import { createCtx, getModel, SUPERUSER_ID } from '@moon/orm'
-import WxEntity from '../models/wx-entity.js'
-import WxReligion from '../models/wx-religion.js'
-import WxRelationType from '../models/wx-relation-type.js'
+import WxEntity from '../models/wx-entity.ts'
+import WxReligion from '../models/wx-religion.ts'
+import WxRelationType from '../models/wx-relation-type.ts'
 import {
   relationSeedValues,
   WITNESS_RELATION_ONTOLOGY_VERSION,
   WITNESS_RELATION_TYPES
-} from '../graph/relation-ontology.js'
+} from '../graph/relation-ontology.ts'
 
 const RELIGION_CONTEXTS = [
   { code: 'ISLAM', name: 'Islam' },

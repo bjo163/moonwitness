@@ -1,4 +1,4 @@
-import { sha256String, stableSerialize } from './hash.js'
+import { sha256String, stableSerialize } from './hash.ts'
 import {
   LEGACY_WITNESS_MODELS,
   type LegacyMigrationCursor,
@@ -8,7 +8,7 @@ import {
   type LegacyRecordBatch,
   type LegacyWitnessModel,
   type MigrationOperationStatus
-} from '../types/migration.js'
+} from '../types/migration.ts'
 
 const DEFAULT_ADAPTER_VERSION = 'legacy-witness-v1'
 const MODEL_ORDER = new Map<LegacyWitnessModel, number>(LEGACY_WITNESS_MODELS.map((model, index) => [model, index]))

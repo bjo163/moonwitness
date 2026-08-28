@@ -1,8 +1,8 @@
 import { getDb, type Ctx } from '@moon/orm'
-import { stableSerialize } from './hash.js'
-import WxEngineResult from '../models/wx-engine-result.js'
-import WxEngineRun from '../models/wx-engine-run.js'
-import type { EngineResultEnvelope, EngineRunRecord, EngineRunStore } from '../types/engine.js'
+import { stableSerialize } from './hash.ts'
+import WxEngineResult from '../models/wx-engine-result.ts'
+import WxEngineRun from '../models/wx-engine-run.ts'
+import type { EngineResultEnvelope, EngineRunRecord, EngineRunStore } from '../types/engine.ts'
 
 function copy<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T

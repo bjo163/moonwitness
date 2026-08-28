@@ -1,5 +1,5 @@
 import { Vertex, fields } from '@moon/orm'
-import { RECORD_STATUS_SELECTION } from '../graph/contracts.js'
+import { RECORD_STATUS_SELECTION } from '../graph/contracts.ts'
 
 /** Corpus-independent semantic concept with multilingual labels kept separately. */
 export default class WxConcept extends Vertex {

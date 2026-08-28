@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { handleHealth, handleDbStatus, handleLiveness, handleReadiness } from '../src/handlers/meta.js'
+import { handleHealth, handleDbStatus, handleLiveness, handleReadiness } from '../src/handlers/meta.ts'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 
 function createMockReqRes(url = '/health') {

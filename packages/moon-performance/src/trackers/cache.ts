@@ -1,5 +1,5 @@
 import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm'
-import type { CacheStatsUpdate } from '../types/index.js'
+import type { CacheStatsUpdate } from '../types/index.ts'
 
 /**
  * Update cache statistics

@@ -6,7 +6,7 @@ import {
   RELATION_MODALITY_SELECTION,
   RELATION_POLARITY_SELECTION,
   SOURCE_CLASS_SELECTION
-} from '../graph/contracts.js'
+} from '../graph/contracts.ts'
 
 /**
  * wx.relation — provenance-aware semantic edge between canonical entities.

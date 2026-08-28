@@ -1,5 +1,5 @@
 import { Vertex, fields } from '@moon/orm'
-import { ALIAS_TYPE_SELECTION, EPISTEMIC_LANE_SELECTION } from '../graph/contracts.js'
+import { ALIAS_TYPE_SELECTION, EPISTEMIC_LANE_SELECTION } from '../graph/contracts.ts'
 
 export default class WxEntityAlias extends Vertex {
   static _name = 'wx.entity.alias'

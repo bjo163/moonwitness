@@ -15,7 +15,7 @@ import {
   MoonErrorSchema,
   paginatedResponse,
   moonResponse,
-} from '../envelopes.js'
+} from '../envelopes.ts'
 
 // ── NORMATIVE BOUNDS (mirrored by handleRest at runtime) ───────────
 export const MAX_LIMIT = 100

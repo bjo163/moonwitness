@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { SCORE_PROFILES, independentEvidence, score, toEngineScore } from '../src/services/scoring.js'
+import { SCORE_PROFILES, independentEvidence, score, toEngineScore } from '../src/services/scoring.ts'
 
 describe('Witness scoring kernel (#63)', () => {
   it('keeps not-applicable dimensions distinct from zero and is deterministic', () => {

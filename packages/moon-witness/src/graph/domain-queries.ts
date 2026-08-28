@@ -1,13 +1,13 @@
 import type { Ctx } from '@moon/orm'
-import WxContent from '../models/wx-content.js'
-import WxEntity from '../models/wx-entity.js'
-import WxEntityAlias from '../models/wx-entity-alias.js'
-import WxFigure from '../models/wx-figure.js'
-import WxFigureName from '../models/wx-figure-name.js'
-import WxFigureRole from '../models/wx-figure-role.js'
-import WxPassage from '../models/wx-passage.js'
-import WxScripture from '../models/wx-scripture.js'
-import { WitnessGraphService, type Loose } from './service.js'
+import WxContent from '../models/wx-content.ts'
+import WxEntity from '../models/wx-entity.ts'
+import WxEntityAlias from '../models/wx-entity-alias.ts'
+import WxFigure from '../models/wx-figure.ts'
+import WxFigureName from '../models/wx-figure-name.ts'
+import WxFigureRole from '../models/wx-figure-role.ts'
+import WxPassage from '../models/wx-passage.ts'
+import WxScripture from '../models/wx-scripture.ts'
+import { WitnessGraphService, type Loose } from './service.ts'
 
 const MAX_QUERY_LIMIT = 100
 const DEFAULT_QUERY_LIMIT = 20

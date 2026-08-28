@@ -1,12 +1,12 @@
 import type { Ctx } from '@moon/orm'
-import WxAssertion from '../models/wx-assertion.js'
-import WxConcept from '../models/wx-concept.js'
-import WxEntityAlias from '../models/wx-entity-alias.js'
-import WxEvidence from '../models/wx-evidence.js'
-import WxProvenance from '../models/wx-provenance.js'
-import WxSource from '../models/wx-source.js'
-import type { Loose } from '../graph/service.js'
-import type { EngineEvidenceCandidate, EngineEvidenceExplanation, EngineOutputAuthorityClass, EngineResultDraft, EngineScopeInput, EngineValidationResult, WitnessEngineModule } from '../types/engine.js'
+import WxAssertion from '../models/wx-assertion.ts'
+import WxConcept from '../models/wx-concept.ts'
+import WxEntityAlias from '../models/wx-entity-alias.ts'
+import WxEvidence from '../models/wx-evidence.ts'
+import WxProvenance from '../models/wx-provenance.ts'
+import WxSource from '../models/wx-source.ts'
+import type { Loose } from '../graph/service.ts'
+import type { EngineEvidenceCandidate, EngineEvidenceExplanation, EngineOutputAuthorityClass, EngineResultDraft, EngineScopeInput, EngineValidationResult, WitnessEngineModule } from '../types/engine.ts'
 
 export interface ConceptEvidenceInput { conceptId?: number; entityId?: number; query?: string; assertionClasses?: string[] }
 

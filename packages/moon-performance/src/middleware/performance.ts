@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import { trackRequest } from '../trackers/request.js'
+import { trackRequest } from '../trackers/request.ts'
 
 /**
  * Express/HTTP middleware to automatically track requests

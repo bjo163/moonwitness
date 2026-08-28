@@ -1,1 +1,1 @@
-export { seedWitnessGraphCore } from '../src/seed/graph-core.js'
+export { seedWitnessGraphCore } from '../src/seed/graph-core.ts'

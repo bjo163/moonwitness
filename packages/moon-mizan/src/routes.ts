@@ -1,6 +1,6 @@
 import { getModel } from '@moon/orm'
 import { defineRoute } from '@moon/server'
-import { chooseMethod, type MethodInput } from './engine.js'
+import { chooseMethod, type MethodInput } from './engine.ts'
 
 function parseBoolean(value: string | undefined): boolean {
   if (value === 'true') return true

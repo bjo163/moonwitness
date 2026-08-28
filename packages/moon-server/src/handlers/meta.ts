@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { getDb, registry, Vertex } from '@moon/orm'
 import type { FieldDef } from '@moon/orm'
-import { sendJson } from '../utils/http.js'
+import { sendJson } from '../utils/http.ts'
 
 export type MatrixViewMode = 'table' | 'kanban' | 'metrics'
 export type MatrixAccentColor = 'cyan' | 'green' | 'yellow' | 'purple' | 'pink'

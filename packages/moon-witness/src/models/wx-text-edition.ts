@@ -1,5 +1,5 @@
 import { Vertex, fields } from '@moon/orm'
-import { RECORD_STATUS_SELECTION, TEXT_EDITION_TYPE_SELECTION } from '../graph/contracts.js'
+import { RECORD_STATUS_SELECTION, TEXT_EDITION_TYPE_SELECTION } from '../graph/contracts.ts'
 
 /** Concrete textual witness, edition, manuscript, translation, or dataset. */
 export default class WxTextEdition extends Vertex {

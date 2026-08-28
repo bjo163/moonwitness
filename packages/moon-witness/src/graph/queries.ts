@@ -1,7 +1,7 @@
 import type { Ctx } from '@moon/orm'
-import WxRelation from '../models/wx-relation.js'
-import type { Loose, NeighborResult, TraversalNode, GraphPath, RelationProvenanceBundle } from './service.js'
-import type { WitnessGraphService } from './service.js'
+import WxRelation from '../models/wx-relation.ts'
+import type { Loose, NeighborResult, TraversalNode, GraphPath, RelationProvenanceBundle } from './service.ts'
+import type { WitnessGraphService } from './service.ts'
 
 const MAX_TRAVERSAL_DEPTH = 4
 const MAX_TRAVERSAL_NODES = 500

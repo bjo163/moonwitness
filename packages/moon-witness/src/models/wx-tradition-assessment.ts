@@ -1,5 +1,5 @@
 import { Vertex, fields } from '@moon/orm'
-import { RECORD_STATUS_SELECTION } from '../graph/contracts.js'
+import { RECORD_STATUS_SELECTION } from '../graph/contracts.ts'
 
 /** Independent source-aware assessment; raw values and disagreements are preserved. */
 export default class WxTraditionAssessment extends Vertex {

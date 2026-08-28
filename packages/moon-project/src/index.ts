@@ -1,12 +1,12 @@
-import PjProject from './models/pj-project.js'
-import PjStage from './models/pj-stage.js'
-import PjTask from './models/pj-task.js'
-import PjMilestone from './models/pj-milestone.js'
-import PjSprint from './models/pj-sprint.js'
-import PjTag from './models/pj-tag.js'
+import PjProject from './models/pj-project.ts'
+import PjStage from './models/pj-stage.ts'
+import PjTask from './models/pj-task.ts'
+import PjMilestone from './models/pj-milestone.ts'
+import PjSprint from './models/pj-sprint.ts'
+import PjTag from './models/pj-tag.ts'
 
-export { loadDemoData } from './demo-data.js'
-export { views } from './views.js'
+export { loadDemoData } from './demo-data.ts'
+export { views } from './views.ts'
 export { PjProject, PjStage, PjTask, PjMilestone, PjSprint, PjTag }
 
 export default {

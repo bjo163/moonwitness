@@ -5,8 +5,8 @@ import bcrypt from 'bcryptjs'
 import {
   issueJwt,
   resolveUserRole,
-} from '../src/utils/auth.js'
-import { handleLogin, handleRegister } from '../src/handlers/auth.js'
+} from '../src/utils/auth.ts'
+import { handleLogin, handleRegister } from '../src/handlers/auth.ts'
 import { registerModel, setupOrm, Vertex, fields, ANONYMOUS_ID, SUPERUSER_ID, createCtx, getModel } from '@moon/orm'
 
 const TEST_SECRET = 'super-secret-jwt-key-for-unit-testing-32chars!'

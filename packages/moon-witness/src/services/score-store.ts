@@ -1,7 +1,7 @@
 import type { Ctx } from '@moon/orm'
-import WxScoreResult from '../models/wx-score-result.js'
-import { sha256String, stableSerialize } from './hash.js'
-import type { WitnessScoreResult } from './scoring.js'
+import WxScoreResult from '../models/wx-score-result.ts'
+import { sha256String, stableSerialize } from './hash.ts'
+import type { WitnessScoreResult } from './scoring.ts'
 
 export interface PersistScoreInput {
   score: WitnessScoreResult

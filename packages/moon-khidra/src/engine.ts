@@ -1,7 +1,7 @@
 import { GoogleGenAI } from '@google/genai'
 import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm'
-import { SYSTEM_PROMPT } from './prompt.js'
-import { toolDeclarations, toolHandlers } from './tools.js'
+import { SYSTEM_PROMPT } from './prompt.ts'
+import { toolDeclarations, toolHandlers } from './tools.ts'
 
 export interface KhidraConfig {
   apiKeys: string[]

@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto'
-import { parseKindList } from './contracts.js'
+import { parseKindList } from './contracts.ts'
 
 export interface RelationTypePolicy {
   code: string

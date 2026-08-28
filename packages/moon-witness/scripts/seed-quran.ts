@@ -4,7 +4,7 @@
  * Source: equran.id API v2
  * Data: 114 Surahs, 6,236 Ayahs
  */
-import { initSeedDb, batchInsert, progress } from './seed-utils.js'
+import { initSeedDb, batchInsert, progress } from './seed-utils.ts'
 
 const EQURAN_API = 'https://equran.id/api/v2'
 

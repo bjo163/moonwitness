@@ -8,8 +8,8 @@ import {
   handleCorsPreflight,
   PayloadTooLargeError,
   InvalidJsonError
-} from '../src/utils/http.js'
-import { corsMiddleware } from '../src/middleware/cors.js'
+} from '../src/utils/http.ts'
+import { corsMiddleware } from '../src/middleware/cors.ts'
 
 function createMockReq(dataChunks: (string | Buffer)[], headers: Record<string, string> = {}): IncomingMessage {
   const emitter = new EventEmitter() as any

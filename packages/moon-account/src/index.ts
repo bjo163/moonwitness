@@ -1,10 +1,10 @@
-import AccountAccount from './account-account.js'
-import AccountJournal from './account-journal.js'
-import AccountMove from './account-move.js'
-import AccountMoveLine from './account-move-line.js'
+import AccountAccount from './account-account.ts'
+import AccountJournal from './account-journal.ts'
+import AccountMove from './account-move.ts'
+import AccountMoveLine from './account-move-line.ts'
 
-export { loadDemoData } from './demo-data.js'
-export { views } from './views.js'
+export { loadDemoData } from './demo-data.ts'
+export { views } from './views.ts'
 export {
   AccountAccount,
   AccountJournal,

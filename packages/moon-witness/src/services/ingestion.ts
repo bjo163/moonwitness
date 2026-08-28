@@ -24,15 +24,15 @@ import type {
   ValidationReport,
   ImportResult,
   ArtifactVerification
-} from '../types/ingestion.js'
+} from '../types/ingestion.ts'
 import {
   sha256Buffer,
   sha256File,
   computeFingerprint,
   computeRecordsChecksum,
   validateArtifactPath
-} from './hash.js'
-import { runBuiltinValidation } from './validation.js'
+} from './hash.ts'
+import { runBuiltinValidation } from './validation.ts'
 
 // ═══════════════════════════════════════════
 // ADAPTER REGISTRY

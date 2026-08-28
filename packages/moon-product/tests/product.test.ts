@@ -4,8 +4,8 @@ import {
   ProductTemplate,
   ProductProduct,
   ProductPricelist
-} from '../src/index.js'
-import productAddon from '../src/index.js'
+} from '../src/index.ts'
+import productAddon from '../src/index.ts'
 
 describe('@moon/product Addon (#21)', () => {
   it('exports addon manifest with base dependency', () => {

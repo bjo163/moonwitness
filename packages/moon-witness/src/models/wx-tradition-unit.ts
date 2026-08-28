@@ -1,5 +1,5 @@
 import { Vertex, fields, type Ctx } from '@moon/orm'
-import { RECORD_STATUS_SELECTION } from '../graph/contracts.js'
+import { RECORD_STATUS_SELECTION } from '../graph/contracts.ts'
 
 const TRADITION_UNIT_TYPE_SELECTION: Array<[string, string]> = [
   ['REPORT', 'Report'],

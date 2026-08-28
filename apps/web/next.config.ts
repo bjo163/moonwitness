@@ -16,7 +16,7 @@ const withSerwist = withSerwistInit({
 })
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@workspace/ui", "@moon/compute", "@moon/time"],
+  transpilePackages: ["@workspace/ui", "@moon/compute", "@moon/time", "@moon/protocol"],
 
   images: {
     formats: ["image/avif", "image/webp"],

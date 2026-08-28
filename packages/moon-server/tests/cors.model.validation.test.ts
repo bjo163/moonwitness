@@ -22,7 +22,7 @@ import {
   getCorsConfig,
   getSecurityHeaders,
   SECURITY_HEADERS
-} from '../src/utils/http.js'
+} from '../src/utils/http.ts'
 
 function createMockReq(method: string, url: string, headers: Record<string, string> = {}): IncomingMessage {
   const listeners: Record<string, Function[]> = {}
@@ -112,13 +112,13 @@ describe('CORS Configuration & Security Headers (#16)', () => {
 describe('defineRoute CORS Integration (#16)', () => {
   afterEach(async () => {
     setCorsConfig({})
-    const { globalRoutes } = await import('../src/router.js')
+    const { globalRoutes } = await import('../src/router.ts')
     globalRoutes.length = 0
   })
 
   it('respects configured CORS whitelist - allows matching origin', async () => {
     setCorsConfig({ allowedOrigins: ['https://app.moonwitness.org'] })
-    const { defineRoute } = await import('../src/route-builder.js')
+    const { defineRoute } = await import('../src/route-builder.ts')
 
     defineRoute({
       method: 'GET',
@@ -126,7 +126,7 @@ describe('defineRoute CORS Integration (#16)', () => {
       handler: async () => ({ success: true })
     })
 
-    const { globalRoutes } = await import('../src/router.js')
+    const { globalRoutes } = await import('../src/router.ts')
     const route = globalRoutes.find(r => r.path === '/test/allowed')
     expect(route).toBeDefined()
 
@@ -143,7 +143,7 @@ describe('defineRoute CORS Integration (#16)', () => {
 
   it('respects configured CORS whitelist - blocks non-matching origin', async () => {
     setCorsConfig({ allowedOrigins: ['https://app.moonwitness.org'] })
-    const { defineRoute } = await import('../src/route-builder.js')
+    const { defineRoute } = await import('../src/route-builder.ts')
 
     defineRoute({
       method: 'GET',
@@ -151,7 +151,7 @@ describe('defineRoute CORS Integration (#16)', () => {
       handler: async () => ({ success: true })
     })
 
-    const { globalRoutes } = await import('../src/router.js')
+    const { globalRoutes } = await import('../src/router.ts')
     const route = globalRoutes.find(r => r.path === '/test/blocked')
 
     const req = createMockReq('GET', '/test/blocked', { origin: 'https://evil.com' })
@@ -164,7 +164,7 @@ describe('defineRoute CORS Integration (#16)', () => {
 
   it('supports wildcard CORS origin', async () => {
     setCorsConfig({ allowedOrigins: ['*'] })
-    const { defineRoute } = await import('../src/route-builder.js')
+    const { defineRoute } = await import('../src/route-builder.ts')
 
     defineRoute({
       method: 'GET',
@@ -172,7 +172,7 @@ describe('defineRoute CORS Integration (#16)', () => {
       handler: async () => ({ success: true })
     })
 
-    const { globalRoutes } = await import('../src/router.js')
+    const { globalRoutes } = await import('../src/router.ts')
     const route = globalRoutes.find(r => r.path === '/test/wildcard')
 
     const req = createMockReq('GET', '/test/wildcard', { origin: 'https://any-origin.com' })
@@ -187,7 +187,7 @@ describe('defineRoute CORS Integration (#16)', () => {
 
   it('applies security headers on all response paths', async () => {
     setCorsConfig({ allowedOrigins: ['https://app.moonwitness.org'] })
-    const { defineRoute } = await import('../src/route-builder.js')
+    const { defineRoute } = await import('../src/route-builder.ts')
 
     defineRoute({
       method: 'GET',
@@ -195,7 +195,7 @@ describe('defineRoute CORS Integration (#16)', () => {
       handler: async () => ({ success: true })
     })
 
-    const { globalRoutes } = await import('../src/router.js')
+    const { globalRoutes } = await import('../src/router.ts')
     const route = globalRoutes.find(r => r.path === '/test/security')
 
     const req = createMockReq('GET', '/test/security', { origin: 'https://app.moonwitness.org' })
@@ -211,7 +211,7 @@ describe('defineRoute CORS Integration (#16)', () => {
 
   it('applies security headers on error responses', async () => {
     setCorsConfig({ allowedOrigins: ['https://app.moonwitness.org'] })
-    const { defineRoute } = await import('../src/route-builder.js')
+    const { defineRoute } = await import('../src/route-builder.ts')
 
     defineRoute({
       method: 'GET',
@@ -219,7 +219,7 @@ describe('defineRoute CORS Integration (#16)', () => {
       handler: async () => { throw new Error('Test error') }
     })
 
-    const { globalRoutes } = await import('../src/router.js')
+    const { globalRoutes } = await import('../src/router.ts')
     const route = globalRoutes.find(r => r.path === '/test/error')
 
     const req = createMockReq('GET', '/test/error', { origin: 'https://app.moonwitness.org' })
@@ -237,7 +237,7 @@ describe('defineRoute CORS Integration (#16)', () => {
 
 describe('REST Handler Model Name Validation (#16)', () => {
   it('rejects invalid model names with 400 INVALID_MODEL', async () => {
-    const { handleRest } = await import('../src/handlers/rest.js')
+    const { handleRest } = await import('../src/handlers/rest.ts')
     const { setupOrm } = await import('@moon/orm')
 
     setupOrm({
@@ -275,7 +275,7 @@ describe('REST Handler Model Name Validation (#16)', () => {
   })
 
   it('accepts valid model names', async () => {
-    const { handleRest } = await import('../src/handlers/rest.js')
+    const { handleRest } = await import('../src/handlers/rest.ts')
     const { setupOrm, registerModel, Vertex, fields } = await import('@moon/orm')
 
     const validModels = [

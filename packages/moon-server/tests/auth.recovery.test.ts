@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import bcrypt from 'bcryptjs'
-import { handleForgotPassword, handleVerifyOtp, handleResetPassword } from '../src/handlers/auth.js'
-import { hashOtpToken } from '../src/utils/auth.js'
+import { handleForgotPassword, handleVerifyOtp, handleResetPassword } from '../src/handlers/auth.ts'
+import { hashOtpToken } from '../src/utils/auth.ts'
 import { registerModel, setupOrm, Vertex, fields } from '@moon/orm'
 
 // Define models for testing if not already registered

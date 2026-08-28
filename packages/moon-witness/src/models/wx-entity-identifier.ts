@@ -1,5 +1,5 @@
 import { Vertex, fields } from '@moon/orm'
-import { EPISTEMIC_LANE_SELECTION } from '../graph/contracts.js'
+import { EPISTEMIC_LANE_SELECTION } from '../graph/contracts.ts'
 
 /**
  * wx.entity.identifier — source/local/external identifier distinct from aliases.

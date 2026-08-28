@@ -1,7 +1,7 @@
 import {
   forge as runSchemaSync,
   type SchemaSyncResult,
-} from './schema-sync.js'
+} from './schema-sync.ts'
 
 export interface RuntimeSchemaEnvironment {
   NODE_ENV?: string

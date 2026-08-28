@@ -20,36 +20,36 @@ export {
   type MoonError,
   type HttpMethod,
   type EndpointDef,
-} from './envelopes.js'
+} from './envelopes.ts'
 
 // ── WITNESS CONTRACTS (Scripture, Hadith, Astronomy, Engine) ──
-export * from './contracts/witness.js'
+export * from './contracts/witness.ts'
 
 // ── AUTH CONTRACTS (Login, Session, Clearance) ────────────────
-export * from './contracts/auth.js'
+export * from './contracts/auth.ts'
 
 // ── CAB CONTRACTS (Projects, Tasks, Changes, Meetings) ───────
-export * from './contracts/cab.js'
+export * from './contracts/cab.ts'
 
 // ── SYSTEM CONTRACTS (Health, DB, Metrics, Mizan) ─────────────
-export * from './contracts/system.js'
+export * from './contracts/system.ts'
 
 // ── SSE CONTRACTS (Typed Realtime Topics) ─────────────────────
-export * from './contracts/sse.js'
+export * from './contracts/sse.ts'
 
 // ── EXTERNAL CONTRACTS (NASA, USGS, Weather, Markets) ─────────
-export * from './contracts/external.js'
+export * from './contracts/external.ts'
 
 // ── MATRIX CONTRACTS (Server-Driven UI Schema & Views) ────────
-export * from './contracts/matrix.js'
+export * from './contracts/matrix.ts'
 
 // ── RPC + GENERIC REST WIRE CONTRACTS ─────────────────────────
-export * from './contracts/rpc.js'
-export * from './contracts/rest.js'
+export * from './contracts/rpc.ts'
+export * from './contracts/rest.ts'
 
 // ── CANONICAL ENDPOINT REGISTRY (Single Source of Truth) ──────
 export {
   defineEndpoint,
   getEndpointRegistry,
   resetEndpointRegistry,
-} from './registry.js'
+} from './registry.ts'

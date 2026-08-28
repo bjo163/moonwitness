@@ -1,5 +1,5 @@
 import { Vertex, fields } from '@moon/orm'
-import { ALIAS_TYPE_SELECTION } from '../graph/contracts.js'
+import { ALIAS_TYPE_SELECTION } from '../graph/contracts.ts'
 
 const FIGURE_NAME_TYPE_SELECTION: Array<[string, string]> = [
   ['CANONICAL', 'Canonical'],

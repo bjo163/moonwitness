@@ -16,7 +16,7 @@ import type {
   ValidationReport,
   ValidationFinding,
   ImportContext
-} from '../types/ingestion.js'
+} from '../types/ingestion.ts'
 
 // ═══════════════════════════════════════════
 // VALIDATION REPORT BUILDER

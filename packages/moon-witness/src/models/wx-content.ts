@@ -1,6 +1,6 @@
 import { Vertex, fields } from '@moon/orm'
-import { CONTENT_TYPE_SELECTION, RECORD_STATUS_SELECTION } from '../graph/contracts.js'
-import { sha256String } from '../services/hash.js'
+import { CONTENT_TYPE_SELECTION, RECORD_STATUS_SELECTION } from '../graph/contracts.ts'
+import { sha256String } from '../services/hash.ts'
 
 /** Source-preserving text/content attached to a passage or another entity. */
 export default class WxContent extends Vertex {

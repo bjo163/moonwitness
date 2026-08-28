@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { defineRoute } from '../src/route-builder.js'
+import { defineRoute } from '../src/route-builder.ts'
 
 describe('System Mutation Authorization (#98)', () => {
   it('throws when registering a non-GET /api/system/* route without admin auth', () => {

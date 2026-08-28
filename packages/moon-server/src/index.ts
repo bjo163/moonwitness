@@ -1,11 +1,11 @@
-export { NativeServer, publish, type MoonConfig } from './NativeServer.js'
-export { Controller, Get, Post, Put, Delete, registerController } from './router.js'
-export { defineRoute, type RouteContext, type RouteDefinition } from './route-builder.js'
-export { logger } from './logger.js'
-export { ExternalCache, createProxyHandler, type ProxyOptions } from './proxy.js'
+export { NativeServer, publish, type MoonConfig } from './NativeServer.ts'
+export { Controller, Get, Post, Put, Delete, registerController } from './router.ts'
+export { defineRoute, type RouteContext, type RouteDefinition } from './route-builder.ts'
+export { logger } from './logger.ts'
+export { ExternalCache, createProxyHandler, type ProxyOptions } from './proxy.ts'
 
 // Utilities
-export { parseBody, sendJson, parseUrl, setCorsConfig, getCorsConfig, getSecurityHeaders } from './utils/http.js'
+export { parseBody, sendJson, parseUrl, setCorsConfig, getCorsConfig, getSecurityHeaders } from './utils/http.ts'
 export {
   verifyToken,
   issueJwt,
@@ -28,10 +28,10 @@ export {
   type VerifyTokenOptions,
   type AuthenticateRequestOptions,
   type OtpChallenge,
-} from './utils/auth.js'
+} from './utils/auth.ts'
 
 // Middleware
-export { corsMiddleware } from './middleware/cors.js'
+export { corsMiddleware } from './middleware/cors.ts'
 
 // Handlers
 export {
@@ -43,7 +43,7 @@ export {
   handleLogout,
   handleGetSession,
   type AuthConfig,
-} from './handlers/auth.js'
+} from './handlers/auth.ts'
 export {
   handleDbStatus,
   handleMetaModels,
@@ -54,9 +54,9 @@ export {
   type FieldMeta,
   type MatrixViewMode,
   type MatrixAccentColor,
-} from './handlers/meta.js'
-export { handleRest } from './handlers/rest.js'
-export { handleRpc } from './handlers/rpc.js'
+} from './handlers/meta.ts'
+export { handleRest } from './handlers/rest.ts'
+export { handleRpc } from './handlers/rpc.ts'
 export {
   handleSSE,
   broadcast,
@@ -65,10 +65,10 @@ export {
   cleanupClient,
   type SSEClient,
   type SSEOptions
-} from './handlers/sse.js'
+} from './handlers/sse.ts'
 
 // Views
-export { renderDashboard, renderSwaggerUI } from './views/dashboard.js'
+export { renderDashboard, renderSwaggerUI } from './views/dashboard.ts'
 
-export * from './vercel.js'
+export * from './vercel.ts'
 

@@ -1,5 +1,5 @@
 import { getModel, createCtx, SUPERUSER_ID } from '@moon/orm'
-import type { QueryMetrics } from '../types/index.js'
+import type { QueryMetrics } from '../types/index.ts'
 
 /**
  * Track database query performance
