@@ -43,4 +43,13 @@ export {
   type RbacOperation,
   type ModelPermissionGrant
 } from './rbac-evaluator.js'
+export {
+  isOtelEnabled,
+  startDbSpan,
+  withDbSpan,
+  sanitizeSql,
+  trackAttribute,
+  shouldSampleQuery,
+  resetQuerySampler,
+} from './telemetry.js'
 

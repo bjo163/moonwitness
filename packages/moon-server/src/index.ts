@@ -4,6 +4,16 @@ export { defineRoute, type RouteContext, type RouteDefinition } from './route-bu
 export { logger } from './logger.js'
 export { ExternalCache, createProxyHandler, type ProxyOptions } from './proxy.js'
 
+// Telemetry
+export {
+  bootstrapTelemetry,
+  shutdownTelemetry,
+  isTelemetryEnabled,
+  startDomainSpan,
+  withDomainSpan,
+  type TelemetryConfig,
+} from './telemetry.js'
+
 // Utilities
 export { parseBody, sendJson, parseUrl, setCorsConfig, getCorsConfig, getSecurityHeaders } from './utils/http.js'
 export {
