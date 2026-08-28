@@ -184,7 +184,6 @@ export async function up(knex: Knex): Promise<void> {
       table.timestamp("created_at").defaultTo(knex.fn.now())
       table.timestamp("updated_at").defaultTo(knex.fn.now())
       table.foreign("country_id").references("id").inTable("vx_zone")
-      table.foreign("company_id").references("id").inTable("vx_org")
       table.foreign("parent_id").references("id").inTable("vx_node")
     })
   }
@@ -202,6 +201,12 @@ export async function up(knex: Knex): Promise<void> {
       table.timestamp("updated_at").defaultTo(knex.fn.now())
       table.foreign("partner_id").references("id").inTable("vx_node")
       table.foreign("currency_id").references("id").inTable("vx_coin")
+    })
+  }
+
+  if ((await exists("vx_node")) && (await exists("vx_org"))) {
+    await knex.schema.alterTable("vx_node", (table) => {
+      table.foreign("company_id").references("id").inTable("vx_org")
     })
   }
 
