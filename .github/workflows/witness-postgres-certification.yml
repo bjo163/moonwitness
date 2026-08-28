@@ -59,7 +59,7 @@ jobs:
         run: |
           set -euo pipefail
           command -v docker >/dev/null || { echo "Docker is required on the self-hosted runner."; exit 1; }
-          docker network create "$CERT_NETWORK"
+          docker network inspect "$CERT_NETWORK" >/dev/null 2>&1 || docker network create "$CERT_NETWORK"
           docker run -d --rm \
             --name "$CERT_PG_CONTAINER" \
             --network "$CERT_NETWORK" \
@@ -81,7 +81,7 @@ jobs:
 
       - name: Build exact-candidate API image
         shell: bash
-        run: docker build --file apps/api/Dockerfile --tag "$CERT_IMAGE" .
+        run: docker build --file apps/api/Dockerfile --pull --tag "$CERT_IMAGE" .
 
       - name: Clean install, canonical seed, and verify
         shell: bash
@@ -104,6 +104,8 @@ jobs:
             -e CI=true \
             -e NODE_ENV=production \
             -e JWT_SECRET="$JWT_SECRET" \
+            -e BOOTSTRAP_ADMIN_EMAIL="$BOOTSTRAP_ADMIN_EMAIL" \
+            -e BOOTSTRAP_ADMIN_PASSWORD="$BOOTSTRAP_ADMIN_PASSWORD" \
             -e DATABASE_URL="postgres://postgres:postgres@postgres:5432/$CERT_DB" \
             -e TEST_DATABASE_URL="postgres://postgres:postgres@postgres:5432/$CERT_DB" \
             "$CERT_IMAGE" \
@@ -132,11 +134,13 @@ jobs:
             -e CI=true \
             -e NODE_ENV=production \
             -e JWT_SECRET="$JWT_SECRET" \
+            -e BOOTSTRAP_ADMIN_EMAIL="$BOOTSTRAP_ADMIN_EMAIL" \
+            -e BOOTSTRAP_ADMIN_PASSWORD="$BOOTSTRAP_ADMIN_PASSWORD" \
             -e DATABASE_URL="postgres://postgres:postgres@postgres:5432/$CERT_DB" \
             "$CERT_IMAGE"
 
           for attempt in $(seq 1 60); do
-            if docker run --rm --network "$CERT_NETWORK" curlimages/curl:8.12.1 \
+            if docker run --rm --network "$CERT_NETWORK" curlimages/curl:8.11.0 \
               --fail --silent --show-error http://api:4000/health/ready >/dev/null 2>&1; then
               echo "Production API readiness smoke passed."
               exit 0

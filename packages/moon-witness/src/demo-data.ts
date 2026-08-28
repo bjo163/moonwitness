@@ -7,7 +7,7 @@ function request(url: string): Promise<any> {
     const client = url.startsWith('https') ? https : http
     client.get(url, (res: any) => {
       let data = ''
-      res.on('data', (chunk: string) => data += chunk)
+      res.on('data', (chunk: Buffer | string) => data += chunk)
       res.on('end', () => {
         try {
           resolve(JSON.parse(data))
@@ -242,7 +242,7 @@ export async function loadDemoData() {
           nameOriginal: surahInfo.name_arabic || '',
           slug: surahInfo.name_slug || `surah-${surahNum}`,
           versesCount: verses.length,
-          revelationType: surahInfo.revelation_place === 'Mecca' ? 'MAKKIYAH' : 'MADANIYAH',
+          revelationType: surahInfo.revelation_place?.toLowerCase() === 'mecca' ? 'MAKKIYAH' : 'MADANIYAH',
           summary: surahInfo.summary || `Surah ${surahNum} from the Holy Quran.`,
           audioUrl: `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${String(surahNum).padStart(3, '0')}.mp3`
         })
@@ -265,7 +265,7 @@ export async function loadDemoData() {
           bookId,
           verseNumber: vNum,
           textOriginal: textUthmani,
-          textTransliteration: v.text_imlaei || '',
+          textTransliteration: '',
           translationId: translation?.text || '',
           translationEn: translation?.text || '',
           juz: v.juz_number,
@@ -351,8 +351,8 @@ export async function loadDemoData() {
 
   // ── 8. Devotions ──
   const devotionSeeds = [
-    { type: 'dhikr', number: 1, title: 'Tasbih & Tahmid Harian', textOriginal: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ سُبْحَانَ اللَّهِ الْعَظِيمِ', textTransliteration: 'Subhanallahi wa bihamdihi, subhanallahil-azim', translationId: 'Maha Suci Allah dengan segala puji bagi-Nya, Maha Suci Allah Yang Maha Agung.', translationEn: 'Glory be to Allah and His praise, glory be to Allah the Supreme.', category: 'Dzikir Pagi & Petang', source: 'HR. Bukhari & Muslim' },
-    { type: 'dua', number: 2, title: 'Doa Kebaikan Dunia & Akhirat', textOriginal: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ', textTransliteration: 'Rabbana atina fid-dunya hasanah wa fil-akhirati hasanah wa qina \'adhaban-nar', translationId: 'Ya Tuhan kami, berilah kami kebaikan di dunia dan kebaikan di akhirat, dan lindungilah kami dari azab neraka.', translationEn: 'Our Lord, give us in this world that which is good and in the Hereafter that which is good and save us from the torment of the Fire.', category: 'Doa Universal', reference: 'QS 2:201' }
+    { type: 'dhikr', number: 1, title: 'Tasbih & Tahmid Harian', textOriginal: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ سُبْحَانَ اللَّهِ الْعَظِيمِ', textTransliteration: 'Subhanallahi wa bihamdihi, subhanallahil-azim', translationId: 'Maha Suci Allah dengan segala puji bagi-Nya, Maha Suci Allah Yang Maha Agung.', translationEn: 'Glory be to Allah and His praise, glory be to Allah the Supreme.', category: 'Dzikir Pagi & Petang', source: 'HR. Bukhari & Muslim', reference: '' },
+    { type: 'dua', number: 2, title: 'Doa Kebaikan Dunia & Akhirat', textOriginal: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ', textTransliteration: 'Rabbana atina fid-dunya hasanah wa fil-akhirati hasanah wa qina \'adhaban-nar', translationId: 'Ya Tuhan kami, berilah kami kebaikan di dunia dan kebaikan di akhirat, dan lindungilah kami dari azab neraka.', translationEn: 'Our Lord, give us in this world that which is good and in the Hereafter that which is good and save us from the torment of the Fire.', category: 'Doa Universal', source: '', reference: 'QS 2:201' }
   ]
   for (const d of devotionSeeds) {
     const rows = await Devotion.fetch(Devotion, env, [['title', '=', d.title]])

@@ -15,6 +15,8 @@
     "db:demo": "tsx src/migrate.ts demo",
     "db:verify": "tsx src/migrate.ts verify",
     "certify:witness-graph-pg": "tsx src/certify-witness-graph-pg.ts",
+    "test": "vitest run",
+    "audit:rules": "node ../../scripts/audit-rules.mjs",
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{ts,js,json}\"",
     "typecheck": "tsc --noEmit"

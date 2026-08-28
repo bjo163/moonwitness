@@ -117,6 +117,7 @@ async function main() {
   )
 
   const requiredTables = [
+    "wx_scripture",
     "wx_entity",
     "wx_entity_alias",
     "wx_entity_identifier",
@@ -341,7 +342,7 @@ async function main() {
     ontologyVersion: "WITNESS_RELATION_V1",
     identityChecksum: "d".repeat(CHECKSUM_LENGTH),
     status: "RUNNING",
-    startedAt: "2026-01-01T00:00:00.000Z",
+    startedAt: new Date().toISOString(),
     completedAt: undefined,
   })
   const engineResult = {
