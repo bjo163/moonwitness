@@ -2,27 +2,27 @@ import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 
 const sessionSource = readFileSync(
-  new URL('../../../apps/command-center/lib/auth-session.js', import.meta.url),
+  new URL('../../../apps/command-center/lib/auth-session.ts', import.meta.url),
   'utf8'
 )
 const loginSource = readFileSync(
-  new URL('../../../apps/command-center/app/api/auth/session/login/route.js', import.meta.url),
+  new URL('../../../apps/command-center/app/api/auth/session/login/route.ts', import.meta.url),
   'utf8'
 )
 const registerSource = readFileSync(
-  new URL('../../../apps/command-center/app/api/auth/session/register/route.js', import.meta.url),
+  new URL('../../../apps/command-center/app/api/auth/session/register/route.ts', import.meta.url),
   'utf8'
 )
 const logoutSource = readFileSync(
-  new URL('../../../apps/command-center/app/api/auth/session/logout/route.js', import.meta.url),
+  new URL('../../../apps/command-center/app/api/auth/session/logout/route.ts', import.meta.url),
   'utf8'
 )
 const sessionRouteSource = readFileSync(
-  new URL('../../../apps/command-center/app/api/auth/session/route.js', import.meta.url),
+  new URL('../../../apps/command-center/app/api/auth/session/route.ts', import.meta.url),
   'utf8'
 )
 const proxySource = readFileSync(
-  new URL('../../../apps/command-center/app/api/backend/[...path]/route.js', import.meta.url),
+  new URL('../../../apps/command-center/app/api/backend/[...path]/route.ts', import.meta.url),
   'utf8'
 )
 
