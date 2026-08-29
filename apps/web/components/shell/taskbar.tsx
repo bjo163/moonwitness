@@ -178,7 +178,7 @@ export function Taskbar() {
 
   return (
     <div
-      className="fixed right-0 bottom-0 left-0 z-[50] border-t border-cyber-cyan/25 bg-cyber-panel select-none"
+      className="fixed right-0 bottom-0 left-0 z-[50] border-t border-border bg-card select-none"
       style={{ height: "44px" }}
     >
       <div className="flex h-full items-center justify-between gap-1 px-2 text-xs tracking-wide sm:gap-2 sm:px-6">
@@ -186,10 +186,10 @@ export function Taskbar() {
         <div className="flex shrink-0 items-center gap-4 text-primary sm:gap-6">
           {/* SYS ONLINE indicator */}
           <span
-            className="flex items-center gap-1.5 font-medium text-cyber-green"
+            className="text-success flex items-center gap-1.5 font-medium"
             title="System Online"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-cyber-green" />
+            <span className="bg-success h-1.5 w-1.5 rounded-full" />
             <span className="hidden sm:inline">System</span>
           </span>
 
@@ -197,11 +197,11 @@ export function Taskbar() {
 
           {/* Active Connections */}
           <span
-            className="hidden items-center gap-1.5 font-mono text-cyber-green/80 sm:flex"
+            className="text-success/80 hidden items-center gap-1.5 font-mono sm:flex"
             title="Active Connections"
           >
-            <Users className="h-3 w-3 text-cyber-green" />
-            <strong className="font-semibold text-cyber-green">
+            <Users className="text-success h-3 w-3" />
+            <strong className="text-success font-semibold">
               {activeConnections}
             </strong>
           </span>
@@ -213,8 +213,8 @@ export function Taskbar() {
             className="hidden items-center gap-1.5 font-mono sm:flex"
             title="Network Latency"
           >
-            <Activity className="h-3 w-3 text-cyber-cyan" />
-            <strong className="font-semibold text-cyber-cyan">12 ms</strong>
+            <Activity className="h-3 w-3 text-primary" />
+            <strong className="font-semibold text-primary">12 ms</strong>
           </span>
 
           <span className="hidden h-3 w-px bg-border md:block" />
@@ -224,8 +224,8 @@ export function Taskbar() {
             className="hidden items-center gap-1.5 font-mono md:flex"
             title="Qibla Direction"
           >
-            <Compass className="h-3 w-3 text-cyber-cyan" />
-            <strong className="font-semibold text-cyber-cyan">295.14°</strong>
+            <Compass className="h-3 w-3 text-primary" />
+            <strong className="font-semibold text-primary">295.14°</strong>
           </span>
 
           <span className="hidden h-3 w-px bg-border lg:block" />
@@ -236,9 +236,9 @@ export function Taskbar() {
               className="hidden items-center gap-1.5 lg:flex"
               title={lunarInfo.phaseName}
             >
-              <span className="text-cyber-yellow">◐</span>
+              <span className="text-warning">◐</span>
               <span>
-                <strong className="font-semibold font-mono text-cyber-yellow">
+                <strong className="text-warning font-mono font-semibold">
                   {lunarInfo.illuminationPercent}%
                 </strong>
               </span>
@@ -257,22 +257,22 @@ export function Taskbar() {
               <Sun
                 className={`h-3 w-3 ${
                   sunInfo.duhaStatus === "AFDHAL"
-                    ? "text-cyber-yellow"
+                    ? "text-warning"
                     : sunInfo.duhaStatus === "ACTIVE"
-                      ? "text-cyber-yellow"
+                      ? "text-warning"
                       : sunInfo.altitude > 0
-                        ? "text-cyber-yellow/60"
+                        ? "text-warning/60"
                         : "text-muted-foreground"
                 }`}
               />
               <strong
-                className={`font-semibold font-mono ${
+                className={`font-mono font-semibold ${
                   sunInfo.duhaStatus === "AFDHAL"
-                    ? "text-cyber-yellow"
+                    ? "text-warning"
                     : sunInfo.duhaStatus === "ACTIVE"
-                      ? "text-cyber-yellow"
+                      ? "text-warning"
                       : sunInfo.altitude > 0
-                        ? "text-cyber-yellow/70"
+                        ? "text-warning/70"
                         : "text-muted-foreground"
                 }`}
               >
@@ -280,10 +280,10 @@ export function Taskbar() {
               </strong>
               {sunInfo.duhaLabel && (
                 <span
-                    className={`text-xs font-medium ${
-                      sunInfo.duhaStatus === "AFDHAL"
-                      ? "text-cyber-yellow"
-                      : "text-cyber-green/70"
+                  className={`text-xs font-medium ${
+                    sunInfo.duhaStatus === "AFDHAL"
+                      ? "text-warning"
+                      : "text-success/70"
                   }`}
                 >
                   {sunInfo.duhaLabel}
@@ -294,17 +294,19 @@ export function Taskbar() {
         </div>
 
         {/* ── CENTER: Clock ──────────────────────────────────────── */}
-        <div className="clip-tag flex shrink-0 items-center gap-1.5 border border-cyber-cyan/40 bg-cyber-cyan/10 px-3 py-1 font-mono text-sm font-semibold text-cyber-cyan">
+        <div className="flex shrink-0 items-center gap-1.5 rounded-md border border-primary/40 bg-primary/10 px-3 py-1 font-mono text-sm font-semibold text-primary">
           <span>{timeStr || "00:00:00"}</span>
-          <span className="hidden text-xs text-muted-foreground sm:inline">WIB</span>
+          <span className="hidden text-xs text-muted-foreground sm:inline">
+            WIB
+          </span>
         </div>
 
         {/* ── RIGHT: Audio Player + Version ──────────────────────── */}
         <div className="flex shrink-0 items-center gap-4 text-primary sm:gap-6">
           {/* Audio Player — compact inline */}
           <div className="flex items-center gap-1 sm:gap-2">
-            <Music className="hidden h-3 w-3 text-cyber-cyan sm:block" />
-            <span className="hidden max-w-[120px] truncate font-medium text-cyber-cyan sm:inline-block">
+            <Music className="hidden h-3 w-3 text-primary sm:block" />
+            <span className="hidden max-w-[120px] truncate font-medium text-primary sm:inline-block">
               #{currentSurah.number} {currentSurah.name}
             </span>
 
@@ -312,24 +314,24 @@ export function Taskbar() {
             <div className="flex items-center gap-1 sm:ml-2">
               <button
                 aria-label="Previous"
-                className="flex items-center justify-center p-1 text-muted-foreground transition-colors hover:text-cyber-cyan"
+                className="flex items-center justify-center p-1 text-muted-foreground transition-colors hover:text-primary"
               >
                 <SkipBack className="h-3 w-3" />
               </button>
               <button
                 onClick={togglePlay}
                 aria-label={isPlaying ? "Pause" : "Play"}
-                className="flex items-center justify-center p-1 text-cyber-cyan transition-colors hover:text-cyber-green"
+                className="hover:text-success flex items-center justify-center p-1 text-primary transition-colors"
               >
                 {isPlaying ? (
-                  <Pause className="h-3.5 w-3.5 text-cyber-green" />
+                  <Pause className="text-success h-3.5 w-3.5" />
                 ) : (
                   <Play className="h-3.5 w-3.5" />
                 )}
               </button>
               <button
                 aria-label="Next"
-                className="flex items-center justify-center p-1 text-muted-foreground transition-colors hover:text-cyber-cyan"
+                className="flex items-center justify-center p-1 text-muted-foreground transition-colors hover:text-primary"
               >
                 <SkipForward className="h-3 w-3" />
               </button>
@@ -340,7 +342,7 @@ export function Taskbar() {
               <button
                 onClick={toggleLoop}
                 aria-label="Toggle Loop"
-                className={`flex items-center justify-center p-1 transition-colors ${isLooping ? "text-cyber-purple" : "text-muted-foreground hover:text-cyber-cyan"}`}
+                className={`flex items-center justify-center p-1 transition-colors ${isLooping ? "text-info" : "text-muted-foreground hover:text-primary"}`}
               >
                 <Repeat className="h-3 w-3" />
               </button>
@@ -351,7 +353,7 @@ export function Taskbar() {
                   )
                 }
                 aria-label="Toggle Speed"
-                className="flex items-center gap-1 p-1 font-mono text-xs text-cyber-cyan/80 transition-colors hover:text-cyber-cyan"
+                className="flex items-center gap-1 p-1 font-mono text-xs text-primary/80 transition-colors hover:text-primary"
               >
                 <Gauge className="h-3 w-3" />
                 {playbackRate}x
@@ -369,7 +371,7 @@ export function Taskbar() {
           <span className="hidden h-3 w-px bg-border md:block" />
 
           {/* Version badge */}
-          <span className="clip-tag border border-border bg-muted px-2 py-1 text-xs text-muted-foreground">
+          <span className="border border-border bg-muted px-2 py-1 text-xs text-muted-foreground clip-tag">
             MW-OS v6.5
           </span>
         </div>

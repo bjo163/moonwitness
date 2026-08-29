@@ -1,19 +1,18 @@
 import { Suspense } from "react"
-import { Orbitron, JetBrains_Mono, Geist, Amiri } from "next/font/google"
+import { JetBrains_Mono, Geist, Amiri } from "next/font/google"
 
 import "@workspace/ui/globals.css"
-import { Navbar, Taskbar, PwaRegister, Cosmic3DBackground } from "../components/shell"
+import { Navbar, Taskbar, PwaRegister } from "../components/shell"
 import { MoonProvider } from "@workspace/state"
 import {
   FlyingPropheticAIWidget,
   OnboardingWizard,
   GlobalTickerWidget,
   CommandPalette,
-  CosmicAudioToggle,
+  AudioToggle,
+  ObservatoryBackground,
 } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
-
-const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" })
 
 const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -51,7 +50,6 @@ export default function RootLayout({
       lang="en"
       className={cn(
         "dark antialiased",
-        orbitron.variable,
         jetBrainsMono.variable,
         "font-sans",
         geist.variable,
@@ -63,12 +61,12 @@ export default function RootLayout({
         <meta name="theme-color" content="#05070A" />
       </head>
       <body className="min-h-screen bg-cyber-dark pb-[44px] font-sans text-foreground">
-        <Cosmic3DBackground />
+        <ObservatoryBackground />
 
         {/* Accessible Skip Navigation */}
         <a
           href="#main-content"
-          className="text-primary-foreground sr-only z-[999999] bg-primary px-4 py-2 font-semibold focus:not-sr-only focus:absolute focus:top-4 focus:left-4"
+          className="sr-only z-[999999] bg-primary px-4 py-2 font-semibold text-primary-foreground focus:not-sr-only focus:absolute focus:top-4 focus:left-4"
         >
           Skip to content
         </a>
@@ -94,8 +92,8 @@ export default function RootLayout({
           <PwaRegister />
         </MoonProvider>
         <CommandPalette />
-        <div className="fixed bottom-14 right-4 z-40 hidden sm:block">
-          <CosmicAudioToggle />
+        <div className="fixed right-4 bottom-14 z-40 hidden sm:block">
+          <AudioToggle />
         </div>
       </body>
     </html>

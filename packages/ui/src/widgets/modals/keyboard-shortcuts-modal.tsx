@@ -71,9 +71,9 @@ export function KeyboardShortcutsModal() {
     <>
       <ModalTrigger
         icon={Keyboard}
-        label="[ KEYBOARD HUD ]"
+        label="[ KEYBOARD SHORTCUTS ]"
         onClick={() => setIsOpen(true)}
-        title="Buka Panduan Keyboard Shortcuts HUD (Tekan ?)"
+        title="Buka Panduan Keyboard Shortcuts (Tekan ?)"
         color="cyan"
       />
 
@@ -87,7 +87,7 @@ export function KeyboardShortcutsModal() {
         glowColor="rgba(0,240,255,0.3)"
       >
         <div className="space-y-3 p-6 text-xs">
-          <div className="bg-background rounded-md border border-primary/30 p-2.5 text-[10px] text-muted">
+          <div className="rounded-md border border-primary/30 bg-background p-2.5 text-[10px] text-muted">
             // SYSTEM HOTKEYS: PINDAH & KONTROL SISTEM SECARA CEPAT
           </div>
 
@@ -95,7 +95,7 @@ export function KeyboardShortcutsModal() {
             {SHORTCUTS_LIST.map((sc, idx) => (
               <div
                 key={idx}
-                className="rounded-xl border border-border/40 bg-card bg-background rounded-md flex items-center justify-between gap-2 border border-primary/20 p-3"
+                className="flex items-center justify-between gap-2 rounded-md rounded-xl border border-border/40 border-primary/20 bg-background bg-card p-3"
               >
                 <div>
                   <span className="block text-[8px] font-bold text-muted">
@@ -106,7 +106,7 @@ export function KeyboardShortcutsModal() {
                   </span>
                 </div>
 
-                <kbd className="bg-panel shrink-0 rounded border border-primary/40 px-2.5 py-1 text-xs font-black text-primary">
+                <kbd className="shrink-0 rounded border border-primary/40 bg-panel px-2.5 py-1 text-xs font-black text-primary">
                   {sc.keyCombo}
                 </kbd>
               </div>

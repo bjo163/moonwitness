@@ -25,7 +25,7 @@ type Meteor = {
   color: string
 }
 
-export function Cosmic3DBackground() {
+export function ObservatoryBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const mouseRef = useRef<{
     x: number

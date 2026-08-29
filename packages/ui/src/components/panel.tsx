@@ -93,7 +93,7 @@ export function Panel({
       {/* Corner metadata tag  */}
       <span
         className="pointer-events-none absolute top-1 right-2 font-mono text-[10px] font-bold tracking-widest select-none"
-        style={{ color: `${colorHex}50` }}
+        style={{ color: colorToken }}
       >
         {levelConfig.name.toUpperCase()} • SYS.MOD
       </span>

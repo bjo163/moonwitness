@@ -9,6 +9,7 @@ export const THEME_TOKENS = {
     success: "var(--semantic-success)",
     warning: "var(--semantic-warning)",
     danger: "var(--semantic-danger)",
+    destructive: "var(--destructive)",
     info: "var(--semantic-primary)",
     muted: "var(--text-muted)",
     accent: "var(--semantic-premium)",
