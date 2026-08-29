@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { BookOpen, Scroll, ShieldCheck, Compass } from "lucide-react"
-import { ContextBlock } from "@workspace/ui"
+import { ContextBlock, CitationBox, EpistemicBadge } from "@workspace/ui"
 
 type ParallelPassage = {
   theme: string
@@ -60,144 +60,156 @@ const MATRIX_DATA: ParallelPassage[] = [
     },
   },
   {
-    theme: "RAHMAT & KASIH SAYANG ILAHI",
+    theme: "KEADILAN & TIMBANGAN SOSIAL",
     themeDesc:
-      "Rahmat dan kasih sayang Pencipta mendahului dan meliputi segala ciptaan-Nya.",
+      "Menegakkan neraca keadilan dan membela kaum mustadh'afin (lemah/tertindas).",
     quran: {
-      ref: "Q.S Al-A'raf (7:156) & Al-Anbiya (21:107)",
-      arabic: "وَرَحْمَتِي وَسِعَتْ كُلَّ شَيْءٍ",
-      text: "Dan Rahmat-Ku meliputi segala sesuatu... Dan Kami tidak mengutus engkau (Muhammad) melainkan untuk menjadi rahmat bagi semesta alam.",
+      ref: "Q.S Ar-Rahman (55:9) & An-Nisa (4:135)",
+      arabic: "وَأَقِيمُوا الْوَزْنَ بِالْقِسْطِ وَلَا تُخْسِرُوا الْمِيزَانَ",
+      text: "Dan tegakkanlah timbangan itu dengan adil dan janganlah kamu mengurangi neraca itu.",
     },
     torah: {
-      ref: "Taurat (Keluaran 34:6)",
-      text: "TUHAN, TUHAN, Allah penyayang dan pengasih, panjang sabar, berlimpah kasih-Nya dan setia-Nya.",
+      ref: "Taurat (Imamat 19:35-36)",
+      text: "Janganlah kamu berbuat curang dalam hukum, dalam ukuran panjang, timbangan dan sukat. Neraca yang betul, batu timbangan yang betul haruslah kamu miliki.",
     },
     psalms: {
-      ref: "Zabur (Mazmur 145:9)",
-      text: "TUHAN itu baik kepada semua orang, dan penuh rahmat terhadap segala yang dijadikan-Nya.",
+      ref: "Zabur (Mazmur 82:3)",
+      text: "Berilah keadilan kepada orang yang lemah dan kepada anak yatim, belalah hak orang yang tertindas dan orang yang miskin!",
     },
     gospel: {
-      ref: "Injil (Lukas 6:36)",
-      text: "Hendaklah kamu murah hati, sama seperti Bapamu adalah murah hati.",
+      ref: "Injil (Lukas 6:38)",
+      text: "Berilah dan kamu akan diberi: suatu takaran yang baik, yang dipadatkan, yang digoncang dan yang tumpah ke luar akan dicurahkan ke dalam ribaanmu.",
     },
   },
 ]
 
 export function MatriksKitabView() {
-  const [activeTab, setActiveTab] = useState(0)
-
-  const activePassage = MATRIX_DATA[activeTab] ?? MATRIX_DATA[0]!
+  const [selectedIdx, setSelectedIdx] = useState(0)
+  const activePassage = MATRIX_DATA[selectedIdx] || MATRIX_DATA[0]!
 
   return (
     <div
-      className="theme-grid-bg min-h-screen py-10 font-mono text-foreground"
+      className="min-h-screen py-10 font-sans text-foreground bg-background"
       suppressHydrationWarning
     >
       <div className="mx-auto max-w-6xl space-y-6 px-4 sm:px-6">
         <ContextBlock
-          title="MATRIKS KOMPARATIF MANUSKRIP SUCI PARALEL"
-          subtitle="Menampilkan keselarasan ayat-ayat pembawa kebenaran tauhid dari Al-Qur'anul Karim, Taurat, Zabur, dan Injil dalam satu matriks komparatif ilmiah."
-          operation="CROSS-SCRIPTURE-ANALYSIS"
+          title="MATRIKS KONSISTENSI KITAB SUCI GLOBAL"
+          subtitle="Komparasi tematik lintas teks suci abrahamik: Al-Qur'an, Taurat, Zabur, dan Injil untuk melihat benang merah wahyu Ilahi."
+          operation="CROSS-REVELATION-MATRIX"
           status="ONLINE"
           accentColor="primary"
         />
 
-        {/* Theme Selectors */}
-        <div className="flex flex-wrap gap-2">
+        {/* Theme Selection Tabs */}
+        <div className="flex flex-wrap gap-2 border-b border-border pb-4">
           {MATRIX_DATA.map((item, idx) => (
             <button
               key={idx}
-              onClick={() => setActiveTab(idx)}
-              className={`rounded-md border px-4 py-2.5 text-xs font-extrabold tracking-wider transition-all ${
-                activeTab === idx
-                  ? "border-primary bg-primary/20 text-primary shadow-sm"
-                  : "bg-background border-primary/20 text-primary hover:text-foreground"
+              onClick={() => setSelectedIdx(idx)}
+              className={`rounded-lg px-4 py-2 text-xs font-semibold transition-colors ${
+                selectedIdx === idx
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
               }`}
             >
-              ◆ {item.theme}
+              {item.theme}
             </button>
           ))}
         </div>
 
         {/* Comparative Matrix Display Grid */}
         <div className="space-y-4">
-          <div className="bg-panel rounded-md space-y-1 border border-primary/30 p-4">
-            <span className="text-[10px] font-bold text-primary uppercase">
-              {/* FOKUS TEMA MATRIKS: */}
-            </span>
-            <h3 className="font-sans text-base font-black text-foreground">
+          <div className="rounded-lg border border-border bg-card p-4 space-y-1">
+            <h3 className="font-sans text-base font-semibold text-foreground">
               {activePassage.theme}
             </h3>
-            <p className="text-xs text-primary">{activePassage.themeDesc}</p>
+            <p className="text-xs text-muted-foreground">{activePassage.themeDesc}</p>
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {/* Al-Qur'an Card */}
-            <div className="rounded-xl border border-border/40 bg-card/90 bg-background/95 space-y-3 border border-primary/60 p-5 shadow-sm">
-              <div className="flex items-center justify-between border-b border-primary/20 pb-2">
-                <span className="font-sans flex items-center gap-1.5 text-xs font-bold text-primary">
+            <div className="rounded-xl border border-border bg-card space-y-3 p-5 shadow-sm">
+              <div className="flex items-center justify-between border-b border-border pb-2">
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
                   <BookOpen className="h-4 w-4 text-primary" />
-                  AL-QUR'ANUL KARIM
+                  Al-Qur&apos;anul Karim
                 </span>
-                <span className="rounded-md rounded-md px-2 py-0.5 text-[8px]">
-                  {activePassage.quran.ref}
-                </span>
+                <EpistemicBadge authority="REVELATION" contentKind="ORIGINAL_TEXT" />
               </div>
-              <div className="arabic-text text-right text-lg leading-loose font-bold text-foreground">
+              <div lang="ar" dir="rtl" className="font-arabic text-right text-xl leading-loose text-foreground">
                 {activePassage.quran.arabic}
               </div>
-              <p className="text-xs leading-relaxed text-primary italic">
+              <p className="text-xs leading-relaxed text-muted-foreground italic">
                 &ldquo;{activePassage.quran.text}&rdquo;
               </p>
+              <div className="text-right text-[11px] font-mono text-primary">
+                {activePassage.quran.ref}
+              </div>
             </div>
 
             {/* Taurat Card */}
-            <div className="rounded-xl border border-border/40 bg-card/90 bg-background/95 space-y-3 border border-accent/40 p-5">
-              <div className="flex items-center justify-between border-b border-accent/20 pb-2">
-                <span className="font-sans flex items-center gap-1.5 text-xs font-bold text-accent">
-                  <Scroll className="h-4 w-4 text-accent" />
-                  TAURAT (TORAH)
+            <div className="rounded-xl border border-border bg-card space-y-3 p-5 shadow-sm">
+              <div className="flex items-center justify-between border-b border-border pb-2">
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
+                  <Scroll className="h-4 w-4 text-primary" />
+                  Taurat (Torah)
                 </span>
-                <span className="rounded-md border border-amber-500/40 bg-warning/10 text-warning px-2 py-0.5 font-mono text-[8px]">
-                  {activePassage.torah.ref}
-                </span>
+                <EpistemicBadge authority="REVELATION" contentKind="TRANSLATION" />
               </div>
-              <p className="pt-2 text-xs leading-relaxed text-foreground/90 italic">
+              <p className="pt-2 text-xs leading-relaxed text-muted-foreground italic">
                 &ldquo;{activePassage.torah.text}&rdquo;
               </p>
+              <div className="text-right text-[11px] font-mono text-muted-foreground">
+                {activePassage.torah.ref}
+              </div>
             </div>
 
             {/* Zabur Card */}
-            <div className="rounded-xl border border-border/40 bg-card/90 border-success/40 bg-background/95 space-y-3 border p-5">
-              <div className="border-success/20 flex items-center justify-between border-b pb-2">
-                <span className="text-success font-sans flex items-center gap-1.5 text-xs font-bold">
-                  <ShieldCheck className="text-success h-4 w-4" />
-                  ZABUR (PSALMS)
+            <div className="rounded-xl border border-border bg-card space-y-3 p-5 shadow-sm">
+              <div className="flex items-center justify-between border-b border-border pb-2">
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
+                  <ShieldCheck className="h-4 w-4 text-primary" />
+                  Zabur (Psalms)
                 </span>
-                <span className="rounded-md border border-emerald-500/40 bg-success/10 text-success px-2 py-0.5 font-mono text-[8px]">
-                  {activePassage.psalms.ref}
-                </span>
+                <EpistemicBadge authority="REVELATION" contentKind="TRANSLATION" />
               </div>
-              <p className="pt-2 text-xs leading-relaxed text-foreground/90 italic">
+              <p className="pt-2 text-xs leading-relaxed text-muted-foreground italic">
                 &ldquo;{activePassage.psalms.text}&rdquo;
               </p>
+              <div className="text-right text-[11px] font-mono text-muted-foreground">
+                {activePassage.psalms.ref}
+              </div>
             </div>
 
             {/* Injil Card */}
-            <div className="rounded-xl border border-border/40 bg-card/90 bg-background/95 space-y-3 border border-primary/40 p-5">
-              <div className="flex items-center justify-between border-b border-primary/20 pb-2">
-                <span className="font-sans flex items-center gap-1.5 text-xs font-bold text-primary">
+            <div className="rounded-xl border border-border bg-card space-y-3 p-5 shadow-sm">
+              <div className="flex items-center justify-between border-b border-border pb-2">
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
                   <Compass className="h-4 w-4 text-primary" />
-                  INJIL (GOSPEL)
+                  Injil (Gospel)
                 </span>
-                <span className="rounded-md border border-border bg-muted text-primary px-2 py-0.5 font-mono text-[8px]">
-                  {activePassage.gospel.ref}
-                </span>
+                <EpistemicBadge authority="REVELATION" contentKind="TRANSLATION" />
               </div>
-              <p className="pt-2 text-xs leading-relaxed text-foreground/90 italic">
+              <p className="pt-2 text-xs leading-relaxed text-muted-foreground italic">
                 &ldquo;{activePassage.gospel.text}&rdquo;
               </p>
+              <div className="text-right text-[11px] font-mono text-muted-foreground">
+                {activePassage.gospel.ref}
+              </div>
             </div>
+          </div>
+
+          {/* Citation Box */}
+          <div className="pt-4">
+            <CitationBox
+              title="Abrahamic Scripture Concordance"
+              sourceName="Cross-Tradition Scripture Dataset"
+              edition="Thematic Parallel Passages"
+              reference={activePassage.theme}
+              language="Multi-language (ar, he, id)"
+              revision="1.0.0"
+            />
           </div>
         </div>
       </div>

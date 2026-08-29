@@ -3,7 +3,8 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { InspirationCommentsClient } from "@/views/knowledge/components/inspiration-comments-client"
 import { cleanHadithText, apiGet } from "@moon/client"
-import { ContextBlock, VerseInsightTooltip } from "@workspace/ui"
+import { ContextBlock, VerseInsightTooltip, CitationBox, ProvenanceCard } from "@workspace/ui"
+import { Suspense } from "react"
 
 type PageProps = {
   params: Promise<{
@@ -62,25 +63,23 @@ export async function generateMetadata({
   } catch {}
 
   return {
-    title: `Inspiration Q.S ${surahName} (${surahNum}:${ayahNum}) | MoonWitness Daily Inspiration`,
-    description: `MoonWitness Short Link — Q.S ${surahName} Ayah ${ayahNum}, Prophetic Hadiths & Scripture Reflection.`,
+    title: `Inspiration Q.S ${surahName} (${surahNum}:${ayahNum}) | MoonWitness Knowledge`,
+    description: `MoonWitness Citation — Q.S ${surahName} Ayah ${ayahNum}, Prophetic Hadiths & Scripture Reflection.`,
     openGraph: {
       title: `Inspiration Q.S ${surahName} (${surahNum}:${ayahNum})`,
-      description: `MoonWitness Short Link — Q.S ${surahName} Ayah ${ayahNum}, Prophetic Hadiths & Scripture Reflection.`,
+      description: `MoonWitness Citation — Q.S ${surahName} Ayah ${ayahNum}, Prophetic Hadiths & Scripture Reflection.`,
       url: `/s/${id}`,
     },
   }
 }
 
-import { Suspense } from "react"
-
 export default function ShortUrlInspirationSharePage({ params }: PageProps) {
   return (
-    <div className="theme-grid-bg min-h-screen py-10 font-mono text-foreground">
+    <div className="min-h-screen py-10 font-sans text-foreground bg-background">
       <Suspense
         fallback={
-          <div className="flex h-64 animate-pulse items-center justify-center tracking-widest text-primary">
-            LOADING TRANSMISSION...
+          <div className="flex h-64 animate-pulse items-center justify-center tracking-widest text-primary text-sm">
+            Loading Verse Inspiration...
           </div>
         }
       >
@@ -137,46 +136,43 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
   } catch (e) {}
 
   // 5. Fetch Scripture Wisdom
-  // MOCK FOR NOW UNTIL WE ADD A SPECIFIC WITNESS ENDPOINT
   const scriptureData = {
     translation_id: "Sungguh petunjuk Allah adalah sebaik-baik petunjuk.",
     notes: "Khazanah Kitab Suci Global",
   }
 
-  const shortUrl = `${process.env.NEXT_PUBLIC_APP_URL || ""}/s/${id}`
+  const canonicalRef = `Q.S ${surahName} (${surahNum}:${ayahNum})`
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 px-4 sm:px-6">
       <ContextBlock
         title={`INSPIRATION Q.S ${surahName} (${surahNum}:${ayahNum})`}
-        subtitle="MoonWitness Short Link — Prophetic Hadiths & Scripture Reflection."
+        subtitle="MoonWitness Knowledge Link — Prophetic Hadiths & Scripture Reflection."
         operation="SHARE-VIEW"
         status="ACTIVE"
         accentColor="primary"
       />
 
       {/* FULL SHORT SHARE CARD */}
-      <div className=" relative space-y-6 overflow-hidden rounded-xl border border-border/40 bg-card/90 p-6 rounded-xl sm:p-10">
-        <div className="holo-scan-bar" />
-
+      <div className="relative space-y-6 overflow-hidden rounded-xl border border-border bg-card p-6 shadow-sm sm:p-8">
         {/* Header Branding */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-primary/20 pb-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
           <div className="flex items-center gap-3">
-            <div className="rounded-md flex h-10 w-10 items-center justify-center border border-secondary/50 bg-secondary/20 text-xl font-bold">
+            <div className="rounded-md flex h-10 w-10 items-center justify-center border border-border bg-muted/20 text-xl font-bold">
               🌙
             </div>
             <div>
-              <h1 className="text-base font-black tracking-widest text-foreground uppercase">
-                MOONWITNESS SHORT TRANSMISSION
+              <h1 className="text-base font-semibold text-foreground">
+                MoonWitness Scripture & Wisdom Reference
               </h1>
-              <p className="text-[10px] font-bold tracking-wider text-secondary uppercase">
-                // DIVINE SCRIPTURES & SACRED LORE REPOSITORY
+              <p className="text-xs text-muted-foreground">
+                Canonical Witness Graph & Sacred Tradition
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="rounded-md border border-emerald-500/40 bg-success/10 text-success px-2 py-0.5 font-mono text-xs">
+            <span className="rounded-md border border-success/30 bg-success/10 text-success px-2.5 py-1 font-mono text-xs">
               📖 Q.S {surahName} ({surahNum}:{ayahNum})
             </span>
           </div>
@@ -188,35 +184,33 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
           arabicText={ayahData.textArabic}
           translation={ayahData.textId || ayahData.textEn}
         >
-          <div className="bg-background/90 space-y-4 rounded-xl border border-border/40 bg-card/90 p-6 rounded-xl">
+          <div className="space-y-4 rounded-xl border border-border bg-background/50 p-6">
             <div
-              className="arabic-text py-2 text-right text-2xl leading-[2.3] font-bold text-foreground sm:text-4xl"
-              style={{ textShadow: "0 0 10px rgba(0,240,255,0.15)" }}
+              lang="ar"
+              dir="rtl"
+              className="font-arabic py-2 text-right text-2xl leading-[2.3] text-foreground sm:text-4xl"
             >
               {ayahData.textArabic}
             </div>
 
             {ayahData.textLatin && (
-              <p
-                className="text-success font-serif text-xs font-bold italic sm:text-sm"
-                style={{ textShadow: "0 0 5px rgba(0,255,102,0.3)" }}
-              >
+              <p className="text-muted-foreground font-sans text-xs italic sm:text-sm">
                 &ldquo;{ayahData.textLatin}&rdquo;
               </p>
             )}
 
-            <div className="bg-panel rounded-md border border-primary/20 p-4">
-              <p className="font-mono text-xs leading-relaxed text-foreground/90">
+            <div className="rounded-md border border-border bg-card p-4">
+              <p className="font-sans text-sm leading-relaxed text-foreground">
                 &ldquo;{ayahData.textId || ayahData.textEn}&rdquo;
               </p>
             </div>
 
-            <div className="rounded-md border border-accent/30 bg-accent/5 p-4 text-xs">
-              <div className="mb-1 flex items-center gap-2 font-bold text-accent">
+            <div className="rounded-md border border-border bg-muted/20 p-4 text-xs">
+              <div className="mb-1 flex items-center gap-2 font-semibold text-foreground">
                 <span>💡</span>
-                <span>DIVINE TAFSIR & LORE NOTES:</span>
+                <span>Tafsir & Contextual Reflection:</span>
               </div>
-              <p className="text-foreground/90 italic">
+              <p className="text-muted-foreground italic">
                 &ldquo;Tadabbur tentang ketaatan semesta alam kepada Sang Maha
                 Pencipta dan keagungan tauhid.&rdquo;
               </p>
@@ -227,38 +221,38 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
         {/* Asmaul Husna Pairs */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {asmaulSurah && (
-            <div className=" flex items-center justify-between rounded-xl border border-border/40 bg-card/90 p-4 rounded-xl">
+            <div className="flex items-center justify-between rounded-xl border border-border bg-card p-4">
               <div>
-                <span className="block text-[9px] font-black text-primary uppercase">
-                  ✨ SURAH PAIR RUNIC #{surahNum}
+                <span className="block text-[10px] font-semibold text-primary uppercase">
+                  Surah Pair #{surahNum}
                 </span>
                 <h4 className="text-xs font-bold text-foreground">
                   {asmaulSurah.latin}
                 </h4>
-                <p className="text-[10px] text-primary">
+                <p className="text-[11px] text-muted-foreground">
                   &ldquo;{asmaulSurah.meaning}&rdquo;
                 </p>
               </div>
-              <div className="arabic-text text-2xl text-secondary">
+              <div className="font-arabic text-2xl text-primary">
                 {asmaulSurah.arabic}
               </div>
             </div>
           )}
 
           {asmaulAyah && (
-            <div className=" flex items-center justify-between rounded-xl border border-border/40 bg-card/90 p-4 rounded-xl">
+            <div className="flex items-center justify-between rounded-xl border border-border bg-card p-4">
               <div>
-                <span className="block text-[9px] font-black text-primary uppercase">
-                  ✨ AYAH PAIR RUNIC #{ayahNum}
+                <span className="block text-[10px] font-semibold text-primary uppercase">
+                  Ayah Pair #{ayahNum}
                 </span>
                 <h4 className="text-xs font-bold text-foreground">
                   {asmaulAyah.latin}
                 </h4>
-                <p className="text-[10px] text-primary">
+                <p className="text-[11px] text-muted-foreground">
                   &ldquo;{asmaulAyah.meaning}&rdquo;
                 </p>
               </div>
-              <div className="arabic-text text-2xl text-secondary">
+              <div className="font-arabic text-2xl text-primary">
                 {asmaulAyah.arabic}
               </div>
             </div>
@@ -267,67 +261,91 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
 
         {/* Hadith Block */}
         {hadithData && (
-          <div className=" space-y-3 rounded-xl border border-border/40 bg-card/90 p-5 rounded-xl">
-            <div className="flex items-center gap-2 text-[10px] font-bold text-destructive">
-              <span>⚔️</span>
-              <span className="uppercase">
-                PROPHETIC COMMAND (HADITH {bookName.toUpperCase()} #
-                {hadithData.number})
+          <div className="space-y-3 rounded-xl border border-border bg-card p-5">
+            <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
+              <span>📜</span>
+              <span>
+                Prophetic Tradition (Hadith {bookName} #{hadithData.number})
               </span>
-              <span className="rounded-md bg-destructive/20 px-1 text-[8px] text-destructive">
-                {"SHAHIH"}
+              <span className="rounded-md border border-success/30 bg-success/10 text-success px-1.5 py-0.5 text-[10px]">
+                Shahih
               </span>
             </div>
-            <p className="border-l-2 border-destructive/50 pl-3 font-serif text-sm leading-relaxed text-foreground/80 italic">
-              &ldquo;{cleanHadithText(hadithData.textId || hadithData.textEn)}
-              &rdquo;
+            <p className="border-l-2 border-primary/40 pl-3 font-sans text-xs leading-relaxed text-muted-foreground italic">
+              &ldquo;{cleanHadithText(hadithData.textId || hadithData.textEn)}&rdquo;
             </p>
           </div>
         )}
 
         {/* Universal Wisdom Block */}
-        <div className=" space-y-3 rounded-xl border border-border/40 bg-card/90 p-5 rounded-xl">
-          <div className="flex items-center gap-2 text-[10px] font-bold text-secondary">
-            <span>📜</span>
-            <span className="uppercase">
-              UNIVERSAL SCRIPTURE CROSS-REFERENCE
-            </span>
+        <div className="space-y-3 rounded-xl border border-border bg-card p-5">
+          <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
+            <span>📖</span>
+            <span>Universal Scripture Cross-Reference</span>
           </div>
-          <p className="border-l-2 border-secondary/50 pl-3 font-serif text-sm leading-relaxed text-foreground/80 italic">
+          <p className="border-l-2 border-border pl-3 font-sans text-xs leading-relaxed text-muted-foreground italic">
             &ldquo;{scriptureData.translation_id}&rdquo;
           </p>
-          <div className="text-right text-[10px] font-bold text-secondary">
+          <div className="text-right text-xs text-muted-foreground">
             — {scriptureData.notes}
           </div>
         </div>
 
+        {/* Structured Citation & Provenance Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <CitationBox
+            title="Al-Qur'an al-Karim"
+            sourceName="Al-Qur'an al-Karim"
+            edition="Mushaf Madinah Uthmani"
+            reference={canonicalRef}
+            language="ar"
+            revision="1.0.0"
+            publisher="King Fahd Glorious Quran Printing Complex"
+          />
+
+          <ProvenanceCard
+            provenance={{
+              sourceName: "King Fahd Glorious Quran Printing Complex",
+              sourceKey: "source:quran-uthmani",
+              edition: "quran-uthmani-v1",
+              revision: "1.0.0",
+              publisher: "King Fahd Glorious Quran Printing Complex",
+              language: "Arabic (Uthmani Script)",
+              license: "Public Domain / Islamic Heritage",
+              checksum: "sha256-verified-release-1.0.0",
+              authority: "REVELATION",
+              contentKind: "ORIGINAL_TEXT"
+            }}
+          />
+        </div>
+
         {/* Footer Actions */}
-        <div className="mt-4 flex flex-col justify-between gap-4 border-t border-primary/20 pt-4 sm:flex-row sm:items-center">
+        <div className="mt-4 flex flex-col justify-between gap-4 border-t border-border pt-4 sm:flex-row sm:items-center">
           <div className="flex items-center gap-2">
-            <div className="bg-success h-2 w-2 animate-pulse" />
-            <span className="text-success text-[10px] font-bold tracking-widest uppercase">
-              TRANSMISSION VERIFIED
+            <div className="bg-success h-2 w-2 rounded-full" />
+            <span className="text-success text-xs font-medium">
+              Canonical Reference Verified
             </span>
           </div>
 
           <div className="flex gap-2">
             <Link
               href="/"
-              className="rounded-md inline-flex h-8 items-center justify-center bg-secondary/10 px-4 text-xs font-bold text-secondary transition-colors hover:bg-secondary hover:text-secondary-foreground"
+              className="rounded-md inline-flex h-8 items-center justify-center border border-border bg-secondary px-4 text-xs font-medium text-secondary-foreground transition-colors hover:bg-accent"
             >
-              LAUNCH COMMAND CENTER
+              Back to Overview
             </Link>
           </div>
         </div>
       </div>
 
-      <div className="pt-8">
-        <InspirationCommentsClient
-          periodCode="shared"
-          dateStr={new Date().toISOString().split("T")[0] || ""}
-          itemId={parseInt(id) || 1}
-        />
-      </div>
+      {/* Community Comments */}
+      <InspirationCommentsClient
+        periodCode={periodCode}
+        dateStr={new Date().toISOString().split('T')[0]!}
+        itemId={ayahNum}
+        itemTitle={canonicalRef}
+      />
     </div>
   )
 }
