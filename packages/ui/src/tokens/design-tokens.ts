@@ -47,34 +47,35 @@ export const SemanticColors = {
 } as const;
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * GEOMETRIC CHAMFER SYSTEM
+ * GEOMETRIC CONTAINER & RADIUS SYSTEM (SHADCN STANDARDS)
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-export const ChamferSizes = {
-  card: 16,
-  hero: 28,
-  button: 10,
-  tag: 6,
+export const ContainerRadii = {
+  card: 12,    // 0.75rem / rounded-xl
+  hero: 16,    // 1rem / rounded-2xl
+  button: 8,   // 0.5rem / rounded-lg
+  tag: 6,      // 0.375rem / rounded-md
+  rune: 9999,  // rounded-full
 } as const;
 
+export const ChamferSizes = ContainerRadii;
 export type ChamferSize = keyof typeof ChamferSizes;
 
-/** CSS clip-path polygon values */
-export const ClipPaths = {
-  card: 'polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px)',
-  hero: 'polygon(28px 0, 100% 0, 100% calc(100% - 28px), calc(100% - 28px) 100%, 0 100%, 0 28px)',
-  button: 'polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)',
-  tag: 'polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px)',
-  rune: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)',
-} as const;
-
-/** Tailwind utility class names for clip paths */
+/** Standard utility class names for rounded containers */
 export const ClipPathClasses = {
   card: 'clip-card',
   hero: 'clip-hero',
   button: 'clip-btn',
   tag: 'clip-tag',
   rune: 'clip-rune',
+} as const;
+
+export const ClipPaths = {
+  card: 'var(--radius-xl, 0.75rem)',
+  hero: 'var(--radius-2xl, 1rem)',
+  button: 'var(--radius-md, 0.5rem)',
+  tag: 'var(--radius-sm, 0.375rem)',
+  rune: '9999px',
 } as const;
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

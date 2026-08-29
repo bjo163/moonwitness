@@ -17,6 +17,7 @@ import {
   type NavLinkConfig,
   type UserProfile,
 } from "@workspace/types"
+import { ThemeToggle } from "./theme-toggle"
 
 const MAX_NAME_DISPLAY_LENGTH = 12
 /* eslint-disable-next-line @typescript-eslint/no-magic-numbers -- Equalizer waveform heights */
@@ -329,6 +330,8 @@ export function Navbar({
               ))}
             </div>
           </div>
+
+          <ThemeToggle />
 
           {/* Mobile menu toggle button */}
           <button

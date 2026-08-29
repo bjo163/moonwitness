@@ -15,7 +15,7 @@ import {
 } from "lucide-react"
 import { ContextBlock } from "@workspace/ui"
 import { Panel, PanelHeader } from "@workspace/ui"
-import { HUDTabs } from "@workspace/ui"
+import { SimpleTabs } from "@workspace/ui"
 import { SeismicTectonicRadar } from "@workspace/ui"
 
 // ── PLATE DATA ───────────────────────────────────────────
@@ -338,7 +338,7 @@ export function TectonicMapView() {
         accentColor="accent"
       />
 
-      <HUDTabs
+      <SimpleTabs
         tabs={viewTabs}
         activeTab={viewMode}
         onChange={setViewMode}

@@ -19,7 +19,7 @@ import {
 } from "lucide-react"
 import { ContextBlock } from "@workspace/ui"
 import { Panel, PanelHeader } from "@workspace/ui"
-import { HUDTabs } from "@workspace/ui"
+import { SimpleTabs } from "@workspace/ui"
 
 // ── ARCHIVE DATA ─────────────────────────────────────────
 type HistoricQuake = {
@@ -435,7 +435,7 @@ export function QuakeArchiveView() {
       </Panel>
 
       {/* Type filter tabs */}
-      <HUDTabs
+      <SimpleTabs
         tabs={tabs}
         activeTab={filterType}
         onChange={setFilterType}

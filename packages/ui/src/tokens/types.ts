@@ -151,38 +151,38 @@ export type LineHeightToken = 'tight' | 'normal' | 'relaxed' | 'loose';
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
- * Sacred geometric chamfer types
+ * Geometric container types
  */
 export type ChamferType = 'card' | 'hero' | 'btn' | 'tag' | 'rune';
 
 /**
- * Chamfer specifications (in pixels)
+ * Geometric container specifications
  */
 export const CHAMFER_SPECS: Record<ChamferType, { size: number; usage: string; clipPath: string }> = {
   card: {
-    size: 16,
-    usage: 'Standard cards, panels, containers',
-    clipPath: 'polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px)',
+    size: 12,
+    usage: 'Standard cards, panels, containers (rounded-xl)',
+    clipPath: '0.75rem',
   },
   hero: {
-    size: 28,
-    usage: 'Hero sections, large feature blocks',
-    clipPath: 'polygon(28px 0, 100% 0, 100% calc(100% - 28px), calc(100% - 28px) 100%, 0 100%, 0 28px)',
+    size: 16,
+    usage: 'Hero sections, large feature blocks (rounded-2xl)',
+    clipPath: '1rem',
   },
   btn: {
-    size: 10,
-    usage: 'Buttons, chips, interactive elements',
-    clipPath: 'polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)',
+    size: 8,
+    usage: 'Buttons, chips, interactive elements (rounded-lg)',
+    clipPath: '0.5rem',
   },
   tag: {
     size: 6,
-    usage: 'Tags, badges, small labels',
-    clipPath: 'polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px)',
+    usage: 'Tags, badges, small labels (rounded-md)',
+    clipPath: '0.375rem',
   },
   rune: {
-    size: 0, // Octagonal, not chamfer-based
-    usage: 'Icons, avatars, sacred geometry',
-    clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)',
+    size: 9999,
+    usage: 'Icons, avatars, badges (rounded-full)',
+    clipPath: '9999px',
   },
 } as const;
 

@@ -12,7 +12,7 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
 export const metadata = {
   title: "MoonWitness OS — Command Center",
-  description: "Tactical Governance and Administrative Operations Terminal",
+  description: "Governance and Administrative Operations Console",
 }
 
 export default function RootLayout({
@@ -23,11 +23,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${orbitron.variable} ${jetBrainsMono.variable} ${geist.variable} dark`}
+      className={`${orbitron.variable} ${jetBrainsMono.variable} ${geist.variable} font-sans antialiased`}
       suppressHydrationWarning
     >
       <body
-        className="bg-[#030508] font-sans text-white antialiased selection:bg-cyber-purple/30 selection:text-white"
+        className="bg-background font-sans text-foreground antialiased selection:bg-primary/30 selection:text-foreground"
         suppressHydrationWarning
       >
         <MoonProvider>

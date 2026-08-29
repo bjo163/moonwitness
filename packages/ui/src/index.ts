@@ -34,6 +34,7 @@ export * from "./components/projects-tasks"
 
 // Base Primitives
 export * from "./components/button"
+export * from "./components/theme-toggle"
 export * from "./components/card"
 export * from "./components/dialog"
 export * from "./components/breadcrumb"

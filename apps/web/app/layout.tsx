@@ -50,19 +50,20 @@ export default function RootLayout({
     <html
       lang="en"
       className={cn(
-        "dark antialiased",
+        "antialiased",
         orbitron.variable,
         jetBrainsMono.variable,
         "font-sans",
         geist.variable,
         amiri.variable
       )}
+      suppressHydrationWarning
     >
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#05070A" />
       </head>
-      <body className="bg-space relative min-h-screen pb-[44px]">
+      <body className="bg-background text-foreground relative min-h-screen pb-[44px]">
         <Cosmic3DBackground />
 
         {/* Accessible Skip Navigation */}

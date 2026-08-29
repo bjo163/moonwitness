@@ -132,6 +132,18 @@
 }
 
 /* ── STANDARD CORNER ACCENTS & CONTAINERS ── */
+@utility bg-space {
+  background-color: var(--card);
+}
+@utility panel-box {
+  position: relative;
+  border-radius: 0.75rem;
+  background-color: var(--card);
+}
+@utility panel-clip {
+  border-radius: 0.75rem;
+  background-color: var(--card);
+}
 @utility corner-box {
   position: relative;
   border-radius: 0.75rem;
@@ -181,12 +193,12 @@
 
 /* ── SMOOTH SHADCN GLASS & ELEVATION ── */
 @utility panel-glass {
-  background-color: rgba(10, 15, 23, 0.85);
+  background-color: var(--card);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
   border-radius: 0.75rem;
-  box-shadow: 0 4px 20px -1px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 20px -1px rgba(0, 0, 0, 0.08);
 }
 
 @utility holo-glow {
@@ -214,77 +226,94 @@
 }
 
 :root {
-    --background: #05070A;
-    --foreground: #F5F5F5;
-    --card: #0A0F17;
-    --card-foreground: #F5F5F5;
-    --popover: #0A0F17;
-    --popover-foreground: #F5F5F5;
-    --primary: #00F0FF;
-    --primary-foreground: #05070A;
-    --secondary: #0A1224;
-    --secondary-foreground: #00F0FF;
-    --muted: #0D1626;
-    --muted-foreground: #8B9BB0;
-    --accent: #0A1224;
-    --accent-foreground: #00F0FF;
-    --destructive: #FF0055;
-    --border: rgba(0, 240, 255, 0.2);
-    --input: rgba(0, 240, 255, 0.2);
-    --ring: #00F0FF;
-    --chart-1: #00F0FF;
-    --chart-2: #00FF66;
-    --chart-3: #FFE600;
-    --chart-4: #A100FF;
-    --chart-5: #FF0055;
+    --background: #ffffff;
+    --foreground: #09090b;
+    --card: #ffffff;
+    --card-foreground: #09090b;
+    --popover: #ffffff;
+    --popover-foreground: #09090b;
+    --primary: #0284c7;
+    --primary-foreground: #ffffff;
+    --secondary: #f4f4f5;
+    --secondary-foreground: #18181b;
+    --muted: #f4f4f5;
+    --muted-foreground: #71717a;
+    --accent: #f4f4f5;
+    --accent-foreground: #0284c7;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --border: #e4e4e7;
+    --input: #e4e4e7;
+    --ring: #0284c7;
+    --chart-1: #0284c7;
+    --chart-2: #10b981;
+    --chart-3: #f59e0b;
+    --chart-4: #8b5cf6;
+    --chart-5: #ef4444;
     --radius: 0.5rem;
-    --sidebar: #0A0F17;
-    --sidebar-foreground: #F5F5F5;
-    --sidebar-primary: #00F0FF;
-    --sidebar-primary-foreground: #05070A;
-    --sidebar-accent: #0A1224;
-    --sidebar-accent-foreground: #00F0FF;
-    --sidebar-border: rgba(0, 240, 255, 0.2);
-    --sidebar-ring: #00F0FF;
+    --sidebar: #fafafa;
+    --sidebar-foreground: #18181b;
+    --sidebar-primary: #0284c7;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #f4f4f5;
+    --sidebar-accent-foreground: #18181b;
+    --sidebar-border: #e4e4e7;
+    --sidebar-ring: #0284c7;
 
-    /* Semantic Cyber Palette */
-    --cyber-cyan: #00F0FF;
-    --cyber-green: #00FF66;
-    --cyber-yellow: #FFE600;
-    --cyber-purple: #A100FF;
-    --cyber-pink: #FF0055;
-    --cyber-dark: #05070A;
-    --cyber-panel: #0A0F17;
-    --cyber-panel-border: rgba(0, 240, 255, 0.25);
+    /* Semantic Cyber/Cosmic Tokens (Light Context) */
+    --cyber-cyan: #0284c7;
+    --cyber-green: #10b981;
+    --cyber-yellow: #d97706;
+    --cyber-purple: #7c3aed;
+    --cyber-pink: #e11d48;
+    --cyber-dark: #ffffff;
+    --cyber-panel: #f8fafc;
+    --cyber-panel-border: #e2e8f0;
 }
 
 .dark {
-    --background: #05070A;
-    --foreground: #F5F5F5;
-    --card: #0A0F17;
-    --card-foreground: #F5F5F5;
-    --popover: #0A0F17;
-    --popover-foreground: #F5F5F5;
-    --primary: #00F0FF;
-    --primary-foreground: #05070A;
-    --secondary: #0A1224;
-    --secondary-foreground: #00F0FF;
-    --muted: #0D1626;
-    --muted-foreground: #8B9BB0;
-    --accent: #0A1224;
-    --accent-foreground: #00F0FF;
-    --destructive: #FF0055;
-    --border: rgba(0, 240, 255, 0.2);
-    --input: rgba(0, 240, 255, 0.2);
-    --ring: #00F0FF;
-    --sidebar: #0A0F17;
-    --sidebar-foreground: #F5F5F5;
-    --sidebar-primary: #00F0FF;
-    --sidebar-primary-foreground: #05070A;
-    --sidebar-accent: #0A1224;
-    --sidebar-accent-foreground: #00F0FF;
-    --sidebar-border: rgba(0, 240, 255, 0.2);
-    --sidebar-ring: #00F0FF;
+    --background: #05070a;
+    --foreground: #f4f4f5;
+    --card: #0a0f17;
+    --card-foreground: #f4f4f5;
+    --popover: #0a0f17;
+    --popover-foreground: #f4f4f5;
+    --primary: #00f0ff;
+    --primary-foreground: #05070a;
+    --secondary: #0f172a;
+    --secondary-foreground: #f4f4f5;
+    --muted: #0f172a;
+    --muted-foreground: #94a3b8;
+    --accent: #0f172a;
+    --accent-foreground: #00f0ff;
+    --destructive: #ff0055;
+    --destructive-foreground: #f4f4f5;
+    --border: rgba(255, 255, 255, 0.1);
+    --input: rgba(255, 255, 255, 0.15);
+    --ring: #00f0ff;
+    --chart-1: #00f0ff;
+    --chart-2: #00ff66;
+    --chart-3: #ffe600;
+    --chart-4: #a100ff;
+    --chart-5: #ff0055;
+    --sidebar: #0a0f17;
+    --sidebar-foreground: #f4f4f5;
+    --sidebar-primary: #00f0ff;
+    --sidebar-primary-foreground: #05070a;
+    --sidebar-accent: #0f172a;
+    --sidebar-accent-foreground: #00f0ff;
+    --sidebar-border: rgba(255, 255, 255, 0.1);
+    --sidebar-ring: #00f0ff;
+
+    /* Semantic Cyber/Cosmic Tokens (Dark Context) */
+    --cyber-cyan: #00f0ff;
+    --cyber-green: #00ff66;
+    --cyber-yellow: #ffe600;
+    --cyber-purple: #a100ff;
+    --cyber-pink: #ff0055;
+    --cyber-dark: #05070a;
+    --cyber-panel: #0a0f17;
+    --cyber-panel-border: rgba(0, 240, 255, 0.25);
 }
 
 @layer base {
@@ -295,11 +324,10 @@
     text-rendering: optimizeLegibility;
   }
   body {
-    background-color: var(--cyber-dark, #05070A);
-    color: var(--foreground, #F5F5F5);
-    font-family: var(--font-mono), monospace;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans), system-ui, sans-serif;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 

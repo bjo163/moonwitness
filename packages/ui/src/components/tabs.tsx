@@ -127,7 +127,4 @@ export function SimpleTabs({
   )
 }
 
-/** @deprecated Use SimpleTabs */
-export const HUDTabs = SimpleTabs
-
 export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants }

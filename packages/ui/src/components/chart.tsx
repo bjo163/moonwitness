@@ -406,9 +406,6 @@ export function MetricChart({
   )
 }
 
-/** @deprecated Use MetricChart */
-export const HUDChart = MetricChart
-
 export {
   ChartContainer,
   ChartTooltip,

@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import { Bell, Sparkles, Database, CheckCircle2, AlertTriangle, X } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { Button } from "./button"
+import { ThemeToggle } from "./theme-toggle"
 import { apiPost } from "@moon/client"
 import { APP_PORTS } from "@workspace/types"
 import { cosmicAudio } from "./cosmic-sound-synthesizer"
@@ -123,30 +124,33 @@ export function Topbar({
           )}
         </div>
 
+        <ThemeToggle />
+
         {rightActions}
 
         {/* User Profile */}
-        <div className="flex items-center gap-3 border-l border-cyan-500/30 pl-4 md:pl-6">
+        <div className="flex items-center gap-3 border-l border-border/50 pl-4 md:pl-6">
           <div className="hidden flex-col items-end sm:flex">
-            <span className="font-sans text-sm font-bold text-white">
-              {profile?.name || "Operator"}
+            <span className="font-sans text-sm font-bold text-foreground">
+              {profile?.name || "User"}
             </span>
-            <span className="font-mono text-[10px] text-cyan-400">
+            <span className="font-mono text-[10px] text-primary">
               {profile?.title || profile?.role || "Administrator"}
             </span>
           </div>
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-cyan-400/40 bg-cyan-950/40 font-mono text-xs font-bold text-cyan-300">
-            {profile?.name ? profile.name.substring(0, 2).toUpperCase() : "OP"}
+          <div className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/40 bg-primary/10 font-mono text-xs font-bold text-primary">
+            {profile?.name ? profile.name.substring(0, 2).toUpperCase() : "US"}
           </div>
         </div>
 
         {onPublicClick && (
           <Button
-            variant="secondary"
+            variant="outline"
+            size="sm"
             className="hidden md:flex"
             onClick={onPublicClick}
           >
-            PUBLIC ↗
+            Public Portal ↗
           </Button>
         )}
       </div>

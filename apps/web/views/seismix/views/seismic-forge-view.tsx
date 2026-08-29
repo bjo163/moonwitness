@@ -18,7 +18,7 @@ import {
 import { ContextBlock } from "@workspace/ui"
 import { Panel, PanelHeader } from "@workspace/ui"
 import { Stat } from "@workspace/ui"
-import { HUDTabs } from "@workspace/ui"
+import { SimpleTabs } from "@workspace/ui"
 import { useResource } from "@workspace/hooks"
 import { fetchEarthquakes } from "@moon/client"
 
@@ -501,7 +501,7 @@ export function SeismicForgeView() {
         />
 
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <HUDTabs
+          <SimpleTabs
             tabs={waveTabs}
             activeTab={activeWave}
             onChange={(id: string) =>

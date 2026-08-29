@@ -86,10 +86,10 @@ Theme: "Deep Space Cosmic Operating System powered by Standard shadcn/ui Design 
 
 ### 4.6 Glassmorphism & Panel System
 **Primary Glass Panel** — `panel-glass` utility:
-- Background: `rgba(10, 15, 23, 0.85)` (85% dark with transparency)
+- Background: `var(--card)` with `backdrop-blur-md`
 - Backdrop: 16px blur (`backdrop-blur-md`)
-- Border: `rgba(255, 255, 255, 0.08)` (clean subtle border)
-- Shadow: `0 4px 20px -1px rgba(0, 0, 0, 0.5)`
+- Border: `1px solid var(--border)` (clean subtle border)
+- Shadow: `0 4px 20px -1px rgba(0, 0, 0, 0.08)` (Light) / `rgba(0, 0, 0, 0.5)` (Dark)
 
 **Usage Pattern**:
 ```tsx
