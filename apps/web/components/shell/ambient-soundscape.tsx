@@ -122,7 +122,7 @@ export function AmbientSoundscape() {
     <div className="flex items-center gap-1.5 font-sans">
       <button
         onClick={togglePlay}
-        className={`flex cursor-pointer items-center gap-1 border px-2 py-1 text-xs font-medium transition-colors clip-tag ${
+        className={`flex cursor-pointer items-center gap-1 rounded border px-2 py-1 text-xs font-medium transition-colors ${
           isPlaying
             ? "border-success/60 bg-success/10 text-success"
             : "border-border text-muted-foreground hover:border-primary hover:text-primary"

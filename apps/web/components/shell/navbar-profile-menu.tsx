@@ -107,7 +107,7 @@ export function NavbarProfileMenu({
               <div className="flex items-center gap-3">
                 <Orbit className="h-4 w-4" /> Universe
               </div>
-              <span className="border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground clip-tag">
+              <span className="rounded border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground">
                 Coming soon
               </span>
             </button>
