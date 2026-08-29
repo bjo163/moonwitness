@@ -51,8 +51,8 @@ export function UsersView() {
               )}
             </div>
             <div className="flex flex-col">
-              <span className="text-xs font-semibold text-slate-200">{displayName}</span>
-              <span className="text-[10px] text-slate-500">{row.login || row.email || "Unavailable"}</span>
+              <span className="text-xs font-semibold text-foreground">{displayName}</span>
+              <span className="text-[10px] text-muted-foreground">{row.login || row.email || "Unavailable"}</span>
             </div>
           </div>
         )
@@ -72,7 +72,7 @@ export function UsersView() {
       render: (_, row) => {
         const level = row.level ?? "Unavailable"
         return (
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-muted-foreground">
             {level}
           </span>
         )
@@ -84,8 +84,8 @@ export function UsersView() {
       hideInForm: true,
       render: (_, row) => {
         const enabled = row.two_factor_enabled || row.twoFactorEnabled
-        const color = enabled ? "text-emerald-400" : "text-slate-500"
-        const dot = enabled ? "bg-emerald-500" : "bg-slate-500"
+        const color = enabled ? "text-success" : "text-muted-foreground"
+        const dot = enabled ? "bg-success" : "bg-muted-foreground"
         return (
           <div className="flex items-center gap-2">
             <span className={`h-1.5 w-1.5 rounded-full ${dot} shadow-sm`} />
@@ -100,9 +100,9 @@ export function UsersView() {
       hideInForm: true,
       render: (_, row) => {
         const lastLogin = row.last_login || row.lastLogin
-        if (!lastLogin) return <span className="text-xs text-slate-600">Never</span>
+        if (!lastLogin) return <span className="text-xs text-muted-foreground">Never</span>
         return (
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-muted-foreground font-mono">
             {new Date(lastLogin).toLocaleString()}
           </span>
         )
@@ -115,7 +115,7 @@ export function UsersView() {
       render: (_, row) => {
         const groups = row.groupsId || row.groups_id
         if (!groups || !Array.isArray(groups) || groups.length === 0) {
-          return <span className="text-xs text-slate-500">No roles assigned</span>
+          return <span className="text-xs text-muted-foreground">No roles assigned</span>
         }
         const roleNames = groups
           .map((g: any) => g.name || g)
@@ -124,12 +124,12 @@ export function UsersView() {
         return (
           <div className="flex flex-wrap gap-1">
             {roleNames.slice(0, 3).map((role: string, i: number) => (
-              <span key={i} className="rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] text-primary">
+              <span key={i} className="rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] text-foreground">
                 {role}
               </span>
             ))}
             {roleNames.length > 3 && (
-              <span className="text-[10px] text-slate-500">+{roleNames.length - 3}</span>
+              <span className="text-[10px] text-muted-foreground font-mono">+{roleNames.length - 3}</span>
             )}
           </div>
         )

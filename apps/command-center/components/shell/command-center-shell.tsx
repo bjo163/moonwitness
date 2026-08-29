@@ -15,7 +15,7 @@ export function CommandCenterShell({ children }: { children: React.ReactNode }) 
 
   const isAuthRoute = pathname === "/login" || pathname === "/auth/login"
 
-  // Redirect unauthenticated operators to /login
+  // Redirect unauthenticated users to /login
   React.useEffect(() => {
     if (!isAuthenticated && !isAuthRoute) {
       router.push("/login")
@@ -29,16 +29,16 @@ export function CommandCenterShell({ children }: { children: React.ReactNode }) 
 
   // If on login route, render full-screen without sidebar/topbar
   if (isAuthRoute) {
-    return <main className="min-h-screen w-full">{children}</main>
+    return <main className="min-h-screen w-full bg-background text-foreground">{children}</main>
   }
 
-  // If not authenticated yet on protected route, show clearance gate loader
+  // If not authenticated yet on protected route, show access verification loader
   if (!isAuthenticated) {
     return (
-      <div className="flex min-h-screen w-full items-center justify-center bg-background font-mono text-foreground">
+      <div className="flex min-h-screen w-full items-center justify-center bg-background font-sans text-foreground">
         <div className="flex flex-col items-center gap-3">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-          <span className="text-[10px] tracking-widest text-primary/70 uppercase">
+          <span className="text-xs font-medium text-muted-foreground">
             Verifying access…
           </span>
         </div>
@@ -47,7 +47,7 @@ export function CommandCenterShell({ children }: { children: React.ReactNode }) 
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-background text-foreground font-sans">
       <Suspense fallback={null}>
         <CommandCenterSidebar onLogout={handleLogout} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       </Suspense>

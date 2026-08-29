@@ -40,7 +40,7 @@ export function Topbar({
   const [showNotifications, setShowNotifications] = useState(false)
   const [notifications] = useState([
     { id: 1, title: "Cron Loop Active", text: "Background runner polling every 30s", time: "Just now", type: "info" },
-    { id: 2, title: "Worker Queue Standby", text: "CosmicWorker default pool online (5 slots)", time: "1m ago", type: "success" },
+    { id: 2, title: "Worker Queue Standby", text: "Worker default pool online (5 slots)", time: "1m ago", type: "success" },
     { id: 3, title: "Ephemeris Synced", text: "Prayer azimuths recalculated", time: "5m ago", type: "info" },
   ])
 

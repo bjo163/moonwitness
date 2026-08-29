@@ -7,69 +7,69 @@ export function AchievementsList() {
   const achievements = [
     {
       title: "Moon Observer",
-      description: "Submitted 10 moon observations",
+      description: "Submitted 10 observations",
       date: "24 May 2025",
       icon: Moon,
-      color: "text-blue-400 border-blue-400/30",
+      color: "text-primary border-primary/30 bg-primary/10",
     },
     {
       title: "Qur'an Explorer",
       description: "Completed 50 verses with notes",
       date: "18 May 2025",
       icon: BookOpen,
-      color: "text-emerald-400 border-emerald-400/30",
+      color: "text-success border-success/30 bg-success/10",
     },
     {
       title: "Research Contributor",
-      description: "Published 5 research papers",
+      description: "Published 5 research summaries",
       date: "10 May 2025",
       icon: FileText,
-      color: "text-primary border-border",
+      color: "text-primary border-primary/30 bg-primary/10",
     },
     {
       title: "Knowledge Sharer",
-      description: "Helped 10 community members",
+      description: "Assisted 10 community inquiries",
       date: "5 May 2025",
       icon: Share2,
-      color: "text-amber-400 border-amber-400/30",
+      color: "text-warning border-warning/30 bg-warning/10",
     },
     {
-      title: "Early Mission Supporter",
-      description: "Joined in the early days",
+      title: "Early Supporter",
+      description: "Joined during foundational release",
       date: "26 Apr 2025",
       icon: Star,
-      color: "text-fuchsia-400 border-fuchsia-400/30",
+      color: "text-warning border-warning/30 bg-warning/10",
     },
   ]
 
   return (
-    <div className="rounded-xl border border-border bg-black/40 p-6 backdrop-blur-md">
+    <div className="rounded-xl border border-border bg-card p-6 shadow-sm text-card-foreground">
       <div className="mb-6 flex items-center justify-between">
-        <h3 className="font-sans text-[10px] font-bold tracking-widest text-primary/70 uppercase">
-          Achievements
+        <h3 className="font-sans text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Milestones & Achievements
         </h3>
-        <button className="font-sans text-[9px] text-primary transition-colors hover:text-primary">
+        <button className="font-sans text-xs font-medium text-primary hover:underline">
           View All
         </button>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3.5">
         {achievements.map((ach, i) => (
-          <div key={i} className="group flex cursor-default items-start gap-4">
+          <div key={i} className="group flex items-start gap-3.5">
             <div
-              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border bg-black/50 ${ach.color} shadow-sm transition-transform group-hover:scale-110`}
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border ${ach.color} shadow-sm`}
             >
-              <ach.icon className="h-5 w-5" />
+              <ach.icon className="h-4 w-4" />
             </div>
-            <div className="flex-1">
-              <h4 className="font-sans text-sm font-semibold text-slate-200 transition-colors group-hover:text-white">
+            <div className="flex-1 min-w-0">
+              <h4 className="font-sans text-xs font-semibold text-foreground">
                 {ach.title}
               </h4>
-              <p className="font-sans text-[10px] text-slate-400">
+              <p className="font-sans text-[11px] text-muted-foreground">
                 {ach.description}
               </p>
             </div>
-            <div className="pt-1 font-mono text-[9px] text-slate-500">
+            <div className="pt-0.5 font-mono text-[10px] text-muted-foreground">
               {ach.date}
             </div>
           </div>

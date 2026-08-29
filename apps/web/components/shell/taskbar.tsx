@@ -381,6 +381,3 @@ export function Taskbar() {
     </div>
   )
 }
-
-// Backward compatibility alias
-export { Taskbar as HUDTaskbar }

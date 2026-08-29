@@ -1,5 +1,6 @@
 // Tokens & Themes
 export * from "./tokens/theme-tokens"
+export * from "./components/theme-toggle"
 
 // Layouts & Primitives
 export * from "./components/sidebar-nav"

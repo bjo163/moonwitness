@@ -39,8 +39,8 @@ export const Q4Q_LEVELS = [
     name: "Physical Human",
     arabicTerm: "Body / Five Senses",
     icon: Eye,
-    color: "text-slate-400",
-    border: "border-slate-400/30",
+    color: "text-muted-foreground",
+    border: "border-border",
     coreQuestion: "What am I experiencing?",
     quranRef: "QS 16:78",
     torahRef: "Deut 4:28",
@@ -207,7 +207,7 @@ export const UPGRADE_REQUESTS: UpgradeRequest[] = [
 ]
 
 export const STATUS_CONFIG: Record<UpgradeStatus, { label: string; color: string }> = {
-  PROPOSED: { label: "PROPOSED", color: "text-slate-400 border-slate-400/30" },
+  PROPOSED: { label: "PROPOSED", color: "text-muted-foreground border-border" },
   BRIDGE_REVIEW: {
     label: "BRIDGE REVIEW",
     color: "text-yellow-400 border-yellow-400/30",

@@ -415,6 +415,39 @@ function auditThemeParity() {
   }
 }
 
+function auditThemeInfrastructure() {
+  const providerPath = path.join(ROOT_DIR, "packages", "state", "src", "providers", "theme-provider.tsx")
+  if (!fs.existsSync(providerPath)) {
+    VIOLATIONS.themeParity.push({ file: "theme-provider.tsx", token: "Theme provider missing in @workspace/state" })
+  } else {
+    const providerContent = fs.readFileSync(providerPath, "utf8")
+    if (!providerContent.includes("next-themes")) {
+      VIOLATIONS.themeParity.push({ file: "theme-provider.tsx", token: "ThemeProvider must use next-themes" })
+    }
+  }
+
+  const togglePath = path.join(ROOT_DIR, "packages", "ui", "src", "components", "theme-toggle.tsx")
+  if (!fs.existsSync(togglePath)) {
+    VIOLATIONS.themeParity.push({ file: "theme-toggle.tsx", token: "ThemeToggle component missing in @workspace/ui" })
+  }
+
+  const ccTopbarPath = path.join(ROOT_DIR, "apps", "command-center", "components", "topbar", "topbar.tsx")
+  if (fs.existsSync(ccTopbarPath)) {
+    const ccTopbar = fs.readFileSync(ccTopbarPath, "utf8")
+    if (!ccTopbar.includes("ThemeToggle")) {
+      VIOLATIONS.themeParity.push({ file: "apps/command-center/components/topbar/topbar.tsx", token: "Command center topbar missing ThemeToggle" })
+    }
+  }
+
+  const navbarPath = path.join(ROOT_DIR, "packages", "ui", "src", "components", "navbar.tsx")
+  if (fs.existsSync(navbarPath)) {
+    const navbar = fs.readFileSync(navbarPath, "utf8")
+    if (!navbar.includes("ThemeToggle")) {
+      VIOLATIONS.themeParity.push({ file: "packages/ui/src/components/navbar.tsx", token: "Navbar missing ThemeToggle" })
+    }
+  }
+}
+
 // Check for Ghost Folders on disk
 function checkGhostFolders(dir) {
   if (!fs.existsSync(dir)) return
@@ -622,6 +655,7 @@ checkGhostFolders(path.join(ROOT_DIR, "packages"))
 checkGhostFolders(path.join(ROOT_DIR, "apps"))
 auditPackageBoundaries()
 auditThemeParity()
+auditThemeInfrastructure()
 
 for (const dir of TARGET_DIRS) {
   scanDirectory(path.join(ROOT_DIR, dir))
