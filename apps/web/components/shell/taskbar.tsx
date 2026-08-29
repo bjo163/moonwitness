@@ -249,9 +249,11 @@ export function Taskbar() {
 
           {/* Sun Position & Duha Status */}
           {sunInfo && (
-            <span
+            <button
               onClick={() => playDuhaChime(sunInfo.duhaStatus === "AFDHAL")}
-              className="hidden cursor-pointer items-center gap-1.5 transition-opacity hover:opacity-80 lg:flex"
+              type="button"
+              className="hidden items-center gap-1.5 rounded-sm transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none lg:flex"
+              aria-label={`Sun position ${sunInfo.altitude} degrees, ${sunInfo.duhaLabel || sunInfo.label}`}
               title={`Solar Altitude: ${sunInfo.altitude}° — ${sunInfo.duhaLabel || sunInfo.label}`}
             >
               <Sun
@@ -289,7 +291,7 @@ export function Taskbar() {
                   {sunInfo.duhaLabel}
                 </span>
               )}
-            </span>
+            </button>
           )}
         </div>
 

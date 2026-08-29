@@ -10,6 +10,8 @@ export const metadata = {
   description: "Tactical Governance and Administrative Operations Terminal",
 }
 
+export const dynamic = "force-dynamic"
+
 export default function RootLayout({
   children,
 }: {
@@ -17,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
+      lang="id"
       className={`${geist.variable}`}
       suppressHydrationWarning
     >
