@@ -76,10 +76,10 @@ export function Navbar({
           </span>
           <span>
             <span className="block text-sm font-semibold text-foreground sm:text-base">
-              MOONWITNESS OS
+              MoonWitness
             </span>
             <span className="block text-[10px] text-muted-foreground">
-              GLOBAL DIVINE OBSERVATORY
+              Public knowledge platform
             </span>
           </span>
         </Link>

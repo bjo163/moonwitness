@@ -61,6 +61,16 @@ export const navigationItems: NavigationItem[] = [
   },
   { label: "Hadith archive", href: "/hadiths", icon: BookOpen },
   { label: "Scripture database", href: "/scriptures", icon: ScrollText },
+  {
+    label: "Knowledge operations", href: "/matrix/wx.source", icon: Database,
+    children: [
+      child("Sources", "/matrix/wx.source", Database),
+      child("Provenance", "/matrix/wx.provenance", ShieldCheck),
+      child("Corpus snapshots", "/matrix/wx.source.snapshot", FileText),
+      child("Research runs", "/matrix/wx.research.run", BarChart3),
+      child("Evidence", "/matrix/wx.evidence", Scale),
+    ],
+  },
   { label: "Users", href: "/users", icon: Users },
   { label: "Developer console", href: "/terminal", icon: Terminal },
 ]

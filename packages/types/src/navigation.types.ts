@@ -61,9 +61,9 @@ export type ModuleDefinition = {
 
 export const NAVIGATION_MESH = {
   portal: [
-    { label: "HOME", href: "/", icon: "Orbit" },
+    { label: "Home", href: "/", icon: "Home" },
     {
-      label: "OBSERVATORY",
+      label: "Observatory",
       href: "/observatory",
       icon: "Telescope",
       subLinks: [
@@ -79,40 +79,17 @@ export const NAVIGATION_MESH = {
       ],
     },
     {
-      label: "KNOWLEDGE",
+      label: "Explore",
       href: "/knowledge",
       icon: "BookOpen",
       subLinks: [
-        { label: "Holy Qur'an Matrix", href: "/knowledge/quran-matrix", icon: "BookOpen" },
-        { label: "Hadith Compendiums", href: "/knowledge/hadith-compendiums", icon: "ScrollText" },
-        { label: "Sirah Chronology", href: "/history/sirah-chronology", icon: "MapPin" },
-        { label: "Civilization Timeline", href: "/history/civilization-timeline", icon: "History" },
-        { label: "Tafsir Deep Reader", href: "/knowledge/tafsir-reader", icon: "BookMarked" },
-        { label: "Asmaul Husna", href: "/knowledge/asmaul-husna", icon: "Sparkles" },
-        { label: "Science Miracles", href: "/history/mukjizat-sains", icon: "Sparkles" },
-        { label: "Root Concordance", href: "/knowledge/root-concordance", icon: "Search" },
-      ],
-    },
-    {
-      label: "ANALYTICS",
-      href: "/analytics",
-      icon: "BarChart3",
-      subLinks: [
-        { label: "Tabayyun Verification", href: "/analytics/tabayyun-truth", icon: "ShieldCheck" },
-        { label: "Mizan Assessment", href: "/analytics/mizan-assessment", icon: "Scale" },
-        { label: "Global Zakat Engine", href: "/analytics/zakat-engine", icon: "Scale" },
-        { label: "Psychology of Soul", href: "/analytics/psikologi-jiwa", icon: "Brain" },
-      ],
-    },
-    {
-      label: "MISSION",
-      href: "/mission",
-      icon: "Target",
-      subLinks: [
-        { label: "Rasulullah Toolkit", href: "/mission/toolkit-rasulullah", icon: "Crosshair" },
-        { label: "Prophetic Diplomacy", href: "/mission/diplomasi-profetik", icon: "Award" },
-        { label: "Global Human Unity", href: "/mission/persatuan-umat", icon: "Globe" },
-        { label: "Civilization Charter", href: "/mission/piagam-peradaban", icon: "ScrollText" },
+        { label: "Scripture", href: "/knowledge/kitab", icon: "BookOpen" },
+        { label: "Traditions", href: "/knowledge/hadits", icon: "ScrollText" },
+        { label: "Search", href: "/knowledge/search", icon: "Search" },
+        { label: "Sources", href: "/knowledge/sources", icon: "Database" },
+        { label: "Source transparency", href: "/transparency", icon: "ShieldCheck" },
+        { label: "Methodology", href: "/methodology", icon: "FileText" },
+        { label: "About", href: "/about", icon: "Info" },
       ],
     },
   ],
