@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "private": true,
   "scripts": {
-    "dev": "turbo dev --parallel",
+    "dev": "turbo dev --filter=web --filter=command-center --filter=api --parallel",
     "dev:all": "turbo dev --filter=web --filter=command-center --filter=api --parallel",
     "dev:web": "turbo dev --filter=web",
     "dev:admin": "turbo dev --filter=command-center",

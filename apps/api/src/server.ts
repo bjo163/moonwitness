@@ -6,6 +6,8 @@ import {
   sendJson,
   registerViewManifests,
   defineRoute,
+  globalRoutes,
+  publish,
 } from "@moon/server"
 import baseAddons, { seedBaseData, loadBaseData, views as baseViews, loadDemoData as loadBaseDemoData } from "@moon/base"
 import performanceAddons, { performanceMiddleware, views as performanceViews, loadDemoData as loadPerformanceDemoData } from "@moon/performance"
@@ -28,8 +30,6 @@ import crmAddons, { views as crmViews, loadDemoData as loadCrmDemoData } from "@
 import mailAddons, { views as mailViews, loadDemoData as loadMailDemoData } from "@moon/mail"
 import geoAddons, { views as geoViews, loadDemoData as loadGeoDemoData } from "@moon/geo"
 import cronAddons, { views as cronViews, globalCronRunner, loadDemoData as loadCronDemoData } from "@moon/cron"
-import { globalRoutes } from "@moon/server/dist/router.js"
-import { publish } from "@moon/server"
 import { trackSystem } from "@moon/performance"
 import { getModel, createCtx, SUPERUSER_ID, checkDbConnection } from "@moon/orm"
 
