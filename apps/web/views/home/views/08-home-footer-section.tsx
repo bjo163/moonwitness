@@ -2,7 +2,7 @@ import React from "react"
 
 export function HomeFooterSection() {
   return (
-    <section id="footer" className="relative bg-black py-20">
+    <section id="footer" className="relative bg-card py-20">
       <div className="mx-auto mb-12 flex w-full max-w-[1700px] justify-center px-6 sm:px-10">
         <h2 className="font-mono text-[10px] font-black tracking-[0.3em] text-primary/50 uppercase">
           [ SECTION 08 : SYSTEM FOOTER ]

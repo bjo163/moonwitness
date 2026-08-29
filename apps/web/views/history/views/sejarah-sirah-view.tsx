@@ -111,7 +111,7 @@ export function SejarahSirahView() {
                   {selectedEvent.title}
                 </h3>
               </div>
-              <span className="rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-500 px-3 py-1 font-mono text-xs font-bold">
+              <span className="rounded-md border border-emerald-500/40 bg-success/10 text-success px-3 py-1 font-mono text-xs font-bold">
                 {selectedEvent.yearStr}
               </span>
             </div>
@@ -163,8 +163,8 @@ export function SejarahSirahView() {
                   onClick={() => setSelectedEvent(ev)}
                   className={`rounded-md flex w-full items-center justify-between border p-4 text-left transition-all ${
                     isSelected
-                      ? "border-primary bg-primary/20 text-white shadow-sm"
-                      : "bg-background border-primary/20 text-primary hover:border-primary/60 hover:text-white"
+                      ? "border-primary bg-primary/20 text-foreground shadow-sm"
+                      : "bg-background border-primary/20 text-primary hover:border-primary/60 hover:text-foreground"
                   }`}
                 >
                   <div className="flex items-center gap-3">

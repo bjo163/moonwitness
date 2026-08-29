@@ -13,10 +13,10 @@ import {
 
 const STEPS = [
   {
-    title: "INITIATING SEQUENCE",
+    title: "GETTING STARTED",
     subtitle: "Welcome to MoonWitness OS",
     description:
-      "You have accessed the Global Divine Observatory. This cosmic platform connects you to the Quran, Hadith, and global spiritual telemetry in real-time.",
+      "You have accessed the Global Knowledge Platform & Observatory. This unified system connects you to the Quran, Hadith, celestial calculations, and spiritual insights in real-time.",
     icon: Orbit,
   },
   {
@@ -62,10 +62,10 @@ export function OnboardingWizard() {
   if (!current) return null
   const Icon = current.icon
   return (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 p-4 backdrop-blur-md">
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-card/90 p-4 backdrop-blur-md">
       <div className="rounded-xl bg-card bg-background/95 relative w-full max-w-2xl animate-in border border-border p-8 shadow-sm duration-500 fade-in zoom-in">
         {/* Progress Bar */}
-        <div className="absolute top-0 left-0 h-1 w-full bg-black/40">
+        <div className="absolute top-0 left-0 h-1 w-full bg-card">
           <div
             className="h-full bg-primary transition-all duration-500"
             style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
@@ -80,24 +80,24 @@ export function OnboardingWizard() {
           <h4 className="mb-2 font-mono text-sm tracking-[0.3em] text-primary">
             STEP 0{step + 1} // {current.title}
           </h4>
-          <h2 className="mb-4 font-sans text-3xl font-black text-white uppercase drop-shadow-md">
+          <h2 className="mb-4 font-sans text-3xl font-black text-foreground uppercase drop-shadow-md">
             {current.subtitle}
           </h2>
-          <p className="mb-10 max-w-lg font-mono text-xs leading-relaxed text-slate-300">
+          <p className="mb-10 max-w-lg font-mono text-xs leading-relaxed text-foreground">
             {current.description}
           </p>
 
           <div className="flex w-full items-center justify-between border-t border-border pt-6">
             <button
               onClick={() => setHasCompletedOnboarding(true)}
-              className="font-mono text-[10px] tracking-widest text-slate-500 uppercase transition-colors hover:text-white"
+              className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase transition-colors hover:text-foreground"
             >
               SKIP SEQUENCE
             </button>
 
             <button
               onClick={handleNext}
-              className="flex items-center gap-2 rounded-none border border-border bg-primary/10 px-6 py-3 font-mono text-xs font-bold tracking-widest text-primary uppercase shadow-sm transition-all hover:bg-primary hover:text-black hover:shadow-sm"
+              className="flex items-center gap-2 rounded-none border border-border bg-primary/10 px-6 py-3 font-mono text-xs font-bold tracking-widest text-primary uppercase shadow-sm transition-all hover:bg-primary hover:text-foreground hover:shadow-sm"
             >
               {step === STEPS.length - 1 ? (
                 <>

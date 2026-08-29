@@ -33,10 +33,10 @@ export function AchievementWidget() {
     .filter(Boolean)
 
   return (
-    <div className="rounded-xl bg-card w-full border border-fuchsia-500/20 bg-black/40 p-4 font-mono">
+    <div className="rounded-xl bg-card w-full border border-fuchsia-500/20 bg-card p-4 font-mono">
       <div className="mb-4 flex items-center gap-2">
         <Award className="h-4 w-4 text-fuchsia-400" />
-        <h3 className="text-xs font-bold tracking-widest text-white uppercase">
+        <h3 className="text-xs font-bold tracking-widest text-foreground uppercase">
           Player Status
         </h3>
       </div>
@@ -50,7 +50,7 @@ export function AchievementWidget() {
             <span>LEVEL {level}</span>
             <span className="text-fuchsia-400">{points} XP</span>
           </div>
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted/30">
             <div
               className="h-full bg-gradient-to-r from-fuchsia-500 to-transparent"
               style={{ width: `${progressToNextLevel}%` }}
@@ -60,7 +60,7 @@ export function AchievementWidget() {
       </div>
 
       <div className="space-y-2">
-        <div className="mb-2 border-b border-white/10 pb-1 text-[9px] tracking-widest text-primary/70 uppercase">
+        <div className="mb-2 border-b border-border pb-1 text-[9px] tracking-widest text-primary/70 uppercase">
           Recent Unlocks
         </div>
 
@@ -76,13 +76,13 @@ export function AchievementWidget() {
             return (
               <div
                 key={ach.id}
-                className="flex items-center gap-3 rounded bg-white/5 p-2 transition-colors hover:bg-white/10"
+                className="flex items-center gap-3 rounded bg-muted/30 p-2 transition-colors hover:bg-muted/30"
               >
                 <div className="rounded bg-fuchsia-500/10 p-1.5 text-fuchsia-400">
                   <Icon className="h-3.5 w-3.5" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[10px] font-bold text-white">
+                  <p className="truncate text-[10px] font-bold text-foreground">
                     {ach.title}
                   </p>
                   <p className="truncate text-[8px] text-primary">

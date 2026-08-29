@@ -77,7 +77,7 @@ export function HaditsPortalView() {
   })
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-card pb-12 font-sans text-white selection:bg-primary/10">
+    <div className="min-h-screen overflow-x-hidden bg-card pb-12 font-sans text-foreground selection:bg-primary/10">
       {/* 1. Top Compendiums Stats Bar */}
       <HaditsCompendiumsBar
         totalHadiths={totalHadiths}
@@ -87,17 +87,17 @@ export function HaditsPortalView() {
 
       <div className="mx-auto max-w-[1800px] space-y-6 px-4 pt-6 lg:px-6">
         {/* 2. Header Title */}
-        <div className="flex flex-col items-start justify-between gap-4 border-b border-white/10 pb-4 md:flex-row md:items-center">
+        <div className="flex flex-col items-start justify-between gap-4 border-b border-border pb-4 md:flex-row md:items-center">
           <div>
             <div className="mb-1 flex items-center gap-3">
-              <h1 className="font-mono text-2xl font-black tracking-widest text-white uppercase drop-shadow-md sm:text-3xl">
+              <h1 className="font-mono text-2xl font-black tracking-widest text-foreground uppercase drop-shadow-md sm:text-3xl">
                 {selectedCompendium === "bukhari" ? "HADITH TRANSMISSION COMPENDIUM" : "HADITH COLLECTION READER"}
               </h1>
               <span className="rounded border border-border bg-primary/10 px-2 py-0.5 font-mono text-[9px] font-bold text-primary">
                 KUTUBUT TIS&apos;AH
               </span>
             </div>
-            <p className="font-mono text-xs text-white/50">
+            <p className="font-mono text-xs text-foreground/50">
               Universal Prophetic Sunnah & Chains of Transmission (Sanad) Telemetry
             </p>
           </div>
@@ -106,7 +106,7 @@ export function HaditsPortalView() {
             <div className="font-arabic text-xl text-primary/90 drop-shadow-sm">
               تَرَكْتُ فِيكُمْ أَمْرَيْنِ لَنْ تَضِلُّوا مَا تَمَسَّكْتُمْ بِهِمَا
             </div>
-            <p className="font-mono text-[9px] text-white/40 italic">
+            <p className="font-mono text-[9px] text-foreground/40 italic">
               &ldquo;I have left among you two matters; you will not go astray as long as you adhere to them.&rdquo;
             </p>
           </div>
@@ -129,11 +129,11 @@ export function HaditsPortalView() {
           {/* LEFT: Hadith Cards List */}
           <div className="space-y-4 lg:col-span-2">
             {loading && hadithData.length === 0 ? (
-              <div className="flex h-64 items-center justify-center rounded-xl border border-white/5 bg-card font-mono text-xs text-primary">
+              <div className="flex h-64 items-center justify-center rounded-xl border border-border bg-card font-mono text-xs text-primary">
                 SYNCHRONIZING HADITH TELEMETRY...
               </div>
             ) : filteredHadiths.length === 0 ? (
-              <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-white/5 bg-card p-6 text-center font-mono text-xs text-white/40">
+              <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-border bg-card p-6 text-center font-mono text-xs text-foreground/40">
                 <p>No hadiths matched your query or filter.</p>
               </div>
             ) : (

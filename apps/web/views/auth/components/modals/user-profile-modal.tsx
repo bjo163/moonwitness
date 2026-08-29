@@ -161,7 +161,7 @@ export function UserProfileModal({
           )}
 
           {successMsg && (
-            <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-3 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+            <div className="rounded-xl border border-success/20 bg-success/10 p-3 text-xs font-bold text-emerald-600 dark:text-success">
               ✅ {successMsg}
             </div>
           )}
@@ -222,7 +222,7 @@ export function UserProfileModal({
                     onClick={() => setAvatar(av)}
                     className={`flex h-7 w-7 items-center justify-center rounded-xl text-xs transition-all ${
                       avatar === av
-                        ? "scale-110 bg-primary text-white shadow-md"
+                        ? "scale-110 bg-primary text-foreground shadow-md"
                         : "border border-border bg-background hover:bg-muted"
                     }`}
                   >

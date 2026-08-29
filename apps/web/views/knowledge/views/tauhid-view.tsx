@@ -55,7 +55,7 @@ export function TauhidPortalView() {
             >
               <div>
                 <div className="mb-4 flex items-center justify-between">
-                  <span className="rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-500 px-2 py-0.5 font-mono text-[9px]">
+                  <span className="rounded-md border border-amber-500/40 bg-warning/10 text-warning px-2 py-0.5 font-mono text-[9px]">
                     PILLAR 0{idx + 1}
                   </span>
                   <span className="font-bold text-accent">☝️</span>

@@ -6,9 +6,9 @@ export function ObservatoryLeftColumn({ obs }: { obs: any }) {
     <div className="flex flex-col justify-between space-y-6 lg:col-span-3">
       {/* Moon Status Box */}
       <div className="bg-background/40 hover:bg-background/60 space-y-4 rounded-xl border border-border p-5 shadow-sm backdrop-blur-xl transition-all duration-500 hover:border-border">
-        <div className="flex items-center justify-between border-b border-white/10 pb-2.5 text-xs font-black tracking-wider text-primary uppercase">
+        <div className="flex items-center justify-between border-b border-border pb-2.5 text-xs font-black tracking-wider text-primary uppercase">
           <span>| MOON STATUS</span>
-          <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-400">
+          <span className="flex items-center gap-1 text-[10px] font-bold text-success">
             ● ACTIVE
           </span>
         </div>
@@ -23,7 +23,7 @@ export function ObservatoryLeftColumn({ obs }: { obs: any }) {
             />
           </div>
           <div>
-            <div className="text-xs font-black tracking-wider text-white uppercase">
+            <div className="text-xs font-black tracking-wider text-foreground uppercase">
               {obs.loading ? "SCANNING..." : obs.moon.phaseName}
             </div>
             <div className="mt-0.5 font-mono text-xl font-black text-primary drop-shadow-sm">
@@ -36,20 +36,20 @@ export function ObservatoryLeftColumn({ obs }: { obs: any }) {
         </div>
 
         {/* Stats Table */}
-        <div className="space-y-2 border-t border-white/10 pt-2 font-mono text-[11px]">
+        <div className="space-y-2 border-t border-border pt-2 font-mono text-[11px]">
           <div className="flex justify-between">
             <span className="text-primary">LUNAR AGE</span>
-            <span className="font-bold text-white">
+            <span className="font-bold text-foreground">
               {obs.loading ? "--" : obs.moon.age} DAYS
             </span>
           </div>
           <div className="flex justify-between">
             <span className="text-primary">MOONRISE</span>
-            <span className="font-bold text-white">18:42 WIB</span>
+            <span className="font-bold text-foreground">18:42 WIB</span>
           </div>
           <div className="flex justify-between">
             <span className="text-primary">MOONSET</span>
-            <span className="font-bold text-white">06:11 WIB</span>
+            <span className="font-bold text-foreground">06:11 WIB</span>
           </div>
           <div className="flex justify-between">
             <span className="text-primary">NEXT FULL MOON</span>
@@ -57,9 +57,9 @@ export function ObservatoryLeftColumn({ obs }: { obs: any }) {
               {obs.loading ? "----" : obs.moon.nextFullMoon}
             </span>
           </div>
-          <div className="flex items-center justify-between border-t border-white/5 pt-1">
+          <div className="flex items-center justify-between border-t border-border pt-1">
             <span className="text-primary">VISIBILITY</span>
-            <span className="rounded-xs border border-emerald-400/30 bg-emerald-500/10 px-2 py-0.5 font-black tracking-wider text-emerald-400 backdrop-blur-sm">
+            <span className="rounded-xs border border-success/30 bg-success/10 px-2 py-0.5 font-black tracking-wider text-success backdrop-blur-sm">
               {obs.loading ? "---" : obs.moon.visibility} ●
             </span>
           </div>
@@ -68,26 +68,26 @@ export function ObservatoryLeftColumn({ obs }: { obs: any }) {
 
       {/* Hijri Calendar Terminal Box */}
       <div className="bg-background/40 hover:bg-background/60 flex flex-col justify-between rounded-xl border border-border p-5 shadow-sm backdrop-blur-xl transition-all duration-500 hover:border-border">
-        <div className="mb-3 flex items-center gap-2 border-b border-white/10 pb-2.5 text-xs font-black tracking-wider text-primary uppercase">
+        <div className="mb-3 flex items-center gap-2 border-b border-border pb-2.5 text-xs font-black tracking-wider text-primary uppercase">
           <Calendar className="h-4 w-4 text-primary" />
           <span>HIJRI CALENDAR</span>
         </div>
 
         <div className="my-2 flex items-center gap-4">
-          <div className="font-mono text-5xl font-black text-white drop-shadow-sm">
+          <div className="font-mono text-5xl font-black text-foreground drop-shadow-sm">
             {obs.loading ? "--" : obs.hijri.day}
           </div>
           <div>
             <div className="text-sm font-black tracking-wider text-primary">
               {obs.loading ? "SCANNING..." : obs.hijri.month}
             </div>
-            <div className="text-xs font-bold text-white/90">
+            <div className="text-xs font-bold text-foreground">
               {obs.loading ? "----" : obs.hijri.year} AH
             </div>
           </div>
         </div>
 
-        <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2.5 text-xs font-black tracking-widest text-emerald-400 uppercase">
+        <div className="mt-3 flex items-center justify-between border-t border-border pt-2.5 text-xs font-black tracking-widest text-success uppercase">
           <span>
             {obs.loading
               ? "----"

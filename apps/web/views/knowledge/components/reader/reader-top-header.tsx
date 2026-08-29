@@ -26,7 +26,7 @@ export function ReaderTopHeader({
               {scriptureName}
             </h1>
             {scriptureArabic && (
-              <span lang="ar" dir="rtl" className="font-arabic text-2xl text-amber-500">
+              <span lang="ar" dir="rtl" className="font-arabic text-2xl text-warning">
                 {scriptureArabic}
               </span>
             )}
@@ -36,17 +36,17 @@ export function ReaderTopHeader({
               </span>
             )}
           </div>
-          {scriptureDesc && <p className="text-sm text-white/60">{scriptureDesc}</p>}
+          {scriptureDesc && <p className="text-sm text-foreground/60">{scriptureDesc}</p>}
         </div>
 
-        <div className="flex flex-wrap items-center gap-6 text-xs text-white/50">
+        <div className="flex flex-wrap items-center gap-6 text-xs text-foreground/50">
           {stats &&
             Object.entries(stats).map(([key, value]) => (
               <div key={key} className="flex flex-col gap-1">
                 <span className="text-[10px] font-bold tracking-widest uppercase">
                   {key}
                 </span>
-                <span className="text-sm font-bold text-white">
+                <span className="text-sm font-bold text-foreground">
                   {value as React.ReactNode}
                 </span>
               </div>

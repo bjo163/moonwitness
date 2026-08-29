@@ -22,24 +22,24 @@ interface HaditsCompendiumsBarProps {
 export function HaditsCompendiumsBar({ totalHadiths, selectedSlug, onSelect }: HaditsCompendiumsBarProps) {
   return (
     <div className="border-b border-border bg-card py-2 px-4 shadow-inner">
-      <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-4 overflow-x-auto text-[10px] text-white/50 no-scrollbar">
-        <div className="flex shrink-0 items-center gap-2 font-mono text-cyan-400">
+      <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-4 overflow-x-auto text-[10px] text-foreground/50 no-scrollbar">
+        <div className="flex shrink-0 items-center gap-2 font-mono text-primary">
           <Database className="h-3.5 w-3.5" />
           <span className="font-black">TOTAL CORPUS:</span>
-          <span className="font-bold text-white">{totalHadiths.toLocaleString()} HADITHS</span>
+          <span className="font-bold text-foreground">{totalHadiths.toLocaleString()} HADITHS</span>
         </div>
-        <div className="flex shrink-0 items-center gap-4 border-l border-white/10 pl-4 font-mono">
+        <div className="flex shrink-0 items-center gap-4 border-l border-border pl-4 font-mono">
           {HADITH_COMPENDIUMS.slice(0, 7).map((c, i) => (
             <button
               key={c.slug}
               type="button"
               onClick={() => onSelect(c.slug)}
               aria-pressed={selectedSlug === c.slug}
-              className={`flex items-center gap-1.5 whitespace-nowrap rounded px-1.5 py-1 transition-colors ${selectedSlug === c.slug ? "bg-cyan-500/10 text-cyan-300" : "hover:bg-white/5"}`}
+              className={`flex items-center gap-1.5 whitespace-nowrap rounded px-1.5 py-1 transition-colors ${selectedSlug === c.slug ? "bg-primary/10 text-cyan-300" : "hover:bg-muted/30"}`}
             >
               <div className={`h-1.5 w-1.5 rounded-full ${c.c}`} />
-              <span className="text-white/70">{c.n}</span>
-              <span className="text-[9px] text-white/30">({c.v})</span>
+              <span className="text-foreground">{c.n}</span>
+              <span className="text-[9px] text-foreground/30">({c.v})</span>
             </button>
           ))}
         </div>

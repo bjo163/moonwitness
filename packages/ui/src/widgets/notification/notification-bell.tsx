@@ -38,15 +38,15 @@ export function NotificationBell() {
   const getIconColor = (type: string) => {
     switch (type) {
       case "success":
-        return "text-emerald-400 bg-emerald-500/10"
+        return "text-success bg-success/10"
       case "warning":
-        return "text-amber-400 bg-amber-500/10"
+        return "text-warning bg-warning/10"
       case "error":
-        return "text-red-400 bg-red-500/10"
+        return "text-destructive bg-destructive/10"
       case "prayer":
         return "text-fuchsia-400 bg-fuchsia-500/10"
       case "achievement":
-        return "text-amber-300 bg-amber-500/20"
+        return "text-amber-300 bg-warning/20"
       default:
         return "text-primary bg-primary/10"
     }
@@ -56,11 +56,11 @@ export function NotificationBell() {
     <div className="relative" ref={panelRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative flex h-9 w-9 items-center justify-center rounded-full border border-border bg-black/40 text-primary transition-colors hover:border-border hover:bg-muted hover:text-primary"
+        className="relative flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-primary transition-colors hover:border-border hover:bg-muted hover:text-primary"
       >
         <Bell className="h-4 w-4" />
         {mounted && unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white shadow-sm">
+          <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-foreground shadow-sm">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
@@ -69,7 +69,7 @@ export function NotificationBell() {
       {isOpen && (
         <div className="bg-background/95 absolute top-full right-0 z-[100] mt-2 w-80 overflow-hidden rounded-xl border border-border shadow-sm backdrop-blur-xl sm:w-96">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-border bg-black/40 px-4 py-3">
+          <div className="flex items-center justify-between border-b border-border bg-card px-4 py-3">
             <h3 className="font-mono text-[10px] font-bold tracking-widest text-primary uppercase">
               System Notifications
             </h3>
@@ -84,7 +84,7 @@ export function NotificationBell() {
               <button
                 onClick={clearAll}
                 title="Clear all"
-                className="rounded p-1 text-red-500 transition-colors hover:bg-red-500/10 hover:text-red-400"
+                className="rounded p-1 text-destructive transition-colors hover:bg-destructive/10 hover:text-destructive"
               >
                 <Trash2 className="h-3.5 w-3.5" />
               </button>
@@ -105,7 +105,7 @@ export function NotificationBell() {
                 {notifications.map((notif) => (
                   <div
                     key={notif.id}
-                    className={`flex flex-col gap-2 px-4 py-3 transition-colors hover:bg-white/5 ${!notif.read ? "bg-primary/10" : ""}`}
+                    className={`flex flex-col gap-2 px-4 py-3 transition-colors hover:bg-muted/30 ${!notif.read ? "bg-primary/10" : ""}`}
                     onClick={() => {
                       if (!notif.read) markAsRead(notif.id)
                     }}
@@ -119,7 +119,7 @@ export function NotificationBell() {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-start justify-between">
                           <h4
-                            className={`font-sans text-xs font-bold ${!notif.read ? "text-white" : "text-slate-300"}`}
+                            className={`font-sans text-xs font-bold ${!notif.read ? "text-foreground" : "text-foreground"}`}
                           >
                             {notif.title}
                           </h4>
@@ -131,7 +131,7 @@ export function NotificationBell() {
                           </span>
                         </div>
                         <p
-                          className={`mt-0.5 font-mono text-[10px] leading-relaxed ${!notif.read ? "text-primary" : "text-slate-400"}`}
+                          className={`mt-0.5 font-mono text-[10px] leading-relaxed ${!notif.read ? "text-primary" : "text-muted-foreground"}`}
                         >
                           {notif.message}
                         </p>

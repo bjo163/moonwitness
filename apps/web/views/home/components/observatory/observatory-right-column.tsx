@@ -7,9 +7,9 @@ export function ObservatoryRightColumn({ obs }: { obs: any }) {
     <div className="flex flex-col justify-between space-y-5 lg:col-span-3">
       {/* Upcoming Events List */}
       <div className="bg-background/40 hover:bg-background/60 space-y-3.5 rounded-xl border border-border p-5 shadow-sm backdrop-blur-xl transition-all duration-500 hover:border-border">
-        <div className="flex items-center justify-between border-b border-white/10 pb-2 text-xs font-black tracking-wider text-primary uppercase">
+        <div className="flex items-center justify-between border-b border-border pb-2 text-xs font-black tracking-wider text-primary uppercase">
           <span>| UPCOMING EVENTS</span>
-          <Sparkles className="h-3.5 w-3.5 animate-pulse text-amber-400" />
+          <Sparkles className="h-3.5 w-3.5 animate-pulse text-warning" />
         </div>
 
         <div className="space-y-3 font-mono text-[11px]">
@@ -34,10 +34,10 @@ export function ObservatoryRightColumn({ obs }: { obs: any }) {
           ].map((ev, i) => (
             <div
               key={i}
-              className="flex flex-col border-l-2 py-1 pl-2.5 transition-colors hover:bg-white/5"
+              className="flex flex-col border-l-2 py-1 pl-2.5 transition-colors hover:bg-muted/30"
               style={{ borderColor: ev.col }}
             >
-              <span className="text-xs font-black text-white">{ev.title}</span>
+              <span className="text-xs font-black text-foreground">{ev.title}</span>
               <span className="mt-0.5 text-[10px] text-primary">{ev.dt}</span>
             </div>
           ))}
@@ -52,9 +52,9 @@ export function ObservatoryRightColumn({ obs }: { obs: any }) {
       </div>
 
       {/* Sun Position Strip */}
-      <div className="bg-background/40 flex items-center justify-between rounded-xl border border-amber-500/30 p-4 shadow-sm backdrop-blur-xl transition-all duration-500 hover:border-amber-400/50">
+      <div className="bg-background/40 flex items-center justify-between rounded-xl border border-warning/30 p-4 shadow-sm backdrop-blur-xl transition-all duration-500 hover:border-amber-400/50">
         <div className="flex items-center gap-3">
-          <Sun className="animate-spin-slow h-8 w-8 shrink-0 text-amber-400 drop-shadow-sm filter" />
+          <Sun className="animate-spin-slow h-8 w-8 shrink-0 text-warning drop-shadow-sm filter" />
           <div>
             <div className="text-[10px] font-black text-primary uppercase">
               SUN POSITION
@@ -64,23 +64,23 @@ export function ObservatoryRightColumn({ obs }: { obs: any }) {
             </div>
           </div>
         </div>
-        <div className="text-right font-mono text-[10px] font-bold text-white">
+        <div className="text-right font-mono text-[10px] font-bold text-foreground">
           DAY LENGTH
           <br />
-          <span className="text-xs font-black text-amber-400">11h 45m 12s</span>
+          <span className="text-xs font-black text-warning">11h 45m 12s</span>
         </div>
       </div>
 
       {/* Qibla Direction Compass Dial */}
-      <div className="bg-background/40 flex items-center justify-between gap-3 rounded-xl border border-emerald-500/30 p-5 shadow-sm backdrop-blur-xl transition-all duration-500 hover:border-emerald-400/50">
+      <div className="bg-background/40 flex items-center justify-between gap-3 rounded-xl border border-success/30 p-5 shadow-sm backdrop-blur-xl transition-all duration-500 hover:border-emerald-400/50">
         <div>
-          <div className="mb-1 text-xs font-black tracking-wider text-emerald-400 uppercase">
+          <div className="mb-1 text-xs font-black tracking-wider text-success uppercase">
             | QIBLA DIRECTION
           </div>
-          <div className="font-mono text-3xl font-black text-white drop-shadow-sm">
+          <div className="font-mono text-3xl font-black text-foreground drop-shadow-sm">
             {obs.loading ? "---.-" : obs.qibla}°
           </div>
-          <div className="mt-0.5 text-[11px] font-bold text-emerald-300 uppercase">
+          <div className="mt-0.5 text-[11px] font-bold text-success uppercase">
             NW TOWARDS MAKKAH
           </div>
           <div className="mt-1 flex items-center gap-1 text-[9px] font-bold text-primary">
@@ -91,8 +91,8 @@ export function ObservatoryRightColumn({ obs }: { obs: any }) {
 
         {/* Compass Gauge visual */}
         <div className="bg-background/60 relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full border border-emerald-400/40 shadow-sm backdrop-blur-md">
-          <Compass className="h-10 w-10 animate-pulse text-emerald-400 drop-shadow-sm" />
-          <span className="absolute top-1 text-[8px] font-black text-white">
+          <Compass className="h-10 w-10 animate-pulse text-success drop-shadow-sm" />
+          <span className="absolute top-1 text-[8px] font-black text-foreground">
             N
           </span>
           <span className="absolute bottom-1 text-[8px] font-black text-primary">

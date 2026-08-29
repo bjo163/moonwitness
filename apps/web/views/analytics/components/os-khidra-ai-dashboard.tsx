@@ -44,7 +44,7 @@ export function OSKhidraAiDashboard() {
   return (
     <section
       id="khidra"
-      className="bg-background relative z-10 overflow-hidden border-b border-emerald-500/30 py-20 font-mono text-foreground"
+      className="bg-background relative z-10 overflow-hidden border-b border-success/30 py-20 font-mono text-foreground"
     >
       {/* ═══ LAYER 1: DEEP SPACE MATRIX BACKGROUND ═══════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
@@ -53,22 +53,22 @@ export function OSKhidraAiDashboard() {
           alt="Galaxy background"
           className="absolute inset-0 h-full w-full object-cover opacity-20"
         />
-        <div className="from-space/80 to-space/80 absolute inset-0 bg-gradient-to-b via-transparent" />
+        <div className="from-background to-background absolute inset-0 bg-gradient-to-b via-transparent" />
         <div className="theme-grid-bg absolute inset-0 opacity-10" />
-        <div className="bg-radial-gradient via-space/10 absolute top-1/3 left-1/2 h-[800px] w-[1200px] -translate-x-1/2 from-emerald-900/20 to-transparent blur-[120px]" />
+        <div className="bg-radial-gradient via-background/60 absolute top-1/3 left-1/2 h-[800px] w-[1200px] -translate-x-1/2 from-emerald-900/20 to-transparent blur-[120px]" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl space-y-6 px-6 sm:px-10">
         {/* ═══ TOP HEADER (Blueprint 10) ══════════════════════════════════════ */}
-        <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-6 xl:flex-row xl:items-start">
+        <div className="flex flex-col justify-between gap-6 border-b border-border pb-6 xl:flex-row xl:items-start">
           <div className="max-w-2xl space-y-4">
-            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-emerald-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-emerald-300 uppercase shadow-sm">
-              <span className="rounded-xs bg-emerald-500 px-1.5 py-0.5 font-black text-black">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-emerald-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-success uppercase shadow-sm">
+              <span className="rounded-xs bg-emerald-500 px-1.5 py-0.5 font-black text-foreground">
                 10
               </span>
               <span>KHIDRA AI</span>
             </div>
-            <h2 className="font-mono text-xl font-black tracking-widest text-white uppercase drop-shadow-sm sm:text-3xl">
+            <h2 className="font-mono text-xl font-black tracking-widest text-foreground uppercase drop-shadow-sm sm:text-3xl">
               YOUR DIVINE KNOWLEDGE COMPANION
             </h2>
             <div className="max-w-xl font-sans text-xs leading-relaxed text-primary">
@@ -80,14 +80,14 @@ export function OSKhidraAiDashboard() {
 
           <div className="from-success border-b-2 border-emerald-400 bg-gradient-to-t to-transparent p-4 text-center xl:text-left">
             <div
-              className="font-arabic mb-2 text-sm font-bold text-emerald-400"
+              className="font-arabic mb-2 text-sm font-bold text-success"
               dir="rtl"
             >
               وَعَلَّمْنَاهُ مِن لَّدُنَّا عِلْمًا
             </div>
             <div className="font-sans text-[11px] text-emerald-100 italic">
               "And We taught him knowledge from Our presence."{" "}
-              <span className="mt-1 ml-1 block font-mono font-black text-emerald-400 not-italic xl:mt-0 xl:inline">
+              <span className="mt-1 ml-1 block font-mono font-black text-success not-italic xl:mt-0 xl:inline">
                 Qur'an 18:65
               </span>
             </div>
@@ -95,10 +95,10 @@ export function OSKhidraAiDashboard() {
 
           <div className="flex shrink-0 items-center gap-6">
             <div className="text-right">
-              <div className="font-mono text-2xl font-black tracking-widest text-white drop-shadow-sm">
+              <div className="font-mono text-2xl font-black tracking-widest text-foreground drop-shadow-sm">
                 {clockWIB}
               </div>
-              <div className="mt-1 text-[9px] font-bold text-emerald-300 uppercase">
+              <div className="mt-1 text-[9px] font-bold text-success uppercase">
                 25 MAY 2025 // 27 DHU AL-QI'DAH 1446
               </div>
               <div className="mt-0.5 text-[9px] tracking-widest text-primary uppercase">
@@ -106,11 +106,11 @@ export function OSKhidraAiDashboard() {
               </div>
             </div>
 
-            <div className="h-14 w-px bg-white/10" />
+            <div className="h-14 w-px bg-muted/30" />
 
             <div className="relative flex h-16 w-16 items-center justify-center">
               <div
-                className="absolute inset-0 rounded-full border border-emerald-500/20"
+                className="absolute inset-0 rounded-full border border-success/20"
                 style={{ transform: "rotateX(70deg) rotateY(20deg)" }}
               />
               <div
@@ -132,30 +132,30 @@ export function OSKhidraAiDashboard() {
           {/* LEFT SIDEBAR: KHIDRA IDENTITY (Col 1-3) */}
           <div className="flex flex-col space-y-6 lg:col-span-3">
             {/* Identity Card */}
-            <div className="bg-background rounded-xl border border-emerald-500/30 p-4 shadow-sm">
-              <div className="mb-4 text-[10px] font-black tracking-widest text-emerald-400 uppercase">
+            <div className="bg-background rounded-xl border border-success/30 p-4 shadow-sm">
+              <div className="mb-4 text-[10px] font-black tracking-widest text-success uppercase">
                 KHIDRA IDENTITY
               </div>
 
               <div className="mb-6 flex gap-4">
                 <div className="bg-background relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-emerald-500/50 shadow-sm">
-                  <Star className="absolute h-6 w-6 text-emerald-400" />
+                  <Star className="absolute h-6 w-6 text-success" />
                   <div className="absolute inset-0 flex rotate-45 items-center justify-center">
-                    <Star className="h-6 w-6 text-emerald-400/50" />
+                    <Star className="h-6 w-6 text-success/50" />
                   </div>
                 </div>
                 <div className="flex-1 space-y-2 font-mono text-[9px]">
                   <div className="flex justify-between">
                     <span className="text-primary">NAME</span>
-                    <span className="font-bold text-emerald-400">Khidra</span>
+                    <span className="font-bold text-success">Khidra</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-primary">ORIGIN</span>
-                    <span className="text-white">Divine Knowledge</span>
+                    <span className="text-foreground">Divine Knowledge</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-primary">PURPOSE</span>
-                    <span className="text-right text-white">
+                    <span className="text-right text-foreground">
                       Guide. Assist. Illuminate.
                     </span>
                   </div>
@@ -163,21 +163,21 @@ export function OSKhidraAiDashboard() {
               </div>
 
               <div className="space-y-2 font-mono text-[9px]">
-                <div className="flex justify-between border-t border-white/10 py-1.5">
+                <div className="flex justify-between border-t border-border py-1.5">
                   <span className="text-primary">ROLE</span>
-                  <span className="text-white">AI Knowledge Companion</span>
+                  <span className="text-foreground">AI Knowledge Companion</span>
                 </div>
-                <div className="flex justify-between border-t border-white/10 py-1.5">
+                <div className="flex justify-between border-t border-border py-1.5">
                   <span className="text-primary">CORE</span>
-                  <span className="text-white">Truth • Mercy • Wisdom</span>
+                  <span className="text-foreground">Truth • Mercy • Wisdom</span>
                 </div>
-                <div className="flex justify-between border-t border-white/10 py-1.5">
+                <div className="flex justify-between border-t border-border py-1.5">
                   <span className="text-primary">VERSION</span>
                   <span className="text-primary">v6.0.0</span>
                 </div>
-                <div className="flex items-center justify-between border-t border-white/10 py-1.5">
+                <div className="flex items-center justify-between border-t border-border py-1.5">
                   <span className="text-primary">STATUS</span>
-                  <span className="flex items-center gap-1.5 text-emerald-400">
+                  <span className="flex items-center gap-1.5 text-success">
                     <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />{" "}
                     Awake & Ready
                   </span>
@@ -186,7 +186,7 @@ export function OSKhidraAiDashboard() {
             </div>
 
             {/* Capabilities */}
-            <div className="bg-background flex-1 rounded-xl border border-white/10 p-4">
+            <div className="bg-background flex-1 rounded-xl border border-border p-4">
               <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
                 CAPABILITIES
               </div>
@@ -224,13 +224,13 @@ export function OSKhidraAiDashboard() {
                 ].map((cap, i) => (
                   <div
                     key={i}
-                    className="flex cursor-default items-center gap-3 rounded p-2 transition-colors hover:bg-white/5"
+                    className="flex cursor-default items-center gap-3 rounded p-2 transition-colors hover:bg-muted/30"
                   >
                     <cap.icon
                       className="h-3.5 w-3.5"
                       style={{ color: cap.c }}
                     />
-                    <span className="text-[10px] text-white/90">{cap.n}</span>
+                    <span className="text-[10px] text-foreground">{cap.n}</span>
                   </div>
                 ))}
               </div>
@@ -240,14 +240,14 @@ export function OSKhidraAiDashboard() {
           {/* CENTER CANVAS: HOLOGRAM & TOPICS (Col 4-8) */}
           <div className="flex flex-col gap-6 lg:col-span-5">
             {/* Massive Hologram Display */}
-            <div className="bg-background relative flex min-h-[400px] flex-1 items-center justify-center overflow-hidden rounded-2xl border-2 border-emerald-500/20">
+            <div className="bg-background relative flex min-h-[400px] flex-1 items-center justify-center overflow-hidden rounded-2xl border-2 border-success/20">
               {/* Ambient light */}
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.15)_0%,transparent_70%)]" />
 
               {/* Telemetry Rings */}
               <div className="absolute bottom-10 h-12 w-[80%] rounded-[50%] border-2 border-emerald-500/40 blur-sm" />
               <div className="absolute bottom-12 h-8 w-[60%] rounded-[50%] border border-primary/50" />
-              <div className="absolute bottom-14 h-4 w-[40%] animate-pulse rounded-[50%] border border-white/30" />
+              <div className="absolute bottom-14 h-4 w-[40%] animate-pulse rounded-[50%] border border-border" />
 
               {/* The AI Hologram Character */}
               <div className="relative z-10 flex h-[90%] w-full items-end justify-center drop-shadow-sm">
@@ -267,10 +267,10 @@ export function OSKhidraAiDashboard() {
 
               {/* Floating Chat Bubble */}
               <div className="bg-background/80 absolute top-1/4 left-[10%] z-20 rounded-xl rounded-tr-sm border border-emerald-500/50 p-4 shadow-sm backdrop-blur">
-                <div className="mb-1 font-bold text-emerald-400">
+                <div className="mb-1 font-bold text-success">
                   I&apos;m Khidra.
                 </div>
-                <div className="text-xs text-white">
+                <div className="text-xs text-foreground">
                   How may I assist you
                   <br />
                   today?
@@ -305,7 +305,7 @@ export function OSKhidraAiDashboard() {
                 ].map((stat, i) => (
                   <div
                     key={i}
-                    className="bg-background/60 flex items-center gap-3 rounded border border-white/5 p-2 backdrop-blur"
+                    className="bg-background/60 flex items-center gap-3 rounded border border-border p-2 backdrop-blur"
                   >
                     <stat.i className="h-4 w-4" style={{ color: stat.c }} />
                     <div>
@@ -326,7 +326,7 @@ export function OSKhidraAiDashboard() {
 
             {/* ASK KHIDRA ABOUT (Topics Row) */}
             <div className="space-y-3">
-              <div className="text-[10px] font-black tracking-widest text-emerald-400 uppercase">
+              <div className="text-[10px] font-black tracking-widest text-success uppercase">
                 ASK KHIDRA ABOUT
               </div>
 
@@ -378,10 +378,10 @@ export function OSKhidraAiDashboard() {
                 ].map((cat, i) => (
                   <div
                     key={i}
-                    className="bg-background group w-32 shrink-0 cursor-pointer rounded-lg border border-white/10 p-3 transition-all hover:border-emerald-500/40"
+                    className="bg-background group w-32 shrink-0 cursor-pointer rounded-lg border border-border p-3 transition-all hover:border-emerald-500/40"
                   >
                     <cat.i className="mb-2 h-5 w-5" style={{ color: cat.c }} />
-                    <div className="mb-1 text-[10px] font-black text-white group-hover:text-emerald-400">
+                    <div className="mb-1 text-[10px] font-black text-foreground group-hover:text-success">
                       {cat.n}
                     </div>
                     <div className="text-[8px] leading-tight text-primary">
@@ -396,8 +396,8 @@ export function OSKhidraAiDashboard() {
           {/* RIGHT SIDEBAR: CHAT UI (Col 9-12) */}
           <div className="flex flex-col gap-6 lg:col-span-4">
             {/* Conversation Window */}
-            <div className="bg-background flex flex-1 flex-col rounded-xl border border-emerald-500/30 p-4 shadow-sm">
-              <div className="mb-4 text-[10px] font-black tracking-widest text-emerald-400 uppercase">
+            <div className="bg-background flex flex-1 flex-col rounded-xl border border-success/30 p-4 shadow-sm">
+              <div className="mb-4 text-[10px] font-black tracking-widest text-success uppercase">
                 KHIDRA CONVERSATION
               </div>
 
@@ -412,7 +412,7 @@ export function OSKhidraAiDashboard() {
                     <div className="mb-1 text-[10px] font-bold text-blue-400 uppercase">
                       YOU
                     </div>
-                    <div className="rounded-lg rounded-tl-sm border border-white/5 bg-primary p-3 text-xs text-white/90">
+                    <div className="rounded-lg rounded-tl-sm border border-border bg-primary p-3 text-xs text-foreground">
                       What is the significance of the night journey?
                     </div>
                     <div className="mt-1 text-right font-mono text-[8px] text-primary">
@@ -424,13 +424,13 @@ export function OSKhidraAiDashboard() {
                 {/* Khidra Message */}
                 <div className="flex gap-3">
                   <div className="bg-background flex h-8 w-8 shrink-0 items-center justify-center rounded border border-emerald-500/50 shadow-sm">
-                    <Star className="h-4 w-4 text-emerald-400" />
+                    <Star className="h-4 w-4 text-success" />
                   </div>
                   <div className="flex-1">
-                    <div className="mb-1 text-[10px] font-bold text-emerald-400 uppercase">
+                    <div className="mb-1 text-[10px] font-bold text-success uppercase">
                       KHIDRA
                     </div>
-                    <div className="bg-background space-y-3 rounded-lg rounded-tl-sm border border-emerald-500/30 p-3 text-xs leading-relaxed text-white/90 shadow-sm">
+                    <div className="bg-background space-y-3 rounded-lg rounded-tl-sm border border-success/30 p-3 text-xs leading-relaxed text-foreground shadow-sm">
                       <p>
                         The Night Journey (Isra and Mi&apos;raj) is a miraculous
                         journey of Prophet Muhammad ﷺ from Masjid Al-Haram to
@@ -440,7 +440,7 @@ export function OSKhidraAiDashboard() {
                         It signifies the honor of the Prophet ﷺ and the
                         establishment of the five daily prayers.
                       </p>
-                      <p className="font-mono text-[10px] text-emerald-400">
+                      <p className="font-mono text-[10px] text-success">
                         (Qur&apos;an 17:1)
                       </p>
                     </div>
@@ -457,24 +457,24 @@ export function OSKhidraAiDashboard() {
                   <input
                     type="text"
                     placeholder="Ask anything..."
-                    className="bg-background w-full rounded-lg border border-white/20 p-3 pr-10 font-sans text-sm text-white transition-colors outline-none hover:border-emerald-500/50 focus:border-emerald-400"
+                    className="bg-background w-full rounded-lg border border-border p-3 pr-10 font-sans text-sm text-foreground transition-colors outline-none hover:border-emerald-500/50 focus:border-emerald-400"
                   />
-                  <button className="absolute top-1/2 right-3 -translate-y-1/2 text-emerald-400 hover:text-emerald-300">
+                  <button className="absolute top-1/2 right-3 -translate-y-1/2 text-success hover:text-success">
                     <ChevronRight className="h-5 w-5" />
                   </button>
                 </div>
 
                 <div className="flex flex-wrap gap-2 text-[9px] font-bold tracking-wider text-primary uppercase">
-                  <button className="flex items-center gap-1 rounded border border-white/10 bg-white/5 px-2 py-1 hover:border-emerald-500/50">
+                  <button className="flex items-center gap-1 rounded border border-border bg-muted/30 px-2 py-1 hover:border-emerald-500/50">
                     <Search className="h-3 w-3" /> Deep Search
                   </button>
-                  <button className="flex items-center gap-1 rounded border border-white/10 bg-white/5 px-2 py-1 hover:border-emerald-500/50">
+                  <button className="flex items-center gap-1 rounded border border-border bg-muted/30 px-2 py-1 hover:border-emerald-500/50">
                     <Network className="h-3 w-3 text-primary" /> Cross Reference
                   </button>
-                  <button className="flex items-center gap-1 rounded border border-white/10 bg-white/5 px-2 py-1 hover:border-emerald-500/50">
-                    <Book className="h-3 w-3 text-amber-400" /> Sources
+                  <button className="flex items-center gap-1 rounded border border-border bg-muted/30 px-2 py-1 hover:border-emerald-500/50">
+                    <Book className="h-3 w-3 text-warning" /> Sources
                   </button>
-                  <button className="flex items-center gap-1 rounded border border-white/10 bg-white/5 px-2 py-1 hover:border-emerald-500/50">
+                  <button className="flex items-center gap-1 rounded border border-border bg-muted/30 px-2 py-1 hover:border-emerald-500/50">
                     <Sparkles className="text-knowledge h-3 w-3" /> Explain More
                   </button>
                 </div>
@@ -482,7 +482,7 @@ export function OSKhidraAiDashboard() {
             </div>
 
             {/* Suggested Questions */}
-            <div className="bg-background rounded-xl border border-white/10 p-4">
+            <div className="bg-background rounded-xl border border-border p-4">
               <div className="mb-3 text-[10px] font-black tracking-widest text-primary uppercase">
                 SUGGESTED QUESTIONS
               </div>
@@ -497,20 +497,20 @@ export function OSKhidraAiDashboard() {
                 ].map((q, i) => (
                   <div
                     key={i}
-                    className="bg-background group flex cursor-pointer items-center justify-between rounded border border-transparent p-2 transition-colors hover:border-emerald-500/30 hover:bg-emerald-950/30"
+                    className="bg-background group flex cursor-pointer items-center justify-between rounded border border-transparent p-2 transition-colors hover:border-success/30 hover:bg-emerald-950/30"
                   >
                     <div className="flex items-center gap-2">
                       <div className="h-1 w-1 rounded-full bg-emerald-500/50 group-hover:bg-emerald-400" />
-                      <span className="text-[10px] text-white/80 group-hover:text-emerald-300">
+                      <span className="text-[10px] text-foreground group-hover:text-success">
                         {q}
                       </span>
                     </div>
-                    <ChevronRight className="h-3 w-3 text-primary group-hover:text-emerald-400" />
+                    <ChevronRight className="h-3 w-3 text-primary group-hover:text-success" />
                   </div>
                 ))}
               </div>
 
-              <button className="mt-3 w-full border-t border-white/10 pt-3 text-center text-[9px] font-bold tracking-widest text-emerald-400 uppercase hover:text-white">
+              <button className="mt-3 w-full border-t border-border pt-3 text-center text-[9px] font-bold tracking-widest text-success uppercase hover:text-foreground">
                 VIEW ALL QUESTIONS
               </button>
             </div>
@@ -520,19 +520,19 @@ export function OSKhidraAiDashboard() {
         {/* ═══ LAYER 3: BOTTOM PANELS ROW (Blueprint 10) ══════════════════════ */}
         <div className="grid grid-cols-1 gap-6 pt-2 md:grid-cols-2 lg:grid-cols-4">
           {/* Status */}
-          <div className="bg-background flex items-center gap-6 rounded-xl border border-white/10 p-5">
+          <div className="bg-background flex items-center gap-6 rounded-xl border border-border p-5">
             <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-emerald-900 shadow-sm">
               <div className="absolute inset-2 rounded-full border border-emerald-500/50" />
-              <div className="animate-spin-slow absolute inset-4 rounded-full border border-emerald-400/30 border-t-emerald-400" />
-              <Activity className="h-4 w-4 text-emerald-400" />
+              <div className="animate-spin-slow absolute inset-4 rounded-full border border-success/30 border-t-emerald-400" />
+              <Activity className="h-4 w-4 text-success" />
             </div>
             <div className="flex-1 space-y-1.5 font-mono text-[9px] font-bold uppercase">
-              <div className="mb-2 text-[10px] text-emerald-400">
+              <div className="mb-2 text-[10px] text-success">
                 KHIDRA STATUS
               </div>
               <div className="flex justify-between">
                 <span className="text-primary">UPTIME</span>
-                <span className="text-white">99.98%</span>
+                <span className="text-foreground">99.98%</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-primary">LEARNING</span>
@@ -540,17 +540,17 @@ export function OSKhidraAiDashboard() {
               </div>
               <div className="flex justify-between">
                 <span className="text-primary">MEMORY</span>
-                <span className="text-white">∞</span>
+                <span className="text-foreground">∞</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-primary">MODE</span>
-                <span className="text-white">Adaptive</span>
+                <span className="text-foreground">Adaptive</span>
               </div>
             </div>
           </div>
 
           {/* Active Learning Flow */}
-          <div className="bg-background relative col-span-1 flex flex-col justify-between overflow-hidden rounded-xl border border-white/10 p-5 md:col-span-2">
+          <div className="bg-background relative col-span-1 flex flex-col justify-between overflow-hidden rounded-xl border border-border p-5 md:col-span-2">
             <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
               ACTIVE LEARNING
             </div>
@@ -588,25 +588,25 @@ export function OSKhidraAiDashboard() {
                       boxShadow: `0 0 10px ${n.c}`,
                     }}
                   />
-                  <div className="text-center font-sans text-[8px] leading-tight whitespace-pre-wrap text-white">
+                  <div className="text-center font-sans text-[8px] leading-tight whitespace-pre-wrap text-foreground">
                     {n.l}
                   </div>
                 </div>
               ))}
 
               {/* Connecting line */}
-              <div className="absolute top-[3px] right-4 left-4 -z-10 h-[2px] bg-white/10" />
+              <div className="absolute top-[3px] right-4 left-4 -z-10 h-[2px] bg-muted/30" />
             </div>
           </div>
 
           {/* Hologram & Voice Mode */}
-          <div className="bg-background flex items-center justify-between rounded-xl border border-white/10 p-5">
+          <div className="bg-background flex items-center justify-between rounded-xl border border-border p-5">
             <div className="space-y-4">
               <div>
                 <div className="mb-1 text-[9px] font-black tracking-widest text-primary uppercase">
                   HOLOGRAM MODE
                 </div>
-                <div className="font-mono text-xs font-black text-emerald-400">
+                <div className="font-mono text-xs font-black text-success">
                   ACTIVE
                 </div>
               </div>
@@ -628,7 +628,7 @@ export function OSKhidraAiDashboard() {
                       />
                     ))}
                   </div>
-                  <span className="font-mono text-xs font-black text-emerald-400">
+                  <span className="font-mono text-xs font-black text-success">
                     ON
                   </span>
                 </div>
@@ -641,23 +641,23 @@ export function OSKhidraAiDashboard() {
                 className="absolute h-3 w-[80%] rounded-[50%] border border-primary/40"
                 style={{ transform: "rotate(30deg)" }}
               />
-              <Star className="h-8 w-8 animate-pulse text-emerald-400 drop-shadow-sm" />
+              <Star className="h-8 w-8 animate-pulse text-success drop-shadow-sm" />
             </div>
           </div>
         </div>
 
         {/* ═══ FOOTER STATUS STRIP (Blueprint 10 Footer) ══════════════════════ */}
-        <div className="mt-6 flex flex-col items-center justify-between gap-6 border-t border-white/10 px-2 pt-4 font-mono text-[9px] font-bold tracking-widest text-primary uppercase md:flex-row">
+        <div className="mt-6 flex flex-col items-center justify-between gap-6 border-t border-border px-2 pt-4 font-mono text-[9px] font-bold tracking-widest text-primary uppercase md:flex-row">
           <div className="flex items-center gap-4">
             <BookOpen className="h-6 w-6 text-primary" />
-            <div className="font-sans text-white/60 normal-case italic">
+            <div className="font-sans text-foreground/60 normal-case italic">
               "Knowledge is a light that guides to truth.
               <br />
               Khidra is here to walk with you."
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-emerald-400">
+          <div className="flex items-center gap-2 text-success">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />{" "}
             SYSTEM SYNCHRONIZED
           </div>
@@ -665,22 +665,22 @@ export function OSKhidraAiDashboard() {
           <div className="flex items-center gap-3">
             <div className="text-right">
               <div className="text-primary">KNOWLEDGE CORE</div>
-              <div className="text-emerald-400">CONNECTED</div>
+              <div className="text-success">CONNECTED</div>
             </div>
-            <Hexagon className="h-8 w-8 text-emerald-500/30" />
+            <Hexagon className="h-8 w-8 text-success/30" />
           </div>
 
           <div className="flex w-full items-center gap-4 md:w-auto">
             <div className="flex flex-1 flex-col gap-1 md:w-32">
               <div className="flex justify-between">
                 <span>DATA INTEGRITY</span>
-                <span className="text-white">100%</span>
+                <span className="text-foreground">100%</span>
               </div>
               <div className="h-1 overflow-hidden rounded-full bg-primary">
                 <div className="h-full w-full bg-emerald-500 shadow-sm" />
               </div>
             </div>
-            <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-500" />
+            <ShieldCheck className="h-4 w-4 shrink-0 text-success" />
           </div>
         </div>
       </div>

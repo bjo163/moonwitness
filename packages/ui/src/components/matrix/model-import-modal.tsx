@@ -182,7 +182,7 @@ export function ModelImportModal({
           )}
 
           {importStats && (
-            <div className="flex items-center gap-2 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-600 dark:text-emerald-400">
+            <div className="flex items-center gap-2 p-3 bg-success/10 border border-success/30 rounded-lg text-emerald-600 dark:text-success">
               <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
               <span>
                 Import complete: {importStats.success} records created, {importStats.failed} failed.

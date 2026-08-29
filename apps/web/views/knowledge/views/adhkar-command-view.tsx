@@ -94,10 +94,10 @@ export function AdhkarCommandView() {
     <div className="mx-auto w-full max-w-7xl px-4 pt-6 pb-20 font-sans sm:px-6 lg:px-8">
       {/* Header */}
       <div className="mb-10 text-center">
-        <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-black/40 shadow-sm backdrop-blur-xl">
+        <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-card shadow-sm backdrop-blur-xl">
           <Shield className="h-8 w-8 text-primary drop-shadow-sm" />
         </div>
-        <h1 className="mt-6 text-3xl font-black tracking-widest text-white uppercase drop-shadow-md sm:text-4xl">
+        <h1 className="mt-6 text-3xl font-black tracking-widest text-foreground uppercase drop-shadow-md sm:text-4xl">
           Adhkar Command Center
         </h1>
         <p className="mx-auto mt-4 max-w-2xl font-mono text-xs tracking-widest text-primary uppercase">
@@ -117,7 +117,7 @@ export function AdhkarCommandView() {
               className={`flex shrink-0 snap-center items-center gap-2 rounded-full border px-5 py-2.5 text-[10px] font-bold tracking-widest uppercase transition-all ${
                 isActive
                   ? "border-border bg-primary/10 text-primary shadow-sm"
-                  : "border-white/10 bg-black/40 text-slate-400 hover:border-border hover:text-primary"
+                  : "border-border bg-card text-muted-foreground hover:border-border hover:text-primary"
               }`}
             >
               <Icon className="h-3.5 w-3.5" />
@@ -129,20 +129,20 @@ export function AdhkarCommandView() {
 
       {/* Dzikir Counter Modal (Active State) */}
       {activeDzikir && (
-        <div className="fixed inset-0 z-[100] flex animate-in items-center justify-center bg-black/80 p-2 backdrop-blur-md duration-300 fade-in zoom-in sm:p-4">
+        <div className="fixed inset-0 z-[100] flex animate-in items-center justify-center bg-card p-2 backdrop-blur-md duration-300 fade-in zoom-in sm:p-4">
           <div className="hide-scrollbar bg-background/95 relative max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-border p-6 shadow-sm sm:p-8">
             <button
               onClick={() => {
                 setActiveDzikir(null)
                 setCount(0)
               }}
-              className="absolute top-6 right-6 text-slate-400 transition-colors hover:text-white"
+              className="absolute top-6 right-6 text-muted-foreground transition-colors hover:text-foreground"
             >
               Close
             </button>
 
             <div className="mb-8 text-center">
-              <h2 className="mb-2 font-sans text-xl font-bold text-white">
+              <h2 className="mb-2 font-sans text-xl font-bold text-foreground">
                 {activeDzikir.title}
               </h2>
               <p className="font-mono text-xs tracking-widest text-primary uppercase">
@@ -152,12 +152,12 @@ export function AdhkarCommandView() {
 
             <div className="mb-10 text-center">
               <p
-                className="font-arabic text-4xl leading-relaxed text-white drop-shadow-sm sm:text-5xl"
+                className="font-arabic text-4xl leading-relaxed text-foreground drop-shadow-sm sm:text-5xl"
                 dir="rtl"
               >
                 {activeDzikir.text_arabic}
               </p>
-              <p className="mt-8 font-sans text-sm text-slate-300 italic">
+              <p className="mt-8 font-sans text-sm text-foreground italic">
                 {activeDzikir.text_latin}
               </p>
               <p className="mt-4 font-mono text-xs text-primary">
@@ -170,7 +170,7 @@ export function AdhkarCommandView() {
                 onClick={handleTap}
                 className={`relative flex h-32 w-32 items-center justify-center rounded-full border-4 transition-all active:scale-95 ${
                   count >= targetCount
-                    ? "border-emerald-500 bg-emerald-500/20 text-emerald-400 shadow-sm"
+                    ? "border-emerald-500 bg-success/20 text-success shadow-sm"
                     : "border-border bg-primary/10 text-primary shadow-sm hover:shadow-sm"
                 }`}
               >
@@ -180,7 +180,7 @@ export function AdhkarCommandView() {
                 <div className="absolute inset-0 animate-ping rounded-full bg-primary/10 opacity-0 transition-opacity duration-300 active:opacity-100" />
               </button>
 
-              <div className="mt-6 h-2 w-64 overflow-hidden rounded-full bg-white/10">
+              <div className="mt-6 h-2 w-64 overflow-hidden rounded-full bg-muted/30">
                 <div
                   className="h-full bg-gradient-to-r from-primary/10 to-emerald-400 transition-all duration-300"
                   style={{
@@ -201,10 +201,10 @@ export function AdhkarCommandView() {
       ) : data.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center opacity-50">
           <Shield className="mb-4 h-12 w-12 text-primary" />
-          <h3 className="font-mono text-sm tracking-widest text-white">
+          <h3 className="font-mono text-sm tracking-widest text-foreground">
             NO DATA IN DATABASE
           </h3>
-          <p className="mt-2 text-xs text-slate-400">
+          <p className="mt-2 text-xs text-muted-foreground">
             Please seed the database with adhkar records.
           </p>
         </div>
@@ -213,35 +213,35 @@ export function AdhkarCommandView() {
           {data.map((item) => (
             <div
               key={item.id}
-              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-6 transition-all hover:border-border hover:bg-black/60 hover:shadow-sm"
+              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all hover:border-border hover:bg-card hover:shadow-sm"
             >
               <div>
                 <div className="mb-4 flex items-start justify-between">
-                  <h3 className="font-sans text-lg font-bold text-white group-hover:text-primary">
+                  <h3 className="font-sans text-lg font-bold text-foreground group-hover:text-primary">
                     {item.title}
                   </h3>
-                  <span className="rounded bg-white/10 px-2 py-1 font-mono text-[8px] tracking-widest text-slate-300 uppercase">
+                  <span className="rounded bg-muted/30 px-2 py-1 font-mono text-[8px] tracking-widest text-foreground uppercase">
                     {item.timing}
                   </span>
                 </div>
                 <p
-                  className="font-arabic mb-4 line-clamp-3 text-right text-2xl leading-relaxed text-slate-200"
+                  className="font-arabic mb-4 line-clamp-3 text-right text-2xl leading-relaxed text-foreground"
                   dir="rtl"
                 >
                   {item.text_arabic}
                 </p>
-                <p className="line-clamp-2 font-sans text-xs text-slate-400 italic">
+                <p className="line-clamp-2 font-sans text-xs text-muted-foreground italic">
                   {item.text_latin}
                 </p>
               </div>
 
-              <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
+              <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
                 <span className="font-mono text-[9px] tracking-widest text-primary/70 uppercase">
                   {item.source}
                 </span>
                 <button
                   onClick={() => setActiveDzikir(item)}
-                  className="flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 font-mono text-[10px] font-bold tracking-widest text-primary transition-colors hover:bg-primary hover:text-black"
+                  className="flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 font-mono text-[10px] font-bold tracking-widest text-primary transition-colors hover:bg-primary hover:text-foreground"
                 >
                   START <ArrowRight className="h-3 w-3" />
                 </button>

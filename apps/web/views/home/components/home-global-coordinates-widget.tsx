@@ -88,14 +88,14 @@ export function HomeGlobalCoordinatesWidget() {
 
   return (
     <div className="flex h-full flex-col lg:col-span-3">
-      <div className="relative flex flex-1 flex-col rounded-lg border border-primary/20 bg-black/10 p-4 shadow-sm backdrop-blur-xl sm:p-5">
+      <div className="relative flex flex-1 flex-col rounded-lg border border-primary/20 bg-muted/40 p-4 shadow-sm backdrop-blur-xl sm:p-5">
         <div>
-          <div className="mb-3 flex items-center justify-between border-b border-white/10 pb-2.5 text-xs font-bold tracking-wider text-primary uppercase">
+          <div className="mb-3 flex items-center justify-between border-b border-border pb-2.5 text-xs font-bold tracking-wider text-primary uppercase">
             <span>GLOBAL COORDINATES</span>
             <MapPin className="h-4 w-4 shrink-0 text-primary" />
           </div>
 
-          <div className="group relative my-3 flex h-28 w-full items-center justify-center overflow-hidden rounded-md border border-primary/20 bg-black/20 shadow-inner">
+          <div className="group relative my-3 flex h-28 w-full items-center justify-center overflow-hidden rounded-md border border-primary/20 bg-muted/40 shadow-inner">
             <div
               className="absolute h-[446px] w-[800px] max-w-none opacity-40 transition-all duration-1000 group-hover:opacity-70"
               style={{
@@ -119,14 +119,14 @@ export function HomeGlobalCoordinatesWidget() {
             <div className="pointer-events-none absolute top-1/2 left-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-sm border-[1.5px] border-emerald-400" />
             <div className="pointer-events-none absolute top-1/2 left-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400 shadow-sm" />
 
-            <div className="absolute bottom-2 left-2 z-10 rounded border border-emerald-500/20 bg-black/60 px-1.5 py-0.5 font-mono text-[8px] text-emerald-400 backdrop-blur-md">
+            <div className="absolute bottom-2 left-2 z-10 rounded border border-success/20 bg-card px-1.5 py-0.5 font-mono text-[8px] text-success backdrop-blur-md">
               LOCKED • {gpsLocation ? gpsLocation.city : "LOCATING..."}
             </div>
           </div>
         </div>
 
         <div className="mt-auto space-y-2 pt-1 font-sans text-[10px] font-medium tracking-widest uppercase">
-          <div className="flex items-center justify-between border-b border-white/5 pb-2">
+          <div className="flex items-center justify-between border-b border-border pb-2">
             <span className="text-primary/80">COORDINATES</span>
             <span className="font-mono font-bold tracking-wide text-primary">
               {gpsLocation

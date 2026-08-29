@@ -72,7 +72,7 @@ export function GlobalTickerWidget() {
                   <Quote className="inline h-3 w-3" />
                   {m.user_avatar} {m.user_name}:
                 </span>
-                <span className="text-white/80 italic">"{m.comment_text}"</span>
+                <span className="text-foreground italic">"{m.comment_text}"</span>
               </div>
             ))}
           </div>

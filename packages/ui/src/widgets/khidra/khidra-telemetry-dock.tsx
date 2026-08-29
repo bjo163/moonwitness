@@ -187,10 +187,10 @@ export function KhidraTelemetryDock() {
       </div>
 
       {/* Bottom Sub-bar */}
-      <div className="col-span-12 flex flex-col items-center justify-between gap-4 rounded-lg border border-primary/20 bg-black/40 p-3 text-[9px] font-bold tracking-widest uppercase backdrop-blur-md sm:flex-row">
+      <div className="col-span-12 flex flex-col items-center justify-between gap-4 rounded-lg border border-primary/20 bg-card p-3 text-[9px] font-bold tracking-widest uppercase backdrop-blur-md sm:flex-row">
         <div className="flex items-center gap-2">
           <Database className="h-4 w-4 text-primary" />
-          <span className="text-white">
+          <span className="text-foreground">
             &quot;Knowledge is a light that guides to truth. Khidra is here to
             walk with you.&quot;
           </span>

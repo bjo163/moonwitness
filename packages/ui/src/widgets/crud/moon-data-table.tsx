@@ -148,7 +148,7 @@ export function MoonDataTable({
         <div
           className={`flex flex-col gap-4 ${sideWidgets ? "w-full xl:w-3/4" : "w-full"}`}
         >
-          <div className="flex flex-col overflow-hidden rounded-xl border border-border bg-black/40 shadow-sm backdrop-blur-md">
+          <div className="flex flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm backdrop-blur-md">
             {/* Toolbar / Header */}
             <div className="flex flex-col gap-4 border-b border-border p-4">
               {/* Tabs & Primary Actions */}
@@ -162,7 +162,7 @@ export function MoonDataTable({
                         className={`border-b-2 pb-2 text-xs font-semibold tracking-wider whitespace-nowrap uppercase transition-colors ${
                           activeTab === tab.id
                             ? "border-border text-primary"
-                            : "border-transparent text-slate-500 hover:text-slate-300"
+                            : "border-transparent text-muted-foreground hover:text-foreground"
                         }`}
                       >
                         {tab.label}
@@ -175,10 +175,10 @@ export function MoonDataTable({
                       {icon}
                     </div>
                     <div>
-                      <h2 className="text-sm font-bold tracking-wider text-white uppercase">
+                      <h2 className="text-sm font-bold tracking-wider text-foreground uppercase">
                         {title}
                       </h2>
-                      <p className="text-xs text-slate-400">{description}</p>
+                      <p className="text-xs text-muted-foreground">{description}</p>
                     </div>
                   </div>
                 )}
@@ -190,7 +190,7 @@ export function MoonDataTable({
                       setFormData({})
                       setIsAddOpen(true)
                     }}
-                    className="h-8 bg-primary px-3 text-xs font-semibold text-black shadow-sm hover:bg-primary"
+                    className="h-8 bg-primary px-3 text-xs font-semibold text-foreground shadow-sm hover:bg-primary"
                   >
                     <Plus className="mr-1 h-4 w-4" />
                     ADD RECORD
@@ -201,12 +201,12 @@ export function MoonDataTable({
               {/* Filters & Search */}
               <div className="flex w-full flex-col items-center gap-3 md:flex-row">
                 <div className="relative w-full md:w-64">
-                  <Search className="absolute top-2 left-2.5 h-4 w-4 text-slate-500" />
+                  <Search className="absolute top-2 left-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
                     placeholder="Search records..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="h-8 border-border bg-black/50 pl-9 text-xs text-slate-200 focus-visible:ring-cyan-500/50"
+                    className="h-8 border-border bg-card pl-9 text-xs text-foreground focus-visible:ring-cyan-500/50"
                   />
                 </div>
 
@@ -220,11 +220,11 @@ export function MoonDataTable({
             <div className="w-full overflow-x-auto">
               <table className="w-full border-collapse text-left">
                 <thead>
-                  <tr className="border-b border-border bg-white/[0.02]">
-                    <th className="w-12 px-4 py-3 text-center text-[10px] font-bold tracking-widest text-slate-500 uppercase">
+                  <tr className="border-b border-border bg-card/[0.02]">
+                    <th className="w-12 px-4 py-3 text-center text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
                       <input
                         type="checkbox"
-                        className="rounded border-border bg-black/50"
+                        className="rounded border-border bg-card"
                       />
                     </th>
                     {columns
@@ -232,12 +232,12 @@ export function MoonDataTable({
                       .map((col) => (
                         <th
                           key={col.name}
-                          className="px-4 py-3 text-[10px] font-bold tracking-widest text-slate-500 uppercase"
+                          className="px-4 py-3 text-[10px] font-bold tracking-widest text-muted-foreground uppercase"
                         >
                           {col.label}
                         </th>
                       ))}
-                    <th className="px-4 py-3 text-right text-[10px] font-bold tracking-widest text-slate-500 uppercase">
+                    <th className="px-4 py-3 text-right text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
                       Actions
                     </th>
                   </tr>
@@ -250,7 +250,7 @@ export function MoonDataTable({
                         className="px-4 py-12 text-center"
                       >
                         <Loader2 className="mx-auto mb-2 h-6 w-6 animate-spin text-primary" />
-                        <span className="text-xs tracking-widest text-slate-400 uppercase">
+                        <span className="text-xs tracking-widest text-muted-foreground uppercase">
                           Loading...
                         </span>
                       </td>
@@ -259,7 +259,7 @@ export function MoonDataTable({
                     <tr>
                       <td
                         colSpan={columns.length + 2}
-                        className="px-4 py-12 text-center text-xs tracking-wider text-slate-500"
+                        className="px-4 py-12 text-center text-xs tracking-wider text-muted-foreground"
                       >
                         {error
                           ? "Failed to load records."
@@ -270,7 +270,7 @@ export function MoonDataTable({
                     <tr>
                       <td
                         colSpan={columns.length + 2}
-                        className="px-4 py-12 text-center text-xs tracking-wider text-slate-500"
+                        className="px-4 py-12 text-center text-xs tracking-wider text-muted-foreground"
                       >
                         No matches found.
                       </td>
@@ -279,12 +279,12 @@ export function MoonDataTable({
                     filteredData.map((row: any) => (
                       <tr
                         key={row.id}
-                        className="group border-b border-border transition-colors hover:bg-white/[0.02]"
+                        className="group border-b border-border transition-colors hover:bg-card/[0.02]"
                       >
                         <td className="px-4 py-3 text-center">
                           <input
                             type="checkbox"
-                            className="rounded border-border bg-black/50"
+                            className="rounded border-border bg-card"
                           />
                         </td>
                         {columns
@@ -292,7 +292,7 @@ export function MoonDataTable({
                           .map((col) => (
                             <td
                               key={col.name}
-                              className="px-4 py-3 font-sans text-xs text-slate-300"
+                              className="px-4 py-3 font-sans text-xs text-foreground"
                             >
                               {col.render
                                 ? col.render(row[col.name], row)
@@ -303,17 +303,17 @@ export function MoonDataTable({
                           <div className="flex items-center justify-end gap-2 opacity-50 transition-opacity group-hover:opacity-100">
                             <button
                               onClick={() => openEdit(row)}
-                              className="rounded bg-white/5 p-1.5 text-slate-400 transition-colors hover:bg-primary/10 hover:text-primary"
+                              className="rounded bg-muted/30 p-1.5 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
                             >
                               <Edit className="h-3.5 w-3.5" />
                             </button>
                             <button
                               onClick={() => handleDelete(row.id)}
-                              className="rounded bg-white/5 p-1.5 text-slate-400 transition-colors hover:bg-red-500/20 hover:text-red-400"
+                              className="rounded bg-muted/30 p-1.5 text-muted-foreground transition-colors hover:bg-destructive/20 hover:text-destructive"
                             >
                               <Trash2 className="h-3.5 w-3.5" />
                             </button>
-                            <button className="rounded bg-white/5 p-1.5 text-slate-400 transition-colors hover:bg-white/10">
+                            <button className="rounded bg-muted/30 p-1.5 text-muted-foreground transition-colors hover:bg-muted/30">
                               <MoreHorizontal className="h-3.5 w-3.5" />
                             </button>
                           </div>
@@ -327,21 +327,21 @@ export function MoonDataTable({
 
             {/* Table Footer / Pagination */}
             <div className="flex items-center justify-between border-t border-border p-4">
-              <span className="text-[10px] tracking-wider text-slate-500">
+              <span className="text-[10px] tracking-wider text-muted-foreground">
                 Showing {filteredData.length} records
               </span>
               <div className="flex items-center gap-1">
                 {/* Pagination placeholder */}
-                <button className="flex h-6 w-6 items-center justify-center rounded text-[10px] text-slate-500 hover:bg-white/5">
+                <button className="flex h-6 w-6 items-center justify-center rounded text-[10px] text-muted-foreground hover:bg-muted/30">
                   &lt;
                 </button>
                 <button className="flex h-6 w-6 items-center justify-center rounded border border-border bg-primary/10 text-[10px] text-primary">
                   1
                 </button>
-                <button className="flex h-6 w-6 items-center justify-center rounded text-[10px] text-slate-500 hover:bg-white/5">
+                <button className="flex h-6 w-6 items-center justify-center rounded text-[10px] text-muted-foreground hover:bg-muted/30">
                   2
                 </button>
-                <button className="flex h-6 w-6 items-center justify-center rounded text-[10px] text-slate-500 hover:bg-white/5">
+                <button className="flex h-6 w-6 items-center justify-center rounded text-[10px] text-muted-foreground hover:bg-muted/30">
                   &gt;
                 </button>
               </div>
@@ -359,7 +359,7 @@ export function MoonDataTable({
 
       {/* Add Dialog */}
       <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-        <DialogContent className="border-border bg-slate-950">
+        <DialogContent className="border-border bg-background">
           <DialogHeader>
             <DialogTitle className="text-sm font-bold tracking-wider text-primary uppercase">
               Add New {title}
@@ -373,9 +373,9 @@ export function MoonDataTable({
               .filter((c) => !c.hideInForm)
               .map((col) => (
                 <div key={col.name} className="flex flex-col gap-2">
-                  <Label htmlFor={col.name} className="text-xs text-slate-400">
+                  <Label htmlFor={col.name} className="text-xs text-muted-foreground">
                     {col.label}{" "}
-                    {col.required && <span className="text-red-500">*</span>}
+                    {col.required && <span className="text-destructive">*</span>}
                   </Label>
                   <Input
                     id={col.name}
@@ -389,7 +389,7 @@ export function MoonDataTable({
                     }
                     value={formData[col.name] || ""}
                     onChange={handleInputChange}
-                    className="border-border bg-black/50 text-slate-200 focus-visible:ring-cyan-500/50"
+                    className="border-border bg-card text-foreground focus-visible:ring-cyan-500/50"
                     required={col.required}
                   />
                 </div>
@@ -399,14 +399,14 @@ export function MoonDataTable({
             <Button
               variant="ghost"
               onClick={() => setIsAddOpen(false)}
-              className="h-8 text-xs text-slate-400 hover:text-slate-200"
+              className="h-8 text-xs text-muted-foreground hover:text-foreground"
             >
               Cancel
             </Button>
             <Button
               onClick={() => handleSave(false)}
               disabled={isSubmitting}
-              className="h-8 bg-primary px-6 text-xs font-semibold text-black shadow-sm hover:bg-primary"
+              className="h-8 bg-primary px-6 text-xs font-semibold text-foreground shadow-sm hover:bg-primary"
             >
               {isSubmitting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -420,7 +420,7 @@ export function MoonDataTable({
 
       {/* Edit Dialog */}
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <DialogContent className="border-border bg-slate-950">
+        <DialogContent className="border-border bg-background">
           <DialogHeader>
             <DialogTitle className="text-sm font-bold tracking-wider text-primary uppercase">
               Edit {title}
@@ -434,9 +434,9 @@ export function MoonDataTable({
               .filter((c) => !c.hideInForm)
               .map((col) => (
                 <div key={col.name} className="flex flex-col gap-2">
-                  <Label htmlFor={col.name} className="text-xs text-slate-400">
+                  <Label htmlFor={col.name} className="text-xs text-muted-foreground">
                     {col.label}{" "}
-                    {col.required && <span className="text-red-500">*</span>}
+                    {col.required && <span className="text-destructive">*</span>}
                   </Label>
                   <Input
                     id={col.name}
@@ -450,7 +450,7 @@ export function MoonDataTable({
                     }
                     value={formData[col.name] || ""}
                     onChange={handleInputChange}
-                    className="border-border bg-black/50 text-slate-200 focus-visible:ring-cyan-500/50"
+                    className="border-border bg-card text-foreground focus-visible:ring-cyan-500/50"
                     required={col.required}
                   />
                 </div>
@@ -460,14 +460,14 @@ export function MoonDataTable({
             <Button
               variant="ghost"
               onClick={() => setIsEditOpen(false)}
-              className="h-8 text-xs text-slate-400 hover:text-slate-200"
+              className="h-8 text-xs text-muted-foreground hover:text-foreground"
             >
               Cancel
             </Button>
             <Button
               onClick={() => handleSave(true)}
               disabled={isSubmitting}
-              className="h-8 bg-primary px-6 text-xs font-semibold text-black shadow-sm hover:bg-primary"
+              className="h-8 bg-primary px-6 text-xs font-semibold text-foreground shadow-sm hover:bg-primary"
             >
               {isSubmitting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

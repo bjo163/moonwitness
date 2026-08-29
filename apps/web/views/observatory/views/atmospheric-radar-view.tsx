@@ -30,7 +30,7 @@ export function AtmosphericRadarView() {
   }
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-card pb-12 font-sans text-white selection:bg-primary/10">
+    <div className="min-h-screen overflow-x-hidden bg-card pb-12 font-sans text-foreground selection:bg-primary/10">
       <div className="mx-auto max-w-[1800px] space-y-6 px-4 pt-6 lg:px-6">
         {/* 1. Header Hero & Atmospheric Metrics */}
         <RadarHeroStats

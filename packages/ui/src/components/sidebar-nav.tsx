@@ -325,8 +325,8 @@ export function Sidebar({
                         aria-label={`${isExpanded ? "Collapse" : "Expand"} ${mod.label}`}
                         className={`flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 font-sans text-xs transition-colors ${
                           isModActive
-                            ? "bg-cyan-500/10 text-cyan-400"
-                            : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+                            ? "bg-accent text-accent-foreground font-semibold"
+                            : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                         }`}
                       >
                         <span className="flex items-center gap-2">
@@ -342,7 +342,7 @@ export function Sidebar({
                         )}
                       </button>
                       {isExpanded && (
-                        <ul className="mt-0.5 ml-4 space-y-0.5 border-l border-cyan-500/10 pl-3">
+                        <ul className="mt-0.5 ml-4 space-y-0.5 border-l border-border pl-3">
                           {mod.subLinks?.map((sub) => {
                             const isActive =
                               pathname === sub.href ||
@@ -354,8 +354,8 @@ export function Sidebar({
                                   onClick={() => setMobileOpen(false)}
                                   className={`flex items-center gap-2 rounded-md px-2 py-1.5 font-sans text-xs transition-colors ${
                                     isActive
-                                      ? "bg-cyan-500/10 text-cyan-400"
-                                      : "text-slate-500 hover:bg-white/5 hover:text-slate-300"
+                                      ? "bg-accent text-accent-foreground font-semibold"
+                                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                                   }`}
                                 >
                                   {getIcon(sub.icon)}
@@ -373,8 +373,8 @@ export function Sidebar({
                       onClick={() => setMobileOpen(false)}
                       className={`flex items-center gap-2 rounded-lg px-3 py-2 font-sans text-xs transition-colors ${
                         pathname === mod.href || pathname?.startsWith(mod.href)
-                          ? "bg-cyan-500/10 text-cyan-400"
-                          : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+                          ? "bg-accent text-accent-foreground font-semibold"
+                          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                       }`}
                     >
                       {getIcon(mod.icon)}
@@ -409,8 +409,8 @@ export function Sidebar({
                     onClick={() => setMobileOpen(false)}
                     className={`flex items-center gap-3 rounded-lg px-3 py-2 font-sans text-xs transition-colors ${
                       isActive
-                        ? "border border-primary/30 bg-primary/10 text-primary shadow-sm"
-                        : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                        ? "border border-border bg-accent text-accent-foreground font-semibold shadow-sm"
+                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                     }`}
                   >
                     {getIcon(item.icon)}
@@ -424,39 +424,34 @@ export function Sidebar({
       </nav>
 
       {/* System Status Footer */}
-      <div className="mt-auto border-t border-cyan-500/20 bg-black/40 p-4">
-        <p className="mb-2 font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
+      <div className="mt-auto border-t border-border bg-muted/30 p-4">
+        <p className="mb-2 font-sans text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
           System Status
         </p>
         <div className="flex items-center gap-3">
-          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-cyan-500/30 bg-cyan-500/10">
-            <Target className="h-5 w-5 text-cyan-400 opacity-50" />
-            <div className="absolute inset-0 animate-[spin_4s_linear_infinite] rounded-full border border-cyan-400 border-t-transparent" />
-            <div className="absolute inset-1 animate-[spin_3s_linear_infinite_reverse] rounded-full border border-cyan-500/50 border-b-transparent" />
+          <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 text-primary">
+            <Target className="h-4 w-4" />
           </div>
           <div className="flex flex-col">
-            <span className="font-sans text-xs font-semibold text-emerald-400">
+            <span className="font-sans text-xs font-semibold text-success">
               All Systems Operational
             </span>
-            <span className="font-mono text-[9px] text-slate-500">
+            <span className="font-mono text-[10px] text-muted-foreground">
               Uptime: 134d 21h 43m
             </span>
           </div>
         </div>
-        <button className="mt-3 flex w-full items-center justify-center gap-2 rounded-md border border-cyan-500/30 px-3 py-1.5 font-sans text-[10px] text-cyan-400 transition-colors hover:bg-cyan-500/10">
-          View System Health &rarr;
-        </button>
       </div>
 
-      <div className="border-t border-cyan-500/20 p-4">
+      <div className="border-t border-border p-4">
         <button
           onClick={handleLogout}
           type="button"
-          aria-label="Disconnect from command center"
-          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 font-sans text-xs text-red-400 transition-colors hover:bg-red-500/10 hover:text-red-300"
+          aria-label="Sign out from command center"
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 font-sans text-xs text-destructive transition-colors hover:bg-destructive/10"
         >
           <LogOut className="h-4 w-4" />
-          Disconnect
+          Sign Out
         </button>
       </div>
       </aside>

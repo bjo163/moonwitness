@@ -7,15 +7,15 @@ export function HaditsAnalyticsPanel() {
   return (
     <div className="space-y-4">
       {/* 1. Authenticity Distribution */}
-      <div className="rounded-xl border border-white/10 bg-card p-4 shadow-lg">
+      <div className="rounded-xl border border-border bg-card p-4 shadow-lg">
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4 text-emerald-400" />
-            <span className="font-mono text-xs font-black tracking-wider text-white uppercase">
+            <ShieldCheck className="h-4 w-4 text-success" />
+            <span className="font-mono text-xs font-black tracking-wider text-foreground uppercase">
               Authenticity Matrix
             </span>
           </div>
-          <span className="font-mono text-[9px] text-emerald-400">100% Indexed</span>
+          <span className="font-mono text-[9px] text-success">100% Indexed</span>
         </div>
 
         <div className="space-y-2">
@@ -27,10 +27,10 @@ export function HaditsAnalyticsPanel() {
           ].map((item, i) => (
             <div key={i} className="space-y-1">
               <div className="flex justify-between font-mono text-[9px]">
-                <span className="text-white/60">{item.label}</span>
-                <span className="text-white/40">{item.count} ({item.pct})</span>
+                <span className="text-foreground/60">{item.label}</span>
+                <span className="text-foreground/40">{item.count} ({item.pct})</span>
               </div>
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/5">
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted/30">
                 <div className={`h-full ${item.color}`} style={{ width: item.pct }} />
               </div>
             </div>
@@ -39,10 +39,10 @@ export function HaditsAnalyticsPanel() {
       </div>
 
       {/* 2. Top Narrators / Ruwat */}
-      <div className="rounded-xl border border-white/10 bg-card p-4 shadow-lg">
+      <div className="rounded-xl border border-border bg-card p-4 shadow-lg">
         <div className="mb-3 flex items-center gap-2">
           <Layers className="h-4 w-4 text-primary" />
-          <span className="font-mono text-xs font-black tracking-wider text-white uppercase">
+          <span className="font-mono text-xs font-black tracking-wider text-foreground uppercase">
             Top Narrators (Al-Mukthirun)
           </span>
         </div>
@@ -57,13 +57,13 @@ export function HaditsAnalyticsPanel() {
           ].map((narrator, i) => (
             <div
               key={i}
-              className="flex items-center justify-between rounded border border-white/5 bg-white/[0.02] p-2 hover:border-border"
+              className="flex items-center justify-between rounded border border-border bg-card/[0.02] p-2 hover:border-border"
             >
               <div>
-                <div className="font-bold text-white/90">{narrator.name}</div>
+                <div className="font-bold text-foreground">{narrator.name}</div>
                 <div className="text-[8px] text-primary/70">{narrator.role}</div>
               </div>
-              <span className="text-[9px] text-white/40">{narrator.count}</span>
+              <span className="text-[9px] text-foreground/40">{narrator.count}</span>
             </div>
           ))}
         </div>
@@ -75,10 +75,10 @@ export function HaditsAnalyticsPanel() {
           <BookOpen className="h-4 w-4" />
           <span className="font-mono text-[10px] font-black uppercase">Jawami&apos; al-Kalim</span>
         </div>
-        <p className="font-arabic mb-2 text-right text-sm text-white/90">
+        <p className="font-arabic mb-2 text-right text-sm text-foreground">
           إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ
         </p>
-        <p className="text-[10px] text-white/60 italic">
+        <p className="text-[10px] text-foreground/60 italic">
           &ldquo;Actions are judged solely by intentions.&rdquo;
         </p>
         <div className="mt-2 font-mono text-[8px] text-primary/60">

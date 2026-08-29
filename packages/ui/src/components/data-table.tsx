@@ -130,7 +130,7 @@ export function DataTable<T = any>({
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <div className={`space-y-6 ${sideWidgets ? "lg:col-span-8" : "lg:col-span-12"}`}>
-          <Card className="border-border bg-black/60 shadow-xl backdrop-blur-md">
+          <Card className="border-border bg-card shadow-xl backdrop-blur-md">
             <CardHeader className="border-b border-border pb-4">
               <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
                 <div className="flex items-center gap-3">
@@ -140,10 +140,10 @@ export function DataTable<T = any>({
                     </div>
                   )}
                   <div>
-                    <CardTitle className="font-sans text-lg font-bold tracking-wide text-white uppercase">
+                    <CardTitle className="font-sans text-lg font-bold tracking-wide text-foreground uppercase">
                       {title}
                     </CardTitle>
-                    <CardDescription className="text-xs text-slate-400">
+                    <CardDescription className="text-xs text-muted-foreground">
                       {description}
                     </CardDescription>
                   </div>
@@ -173,7 +173,7 @@ export function DataTable<T = any>({
                       className={`px-3 py-1.5 rounded-lg text-xs font-bold font-mono transition-all ${
                         activeTab === tab.id
                           ? "bg-primary/10 text-primary border border-border"
-                          : "text-slate-400 hover:text-white"
+                          : "text-muted-foreground hover:text-foreground"
                       }`}
                     >
                       {tab.label}
@@ -184,12 +184,12 @@ export function DataTable<T = any>({
 
               <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="relative max-w-sm flex-1">
-                  <Search className="absolute top-2.5 left-3 h-4 w-4 text-slate-400" />
+                  <Search className="absolute top-2.5 left-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     placeholder="Search records..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="h-9 border-border bg-black/40 pl-9 font-sans text-xs text-white placeholder:text-slate-500 focus:border-border"
+                    className="h-9 border-border bg-card pl-9 font-sans text-xs text-foreground placeholder:text-muted-foreground focus:border-border"
                   />
                 </div>
                 {filterWidgets && <div className="flex items-center gap-2">{filterWidgets}</div>}
@@ -214,12 +214,12 @@ export function DataTable<T = any>({
                   <Loader2 className="h-6 w-6 animate-spin" />
                 </div>
               ) : filteredData.length === 0 ? (
-                <div className="p-12 text-center text-xs text-slate-500">
+                <div className="p-12 text-center text-xs text-muted-foreground">
                   No records found matching criteria.
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs font-sans text-slate-300">
+                  <table className="w-full text-left text-xs font-sans text-foreground">
                     <thead className="border-b border-border bg-muted text-[10px] font-bold text-primary uppercase tracking-wider">
                       <tr>
                         {columns
@@ -254,7 +254,7 @@ export function DataTable<T = any>({
                                   setFormData(row)
                                   setIsEditOpen(true)
                                 }}
-                                className="h-7 w-7 p-0 text-slate-400 hover:text-primary"
+                                className="h-7 w-7 p-0 text-muted-foreground hover:text-primary"
                               >
                                 <Edit className="h-3.5 w-3.5" />
                               </Button>
@@ -264,7 +264,7 @@ export function DataTable<T = any>({
                                 aria-label={`Delete ${title} record ${row.id}`}
                                 title={`Delete record ${row.id}`}
                                 onClick={() => handleDelete(row.id)}
-                                className="h-7 w-7 p-0 text-slate-400 hover:text-rose-400"
+                                className="h-7 w-7 p-0 text-muted-foreground hover:text-rose-400"
                               >
                                 <Trash2 className="h-3.5 w-3.5" />
                               </Button>
@@ -289,12 +289,12 @@ export function DataTable<T = any>({
 
       {/* Add / Edit Dialogs */}
       <Dialog open={isAddOpen || isEditOpen} onOpenChange={(open) => { if (!open) { setIsAddOpen(false); setIsEditOpen(false); setSubmitError(null); } }}>
-        <DialogContent className="border-border bg-card text-white">
+        <DialogContent className="border-border bg-card text-foreground">
           <DialogHeader>
             <DialogTitle className="font-sans text-sm uppercase text-primary font-bold">
               {isEditOpen ? `Edit Record (#${editingId})` : `Add New Record`}
             </DialogTitle>
-            <DialogDescription className="text-xs text-slate-400">
+            <DialogDescription className="text-xs text-muted-foreground">
               Provide necessary parameters for the record below.
             </DialogDescription>
           </DialogHeader>
@@ -303,7 +303,7 @@ export function DataTable<T = any>({
               .filter((c) => !c.hideInForm)
               .map((c) => (
                 <div key={c.name} className="space-y-1.5">
-                  <Label htmlFor={`${modelName}-${c.name}-field`} className="text-xs text-slate-300">{c.label}</Label>
+                  <Label htmlFor={`${modelName}-${c.name}-field`} className="text-xs text-foreground">{c.label}</Label>
                   <Input
                     id={`${modelName}-${c.name}-field`}
                     name={c.name}
@@ -311,7 +311,7 @@ export function DataTable<T = any>({
                     value={formData[c.name] || ""}
                     onChange={handleInputChange}
                     placeholder={`Enter ${c.label}...`}
-                    className="border-border bg-black text-xs text-white"
+                    className="border-border bg-card text-xs text-foreground"
                   />
                 </div>
               ))}
@@ -323,7 +323,7 @@ export function DataTable<T = any>({
             <Button
               onClick={() => handleSave(isEditOpen)}
               disabled={isSubmitting}
-              className="bg-primary text-white hover:bg-primary font-bold text-xs"
+              className="bg-primary text-foreground hover:bg-primary font-bold text-xs"
             >
               {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : isEditOpen ? "Save Changes" : "Create Record"}
             </Button>

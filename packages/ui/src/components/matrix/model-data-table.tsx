@@ -106,7 +106,7 @@ export function ModelDataTable({
       return (
         <span
           className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
-            val ? "bg-emerald-500/10 text-emerald-500" : "bg-muted text-muted-foreground"
+            val ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"
           }`}
         >
           {val ? "YES" : "NO"}

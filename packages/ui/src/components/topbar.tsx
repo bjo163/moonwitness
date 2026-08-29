@@ -24,7 +24,7 @@ export type UserProfile = {
 }
 
 export function Topbar({
-  profile = { name: "Operator", role: "admin" },
+  profile = { name: "User", role: "admin" },
   title,
   rightActions,
   onPublicClick,
@@ -133,14 +133,14 @@ export function Topbar({
         <div className="flex items-center gap-3 border-l border-border pl-4 md:pl-6">
           <div className="hidden flex-col items-end sm:flex">
             <span className="font-sans text-sm font-bold text-foreground">
-              {profile?.name || "Operator"}
+              {profile?.name || "User"}
             </span>
             <span className="font-mono text-[10px] text-muted-foreground">
               {profile?.title || profile?.role || "Administrator"}
             </span>
           </div>
           <div className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/40 bg-primary/10 font-mono text-xs font-bold text-primary">
-            {profile?.name ? profile.name.substring(0, 2).toUpperCase() : "OP"}
+            {profile?.name ? profile.name.substring(0, 2).toUpperCase() : "US"}
           </div>
         </div>
 

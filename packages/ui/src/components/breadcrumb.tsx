@@ -124,16 +124,16 @@ export function BreadcrumbTrail({
   className?: string
 }) {
   return (
-    <nav className={`flex items-center gap-1 font-mono text-[10px] tracking-widest uppercase ${className}`}>
+    <nav className={`flex items-center gap-1 font-mono text-xs ${className}`}>
       {paths.map((p, i) => (
         <React.Fragment key={i}>
-          {i > 0 && <span className="text-slate-600">/</span>}
+          {i > 0 && <span className="text-muted-foreground">/</span>}
           {p.href ? (
-            <a href={p.href} className="text-slate-400 hover:text-primary transition-colors">
+            <a href={p.href} className="text-muted-foreground hover:text-foreground transition-colors">
               {p.label}
             </a>
           ) : (
-            <span className="font-bold text-primary">{p.label}</span>
+            <span className="font-semibold text-foreground">{p.label}</span>
           )}
         </React.Fragment>
       ))}

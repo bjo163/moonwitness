@@ -21,37 +21,37 @@ export function AsmaulHusnaActivePanel({ item }: AsmaulHusnaActivePanelProps) {
             <span>SELECTED ATTRIBUTE #{item.id}</span>
           </div>
 
-          <div className="font-arabic my-4 text-4xl text-white drop-shadow-sm">
+          <div className="font-arabic my-4 text-4xl text-foreground drop-shadow-sm">
             {item.arabic}
           </div>
 
           <h2 className="font-mono text-xl font-black text-indigo-300 uppercase">
             {item.transliteration}
           </h2>
-          <p className="mt-1 text-sm font-medium text-white/80">
+          <p className="mt-1 text-sm font-medium text-foreground">
             {item.meaning}
           </p>
         </div>
 
-        <div className="relative z-10 mt-6 space-y-3 border-t border-white/10 pt-4 font-mono text-[10px]">
+        <div className="relative z-10 mt-6 space-y-3 border-t border-border pt-4 font-mono text-[10px]">
           <div className="flex justify-between">
-            <span className="text-white/40">Qur&apos;anic Context:</span>
-            <span className="text-white/80">{item.ref}</span>
+            <span className="text-foreground/40">Qur&apos;anic Context:</span>
+            <span className="text-foreground">{item.ref}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-white/40">Ontological Domain:</span>
+            <span className="text-foreground/40">Ontological Domain:</span>
             <span className="text-indigo-400">Divine Essence & Mercy</span>
           </div>
         </div>
       </div>
 
       {/* Reflection Guidance */}
-      <div className="rounded-xl border border-white/10 bg-card p-4 font-mono text-xs shadow-lg">
+      <div className="rounded-xl border border-border bg-card p-4 font-mono text-xs shadow-lg">
         <div className="mb-2 flex items-center gap-2 text-indigo-400">
           <Info className="h-4 w-4" />
           <span className="font-bold uppercase">Spiritual Reflection</span>
         </div>
-        <p className="text-[11px] leading-relaxed text-white/60">
+        <p className="text-[11px] leading-relaxed text-foreground/60">
           Contemplating on &ldquo;{item.transliteration}&rdquo; nurtures awareness of Divine omnipotence and aligns human actions toward mercy, justice, and devotion.
         </p>
       </div>

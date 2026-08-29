@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react"
 
 export function TaskCenterWidget() {
   return (
-    <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-12 xl:col-span-3">
+    <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-12 xl:col-span-3">
       <div className="mb-2 flex items-center justify-between">
         <div className="text-[9px] font-black tracking-widest text-primary uppercase">
           TASK CENTER
@@ -31,7 +31,7 @@ export function TaskCenterWidget() {
           />
 
           <div className="text-center">
-            <div className="font-mono text-2xl leading-none font-black text-white">
+            <div className="font-mono text-2xl leading-none font-black text-foreground">
               238
             </div>
             <div className="mt-1 text-[7px] font-bold text-primary uppercase">
@@ -51,16 +51,16 @@ export function TaskCenterWidget() {
           ].map((st, i) => (
             <div
               key={i}
-              className="group flex cursor-pointer items-center justify-between rounded p-1 text-[9px] hover:bg-white/5"
+              className="group flex cursor-pointer items-center justify-between rounded p-1 text-[9px] hover:bg-muted/30"
             >
-              <span className="flex items-center gap-2 text-white/80">
+              <span className="flex items-center gap-2 text-foreground">
                 <span
                   className="h-2 w-2 rounded-full"
                   style={{ backgroundColor: st.c }}
                 />
                 {st.n}
               </span>
-              <span className="font-mono text-white">
+              <span className="font-mono text-foreground">
                 {st.v} <span className="text-primary">({st.p})</span>
               </span>
             </div>
@@ -68,7 +68,7 @@ export function TaskCenterWidget() {
         </div>
       </div>
 
-      <button className="mt-2 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-white">
+      <button className="mt-2 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
         VIEW ALL TASKS <ArrowRight className="h-2.5 w-2.5" />
       </button>
     </div>

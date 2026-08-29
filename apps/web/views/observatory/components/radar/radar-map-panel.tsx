@@ -19,7 +19,7 @@ interface RadarMapPanelProps {
 
 export function RadarMapPanel({ rainTimestamp }: RadarMapPanelProps) {
   return (
-    <div className="relative min-h-[420px] overflow-hidden rounded-xl border border-white/10 bg-muted shadow-2xl">
+    <div className="relative min-h-[420px] overflow-hidden rounded-xl border border-border bg-muted shadow-2xl">
       <MapContainer
         center={[-2.5, 118.0]}
         zoom={5}

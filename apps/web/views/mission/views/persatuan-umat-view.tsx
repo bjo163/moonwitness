@@ -100,7 +100,7 @@ export function PersatuanUmatView() {
               <Sparkles className="h-4 w-4 text-accent" />
               <span>LANDASAN WAHYU SUPREMA: Q.S AL-ANBIYA&apos; (21:107)</span>
             </span>
-            <span className="rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-500 px-2 py-0.5 font-mono text-[9px]">
+            <span className="rounded-md border border-amber-500/40 bg-warning/10 text-warning px-2 py-0.5 font-mono text-[9px]">
               RAHMATAN LIL &apos;ALAMIN
             </span>
           </div>
@@ -139,7 +139,7 @@ export function PersatuanUmatView() {
                       {pillar.title}
                     </h3>
                   </div>
-                  <span className="rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-500 px-2 py-0.5 font-mono text-[9px] font-bold">
+                  <span className="rounded-md border border-amber-500/40 bg-warning/10 text-warning px-2 py-0.5 font-mono text-[9px] font-bold">
                     {pillar.quranRef}
                   </span>
                 </div>

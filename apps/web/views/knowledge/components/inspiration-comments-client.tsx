@@ -187,7 +187,7 @@ export function InspirationCommentsClient({
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              className="text-[9px] font-bold text-primary underline hover:text-white"
+              className="text-[9px] font-bold text-primary underline hover:text-foreground"
             >
               [{t("EDIT", "UBAH")}]
             </button>
@@ -234,7 +234,7 @@ export function InspirationCommentsClient({
                   className={`rounded-md border px-2 py-0.5 font-mono text-[9px] font-black uppercase ${
                     userProfile.role === "admin"
                       ? "border-border bg-muted text-primary"
-                      : "border-emerald-500/40 bg-emerald-500/10 text-emerald-500"
+                      : "border-emerald-500/40 bg-success/10 text-success"
                   }`}
                 >
                   {userProfile.role === "admin"

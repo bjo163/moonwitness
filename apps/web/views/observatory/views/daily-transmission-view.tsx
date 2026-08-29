@@ -90,13 +90,13 @@ export function DailyTransmissionView() {
         className="animate-in space-y-6 pt-12 duration-700 fill-mode-both fade-in slide-in-from-top-8"
         style={{ animationDelay: "400ms" }}
       >
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/5 pb-4">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
           <h2 className="flex items-center gap-3 text-xs font-medium tracking-[0.3em] text-primary uppercase">
             <span className="h-px w-8 bg-emerald-500/50" />
             Transmission Log
           </h2>
 
-          <div className="flex items-center gap-4 rounded-xl border border-white/5 bg-black/40 px-4 py-2 text-[10px] font-medium tracking-widest uppercase backdrop-blur-md">
+          <div className="flex items-center gap-4 rounded-xl border border-border bg-card px-4 py-2 text-[10px] font-medium tracking-widest uppercase backdrop-blur-md">
             <span className="text-primary">Unlocked Verses</span>
             <span className="text-xl font-light text-primary drop-shadow-sm">
               {totalCount} / 6.236
@@ -109,12 +109,12 @@ export function DailyTransmissionView() {
             {SKELETON_ITEMS.map((i) => (
               <div
                 key={i}
-                className="h-48 w-full animate-pulse rounded-2xl border border-white/5 bg-black/40"
+                className="h-48 w-full animate-pulse rounded-2xl border border-border bg-card"
               />
             ))}
           </div>
         ) : history.length === 0 ? (
-          <div className="rounded-2xl border border-white/5 bg-black/40 p-12 text-center backdrop-blur-xl">
+          <div className="rounded-2xl border border-border bg-card p-12 text-center backdrop-blur-xl">
             <p className="text-sm font-light tracking-[0.2em] text-primary uppercase">
               No previous transmissions logged.
             </p>
@@ -124,15 +124,15 @@ export function DailyTransmissionView() {
             {history.map((item) => (
               <div
                 key={`${item.sequenceNumber}-${item.dateStr}-${item.period.code}`}
-                className="bg-background/80 space-y-6 rounded-2xl border border-white/5 p-6 shadow-sm backdrop-blur-2xl transition-all hover:border-border sm:p-8"
+                className="bg-background/80 space-y-6 rounded-2xl border border-border p-6 shadow-sm backdrop-blur-2xl transition-all hover:border-border sm:p-8"
               >
                 {/* Item Header */}
-                <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/5 pb-4">
+                <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
                   <div className="flex items-center gap-4">
                     <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-primary/10 text-xs font-medium text-primary shadow-sm">
                       #{item.sequenceNumber}
                     </span>
-                    <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[9px] font-medium tracking-widest text-primary uppercase">
+                    <span className="flex items-center gap-1.5 rounded-full border border-border bg-muted/30 px-3 py-1 text-[9px] font-medium tracking-widest text-primary uppercase">
                       <span>{item.period.icon}</span>
                       <span>{item.period.name}</span>
                     </span>
@@ -144,7 +144,7 @@ export function DailyTransmissionView() {
                   {item.ayah && (
                     <Link
                       href={`/kitab/quran/${item.ayah.surahNumber}`}
-                      className="rounded-full border border-white/10 px-4 py-2 text-[9px] font-medium tracking-widest text-foreground uppercase transition-all hover:border-white/20 hover:bg-white/10"
+                      className="rounded-full border border-border px-4 py-2 text-[9px] font-medium tracking-widest text-foreground uppercase transition-all hover:border-border hover:bg-muted/30"
                     >
                       Surah {item.ayah.surahName} ({item.ayah.surahNumber}:
                       {item.ayah.ayahNumber}) &rarr;
@@ -154,7 +154,7 @@ export function DailyTransmissionView() {
 
                 {/* Ayah Content */}
                 {item.ayah && (
-                  <div className="space-y-5 rounded-xl border border-white/5 bg-black/40 p-6">
+                  <div className="space-y-5 rounded-xl border border-border bg-card p-6">
                     <div
                       className="arabic-text text-right text-2xl leading-[2.2] font-bold text-foreground sm:text-3xl"
                       style={{ textShadow: "0 0 10px rgba(255,255,255,0.1)" }}
@@ -164,14 +164,14 @@ export function DailyTransmissionView() {
 
                     {item.ayah.textLatin && (
                       <p
-                        className="font-serif text-sm font-medium text-emerald-400 italic"
+                        className="font-serif text-sm font-medium text-success italic"
                         style={{ textShadow: "0 0 10px rgba(16,185,129,0.2)" }}
                       >
                         &ldquo;{item.ayah.textLatin}&rdquo;
                       </p>
                     )}
 
-                    <div className="mt-4 rounded-lg border border-white/5 bg-black/30 p-4">
+                    <div className="mt-4 rounded-lg border border-border bg-muted/40 p-4">
                       <p className="text-sm leading-relaxed font-light text-foreground">
                         &ldquo;{item.ayah.translationId}&rdquo;
                       </p>

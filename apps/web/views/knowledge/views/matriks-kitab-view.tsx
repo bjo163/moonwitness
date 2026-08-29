@@ -111,7 +111,7 @@ export function MatriksKitabView() {
               className={`rounded-md border px-4 py-2.5 text-xs font-extrabold tracking-wider transition-all ${
                 activeTab === idx
                   ? "border-primary bg-primary/20 text-primary shadow-sm"
-                  : "bg-background border-primary/20 text-primary hover:text-white"
+                  : "bg-background border-primary/20 text-primary hover:text-foreground"
               }`}
             >
               ◆ {item.theme}
@@ -158,7 +158,7 @@ export function MatriksKitabView() {
                   <Scroll className="h-4 w-4 text-accent" />
                   TAURAT (TORAH)
                 </span>
-                <span className="rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-500 px-2 py-0.5 font-mono text-[8px]">
+                <span className="rounded-md border border-amber-500/40 bg-warning/10 text-warning px-2 py-0.5 font-mono text-[8px]">
                   {activePassage.torah.ref}
                 </span>
               </div>
@@ -174,7 +174,7 @@ export function MatriksKitabView() {
                   <ShieldCheck className="text-success h-4 w-4" />
                   ZABUR (PSALMS)
                 </span>
-                <span className="rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-500 px-2 py-0.5 font-mono text-[8px]">
+                <span className="rounded-md border border-emerald-500/40 bg-success/10 text-success px-2 py-0.5 font-mono text-[8px]">
                   {activePassage.psalms.ref}
                 </span>
               </div>

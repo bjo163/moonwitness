@@ -62,7 +62,7 @@ export function ScriptureEditDialog({
               type="button"
               onClick={handleSyncFromApi}
               disabled={syncingApi}
-              className="h-8 rounded-xl bg-emerald-600 text-[11px] font-bold text-white hover:bg-emerald-700"
+              className="h-8 rounded-xl bg-emerald-600 text-[11px] font-bold text-foreground hover:bg-emerald-700"
             >
               {syncingApi ? "⏳ Syncing..." : "🔄 Pull dari API"}
             </Button>
@@ -117,7 +117,7 @@ export function ScriptureEditDialog({
             <Button variant="outline" type="button" onClick={onClose}>
               Batal
             </Button>
-            <Button type="submit" className="bg-primary font-bold text-white hover:bg-primary">
+            <Button type="submit" className="bg-primary font-bold text-foreground hover:bg-primary">
               💾 Simpan Terjemahan & Tafsir
             </Button>
           </div>

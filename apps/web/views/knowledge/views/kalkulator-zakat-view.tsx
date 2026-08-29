@@ -63,7 +63,7 @@ export function KalkulatorZakatView() {
                 <input
                   type="number"
                   min="0"
-                  className="w-full rounded-none border border-primary/30 bg-black/50 p-3 pl-12 font-mono text-foreground focus:border-primary focus:outline-none"
+                  className="w-full rounded-none border border-primary/30 bg-card p-3 pl-12 font-mono text-foreground focus:border-primary focus:outline-none"
                   placeholder="0"
                   onChange={(e) => setSavings(Number(e.target.value) || 0)}
                 />
@@ -81,7 +81,7 @@ export function KalkulatorZakatView() {
                 <input
                   type="number"
                   min="0"
-                  className="w-full rounded-none border border-primary/30 bg-black/50 p-3 pl-12 font-mono text-foreground focus:border-primary focus:outline-none"
+                  className="w-full rounded-none border border-primary/30 bg-card p-3 pl-12 font-mono text-foreground focus:border-primary focus:outline-none"
                   placeholder="0"
                   onChange={(e) => setInvestments(Number(e.target.value) || 0)}
                 />
@@ -99,7 +99,7 @@ export function KalkulatorZakatView() {
                 <input
                   type="number"
                   min="0"
-                  className="w-full rounded-none border border-primary/30 bg-black/50 p-3 pl-12 font-mono text-foreground focus:border-primary focus:outline-none"
+                  className="w-full rounded-none border border-primary/30 bg-card p-3 pl-12 font-mono text-foreground focus:border-primary focus:outline-none"
                   placeholder="0"
                   onChange={(e) => setGoldSilver(Number(e.target.value) || 0)}
                 />
@@ -138,13 +138,13 @@ export function KalkulatorZakatView() {
 
           {/* Calculation Result */}
           <div
-            className={`rounded-xl border border-border/40 bg-card/90 border-2 p-6 transition-all duration-500 ${isEligible ? "bg-success/10 border-success shadow-sm" : "border-primary/30 bg-black/50"}`}
+            className={`rounded-xl border border-border/40 bg-card/90 border-2 p-6 transition-all duration-500 ${isEligible ? "bg-success/10 border-success shadow-sm" : "border-primary/30 bg-card"}`}
           >
             <div className="mb-6 text-center">
               <div className="mb-2 text-[10px] font-bold tracking-widest text-primary/50">
                 TOTAL AKUMULASI HARTA
               </div>
-              <div className="font-mono text-2xl font-black text-white">
+              <div className="font-mono text-2xl font-black text-foreground">
                 {formatCurrency(totalWealth)}
               </div>
             </div>
@@ -155,7 +155,7 @@ export function KalkulatorZakatView() {
                   STATUS WAJIB ZAKAT
                 </span>
                 {isEligible ? (
-                  <span className="rounded-md bg-success flex items-center gap-1 px-2 py-1 text-[10px] font-bold text-black">
+                  <span className="rounded-md bg-success flex items-center gap-1 px-2 py-1 text-[10px] font-bold text-foreground">
                     <ShieldCheck className="h-3 w-3" /> WAJIB (MELEBIHI NISAB)
                   </span>
                 ) : (

@@ -874,7 +874,7 @@ ${transmissionText}`
 
   if (!mounted || (loading && !data)) {
     return (
-      <div className="my-8 flex h-64 w-full flex-col items-center justify-center rounded-2xl border border-white/5 bg-black/40 font-sans backdrop-blur-xl">
+      <div className="my-8 flex h-64 w-full flex-col items-center justify-center rounded-2xl border border-border bg-card font-sans backdrop-blur-xl">
         <div className="mb-2 flex animate-pulse items-center gap-3 text-primary">
           <span className="h-2 w-2 rounded-full bg-primary shadow-sm" />
           <span className="text-xs font-light tracking-[0.3em] uppercase">
@@ -948,7 +948,7 @@ ${transmissionText}`
   return (
     <section className="my-8 font-sans">
       {/* ──── TOP display (Sleek Dashboard Header) ──── */}
-      <div className="mb-4 flex flex-wrap items-center justify-between border-b border-white/10 pb-3 text-[9px] tracking-widest text-white/70 uppercase">
+      <div className="mb-4 flex flex-wrap items-center justify-between border-b border-border pb-3 text-[9px] tracking-widest text-foreground uppercase">
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary shadow-sm"></span>
@@ -965,7 +965,7 @@ ${transmissionText}`
         {data.globalStats && (
           <div className="flex items-center gap-4">
             {/* Minimalist Action Buttons */}
-            <div className="flex items-center gap-1.5 border-r border-white/10 pr-4">
+            <div className="flex items-center gap-1.5 border-r border-border pr-4">
               <button
                 onClick={copyDynamicShareUrl}
                 title={
@@ -973,7 +973,7 @@ ${transmissionText}`
                     ? t("COPIED", "TERSALIN")
                     : t("COPY LINK", "SALIN TAUTAN")
                 }
-                className="flex h-6 w-6 items-center justify-center rounded bg-white/5 text-[10px] text-primary transition-colors hover:bg-primary/10 hover:text-primary"
+                className="flex h-6 w-6 items-center justify-center rounded bg-muted/30 text-[10px] text-primary transition-colors hover:bg-primary/10 hover:text-primary"
               >
                 <LinkIcon className="h-3 w-3" />
               </button>
@@ -984,7 +984,7 @@ ${transmissionText}`
                     ? t("COPIED", "TERSALIN")
                     : t("SHARE TRANSMISSION", "BAGIKAN HIKMAH")
                 }
-                className="flex h-6 w-6 items-center justify-center rounded bg-white/5 text-[10px] text-emerald-400 transition-colors hover:bg-emerald-500/20 hover:text-emerald-300"
+                className="flex h-6 w-6 items-center justify-center rounded bg-muted/30 text-[10px] text-success transition-colors hover:bg-success/20 hover:text-success"
               >
                 <MessageSquare className="h-3 w-3" />
               </button>
@@ -995,7 +995,7 @@ ${transmissionText}`
                     ? t("PROMPT COPIED!", "PROMPT TERSALIN!")
                     : t("SHARE PROMPT", "SHARE PROMPT")
                 }
-                className="flex h-6 w-6 items-center justify-center rounded bg-white/5 text-[10px] text-fuchsia-400 transition-colors hover:bg-fuchsia-500/20 hover:text-fuchsia-300"
+                className="flex h-6 w-6 items-center justify-center rounded bg-muted/30 text-[10px] text-fuchsia-400 transition-colors hover:bg-fuchsia-500/20 hover:text-fuchsia-300"
               >
                 <Palette className="h-3 w-3" />
               </button>
@@ -1007,7 +1007,7 @@ ${transmissionText}`
                     ? t("EXPORTING...", "MENGEKSPOR...")
                     : t("EXPORT FULL DASHBOARD", "EKSPOR INFOGRAFIS")
                 }
-                className="flex h-6 w-6 items-center justify-center rounded bg-white/5 text-[10px] text-indigo-400 transition-colors hover:bg-indigo-500/20 hover:text-indigo-300 disabled:opacity-50"
+                className="flex h-6 w-6 items-center justify-center rounded bg-muted/30 text-[10px] text-indigo-400 transition-colors hover:bg-indigo-500/20 hover:text-indigo-300 disabled:opacity-50"
               >
                 {isExporting ? (
                   <Loader2 className="h-3 w-3 animate-spin" />
@@ -1019,14 +1019,14 @@ ${transmissionText}`
 
             <div className="flex items-center gap-3">
               <div className="flex flex-col text-right">
-                <span className="text-[8px] text-amber-400/80 uppercase">
+                <span className="text-[8px] text-warning/80 uppercase">
                   ROTATION{" "}
                   {data.globalStats.seenAyahsCount.toLocaleString("en-US")} /{" "}
                   {data.globalStats.totalAyahs.toLocaleString("en-US")}
                 </span>
                 <span>GLOBAL PROGRESS</span>
               </div>
-              <span className="text-lg font-bold text-white drop-shadow-sm">
+              <span className="text-lg font-bold text-foreground drop-shadow-sm">
                 {rotationPercentFormatted}%
               </span>
               {/* Mini Waveform visualization */}
@@ -1047,7 +1047,7 @@ ${transmissionText}`
       {/* ═══ strategic MISSION SCREEN CONTAINER (The Premium ambient Card) ═══ */}
       <div
         id="whatsapp-share-card"
-        className={`relative w-full overflow-hidden rounded-[2rem] border border-white/5 p-6 font-sans text-white shadow-sm backdrop-blur-2xl sm:p-10 ${
+        className={`relative w-full overflow-hidden rounded-[2rem] border border-border p-6 font-sans text-foreground shadow-sm backdrop-blur-2xl sm:p-10 ${
           isZapping
             ? "translate-x-[2px] -translate-y-[2px] bg-primary/10 brightness-150 contrast-125 saturate-150 transition-none"
             : "bg-card transition-all duration-700"
@@ -1105,22 +1105,22 @@ ${transmissionText}`
           {/* ROW 1: Current Cycle (Left) + Ayah Panel (Right) */}
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
             {/* Left: Current Cycle Timer */}
-            <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-3xl border border-white/5 bg-card p-8 backdrop-blur-xl lg:col-span-3">
+            <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-3xl border border-border bg-card p-8 backdrop-blur-xl lg:col-span-3">
               <div className="pointer-events-none absolute top-0 left-0 h-full w-full bg-gradient-to-b from-blue-900/10 to-transparent" />
 
               {/* Mosque Background Silhouette (Subtle) */}
               <div className="pointer-events-none absolute right-0 bottom-0 h-32 w-full bg-[url('https://www.svgrepo.com/show/305267/mosque.svg')] bg-contain bg-right-bottom bg-no-repeat opacity-10 mix-blend-screen" />
 
-              <span className="text-[9px] font-bold tracking-widest text-amber-500 uppercase">
+              <span className="text-[9px] font-bold tracking-widest text-warning uppercase">
                 CURRENT <span className="text-blue-300">CYCLE</span>
               </span>
-              <h2 className="mt-2 text-center text-2xl font-light tracking-widest text-white uppercase drop-shadow-sm md:text-4xl">
+              <h2 className="mt-2 text-center text-2xl font-light tracking-widest text-foreground uppercase drop-shadow-sm md:text-4xl">
                 {data.prayerPeriod?.name || "ISYA'"}
               </h2>
-              <p className="mt-2 text-[10px] tracking-widest text-gray-400">
+              <p className="mt-2 text-[10px] tracking-widest text-muted-foreground">
                 19:25 - 20:40 WIB
               </p>
-              <p className="text-[10px] tracking-widest text-gray-500">
+              <p className="text-[10px] tracking-widest text-muted-foreground">
                 Jakarta, Indonesia
               </p>
 
@@ -1138,7 +1138,7 @@ ${transmissionText}`
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
-                    className="text-white/10"
+                    className="text-foreground/10"
                   />
                   {/* Progress track */}
                   <circle
@@ -1160,7 +1160,7 @@ ${transmissionText}`
                 <div className="absolute inset-4 animate-[spin_10s_linear_infinite_reverse] rounded-full border border-indigo-500/20" />
 
                 <div className="z-10 text-center">
-                  <div className="text-xl font-bold tracking-widest text-white">
+                  <div className="text-xl font-bold tracking-widest text-foreground">
                     {nextPrayer?.formattedCountdown || "00:00:00"}
                   </div>
                   <div className="mt-1 text-[8px] tracking-widest text-blue-400 uppercase">
@@ -1187,7 +1187,7 @@ ${transmissionText}`
 
               <div className="relative z-10 flex h-full w-full flex-col">
                 {/* Header with Minimalist Action Icons & Surah Details */}
-                <div className="mb-8 flex flex-wrap items-center justify-between border-b border-white/10 pb-4">
+                <div className="mb-8 flex flex-wrap items-center justify-between border-b border-border pb-4">
                   <div className="flex flex-col items-start gap-1 sm:flex-row sm:items-center sm:gap-3">
                     <span className="rounded-full border border-border bg-primary/10 px-4 py-1.5 text-[10px] font-medium tracking-widest text-primary uppercase">
                       Q.S {data.ayah.surahName.toUpperCase()}{" "}
@@ -1211,7 +1211,7 @@ ${transmissionText}`
                         />
                         <button
                           onClick={toggleAudio}
-                          className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest text-white transition-colors hover:text-primary"
+                          className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest text-foreground transition-colors hover:text-primary"
                           title="Play Audio Recitation"
                         >
                           {isPlayingAudio ? (
@@ -1222,7 +1222,7 @@ ${transmissionText}`
                           <span>PLAY</span>
                         </button>
                         <AudioWaveformVisualizer isPlaying={isPlayingAudio} />
-                        <span className="mx-1 text-white/20">|</span>
+                        <span className="mx-1 text-foreground/20">|</span>
                       </div>
                     )}
                     {/* The Modals - they render as buttons internally, but we can override or keep them minimalist in CSS later. For now, they fit fine. */}
@@ -1250,10 +1250,10 @@ ${transmissionText}`
 
                 {/* Arabic & Number Marker */}
                 <div className="mb-4 flex items-start justify-end gap-6">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/20 bg-card font-serif text-lg text-white">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-border bg-card font-serif text-lg text-foreground">
                     {data.ayah.ayahNumber.toLocaleString("ar-EG")}
                   </div>
-                  <div className="arabic-text max-w-4xl text-right text-4xl leading-[2.5] font-bold text-white drop-shadow-sm sm:text-5xl lg:text-6xl">
+                  <div className="arabic-text max-w-4xl text-right text-4xl leading-[2.5] font-bold text-foreground drop-shadow-sm sm:text-5xl lg:text-6xl">
                     {data.ayah.textArabic}
                   </div>
                 </div>
@@ -1266,20 +1266,20 @@ ${transmissionText}`
                 )}
 
                 {/* 3-Column Footer grid for Ayah details */}
-                <div className="mt-auto grid grid-cols-1 gap-8 border-t border-white/10 pt-8 md:grid-cols-3">
-                  <div className="border-r border-white/10 pr-6">
+                <div className="mt-auto grid grid-cols-1 gap-8 border-t border-border pt-8 md:grid-cols-3">
+                  <div className="border-r border-border pr-6">
                     <h4 className="mb-3 text-[10px] tracking-[0.2em] text-primary uppercase">
                       Translation
                     </h4>
-                    <p className="text-sm leading-relaxed font-light text-gray-200">
+                    <p className="text-sm leading-relaxed font-light text-foreground">
                       "{activeAyahTranslation}"
                     </p>
                   </div>
-                  <div className="border-r border-white/10 pr-6">
+                  <div className="border-r border-border pr-6">
                     <h4 className="mb-3 text-[10px] tracking-[0.2em] text-primary uppercase">
                       Tafsir &amp; Lore Notes
                     </h4>
-                    <p className="text-sm leading-relaxed font-light text-slate-200 italic">
+                    <p className="text-sm leading-relaxed font-light text-foreground italic">
                       "{getCustomTafsirNote()}"
                     </p>
                   </div>
@@ -1287,7 +1287,7 @@ ${transmissionText}`
                     <h4 className="mb-3 text-[10px] tracking-[0.2em] text-primary uppercase">
                       Source
                     </h4>
-                    <p className="text-sm leading-relaxed font-light text-slate-300">
+                    <p className="text-sm leading-relaxed font-light text-foreground">
                       Tafsir As-Sa'di | Tafsir Ibnu Katsir
                       <br />
                       Sahih International Translation
@@ -1302,28 +1302,28 @@ ${transmissionText}`
           <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
             {/* 1. Next Verse Pair */}
             <div
-              className={`flex flex-col justify-between rounded-2xl border border-emerald-500/20 bg-card p-6 backdrop-blur-xl transition-colors hover:border-emerald-500/40 ${!data.asmaulSurah ? "opacity-50" : ""}`}
+              className={`flex flex-col justify-between rounded-2xl border border-success/20 bg-card p-6 backdrop-blur-xl transition-colors hover:border-emerald-500/40 ${!data.asmaulSurah ? "opacity-50" : ""}`}
             >
               <div className="mb-4 flex items-start justify-between">
-                <h4 className="text-[10px] tracking-[0.2em] text-emerald-400 uppercase">
+                <h4 className="text-[10px] tracking-[0.2em] text-success uppercase">
                   Next Verse Pair
                 </h4>
                 {data.asmaulSurah && (
-                  <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-[9px] text-emerald-300">
+                  <span className="rounded-full border border-success/20 bg-success/10 px-3 py-1 text-[9px] text-success">
                     #{data.asmaulSurah.number}
                   </span>
                 )}
               </div>
               <div className="flex items-end justify-between">
                 <div>
-                  <h3 className="text-xl font-medium text-white drop-shadow-sm">
+                  <h3 className="text-xl font-medium text-foreground drop-shadow-sm">
                     {data.asmaulSurah?.nameLatin || "—"}
                   </h3>
-                  <p className="mt-1 text-[11px] text-emerald-300">
+                  <p className="mt-1 text-[11px] text-success">
                     {data.asmaulSurah ? asmaulSurahMeaning : "No pair"}
                   </p>
                 </div>
-                <div className="font-serif text-3xl font-bold text-emerald-400 drop-shadow-sm">
+                <div className="font-serif text-3xl font-bold text-success drop-shadow-sm">
                   {data.asmaulSurah?.nameArabic || ""}
                 </div>
               </div>
@@ -1349,7 +1349,7 @@ ${transmissionText}`
               </div>
               <div className="flex items-end justify-between">
                 <div>
-                  <h3 className="text-xl font-medium text-white drop-shadow-sm">
+                  <h3 className="text-xl font-medium text-foreground drop-shadow-sm">
                     {data.asmaulAyah?.nameLatin || "—"}
                   </h3>
                   <p className="mt-1 text-[11px] text-fuchsia-300">
@@ -1369,15 +1369,15 @@ ${transmissionText}`
           {/* ROW 3: Lore & Wisdom */}
           <div className="mt-2 grid grid-cols-1 gap-6 md:grid-cols-2">
             {data.hadith ? (
-              <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br -background to-background/80 p-8 shadow-lg backdrop-blur-xl transition-colors hover:border-amber-500/40">
+              <div className="rounded-2xl border border-warning/20 bg-gradient-to-br -background to-background/80 p-8 shadow-lg backdrop-blur-xl transition-colors hover:border-amber-500/40">
                 <div className="mb-6 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="text-base text-amber-500">👑</span>
-                    <h4 className="text-[11px] tracking-[0.2em] text-amber-400 uppercase">
+                    <span className="text-base text-warning">👑</span>
+                    <h4 className="text-[11px] tracking-[0.2em] text-warning uppercase">
                       Legendary Lore Channel
                     </h4>
                   </div>
-                  <span className="rounded border border-amber-500/20 bg-amber-500/10 px-3 py-1 text-[9px] tracking-widest text-amber-300">
+                  <span className="rounded border border-warning/20 bg-warning/10 px-3 py-1 text-[9px] tracking-widest text-amber-300">
                     {hadithGradeText.toUpperCase()}
                   </span>
                 </div>
@@ -1386,7 +1386,7 @@ ${transmissionText}`
                 </h3>
                 <div className="flex gap-6">
                   <div className="mt-1 text-4xl opacity-30">📖</div>
-                  <p className="text-sm leading-relaxed font-light text-slate-200 italic">
+                  <p className="text-sm leading-relaxed font-light text-foreground italic">
                     "
                     {lang === "en"
                       ? data.hadith.textEn || data.hadith.textId
@@ -1396,7 +1396,7 @@ ${transmissionText}`
                 </div>
               </div>
             ) : (
-              <div className="flex items-center justify-center rounded-2xl border border-white/5 bg-card p-8 text-xs text-white/20 backdrop-blur-xl">
+              <div className="flex items-center justify-center rounded-2xl border border-border bg-card p-8 text-xs text-foreground/20 backdrop-blur-xl">
                 NO LORE DETECTED
               </div>
             )}
@@ -1410,8 +1410,8 @@ ${transmissionText}`
                     Sacred Scripture Reflection
                   </h4>
                 </div>
-                <div className="relative z-10 mb-6 rounded-xl border border-border bg-black/40 p-6">
-                  <p className="text-base leading-relaxed font-light text-white italic drop-shadow-md">
+                <div className="relative z-10 mb-6 rounded-xl border border-border bg-card p-6">
+                  <p className="text-base leading-relaxed font-light text-foreground italic drop-shadow-md">
                     "
                     {lang === "en"
                       ? data.wisdom.quoteEn || data.wisdom.quote
@@ -1427,7 +1427,7 @@ ${transmissionText}`
                 </p>
               </div>
             ) : (
-              <div className="flex items-center justify-center rounded-2xl border border-white/5 bg-card p-8 text-xs text-white/20 backdrop-blur-xl">
+              <div className="flex items-center justify-center rounded-2xl border border-border bg-card p-8 text-xs text-foreground/20 backdrop-blur-xl">
                 NO SCRIPTURE DETECTED
               </div>
             )}
@@ -1435,7 +1435,7 @@ ${transmissionText}`
         </div>
 
         {/* ──── FOOTER WATERMARK ──── */}
-        <div className="relative z-10 mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-8 text-[10px] font-medium tracking-[0.2em] text-white/40 uppercase">
+        <div className="relative z-10 mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-8 text-[10px] font-medium tracking-[0.2em] text-foreground/40 uppercase">
           <div className="flex items-center gap-3">
             <span>+ MOONWITNESS PLATFORM</span>
             <span className="opacity-30">•</span>

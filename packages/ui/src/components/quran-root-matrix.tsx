@@ -84,7 +84,7 @@ export function QuranRootMatrix({ className = "" }: { className?: string }) {
   )
 
   return (
-    <div className={`flex flex-col font-mono text-white ${className}`}>
+    <div className={`flex flex-col font-mono text-foreground ${className}`}>
       {/* Search Header */}
       <div className="flex items-center gap-3 bg-card p-4 rounded-xl border border-border">
         <Search className="h-5 w-5 text-primary" />
@@ -95,7 +95,7 @@ export function QuranRootMatrix({ className = "" }: { className?: string }) {
           placeholder="Search Arabic Root (e.g. 'ش ه د' or 'Sh-H-D' or 'Moon')..."
           className="flex-1 bg-transparent font-sans text-sm outline-none placeholder-zinc-500"
         />
-        <span className="text-[10px] text-zinc-500 bg-muted border border-border px-2 py-1 rounded">
+        <span className="text-[10px] text-muted-foreground bg-muted border border-border px-2 py-1 rounded">
           CONCORDANCE MATRIX
         </span>
       </div>
@@ -111,19 +111,19 @@ export function QuranRootMatrix({ className = "" }: { className?: string }) {
               className={`w-full p-4 rounded-xl border text-left transition-all ${
                 selectedRoot.root === r.root
                   ? "border-border bg-muted shadow-sm"
-                  : "border-white/10 bg-card/80 hover:border-border"
+                  : "border-border bg-card/80 hover:border-border"
               }`}
             >
               <div className="flex items-center justify-between">
                 <span className="text-xl font-bold font-serif text-primary">
                   {r.root}
                 </span>
-                <span className="text-xs text-emerald-400 font-bold bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-500/30">
+                <span className="text-xs text-success font-bold bg-emerald-950/40 px-2 py-0.5 rounded border border-success/30">
                   {r.occurrences}x in Qur'an
                 </span>
               </div>
-              <div className="mt-1 text-xs text-zinc-300 font-bold">{r.transliteration}</div>
-              <div className="mt-1 text-[11px] text-zinc-500 line-clamp-1">{r.primaryMeaning}</div>
+              <div className="mt-1 text-xs text-foreground font-bold">{r.transliteration}</div>
+              <div className="mt-1 text-[11px] text-muted-foreground line-clamp-1">{r.primaryMeaning}</div>
             </button>
           ))}
         </div>
@@ -131,17 +131,17 @@ export function QuranRootMatrix({ className = "" }: { className?: string }) {
         {/* Detailed Breakdown Right */}
         <div className="lg:col-span-2 rounded-2xl border border-border bg-card/90 p-6 space-y-6 shadow-xl backdrop-blur-md">
           {/* Header Card */}
-          <div className="flex items-start justify-between border-b border-white/10 pb-4">
+          <div className="flex items-start justify-between border-b border-border pb-4">
             <div>
               <div className="text-3xl font-bold font-serif text-primary">{selectedRoot.root}</div>
-              <div className="mt-1 text-sm font-bold text-zinc-300">
+              <div className="mt-1 text-sm font-bold text-foreground">
                 Root Transliteration: <span className="text-primary">{selectedRoot.transliteration}</span>
               </div>
-              <div className="mt-1 text-xs text-zinc-400">{selectedRoot.primaryMeaning}</div>
+              <div className="mt-1 text-xs text-muted-foreground">{selectedRoot.primaryMeaning}</div>
             </div>
             <div className="text-right">
-              <div className="text-2xl font-black text-emerald-400">{selectedRoot.occurrences}</div>
-              <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Total Quranic Citations</div>
+              <div className="text-2xl font-black text-success">{selectedRoot.occurrences}</div>
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Total Quranic Citations</div>
             </div>
           </div>
 
@@ -153,10 +153,10 @@ export function QuranRootMatrix({ className = "" }: { className?: string }) {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {selectedRoot.derivedWords.map((d) => (
-                <div key={d.word} className="p-3 rounded-xl border border-white/10 bg-black/40">
+                <div key={d.word} className="p-3 rounded-xl border border-border bg-card">
                   <div className="text-lg font-serif text-amber-300">{d.word}</div>
-                  <div className="text-xs font-bold text-zinc-200 mt-1">{d.meaning}</div>
-                  <div className="text-[10px] text-zinc-500 mt-0.5">{d.count} occurrences</div>
+                  <div className="text-xs font-bold text-foreground mt-1">{d.meaning}</div>
+                  <div className="text-[10px] text-muted-foreground mt-0.5">{d.count} occurrences</div>
                 </div>
               ))}
             </div>
@@ -164,18 +164,18 @@ export function QuranRootMatrix({ className = "" }: { className?: string }) {
 
           {/* Sample Quranic Verses */}
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 uppercase tracking-widest mb-3">
+            <div className="flex items-center gap-2 text-xs font-bold text-success uppercase tracking-widest mb-3">
               <BookOpen className="h-4 w-4" />
               <span>Sample Indexed Quranic Verses</span>
             </div>
             <div className="space-y-3">
               {selectedRoot.sampleVerses.map((v, i) => (
-                <div key={i} className="p-4 rounded-xl border border-emerald-500/20 bg-emerald-950/10">
-                  <div className="flex items-center justify-between text-xs text-emerald-400 font-bold mb-2">
+                <div key={i} className="p-4 rounded-xl border border-success/20 bg-emerald-950/10">
+                  <div className="flex items-center justify-between text-xs text-success font-bold mb-2">
                     <span>QS {v.surah}:{v.ayah}</span>
-                    <span className="text-[10px] text-zinc-500">EXACT MATCH</span>
+                    <span className="text-[10px] text-muted-foreground">EXACT MATCH</span>
                   </div>
-                  <div className="text-lg font-serif text-right text-zinc-100 leading-relaxed">
+                  <div className="text-lg font-serif text-right text-foreground leading-relaxed">
                     {v.text}
                   </div>
                 </div>

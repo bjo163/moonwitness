@@ -64,7 +64,7 @@ export function AsmaulHusnaView() {
   })
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-card pb-12 font-sans text-white selection:bg-indigo-500/30">
+    <div className="min-h-screen overflow-x-hidden bg-card pb-12 font-sans text-foreground selection:bg-indigo-500/30">
       <div className="mx-auto max-w-[1800px] space-y-6 px-4 pt-6 lg:px-6">
         {/* 1. Header Hero & Search Toolbar */}
         <AsmaulHusnaHero
@@ -79,7 +79,7 @@ export function AsmaulHusnaView() {
           {/* LEFT: 99 Names Cards Grid */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:col-span-2 xl:grid-cols-3">
             {filteredData.length === 0 ? (
-              <div className="col-span-full flex h-64 items-center justify-center rounded-xl border border-white/5 bg-card font-mono text-xs text-white/40">
+              <div className="col-span-full flex h-64 items-center justify-center rounded-xl border border-border bg-card font-mono text-xs text-foreground/40">
                 No Divine Names found matching &ldquo;{searchQuery}&rdquo;.
               </div>
             ) : (

@@ -35,15 +35,15 @@ export function KhidraIdentityPanel() {
             <div className="flex w-full flex-col gap-1.5 text-[9px] font-medium tracking-widest uppercase">
               <div className="flex justify-between border-b border-primary/10 pb-1">
                 <span className="text-primary/60">NAME</span>
-                <span className="font-bold text-white">Khidra</span>
+                <span className="font-bold text-foreground">Khidra</span>
               </div>
               <div className="flex justify-between border-b border-primary/10 pb-1">
                 <span className="text-primary/60">ORIGIN</span>
-                <span className="font-bold text-white">Divine Knowledge</span>
+                <span className="font-bold text-foreground">Divine Knowledge</span>
               </div>
               <div className="flex justify-between border-b border-primary/10 pb-1">
                 <span className="text-primary/60">PURPOSE</span>
-                <span className="font-bold text-white">
+                <span className="font-bold text-foreground">
                   Guide. Assist. Illuminate.
                 </span>
               </div>
@@ -53,13 +53,13 @@ export function KhidraIdentityPanel() {
           <div className="mt-2 flex flex-col gap-1.5 text-[9px] font-medium tracking-widest uppercase">
             <div className="flex justify-between border-b border-primary/10 pb-1">
               <span className="text-primary/60">ROLE</span>
-              <span className="font-bold text-white">
+              <span className="font-bold text-foreground">
                 AI Knowledge Companion
               </span>
             </div>
             <div className="flex justify-between border-b border-primary/10 pb-1">
               <span className="text-primary/60">CORE</span>
-              <span className="font-bold text-white">
+              <span className="font-bold text-foreground">
                 Truth • Mercy • Wisdom
               </span>
             </div>

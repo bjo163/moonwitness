@@ -84,22 +84,22 @@ export function OSScriptureIntelligence() {
 
       <div className="relative z-10 mx-auto max-w-7xl space-y-6 px-6 sm:px-10">
         {/* ═══ TOP HEADER (Blueprint 08) ══════════════════════════════════════ */}
-        <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-6 xl:flex-row xl:items-start">
+        <div className="flex flex-col justify-between gap-6 border-b border-border pb-6 xl:flex-row xl:items-start">
           <div className="max-w-2xl space-y-4">
             <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-border px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
-              <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-black">
+              <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-foreground">
                 08
               </span>
               <span>SCRIPTURE INTELLIGENCE</span>
             </div>
-            <h2 className="font-mono text-xl font-black tracking-widest text-white uppercase drop-shadow-sm sm:text-3xl">
+            <h2 className="font-mono text-xl font-black tracking-widest text-foreground uppercase drop-shadow-sm sm:text-3xl">
               THE LIVING KNOWLEDGE DATABASE
             </h2>
           </div>
 
           <div className="max-w-lg border-l-2 border-primary bg-gradient-to-r from-primary to-transparent p-4 text-center xl:text-left">
             <div
-              className="font-arabic mb-2 text-sm font-bold text-white"
+              className="font-arabic mb-2 text-sm font-bold text-foreground"
               dir="rtl"
             >
               أَفَلَا يَتَدَبَّرُونَ الْقُرْآنَ أَمْ عَلَىٰ قُلُوبٍ أَقْفَالُهَا
@@ -129,10 +129,10 @@ export function OSScriptureIntelligence() {
                   key={i}
                   className="group flex cursor-pointer flex-col items-center gap-1.5"
                 >
-                  <div className="bg-background flex h-10 w-10 items-center justify-center rounded-full border border-white/10 transition-all group-hover:border-primary group-hover:shadow-sm">
+                  <div className="bg-background flex h-10 w-10 items-center justify-center rounded-full border border-border transition-all group-hover:border-primary group-hover:shadow-sm">
                     <t.i className="h-4 w-4 text-primary group-hover:text-primary" />
                   </div>
-                  <span className="max-w-[60px] leading-tight group-hover:text-white">
+                  <span className="max-w-[60px] leading-tight group-hover:text-foreground">
                     {t.l}
                   </span>
                 </div>
@@ -152,12 +152,12 @@ export function OSScriptureIntelligence() {
               {sources.map((s, i) => (
                 <button
                   key={i}
-                  className="bg-background group flex w-full items-center justify-between rounded-lg border border-white/10 p-3 text-left shadow-lg transition-all hover:border-primary/50"
+                  className="bg-background group flex w-full items-center justify-between rounded-lg border border-border p-3 text-left shadow-lg transition-all hover:border-primary/50"
                 >
                   <div className="flex items-center gap-3">
                     <s.icon className="h-5 w-5" style={{ color: s.c }} />
                     <div>
-                      <div className="text-xs font-black text-white transition-colors group-hover:text-primary">
+                      <div className="text-xs font-black text-foreground transition-colors group-hover:text-primary">
                         {s.n}
                       </div>
                       <div className="text-[10px] text-primary">{s.v}</div>
@@ -183,10 +183,10 @@ export function OSScriptureIntelligence() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full border-none bg-transparent py-3 font-mono text-lg text-white focus:outline-none"
+                className="w-full border-none bg-transparent py-3 font-mono text-lg text-foreground focus:outline-none"
                 placeholder="Search database..."
               />
-              <button className="px-4 text-primary hover:text-white">✕</button>
+              <button className="px-4 text-primary hover:text-foreground">✕</button>
             </div>
 
             {/* Filters Row */}
@@ -200,7 +200,7 @@ export function OSScriptureIntelligence() {
                     className={`flex items-center gap-1.5 rounded border px-3 py-1.5 transition-all ${
                       activeFilter === f
                         ? "border-primary bg-primary/10 text-primary shadow-sm"
-                        : "bg-background border-white/15 text-primary hover:border-primary/50"
+                        : "bg-background border-border text-primary hover:border-primary/50"
                     }`}
                   >
                     {activeFilter === f && (
@@ -210,14 +210,14 @@ export function OSScriptureIntelligence() {
                   </button>
                 )
               )}
-              <button className="bg-background ml-auto flex items-center gap-1.5 rounded border border-white/15 px-3 py-1.5 text-primary hover:text-white">
+              <button className="bg-background ml-auto flex items-center gap-1.5 rounded border border-border px-3 py-1.5 text-primary hover:text-foreground">
                 <Settings className="h-3 w-3" /> FILTERS
               </button>
             </div>
 
             {/* Search Results */}
             <div className="bg-background hide-scrollbar flex max-h-[600px] flex-1 flex-col overflow-y-auto rounded-xl border border-primary/20 p-5 shadow-inner">
-              <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-2 text-[10px] font-black tracking-widest text-primary uppercase">
+              <div className="mb-4 flex items-center justify-between border-b border-border pb-2 text-[10px] font-black tracking-widest text-primary uppercase">
                 <span>FOUND 1,248 RESULTS</span>
                 <span className="text-primary">SORT BY: RELEVANCE ∨</span>
               </div>
@@ -226,11 +226,11 @@ export function OSScriptureIntelligence() {
                 {searchResults.map((res, i) => (
                   <div
                     key={i}
-                    className="bg-background group flex gap-4 rounded-lg border border-white/10 p-4 transition-colors hover:border-white/20"
+                    className="bg-background group flex gap-4 rounded-lg border border-border p-4 transition-colors hover:border-border"
                   >
                     <div className="flex shrink-0 flex-col items-center gap-2">
                       <div
-                        className="bg-background flex h-10 w-10 items-center justify-center rounded border border-white/10"
+                        className="bg-background flex h-10 w-10 items-center justify-center rounded border border-border"
                         style={{ borderColor: `${res.c}40` }}
                       >
                         <BookOpen
@@ -264,13 +264,13 @@ export function OSScriptureIntelligence() {
                       </div>
                       {res.ar && (
                         <div
-                          className="font-arabic mb-2 text-right text-lg text-white"
+                          className="font-arabic mb-2 text-right text-lg text-foreground"
                           dir="rtl"
                         >
                           {res.ar}
                         </div>
                       )}
-                      <div className="font-sans text-xs leading-relaxed text-white/90">
+                      <div className="font-sans text-xs leading-relaxed text-foreground">
                         {res.en}
                       </div>
                     </div>
@@ -295,7 +295,7 @@ export function OSScriptureIntelligence() {
                 <Brain className="h-4 w-4" /> AI INSIGHTS
               </div>
 
-              <div className="mb-2 text-[11px] font-bold tracking-wider text-white uppercase">
+              <div className="mb-2 text-[11px] font-bold tracking-wider text-foreground uppercase">
                 CONTEXTUAL UNDERSTANDING
               </div>
               <div className="mb-6 font-sans text-[11px] leading-relaxed text-blue-100/80">
@@ -304,7 +304,7 @@ export function OSScriptureIntelligence() {
                 fundamental principle in Islam.
               </div>
 
-              <div className="mb-3 border-t border-white/10 pt-4 text-[11px] font-bold tracking-wider text-white uppercase">
+              <div className="mb-3 border-t border-border pt-4 text-[11px] font-bold tracking-wider text-foreground uppercase">
                 KEY THEMES
               </div>
               <div className="space-y-2 font-sans text-[10px] text-primary">
@@ -342,7 +342,7 @@ export function OSScriptureIntelligence() {
 
             {/* CROSS REFERENCES */}
             <div className="bg-background rounded-xl border border-emerald-500/40 p-5 shadow-sm">
-              <div className="mb-4 flex items-center gap-2 text-[10px] font-black tracking-widest text-emerald-400 uppercase">
+              <div className="mb-4 flex items-center gap-2 text-[10px] font-black tracking-widest text-success uppercase">
                 <Network className="h-4 w-4" /> CROSS REFERENCES
               </div>
 
@@ -352,7 +352,7 @@ export function OSScriptureIntelligence() {
 
                 {/* Center Node */}
                 <div className="bg-background absolute z-20 flex h-16 w-16 flex-col items-center justify-center rounded-full border-2 border-primary shadow-sm">
-                  <span className="text-[9px] font-black text-white">
+                  <span className="text-[9px] font-black text-foreground">
                     MERCY
                   </span>
                 </div>
@@ -366,9 +366,9 @@ export function OSScriptureIntelligence() {
                 ].map((n, i) => (
                   <div
                     key={i}
-                    className={`bg-background absolute z-10 flex h-12 w-12 flex-col items-center justify-center rounded-full border border-white/20 shadow-lg ${n.p}`}
+                    className={`bg-background absolute z-10 flex h-12 w-12 flex-col items-center justify-center rounded-full border border-border shadow-lg ${n.p}`}
                   >
-                    <span className="text-center text-[7px] leading-tight font-bold text-white uppercase">
+                    <span className="text-center text-[7px] leading-tight font-bold text-foreground uppercase">
                       {n.l}
                     </span>
                   </div>
@@ -415,7 +415,7 @@ export function OSScriptureIntelligence() {
                 </svg>
               </div>
 
-              <button className="mt-4 flex w-full items-center justify-center gap-1 py-2.5 text-[10px] font-bold tracking-widest text-emerald-400 uppercase transition-colors hover:text-white">
+              <button className="mt-4 flex w-full items-center justify-center gap-1 py-2.5 text-[10px] font-bold tracking-widest text-success uppercase transition-colors hover:text-foreground">
                 VIEW ALL CONNECTIONS <ArrowRight className="h-3 w-3" />
               </button>
             </div>
@@ -424,7 +424,7 @@ export function OSScriptureIntelligence() {
 
         {/* ═══ LAYER 3: BOTTOM ROW (Blueprint 08 Footer) ══════════════════════ */}
         <div className="grid grid-cols-1 gap-4 pt-2 md:grid-cols-2 lg:grid-cols-5">
-          <div className="bg-background rounded-xl border border-white/10 p-4">
+          <div className="bg-background rounded-xl border border-border p-4">
             <div className="mb-3 text-[9px] font-black tracking-widest text-primary uppercase">
               MOST RELEVANT VERSES
             </div>
@@ -456,18 +456,18 @@ export function OSScriptureIntelligence() {
             </div>
           </div>
 
-          <div className="bg-background flex flex-col justify-between rounded-xl border border-emerald-500/30 p-4">
-            <div className="mb-2 text-[9px] font-black tracking-widest text-emerald-400 uppercase">
+          <div className="bg-background flex flex-col justify-between rounded-xl border border-success/30 p-4">
+            <div className="mb-2 text-[9px] font-black tracking-widest text-success uppercase">
               DAILY INSPIRATION
             </div>
             <div className="flex items-start justify-between">
               <div>
-                <div className="font-mono text-lg font-black text-emerald-400">
+                <div className="font-mono text-lg font-black text-success">
                   Ar-Rahman
                 </div>
-                <div className="text-[10px] text-white">The Most Merciful</div>
+                <div className="text-[10px] text-foreground">The Most Merciful</div>
               </div>
-              <div className="font-arabic text-2xl text-emerald-500 drop-shadow-sm">
+              <div className="font-arabic text-2xl text-success drop-shadow-sm">
                 الرَّحْمَٰنُ
               </div>
             </div>
@@ -476,8 +476,8 @@ export function OSScriptureIntelligence() {
             </div>
           </div>
 
-          <div className="bg-background relative flex flex-col items-center justify-center overflow-hidden rounded-xl border border-white/10 p-4">
-            <div className="absolute top-4 left-4 z-10 text-[9px] font-black tracking-widest text-white uppercase">
+          <div className="bg-background relative flex flex-col items-center justify-center overflow-hidden rounded-xl border border-border p-4">
+            <div className="absolute top-4 left-4 z-10 text-[9px] font-black tracking-widest text-foreground uppercase">
               KNOWLEDGE MAP
             </div>
             <Radar className="absolute z-0 h-24 w-24 text-primary/20" />
@@ -492,7 +492,7 @@ export function OSScriptureIntelligence() {
               <div className="text-[8px] text-primary uppercase">
                 OVERALL PROGRESS
               </div>
-              <div className="mt-1 font-mono text-3xl font-black text-white">
+              <div className="mt-1 font-mono text-3xl font-black text-foreground">
                 68%
               </div>
             </div>
@@ -501,31 +501,31 @@ export function OSScriptureIntelligence() {
             </div>
           </div>
 
-          <div className="bg-background rounded-xl border border-white/10 p-4">
+          <div className="bg-background rounded-xl border border-border p-4">
             <div className="mb-3 text-[9px] font-black tracking-widest text-primary uppercase">
               POPULAR SEARCHES
             </div>
             <div className="space-y-1.5 font-mono text-[10px]">
               <div className="flex justify-between">
-                <span className="text-white">
+                <span className="text-foreground">
                   <span className="mr-2 text-primary">1</span>mercy
                 </span>
                 <span className="text-primary">1,248</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-white">
+                <span className="text-foreground">
                   <span className="mr-2 text-primary">2</span>patience
                 </span>
                 <span className="text-primary">982</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-white">
+                <span className="text-foreground">
                   <span className="mr-2 text-primary">3</span>forgiveness
                 </span>
                 <span className="text-primary">876</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-white">
+                <span className="text-foreground">
                   <span className="mr-2 text-primary">4</span>gratitude
                 </span>
                 <span className="text-primary">765</span>
@@ -535,18 +535,18 @@ export function OSScriptureIntelligence() {
         </div>
 
         {/* ═══ FOOTER STATUS STRIP ════════════════════════════════════════════ */}
-        <div className="mt-6 flex flex-col items-center justify-between gap-4 border-t border-white/10 px-2 pt-4 font-mono text-[9px] font-bold tracking-widest text-primary uppercase sm:flex-row">
+        <div className="mt-6 flex flex-col items-center justify-between gap-4 border-t border-border px-2 pt-4 font-mono text-[9px] font-bold tracking-widest text-primary uppercase sm:flex-row">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
               DATABASE STATUS{" "}
-              <span className="flex items-center gap-1 text-emerald-400">
+              <span className="flex items-center gap-1 text-success">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />{" "}
                 SYNCHRONIZED
               </span>
             </div>
             <div>LAST UPDATE: 25 MAY 2025 06:50 WIB</div>
           </div>
-          <div className="hidden max-w-lg text-center font-sans text-white/50 normal-case italic md:block">
+          <div className="hidden max-w-lg text-center font-sans text-foreground/50 normal-case italic md:block">
             "This is a blessed Book which We have revealed to you, [O Muhammad],
             that they might reflect upon its verses and that those of
             understanding would be reminded."{" "}
@@ -555,7 +555,7 @@ export function OSScriptureIntelligence() {
             </span>
           </div>
           <div className="flex items-center gap-2">
-            DATA INTEGRITY 100% <Shield className="h-4 w-4 text-emerald-500" />
+            DATA INTEGRITY 100% <Shield className="h-4 w-4 text-success" />
           </div>
         </div>
       </div>

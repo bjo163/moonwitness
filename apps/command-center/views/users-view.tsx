@@ -8,9 +8,9 @@ import { Users, Shield, Clock, MonitorPlay, Download } from "lucide-react"
 function MetricWidget({ label, value, sub, color, icon }: { label: string; value: string; sub?: string; color: "cyan" | "emerald" | "purple" | "amber"; icon: React.ReactNode }) {
   const colorMap = {
     cyan: { text: "text-primary", border: "border-primary/30", sub: "text-primary/80" },
-    emerald: { text: "text-emerald-500", border: "border-emerald-500/30", sub: "text-emerald-500/80" },
+    emerald: { text: "text-success", border: "border-success/30", sub: "text-success/80" },
     purple: { text: "text-primary", border: "border-border", sub: "text-primary/80" },
-    amber: { text: "text-amber-500", border: "border-amber-500/30", sub: "text-amber-500/80" },
+    amber: { text: "text-warning", border: "border-warning/30", sub: "text-warning/80" },
   }
   const c = colorMap[color]
   return (
@@ -139,10 +139,10 @@ export function UsersView() {
 
   const topWidgets = usersLoading ? (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <div className="h-24 animate-pulse rounded-xl border border-border bg-black/40" />
-      <div className="h-24 animate-pulse rounded-xl border border-emerald-900/30 bg-black/40" />
-      <div className="h-24 animate-pulse rounded-xl border border-border bg-black/40" />
-      <div className="h-24 animate-pulse rounded-xl border border-amber-900/30 bg-black/40" />
+      <div className="h-24 animate-pulse rounded-xl border border-border bg-card" />
+      <div className="h-24 animate-pulse rounded-xl border border-emerald-900/30 bg-card" />
+      <div className="h-24 animate-pulse rounded-xl border border-border bg-card" />
+      <div className="h-24 animate-pulse rounded-xl border border-amber-900/30 bg-card" />
     </div>
   ) : (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -166,7 +166,7 @@ export function UsersView() {
           </div>
           <div className="flex items-center justify-between">
             <span>Active</span>
-            <span className="font-semibold text-emerald-500">{activeUsers}</span>
+            <span className="font-semibold text-success">{activeUsers}</span>
           </div>
           <div className="flex items-center justify-between">
             <span>2FA Enabled</span>

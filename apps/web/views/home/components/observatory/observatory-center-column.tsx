@@ -17,7 +17,7 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
               className={`flex-1 rounded py-1.5 text-[10px] font-black tracking-wider uppercase transition-all ${
                 activeTab === tab
                   ? "border border-border bg-primary/10 text-primary shadow-sm"
-                  : "text-primary hover:text-white"
+                  : "text-primary hover:text-foreground"
               }`}
             >
               {tab}
@@ -29,7 +29,7 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
       {/* Center Orbital Viewport Illusion */}
       <div className="relative my-4 flex min-h-[320px] w-full flex-1 items-center justify-center">
         {/* Starry space background graphic */}
-        <div className="absolute inset-0 flex items-center justify-center overflow-hidden rounded-xl border border-border bg-black/40">
+        <div className="absolute inset-0 flex items-center justify-center overflow-hidden rounded-xl border border-border bg-card">
           <img
             src="/assets/hero_bg.png"
             alt="Deep Space Matrix"
@@ -40,7 +40,7 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
 
         {/* Animated Orbital Ellipses */}
         <div
-          className="animate-spin-slow pointer-events-none absolute h-[220px] w-[420px] rounded-[50%] border border-dashed border-amber-400/20"
+          className="animate-spin-slow pointer-events-none absolute h-[220px] w-[420px] rounded-[50%] border border-dashed border-warning/20"
           style={{ animationDuration: "60s" }}
         />
         <div
@@ -54,9 +54,9 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
 
         {/* Sun Object */}
         <div className="bg-background/70 animate-float absolute top-6 left-10 flex items-center gap-2 rounded-lg border border-amber-500/40 p-2 shadow-sm backdrop-blur-md">
-          <Sun className="animate-spin-slow h-6 w-6 shrink-0 text-amber-400" />
+          <Sun className="animate-spin-slow h-6 w-6 shrink-0 text-warning" />
           <div className="font-mono text-[9px] leading-tight">
-            <div className="text-xs font-black text-amber-400">SUN ☀</div>
+            <div className="text-xs font-black text-warning">SUN ☀</div>
             <div className="text-primary">ALT 32.4° • AZ 128.7°</div>
           </div>
         </div>
@@ -94,12 +94,12 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
         </div>
 
         <div className="bg-background/70 absolute right-6 bottom-6 flex items-center gap-2.5 rounded-lg border border-emerald-400/40 p-2.5 shadow-sm backdrop-blur-md sm:right-10">
-          <Compass className="animate-bounce-x h-6 w-6 text-emerald-400" />
+          <Compass className="animate-bounce-x h-6 w-6 text-success" />
           <div className="text-right font-mono text-[9px] leading-tight">
-            <div className="text-xs font-black text-emerald-400">
+            <div className="text-xs font-black text-success">
               QIBLA VECTOR
             </div>
-            <div className="text-white">
+            <div className="text-foreground">
               {obs.loading ? "---" : obs.qibla}° NW // 8,865 KM
             </div>
           </div>
@@ -107,7 +107,7 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
       </div>
 
       {/* Bottom 4 Diagnostic Pills */}
-      <div className="z-10 grid grid-cols-2 gap-2 border-t border-white/10 pt-4 text-center font-mono text-[10px] font-black uppercase sm:grid-cols-4">
+      <div className="z-10 grid grid-cols-2 gap-2 border-t border-border pt-4 text-center font-mono text-[10px] font-black uppercase sm:grid-cols-4">
         <span className="flex items-center justify-center gap-1.5 rounded border border-border bg-muted px-2 py-1 text-primary shadow-sm backdrop-blur-sm">
           <span className="h-1.5 w-1.5 animate-ping rounded-full bg-primary" />{" "}
           ORBIT TRACE ON
@@ -120,7 +120,7 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
           <span className="h-1.5 w-1.5 rounded-full bg-blue-400" /> ATMOSPHERE
           ON
         </span>
-        <span className="flex items-center justify-center gap-1.5 rounded border border-emerald-400/40 bg-emerald-950/40 px-2 py-1 text-emerald-300 shadow-sm backdrop-blur-sm">
+        <span className="flex items-center justify-center gap-1.5 rounded border border-emerald-400/40 bg-emerald-950/40 px-2 py-1 text-success shadow-sm backdrop-blur-sm">
           <span className="h-1.5 w-1.5 animate-ping rounded-full bg-emerald-400" />{" "}
           QIBLA LINE ON
         </span>

@@ -7,12 +7,13 @@ import {
   Loader2,
   Sparkles,
   ArrowRight,
-  Radio,
   Mic,
   MicOff,
   Volume2,
   VolumeX,
   Activity,
+  Bot,
+  User as UserIcon,
 } from "lucide-react"
 import {
   type PropheticAIChatTerminalProps,
@@ -42,19 +43,15 @@ export function PropheticAIChatTerminal({
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Audio & Voice Radar State
   const [isListening, setIsListening] = useState(false)
   const [speechSupported, setSpeechSupported] = useState(false)
-  const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(
-    null
-  )
+  const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(null)
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages, isLoading, isListening])
 
-  // Inisialisasi Web Speech API (Microphone Recognition)
   useEffect(() => {
     if (
       typeof window !== "undefined" &&
@@ -68,7 +65,7 @@ export function PropheticAIChatTerminal({
       const recognition = new SpeechRecognition()
       recognition.continuous = true
       recognition.interimResults = true
-      recognition.lang = "id-ID" // Optimal mengenali istilah Arab, Indonesia, & Inggris yang lazim dikucarkan user
+      recognition.lang = "id-ID"
 
       recognition.onresult = (event: SpeechRecognitionEvent) => {
         let transcript = ""
@@ -82,7 +79,7 @@ export function PropheticAIChatTerminal({
       }
 
       recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
-        console.error("[Speech Radar Error]", event.error)
+        console.error("[Speech Error]", event.error)
         setIsListening(false)
       }
 
@@ -94,7 +91,6 @@ export function PropheticAIChatTerminal({
     }
   }, [setInput])
 
-  // Handle Toggle Microphone Radar
   const toggleListen = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
@@ -115,7 +111,6 @@ export function PropheticAIChatTerminal({
     }
   }
 
-  // Handle Text-to-Speech (Audio Playback)
   const speakText = (id: string, text: string) => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return
 
@@ -127,7 +122,6 @@ export function PropheticAIChatTerminal({
 
     window.speechSynthesis.cancel()
 
-    // Bersihkan format Markdown/kode agar ucapan jitu, bersih, dan berwibawa
     const cleanText = text
       .replace(/\[.*?\]/g, "")
       .replace(/[#*`~>_-]/g, " ")
@@ -135,7 +129,7 @@ export function PropheticAIChatTerminal({
       .trim()
 
     const utterance = new SpeechSynthesisUtterance(cleanText)
-    utterance.rate = 0.95 // Kecepatan agak tenang & jelas
+    utterance.rate = 0.95
     utterance.onend = () => setSpeakingMessageId(null)
     utterance.onerror = () => setSpeakingMessageId(null)
 
@@ -154,26 +148,26 @@ export function PropheticAIChatTerminal({
     <div
       className={
         fullWorkspace
-          ? "bg-background flex h-full w-full flex-col overflow-hidden font-mono text-foreground"
-          : `rounded-xl border border-border/40 bg-card bg-background/95 border-success/40 flex flex-col overflow-hidden border ${maxHeight}`
+          ? "flex h-full w-full flex-col overflow-hidden bg-background font-sans text-foreground"
+          : `flex flex-col overflow-hidden rounded-xl border border-border bg-card text-card-foreground shadow-sm ${maxHeight}`
       }
     >
       {/* Header Compact */}
       {!fullWorkspace && (
-        <div className="border-success/30 bg-success/10 text-success flex shrink-0 items-center justify-between border-b px-3 py-1.5 text-[11px] font-bold tracking-wider uppercase">
-          <div className="flex items-center gap-1.5">
-            <Radio className="text-success h-3.5 w-3.5 animate-pulse" />
-            <span>KHIDRA AI // WISDOM INTELLIGENCE</span>
+        <div className="flex shrink-0 items-center justify-between border-b border-border bg-muted/40 px-4 py-2.5 text-xs font-semibold">
+          <div className="flex items-center gap-2 text-foreground">
+            <Bot className="h-4 w-4 text-primary" />
+            <span>AI Knowledge Assistant</span>
           </div>
           {isLoading && (
-            <Loader2 className="text-success h-3.5 w-3.5 animate-spin" />
+            <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />
           )}
         </div>
       )}
 
       {/* Messages Area */}
       <div
-        className={`flex-1 overflow-y-auto ${fullWorkspace ? "p-3 sm:p-6" : "p-2.5 sm:p-4"} scrollbar-thin scrollbar-thumb-success/40 space-y-3 sm:space-y-4`}
+        className={`flex-1 space-y-3 overflow-y-auto ${fullWorkspace ? "p-4 sm:p-6" : "p-3 sm:p-4"}`}
       >
         <div
           className={
@@ -183,26 +177,24 @@ export function PropheticAIChatTerminal({
           }
         >
           {messages.length === 0 ? (
-            /* Terminal Welcome Box */
-            <div className="bg-success/5 border-success/20 space-y-3 rounded border p-3 font-mono text-xs leading-relaxed text-foreground sm:p-4 sm:text-sm">
-              <div className="text-success flex flex-wrap items-center justify-between gap-2 text-[11px] font-bold tracking-wider uppercase sm:text-xs">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="text-success h-3.5 w-3.5 shrink-0 animate-pulse" />
-                  <span>
-                    [ KHIDRA AI ONLINE // SUPABASE REVELATION CORE ACTIVE ]
-                  </span>
+            /* Welcome Box */
+            <div className="space-y-3 rounded-xl border border-border bg-muted/20 p-4 font-sans text-xs leading-relaxed text-foreground sm:text-sm">
+              <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-semibold">
+                <div className="flex items-center gap-2 text-foreground">
+                  <Sparkles className="h-4 w-4 text-primary" />
+                  <span>Knowledge Assistant Ready</span>
                 </div>
                 {speechSupported && (
-                  <span className="bg-success/15 border-success/40 text-success flex items-center gap-1 rounded border px-2 py-0.5 text-[10px]">
-                    <Mic className="text-success h-3 w-3 animate-pulse" />
-                    <span>VOICE RADAR ENABLED</span>
+                  <span className="flex items-center gap-1 rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
+                    <Mic className="h-3 w-3 text-primary" />
+                    <span>Voice Input Available</span>
                   </span>
                 )}
               </div>
 
-              <div className="pt-1">
-                <span className="mb-1.5 block text-[10px] font-bold tracking-wider text-primary uppercase sm:text-[11px]">
-                  // QUICK INQUIRIES:
+              <div className="pt-2">
+                <span className="mb-2 block text-xs font-semibold text-muted-foreground">
+                  Suggested inquiries:
                 </span>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {QUICK_PROMPTS.map((item, i) => (
@@ -210,10 +202,10 @@ export function PropheticAIChatTerminal({
                       key={i}
                       type="button"
                       onClick={() => handleQuickPrompt(item.prompt)}
-                      className="bg-success/10 hover:bg-success/25 border-success/30 hover:border-success flex cursor-pointer items-center gap-1.5 rounded-sm border px-2.5 py-1 text-left font-sans text-[11px] text-foreground transition-all active:scale-95 sm:px-3 sm:py-1.5 sm:font-mono sm:text-xs"
+                      className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1 text-left font-sans text-xs text-foreground transition-colors hover:bg-accent hover:text-accent-foreground sm:px-3 sm:py-1.5"
                     >
                       <span>{item.label}</span>
-                      <ArrowRight className="text-success h-3 w-3 shrink-0 opacity-70" />
+                      <ArrowRight className="h-3 w-3 shrink-0 text-muted-foreground" />
                     </button>
                   ))}
                 </div>
@@ -227,40 +219,38 @@ export function PropheticAIChatTerminal({
                   key={msg.id}
                   className={`flex flex-col gap-1.5 ${msg.role === "user" ? "items-end" : "items-start"}`}
                 >
-                  <div className="flex w-full max-w-[96%] items-center justify-between px-1 text-[10px] font-bold tracking-wider uppercase opacity-90 sm:max-w-[85%]">
+                  <div className="flex w-full max-w-[96%] items-center justify-between px-1 text-[11px] font-medium text-muted-foreground sm:max-w-[85%]">
                     {msg.role === "user" ? (
-                      <span className="ml-auto text-primary">
-                        COMMANDER // YOU
+                      <span className="ml-auto flex items-center gap-1 text-foreground">
+                        <UserIcon className="h-3.5 w-3.5 text-primary" /> You
                       </span>
                     ) : (
                       <div className="flex w-full items-center justify-between">
-                        <span className="text-success flex items-center gap-1">
-                          <Sparkles className="text-success h-3 w-3" /> KHIDRA
-                          AI // REVELATION FEED
+                        <span className="flex items-center gap-1 text-foreground font-semibold">
+                          <Sparkles className="h-3.5 w-3.5 text-primary" /> Knowledge Assistant
                         </span>
 
-                        {/* Tombol TTS Audio Playback pada Pesan AI */}
                         <button
                           type="button"
                           onClick={() => speakText(msg.id, msg.content)}
-                          className="bg-panel hover:bg-success/25 border-success/50 hover:border-success text-success flex cursor-pointer items-center gap-1 rounded-sm border px-2 py-0.5 text-[9px] font-bold shadow-sm transition-all active:scale-95"
+                          className="flex cursor-pointer items-center gap-1 rounded-md border border-border bg-card px-2 py-0.5 text-[10px] text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                           title={
                             speakingMessageId === msg.id
-                              ? "Stop Speech Playback"
-                              : "Listen to KHIDRA AI Voice"
+                              ? "Stop audio playback"
+                              : "Listen to answer"
                           }
                         >
                           {speakingMessageId === msg.id ? (
                             <>
-                              <VolumeX className="h-3 w-3 animate-pulse text-red-400" />
-                              <span className="font-black tracking-widest text-red-400">
-                                STOP AUDIO
+                              <VolumeX className="h-3 w-3 text-destructive" />
+                              <span className="text-destructive font-medium">
+                                Stop Audio
                               </span>
                             </>
                           ) : (
                             <>
-                              <Volume2 className="text-success h-3 w-3" />
-                              <span>LISTEN [TTS]</span>
+                              <Volume2 className="h-3 w-3 text-primary" />
+                              <span>Listen</span>
                             </>
                           )}
                         </button>
@@ -269,10 +259,10 @@ export function PropheticAIChatTerminal({
                   </div>
 
                   <div
-                    className={`max-w-[96%] rounded-sm p-4 text-xs leading-relaxed font-normal shadow-lg transition-all sm:max-w-[85%] sm:text-sm ${
+                    className={`max-w-[96%] rounded-xl p-3.5 text-xs leading-relaxed sm:max-w-[85%] sm:text-sm ${
                       msg.role === "user"
-                        ? "rounded-tr-none border border-primary/60 bg-muted font-mono text-primary shadow-sm"
-                        : "border-success text-success rounded-tl-none border bg-emerald-950/60 font-sans shadow-sm"
+                        ? "border border-border bg-primary text-primary-foreground font-sans shadow-sm"
+                        : "border border-border bg-card text-card-foreground font-sans shadow-sm"
                     }`}
                   >
                     <div className="whitespace-pre-wrap">{msg.content}</div>
@@ -283,18 +273,16 @@ export function PropheticAIChatTerminal({
           )}
 
           {isListening && (
-            <div className="text-success bg-success/10 border-success flex w-fit animate-pulse items-center gap-2.5 rounded border px-3 py-2 font-mono text-xs shadow-sm">
-              <Activity className="text-success h-4 w-4 animate-bounce" />
-              <span className="font-bold tracking-wider">
-                {/* SPEECH RADAR ACTIVE: LISTENING TO AUDIO STREAM... */}
-              </span>
+            <div className="flex w-fit items-center gap-2 rounded-lg border border-warning/30 bg-warning/10 px-3 py-1.5 font-sans text-xs text-warning">
+              <Activity className="h-3.5 w-3.5 animate-pulse" />
+              <span className="font-medium">Listening to speech...</span>
             </div>
           )}
 
           {isLoading && (
-            <div className="text-success bg-success/5 border-success/20 flex w-fit animate-pulse items-center gap-2 rounded border px-2 py-1.5 font-mono text-xs">
+            <div className="flex w-fit items-center gap-2 rounded-lg border border-border bg-muted/40 px-3 py-1.5 font-sans text-xs text-muted-foreground">
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
-              <span>Scanning scripture core...</span>
+              <span>Analyzing knowledge repository...</span>
             </div>
           )}
 
@@ -303,7 +291,7 @@ export function PropheticAIChatTerminal({
       </div>
 
       {/* Input Area */}
-      <div className="border-success/30 bg-background shrink-0 border-t p-2 sm:p-3">
+      <div className="shrink-0 border-t border-border bg-card p-2.5 sm:p-3">
         <div className={fullWorkspace ? "mx-auto w-full max-w-4xl" : "w-full"}>
           <form onSubmit={handleSubmit} className="relative flex items-center">
             <input
@@ -312,49 +300,41 @@ export function PropheticAIChatTerminal({
               onChange={handleInputChange}
               placeholder={
                 isListening
-                  ? "🎙️ Listening... Speak your inquiry now..."
-                  : "Enter theological inquiry or Quranic topic..."
+                  ? "Listening... speak now..."
+                  : "Ask a question or enter a topic..."
               }
-              className={`bg-background w-full rounded-sm py-2.5 pr-20 pl-3.5 font-mono text-xs text-foreground transition-all outline-none sm:py-3 sm:pr-24 sm:pl-4 sm:text-sm ${
-                isListening
-                  ? "border-success placeholder:text-success border-2 font-bold shadow-sm"
-                  : "border-success/40 focus:border-success border placeholder:text-primary/50"
+              className={`w-full rounded-lg border border-input bg-background py-2 pr-20 pl-3 font-sans text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:py-2.5 sm:pr-24 sm:pl-3.5 sm:text-sm ${
+                isListening ? "border-warning ring-2 ring-warning/30" : ""
               }`}
               disabled={isLoading}
               autoFocus
             />
 
             <div className="absolute right-1.5 flex items-center gap-1">
-              {/* Tombol Microphone Voice Radar */}
               {speechSupported && (
                 <button
                   type="button"
                   onClick={toggleListen}
-                  className={`cursor-pointer rounded-sm border p-1.5 transition-all duration-200 sm:p-2 ${
+                  className={`cursor-pointer rounded-md p-1.5 transition-colors sm:p-2 ${
                     isListening
-                      ? "animate-pulse border-red-400 bg-red-500/80 text-white shadow-sm hover:bg-red-500"
-                      : "bg-success/15 hover:bg-success/30 text-success border-success/50 hover:text-white"
+                      ? "bg-destructive text-destructive-foreground"
+                      : "text-muted-foreground hover:bg-accent hover:text-foreground"
                   }`}
-                  title={
-                    isListening
-                      ? "Stop Voice Radar"
-                      : "Voice Command (Tap to Speak)"
-                  }
+                  title={isListening ? "Stop listening" : "Voice input"}
                 >
                   {isListening ? (
-                    <MicOff className="h-4 w-4 animate-bounce" />
+                    <MicOff className="h-4 w-4" />
                   ) : (
                     <Mic className="h-4 w-4" />
                   )}
                 </button>
               )}
 
-              {/* Tombol Kirim / Submit */}
               <button
                 type="submit"
                 disabled={isLoading || (!input?.trim() && !isListening)}
-                className="text-success bg-success/15 hover:bg-success/30 border-success/50 cursor-pointer rounded-sm border p-1.5 transition-colors hover:text-white disabled:opacity-40 sm:p-2"
-                title="Transmit Query (Enter)"
+                className="cursor-pointer rounded-md bg-primary p-1.5 text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40 sm:p-2"
+                title="Send message"
               >
                 {isLoading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />

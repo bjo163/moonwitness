@@ -155,13 +155,13 @@ export function MissionControlView() {
   const getSeverityBg = (severity: string) => {
     switch (severity) {
       case "CRITICAL":
-        return "bg-destructive text-white"
+        return "bg-destructive text-foreground"
       case "HIGH":
-        return "bg-warning text-black"
+        return "bg-warning text-foreground"
       case "MEDIUM":
-        return "bg-accent text-black"
+        return "bg-accent text-foreground"
       default:
-        return "bg-primary text-black"
+        return "bg-primary text-foreground"
     }
   }
 
@@ -214,7 +214,7 @@ export function MissionControlView() {
                       click: () => setActiveTarget(target),
                     }}
                   >
-                    <Popup className="rounded-none border border-primary/30 bg-black text-white">
+                    <Popup className="rounded-none border border-primary/30 bg-card text-foreground">
                       <div className="max-w-[200px] p-1">
                         <div
                           className={`mb-2 inline-block px-1 py-0.5 text-[10px] font-bold ${getSeverityBg(target.severity)}`}
@@ -224,7 +224,7 @@ export function MissionControlView() {
                         <h4 className="mb-1 text-xs font-bold">
                           {target.title}
                         </h4>
-                        <p className="text-[10px] text-gray-400">
+                        <p className="text-[10px] text-muted-foreground">
                           {target.type}
                         </p>
                       </div>
@@ -252,18 +252,18 @@ export function MissionControlView() {
                   {activeTarget.severity} PRIORITY
                 </div>
 
-                <h4 className="text-lg leading-tight font-black text-white">
+                <h4 className="text-lg leading-tight font-black text-foreground">
                   {activeTarget.title}
                 </h4>
 
                 <div className="grid grid-cols-2 gap-2 text-[10px]">
-                  <div className="border border-primary/20 bg-black/50 p-2">
+                  <div className="border border-primary/20 bg-card p-2">
                     <span className="mb-1 block text-primary/50">LATITUDE</span>
                     <span className="font-mono text-accent">
                       {activeTarget.lat}°
                     </span>
                   </div>
-                  <div className="border border-primary/20 bg-black/50 p-2">
+                  <div className="border border-primary/20 bg-card p-2">
                     <span className="mb-1 block text-primary/50">
                       LONGITUDE
                     </span>
@@ -307,13 +307,13 @@ export function MissionControlView() {
               GLOBAL SUMMARY
             </div>
             <div className="mb-2 flex items-center justify-between text-xs">
-              <span className="text-white">Active Zones</span>
+              <span className="text-foreground">Active Zones</span>
               <span className="font-mono font-bold text-accent">
                 {allTargets.length}
               </span>
             </div>
             <div className="mb-2 flex items-center justify-between text-xs">
-              <span className="text-white">Critical Threats</span>
+              <span className="text-foreground">Critical Threats</span>
               <span className="font-mono font-bold text-destructive">
                 {
                   allTargets.filter((t) => t.severity === "CRITICAL")

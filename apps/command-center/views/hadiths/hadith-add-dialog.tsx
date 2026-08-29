@@ -96,7 +96,7 @@ export function HadithAddDialog({
             <Button variant="outline" type="button" onClick={onClose}>
               Batal
             </Button>
-            <Button type="submit" className="bg-primary font-bold text-white hover:bg-primary">
+            <Button type="submit" className="bg-primary font-bold text-foreground hover:bg-primary">
               Simpan Hadits
             </Button>
           </div>

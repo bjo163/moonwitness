@@ -107,7 +107,7 @@ export function QariSelectorModal() {
                 onClick={() => selectQari(qari.id)}
                 className={`rounded-md flex w-full items-center justify-between border p-3.5 text-left transition-all ${
                   isSelected
-                    ? "bg-success/15 border-success text-white shadow-sm"
+                    ? "bg-success/15 border-success text-foreground shadow-sm"
                     : "bg-background hover:border-success/50 border-primary/20 text-muted hover:text-foreground"
                 }`}
               >

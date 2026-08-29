@@ -13,7 +13,7 @@ export function AviationTrafficWidget({
     .slice(0, 10)
 
   return (
-    <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3 xl:col-span-2">
+    <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-3 xl:col-span-2">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2 text-[9px] font-black tracking-widest text-primary uppercase">
           AVIATION NETWORK
@@ -35,16 +35,16 @@ export function AviationTrafficWidget({
           displayFlights.map((f, i) => (
             <div
               key={f.icao24}
-              className="group flex cursor-pointer gap-2 rounded border border-transparent p-1 transition-colors hover:border-white/5 hover:bg-white/5"
+              className="group flex cursor-pointer gap-2 rounded border border-transparent p-1 transition-colors hover:border-border hover:bg-muted/30"
             >
               <div className="mt-0.5 w-6 font-mono text-[8px] text-primary">
                 {f.callsign}
               </div>
-              <div className="bg-background flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-white/10">
-                <Plane className="h-3 w-3 text-secondary group-hover:text-white" />
+              <div className="bg-background flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border">
+                <Plane className="h-3 w-3 text-secondary group-hover:text-foreground" />
               </div>
               <div className="flex-1">
-                <div className="mb-0.5 text-[9px] leading-tight font-bold text-white">
+                <div className="mb-0.5 text-[9px] leading-tight font-bold text-foreground">
                   {f.origin_country}
                 </div>
                 <div className="max-w-[100px] truncate text-[7px] text-primary">
@@ -59,7 +59,7 @@ export function AviationTrafficWidget({
         )}
       </div>
 
-      <button className="mt-2 flex w-full items-center justify-center gap-1 border-t border-white/10 pt-2 text-center text-[8px] font-bold tracking-widest text-primary uppercase hover:text-white">
+      <button className="mt-2 flex w-full items-center justify-center gap-1 border-t border-border pt-2 text-center text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
         VIEW FULL NETWORK <ArrowRight className="h-2.5 w-2.5" />
       </button>
     </div>

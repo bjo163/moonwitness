@@ -434,7 +434,7 @@ export function IntelligenceGraphView() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 border border-primary/30 bg-black/50 p-2 text-[10px] font-bold backdrop-blur-sm">
+          <div className="flex items-center gap-4 border border-primary/30 bg-card p-2 text-[10px] font-bold backdrop-blur-sm">
             <span className="flex items-center gap-1">
               <span className="h-2 w-2 rounded-full bg-primary" /> TOKOH
             </span>
@@ -462,14 +462,14 @@ export function IntelligenceGraphView() {
 
         {/* Selected Node display */}
         {hoveredNode && (
-          <div className="pointer-events-none absolute right-6 bottom-6 z-10 max-w-[300px] border border-primary bg-black/80 p-4 shadow-sm backdrop-blur-md">
+          <div className="pointer-events-none absolute right-6 bottom-6 z-10 max-w-[300px] border border-primary bg-card p-4 shadow-sm backdrop-blur-md">
             <div className="mb-2 flex items-center gap-2 border-b border-primary/20 pb-2">
               <Scan className="animate-spin-slow h-4 w-4 text-accent" />
               <span className="text-xs font-bold tracking-widest text-primary">
                 TARGET ACQUIRED
               </span>
             </div>
-            <h3 className="text-xl font-black text-white">
+            <h3 className="text-xl font-black text-foreground">
               {hoveredNode.label}
             </h3>
             <div className="mt-1 text-[10px] text-primary/70 uppercase">

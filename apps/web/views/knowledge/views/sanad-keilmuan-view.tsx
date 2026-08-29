@@ -95,7 +95,7 @@ export function SanadKeilmuanView() {
                 <h3 className="font-sans text-base font-black text-foreground">
                   {node.name}
                 </h3>
-                <span className="rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-500 px-2 py-0.5 font-mono text-[9px] font-bold">
+                <span className="rounded-md border border-amber-500/40 bg-warning/10 text-warning px-2 py-0.5 font-mono text-[9px] font-bold">
                   {node.title}
                 </span>
 

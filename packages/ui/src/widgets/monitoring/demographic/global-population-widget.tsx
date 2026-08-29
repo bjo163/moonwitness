@@ -39,7 +39,7 @@ export function GlobalPopulationWidget() {
   }, [])
 
   return (
-    <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-4 xl:col-span-3">
+    <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-4 xl:col-span-3">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2 text-[9px] font-black tracking-widest text-primary uppercase">
           GLOBAL POPULATION PULSE
@@ -50,8 +50,8 @@ export function GlobalPopulationWidget() {
       </div>
 
       <div className="flex flex-1 flex-col items-center justify-center py-4">
-        <Users className="mb-2 h-8 w-8 text-white/20" />
-        <div className="font-mono text-3xl font-black tracking-widest text-white drop-shadow-sm">
+        <Users className="mb-2 h-8 w-8 text-foreground/20" />
+        <div className="font-mono text-3xl font-black tracking-widest text-foreground drop-shadow-sm">
           {population.toLocaleString("en-US")}
         </div>
         <div className="mt-1 text-[10px] font-bold tracking-widest text-primary uppercase">
@@ -59,11 +59,11 @@ export function GlobalPopulationWidget() {
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-2 border-t border-white/10 pt-4">
-        <div className="border-success/10 flex items-center gap-3 rounded border bg-white/5 p-2">
+      <div className="mt-4 grid grid-cols-2 gap-2 border-t border-border pt-4">
+        <div className="border-success/10 flex items-center gap-3 rounded border bg-muted/30 p-2">
           <HeartPulse className="text-success h-5 w-5 animate-pulse" />
           <div>
-            <div className="text-[8px] font-bold text-white/50 uppercase">
+            <div className="text-[8px] font-bold text-foreground/50 uppercase">
               Births Today
             </div>
             <div className="text-success font-mono text-sm font-black">
@@ -71,13 +71,13 @@ export function GlobalPopulationWidget() {
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-3 rounded border border-red-500/10 bg-white/5 p-2">
-          <Skull className="h-5 w-5 text-red-500" />
+        <div className="flex items-center gap-3 rounded border border-red-500/10 bg-muted/30 p-2">
+          <Skull className="h-5 w-5 text-destructive" />
           <div>
-            <div className="text-[8px] font-bold text-white/50 uppercase">
+            <div className="text-[8px] font-bold text-foreground/50 uppercase">
               Deaths Today
             </div>
-            <div className="font-mono text-sm font-black text-red-500">
+            <div className="font-mono text-sm font-black text-destructive">
               -{deathsToday.toLocaleString()}
             </div>
           </div>

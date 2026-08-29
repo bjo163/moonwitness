@@ -34,9 +34,9 @@ export function LunarCalendarGrid({
   onSelectDay
 }: LunarCalendarGridProps) {
   return (
-    <div className="space-y-2 rounded-xl border border-white/10 bg-card p-4 shadow-xl">
+    <div className="space-y-2 rounded-xl border border-border bg-card p-4 shadow-xl">
       {/* Weekday headers */}
-      <div className="grid grid-cols-7 gap-1 border-b border-white/10 pb-2 text-center font-mono text-[9px] font-black text-amber-400/80 uppercase">
+      <div className="grid grid-cols-7 gap-1 border-b border-border pb-2 text-center font-mono text-[9px] font-black text-warning/80 uppercase">
         {WEEKDAYS.map((d, i) => (
           <div key={i}>{d}</div>
         ))}
@@ -54,8 +54,8 @@ export function LunarCalendarGrid({
                 isSelected
                   ? "border-amber-500 bg-muted shadow-sm"
                   : day.isAyyamulBidh
-                  ? "border-amber-500/30 bg-card hover:border-amber-500/60"
-                  : "border-white/5 bg-muted hover:border-white/20 hover:bg-card"
+                  ? "border-warning/30 bg-card hover:border-amber-500/60"
+                  : "border-border bg-muted hover:border-border hover:bg-card"
               }`}
             >
               {/* Top Numbers */}
@@ -63,15 +63,15 @@ export function LunarCalendarGrid({
                 <span
                   className={`text-sm font-black ${
                     isSelected
-                      ? "text-amber-400"
+                      ? "text-warning"
                       : day.isAyyamulBidh
                       ? "text-amber-300"
-                      : "text-white"
+                      : "text-foreground"
                   }`}
                 >
                   {day.hijriDay}
                 </span>
-                <span className="text-[8px] text-white/40">
+                <span className="text-[8px] text-foreground/40">
                   {day.gregorianDay} {day.gregorianMonthName}
                 </span>
               </div>
@@ -79,14 +79,14 @@ export function LunarCalendarGrid({
               {/* Moon Phase Icon & Illumination */}
               <div className="my-1 flex items-center justify-between text-xs">
                 <span className="text-base">{day.icon}</span>
-                <span className="font-mono text-[8px] text-white/40">
+                <span className="font-mono text-[8px] text-foreground/40">
                   {day.illumination}%
                 </span>
               </div>
 
               {/* Tag / Ayyamul Bidh */}
               {day.isAyyamulBidh && (
-                <div className="truncate rounded bg-amber-500/20 px-1 py-0.5 text-center font-mono text-[7px] font-bold text-amber-300">
+                <div className="truncate rounded bg-warning/20 px-1 py-0.5 text-center font-mono text-[7px] font-bold text-amber-300">
                   AYYAMUL BIDH
                 </div>
               )}

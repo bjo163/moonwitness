@@ -39,8 +39,8 @@ export function ErpProfileView() {
   return (
     <div className="mx-auto w-full max-w-[1600px] animate-in px-4 pb-12 duration-700 fade-in sm:px-6 lg:px-8">
       <ContextBlock
-        title={isOwnProfile ? "OPERATOR PROFILE" : "PROFILE OBSERVATION"}
-        subtitle={isOwnProfile ? "Review your operational identity, mission progress, and account actions." : "Read-only view of an operator profile in the command center."}
+        title={isOwnProfile ? "USER PROFILE" : "PROFILE OVERVIEW"}
+        subtitle={isOwnProfile ? "Review your account identity, activity progress, and settings." : "Read-only view of a user profile in the operations terminal."}
         operation="PROFILE-MGMT"
         status="ONLINE"
         accentColor="system"
@@ -68,7 +68,7 @@ export function ErpProfileView() {
         <div className="space-y-6 lg:col-span-4 xl:col-span-3">
           <ProfileCard profileData={profileData} isOwnProfile={isOwnProfile} />
           <MissionSummary />
-          <div className="rounded-xl border border-border bg-black/40 p-4 backdrop-blur-md">
+          <div className="rounded-xl border border-border bg-card p-4 backdrop-blur-md">
             <h3 className="mb-4 font-sans text-[10px] font-bold tracking-widest text-primary uppercase">
               System Status
             </h3>
@@ -77,10 +77,10 @@ export function ErpProfileView() {
               <div className="absolute h-24 w-24 animate-[spin_4s_linear_infinite_reverse] rounded-full border-t border-r border-fuchsia-500/50" />
               <div className="absolute h-16 w-16 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite] rounded-full border-b border-l border-border" />
               <div className="z-10 text-center">
-                <span className="block font-sans text-xs text-emerald-400">
+                <span className="block font-sans text-xs text-success">
                   All Systems Operational
                 </span>
-                <span className="font-mono text-[9px] text-slate-500">
+                <span className="font-mono text-[9px] text-muted-foreground">
                   Uptime: 134d 21h 43m
                 </span>
               </div>

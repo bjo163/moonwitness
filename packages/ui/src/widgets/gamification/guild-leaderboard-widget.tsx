@@ -31,7 +31,7 @@ export function GuildLeaderboardWidget() {
               className={`relative flex items-center justify-between overflow-hidden rounded-xl border p-3 transition-all ${
                 isMember
                   ? "border-fuchsia-500/50 bg-fuchsia-500/10 shadow-sm"
-                  : "border-transparent bg-black/40 hover:bg-black/60"
+                  : "border-transparent bg-card hover:bg-card"
               }`}
             >
               {isMember && (
@@ -44,7 +44,7 @@ export function GuildLeaderboardWidget() {
                 <span className="text-lg">{g.icon}</span>
                 <div>
                   <div
-                    className={`font-sans text-xs font-bold tracking-wider uppercase ${isMember ? "text-fuchsia-300" : "text-white"}`}
+                    className={`font-sans text-xs font-bold tracking-wider uppercase ${isMember ? "text-fuchsia-300" : "text-foreground"}`}
                   >
                     {g.name}
                   </div>
@@ -61,7 +61,7 @@ export function GuildLeaderboardWidget() {
                 {isMember ? (
                   <button
                     onClick={leaveGuild}
-                    className="text-[8px] font-bold tracking-widest text-slate-500 uppercase hover:text-white"
+                    className="text-[8px] font-bold tracking-widest text-muted-foreground uppercase hover:text-foreground"
                   >
                     [ LEAVE ]
                   </button>

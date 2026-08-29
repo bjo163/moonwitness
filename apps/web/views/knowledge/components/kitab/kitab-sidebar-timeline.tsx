@@ -34,7 +34,7 @@ export function KitabLeftSidebar({ activeCollection, onCollectionChange }: Kitab
               className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-xs font-bold transition-all ${isActive ? "border border-primary/30 bg-primary/10 text-primary" : "text-muted-foreground hover:bg-accent hover:text-foreground"}`}
             >
               <BookOpen
-                className={`h-3.5 w-3.5 ${i === 0 ? "text-blue-400" : "text-white/30"}`}
+                className={`h-3.5 w-3.5 ${i === 0 ? "text-blue-400" : "text-foreground/30"}`}
               />
               {item}
             </button>
@@ -58,7 +58,7 @@ export function KitabLeftSidebar({ activeCollection, onCollectionChange }: Kitab
           ].map((item, i) => (
             <button
               key={i}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-[11px] font-medium text-white/50 transition-all hover:bg-white/5 hover:text-white"
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-[11px] font-medium text-foreground/50 transition-all hover:bg-muted/30 hover:text-foreground"
             >
               <div className="flex h-4 w-4 items-center justify-center rounded-full bg-blue-500/10">
                 <Star className="h-2 w-2 text-blue-400/50" />
@@ -152,13 +152,13 @@ export function KitabRightTimeline() {
           </p>
           <ul className="mb-5 space-y-1.5 text-[8.5px] text-muted-foreground">
             <li className="flex items-start gap-1.5">
-              <Check className="h-3 w-3 shrink-0 text-emerald-500" /> Clarifies & Confirms
+              <Check className="h-3 w-3 shrink-0 text-success" /> Clarifies & Confirms
             </li>
             <li className="flex items-start gap-1.5">
-              <Check className="h-3 w-3 shrink-0 text-emerald-500" /> Completes Previous Scriptures
+              <Check className="h-3 w-3 shrink-0 text-success" /> Completes Previous Scriptures
             </li>
             <li className="flex items-start gap-1.5">
-              <Check className="h-3 w-3 shrink-0 text-emerald-500" /> Preserved Eternally by Allah SWT
+              <Check className="h-3 w-3 shrink-0 text-success" /> Preserved Eternally by Allah SWT
             </li>
           </ul>
           <button className="w-full rounded border border-border bg-muted/40 py-1.5 text-[9px] font-black text-foreground uppercase transition-colors hover:bg-muted">
@@ -170,12 +170,12 @@ export function KitabRightTimeline() {
       {/* Arabic Quote */}
       <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-xl border border-warning/20 bg-card p-5 text-center shadow-lg">
         <div className="absolute inset-0 bg-gradient-to-t from-amber-500/10 to-transparent opacity-50" />
-        <div className="font-arabic relative z-10 mb-2 text-xl text-amber-400 drop-shadow-md">
+        <div className="font-arabic relative z-10 mb-2 text-xl text-warning drop-shadow-md">
           كُلُّ نَفْسٍ ذَائِقَةُ الْمَوْتِ
         </div>
-        <p className="relative z-10 text-[9px] text-white/60 italic">
+        <p className="relative z-10 text-[9px] text-foreground/60 italic">
           &ldquo;Every soul will taste death.&rdquo;
-          <span className="mt-1 block text-[8px] text-white/30 not-italic">
+          <span className="mt-1 block text-[8px] text-foreground/30 not-italic">
             (QS. Ali Imran 3:185)
           </span>
         </p>

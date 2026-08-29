@@ -263,7 +263,7 @@ export function ModelFormModal({
           {/* Scheduled Activities Panel */}
           {isEdit && formConfig?.chatter && (
             <div className="space-y-3 pt-4 border-t border-border">
-              <h3 className="flex items-center gap-2 text-xs font-bold text-amber-500 tracking-wider uppercase">
+              <h3 className="flex items-center gap-2 text-xs font-bold text-warning tracking-wider uppercase">
                 <CalendarCheck className="w-3.5 h-3.5" /> Scheduled Activities & Reminders
               </h3>
               <div className="space-y-2 max-h-36 overflow-y-auto">
@@ -271,7 +271,7 @@ export function ModelFormModal({
                   <p className="text-[11px] text-muted-foreground font-sans">No pending activities.</p>
                 ) : (
                   activities.map((act) => (
-                    <div key={act.id} className="flex items-center justify-between p-2 bg-amber-500/5 border border-amber-500/20 rounded-lg text-xs font-sans">
+                    <div key={act.id} className="flex items-center justify-between p-2 bg-amber-500/5 border border-warning/20 rounded-lg text-xs font-sans">
                       <div>
                         <span className="text-foreground font-semibold">{act.summary}</span>
                         <div className="text-[10px] text-muted-foreground">Due: {String(act.dateDue).slice(0, 10)}</div>
@@ -279,7 +279,7 @@ export function ModelFormModal({
                       <button
                         type="button"
                         onClick={() => handleCompleteActivity(act.id)}
-                        className="flex items-center gap-1 px-2 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded text-[10px] text-emerald-500 hover:bg-emerald-500/20 uppercase font-semibold"
+                        className="flex items-center gap-1 px-2 py-1 bg-success/10 border border-success/30 rounded text-[10px] text-success hover:bg-success/20 uppercase font-semibold"
                       >
                         <CheckCircle2 className="w-3 h-3" /> Done
                       </button>
@@ -304,7 +304,7 @@ export function ModelFormModal({
                 <button
                   type="button"
                   onClick={handleScheduleActivity}
-                  className="px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-lg text-amber-500 text-xs font-medium hover:bg-amber-500/20 uppercase"
+                  className="px-3 py-1.5 bg-warning/10 border border-warning/30 rounded-lg text-warning text-xs font-medium hover:bg-warning/20 uppercase"
                 >
                   Schedule
                 </button>

@@ -8,9 +8,9 @@ export function GlobalPrayerNetworkWidget({
   globalPrayers?: GlobalCityPrayer[]
 }) {
   return (
-    <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3 xl:col-span-3">
+    <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-3 xl:col-span-3">
       <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-[9px] font-black tracking-widest text-white uppercase">
+        <div className="flex items-center gap-2 text-[9px] font-black tracking-widest text-foreground uppercase">
           GLOBAL PRAYER NETWORK
           <span className="animate-pulse rounded-[2px] border border-primary/30 bg-primary/20 px-1.5 py-0.5 text-[8px] text-primary">
             ALADHAN SYNC
@@ -37,7 +37,7 @@ export function GlobalPrayerNetworkWidget({
                     {gp.city}, {gp.country}
                   </div>
                 </div>
-                <div className="mt-2 grid grid-cols-5 gap-1 text-center font-mono text-[8px] text-white/70">
+                <div className="mt-2 grid grid-cols-5 gap-1 text-center font-mono text-[8px] text-foreground">
                   <div className="flex flex-col">
                     <span className="text-primary">Fajr</span>
                     <span>{gp.prayerTimes.Fajr}</span>
@@ -65,7 +65,7 @@ export function GlobalPrayerNetworkWidget({
         )}
       </div>
 
-      <button className="mt-2 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-white">
+      <button className="mt-2 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
         VIEW FULL NETWORK <ArrowRight className="h-2.5 w-2.5" />
       </button>
     </div>

@@ -187,7 +187,7 @@ export function MercyButton({ requestId, onMercySent }: MercyButtonProps) {
           ? "border-yellow-300/80 bg-yellow-400/20 text-yellow-200 shadow-sm"
           : sent
             ? "border-yellow-400/50 bg-yellow-400/10 text-yellow-300"
-            : "border-yellow-400/20 bg-transparent text-yellow-400/50 hover:border-yellow-400/50 hover:bg-yellow-400/10 hover:text-yellow-300 hover:shadow-sm"
+            : "border-yellow-400/20 bg-transparent text-warning/50 hover:border-yellow-400/50 hover:bg-yellow-400/10 hover:text-yellow-300 hover:shadow-sm"
       } `}
     >
       <Heart
@@ -276,9 +276,9 @@ const TIER_CONFIG: Record<
   SHADOW: {
     label: "SHADOW",
     icon: <Star className="h-3 w-3" />,
-    color: "text-white",
-    border: "border-white/20",
-    bg: "bg-white/5",
+    color: "text-foreground",
+    border: "border-border",
+    bg: "bg-muted/30",
     align: "items-end",
   },
   HUMAN: {
@@ -350,7 +350,7 @@ function WhisperBubble({
         >
           {cfg.icon} {cfg.label}
         </span>
-        <span className="font-mono text-[8px] text-white/20">
+        <span className="font-mono text-[8px] text-foreground/20">
           {formatDate(whisper.createdAt)}
         </span>
       </div>
@@ -367,7 +367,7 @@ function WhisperBubble({
         <div className={`mt-2 flex items-center justify-between gap-2`}>
           <span
             className={`flex items-center gap-1 font-mono text-[8px] ${
-              timeLeft.urgent ? "text-yellow-400/70" : "text-white/20"
+              timeLeft.urgent ? "text-warning/70" : "text-foreground/20"
             }`}
           >
             <Clock className="h-2.5 w-2.5" />
@@ -375,7 +375,7 @@ function WhisperBubble({
           </span>
           <button
             onClick={() => onDelete(whisper.id)}
-            className="text-white/15 transition-colors hover:text-red-400/60"
+            className="text-foreground/15 transition-colors hover:text-destructive/60"
             title="Hapus whisper"
           >
             <Trash2 className="h-3 w-3" />
@@ -451,14 +451,14 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`flex w-full items-center justify-between gap-2 rounded-none px-2 py-2 font-mono text-[10px] tracking-widest uppercase transition-all ${
-          isOpen ? "text-yellow-400" : "text-muted-foreground hover:text-foreground"
+          isOpen ? "text-warning" : "text-muted-foreground hover:text-foreground"
         } `}
       >
         <span className="flex items-center gap-2">
           <MessageCircle className="h-3.5 w-3.5" />
           WHISPER CHANNEL
           {activeCount > 0 && (
-            <span className="rounded-md border border-yellow-400/30 px-1.5 py-0.5 text-[8px] text-yellow-400">
+            <span className="rounded-md border border-yellow-400/30 px-1.5 py-0.5 text-[8px] text-warning">
               {activeCount}
             </span>
           )}
@@ -476,8 +476,8 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
         <div className="mt-2 flex flex-col gap-3">
           {/* Theology note */}
           <div className="flex items-start gap-2 rounded-none border border-yellow-400/20 bg-yellow-400/5 px-3 py-2">
-            <Infinity className="mt-0.5 h-3 w-3 shrink-0 text-yellow-400/60" />
-            <p className="font-mono text-[9px] text-yellow-400/80 italic">
+            <Infinity className="mt-0.5 h-3 w-3 shrink-0 text-warning/60" />
+            <p className="font-mono text-[9px] text-warning/80 italic">
               Whisper ini bersifat fana — ia akan berakhir pada masanya.
               &quot;Kullu man &apos;alayha fan.&quot; QS 55:26
             </p>
@@ -528,7 +528,7 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
                     <span className="font-mono text-[10px] font-bold text-foreground">
                       {opt.label} — {opt.desc}
                     </span>
-                    <span className="font-mono text-[8px] text-yellow-400/80">
+                    <span className="font-mono text-[8px] text-warning/80">
                       {opt.ref}
                     </span>
                   </button>
@@ -574,7 +574,7 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
             <button
               onClick={handleSend}
               disabled={!inputValue.trim()}
-              className="rounded-lg border border-yellow-400/30 bg-yellow-400/10 px-3 py-2 text-yellow-400 transition-all hover:bg-yellow-400/20 hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-30"
+              className="rounded-lg border border-yellow-400/30 bg-yellow-400/10 px-3 py-2 text-warning transition-all hover:bg-yellow-400/20 hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-30"
             >
               <Send className="h-3.5 w-3.5" />
             </button>
@@ -582,8 +582,8 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
 
           {/* Warning */}
           <div className="flex items-center gap-2">
-            <AlertTriangle className="h-3 w-3 shrink-0 text-white/15" />
-            <p className="font-mono text-[8px] text-white/15">
+            <AlertTriangle className="h-3 w-3 shrink-0 text-foreground/15" />
+            <p className="font-mono text-[8px] text-foreground/15">
               Whisper disimpan secara lokal. Tidak ada server. Akan hilang
               otomatis sesuai masa yang dipilih.
             </p>

@@ -234,7 +234,7 @@ export function RandomWarpGenerator() {
                     playClickSound()
                     setIsOpen(false)
                   }}
-                  className="bg-background flex items-center gap-1 rounded border border-primary/20 px-2.5 py-1 text-xs font-bold text-primary transition-all hover:border-primary/60 hover:text-white"
+                  className="bg-background flex items-center gap-1 rounded border border-primary/20 px-2.5 py-1 text-xs font-bold text-primary transition-all hover:border-primary/60 hover:text-foreground"
                 >
                   <span>[✕ CLOSE]</span>
                 </button>
@@ -258,11 +258,11 @@ export function RandomWarpGenerator() {
                   warpData && (
                     <div className="animate-in space-y-4 fade-in">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className="rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-500 px-2 py-0.5 font-mono text-[10px]">
+                        <span className="rounded-md border border-emerald-500/40 bg-success/10 text-success px-2 py-0.5 font-mono text-[10px]">
                           📖 Q.S {warpData.surahName} ({warpData.surahNumber}:
                           {warpData.ayahNumber})
                         </span>
-                        <span className="rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-500 px-2 py-0.5 font-mono text-[9px]">
+                        <span className="rounded-md border border-amber-500/40 bg-warning/10 text-warning px-2 py-0.5 font-mono text-[9px]">
                           ✨ {warpData.asmaulName}
                         </span>
                       </div>

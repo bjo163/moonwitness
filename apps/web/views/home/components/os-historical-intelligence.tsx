@@ -146,21 +146,21 @@ export function OSHistoricalIntelligence() {
 
       <div className="relative z-10 mx-auto max-w-7xl space-y-8 px-6 sm:px-10">
         {/* ═══ SECTION HEADER: MATCHING BLUEPRINT 06 ═════════════════════════ */}
-        <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-6 xl:flex-row xl:items-end">
+        <div className="flex flex-col justify-between gap-6 border-b border-border pb-6 xl:flex-row xl:items-end">
           <div className="max-w-3xl space-y-4">
             <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-teal-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-teal-300 uppercase shadow-sm">
-              <span className="rounded-xs bg-teal-500 px-1.5 py-0.5 font-black text-black">
+              <span className="rounded-xs bg-teal-500 px-1.5 py-0.5 font-black text-foreground">
                 06
               </span>
               <span>HISTORICAL INTELLIGENCE</span>
             </div>
-            <h2 className="font-mono text-2xl font-black tracking-wider text-white uppercase drop-shadow-sm sm:text-4xl">
+            <h2 className="font-mono text-2xl font-black tracking-wider text-foreground uppercase drop-shadow-sm sm:text-4xl">
               Timeline of Prophets, Civilizations, and Divine Events
             </h2>
           </div>
 
           <div className="flex w-full shrink-0 flex-col items-center gap-4 md:flex-row xl:w-auto">
-            <div className="hide-scrollbar flex w-full items-center gap-2 overflow-x-auto pb-2 text-[10px] font-bold tracking-wider text-white uppercase md:w-auto md:pb-0">
+            <div className="hide-scrollbar flex w-full items-center gap-2 overflow-x-auto pb-2 text-[10px] font-bold tracking-wider text-foreground uppercase md:w-auto md:pb-0">
               <span className="mr-2 text-primary">FILTER BY:</span>
               {[
                 "ALL",
@@ -172,7 +172,7 @@ export function OSHistoricalIntelligence() {
               ].map((f, i) => (
                 <button
                   key={i}
-                  className={`border px-3 py-1.5 ${i === 0 ? "border-teal-400 bg-teal-900/40 text-teal-300 shadow-sm" : "border-white/15 hover:border-teal-500/50"} shrink-0 rounded transition-all`}
+                  className={`border px-3 py-1.5 ${i === 0 ? "border-teal-400 bg-teal-900/40 text-teal-300 shadow-sm" : "border-border hover:border-teal-500/50"} shrink-0 rounded transition-all`}
                 >
                   {f}
                 </button>
@@ -183,7 +183,7 @@ export function OSHistoricalIntelligence() {
               <input
                 type="text"
                 placeholder="Search timeline..."
-                className="bg-background w-full rounded-md border border-white/20 py-1.5 pr-4 pl-9 font-mono text-xs text-white focus:border-teal-400 focus:outline-none"
+                className="bg-background w-full rounded-md border border-border py-1.5 pr-4 pl-9 font-mono text-xs text-foreground focus:border-teal-400 focus:outline-none"
               />
             </div>
           </div>
@@ -196,7 +196,7 @@ export function OSHistoricalIntelligence() {
             {/* Timeline Overview & Hologram */}
             <Panel
               accentColor="secondary"
-              className="bg-background/80 group flex cursor-pointer flex-col p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/50 hover:shadow-sm"
+              className="bg-background/80 group flex cursor-pointer flex-col p-6 backdrop-blur-xl transition-all duration-300 hover:border-border hover:shadow-sm"
             >
               <div className="mb-4 text-xs font-black tracking-wider text-teal-400 uppercase">
                 TIMELINE OVERVIEW
@@ -209,9 +209,9 @@ export function OSHistoricalIntelligence() {
                 <div className="absolute top-0 left-1/2 h-full w-px bg-teal-400/30 shadow-sm" />
               </div>
 
-              <div className="grid grid-cols-4 gap-2 border-t border-white/10 pt-4 text-center">
+              <div className="grid grid-cols-4 gap-2 border-t border-border pt-4 text-center">
                 <div>
-                  <div className="text-lg font-black text-white">7</div>
+                  <div className="text-lg font-black text-foreground">7</div>
                   <div className="text-[7px] text-primary uppercase">
                     PROPHETS
                   </div>
@@ -223,7 +223,7 @@ export function OSHistoricalIntelligence() {
                   </div>
                 </div>
                 <div>
-                  <div className="text-lg font-black text-amber-400">152</div>
+                  <div className="text-lg font-black text-warning">152</div>
                   <div className="text-[7px] text-primary uppercase">
                     KEY EVENTS
                   </div>
@@ -242,25 +242,25 @@ export function OSHistoricalIntelligence() {
               accentColor="secondary"
               className="bg-background/80 p-5 backdrop-blur-xl"
             >
-              <div className="mb-4 text-xs font-black tracking-wider text-white uppercase">
+              <div className="mb-4 text-xs font-black tracking-wider text-foreground uppercase">
                 TIME RANGE
               </div>
               <div className="mb-2 flex items-end justify-between">
                 <div>
                   <div className="text-[9px] text-primary">FROM</div>
                   <div className="text-lg font-black text-teal-400">-4000</div>
-                  <div className="text-[9px] text-white">BEFORE CE</div>
+                  <div className="text-[9px] text-foreground">BEFORE CE</div>
                 </div>
                 <div className="text-right">
                   <div className="text-[9px] text-primary">TO</div>
                   <div className="text-lg font-black text-primary">2025</div>
-                  <div className="text-[9px] text-white">CE</div>
+                  <div className="text-[9px] text-foreground">CE</div>
                 </div>
               </div>
-              <div className="relative mt-4 h-1 w-full rounded-full bg-white/10">
+              <div className="relative mt-4 h-1 w-full rounded-full bg-muted/30">
                 <div className="absolute right-[5%] left-[10%] h-full bg-gradient-to-r from-teal-400 to-transparent shadow-sm" />
-                <div className="absolute top-1/2 left-[10%] h-3 w-3 -translate-y-1/2 rounded-full bg-white shadow-sm" />
-                <div className="absolute top-1/2 right-[5%] h-3 w-3 -translate-y-1/2 rounded-full bg-white shadow-sm" />
+                <div className="absolute top-1/2 left-[10%] h-3 w-3 -translate-y-1/2 rounded-full bg-card shadow-sm" />
+                <div className="absolute top-1/2 right-[5%] h-3 w-3 -translate-y-1/2 rounded-full bg-card shadow-sm" />
               </div>
             </Panel>
 
@@ -269,7 +269,7 @@ export function OSHistoricalIntelligence() {
               accentColor="secondary"
               className="bg-background/80 flex flex-1 flex-col p-5 backdrop-blur-xl"
             >
-              <div className="mb-4 text-xs font-black tracking-wider text-white uppercase">
+              <div className="mb-4 text-xs font-black tracking-wider text-foreground uppercase">
                 SCRIPTURE REFERENCES
               </div>
               <div className="flex-1 space-y-3 font-mono text-xs">
@@ -284,15 +284,15 @@ export function OSHistoricalIntelligence() {
                     key={i}
                     className="group flex cursor-pointer items-center justify-between"
                   >
-                    <span className="flex items-center gap-2 font-bold text-primary transition-colors group-hover:text-white">
+                    <span className="flex items-center gap-2 font-bold text-primary transition-colors group-hover:text-foreground">
                       <Book className="h-3.5 w-3.5" style={{ color: s.c }} />
                       {s.n}
                     </span>
-                    <span className="font-black text-white">{s.v}</span>
+                    <span className="font-black text-foreground">{s.v}</span>
                   </div>
                 ))}
               </div>
-              <button className="mt-2 flex items-center justify-end gap-1 border-t border-white/10 pt-4 text-right text-[10px] font-bold text-teal-400 uppercase transition-colors hover:text-white">
+              <button className="mt-2 flex items-center justify-end gap-1 border-t border-border pt-4 text-right text-[10px] font-bold text-teal-400 uppercase transition-colors hover:text-foreground">
                 VIEW ALL REFERENCES <ChevronRight className="h-3 w-3" />
               </button>
             </Panel>
@@ -301,7 +301,7 @@ export function OSHistoricalIntelligence() {
           {/* RIGHT MAIN CAROUSELS (Col 4-12) */}
           <div className="space-y-6 lg:col-span-9">
             {/* TOP CAROUSEL: THE JOURNEY OF GUIDANCE */}
-            <div className="bg-background relative rounded-xl border-2 border-white/10 p-6 shadow-sm">
+            <div className="bg-background relative rounded-xl border-2 border-border p-6 shadow-sm">
               <div className="mb-4 flex items-center justify-between text-xs font-black tracking-widest text-primary uppercase">
                 <span>--- THE JOURNEY OF GUIDANCE ---</span>
               </div>
@@ -312,22 +312,22 @@ export function OSHistoricalIntelligence() {
                     key={i}
                     className="min-w-[180px] flex-shrink-0 snap-start sm:min-w-[220px]"
                   >
-                    <div className="bg-background group relative flex h-64 flex-col justify-between overflow-hidden rounded-xl border border-white/15 shadow-lg">
+                    <div className="bg-background group relative flex h-64 flex-col justify-between overflow-hidden rounded-xl border border-border shadow-lg">
                       {/* Gradient Fallback Art Background */}
-                      <div className="absolute inset-0 z-10 bg-gradient-to-br from-black/80 via-black/40 to-transparent" />
+                      <div className="absolute inset-0 z-10 bg-gradient-to-br from-card via-card/40 to-transparent" />
                       <div
                         className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-luminosity transition-transform duration-700 group-hover:scale-110"
                         style={{ backgroundImage: `url(${p.img})` }}
                       />
 
-                      <div className="from-space absolute inset-0 z-10 bg-gradient-to-t via-transparent to-transparent" />
+                      <div className="from-background absolute inset-0 z-10 bg-gradient-to-t via-transparent to-transparent" />
 
                       {/* Header */}
                       <div className="relative z-20 p-4">
-                        <div className="mb-2 flex h-6 w-6 items-center justify-center rounded-sm border border-white/20 bg-black/50 text-[10px] font-black text-white/70 backdrop-blur-sm">
+                        <div className="mb-2 flex h-6 w-6 items-center justify-center rounded-sm border border-border bg-card text-[10px] font-black text-foreground backdrop-blur-sm">
                           {p.num}
                         </div>
-                        <div className="text-lg font-black text-white drop-shadow-md">
+                        <div className="text-lg font-black text-foreground drop-shadow-md">
                           {p.name}
                         </div>
                         <div className="mt-1 font-mono text-[10px] text-primary">
@@ -342,7 +342,7 @@ export function OSHistoricalIntelligence() {
                             className="mt-0.5 h-4 w-4 shrink-0"
                             style={{ color: p.color }}
                           />
-                          <div className="text-[10px] leading-tight font-bold tracking-wider text-white/90 uppercase">
+                          <div className="text-[10px] leading-tight font-bold tracking-wider text-foreground uppercase">
                             {p.title}
                             <br />
                             <span style={{ color: p.color }}>{p.sub}</span>
@@ -355,7 +355,7 @@ export function OSHistoricalIntelligence() {
               </div>
 
               {/* Connected Timeline Dots below carousel */}
-              <div className="absolute right-6 bottom-6 left-6 z-0 flex h-0.5 justify-between bg-white/10">
+              <div className="absolute right-6 bottom-6 left-6 z-0 flex h-0.5 justify-between bg-muted/30">
                 {prophets.map((p, i) => (
                   <div
                     key={i}
@@ -365,19 +365,19 @@ export function OSHistoricalIntelligence() {
                       boxShadow: `0 0 10px ${p.color}`,
                     }}
                   >
-                    <div className="absolute -top-6 left-1/2 h-6 w-px -translate-x-1/2 bg-white/10" />
+                    <div className="absolute -top-6 left-1/2 h-6 w-px -translate-x-1/2 bg-muted/30" />
                   </div>
                 ))}
               </div>
 
               {/* Right Chevron Overlay */}
-              <button className="from-space absolute top-1/2 right-0 z-20 flex h-full w-12 -translate-y-1/2 items-center justify-end bg-gradient-to-l to-transparent pr-2 opacity-0 transition-opacity hover:opacity-100">
-                <ChevronRight className="h-8 w-8 text-white drop-shadow-lg" />
+              <button className="from-background absolute top-1/2 right-0 z-20 flex h-full w-12 -translate-y-1/2 items-center justify-end bg-gradient-to-l to-transparent pr-2 opacity-0 transition-opacity hover:opacity-100">
+                <ChevronRight className="h-8 w-8 text-foreground drop-shadow-lg" />
               </button>
             </div>
 
             {/* MIDDLE CAROUSEL: MAJOR CIVILIZATIONS */}
-            <div className="bg-background relative rounded-xl border-2 border-white/10 p-6 shadow-sm">
+            <div className="bg-background relative rounded-xl border-2 border-border p-6 shadow-sm">
               <div className="mb-4 text-xs font-black tracking-widest text-primary uppercase">
                 --- MAJOR CIVILIZATIONS & KINGDOMS ---
               </div>
@@ -388,13 +388,13 @@ export function OSHistoricalIntelligence() {
                     key={i}
                     className="min-w-[150px] flex-shrink-0 snap-start sm:min-w-[180px]"
                   >
-                    <div className="bg-background group relative flex h-44 flex-col justify-between overflow-hidden rounded-lg border border-white/15 shadow-lg">
+                    <div className="bg-background group relative flex h-44 flex-col justify-between overflow-hidden rounded-lg border border-border shadow-lg">
                       {/* Gradient Fallback Art */}
-                      <div className="from-space to-space absolute inset-0 z-10 bg-gradient-to-b via-transparent opacity-80" />
+                      <div className="from-background to-background absolute inset-0 z-10 bg-gradient-to-b via-transparent opacity-80" />
                       <div className="absolute inset-0 bg-[url('/assets/hero_bg.png')] bg-cover bg-center opacity-40 mix-blend-color-dodge sepia transition-transform duration-700 group-hover:scale-110" />
 
                       <div className="relative z-20 p-3">
-                        <div className="text-sm leading-tight font-black text-white drop-shadow-md">
+                        <div className="text-sm leading-tight font-black text-foreground drop-shadow-md">
                           {c.name}
                           <br />
                           EMPIRE
@@ -404,7 +404,7 @@ export function OSHistoricalIntelligence() {
                         </div>
                       </div>
 
-                      <div className="relative z-20 flex justify-center border-t border-white/10 p-3 pb-2">
+                      <div className="relative z-20 flex justify-center border-t border-border p-3 pb-2">
                         <Map
                           className="h-4 w-4 opacity-50"
                           style={{ color: c.color }}
@@ -415,8 +415,8 @@ export function OSHistoricalIntelligence() {
                 ))}
               </div>
 
-              <button className="from-space absolute top-1/2 right-0 z-20 flex h-full w-12 -translate-y-1/2 items-center justify-end bg-gradient-to-l to-transparent pr-2 opacity-0 transition-opacity hover:opacity-100">
-                <ChevronRight className="h-8 w-8 text-white drop-shadow-lg" />
+              <button className="from-background absolute top-1/2 right-0 z-20 flex h-full w-12 -translate-y-1/2 items-center justify-end bg-gradient-to-l to-transparent pr-2 opacity-0 transition-opacity hover:opacity-100">
+                <ChevronRight className="h-8 w-8 text-foreground drop-shadow-lg" />
               </button>
             </div>
           </div>
@@ -425,7 +425,7 @@ export function OSHistoricalIntelligence() {
         {/* ═══ BOTTOM LAYER: EVENTS LIST & INSIGHTS (Blueprint 06) ═══════════ */}
         <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
           {/* LEFT: GLOBAL MAP DOTS */}
-          <div className="bg-background flex flex-col items-center justify-between rounded-xl border border-white/10 p-5 opacity-80 lg:col-span-3">
+          <div className="bg-background flex flex-col items-center justify-between rounded-xl border border-border p-5 opacity-80 lg:col-span-3">
             <div className="mb-4 w-full text-xs font-black tracking-widest text-primary uppercase">
               --- GLOBAL MAP ---
             </div>
@@ -452,9 +452,9 @@ export function OSHistoricalIntelligence() {
               {keyEvents.map((evt, i) => (
                 <div
                   key={i}
-                  className="group flex cursor-pointer items-center justify-between rounded px-1.5 py-1 transition-colors hover:bg-white/5"
+                  className="group flex cursor-pointer items-center justify-between rounded px-1.5 py-1 transition-colors hover:bg-muted/30"
                 >
-                  <div className="flex items-center gap-2 text-white/90">
+                  <div className="flex items-center gap-2 text-foreground">
                     <span className="h-1.5 w-1.5 rounded-full bg-teal-400 shadow-sm group-hover:animate-ping" />
                     <span className="truncate transition-colors group-hover:text-teal-300">
                       {evt.title}
@@ -467,8 +467,8 @@ export function OSHistoricalIntelligence() {
               ))}
             </div>
 
-            <div className="mt-4 border-t border-white/10 pt-4 text-right">
-              <button className="ml-auto flex items-center justify-end gap-1 text-[10px] font-bold text-teal-400 uppercase transition-colors hover:text-white">
+            <div className="mt-4 border-t border-border pt-4 text-right">
+              <button className="ml-auto flex items-center justify-end gap-1 text-[10px] font-bold text-teal-400 uppercase transition-colors hover:text-foreground">
                 VIEW FULL TIMELINE <ChevronRight className="h-3 w-3" />
               </button>
             </div>
@@ -488,7 +488,7 @@ export function OSHistoricalIntelligence() {
                 HISTORICAL INSIGHTS
               </div>
 
-              <div className="relative border-l-2 border-teal-400 py-1 pl-4 font-serif text-sm leading-relaxed text-white/90 italic md:text-base">
+              <div className="relative border-l-2 border-teal-400 py-1 pl-4 font-serif text-sm leading-relaxed text-foreground italic md:text-base">
                 <span className="bg-background absolute -top-2 -left-[11px] flex h-4 items-center text-3xl leading-none text-teal-500">
                   "
                 </span>
@@ -503,7 +503,7 @@ export function OSHistoricalIntelligence() {
         </div>
 
         {/* ═══ FOOTER STATUS STRIP (Blueprint 06 Bottom) ═════════════════════ */}
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 px-2 pt-4 font-mono text-[9px] font-bold tracking-widest text-primary uppercase sm:flex-row">
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-border px-2 pt-4 font-mono text-[9px] font-bold tracking-widest text-primary uppercase sm:flex-row">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1.5">
               <Clock className="h-3 w-3" /> CHRONO SYNC
@@ -512,12 +512,12 @@ export function OSHistoricalIntelligence() {
           </div>
           <div className="flex items-center gap-2">
             HISTORY DATABASE STATUS{" "}
-            <span className="flex items-center gap-1 text-emerald-400">
+            <span className="flex items-center gap-1 text-success">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />{" "}
               SYNCHRONIZED
             </span>
           </div>
-          <div className="hidden text-right text-white/50 lg:block">
+          <div className="hidden text-right text-foreground/50 lg:block">
             DATA SOURCES: QUR&apos;AN | HADITH | HISTORICAL RECORDS |
             ASTRONOMICAL DATA
           </div>

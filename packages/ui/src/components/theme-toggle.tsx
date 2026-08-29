@@ -61,7 +61,7 @@ export function ThemeToggle({ className, size = "icon-sm", ...props }: ThemeTogg
       ) : resolvedTheme === "dark" ? (
         <Moon className="size-4 text-primary" />
       ) : (
-        <Sun className="size-4 text-amber-500" />
+        <Sun className="size-4 text-warning" />
       )}
       <span className="sr-only">Toggle theme</span>
     </Button>

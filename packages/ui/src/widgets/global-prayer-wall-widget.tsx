@@ -62,12 +62,12 @@ export function GlobalPrayerWallWidget() {
     <div className="rounded-xl border border-border/40 bg-card border-success/40 bg-background/95 space-y-4 border p-6 font-mono shadow-sm">
       <div className="border-success/20 flex flex-wrap items-center justify-between gap-2 border-b pb-3">
         <div className="flex items-center gap-2">
-          <Globe className="text-emerald-500 h-4 w-4 animate-pulse" />
-          <span className="font-sans text-emerald-500 text-xs font-bold tracking-wide uppercase">
+          <Globe className="text-success h-4 w-4 animate-pulse" />
+          <span className="font-sans text-success text-xs font-bold tracking-wide uppercase">
             Dinding Doa Kedamaian & Global Telemetri
           </span>
         </div>
-        <span className="rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-500 px-2 py-0.5 font-mono text-[9px] font-bold">
+        <span className="rounded-md border border-emerald-500/40 bg-success/10 text-success px-2 py-0.5 font-mono text-[9px] font-bold">
           ⚡ {lightCount.toLocaleString("en-US")} SINYAL DOA AKTIF
         </span>
       </div>
@@ -83,7 +83,7 @@ export function GlobalPrayerWallWidget() {
         />
         <button
           onClick={handleSendPrayer}
-          className="flex shrink-0 items-center gap-1.5 px-4 py-2.5 text-xs font-semibold rounded-lg bg-emerald-500/10 text-emerald-500 border border-emerald-500/40 hover:bg-emerald-500/20 transition-colors"
+          className="flex shrink-0 items-center gap-1.5 px-4 py-2.5 text-xs font-semibold rounded-lg bg-success/10 text-success border border-emerald-500/40 hover:bg-success/20 transition-colors"
         >
           <Send className="h-3.5 w-3.5" />
           <span>Kirim Doa</span>

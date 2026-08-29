@@ -13,7 +13,7 @@ export function ExpertiseBadges() {
     {
       label: "Qur'an Studies",
       icon: BookOpen,
-      color: "text-emerald-400 border-emerald-400/30 bg-emerald-400/10",
+      color: "text-success border-success/30 bg-success/10",
     },
     {
       label: "AI & Machine Learning",
@@ -28,7 +28,7 @@ export function ExpertiseBadges() {
     {
       label: "History & Civilization",
       icon: Network,
-      color: "text-amber-400 border-amber-400/30 bg-amber-400/10",
+      color: "text-warning border-warning/30 bg-warning/10",
     },
     {
       label: "Data Science",
@@ -38,7 +38,7 @@ export function ExpertiseBadges() {
   ]
 
   return (
-    <div className="rounded-xl border border-border bg-black/40 p-6 backdrop-blur-md">
+    <div className="rounded-xl border border-border bg-card p-6 backdrop-blur-md">
       <h3 className="mb-6 font-sans text-[10px] font-bold tracking-widest text-primary/70 uppercase">
         Expertise & Interests
       </h3>

@@ -32,14 +32,14 @@ export function MoonwitnessKnowledgeFramework() {
           </div>
 
           {/* ═══ LAYER 3 & LAYER 5: TOP TELEMETRY & DOCTRINE HEADER (Image 3) */}
-          <div className="mb-12 flex flex-col items-start justify-between gap-8 border-b border-white/15 pb-10 lg:flex-row lg:items-center">
+          <div className="mb-12 flex flex-col items-start justify-between gap-8 border-b border-border pb-10 lg:flex-row lg:items-center">
             <div className="space-y-4">
               <SectionBadge
                 number="02"
                 label="THE MOONWITNESS KNOWLEDGE FRAMEWORK"
               />
 
-              <h2 className="flex items-center gap-4 font-mono text-4xl font-black tracking-wider text-white uppercase drop-shadow-sm sm:text-6xl">
+              <h2 className="flex items-center gap-4 font-mono text-4xl font-black tracking-wider text-foreground uppercase drop-shadow-sm sm:text-6xl">
                 <span className="flex items-center">
                   <span className="text-danger drop-shadow-sm">
                     R
@@ -51,8 +51,8 @@ export function MoonwitnessKnowledgeFramework() {
                     B
                   </span>
                 </span>
-                <ArrowRight className="animate-bounce-x h-8 w-8 text-white drop-shadow-sm sm:h-12 sm:w-12" />
-                <span className="tracking-widest text-white drop-shadow-sm">
+                <ArrowRight className="animate-bounce-x h-8 w-8 text-foreground drop-shadow-sm sm:h-12 sm:w-12" />
+                <span className="tracking-widest text-foreground drop-shadow-sm">
                   LIGHT
                 </span>
               </h2>
@@ -75,7 +75,7 @@ export function MoonwitnessKnowledgeFramework() {
                 </span>{" "}
                 into a coherent understanding.
               </p>
-              <div className="flex items-center gap-2 border-t border-white/10 pt-2.5 font-mono text-xs font-black tracking-[0.15em] text-emerald-400 uppercase">
+              <div className="flex items-center gap-2 border-t border-border pt-2.5 font-mono text-xs font-black tracking-[0.15em] text-success uppercase">
                 <span className="h-2 w-2 animate-ping rounded-full bg-emerald-400 shadow-sm" />
                 <span>
                   {/* RGB IS THE PATH TOWARD INTEGRATED UNDERSTANDING. */}
@@ -98,7 +98,7 @@ export function MoonwitnessKnowledgeFramework() {
                   </span>
                   <span className="bg-danger h-2.5 w-2.5 animate-ping rounded-full shadow-sm" />
                 </div>
-                <h3 className="mb-1 font-mono text-3xl font-black tracking-widest text-white uppercase drop-shadow-sm">
+                <h3 className="mb-1 font-mono text-3xl font-black tracking-widest text-foreground uppercase drop-shadow-sm">
                   HAQIQAH
                 </h3>
                 <div className="text-warning mb-6 font-mono text-[11px] font-black tracking-[0.2em] uppercase">
@@ -108,7 +108,7 @@ export function MoonwitnessKnowledgeFramework() {
 
               {/* ambienting Optic Center Emblem */}
               <div className="relative my-6 flex items-center justify-center">
-                <div className="bg-radial-gradient from-danger/30 via-space border-danger/50 relative z-10 flex h-28 w-28 items-center justify-center rounded-full border to-black shadow-sm transition-transform duration-300 group-hover:scale-110">
+                <div className="bg-radial-gradient from-danger/30 via-background/60 border-danger/50 relative z-10 flex h-28 w-28 items-center justify-center rounded-full border to-transparent shadow-sm transition-transform duration-300 group-hover:scale-110">
                   <div
                     className="border-danger/60 animate-spin-slow absolute h-[120%] w-[120%] rounded-full border border-dashed"
                     style={{ animationDuration: "25s" }}
@@ -135,13 +135,13 @@ export function MoonwitnessKnowledgeFramework() {
               className="group bg-background/80 flex min-h-[380px] flex-col justify-between p-7 backdrop-blur-xl"
             >
               <div>
-                <div className="mb-4 flex items-center justify-between border-b border-emerald-400/30 pb-3.5">
-                  <span className="rounded-md border border-emerald-400/60 bg-emerald-500/15 px-3 py-1 text-xs font-black tracking-widest text-emerald-400 uppercase shadow-sm">
+                <div className="mb-4 flex items-center justify-between border-b border-success/30 pb-3.5">
+                  <span className="rounded-md border border-emerald-400/60 bg-emerald-500/15 px-3 py-1 text-xs font-black tracking-widest text-success uppercase shadow-sm">
                     02 // GREEN
                   </span>
                   <span className="h-2.5 w-2.5 animate-ping rounded-full bg-emerald-400 shadow-sm" />
                 </div>
-                <h3 className="mb-1 font-mono text-3xl font-black tracking-widest text-white uppercase drop-shadow-sm">
+                <h3 className="mb-1 font-mono text-3xl font-black tracking-widest text-foreground uppercase drop-shadow-sm">
                   FALĀḤ
                 </h3>
                 <div className="text-success mb-6 font-mono text-[11px] font-black tracking-[0.2em] uppercase">
@@ -150,12 +150,12 @@ export function MoonwitnessKnowledgeFramework() {
               </div>
 
               <div className="relative my-6 flex items-center justify-center">
-                <div className="bg-radial-gradient via-space relative z-10 flex h-28 w-28 items-center justify-center rounded-full border border-emerald-400/50 from-emerald-500/30 to-black shadow-sm transition-transform duration-300 group-hover:scale-110">
+                <div className="bg-radial-gradient via-background/60 relative z-10 flex h-28 w-28 items-center justify-center rounded-full border border-emerald-400/50 from-emerald-500/30 to-transparent shadow-sm transition-transform duration-300 group-hover:scale-110">
                   <div
                     className="animate-spin-slow absolute h-[120%] w-[120%] rounded-full border border-dashed border-emerald-400/60"
                     style={{ animationDuration: "35s" }}
                   />
-                  <Orbit className="animate-spin-slow h-12 w-12 text-emerald-400 drop-shadow-sm" />
+                  <Orbit className="animate-spin-slow h-12 w-12 text-success drop-shadow-sm" />
                 </div>
 
                 {/* Optical beam Data Bridge to Card 3 */}
@@ -165,7 +165,7 @@ export function MoonwitnessKnowledgeFramework() {
                 </div>
               </div>
 
-              <p className="mt-auto border-t border-emerald-400/30 pt-6 font-sans text-xs leading-relaxed font-normal text-primary">
+              <p className="mt-auto border-t border-success/30 pt-6 font-sans text-xs leading-relaxed font-normal text-primary">
                 Observe creation, explore the cosmos, study scientific
                 astronomy, and cultivate flourishing throughout the living
                 natural world.
@@ -184,7 +184,7 @@ export function MoonwitnessKnowledgeFramework() {
                   </span>
                   <span className="h-2.5 w-2.5 animate-ping rounded-full bg-primary shadow-sm" />
                 </div>
-                <h3 className="mb-1 font-mono text-3xl font-black tracking-widest text-white uppercase drop-shadow-sm">
+                <h3 className="mb-1 font-mono text-3xl font-black tracking-widest text-foreground uppercase drop-shadow-sm">
                   ḤIKMAH
                 </h3>
                 <div className="mb-6 font-mono text-[11px] font-black tracking-[0.2em] text-primary uppercase">
@@ -193,7 +193,7 @@ export function MoonwitnessKnowledgeFramework() {
               </div>
 
               <div className="relative my-6 flex items-center justify-center">
-                <div className="bg-radial-gradient via-space relative z-10 flex h-28 w-28 items-center justify-center rounded-full border border-primary/50 from-primary/10 to-black shadow-sm transition-transform duration-300 group-hover:scale-110">
+                <div className="bg-radial-gradient via-background/60 relative z-10 flex h-28 w-28 items-center justify-center rounded-full border border-primary/50 from-primary/10 to-transparent shadow-sm transition-transform duration-300 group-hover:scale-110">
                   <div
                     className="animate-spin-slow absolute h-[120%] w-[120%] rounded-full border border-dashed border-primary/60"
                     style={{
@@ -223,45 +223,45 @@ export function MoonwitnessKnowledgeFramework() {
               className="group bg-panel/80 flex min-h-[380px] flex-col justify-between p-7 backdrop-blur-xl"
             >
               <div>
-                <div className="mb-4 flex items-center justify-between border-b border-white/30 pb-3.5">
-                  <span className="rounded-md border border-white/50 bg-white/10 px-3 py-1 text-xs font-black tracking-widest text-white uppercase shadow-sm">
+                <div className="mb-4 flex items-center justify-between border-b border-border pb-3.5">
+                  <span className="rounded-md border border-border bg-muted/30 px-3 py-1 text-xs font-black tracking-widest text-foreground uppercase shadow-sm">
                     // LIGHT
                   </span>
-                  <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-white shadow-sm" />
+                  <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-card shadow-sm" />
                 </div>
-                <h3 className="mb-1 font-mono text-3xl font-black tracking-widest text-white uppercase drop-shadow-sm">
+                <h3 className="mb-1 font-mono text-3xl font-black tracking-widest text-foreground uppercase drop-shadow-sm">
                   NŪR
                 </h3>
                 <div className="mb-6 flex items-center gap-2 font-mono text-[11px] font-black tracking-[0.2em] text-foreground uppercase">
-                  <Sparkles className="h-3 w-3 text-white" />
+                  <Sparkles className="h-3 w-3 text-foreground" />
                   THE ULTIMATE SYNTHESIS
                 </div>
               </div>
 
               <div className="relative my-6 flex items-center justify-center">
                 {/* Hyper-ambienting White Core */}
-                <div className="bg-radial-gradient via-panel relative z-10 flex h-28 w-28 items-center justify-center rounded-full border border-white/70 from-white/40 to-black shadow-sm transition-transform duration-500 group-hover:scale-110">
+                <div className="bg-radial-gradient via-panel relative z-10 flex h-28 w-28 items-center justify-center rounded-full border border-border/70 from-primary/20 to-transparent shadow-sm transition-transform duration-500 group-hover:scale-110">
                   <div
-                    className="animate-spin-slow absolute h-[130%] w-[130%] rounded-full border-2 border-dotted border-white/40"
+                    className="animate-spin-slow absolute h-[130%] w-[130%] rounded-full border-2 border-dotted border-border"
                     style={{ animationDuration: "15s" }}
                   />
                   <div
-                    className="animate-spin-slow absolute h-[90%] w-[90%] rounded-full border border-white/20"
+                    className="animate-spin-slow absolute h-[90%] w-[90%] rounded-full border border-border"
                     style={{
                       animationDuration: "10s",
                       animationDirection: "reverse",
                     }}
                   />
-                  <Sun className="h-14 w-14 text-white drop-shadow-sm" />
+                  <Sun className="h-14 w-14 text-foreground drop-shadow-sm" />
                 </div>
 
                 {/* Connecting Rays from the left (absorbing RGB) */}
                 <div className="absolute top-1/2 -left-[40px] z-0 hidden -translate-y-1/2 lg:block">
-                  <div className="h-px w-[40px] bg-gradient-to-r from-transparent via-white/50 to-white/90 shadow-sm" />
+                  <div className="h-px w-[40px] bg-gradient-to-r from-transparent via-primary/10 to-transparent shadow-sm" />
                 </div>
               </div>
 
-              <p className="mt-auto border-t border-white/40 pt-6 font-sans text-xs leading-relaxed font-medium text-white/90">
+              <p className="mt-auto border-t border-border pt-6 font-sans text-xs leading-relaxed font-medium text-foreground">
                 The integrated state of awareness. When Truth, Flourishing, and
                 Wisdom align, the mind reaches enlightenment (Nūr).
               </p>
@@ -272,7 +272,7 @@ export function MoonwitnessKnowledgeFramework() {
           <div className="bg-background mt-12 rounded-lg border border-border p-7 font-mono text-xs shadow-inner">
             <div className="mb-6 flex items-center gap-3 border-b border-primary/30 pb-4">
               <Cpu className="h-5 w-5 animate-pulse text-primary" />
-              <span className="text-sm font-black tracking-widest text-white uppercase drop-shadow-sm">
+              <span className="text-sm font-black tracking-widest text-foreground uppercase drop-shadow-sm">
                 THE INTEGRATION PATH
               </span>
               <span className="hidden font-sans text-xs text-primary md:inline">
@@ -288,7 +288,7 @@ export function MoonwitnessKnowledgeFramework() {
                     <BookOpen className="h-5 w-5" />
                   </div>
                   <div>
-                    <div className="text-xs font-black tracking-wider text-white uppercase">
+                    <div className="text-xs font-black tracking-wider text-foreground uppercase">
                       OBSERVE REALITY
                     </div>
                     <div className="font-sans text-[11px] text-primary">
@@ -303,11 +303,11 @@ export function MoonwitnessKnowledgeFramework() {
 
               <div className="bg-background flex items-center justify-between rounded-md border border-emerald-400/60 p-4 shadow-inner transition-all hover:border-emerald-400">
                 <div className="flex items-center gap-3.5">
-                  <div className="shrink-0 rounded-full border border-emerald-400 bg-emerald-500/20 p-2.5 text-emerald-400 shadow-sm">
+                  <div className="shrink-0 rounded-full border border-emerald-400 bg-success/20 p-2.5 text-success shadow-sm">
                     <Orbit className="h-5 w-5" />
                   </div>
                   <div>
-                    <div className="text-xs font-black tracking-wider text-white uppercase">
+                    <div className="text-xs font-black tracking-wider text-foreground uppercase">
                       EXPLORE CREATION
                     </div>
                     <div className="font-sans text-[11px] text-primary">
@@ -315,7 +315,7 @@ export function MoonwitnessKnowledgeFramework() {
                     </div>
                   </div>
                 </div>
-                <span className="ml-2 hidden text-base font-black text-emerald-400 xl:inline">
+                <span className="ml-2 hidden text-base font-black text-success xl:inline">
                   ➔
                 </span>
               </div>
@@ -326,7 +326,7 @@ export function MoonwitnessKnowledgeFramework() {
                     <Brain className="h-5 w-5" />
                   </div>
                   <div>
-                    <div className="text-xs font-black tracking-wider text-white uppercase">
+                    <div className="text-xs font-black tracking-wider text-foreground uppercase">
                       REFLECT WISDOM
                     </div>
                     <div className="font-sans text-[11px] text-primary">
@@ -339,13 +339,13 @@ export function MoonwitnessKnowledgeFramework() {
                 </span>
               </div>
 
-              <div className="to-space flex items-center justify-between rounded-md border-2 border-white bg-gradient-to-r from-white/15 via-primary p-4 shadow-sm">
+              <div className="to-background flex items-center justify-between rounded-md border-2 border-border bg-gradient-to-r from-primary/20 via-primary p-4 shadow-sm">
                 <div className="flex items-center gap-3.5">
-                  <div className="shrink-0 animate-pulse rounded-full border border-white bg-white/20 p-2.5 text-white shadow-sm">
+                  <div className="shrink-0 animate-pulse rounded-full border border-border bg-muted/30 p-2.5 text-foreground shadow-sm">
                     <Sun className="h-5 w-5 drop-shadow-sm" />
                   </div>
                   <div>
-                    <div className="text-xs font-black tracking-wider text-white uppercase drop-shadow-sm">
+                    <div className="text-xs font-black tracking-wider text-foreground uppercase drop-shadow-sm">
                       ILLUMINATE UNDERSTANDING
                     </div>
                     <div className="font-sans text-[11px] text-foreground">
@@ -357,13 +357,13 @@ export function MoonwitnessKnowledgeFramework() {
             </div>
 
             {/* Bottom Diagnostic Strip (From Image 3) */}
-            <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-white/15 pt-4 font-mono text-xs tracking-wider text-primary">
-              <div className="font-bold text-white">
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-4 font-mono text-xs tracking-wider text-primary">
+              <div className="font-bold text-foreground">
                 <span>SYSTEM ID: </span>
                 <span className="text-primary">MWOS-2026-0525</span>
               </div>
 
-              <div className="flex items-center gap-2.5 rounded-sm border border-primary/30 bg-black px-4 py-1">
+              <div className="flex items-center gap-2.5 rounded-sm border border-primary/30 bg-card px-4 py-1">
                 <div className="flex gap-1.5">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <span
@@ -373,7 +373,7 @@ export function MoonwitnessKnowledgeFramework() {
                     />
                   ))}
                 </div>
-                <span className="mx-1 text-white/30">|</span>
+                <span className="mx-1 text-foreground/30">|</span>
                 <div className="flex gap-1.5">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <span
@@ -383,14 +383,14 @@ export function MoonwitnessKnowledgeFramework() {
                     />
                   ))}
                 </div>
-                <span className="ml-2 text-xs font-black tracking-widest text-white">
+                <span className="ml-2 text-xs font-black tracking-widest text-foreground">
                   {/* KNOWLEDGE FLOW ACTIVE // */}
                 </span>
               </div>
 
-              <div className="flex items-center gap-2 font-black text-emerald-400 drop-shadow-sm">
+              <div className="flex items-center gap-2 font-black text-success drop-shadow-sm">
                 <span>KNOWLEDGE CORE STATUS: SYNCHRONIZED</span>
-                <Globe className="animate-spin-slow h-4 w-4 text-emerald-400" />
+                <Globe className="animate-spin-slow h-4 w-4 text-success" />
               </div>
             </div>
           </div>

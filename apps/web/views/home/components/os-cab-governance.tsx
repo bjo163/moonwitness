@@ -98,14 +98,14 @@ export function OSCabGovernance() {
             <div className="flex items-center gap-2 font-mono text-[10px] text-primary">
               <span>ACTIVE RFCS: {cabSummary.data.metrics?.submitted || cabSummary.data.changes?.length || 14}</span>
               <span>•</span>
-              <span className="text-emerald-400">APPROVED: {cabSummary.data.metrics?.approved || 12}</span>
+              <span className="text-success">APPROVED: {cabSummary.data.metrics?.approved || 12}</span>
             </div>
           )}
         </div>
         <h2 className="font-sans text-4xl font-black tracking-tight text-foreground uppercase">
           CHANGE ADVISORY BOARD
         </h2>
-        <p className="max-w-2xl font-mono text-sm leading-relaxed text-slate-400">
+        <p className="max-w-2xl font-mono text-sm leading-relaxed text-muted-foreground">
           Enterprise-grade governance engine for managing RFC lifecycles, CAB
           decisions, meeting agendas, and implementation tracking — with full
           audit trail integrity.
@@ -161,7 +161,7 @@ export function OSCabGovernance() {
                 >
                   {feat.title}
                 </h3>
-                <p className="font-mono text-[11px] leading-relaxed text-slate-400">
+                <p className="font-mono text-[11px] leading-relaxed text-muted-foreground">
                   {feat.description}
                 </p>
               </div>
@@ -176,13 +176,13 @@ export function OSCabGovernance() {
             <p className="text-primary font-mono text-xs font-black tracking-widest uppercase">
               LAUNCH CAB CONSOLE
             </p>
-            <p className="mt-1 font-mono text-[10px] text-slate-500">
+            <p className="mt-1 font-mono text-[10px] text-muted-foreground">
               Full governance dashboard
             </p>
           </div>
           <Link
             href="/command-center/cab"
-            className="rounded-lg border-border text-primary hover:bg-primary flex items-center gap-2 border px-4 py-2 text-xs font-bold tracking-widest uppercase transition-all duration-200 hover:text-black"
+            className="rounded-lg border-border text-primary hover:bg-primary flex items-center gap-2 border px-4 py-2 text-xs font-bold tracking-widest uppercase transition-all duration-200 hover:text-foreground"
           >
             [ OPEN CAB ] <ArrowRight className="h-3 w-3" />
           </Link>

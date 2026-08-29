@@ -156,8 +156,8 @@ export function TasbihView() {
                 }}
                 className={`rounded-md border p-3 text-center transition-all ${
                   isSelected
-                    ? "bg-success/20 border-success text-white shadow-sm"
-                    : "bg-background border-primary/20 text-primary hover:text-white"
+                    ? "bg-success/20 border-success text-foreground shadow-sm"
+                    : "bg-background border-primary/20 text-primary hover:text-foreground"
                 }`}
               >
                 <div className="text-success arabic-text text-sm font-bold">
@@ -188,7 +188,7 @@ export function TasbihView() {
                   }}
                   className={`rounded-md px-3 py-1 text-xs font-bold transition-all ${
                     targetCount === tVal
-                      ? "bg-success font-black text-black"
+                      ? "bg-success font-black text-foreground"
                       : "bg-background border-success/30 border text-primary"
                   }`}
                 >

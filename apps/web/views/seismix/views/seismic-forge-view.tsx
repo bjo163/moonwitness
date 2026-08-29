@@ -365,7 +365,7 @@ function PulseRing() {
           boxShadow: "0 0 30px rgba(255, 230, 0, 0.25)",
         }}
       >
-        <Activity className="h-6 w-6 text-amber-500" />
+        <Activity className="h-6 w-6 text-warning" />
       </div>
     </div>
   )
@@ -683,7 +683,7 @@ export function SeismicForgeView() {
                     {row.count} EVENTS ({row.pct}%)
                   </span>
                 </div>
-                <div className="h-2 w-full overflow-hidden bg-white/5">
+                <div className="h-2 w-full overflow-hidden bg-muted/30">
                   <div
                     className="h-full transition-all duration-1000"
                     style={{

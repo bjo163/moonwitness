@@ -40,7 +40,7 @@ export function PropheticAIConsultantModal() {
           e.stopPropagation()
           setIsOpen(true)
         }}
-        className="bg-success/20 hover:bg-success text-success border-success/60 relative z-20 mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm border px-3 py-2.5 text-xs font-bold tracking-wider uppercase shadow-sm transition-all duration-200 hover:text-white active:scale-95"
+        className="bg-success/20 hover:bg-success text-success border-success/60 relative z-20 mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm border px-3 py-2.5 text-xs font-bold tracking-wider uppercase shadow-sm transition-all duration-200 hover:text-foreground active:scale-95"
       >
         <Bot className="h-4 w-4" />
         <span>[ OPEN KHIDRA AI - FULLSCREEN OVERLAY ]</span>
@@ -65,7 +65,7 @@ export function PropheticAIConsultantModal() {
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="text-danger flex cursor-pointer items-center gap-1 rounded-sm border border-red-500/50 bg-red-500/20 p-1.5 text-xs font-bold uppercase transition-colors hover:bg-red-500 hover:text-white sm:px-3 sm:py-1"
+                  className="text-danger flex cursor-pointer items-center gap-1 rounded-sm border border-red-500/50 bg-destructive/20 p-1.5 text-xs font-bold uppercase transition-colors hover:bg-red-500 hover:text-foreground sm:px-3 sm:py-1"
                 >
                   <X className="h-4 w-4" />
                   <span className="hidden sm:inline">CLOSE [ESC]</span>

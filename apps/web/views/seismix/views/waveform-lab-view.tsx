@@ -131,7 +131,7 @@ function ParamSlider({
           {unit && <span className="ml-0.5 text-primary">{unit}</span>}
         </span>
       </div>
-      <div className="relative h-2 w-full bg-white/5">
+      <div className="relative h-2 w-full bg-muted/30">
         <div
           className="absolute inset-y-0 left-0"
           style={{

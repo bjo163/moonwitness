@@ -173,7 +173,7 @@ export function ScripturesView() {
       label: "TEKS ARAB",
       width: "280px",
       align: "right",
-      className: "font-arabic text-base font-bold text-white leading-loose",
+      className: "font-arabic text-base font-bold text-foreground leading-loose",
     },
     {
       key: "translation",
@@ -206,7 +206,7 @@ export function ScripturesView() {
         />
 
         {notification && (
-          <div className="flex animate-in items-center gap-2 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-xs font-bold text-emerald-600 fade-in dark:text-emerald-400">
+          <div className="flex animate-in items-center gap-2 rounded-2xl border border-success/20 bg-success/10 p-4 text-xs font-bold text-emerald-600 fade-in dark:text-success">
             <span>{notification}</span>
           </div>
         )}

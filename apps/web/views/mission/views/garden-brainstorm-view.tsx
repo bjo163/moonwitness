@@ -274,7 +274,7 @@ function ResultState({
               TASK {String(index + 1).padStart(2, "0")}
             </p>
             <div className="flex items-center gap-2 text-[10px]">
-              <span className="rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-500 px-2 py-0.5 font-mono text-[10px] font-bold">
+              <span className="rounded-md border border-emerald-500/40 bg-success/10 text-success px-2 py-0.5 font-mono text-[10px] font-bold">
                 {task.type}
               </span>
               <span className="font-bold text-primary">{task.score}/99</span>

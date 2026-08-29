@@ -94,7 +94,7 @@ export function LeafletMap({
   if (!mounted) return null
 
   return (
-    <div className="h-full w-full overflow-hidden rounded-md border border-white/10">
+    <div className="h-full w-full overflow-hidden rounded-md border border-border">
       <MapContainer
         key={mapKey}
         center={[20, 0]}
@@ -115,12 +115,12 @@ export function LeafletMap({
               icon={issIcon}
               zIndexOffset={1000}
             >
-              <Popup className="bg-background border border-white/10 text-white">
+              <Popup className="bg-background border border-border text-foreground">
                 <div className="text-xs">
                   <div className="font-bold tracking-widest text-primary">
                     INTERNATIONAL SPACE STATION
                   </div>
-                  <div className="mt-1 text-[10px] text-white/70">
+                  <div className="mt-1 text-[10px] text-foreground">
                     Alt: {issPosition.altitude?.toFixed(2) ?? "N/A"} km <br />
                     Vel: {issPosition.velocity?.toFixed(2) ?? "N/A"} km/h
                   </div>
@@ -170,7 +170,7 @@ export function LeafletMap({
             <Marker position={attack.target} icon={cyberIcon}>
               <Popup className="bg-background border-red-500 font-mono text-foreground">
                 <div className="p-2">
-                  <div className="mb-1 border-b border-red-500/30 pb-1 font-bold text-red-500">
+                  <div className="mb-1 border-b border-destructive/30 pb-1 font-bold text-destructive">
                     THREAT: {attack.type}
                   </div>
                   <div className="text-xs">
@@ -217,13 +217,13 @@ export function LeafletMap({
           const [lng, lat] = eq.geometry.coordinates
           return (
             <Marker key={eq.id} position={[lat, lng]} icon={earthquakeIcon}>
-              <Popup className="bg-background border border-white/10 text-white">
+              <Popup className="bg-background border border-border text-foreground">
                 <div className="text-xs">
-                  <div className="font-bold text-red-400">
+                  <div className="font-bold text-destructive">
                     M {eq.properties.mag.toFixed(1)}
                   </div>
                   <div>{eq.properties.place}</div>
-                  <div className="text-[9px] text-white/50">
+                  <div className="text-[9px] text-foreground/50">
                     {new Date(eq.properties.time).toLocaleString()}
                   </div>
                 </div>

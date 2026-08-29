@@ -269,7 +269,7 @@ const DivineMatrixRain = ({ active }: { active: boolean }) => {
       <MatrixLayer
         words={PROPHETS}
         delay={10}
-        colorClass="text-emerald-400/80 font-arabic"
+        colorClass="text-success/80 font-arabic"
         shadowColor="rgba(52, 211, 153, 1)"
         colCount={8}
         speedMult={0.8}
@@ -693,7 +693,7 @@ export function HomeHeroSection() {
   return (
     <section
       id="hero"
-      className={`bg-background relative flex min-h-screen w-full flex-col justify-center overflow-hidden pt-20 pb-10 font-sans text-white select-none ${
+      className={`bg-background relative flex min-h-screen w-full flex-col justify-center overflow-hidden pt-20 pb-10 font-sans text-foreground select-none ${
         isShaking ? "animate-[heroShake_1.2s_ease-in-out]" : ""
       }`}
     >
@@ -723,7 +723,7 @@ export function HomeHeroSection() {
           <div className="absolute inset-0 animate-pulse border-[4px] border-border shadow-sm" />
           <div className="absolute inset-0 bg-[linear-gradient(rgba(0,240,255,0.03)_1px,transparent_1px)] bg-[length:100%_4px]" />
           <div className="pointer-events-none absolute inset-0 flex animate-[smoothSubliminal_2s_infinite] items-center justify-center">
-            <span className="font-sans text-5xl font-black tracking-[0.8em] text-white drop-shadow-sm md:text-8xl">
+            <span className="font-sans text-5xl font-black tracking-[0.8em] text-foreground drop-shadow-sm md:text-8xl">
               OVERRIDE
             </span>
           </div>
@@ -732,7 +732,7 @@ export function HomeHeroSection() {
 
       {dataReady && dailyData && (
         <div
-          className="fixed inset-0 z-[900] flex animate-in flex-col items-center justify-center bg-black/90 px-4 text-center backdrop-blur-md duration-1000 fade-in"
+          className="fixed inset-0 z-[900] flex animate-in flex-col items-center justify-center bg-card/90 px-4 text-center backdrop-blur-md duration-1000 fade-in"
           onClick={handleReset}
         >
           {/* Matrix Rain will play as long as the modal is open */}
@@ -784,7 +784,7 @@ export function HomeHeroSection() {
             </div>
 
             <h2
-              className="font-arabic animate-[pulse_3s_ease-in-out_infinite] text-4xl leading-relaxed text-white drop-shadow-sm md:text-5xl lg:text-7xl lg:leading-loose"
+              className="font-arabic animate-[pulse_3s_ease-in-out_infinite] text-4xl leading-relaxed text-foreground drop-shadow-sm md:text-5xl lg:text-7xl lg:leading-loose"
               dir="rtl"
             >
               {dailyData.ayah?.textArabic}
@@ -798,7 +798,7 @@ export function HomeHeroSection() {
             </p>
           </div>
 
-          <div className="absolute bottom-10 animate-pulse font-mono text-[10px] font-bold tracking-[0.5em] text-white/40">
+          <div className="absolute bottom-10 animate-pulse font-mono text-[10px] font-bold tracking-[0.5em] text-foreground/40">
             [ CLICK ANYWHERE TO DISMISS ]
           </div>
         </div>
@@ -831,14 +831,14 @@ export function HomeHeroSection() {
             style={{ backgroundImage: `url('${bg}')` }}
           />
         ))}
-        <div className="pointer-events-none absolute top-[140px] right-[220px] z-10 font-mono text-[10px] tracking-[0.3em] text-white/40 uppercase">
+        <div className="pointer-events-none absolute top-[140px] right-[220px] z-10 font-mono text-[10px] tracking-[0.3em] text-foreground/40 uppercase">
           LUNA
         </div>
         <div className="pointer-events-none absolute top-[400px] right-[140px] z-10 font-mono text-[9px] tracking-[0.2em] text-primary/50 uppercase">
           ORBIT-7
         </div>
-        <div className="from-space via-space/75 absolute inset-0 w-full bg-gradient-to-r to-transparent sm:w-2/3" />
-        <div className="from-space absolute inset-0 bg-gradient-to-t via-transparent to-black/50" />
+        <div className="from-background via-background/60 absolute inset-0 w-full bg-gradient-to-r to-transparent sm:w-2/3" />
+        <div className="from-background absolute inset-0 bg-gradient-to-t via-transparent to-transparent" />
 
         <div className="theme-grid-bg absolute inset-0 opacity-15" />
       </div>
@@ -846,7 +846,7 @@ export function HomeHeroSection() {
       {/* ═══ LEVEL UP display NOTIFICATION (Sleek, Minimalist, Top-Left) ═══ */}
       {isLevelUp && (
         <div className="pointer-events-none fixed top-24 left-10 z-[1000] flex flex-col items-start">
-          <div className="relative flex w-[280px] animate-in flex-col gap-3 rounded-lg border border-border bg-black/40 p-5 shadow-sm backdrop-blur-md duration-700 ease-out fill-mode-forwards slide-in-from-left-10 fade-in">
+          <div className="relative flex w-[280px] animate-in flex-col gap-3 rounded-lg border border-border bg-card p-5 shadow-sm backdrop-blur-md duration-700 ease-out fill-mode-forwards slide-in-from-left-10 fade-in">
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 animate-pulse rounded-full bg-primary shadow-sm" />
               <div className="font-mono text-[10px] font-bold tracking-[0.3em] text-primary">
@@ -854,7 +854,7 @@ export function HomeHeroSection() {
               </div>
             </div>
 
-            <h1 className="text-xl font-light tracking-[0.2em] text-white">
+            <h1 className="text-xl font-light tracking-[0.2em] text-foreground">
               RANK ASCENDED
             </h1>
 
@@ -874,7 +874,7 @@ export function HomeHeroSection() {
             </div>
 
             {/* Futuristic Data Bar */}
-            <div className="mt-2 w-full border border-border bg-black/60 p-0.5">
+            <div className="mt-2 w-full border border-border bg-card p-0.5">
               <div className="h-1 w-0 animate-[fillBar_2.5s_ease-out_forwards_1.2s] bg-primary shadow-sm" />
             </div>
           </div>

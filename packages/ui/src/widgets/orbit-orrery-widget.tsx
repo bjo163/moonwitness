@@ -17,7 +17,7 @@ function OrbitingEarthAndMoon({ rotation }: { rotation: number }) {
     >
       <div className="absolute top-0 flex -rotate-45 transform flex-col items-center">
         <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary shadow-sm">
-          <Globe className="h-4 w-4 text-black" />
+          <Globe className="h-4 w-4 text-foreground" />
         </div>
         <span className="mt-0.5 text-[7px] font-bold text-primary">EARTH</span>
 
@@ -28,8 +28,8 @@ function OrbitingEarthAndMoon({ rotation }: { rotation: number }) {
             transform: `rotate(${rotation * MOON_ORBIT_SPEED_MULTIPLIER}deg)`,
           }}
         >
-          <div className="absolute top-0 flex h-3 w-3 items-center justify-center rounded-full bg-white shadow-sm">
-            <Moon className="h-2 w-2 text-black" />
+          <div className="absolute top-0 flex h-3 w-3 items-center justify-center rounded-full bg-card shadow-sm">
+            <Moon className="h-2 w-2 text-foreground" />
           </div>
         </div>
       </div>
@@ -62,7 +62,7 @@ export function OrbitOrreryWidget() {
             // 3D ORBITAL ORRERY & CELESTIAL ALIGNMENT
           </span>
         </div>
-        <span className="rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-500 px-2 py-0.5 font-mono text-[8px] font-bold">
+        <span className="rounded-md border border-emerald-500/40 bg-success/10 text-success px-2 py-0.5 font-mono text-[8px] font-bold">
           ORBITAL MODEL
         </span>
       </div>
@@ -78,7 +78,7 @@ export function OrbitOrreryWidget() {
           <div className="relative z-10 flex flex-col items-center">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent shadow-sm">
               <Sun
-                className="h-5 w-5 animate-spin text-black"
+                className="h-5 w-5 animate-spin text-foreground"
                 style={{ animationDuration: "15s" }}
               />
             </div>

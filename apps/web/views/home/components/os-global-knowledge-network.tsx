@@ -29,21 +29,21 @@ export function OSGlobalKnowledgeNetwork() {
       {/* ═══ LAYER 1: DEEP SPACE MATRIX BACKGROUND ═══════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
         <div className="theme-grid-bg absolute inset-0 opacity-30" />
-        <div className="bg-radial-gradient via-space/10 absolute top-1/2 left-1/2 h-[800px] w-[1200px] -translate-x-1/2 -translate-y-1/2 from-blue-900/15 to-transparent blur-[120px]" />
+        <div className="bg-radial-gradient via-background/60 absolute top-1/2 left-1/2 h-[800px] w-[1200px] -translate-x-1/2 -translate-y-1/2 from-blue-900/15 to-transparent blur-[120px]" />
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(59,130,246,0.02)_1px,transparent_1px)] bg-[size:100%_4px]" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl space-y-6 px-6 sm:px-10">
         {/* ═══ TOP HEADER (Blueprint 11) ══════════════════════════════════════ */}
-        <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-6 xl:flex-row xl:items-center">
+        <div className="flex flex-col justify-between gap-6 border-b border-border pb-6 xl:flex-row xl:items-center">
           <div className="max-w-2xl space-y-4">
             <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-blue-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-blue-300 uppercase shadow-sm">
-              <span className="rounded-xs bg-blue-500 px-1.5 py-0.5 font-black text-black">
+              <span className="rounded-xs bg-blue-500 px-1.5 py-0.5 font-black text-foreground">
                 11
               </span>
               <span>GLOBAL KNOWLEDGE NETWORK</span>
             </div>
-            <h2 className="font-mono text-xl font-black tracking-widest text-white uppercase drop-shadow-sm sm:text-2xl">
+            <h2 className="font-mono text-xl font-black tracking-widest text-foreground uppercase drop-shadow-sm sm:text-2xl">
               TOGETHER, WE PRESERVE. TOGETHER, WE DISCOVER.
             </h2>
           </div>
@@ -135,9 +135,9 @@ export function OSGlobalKnowledgeNetwork() {
                 ].map((stat, i) => (
                   <div
                     key={i}
-                    className="bg-background flex items-center gap-3 rounded border border-white/5 p-2 transition-colors hover:border-white/10"
+                    className="bg-background flex items-center gap-3 rounded border border-border p-2 transition-colors hover:border-border"
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-white/5">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-muted/30">
                       <stat.icon
                         className="h-4 w-4"
                         style={{ color: stat.c }}
@@ -154,7 +154,7 @@ export function OSGlobalKnowledgeNetwork() {
                         {stat.v}
                       </div>
                     </div>
-                    <div className="w-16 text-right text-[8px] text-emerald-400">
+                    <div className="w-16 text-right text-[8px] text-success">
                       {stat.d}
                     </div>
                   </div>
@@ -163,16 +163,16 @@ export function OSGlobalKnowledgeNetwork() {
             </div>
 
             {/* Network Activity Live Feed */}
-            <div className="bg-background flex flex-1 flex-col rounded-xl border border-white/10 p-4">
+            <div className="bg-background flex flex-1 flex-col rounded-xl border border-border p-4">
               <div className="mb-4 flex items-center justify-between">
                 <div className="text-[10px] font-black tracking-widest text-primary uppercase">
                   NETWORK ACTIVITY
                 </div>
-                <div className="cursor-pointer text-[9px] font-bold text-primary transition-colors hover:text-white">
+                <div className="cursor-pointer text-[9px] font-bold text-primary transition-colors hover:text-foreground">
                   View All
                 </div>
               </div>
-              <div className="mb-3 flex items-center gap-2 text-[9px] font-black tracking-widest text-emerald-400 uppercase">
+              <div className="mb-3 flex items-center gap-2 text-[9px] font-black tracking-widest text-success uppercase">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />{" "}
                 LIVE FEED
               </div>
@@ -218,11 +218,11 @@ export function OSGlobalKnowledgeNetwork() {
                   <div key={i} className="relative flex items-start gap-3">
                     {/* Vertical connecting line */}
                     {i !== 4 && (
-                      <div className="absolute top-[26px] bottom-[-16px] left-[13px] w-px bg-white/10" />
+                      <div className="absolute top-[26px] bottom-[-16px] left-[13px] w-px bg-muted/30" />
                     )}
 
                     <div
-                      className="bg-background z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/10"
+                      className="bg-background z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border"
                       style={{ borderColor: `${act.c}40` }}
                     >
                       <act.icon
@@ -231,7 +231,7 @@ export function OSGlobalKnowledgeNetwork() {
                       />
                     </div>
                     <div className="flex-1">
-                      <div className="mb-0.5 text-[10px] leading-tight font-bold text-white">
+                      <div className="mb-0.5 text-[10px] leading-tight font-bold text-foreground">
                         {act.n}
                       </div>
                       <div className="truncate text-[9px] text-primary">
@@ -255,7 +255,7 @@ export function OSGlobalKnowledgeNetwork() {
                 <div className="text-[10px] font-black tracking-widest text-primary uppercase">
                   GLOBAL RESEARCH MAP
                 </div>
-                <div className="flex items-center gap-1 rounded-full border border-emerald-500/50 bg-emerald-500/20 px-2 py-1 text-[9px] font-bold text-emerald-400">
+                <div className="flex items-center gap-1 rounded-full border border-emerald-500/50 bg-success/20 px-2 py-1 text-[9px] font-bold text-success">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />{" "}
                   LIVE
                 </div>
@@ -305,7 +305,7 @@ export function OSGlobalKnowledgeNetwork() {
               </div>
 
               {/* Map Footer Stats */}
-              <div className="relative z-10 mt-auto grid grid-cols-5 gap-2 border-t border-white/10 pt-4">
+              <div className="relative z-10 mt-auto grid grid-cols-5 gap-2 border-t border-border pt-4">
                 {[
                   { l: "Observations", v: "3,248", icon: Eye, c: "#00F0FF" },
                   {
@@ -330,7 +330,7 @@ export function OSGlobalKnowledgeNetwork() {
                 ].map((s, i) => (
                   <div
                     key={i}
-                    className="bg-background/80 rounded border border-white/5 p-2 text-center backdrop-blur"
+                    className="bg-background/80 rounded border border-border p-2 text-center backdrop-blur"
                   >
                     <div className="mb-1 flex justify-center">
                       <s.icon className="h-3 w-3" style={{ color: s.c }} />
@@ -352,12 +352,12 @@ export function OSGlobalKnowledgeNetwork() {
             {/* Row of 3 Panels */}
             <div className="grid h-full grid-cols-1 gap-4 md:grid-cols-3">
               {/* Community Observations */}
-              <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4">
+              <div className="bg-background flex flex-col rounded-xl border border-border p-4">
                 <div className="mb-4 flex items-center justify-between">
                   <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                     COMMUNITY OBSERVATIONS
                   </div>
-                  <div className="cursor-pointer text-[8px] text-primary hover:text-white">
+                  <div className="cursor-pointer text-[8px] text-primary hover:text-foreground">
                     View All
                   </div>
                 </div>
@@ -369,7 +369,7 @@ export function OSGlobalKnowledgeNetwork() {
                       className="h-full w-full object-cover"
                     />
                   </div>
-                  <div className="mb-0.5 text-[10px] font-bold text-white">
+                  <div className="mb-0.5 text-[10px] font-bold text-foreground">
                     New Moon Sighting
                   </div>
                   <div className="mb-2 text-[9px] text-primary">
@@ -381,17 +381,17 @@ export function OSGlobalKnowledgeNetwork() {
                   <div className="text-[8px] text-primary">12 May 2026</div>
                 </div>
 
-                <div className="mt-3 flex justify-center border-t border-white/10 pt-3">
+                <div className="mt-3 flex justify-center border-t border-border pt-3">
                   <div className="flex -space-x-2">
                     {[1, 2, 3, 4, 5].map((i) => (
                       <div
                         key={i}
-                        className="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full border border-black bg-slate-700 text-[8px]"
+                        className="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full border border-border bg-muted text-[8px]"
                       >
                         👤
                       </div>
                     ))}
-                    <div className="z-10 flex h-6 w-6 items-center justify-center rounded-full border border-black bg-muted text-[8px] font-bold text-primary">
+                    <div className="z-10 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-muted text-[8px] font-bold text-primary">
                       +124
                     </div>
                   </div>
@@ -399,12 +399,12 @@ export function OSGlobalKnowledgeNetwork() {
               </div>
 
               {/* Open Projects */}
-              <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4">
+              <div className="bg-background flex flex-col rounded-xl border border-border p-4">
                 <div className="mb-4 flex items-center justify-between">
                   <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                     OPEN PROJECTS
                   </div>
-                  <div className="cursor-pointer text-[8px] text-primary hover:text-white">
+                  <div className="cursor-pointer text-[8px] text-primary hover:text-foreground">
                     View All
                   </div>
                 </div>
@@ -419,7 +419,7 @@ export function OSGlobalKnowledgeNetwork() {
                   ].map((proj, i) => (
                     <div key={i}>
                       <div className="mb-1 flex justify-between text-[9px]">
-                        <span className="text-white/80">{proj.n}</span>
+                        <span className="text-foreground">{proj.n}</span>
                         <span className="font-mono text-primary">
                           {proj.p}%
                         </span>
@@ -436,20 +436,20 @@ export function OSGlobalKnowledgeNetwork() {
               </div>
 
               {/* Translation Network */}
-              <div className="bg-background flex flex-col items-center justify-between rounded-xl border border-white/10 p-4 text-center">
+              <div className="bg-background flex flex-col items-center justify-between rounded-xl border border-border p-4 text-center">
                 <div className="mb-2 flex w-full items-center justify-between">
-                  <div className="text-[9px] font-black tracking-widest text-emerald-400 uppercase">
+                  <div className="text-[9px] font-black tracking-widest text-success uppercase">
                     TRANSLATION NETWORK
                   </div>
                 </div>
 
                 <div className="relative my-2 h-24 w-24">
-                  <Globe2 className="h-full w-full text-emerald-500/20" />
+                  <Globe2 className="h-full w-full text-success/20" />
                   <div className="absolute inset-0 rounded-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjMDAwIiBmaWxsLW9wYWNpdHk9IjAuMCIvPgo8Y2lyY2xlIGN4PSI0IiBjeT0iNCIgcj0iMC41IiBmaWxsPSIjMzBENDc0Ii8+Cjwvc3ZnPg==')] [mask-image:radial-gradient(circle,white,transparent)] opacity-60" />
                 </div>
 
                 <div>
-                  <div className="text-sm font-black text-emerald-400">
+                  <div className="text-sm font-black text-success">
                     23 Languages
                   </div>
                   <div className="mt-1 text-[9px] text-primary">
@@ -457,7 +457,7 @@ export function OSGlobalKnowledgeNetwork() {
                   </div>
                 </div>
 
-                <button className="mt-3 flex w-full items-center justify-center gap-1 rounded border border-emerald-500/40 bg-transparent py-2 text-[9px] font-black tracking-widest text-emerald-400 uppercase transition-colors hover:bg-emerald-500/10">
+                <button className="mt-3 flex w-full items-center justify-center gap-1 rounded border border-emerald-500/40 bg-transparent py-2 text-[9px] font-black tracking-widest text-success uppercase transition-colors hover:bg-success/10">
                   JOIN TRANSLATION <ArrowRight className="h-3 w-3" />
                 </button>
               </div>
@@ -467,12 +467,12 @@ export function OSGlobalKnowledgeNetwork() {
           {/* RIGHT SIDEBAR: LATEST RESEARCH & CONTRIBUTORS (Col 10-12) */}
           <div className="flex flex-col gap-6 lg:col-span-3">
             {/* Latest Research */}
-            <div className="bg-background rounded-xl border border-white/10 p-4">
+            <div className="bg-background rounded-xl border border-border p-4">
               <div className="mb-4 flex items-center justify-between">
                 <div className="text-[10px] font-black tracking-widest text-primary uppercase">
                   LATEST RESEARCH
                 </div>
-                <div className="cursor-pointer text-[9px] text-primary hover:text-white">
+                <div className="cursor-pointer text-[9px] text-primary hover:text-foreground">
                   View All
                 </div>
               </div>
@@ -514,9 +514,9 @@ export function OSGlobalKnowledgeNetwork() {
                 ].map((res, i) => (
                   <div
                     key={i}
-                    className="group flex cursor-pointer items-center gap-3 rounded p-2 transition-colors hover:bg-white/5"
+                    className="group flex cursor-pointer items-center gap-3 rounded p-2 transition-colors hover:bg-muted/30"
                   >
-                    <div className="h-12 w-12 shrink-0 overflow-hidden rounded border border-white/10 bg-primary group-hover:border-primary/50">
+                    <div className="h-12 w-12 shrink-0 overflow-hidden rounded border border-border bg-primary group-hover:border-primary/50">
                       <Image
                         unoptimized
                         width={120}
@@ -527,7 +527,7 @@ export function OSGlobalKnowledgeNetwork() {
                       />
                     </div>
                     <div className="flex-1">
-                      <div className="mb-1 text-[10px] leading-tight font-bold text-white group-hover:text-primary">
+                      <div className="mb-1 text-[10px] leading-tight font-bold text-foreground group-hover:text-primary">
                         {res.n}
                       </div>
                       <div className="text-[8px] text-primary">{res.a}</div>
@@ -549,12 +549,12 @@ export function OSGlobalKnowledgeNetwork() {
             </div>
 
             {/* Top Contributors */}
-            <div className="bg-background flex flex-1 flex-col rounded-xl border border-white/10 p-4">
+            <div className="bg-background flex flex-1 flex-col rounded-xl border border-border p-4">
               <div className="mb-4 flex items-center justify-between">
                 <div className="text-[10px] font-black tracking-widest text-primary uppercase">
                   TOP CONTRIBUTORS
                 </div>
-                <div className="cursor-pointer text-[9px] text-primary hover:text-white">
+                <div className="cursor-pointer text-[9px] text-primary hover:text-foreground">
                   View All
                 </div>
               </div>
@@ -594,14 +594,14 @@ export function OSGlobalKnowledgeNetwork() {
                 ].map((usr, i) => (
                   <div key={i} className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="font-mono text-[10px] font-black text-amber-500">
+                      <div className="font-mono text-[10px] font-black text-warning">
                         {usr.i}
                       </div>
-                      <div className="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-slate-700 text-[10px]">
+                      <div className="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-muted text-[10px]">
                         👤
                       </div>
                       <div>
-                        <div className="text-[10px] font-bold text-white">
+                        <div className="text-[10px] font-bold text-foreground">
                           {usr.n}
                         </div>
                         <div className="text-[8px] text-primary">{usr.r}</div>
@@ -619,7 +619,7 @@ export function OSGlobalKnowledgeNetwork() {
 
         {/* ═══ LAYER 3: HOW YOU CAN CONTRIBUTE ════════════════════════════════ */}
         <div className="grid grid-cols-1 items-stretch gap-6 pt-2 lg:grid-cols-12">
-          <div className="bg-background rounded-xl border border-white/10 p-6 lg:col-span-8">
+          <div className="bg-background rounded-xl border border-border p-6 lg:col-span-8">
             <div className="mb-6 flex items-center gap-2 text-[10px] font-black tracking-widest text-primary uppercase">
               <span className="text-lg leading-none text-blue-500">“</span> HOW
               YOU CAN CONTRIBUTE
@@ -660,10 +660,10 @@ export function OSGlobalKnowledgeNetwork() {
               ].map((c, i) => (
                 <div
                   key={i}
-                  className="group flex cursor-pointer flex-col items-center rounded p-2 text-center transition-colors hover:bg-white/5"
+                  className="group flex cursor-pointer flex-col items-center rounded p-2 text-center transition-colors hover:bg-muted/30"
                 >
                   <c.icon className="mb-3 h-8 w-8" style={{ color: c.c }} />
-                  <div className="mb-1.5 line-clamp-2 text-[9px] font-bold text-white uppercase">
+                  <div className="mb-1.5 line-clamp-2 text-[9px] font-bold text-foreground uppercase">
                     {c.n}
                   </div>
                   <div className="text-[8px] leading-relaxed text-primary">
@@ -681,7 +681,7 @@ export function OSGlobalKnowledgeNetwork() {
             </div>
 
             <div className="relative z-10 text-center">
-              <div className="mb-3 text-sm font-black tracking-widest text-white uppercase">
+              <div className="mb-3 text-sm font-black tracking-widest text-foreground uppercase">
                 TOGETHER WE LIGHT THE PATH OF KNOWLEDGE
               </div>
               <div className="mb-6 font-sans text-[10px] text-blue-100/70">
@@ -697,11 +697,11 @@ export function OSGlobalKnowledgeNetwork() {
         </div>
 
         {/* ═══ FOOTER STATUS STRIP (Blueprint 11 Footer) ══════════════════════ */}
-        <div className="mt-6 flex flex-col items-center justify-between gap-6 border-t border-white/10 px-2 pt-4 font-mono text-[9px] font-bold tracking-widest text-primary uppercase lg:flex-row">
+        <div className="mt-6 flex flex-col items-center justify-between gap-6 border-t border-border px-2 pt-4 font-mono text-[9px] font-bold tracking-widest text-primary uppercase lg:flex-row">
           <div className="flex items-center gap-4">
             <Hexagon className="h-6 w-6 text-blue-500/50" />
             <div>
-              <div className="text-white">GLOBAL SYNC</div>
+              <div className="text-foreground">GLOBAL SYNC</div>
               <div>All nodes connected</div>
             </div>
           </div>
@@ -709,7 +709,7 @@ export function OSGlobalKnowledgeNetwork() {
           <div className="flex items-center gap-3">
             <div className="text-right">
               <div className="text-primary">NETWORK STATUS</div>
-              <div className="flex items-center gap-1.5 text-emerald-400">
+              <div className="flex items-center gap-1.5 text-success">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />{" "}
                 STABLE
               </div>
@@ -734,19 +734,19 @@ export function OSGlobalKnowledgeNetwork() {
             <Calendar className="h-5 w-5 text-primary" />
             <div>
               <div className="text-primary">NEXT COMMUNITY MEETUP</div>
-              <div className="text-white">14 June 2026 • 20:00 WIB</div>
+              <div className="text-foreground">14 June 2026 • 20:00 WIB</div>
             </div>
           </div>
 
           <div className="flex items-center gap-4 text-right">
-            <div className="max-w-[200px] font-sans text-white/60 normal-case italic">
+            <div className="max-w-[200px] font-sans text-foreground/60 normal-case italic">
               "Indeed, the believers are but brothers."
               <br />
               <span className="font-mono text-[8px] font-bold text-primary uppercase not-italic">
                 Qur&apos;an 49:10
               </span>
             </div>
-            <div className="flex h-8 w-8 items-center justify-center rounded border border-white/10">
+            <div className="flex h-8 w-8 items-center justify-center rounded border border-border">
               <Hexagon className="h-4 w-4 text-primary" />
             </div>
           </div>

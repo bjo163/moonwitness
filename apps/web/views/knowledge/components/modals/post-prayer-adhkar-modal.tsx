@@ -125,7 +125,7 @@ export function PostPrayerAdhkarModal() {
             </span>
           </div>
 
-          <div className="rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-500 w-full p-2 font-mono text-xs font-bold">
+          <div className="rounded-md border border-amber-500/40 bg-warning/10 text-warning w-full p-2 font-mono text-xs font-bold">
             {currentStep.title}
           </div>
 

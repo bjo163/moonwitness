@@ -118,7 +118,7 @@ export function ToolkitRasulullahView() {
                       {/* PERAN: {tk.role} */}
                     </p>
                   </div>
-                  <span className="rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-500 px-2 py-0.5 font-mono text-[9px] font-bold">
+                  <span className="rounded-md border border-emerald-500/40 bg-success/10 text-success px-2 py-0.5 font-mono text-[9px] font-bold">
                     {tk.quranRef}
                   </span>
                 </div>
@@ -150,7 +150,7 @@ export function ToolkitRasulullahView() {
                     <div className="mt-3">
                       <Button
                         variant="default"
-                        className="w-full py-1.5 text-[10px] bg-emerald-600 hover:bg-emerald-500 text-white"
+                        className="w-full py-1.5 text-[10px] bg-emerald-600 hover:bg-emerald-500 text-foreground"
                       >
                         EKSEKUSI TOOLKIT →
                       </Button>

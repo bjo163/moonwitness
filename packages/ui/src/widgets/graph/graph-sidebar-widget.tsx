@@ -46,9 +46,9 @@ export function GraphSidebarWidget() {
           <input
             type="text"
             placeholder="Search anything..."
-            className="bg-background w-full rounded-md border border-white/10 py-2 pr-8 pl-9 text-[10px] text-white transition-colors focus:border-primary focus:outline-none"
+            className="bg-background w-full rounded-md border border-border py-2 pr-8 pl-9 text-[10px] text-foreground transition-colors focus:border-primary focus:outline-none"
           />
-          <div className="absolute top-1/2 right-2 -translate-y-1/2 rounded bg-white/10 px-1.5 py-0.5 text-[7px] text-primary">
+          <div className="absolute top-1/2 right-2 -translate-y-1/2 rounded bg-muted/30 px-1.5 py-0.5 text-[7px] text-primary">
             ⌘ K
           </div>
         </div>
@@ -61,7 +61,7 @@ export function GraphSidebarWidget() {
         </div>
         <div className="space-y-1 text-[9px]">
           {loading ? (
-            <div className="animate-pulse text-xs text-white/50">
+            <div className="animate-pulse text-xs text-foreground/50">
               Loading entities...
             </div>
           ) : (
@@ -71,13 +71,13 @@ export function GraphSidebarWidget() {
                 return (
                   <div
                     key={et.id}
-                    className="group flex cursor-pointer items-center justify-between rounded p-1.5 transition-colors hover:bg-white/5"
+                    className="group flex cursor-pointer items-center justify-between rounded p-1.5 transition-colors hover:bg-muted/30"
                   >
                     <div className="flex items-center gap-2">
                       <IconComponent
-                        className={`h-3.5 w-3.5 opacity-90 transition-colors group-hover:text-white ${et.col}`}
+                        className={`h-3.5 w-3.5 opacity-90 transition-colors group-hover:text-foreground ${et.col}`}
                       />
-                      <span className="text-white/70 transition-colors group-hover:text-white">
+                      <span className="text-foreground transition-colors group-hover:text-foreground">
                         {et.n}
                       </span>
                     </div>
@@ -101,19 +101,19 @@ export function GraphSidebarWidget() {
           <button className="rounded border border-primary/50 bg-primary/20 px-2 py-1.5 text-[9px] font-bold text-primary">
             Show All
           </button>
-          <button className="bg-background rounded border border-white/10 px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-white/30 hover:text-white">
+          <button className="bg-background rounded border border-border px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-border hover:text-foreground">
             Revelation
           </button>
-          <button className="bg-background rounded border border-white/10 px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-white/30 hover:text-white">
+          <button className="bg-background rounded border border-border px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-border hover:text-foreground">
             Timeline
           </button>
-          <button className="bg-background rounded border border-white/10 px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-white/30 hover:text-white">
+          <button className="bg-background rounded border border-border px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-border hover:text-foreground">
             Science
           </button>
-          <button className="bg-background rounded border border-white/10 px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-white/30 hover:text-white">
+          <button className="bg-background rounded border border-border px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-border hover:text-foreground">
             People
           </button>
-          <button className="bg-background rounded border border-white/10 px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-white/30 hover:text-white">
+          <button className="bg-background rounded border border-border px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-border hover:text-foreground">
             Places
           </button>
         </div>
@@ -127,8 +127,8 @@ export function GraphSidebarWidget() {
         <div className="px-1">
           <div className="bg-background relative mb-2 h-1 rounded-full">
             <div className="absolute inset-y-0 right-[30%] left-[20%] rounded-full bg-primary" />
-            <div className="absolute top-1/2 left-[20%] h-2.5 w-2.5 -translate-y-1/2 cursor-pointer rounded-full border border-primary bg-white shadow-sm" />
-            <div className="absolute top-1/2 right-[30%] h-2.5 w-2.5 -translate-y-1/2 cursor-pointer rounded-full border border-primary bg-white shadow-sm" />
+            <div className="absolute top-1/2 left-[20%] h-2.5 w-2.5 -translate-y-1/2 cursor-pointer rounded-full border border-primary bg-card shadow-sm" />
+            <div className="absolute top-1/2 right-[30%] h-2.5 w-2.5 -translate-y-1/2 cursor-pointer rounded-full border border-primary bg-card shadow-sm" />
           </div>
           <div className="flex justify-between font-mono text-[8px] text-primary">
             <span>-4000</span>
@@ -143,20 +143,20 @@ export function GraphSidebarWidget() {
         <div className="mb-2 text-[9px] font-black tracking-widest text-primary uppercase">
           DEPTH LEVEL
         </div>
-        <div className="flex overflow-hidden rounded border border-white/10 text-[9px] font-bold">
-          <button className="bg-background flex-1 py-1.5 text-primary hover:bg-white/5">
+        <div className="flex overflow-hidden rounded border border-border text-[9px] font-bold">
+          <button className="bg-background flex-1 py-1.5 text-primary hover:bg-muted/30">
             1
           </button>
-          <button className="bg-background flex-1 border-l border-white/10 py-1.5 text-primary hover:bg-white/5">
+          <button className="bg-background flex-1 border-l border-border py-1.5 text-primary hover:bg-muted/30">
             2
           </button>
           <button className="flex-1 border-l border-primary/30 bg-primary/20 py-1.5 text-primary">
             3
           </button>
-          <button className="bg-background flex-1 border-l border-white/10 py-1.5 text-primary hover:bg-white/5">
+          <button className="bg-background flex-1 border-l border-border py-1.5 text-primary hover:bg-muted/30">
             4
           </button>
-          <button className="bg-background flex-1 border-l border-white/10 py-1.5 text-primary hover:bg-white/5">
+          <button className="bg-background flex-1 border-l border-border py-1.5 text-primary hover:bg-muted/30">
             5
           </button>
         </div>

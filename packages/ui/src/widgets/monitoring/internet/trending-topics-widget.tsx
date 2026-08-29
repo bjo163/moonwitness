@@ -10,11 +10,11 @@ export function TrendingTopicsWidget({
   trends?: TrendingTopic[]
 }) {
   return (
-    <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-4 xl:col-span-3">
+    <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-4 xl:col-span-3">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2 text-[9px] font-black tracking-widest text-primary uppercase">
           HUMANITY'S FOCUS
-          <span className="rounded-[2px] border border-white/30 bg-white/20 px-1.5 py-0.5 text-[8px] text-white">
+          <span className="rounded-[2px] border border-border bg-muted/30 px-1.5 py-0.5 text-[8px] text-foreground">
             TRENDS
           </span>
         </div>
@@ -30,14 +30,14 @@ export function TrendingTopicsWidget({
           trends.map((t, i) => (
             <div
               key={i}
-              className="group flex flex-col gap-2 rounded border border-white/5 p-2 transition-colors hover:bg-white/5"
+              className="group flex flex-col gap-2 rounded border border-border p-2 transition-colors hover:bg-muted/30"
             >
               <div className="flex items-start gap-3">
                 <div className="mt-0.5 font-mono text-[14px] font-black text-primary/30 transition-colors group-hover:text-primary">
                   {(i + 1).toString().padStart(2, "0")}
                 </div>
                 <div className="flex-1">
-                  <div className="mb-1 text-[11px] leading-tight font-bold text-white">
+                  <div className="mb-1 text-[11px] leading-tight font-bold text-foreground">
                     {t.title}
                   </div>
                   <div className="flex items-center gap-3 text-[8px] text-primary/70">

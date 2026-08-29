@@ -85,7 +85,7 @@ export function GlobalStatusWidget() {
         ].map((st, i) => (
           <div
             key={i}
-            className="bg-background flex cursor-pointer flex-col justify-between rounded border border-white/5 p-2 transition-colors hover:bg-white/5"
+            className="bg-background flex cursor-pointer flex-col justify-between rounded border border-border p-2 transition-colors hover:bg-muted/30"
           >
             <div className="text-[7px] font-bold text-primary uppercase">
               {st.l}
@@ -93,14 +93,14 @@ export function GlobalStatusWidget() {
             <div className="mt-1 flex items-end justify-between">
               <st.icon className={`mb-0.5 h-3.5 w-3.5 ${st.c}`} />
               <div className="text-right">
-                <div className="text-xs font-black text-white">{st.v}</div>
+                <div className="text-xs font-black text-foreground">{st.v}</div>
                 <div className="text-[7px] text-primary">{st.s}</div>
               </div>
             </div>
           </div>
         ))}
       </div>
-      <button className="mt-3 flex w-full items-center justify-center gap-1 border-t border-white/10 pt-3 text-center text-[9px] font-bold tracking-widest text-primary uppercase hover:text-white">
+      <button className="mt-3 flex w-full items-center justify-center gap-1 border-t border-border pt-3 text-center text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
         VIEW DETAILED STATUS <ArrowRight className="h-3 w-3" />
       </button>
     </div>

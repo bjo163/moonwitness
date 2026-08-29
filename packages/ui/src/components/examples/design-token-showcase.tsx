@@ -19,10 +19,10 @@ export function SemanticColorExample() {
       <div className="text-primary text-xl font-bold">
         Primary Action
       </div>
-      <div className="text-emerald-600 dark:text-emerald-400 text-sm">
+      <div className="text-emerald-600 dark:text-success text-sm">
         ✓ Operation Successful
       </div>
-      <div className="text-amber-600 dark:text-amber-400 text-sm">
+      <div className="text-amber-600 dark:text-warning text-sm">
         ⚠ Attention Required
       </div>
     </div>

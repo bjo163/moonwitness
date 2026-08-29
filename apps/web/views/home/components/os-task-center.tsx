@@ -60,10 +60,10 @@ export function OSTaskCenter() {
 
       <div className="relative z-10 mx-auto max-w-[1700px] space-y-4 px-4">
         {/* ═══ TOP HEADER (Blueprint 16) ══════════════════════════════════════ */}
-        <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-4 xl:flex-row xl:items-center">
+        <div className="flex flex-col justify-between gap-4 border-b border-border pb-4 xl:flex-row xl:items-center">
           <div className="flex items-center gap-4">
             <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-border px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
-              <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-black">
+              <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-foreground">
                 16
               </span>
               <span>TASK CENTER</span>
@@ -85,43 +85,43 @@ export function OSTaskCenter() {
           {/* LEFT COLUMN: Sidebar (Col 1-2) */}
           <div className="flex flex-col gap-4 xl:col-span-2">
             {/* Nav Menu */}
-            <div className="bg-background space-y-1 rounded-xl border border-white/10 p-2 text-[9px] font-bold tracking-widest text-primary uppercase">
+            <div className="bg-background space-y-1 rounded-xl border border-border p-2 text-[9px] font-bold tracking-widest text-primary uppercase">
               <div className="flex cursor-pointer items-center justify-between rounded-r border-l-2 border-primary bg-primary/10 px-3 py-2.5 text-primary">
                 <span className="flex items-center gap-2">
                   <LayoutDashboard className="h-3.5 w-3.5" /> Overview
                 </span>
               </div>
-              <div className="flex cursor-pointer items-center justify-between rounded px-3 py-2 transition-colors hover:bg-white/5">
+              <div className="flex cursor-pointer items-center justify-between rounded px-3 py-2 transition-colors hover:bg-muted/30">
                 <span className="flex items-center gap-2">
                   <CheckSquare className="h-3.5 w-3.5" /> My Tasks
                 </span>
                 <span className="font-mono text-primary">28</span>
               </div>
-              <div className="flex cursor-pointer items-center justify-between rounded px-3 py-2 transition-colors hover:bg-white/5">
+              <div className="flex cursor-pointer items-center justify-between rounded px-3 py-2 transition-colors hover:bg-muted/30">
                 <span className="flex items-center gap-2">
                   <User className="h-3.5 w-3.5" /> Assigned to me
                 </span>
-                <span className="font-mono text-amber-500">15</span>
+                <span className="font-mono text-warning">15</span>
               </div>
-              <div className="flex cursor-pointer items-center justify-between rounded px-3 py-2 transition-colors hover:bg-white/5">
+              <div className="flex cursor-pointer items-center justify-between rounded px-3 py-2 transition-colors hover:bg-muted/30">
                 <span className="flex items-center gap-2">
                   <Users className="h-3.5 w-3.5" /> Team Tasks
                 </span>
                 <span className="font-mono text-primary">86</span>
               </div>
-              <div className="flex cursor-pointer items-center justify-between rounded px-3 py-2 transition-colors hover:bg-white/5">
+              <div className="flex cursor-pointer items-center justify-between rounded px-3 py-2 transition-colors hover:bg-muted/30">
                 <span className="flex items-center gap-2">
                   <CheckCircle2 className="h-3.5 w-3.5" /> Review & Approval
                 </span>
                 <span className="text-knowledge font-mono">12</span>
               </div>
-              <div className="flex cursor-pointer items-center justify-between rounded px-3 py-2 transition-colors hover:bg-white/5">
+              <div className="flex cursor-pointer items-center justify-between rounded px-3 py-2 transition-colors hover:bg-muted/30">
                 <span className="flex items-center gap-2">
                   <CheckCircle2 className="h-3.5 w-3.5" /> Completed
                 </span>
-                <span className="font-mono text-emerald-400">342</span>
+                <span className="font-mono text-success">342</span>
               </div>
-              <div className="flex cursor-pointer items-center justify-between rounded px-3 py-2 transition-colors hover:bg-white/5">
+              <div className="flex cursor-pointer items-center justify-between rounded px-3 py-2 transition-colors hover:bg-muted/30">
                 <span className="flex items-center gap-2">
                   <Archive className="h-3.5 w-3.5" /> Archived
                 </span>
@@ -129,7 +129,7 @@ export function OSTaskCenter() {
             </div>
 
             {/* Quick Create */}
-            <div className="bg-background rounded-xl border border-white/10 p-3">
+            <div className="bg-background rounded-xl border border-border p-3">
               <div className="mb-3 text-[9px] font-black tracking-widest text-primary uppercase">
                 QUICK CREATE
               </div>
@@ -137,13 +137,13 @@ export function OSTaskCenter() {
                 <button className="flex items-center justify-center gap-1.5 rounded border border-primary/30 bg-primary/10 p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-primary/20">
                   <Plus className="h-3 w-3" /> New Task
                 </button>
-                <button className="bg-background flex items-center justify-center gap-1.5 rounded border border-white/10 p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-white/10 hover:text-white">
+                <button className="bg-background flex items-center justify-center gap-1.5 rounded border border-border p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-muted/30 hover:text-foreground">
                   <Upload className="h-3 w-3" /> Import Tasks
                 </button>
-                <button className="bg-background flex items-center justify-center gap-1.5 rounded border border-white/10 p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-white/10 hover:text-white">
+                <button className="bg-background flex items-center justify-center gap-1.5 rounded border border-border p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-muted/30 hover:text-foreground">
                   <Repeat className="h-3 w-3" /> Recurring Task
                 </button>
-                <button className="bg-background flex items-center justify-center gap-1.5 rounded border border-white/10 p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-white/10 hover:text-white">
+                <button className="bg-background flex items-center justify-center gap-1.5 rounded border border-border p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-muted/30 hover:text-foreground">
                   <FileCode2 className="h-3 w-3" /> Task Template
                 </button>
               </div>
@@ -171,7 +171,7 @@ export function OSTaskCenter() {
                   />
                 </div>
                 <div>
-                  <div className="mb-1 text-[10px] font-bold text-white">
+                  <div className="mb-1 text-[10px] font-bold text-foreground">
                     Hi, I&apos;m KHIDRA.
                   </div>
                   <div className="font-sans text-[8px] leading-relaxed text-primary/70">
@@ -186,7 +186,7 @@ export function OSTaskCenter() {
             </div>
 
             {/* Task Insights */}
-            <div className="bg-background rounded-xl border border-white/10 p-4">
+            <div className="bg-background rounded-xl border border-border p-4">
               <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                 TASK INSIGHTS
               </div>
@@ -194,7 +194,7 @@ export function OSTaskCenter() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="bg-background rounded border border-white/10 p-1.5">
+                    <div className="bg-background rounded border border-border p-1.5">
                       <Target className="h-3.5 w-3.5 text-blue-400" />
                     </div>
                     <div>
@@ -205,10 +205,10 @@ export function OSTaskCenter() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-mono text-sm leading-tight font-black text-white">
+                    <div className="font-mono text-sm leading-tight font-black text-foreground">
                       38
                     </div>
-                    <div className="font-mono text-[8px] font-bold text-emerald-400">
+                    <div className="font-mono text-[8px] font-bold text-success">
                       +22%
                     </div>
                   </div>
@@ -216,8 +216,8 @@ export function OSTaskCenter() {
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="bg-background rounded border border-white/10 p-1.5">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                    <div className="bg-background rounded border border-border p-1.5">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-success" />
                     </div>
                     <div>
                       <div className="text-[8px] text-primary uppercase">
@@ -227,21 +227,21 @@ export function OSTaskCenter() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-mono text-sm leading-tight font-black text-white">
+                    <div className="font-mono text-sm leading-tight font-black text-foreground">
                       52
                     </div>
-                    <div className="font-mono text-[8px] font-bold text-emerald-400">
+                    <div className="font-mono text-[8px] font-bold text-success">
                       +31%
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between border-t border-white/10 pt-3">
+                <div className="flex items-center justify-between border-t border-border pt-3">
                   <div className="text-center">
                     <div className="mb-0.5 text-[8px] text-primary uppercase">
                       On Track
                     </div>
-                    <div className="font-mono text-sm font-black text-emerald-400">
+                    <div className="font-mono text-sm font-black text-success">
                       92%
                     </div>
                   </div>
@@ -266,26 +266,26 @@ export function OSTaskCenter() {
           {/* CENTER COLUMN: Main Workspace (Col 3-9) */}
           <div className="flex flex-col gap-4 xl:col-span-7">
             {/* Task Overview Stats */}
-            <div className="bg-background rounded-xl border border-white/10 p-4">
+            <div className="bg-background rounded-xl border border-border p-4">
               <div className="mb-4 flex items-center justify-between">
                 <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-primary uppercase">
                   <CheckSquare className="h-4 w-4" /> TASK OVERVIEW
                 </div>
                 <div className="flex gap-2">
-                  <button className="bg-background flex items-center gap-1 rounded border border-white/10 px-2 py-1 text-[8px] text-primary transition-colors hover:bg-white/5">
+                  <button className="bg-background flex items-center gap-1 rounded border border-border px-2 py-1 text-[8px] text-primary transition-colors hover:bg-muted/30">
                     <Filter className="h-3 w-3" /> Filters ∨
                   </button>
-                  <button className="bg-background flex items-center gap-1 rounded border border-white/10 px-2 py-1 text-[8px] text-primary transition-colors hover:bg-white/5">
+                  <button className="bg-background flex items-center gap-1 rounded border border-border px-2 py-1 text-[8px] text-primary transition-colors hover:bg-muted/30">
                     Group by: <span className="text-primary">Status</span> ∨
                   </button>
-                  <button className="bg-background flex items-center gap-1 rounded border border-white/10 px-2 py-1 text-[8px] text-primary transition-colors hover:bg-white/5">
+                  <button className="bg-background flex items-center gap-1 rounded border border-border px-2 py-1 text-[8px] text-primary transition-colors hover:bg-muted/30">
                     Sort by: <span className="text-primary">Priority</span> ∨
                   </button>
-                  <div className="bg-background ml-2 flex overflow-hidden rounded border border-white/10">
-                    <button className="bg-white/10 px-2 py-1 text-white">
+                  <div className="bg-background ml-2 flex overflow-hidden rounded border border-border">
+                    <button className="bg-muted/30 px-2 py-1 text-foreground">
                       <List className="h-3 w-3" />
                     </button>
-                    <button className="px-2 py-1 text-primary hover:bg-white/5">
+                    <button className="px-2 py-1 text-primary hover:bg-muted/30">
                       <Calendar className="h-3 w-3" />
                     </button>
                   </div>
@@ -297,7 +297,7 @@ export function OSTaskCenter() {
                   <div className="mb-1 text-[8px] font-bold tracking-widest text-primary uppercase">
                     TOTAL TASKS
                   </div>
-                  <div className="mb-1 font-mono text-3xl leading-none font-black text-white">
+                  <div className="mb-1 font-mono text-3xl leading-none font-black text-foreground">
                     238
                   </div>
                   <div className="text-[8px] font-bold text-primary">
@@ -339,7 +339,7 @@ export function OSTaskCenter() {
                     >
                       {st.n}
                     </div>
-                    <div className="mb-1 font-mono text-2xl leading-none font-black text-white">
+                    <div className="mb-1 font-mono text-2xl leading-none font-black text-foreground">
                       {st.v}
                     </div>
                     <div className="font-mono text-[8px] text-primary">
@@ -351,7 +351,7 @@ export function OSTaskCenter() {
                   <div className="mb-1 text-[7px] font-bold tracking-widest text-rose-500 uppercase">
                     OVERDUE
                   </div>
-                  <div className="mb-1 font-mono text-2xl leading-none font-black text-white">
+                  <div className="mb-1 font-mono text-2xl leading-none font-black text-foreground">
                     14
                   </div>
                   <div className="font-mono text-[8px] text-rose-500">5.9%</div>
@@ -360,30 +360,30 @@ export function OSTaskCenter() {
             </div>
 
             {/* Task List Table */}
-            <div className="bg-background flex flex-1 flex-col rounded-xl border border-white/10 p-4">
+            <div className="bg-background flex flex-1 flex-col rounded-xl border border-border p-4">
               {/* Tabs */}
-              <div className="mb-4 flex gap-4 border-b border-white/10 px-2 text-[9px] font-bold tracking-widest text-primary uppercase">
+              <div className="mb-4 flex gap-4 border-b border-border px-2 text-[9px] font-bold tracking-widest text-primary uppercase">
                 <button className="border-b-2 border-primary py-2 text-primary">
                   All Tasks
                 </button>
-                <button className="py-2 transition-colors hover:text-white">
+                <button className="py-2 transition-colors hover:text-foreground">
                   High Priority
                 </button>
-                <button className="py-2 transition-colors hover:text-white">
+                <button className="py-2 transition-colors hover:text-foreground">
                   Due Today
                 </button>
-                <button className="py-2 transition-colors hover:text-white">
+                <button className="py-2 transition-colors hover:text-foreground">
                   This Week
                 </button>
-                <button className="py-2 transition-colors hover:text-white">
+                <button className="py-2 transition-colors hover:text-foreground">
                   Overdue
                 </button>
               </div>
 
               {/* Table Header */}
-              <div className="grid grid-cols-12 gap-2 border-b border-white/5 px-2 pb-2 text-[8px] font-black tracking-widest text-primary uppercase">
+              <div className="grid grid-cols-12 gap-2 border-b border-border px-2 pb-2 text-[8px] font-black tracking-widest text-primary uppercase">
                 <div className="col-span-4 flex gap-2">
-                  <div className="h-4 w-4 rounded-sm border border-white/20" />{" "}
+                  <div className="h-4 w-4 rounded-sm border border-border" />{" "}
                   TASK
                 </div>
                 <div className="col-span-2">PROJECT</div>
@@ -496,15 +496,15 @@ export function OSTaskCenter() {
                 ].map((row, i) => (
                   <div
                     key={i}
-                    className="group grid cursor-pointer grid-cols-12 items-center gap-2 rounded border border-transparent p-2 text-[9px] transition-colors hover:border-white/5 hover:bg-white/5"
+                    className="group grid cursor-pointer grid-cols-12 items-center gap-2 rounded border border-transparent p-2 text-[9px] transition-colors hover:border-border hover:bg-muted/30"
                   >
                     <div className="col-span-4 flex items-center gap-2">
-                      <div className="h-3.5 w-3.5 shrink-0 rounded-sm border border-white/20" />
+                      <div className="h-3.5 w-3.5 shrink-0 rounded-sm border border-border" />
                       <div>
-                        <div className="truncate font-bold text-white transition-colors group-hover:text-primary">
+                        <div className="truncate font-bold text-foreground transition-colors group-hover:text-primary">
                           {row.t}
                         </div>
-                        <div className="mt-0.5 inline-block rounded border border-white/10 bg-primary px-1.5 py-[1px] text-[6px] text-primary">
+                        <div className="mt-0.5 inline-block rounded border border-border bg-primary px-1.5 py-[1px] text-[6px] text-primary">
                           {row.tag}
                         </div>
                       </div>
@@ -560,32 +560,32 @@ export function OSTaskCenter() {
               </div>
 
               {/* Pagination */}
-              <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-[9px] text-primary">
+              <div className="mt-4 flex items-center justify-between border-t border-border pt-3 text-[9px] text-primary">
                 <div>Showing 1 to 8 of 238 tasks</div>
                 <div className="flex items-center gap-1">
-                  <button className="p-1 hover:text-white">
+                  <button className="p-1 hover:text-foreground">
                     <ChevronLeft className="h-3.5 w-3.5" />
                   </button>
                   <button className="flex h-5 w-5 items-center justify-center rounded border border-primary/50 bg-primary/20 text-primary">
                     1
                   </button>
-                  <button className="flex h-5 w-5 items-center justify-center rounded hover:bg-white/5">
+                  <button className="flex h-5 w-5 items-center justify-center rounded hover:bg-muted/30">
                     2
                   </button>
-                  <button className="flex h-5 w-5 items-center justify-center rounded hover:bg-white/5">
+                  <button className="flex h-5 w-5 items-center justify-center rounded hover:bg-muted/30">
                     3
                   </button>
                   <span>...</span>
-                  <button className="flex h-5 w-5 items-center justify-center rounded hover:bg-white/5">
+                  <button className="flex h-5 w-5 items-center justify-center rounded hover:bg-muted/30">
                     30
                   </button>
-                  <button className="p-1 hover:text-white">
+                  <button className="p-1 hover:text-foreground">
                     <ChevronRight className="h-3.5 w-3.5" />
                   </button>
                 </div>
                 <div className="flex items-center gap-2">
                   <span>Rows per page:</span>
-                  <button className="bg-background flex items-center gap-1 rounded border border-white/10 px-2 py-1 text-white">
+                  <button className="bg-background flex items-center gap-1 rounded border border-border px-2 py-1 text-foreground">
                     10 <ChevronDown className="h-3 w-3" />
                   </button>
                 </div>
@@ -595,7 +595,7 @@ export function OSTaskCenter() {
             {/* Bottom Analytics Row */}
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
               {/* Task Priority Distribution */}
-              <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4">
+              <div className="bg-background flex flex-col rounded-xl border border-border p-4">
                 <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                   TASK PRIORITY DISTRIBUTION
                 </div>
@@ -619,7 +619,7 @@ export function OSTaskCenter() {
                     />
 
                     <div className="text-center">
-                      <div className="font-mono text-lg leading-none font-black text-white">
+                      <div className="font-mono text-lg leading-none font-black text-foreground">
                         238
                       </div>
                       <div className="mt-1 text-[6px] font-bold text-primary uppercase">
@@ -630,24 +630,24 @@ export function OSTaskCenter() {
                   <div className="space-y-1.5 text-[8px]">
                     <div className="flex items-center gap-1.5">
                       <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />{" "}
-                      <span className="w-10 text-white/80">High</span>{" "}
+                      <span className="w-10 text-foreground">High</span>{" "}
                       <span className="font-mono text-primary">68 (28.6%)</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />{" "}
-                      <span className="w-10 text-white/80">Medium</span>{" "}
+                      <span className="w-10 text-foreground">Medium</span>{" "}
                       <span className="font-mono text-primary">
                         102 (42.9%)
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />{" "}
-                      <span className="w-10 text-white/80">Low</span>{" "}
+                      <span className="w-10 text-foreground">Low</span>{" "}
                       <span className="font-mono text-primary">48 (20.2%)</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <span className="h-1.5 w-1.5 rounded-full bg-primary" />{" "}
-                      <span className="w-10 text-white/80">None</span>{" "}
+                      <span className="w-10 text-foreground">None</span>{" "}
                       <span className="font-mono text-primary">20 (8.3%)</span>
                     </div>
                   </div>
@@ -655,12 +655,12 @@ export function OSTaskCenter() {
               </div>
 
               {/* Task Progress Trend */}
-              <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4">
+              <div className="bg-background flex flex-col rounded-xl border border-border p-4">
                 <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                   TASK PROGRESS TREND
                 </div>
 
-                <div className="relative mt-2 ml-5 min-h-[100px] flex-1 border-b border-l border-white/10">
+                <div className="relative mt-2 ml-5 min-h-[100px] flex-1 border-b border-l border-border">
                   <div className="absolute top-0 -left-5 -translate-y-1/2 text-[6px] text-primary">
                     250
                   </div>
@@ -746,7 +746,7 @@ export function OSTaskCenter() {
               </div>
 
               {/* Tasks by Project */}
-              <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4">
+              <div className="bg-background flex flex-col rounded-xl border border-border p-4">
                 <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                   TASKS BY PROJECT
                 </div>
@@ -760,7 +760,7 @@ export function OSTaskCenter() {
                     { n: "Others", v: 33, p: "14%", c: "#708090" },
                   ].map((proj, i) => (
                     <div key={i} className="flex items-center gap-2">
-                      <div className="w-20 truncate text-white/80">
+                      <div className="w-20 truncate text-foreground">
                         {proj.n}
                       </div>
                       <div className="bg-background h-1 flex-1 overflow-hidden rounded-full">
@@ -769,14 +769,14 @@ export function OSTaskCenter() {
                           style={{ width: proj.p, backgroundColor: proj.c }}
                         />
                       </div>
-                      <div className="w-12 text-right font-mono text-white">
+                      <div className="w-12 text-right font-mono text-foreground">
                         {proj.v}{" "}
                         <span className="text-primary">({proj.p})</span>
                       </div>
                     </div>
                   ))}
                 </div>
-                <button className="mt-2 flex items-center justify-center gap-1 text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:text-white">
+                <button className="mt-2 flex items-center justify-center gap-1 text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:text-foreground">
                   View All Projects <ArrowRight className="h-2.5 w-2.5" />
                 </button>
               </div>
@@ -786,7 +786,7 @@ export function OSTaskCenter() {
           {/* RIGHT COLUMN: Summary & Deadlines (Col 10-12) */}
           <div className="flex flex-col gap-4 xl:col-span-3">
             {/* My Tasks Summary */}
-            <div className="bg-background rounded-xl border border-white/10 p-4">
+            <div className="bg-background rounded-xl border border-border p-4">
               <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                 MY TASKS SUMMARY
               </div>
@@ -806,7 +806,7 @@ export function OSTaskCenter() {
                   />
 
                   <div className="text-center">
-                    <div className="font-mono text-lg leading-none font-black text-white">
+                    <div className="font-mono text-lg leading-none font-black text-foreground">
                       40
                     </div>
                     <div className="mt-0.5 text-[5px] font-bold text-primary uppercase">
@@ -816,28 +816,28 @@ export function OSTaskCenter() {
                 </div>
                 <div className="flex-1 space-y-1 text-[8px]">
                   <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1.5 text-white/80">
+                    <span className="flex items-center gap-1.5 text-foreground">
                       <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />{" "}
                       To Do
                     </span>
                     <span className="font-mono text-primary">12 (30%)</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1.5 text-white/80">
+                    <span className="flex items-center gap-1.5 text-foreground">
                       <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />{" "}
                       In Progress
                     </span>
                     <span className="font-mono text-primary">18 (45%)</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1.5 text-white/80">
+                    <span className="flex items-center gap-1.5 text-foreground">
                       <span className="h-1.5 w-1.5 rounded-full bg-primary" />{" "}
                       Review
                     </span>
                     <span className="font-mono text-primary">6 (15%)</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1.5 text-white/80">
+                    <span className="flex items-center gap-1.5 text-foreground">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />{" "}
                       Done
                     </span>
@@ -845,13 +845,13 @@ export function OSTaskCenter() {
                   </div>
                 </div>
               </div>
-              <button className="mt-3 flex w-full items-center justify-center gap-1 border-t border-white/10 py-1.5 text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:text-white">
+              <button className="mt-3 flex w-full items-center justify-center gap-1 border-t border-border py-1.5 text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:text-foreground">
                 View My Tasks <ArrowRight className="h-2.5 w-2.5" />
               </button>
             </div>
 
             {/* Upcoming Deadlines */}
-            <div className="bg-background rounded-xl border border-white/10 p-4">
+            <div className="bg-background rounded-xl border border-border p-4">
               <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                 UPCOMING DEADLINES
               </div>
@@ -883,11 +883,11 @@ export function OSTaskCenter() {
                   },
                 ].map((dl, i) => (
                   <div key={i} className="flex gap-3">
-                    <div className="bg-background flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10">
+                    <div className="bg-background flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border">
                       <dl.i className="h-3.5 w-3.5 text-primary" />
                     </div>
-                    <div className="flex-1 border-b border-white/5 pb-2">
-                      <div className="mb-0.5 truncate text-[9px] leading-tight font-bold text-white">
+                    <div className="flex-1 border-b border-border pb-2">
+                      <div className="mb-0.5 truncate text-[9px] leading-tight font-bold text-foreground">
                         {dl.n}
                       </div>
                       <div className="mb-1 text-[7px] text-primary uppercase">
@@ -901,13 +901,13 @@ export function OSTaskCenter() {
                   </div>
                 ))}
               </div>
-              <button className="mt-2 flex w-full items-center justify-center gap-1 py-1.5 text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:text-white">
+              <button className="mt-2 flex w-full items-center justify-center gap-1 py-1.5 text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:text-foreground">
                 View Calendar <ArrowRight className="h-2.5 w-2.5" />
               </button>
             </div>
 
             {/* Team Workload */}
-            <div className="bg-background rounded-xl border border-white/10 p-4">
+            <div className="bg-background rounded-xl border border-border p-4">
               <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                 TEAM WORKLOAD
               </div>
@@ -953,7 +953,7 @@ export function OSTaskCenter() {
                     <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-muted">
                       <User className="h-3 w-3 text-primary" />
                     </div>
-                    <div className="w-24 truncate text-white/80">{tm.n}</div>
+                    <div className="w-24 truncate text-foreground">{tm.n}</div>
                     <div className="bg-background h-1 flex-1 overflow-hidden rounded-full">
                       <div
                         className="h-full rounded-full"
@@ -972,7 +972,7 @@ export function OSTaskCenter() {
                   </div>
                 ))}
               </div>
-              <button className="mt-3 flex w-full items-center justify-center gap-1 border-t border-white/10 py-1.5 text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:text-white">
+              <button className="mt-3 flex w-full items-center justify-center gap-1 border-t border-border py-1.5 text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:text-foreground">
                 View Team Tasks <ArrowRight className="h-2.5 w-2.5" />
               </button>
             </div>
@@ -985,30 +985,30 @@ export function OSTaskCenter() {
               <div className="flex-1 space-y-2.5">
                 <div className="flex items-start gap-2">
                   <Clock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-rose-500" />
-                  <div className="text-[9px] leading-tight text-white/80">
+                  <div className="text-[9px] leading-tight text-foreground">
                     14 tasks are overdue. Consider rescheduling.
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
-                  <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
-                  <div className="text-[9px] leading-tight text-white/80">
+                  <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warning" />
+                  <div className="text-[9px] leading-tight text-foreground">
                     You have 6 high priority tasks due this week.
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
                   <User className="mt-0.5 h-3.5 w-3.5 shrink-0 text-rose-500" />
-                  <div className="text-[9px] leading-tight text-white/80">
+                  <div className="text-[9px] leading-tight text-foreground">
                     Fatimah Zahra has high workload next 3 days.
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
-                  <Target className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-500" />
-                  <div className="text-[9px] leading-tight text-white/80">
+                  <Target className="mt-0.5 h-3.5 w-3.5 shrink-0 text-success" />
+                  <div className="text-[9px] leading-tight text-foreground">
                     Observation coverage is low in West Indonesia.
                   </div>
                 </div>
               </div>
-              <button className="mt-2 flex items-center justify-center gap-1 text-[8px] font-bold text-primary transition-colors hover:text-white">
+              <button className="mt-2 flex items-center justify-center gap-1 text-[8px] font-bold text-primary transition-colors hover:text-foreground">
                 View All Suggestions <ArrowRight className="h-2.5 w-2.5" />
               </button>
             </div>
@@ -1016,18 +1016,18 @@ export function OSTaskCenter() {
         </div>
 
         {/* ═══ LAYER 3: FOOTER GRAPHIC ════════════════════════════════════════ */}
-        <div className="bg-background relative mt-4 flex min-h-[150px] flex-1 flex-col items-center justify-center overflow-hidden rounded-xl border border-white/10 text-center">
+        <div className="bg-background relative mt-4 flex min-h-[150px] flex-1 flex-col items-center justify-center overflow-hidden rounded-xl border border-border text-center">
           <div className="absolute inset-0 bg-[url('/assets/landscape-temp.jpg')] bg-cover bg-center opacity-20 mix-blend-screen" />
-          <div className="from-space via-space/50 absolute inset-0 z-10 bg-gradient-to-t to-transparent" />
+          <div className="from-background via-background/60 absolute inset-0 z-10 bg-gradient-to-t to-transparent" />
 
           <div className="relative z-20 px-8">
             <div
-              className="font-arabic mb-3 text-[20px] font-bold text-white"
+              className="font-arabic mb-3 text-[20px] font-bold text-foreground"
               dir="rtl"
             >
               وَقُل رَّبِّ زِدْنِي عِلْمًا
             </div>
-            <div className="mb-2 font-sans text-[11px] text-white/80 italic">
+            <div className="mb-2 font-sans text-[11px] text-foreground italic">
               "And say, 'My Lord, increase me in knowledge.'"
             </div>
             <div className="font-mono text-[9px] font-bold tracking-widest text-primary uppercase">

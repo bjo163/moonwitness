@@ -41,7 +41,7 @@ export function ShareCardGeneratorModal({
         <button
           onClick={() => setIsOpen(true)}
           title="Export Infographic Share Card"
-          className="flex h-6 w-6 items-center justify-center rounded bg-white/5 text-[10px] text-blue-400 transition-colors hover:bg-blue-500/20 hover:text-blue-300"
+          className="flex h-6 w-6 items-center justify-center rounded bg-muted/30 text-[10px] text-blue-400 transition-colors hover:bg-blue-500/20 hover:text-blue-300"
         >
           <Share2 className="h-3 w-3" />
         </button>

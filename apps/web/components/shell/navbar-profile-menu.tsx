@@ -65,7 +65,7 @@ export function NavbarProfileMenu({
         <div className="flex flex-col items-start text-left">
           <span className="text-xs font-semibold text-foreground group-hover:text-primary">
             {userProfile.name?.substring(0, MAX_NAME_DISPLAY_LENGTH) ||
-              "Operator"}
+              "User"}
           </span>
           <span className="text-[10px] text-muted-foreground">
             {userProfile.role || "Public"}

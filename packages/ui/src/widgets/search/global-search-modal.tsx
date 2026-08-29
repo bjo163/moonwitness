@@ -304,7 +304,7 @@ export function GlobalSearchModal() {
           {query && (
             <button
               onClick={() => setQuery("")}
-              className="text-muted hover:text-white"
+              className="text-muted hover:text-foreground"
             >
               <X className="h-4 w-4" />
             </button>

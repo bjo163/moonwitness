@@ -37,19 +37,19 @@ export function ShootgunPublicView() {
             MOON SHOOTGUN
           </span>
         </div>
-        <h1 className="mt-3 text-3xl font-semibold text-white">
+        <h1 className="mt-3 text-3xl font-semibold text-foreground">
           Operation Archive
         </h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
           Public record of documented operations, their arguments, and
           cross-scripture wisdom.
         </p>
       </header>
 
       {loading ? (
-        <p className="text-sm text-slate-400">Loading operations...</p>
+        <p className="text-sm text-muted-foreground">Loading operations...</p>
       ) : operations.length === 0 ? (
-        <div className="border border-dashed border-border px-5 py-10 text-center text-sm text-slate-400">
+        <div className="border border-dashed border-border px-5 py-10 text-center text-sm text-muted-foreground">
           No public operation records are available.
         </div>
       ) : (
@@ -57,7 +57,7 @@ export function ShootgunPublicView() {
           {operations.map((operation) => (
             <article
               key={operation.id}
-              className="overflow-hidden border border-border bg-slate-950/70"
+              className="overflow-hidden border border-border bg-background/70"
             >
               {operation.targetImage ? (
                 <img
@@ -75,12 +75,12 @@ export function ShootgunPublicView() {
                   <p className="text-xs font-medium tracking-[0.14em] text-primary">
                     OPERATION
                   </p>
-                  <h2 className="mt-1 text-xl font-semibold text-white">
+                  <h2 className="mt-1 text-xl font-semibold text-foreground">
                     {operation.name}
                   </h2>
                 </div>
                 {operation.argument && (
-                  <p className="text-sm leading-6 text-slate-300">
+                  <p className="text-sm leading-6 text-foreground">
                     {operation.argument}
                   </p>
                 )}
@@ -89,7 +89,7 @@ export function ShootgunPublicView() {
                     {operation.wisdom}
                   </div>
                 )}
-                <div className="flex items-center justify-between gap-3 text-xs text-slate-400">
+                <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
                   <span className="inline-flex items-center gap-1.5">
                     <ScrollText className="size-3.5 text-primary" />
                     {operation.verseIds?.length ?? 0} verse reference(s)

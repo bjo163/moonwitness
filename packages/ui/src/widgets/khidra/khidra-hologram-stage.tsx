@@ -37,9 +37,9 @@ export function KhidraHologramStage() {
         <div className="mb-2 text-sm font-bold text-primary">
           I&apos;m Khidra.
         </div>
-        <div className="text-xs text-white">How may I assist you today?</div>
+        <div className="text-xs text-foreground">How may I assist you today?</div>
         {/* Speech tail */}
-        <div className="absolute top-1/2 -right-2 h-4 w-4 -translate-y-1/2 rotate-45 border-t border-r border-primary/40 bg-black/60" />
+        <div className="absolute top-1/2 -right-2 h-4 w-4 -translate-y-1/2 rotate-45 border-t border-r border-primary/40 bg-card" />
       </div>
 
       {/* Stats Floating Right */}

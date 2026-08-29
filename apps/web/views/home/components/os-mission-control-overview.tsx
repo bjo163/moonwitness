@@ -53,7 +53,7 @@ export function OSMissionControlOverview() {
           <div className="bg-background flex flex-col justify-between space-y-6 rounded-xl border-2 border-primary/50 p-6 shadow-sm sm:p-7 lg:col-span-3">
             <div>
               <h2 className="font-mono text-4xl leading-tight font-black tracking-widest uppercase sm:text-5xl">
-                <span className="text-white drop-shadow-sm">
+                <span className="text-foreground drop-shadow-sm">
                   MISSION
                 </span>
                 <br />
@@ -68,7 +68,7 @@ export function OSMissionControlOverview() {
             </div>
 
             {/* 3 Mission Pillars (From Image 4) */}
-            <div className="space-y-4 border-t border-white/15 pt-5">
+            <div className="space-y-4 border-t border-border pt-5">
               {[
                 {
                   label: "Observe the Universe",
@@ -97,7 +97,7 @@ export function OSMissionControlOverview() {
                     />
                   </div>
                   <div>
-                    <div className="text-xs font-black tracking-wider text-white uppercase">
+                    <div className="text-xs font-black tracking-wider text-foreground uppercase">
                       {item.label}
                     </div>
                     <div
@@ -121,7 +121,7 @@ export function OSMissionControlOverview() {
                 alt="Milky Way space background"
                 className="h-full w-full object-cover opacity-40"
               />
-              <div className="from-space to-space/50 absolute inset-0 bg-gradient-to-t via-transparent" />
+              <div className="from-background to-background absolute inset-0 bg-gradient-to-t via-transparent" />
             </div>
 
             {/* Spinning digital Earth Globe Illusion (Using generated studio art /assets/holo_globe.png) */}
@@ -159,41 +159,41 @@ export function OSMissionControlOverview() {
               {/* Left Column Nodes */}
               <div className="pointer-events-auto space-y-7 text-left">
                 <div className="bg-background/90 rounded-r-sm border-l-2 border-primary py-1 pl-2.5 shadow-sm">
-                  <div className="text-xs font-black text-white">
+                  <div className="text-xs font-black text-foreground">
                     QUR&apos;AN
                   </div>
                   <div className="text-primary">• 6,236 Ayat</div>
                 </div>
                 <div className="bg-background/90 rounded-r-sm border-l-2 border-border py-1 pl-2.5 shadow-sm">
-                  <div className="text-xs font-black text-white">HADITH</div>
+                  <div className="text-xs font-black text-foreground">HADITH</div>
                   <div className="text-primary">• 75,000+</div>
                 </div>
                 <div className="bg-background/90 border-danger rounded-r-sm border-l-2 py-1 pl-2.5 shadow-sm">
-                  <div className="text-xs font-black text-white">HISTORY</div>
+                  <div className="text-xs font-black text-foreground">HISTORY</div>
                   <div className="text-warning">• Timelines</div>
                 </div>
                 <div className="bg-background/90 rounded-r-sm border-l-2 border-emerald-400 py-1 pl-2.5 shadow-sm">
-                  <div className="text-xs font-black text-white">ASTRONOMY</div>
-                  <div className="text-emerald-300">• Celestial</div>
+                  <div className="text-xs font-black text-foreground">ASTRONOMY</div>
+                  <div className="text-success">• Celestial</div>
                 </div>
               </div>
 
               {/* Right Column Nodes */}
               <div className="pointer-events-auto space-y-7 text-right">
                 <div className="bg-background/90 rounded-l-sm border-r-2 border-emerald-400 py-1 pr-2.5 shadow-sm">
-                  <div className="text-xs font-black text-white">HUMANITY</div>
-                  <div className="text-emerald-300">One Family •</div>
+                  <div className="text-xs font-black text-foreground">HUMANITY</div>
+                  <div className="text-success">One Family •</div>
                 </div>
                 <div className="bg-background/90 rounded-l-sm border-r-2 border-primary py-1 pr-2.5 shadow-sm">
-                  <div className="text-xs font-black text-white">CREATION</div>
+                  <div className="text-xs font-black text-foreground">CREATION</div>
                   <div className="text-primary">Signs •</div>
                 </div>
                 <div className="bg-background/90 rounded-l-sm border-r-2 border-amber-400 py-1 pr-2.5 shadow-sm">
-                  <div className="text-xs font-black text-white">WISDOM</div>
+                  <div className="text-xs font-black text-foreground">WISDOM</div>
                   <div className="text-amber-300">Reflection •</div>
                 </div>
                 <div className="bg-background/90 rounded-l-sm border-r-2 border-blue-400 py-1 pr-2.5 shadow-sm">
-                  <div className="text-xs font-black text-white">FUTURE</div>
+                  <div className="text-xs font-black text-foreground">FUTURE</div>
                   <div className="text-blue-300">Guidance •</div>
                 </div>
               </div>
@@ -251,7 +251,7 @@ export function OSMissionControlOverview() {
                     <span className="truncate">{card.title}</span>
                   </div>
                   <div
-                    className="my-1.5 font-mono text-xl font-black tracking-wider text-white drop-shadow-sm"
+                    className="my-1.5 font-mono text-xl font-black tracking-wider text-foreground drop-shadow-sm"
                     style={{ color: idx === 3 ? "var(--primary)" : card.color }}
                   >
                     {card.val}
@@ -267,10 +267,10 @@ export function OSMissionControlOverview() {
             <div className="bg-background flex flex-1 flex-col justify-between rounded-xl border-2 border-primary/50 p-6 shadow-sm">
               <div className="mb-4 flex items-center justify-between border-b border-border pb-3.5 text-xs font-black uppercase">
                 <div className="flex items-center gap-2.5 tracking-wider text-primary">
-                  <Radio className="h-4 w-4 animate-pulse text-emerald-400" />
+                  <Radio className="h-4 w-4 animate-pulse text-success" />
                   <span>GLOBAL ACTIVITIES LIVE FEED</span>
                 </div>
-                <span className="animate-pulse rounded-xs border border-emerald-400 bg-emerald-500/20 px-2.5 py-0.5 text-[10px] font-bold text-emerald-400 shadow-sm">
+                <span className="animate-pulse rounded-xs border border-emerald-400 bg-success/20 px-2.5 py-0.5 text-[10px] font-bold text-success shadow-sm">
                   ● LIVE
                 </span>
               </div>
@@ -293,7 +293,7 @@ export function OSMissionControlOverview() {
                 </div>
 
                 {/* Chronological Activity Log (From Image 4 far right column) */}
-                <div className="space-y-3 border-l border-white/10 pl-4 font-mono text-[11px] sm:col-span-6">
+                <div className="space-y-3 border-l border-border pl-4 font-mono text-[11px] sm:col-span-6">
                   {[
                     {
                       title: "New Observation",
@@ -323,7 +323,7 @@ export function OSMissionControlOverview() {
                   ].map((log, i) => (
                     <div
                       key={i}
-                      className="group flex cursor-pointer items-center justify-between rounded-xs px-1.5 py-1 transition-colors hover:bg-white/5"
+                      className="group flex cursor-pointer items-center justify-between rounded-xs px-1.5 py-1 transition-colors hover:bg-muted/30"
                     >
                       <span className="mr-2 flex items-center gap-2 truncate font-bold text-foreground">
                         <span
@@ -355,7 +355,7 @@ export function OSMissionControlOverview() {
             &ldquo;Indeed, in the creation of the heavens and the earth, and the
             alternation of the night and the day, are signs for people of
             understanding.&rdquo;{" "}
-            <span className="ml-2 font-black text-emerald-400 not-italic drop-shadow-sm">
+            <span className="ml-2 font-black text-success not-italic drop-shadow-sm">
               (Qur&apos;an 3:190)
             </span>
           </span>

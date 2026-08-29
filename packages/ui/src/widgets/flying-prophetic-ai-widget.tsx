@@ -56,7 +56,7 @@ export function FlyingPropheticAIWidget() {
 
           {/* Label Teks Flying Pill */}
           <div className="flex flex-col pr-1 text-left font-mono">
-            <span className="flex items-center gap-1 text-[11px] font-black tracking-wider text-foreground uppercase group-hover:text-white sm:text-xs">
+            <span className="flex items-center gap-1 text-[11px] font-black tracking-wider text-foreground uppercase group-hover:text-foreground sm:text-xs">
               <span>KHIDRA AI</span>
               <Sparkles className="text-success hidden h-3 w-3 shrink-0 sm:inline" />
             </span>
@@ -104,7 +104,7 @@ export function FlyingPropheticAIWidget() {
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="text-danger rounded-sm border border-red-500/50 bg-red-500/15 p-1.5 transition-colors hover:bg-red-500 hover:text-white"
+                  className="text-danger rounded-sm border border-red-500/50 bg-red-500/15 p-1.5 transition-colors hover:bg-red-500 hover:text-foreground"
                   title="Close Terminal"
                 >
                   <X className="h-4 w-4" />

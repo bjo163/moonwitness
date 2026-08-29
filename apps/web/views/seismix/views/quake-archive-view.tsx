@@ -329,7 +329,7 @@ function MagnitudeTimeline({ quakes }: { quakes: HistoricQuake[] }) {
               <span className="w-16 shrink-0 font-mono text-[8px] text-primary">
                 {q.date.slice(0, 4)}
               </span>
-              <div className="relative h-3 flex-1 bg-white/3">
+              <div className="relative h-3 flex-1 bg-card/3">
                 <div
                   className="absolute inset-y-0 left-0 transition-all duration-500"
                   style={{

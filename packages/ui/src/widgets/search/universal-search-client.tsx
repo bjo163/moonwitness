@@ -162,7 +162,7 @@ export function UniversalSearchClient() {
                 )}
 
                 {r.textLatin && (
-                  <p className="mb-2 text-xs font-medium text-emerald-700 dark:text-emerald-400">
+                  <p className="mb-2 text-xs font-medium text-emerald-700 dark:text-success">
                     {r.textLatin}
                   </p>
                 )}

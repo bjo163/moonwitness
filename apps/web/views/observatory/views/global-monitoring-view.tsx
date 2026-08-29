@@ -129,10 +129,10 @@ export function GlobalMonitoringView() {
 
       <div className="relative z-10 mx-auto max-w-[1600px] space-y-4 px-4">
         {/* ═══ TOP HEADER ═════════════════════════════════════════════════════ */}
-        <div className="flex flex-col items-center justify-between gap-4 border-b border-white/10 pb-4 xl:flex-row">
+        <div className="flex flex-col items-center justify-between gap-4 border-b border-border pb-4 xl:flex-row">
           <div className="flex items-center gap-4">
             <div className="inline-flex items-center gap-3 rounded-sm border-2 border-primary/60 bg-background px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
-              <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-black">
+              <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-foreground">
                 12
               </span>
               <span>GLOBAL MONITORING CENTER</span>
@@ -144,7 +144,7 @@ export function GlobalMonitoringView() {
 
           <div className="flex shrink-0 items-center gap-6">
             <div className="text-right">
-              <div className="font-mono text-xl font-black tracking-widest text-white drop-shadow-sm">
+              <div className="font-mono text-xl font-black tracking-widest text-foreground drop-shadow-sm">
                 {clockWIB}
               </div>
               <div className="mt-0.5 text-[9px] font-bold text-primary uppercase">
@@ -157,8 +157,8 @@ export function GlobalMonitoringView() {
                   .toUpperCase()}
               </div>
             </div>
-            <div className="border-l border-white/10 pl-6">
-              <div className="text-[9px] font-bold text-white/50 uppercase">
+            <div className="border-l border-border pl-6">
+              <div className="text-[9px] font-bold text-foreground/50 uppercase">
                 STATUS
               </div>
               {isLoading ? (
@@ -197,7 +197,7 @@ export function GlobalMonitoringView() {
               className={`flex items-center gap-2 rounded-sm border px-4 py-2 text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${
                 activeCategory === cat.id
                   ? "border-primary bg-primary/20 text-primary shadow-sm"
-                  : "border-white/10 bg-background text-white/50 hover:bg-white/5 hover:text-white"
+                  : "border-border bg-background text-foreground/50 hover:bg-muted/30 hover:text-foreground"
               }`}
             >
               <cat.icon
@@ -336,12 +336,12 @@ export function GlobalMonitoringView() {
         )}
 
         {/* ═══ FOOTER ═════════════════════════════════════════════════════════ */}
-        <div className="mt-6 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-4 font-mono text-[9px] text-primary md:flex-row">
+        <div className="mt-6 flex flex-col items-center justify-between gap-4 border-t border-border pt-4 font-mono text-[9px] text-primary md:flex-row">
           <div className="flex items-center gap-3">
             <span className="font-bold tracking-widest text-primary uppercase">
               GLOBAL INTELLIGENCE CENTER
             </span>
-            <div className="hidden border-l border-white/10 pl-3 font-sans text-white/50 normal-case italic lg:block">
+            <div className="hidden border-l border-border pl-3 font-sans text-foreground/50 normal-case italic lg:block">
               &quot;Knowledge without action is potential. Action without
               knowledge is risk. Together, they create a better world.&quot;
             </div>
@@ -364,11 +364,11 @@ export function GlobalMonitoringView() {
             <div className="hidden xl:block">
               <span>LAST UPDATED</span>
               <br />
-              <span className="text-white">26 May 2025 {clockWIB}</span>
+              <span className="text-foreground">26 May 2025 {clockWIB}</span>
             </div>
 
             <div>
-              <span className="text-white">SYSTEM {systemStatus}</span>
+              <span className="text-foreground">SYSTEM {systemStatus}</span>
               <br />
               <span className="text-success mt-0.5 flex items-center gap-1.5">
                 <span className="bg-success h-1.5 w-1.5 animate-pulse rounded-full" />{" "}

@@ -5,7 +5,7 @@ export function ObservatoryTelemetry({ obs }: { obs: any }) {
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2.5 text-xs font-black tracking-widest text-primary uppercase">
-        <Activity className="h-4 w-4 animate-pulse text-emerald-400" />
+        <Activity className="h-4 w-4 animate-pulse text-success" />
         <span>LIVE TELEMETRY FEED</span>
       </div>
 
@@ -69,7 +69,7 @@ export function ObservatoryTelemetry({ obs }: { obs: any }) {
               {t.label}
             </div>
             <div
-              className="my-1.5 font-mono text-base font-black text-white drop-shadow-sm"
+              className="my-1.5 font-mono text-base font-black text-foreground drop-shadow-sm"
               style={{ color: t.col }}
             >
               {t.val}

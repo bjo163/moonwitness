@@ -5,32 +5,32 @@ import React from "react"
 export function BridgeLogTab() {
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-2xl border border-yellow-400/25 bg-black/60 p-6">
+      <div className="rounded-2xl border border-yellow-400/25 bg-card p-6">
         <div className="mb-4 text-center">
           <div className="mb-2 font-mono text-4xl text-yellow-300/90">∞</div>
-          <p className="font-mono text-[9px] tracking-widest text-yellow-400/50 uppercase">
+          <p className="font-mono text-[9px] tracking-widest text-warning/50 uppercase">
             ALLAH · The Creator · The Goal
           </p>
         </div>
 
         <div className="flex justify-center">
-          <div className="h-8 w-px bg-gradient-to-b from-yellow-400/30 to-white/5" />
+          <div className="h-8 w-px bg-gradient-to-b from-yellow-400/30 to-transparent" />
         </div>
 
-        <div className="rounded-xl mx-auto my-3 max-w-sm rounded-none border border-white/20 bg-white/5 p-3 text-center">
-          <p className="font-mono text-[9px] tracking-widest text-white/40 uppercase">
+        <div className="rounded-xl mx-auto my-3 max-w-sm rounded-none border border-border bg-muted/30 p-3 text-center">
+          <p className="font-mono text-[9px] tracking-widest text-foreground/40 uppercase">
             ◈ Bridge / Shadow
           </p>
-          <p className="mt-1 font-sans text-sm font-bold text-white">
+          <p className="mt-1 font-sans text-sm font-bold text-foreground">
             Perantara ALLAH — HUMAN
           </p>
-          <p className="font-mono text-[9px] text-white/30">
+          <p className="font-mono text-[9px] text-foreground/30">
             Khalifatullah fil Ardh
           </p>
         </div>
 
         <div className="flex justify-center">
-          <div className="h-8 w-px bg-gradient-to-b from-white/5 to-primary/20" />
+          <div className="h-8 w-px bg-gradient-to-b from-primary/20 to-primary/20" />
         </div>
 
         <div className="mt-3 text-center">
@@ -40,9 +40,9 @@ export function BridgeLogTab() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-white/10 bg-black/40 p-1">
-        <div className="border-b border-white/5 p-3">
-          <p className="font-mono text-[10px] tracking-widest text-white/40 uppercase">
+      <div className="rounded-xl border border-border bg-card p-1">
+        <div className="border-b border-border p-3">
+          <p className="font-mono text-[10px] tracking-widest text-foreground/40 uppercase">
             ◈ Bridge Decision Log
           </p>
         </div>
@@ -74,31 +74,31 @@ export function BridgeLogTab() {
         ].map((log) => (
           <div
             key={log.id}
-            className="border-b border-white/5 p-3 last:border-0"
+            className="border-b border-border p-3 last:border-0"
           >
             <div className="flex items-start justify-between gap-2">
               <div className="flex flex-1 flex-col gap-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-[9px] text-white/25">
+                  <span className="font-mono text-[9px] text-foreground/25">
                     {log.id}
                   </span>
-                  <span className="font-mono text-[9px] text-white/25">·</span>
-                  <span className="font-mono text-[9px] text-white/25">
+                  <span className="font-mono text-[9px] text-foreground/25">·</span>
+                  <span className="font-mono text-[9px] text-foreground/25">
                     {log.date}
                   </span>
                 </div>
-                <p className="font-mono text-xs text-white/70">
+                <p className="font-mono text-xs text-foreground">
                   {log.decision}
                 </p>
-                <p className="font-mono text-[9px] text-yellow-400/50">
+                <p className="font-mono text-[9px] text-warning/50">
                   {log.basis}
                 </p>
               </div>
               <span
                 className={`rounded-md shrink-0 border px-2 py-0.5 font-mono text-[8px] font-bold tracking-widest uppercase ${
                   log.status === "CONFIRMED"
-                    ? "border-emerald-500/30 text-emerald-500"
-                    : "border-amber-400/30 text-amber-400"
+                    ? "border-success/30 text-success"
+                    : "border-warning/30 text-warning"
                 }`}
               >
                 {log.status}

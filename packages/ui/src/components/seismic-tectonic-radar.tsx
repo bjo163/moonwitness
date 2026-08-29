@@ -147,8 +147,8 @@ export function SeismicTectonicRadar({
           <span>SEISMIX TECTONIC RADAR</span>
         </div>
 
-        <div className="absolute top-4 right-4 flex items-center gap-2 text-[10px] text-zinc-400 bg-black/60 px-2.5 py-1 rounded-lg border border-white/10">
-          <Activity className="h-3 w-3 text-emerald-400" />
+        <div className="absolute top-4 right-4 flex items-center gap-2 text-[10px] text-muted-foreground bg-card px-2.5 py-1 rounded-lg border border-border">
+          <Activity className="h-3 w-3 text-success" />
           <span>REAL-TIME SENSORS ACTIVE</span>
         </div>
       </div>
@@ -161,24 +161,24 @@ export function SeismicTectonicRadar({
             onClick={() => setActiveEvent(ev)}
             className={`p-3 rounded-xl border text-left transition-all ${
               activeEvent.id === ev.id
-                ? "border-border bg-muted text-white shadow-sm"
-                : "border-white/10 bg-card/80 text-zinc-400 hover:border-border"
+                ? "border-border bg-muted text-foreground shadow-sm"
+                : "border-border bg-card/80 text-muted-foreground hover:border-border"
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-zinc-500">{ev.id}</span>
+              <span className="text-[10px] font-bold text-muted-foreground">{ev.id}</span>
               <span
                 className={`text-xs font-black px-1.5 py-0.5 rounded ${
                   ev.magnitude >= 6.0
                     ? "bg-rose-500/20 text-rose-400 border border-rose-500/30"
-                    : "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+                    : "bg-warning/20 text-warning border border-warning/30"
                 }`}
               >
                 M {ev.magnitude}
               </span>
             </div>
-            <div className="mt-2 text-xs font-bold text-zinc-200 truncate">{ev.location}</div>
-            <div className="mt-1 flex items-center justify-between text-[10px] text-zinc-500">
+            <div className="mt-2 text-xs font-bold text-foreground truncate">{ev.location}</div>
+            <div className="mt-1 flex items-center justify-between text-[10px] text-muted-foreground">
               <span>Depth: {ev.depthKm} km</span>
               <span>{ev.timestamp}</span>
             </div>

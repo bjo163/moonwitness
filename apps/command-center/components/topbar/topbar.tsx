@@ -119,9 +119,9 @@ export function CommandCenterTopbar({ onMenu }: { onMenu: () => void }) {
         {/* User Profile Badge */}
         <div
           className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/30 bg-primary/10 font-mono text-xs font-bold text-primary shadow-sm"
-          aria-label="Operator profile"
+          aria-label="User profile"
         >
-          OP
+          US
         </div>
       </div>
     </header>
