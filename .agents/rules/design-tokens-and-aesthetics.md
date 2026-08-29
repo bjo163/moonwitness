@@ -31,7 +31,7 @@ All exceptions remain visible with file, line, rule, kind, and reason. Documenta
 
 ### Auditor boundary
 
-The design-token registry (`packages/ui/src/tokens/**`) and shared theme stylesheet (`packages/ui/src/styles/globals.css`, including `.dark`) are canonical infrastructure. Their `cyber-*` declarations are allowed and remain separately auditable. The auditor itself and governance documentation are classified as tooling/documentation. Every other active source file under `apps/` or `packages/` must use semantic theme tokens and must not reference `bg-cyber-*`, `text-cyber-*`, `border-cyber-*`, or `cyber-*` aliases.
+The design-token registry (`packages/ui/src/tokens/**`) and shared theme stylesheet (`packages/ui/src/styles/globals.css`, including `.dark`) are canonical infrastructure. The auditor itself and governance documentation are classified as tooling/documentation. Every active source file under `apps/` or `packages/` must use canonical semantic theme tokens and must not reference `bg-cyber-*`, `text-cyber-*`, `border-cyber-*`, or other legacy aliases.
 
 ---
 
