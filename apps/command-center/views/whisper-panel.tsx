@@ -17,8 +17,9 @@
  *   40 hari  → "Masa perenungan dan perubahan"
  */
 
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useCallback } from "react"
 import { useLocalStorage } from "@workspace/hooks"
+import { readStoredWhispers, writeStoredWhispers } from "../lib/whisper-storage"
 import {
   MessageCircle,
   Send,
@@ -131,13 +132,15 @@ function getMercyMessage(requestId: string, count: number) {
   return `${m.arabic}\n\n"${m.meaning}"\n\n— ${m.latin} · ${m.ref}`
 }
 
+
+
 /**
  * Kirim MERCY whisper ke localStorage channel request tertentu.
  * Bisa dipanggil dari luar WhisperPanel (e.g., dari card header).
  */
 export function sendMercyWhisper(requestId: string): void {
   if (typeof window === "undefined") return
-  const existing = loadWhispers(requestId)
+  const existing = readStoredWhispers(requestId)
   const content = getMercyMessage(requestId, existing.length)
   const now = Date.now()
   const newWhisper: Whisper = {
@@ -150,7 +153,7 @@ export function sendMercyWhisper(requestId: string): void {
     isRead: false,
   }
   const updated = [...existing, newWhisper]
-  saveWhispers(requestId, updated)
+  writeStoredWhispers(requestId, updated)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
