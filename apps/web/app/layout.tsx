@@ -32,9 +32,9 @@ export const viewport = {
 }
 
 export const metadata = {
-  title: "MoonWitness — When the Moon Witness, We Share messages.",
+  title: "MoonWitness — Knowledge Platform",
   description:
-    "MoonWitness: When the Moon Witness, We Share messages. Global Platform for Tauhid & Divine Scriptures (Al-Qur'an 114 Surah, Tajwid Warna, & Audio).",
+    "MoonWitness is a source-aware platform for exploring scripture, traditions, references, and research with transparent provenance.",
   manifest: "/manifest.json",
 }
 
