@@ -12,7 +12,16 @@ export function AccountNavigation({ active }: { active: string }) {
   return (
     <nav aria-label="Account navigation" className="flex flex-wrap gap-2">
       {links.map(([href, label]) => (
-        <Link key={href} href={href} aria-current={active === label ? "page" : undefined} className={`clip-btn border px-3 py-2 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-cyber-cyan ${active === label ? "border-cyber-cyan bg-cyber-cyan text-cyber-dark" : "border-cyber-cyan/25 text-cyber-cyan hover:bg-cyber-cyan/10"}`}>
+        <Link
+          key={href}
+          href={href}
+          aria-current={active === label ? "page" : undefined}
+          className={`rounded-md border px-3.5 py-1.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring ${
+            active === label
+              ? "border-primary bg-primary text-primary-foreground font-semibold shadow-sm"
+              : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground"
+          }`}
+        >
           {label}
         </Link>
       ))}
