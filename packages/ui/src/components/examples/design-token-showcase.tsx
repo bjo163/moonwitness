@@ -119,10 +119,10 @@ export function CosmicGridExample() {
     <div className={`${cosmicGrid} min-h-[300px] p-8`}>
       <div className="clip-card" style={glassStyles}>
         <div className="p-6">
-          <h3 className="text-cyber-cyan text-xl font-mono tracking-widest mb-2">
+          <h3 className="text-primary text-xl font-mono tracking-widest mb-2">
             COSMIC GRID MATRIX
           </h3>
-          <p className="text-[#8B9BB0]">
+          <p className="text-muted-foreground">
             32px grid pattern for navigation and dashboard interfaces
           </p>
         </div>
@@ -239,10 +239,10 @@ export function DashboardPanel() {
     <section className={`${cosmicGrid} min-h-screen p-8`}>
       {/* Hero Banner */}
       <div className={`${heroClip.className} mb-8 p-8`} style={glassStyles}>
-        <h1 className="text-4xl font-orbitron tracking-wider text-cyber-cyan mb-2">
+        <h1 className="text-4xl font-orbitron tracking-wider text-primary mb-2">
           MOONWITNESS OPERATING SYSTEM
         </h1>
-        <p className="text-[#8B9BB0] font-mono">
+        <p className="text-muted-foreground font-mono">
           Deep Space Sci-Fi Divine Operating System — Version 9.5
         </p>
       </div>

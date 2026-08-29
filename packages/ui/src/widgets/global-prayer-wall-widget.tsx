@@ -79,7 +79,7 @@ export function GlobalPrayerWallWidget() {
           value={inputMsg}
           onChange={(e) => setInputMsg(e.target.value)}
           placeholder="Kirimkan doa kedamaian & persaudaraan kemanusiaan..."
-          className="bg-panel border-success/30 tag-clip w-full border p-2.5 font-mono text-xs text-foreground placeholder-[#8B9BB0] focus:outline-none"
+          className="bg-card/90 border-border/40 tag-clip w-full border p-2.5 font-mono text-xs text-foreground placeholder:text-muted-foreground focus:border-cyber-green focus:outline-none"
         />
         <button
           onClick={handleSendPrayer}

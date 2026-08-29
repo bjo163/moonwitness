@@ -89,7 +89,7 @@ export function PiagamPeradabanView() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Cari berdasarkan kota atau negara (Contoh: Jakarta, Kairo, Tokyo)..."
-            className="bg-panel border-success/30 tag-clip w-full border p-3 text-xs text-foreground placeholder-[#8B9BB0] focus:outline-none"
+            className="bg-card/90 border-border/40 tag-clip w-full border p-3 text-xs text-foreground placeholder:text-muted-foreground focus:border-cyber-green focus:outline-none"
           />
         </div>
 

@@ -164,7 +164,7 @@ export function ScripturesView() {
           <Badge variant="secondary" className="border border-cyber-cyan/40 bg-cyber-cyan/20 text-xs font-bold text-cyber-cyan">
             Q.S {v.surahName} ({v.surahNumber}:{v.ayahNumber})
           </Badge>
-          <span className="block text-[10px] text-[#8B9BB0]">Diperbarui: {v.updatedAt}</span>
+          <span className="block text-[10px] text-muted-foreground">Diperbarui: {v.updatedAt}</span>
         </div>
       ),
     },

@@ -57,11 +57,11 @@ export function SystemDiagnosticsSidebar() {
             >
               <div className="flex items-center gap-2">
                 <m.icon className={`h-4 w-4 ${m.color}`} />
-                <span className="font-mono text-[9px] tracking-wider text-[#8B9BB0]">
+                <span className="font-mono text-[9px] tracking-wider text-muted-foreground">
                   {m.label}
                 </span>
               </div>
-              <p className="mt-2 font-mono text-sm font-bold text-white">{m.val}</p>
+              <p className="mt-2 font-mono text-sm font-bold text-foreground">{m.val}</p>
             </div>
           ))}
         </div>
