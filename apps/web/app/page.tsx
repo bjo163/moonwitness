@@ -1,6 +1,5 @@
-import { HomeView } from "@/views/home/views/home-view"
+import { PublicHome } from "@/components/home/public-home"
 
 export default function Page() {
-  return <HomeView />
+  return <PublicHome />
 }
-
