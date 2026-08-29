@@ -35,7 +35,7 @@ const INITIAL_HADITHS: HadithEntry[] = [
 ]
 
 export function HadithsView() {
-  const { data: hadiths, loading, mutate } = useResource<HadithEntry[]>(
+  const { data: hadiths, loading, error, refetch, mutate } = useResource<HadithEntry[]>(
     async () => {
       const res = await fetchHadiths()
       return Array.isArray(res) && res.length > 0 ? res : INITIAL_HADITHS
@@ -142,6 +142,20 @@ export function HadithsView() {
           </div>
         )}
 
+        {error && (
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-cyber-pink/30 bg-cyber-pink/10 p-4 text-xs text-cyber-pink">
+            <span>Gagal menyegarkan katalog hadits. Data tersimpan lokal tetap tersedia.</span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => void refetch()}
+              className="border-cyber-pink/40 text-cyber-pink hover:bg-cyber-pink/10"
+            >
+              COBA LAGI
+            </Button>
+          </div>
+        )}
+
         <ResourceTable<HadithEntry>
           title="DAFTAR ENTRI HADITS PILIHAN"
           subtitle={`Menampilkan ${hadiths?.length || 0} hadits aktif dalam sistem database`}
@@ -151,6 +165,7 @@ export function HadithsView() {
           accentColor="purple"
           loading={loading}
           onDelete={handleDeleteHadith}
+          emptyMessage="Belum ada entri hadits yang tersedia."
           headerActions={
             <Button
               onClick={() => addModal.open()}

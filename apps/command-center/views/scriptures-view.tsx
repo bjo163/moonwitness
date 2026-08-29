@@ -65,7 +65,7 @@ const SAMPLE_QURAN_VERSES: QuranAyahItem[] = [
 ]
 
 export function ScripturesView() {
-  const { data: verses, loading, mutate } = useResource<QuranAyahItem[]>(
+  const { data: verses, loading, error, refetch, mutate } = useResource<QuranAyahItem[]>(
     async () => {
       const res = await fetchScriptures()
       return Array.isArray(res) && res.length > 0 ? res : SAMPLE_QURAN_VERSES
@@ -161,10 +161,10 @@ export function ScripturesView() {
       width: "180px",
       render: (v) => (
         <div className="space-y-1">
-          <Badge variant="secondary" className="border border-primary/40 bg-primary/10 text-xs font-semibold text-primary">
+          <Badge variant="secondary" className="border border-cyber-cyan/40 bg-cyber-cyan/20 text-xs font-bold text-cyber-cyan">
             Q.S {v.surahName} ({v.surahNumber}:{v.ayahNumber})
           </Badge>
-          <span className="block text-[10px] text-muted-foreground">Diperbarui: {v.updatedAt}</span>
+          <span className="block text-[10px] text-[#8B9BB0]">Diperbarui: {v.updatedAt}</span>
         </div>
       ),
     },
@@ -173,15 +173,15 @@ export function ScripturesView() {
       label: "TEKS ARAB",
       width: "280px",
       align: "right",
-      className: "font-arabic text-base font-bold text-foreground leading-loose",
+      className: "font-arabic text-base font-bold text-white leading-loose",
     },
     {
       key: "translation",
       label: "TERJEMAHAN & TAFSIR",
       render: (v) => (
         <div className="space-y-1">
-          <p className="font-mono text-xs font-semibold text-foreground">{v.translation}</p>
-          <p className="font-mono text-[11px] text-muted-foreground italic">&quot;{v.tafsirNote}&quot;</p>
+          <p className="font-mono text-xs font-semibold text-white/90">{v.translation}</p>
+          <p className="font-mono text-[11px] text-[#8B9BB0] italic">&quot;{v.tafsirNote}&quot;</p>
         </div>
       ),
     },
@@ -202,22 +202,26 @@ export function ScripturesView() {
           subtitle="Kelola daftar ayat suci Al-Qur'an dan Kitab lainnya yang akan disinkronkan ke seluruh jamaah (Global Sync)."
           operation="SCRIPTURE-DATABASE-MGMT"
           status="ONLINE"
-          accentColor="primary"
+          accentColor="system"
         />
-
-        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-          <Button
-            onClick={handleSyncFromApi}
-            disabled={syncingApi}
-            className="flex shrink-0 items-center gap-2 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20"
-          >
-            <span>{syncingApi ? "Memproses Sync..." : "Sync Dari API Kemenag"}</span>
-          </Button>
-        </div>
 
         {notification && (
           <div className="flex animate-in items-center gap-2 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-xs font-bold text-emerald-600 fade-in dark:text-emerald-400">
             <span>{notification}</span>
+          </div>
+        )}
+
+        {error && (
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-cyber-pink/30 bg-cyber-pink/10 p-4 text-xs text-cyber-pink">
+            <span>Gagal memuat data ayat terbaru. Data tersimpan lokal tetap tersedia.</span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => void refetch()}
+              className="border-cyber-pink/40 text-cyber-pink hover:bg-cyber-pink/10"
+            >
+              COBA LAGI
+            </Button>
           </div>
         )}
 
@@ -247,6 +251,16 @@ export function ScripturesView() {
           accentColor="cyan"
           loading={loading}
           onEdit={openEditModal}
+          headerActions={
+            <Button
+              onClick={handleSyncFromApi}
+              disabled={syncingApi}
+              className="flex shrink-0 items-center gap-2 rounded-none border border-cyber-green/40 bg-cyber-green/20 px-4 py-1.5 font-mono text-xs font-bold text-cyber-green uppercase transition-all hover:bg-cyber-green/30"
+            >
+              <span>{syncingApi ? "⏳ MEMPROSES..." : "🔄 [ SYNC API ]"}</span>
+            </Button>
+          }
+          emptyMessage="Belum ada ayat yang tersedia untuk ditampilkan."
         />
       </div>
 

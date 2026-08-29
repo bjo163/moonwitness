@@ -12,6 +12,7 @@ import { AchievementsList } from "./profile/achievements-list"
 import { RecentActivity } from "./profile/recent-activity"
 import { MissionBadges } from "./profile/mission-badges"
 import { QuickActions } from "./profile/quick-actions"
+import { ContextBlock } from "@workspace/ui"
 
 export function ErpProfileView() {
   const searchParams = useSearchParams()
@@ -37,6 +38,14 @@ export function ErpProfileView() {
 
   return (
     <div className="mx-auto w-full max-w-[1600px] animate-in px-4 pb-12 duration-700 fade-in sm:px-6 lg:px-8">
+      <ContextBlock
+        title={isOwnProfile ? "OPERATOR PROFILE" : "PROFILE OBSERVATION"}
+        subtitle={isOwnProfile ? "Review your operational identity, mission progress, and account actions." : "Read-only view of an operator profile in the command center."}
+        operation="PROFILE-MGMT"
+        status="ONLINE"
+        accentColor="system"
+      />
+
       {/* Optional: Banner if viewing someone else */}
       {!isOwnProfile && (
         <div className="mb-6 flex items-center gap-2 rounded-lg border border-blue-500/20 bg-blue-500/10 px-4 py-3 font-sans text-sm text-blue-400">
