@@ -1,928 +1,171 @@
 #!/usr/bin/env node
 
-/**
- * ◈ MOONWITNESS — ENTERPRISE DESIGN SYSTEM & GOVERNANCE AUDITOR (PHASE 2 ZERO-DRIFT AUDITOR)
- *
- * Automated Multi-Pillar Forensic Inspection & Constitutional Law Enforcement:
- * ─────────────────────────────────────────────────────────────────────────────
- * • Pillar I   : Single Source of Truth & Theme Parity (:root vs .dark)
- * • Pillar II  : Zero-Tolerance Forbidden Terminology, Tokens & Legacy Visual Utilities
- * • Pillar III : Zero Raw Color Literals & Zero Arbitrary Color Utilities (cyan-*, purple-*, etc.)
- * • Pillar IV  : Typography Compliance (Geist, JetBrains Mono, Amiri; Zero Orbitron)
- * • Pillar V   : Monorepo Topology, Ghost Files & Component Naming
- * • Pillar VI  : React 19 & Next.js 16 Client Conventions
- * • Pillar VII : Security, Memory Safety & WCAG AA Contrast Verification
- * • Covenant   : Sovereign Package Genesis Contract (Mandatory Standard Manifests)
- * ─────────────────────────────────────────────────────────────────────────────
- */
-
+/** MoonWitness constitutional auditor: scan source, themes, visualizations, tests, docs, and tooling. */
 import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const ROOT_DIR = path.resolve(__dirname, "..")
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
+const SKIP_DIRS = new Set(["node_modules", ".next", "dist", ".git", ".turbo", "coverage", "build"])
+const TEXT_EXTS = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".css", ".scss", ".less", ".md", ".mdx", ".json", ".yaml", ".yml", ".toml", ".ps1", ".sh", ".txt"])
+const CATEGORIES = ["forbiddenTerminology", "filenameExports", "hardcodedColors", "hardcodedLocalhost", "shadows", "decorativeEffects", "themeParity", "contrast", "suspiciousPrimary", "domainExceptions", "unsupportedColorFormats", "maxLines", "ghostPaths", "legacyImports", "useClientPlacement", "inlineMocks", "pureComputeIsolation", "packageHierarchy", "packageContract", "secretLeaks", "unsafeLinks", "rawHtml", "rawSql", "directLocalStorage", "consoleLogs", "missingImageAlt"]
+const findings = Object.fromEntries(CATEGORIES.map((name) => [name, []]))
+const inventory = { files: 0, text: 0, skipped: 0, classes: {}, packages: 0 }
+const CANONICAL = { cyan: "#00F0FF", green: "#00FF66", yellow: "#FFE600", purple: "#A100FF", pink: "#FF0055", dark: "#05070A", panel: "#0A0F17" }
+const FORBIDDEN_WORDS = ["website", "web site", "page", "pages", "user", "users", "settings", "loading", "error", "success", "search", "logout", "click here"]
+const COLOR_RE = /#[0-9a-f]{3,8}\b|rgba?\s*\([^)]*\)|hsla?\s*\([^)]*\)/gi
+const UNSUPPORTED_COLOR_RE = /\b(?:oklch|oklab|hwb|lab|lch|color|color-mix|device-cmyk)\s*\(/gi
+const DOMAIN_RULES = [
+  { id: "seismix-canvas-and-series", test: (p) => /^apps\/web\/views\/seismix\//.test(p), reason: "Canvas, waveform, plate, and severity palettes encode domain data." },
+  { id: "celestial-and-graph-visuals", test: (p) => /(^|\/)packages\/ui\/src\/(widgets\/(graph|monitoring)|.*(radar|celestial|eclipse|compass|sphere))\//.test(p), reason: "SVG/canvas/chart colors and motion encode a domain visualization." },
+]
 
-// ANSI Colors
-const RED = "\x1b[31m"
-const GREEN = "\x1b[32m"
-const YELLOW = "\x1b[33m"
-const CYAN = "\x1b[36m"
-const PURPLE = "\x1b[35m"
-const BOLD = "\x1b[1m"
-const RESET = "\x1b[0m"
-
-const IGNORE_DIRS = new Set([
-  "node_modules",
-  ".next",
-  "dist",
-  ".git",
-  ".turbo",
-  "coverage",
-  "build",
-  ".gemini",
-  "scripts",
-])
-
-const TARGET_DIRS = ["apps", "packages"]
-
-const VIOLATIONS = {
-  // Pillar I: Design Tokens & Visual Utilities
-  forbiddenTerminology: [],
-  forbiddenVisualUtilities: [],
-  arbitraryColorUtilities: [],
-  rawColorLiterals: [],
-  arbitraryShadows: [],
-  invalidTypography: [],
-  themeParityIssues: [],
-  contrastIssues: [],
-  suspiciousVisualUtilities: [],
-  allowedDomainSpecific: [],
-  decorativeBlur: [],
-  decorativeGradients: [],
-  decorativeAnimation: [],
-
-  // Pillar II: Topology & Boundary Rules
-  ghostFolders: [],
-  legacyComponentNaming: [],
-  legacyCoreImports: [],
-  packageHierarchyViolations: [],
-  maxLines: [],
-
-  // Pillar III: React & Next.js Conventions
-  useClientPlacement: [],
-  pureComputeIsolation: [],
-
-  // Pillar IV: Security & Accessibility
-  secretLeaks: [],
-  unsafeLinks: [],
-  rawDangerouslySetInnerHTML: [],
-  directLocalStorage: [],
-  missingImageAlt: [],
-
-  // Sovereign Package Genesis Contract
-  packageContractIssues: [],
+const rel = (file) => path.relative(ROOT, file).replaceAll(path.sep, "/")
+const add = (category, detail) => findings[category].push(detail)
+const classesFor = (p) => {
+  const classes = new Set(); const lower = p.toLowerCase(); const ext = path.extname(p).toLowerCase()
+  if (/^apps\/|^packages\//.test(lower) && TEXT_EXTS.has(ext)) classes.add("application-source")
+  if (/\/(tests?|e2e)\/|\.(test|spec)\./.test(lower)) classes.add("tests")
+  if (ext === ".md" || ext === ".mdx" || lower.startsWith("docs/") || lower.startsWith(".agents/") || lower === "agents.md") classes.add("docs")
+  if (/^scripts\/|\/scripts\/|^\.github\/|(^|\/)(.*config|package\.json|pnpm-lock\.yaml|turbo\.json|vercel\.json|dockerfile|\.env)/.test(lower) || /\.(mjs|cjs|ps1|sh)$/.test(lower)) classes.add("tooling")
+  if (/globals?\.(css|scss|less)$|theme|token|tailwind|postcss|design-token/.test(lower)) classes.add("theme")
+  if (/(visual|chart|graph|map|radar|sphere|compass|eclipse|seismic|seismix|waveform|celestial|observatory|monitoring)/.test(lower)) classes.add("domain-visualization")
+  return [...classes]
 }
+const domainRule = (p) => DOMAIN_RULES.find((rule) => rule.test(p))
+const policyDoc = (p) => p === "AGENTS.md" || p === ".agents/AGENTS.md" || p.startsWith(".agents/rules/")
+const isTokenSource = (p) => /packages\/ui\/src\/(tokens\/|styles\/globals\.css$)/.test(p)
+const isCanonicalTokenLine = (p, line) => isTokenSource(p) && (/--(?:cyber|color-cyber)-|CyberColors|THEME_TOKENS|@theme|:root|^\.dark/.test(line) || /@utility (corner|glow|laser|panel|bg-)/.test(line))
+const visualizationContext = (line) => /strokeStyle|fillStyle|stroke=|fill=|\b(series|palette|wave|severity|magnitude|plate|boundary|threshold|color|glow)\s*[:=]/i.test(line) && !/className=|style=/.test(line)
+const codeStrings = (line) => [...line.matchAll(/(["'`])((?:\\.|(?!\1)[^\\])*)\1/g)].map((m) => m[2])
 
-let totalFilesScanned = 0
-let totalPackagesAudited = 0
-const filesByType = {
-  application: 0,
-  theme: 0,
-  domain: 0,
-  test: 0,
-  documentation: 0,
-  tooling: 0,
-}
-
-// ── 1. THEME PARITY & CONTRAST VERIFICATION ─────────────────────────────────
-function auditThemeParityAndContrast() {
-  const globalsCssPath = path.join(
-    ROOT_DIR,
-    "packages",
-    "ui",
-    "src",
-    "styles",
-    "globals.css"
-  )
-  if (!fs.existsSync(globalsCssPath)) {
-    VIOLATIONS.themeParityIssues.push({
-      issue: "Missing packages/ui/src/styles/globals.css",
-    })
-    return
-  }
-
-  const css = fs.readFileSync(globalsCssPath, "utf-8")
-  const requiredTokens = [
-    "--background",
-    "--foreground",
-    "--card",
-    "--card-foreground",
-    "--primary",
-    "--primary-foreground",
-    "--secondary",
-    "--secondary-foreground",
-    "--muted",
-    "--muted-foreground",
-    "--accent",
-    "--accent-foreground",
-    "--destructive",
-    "--destructive-foreground",
-    "--border",
-    "--input",
-    "--ring",
-    "--success",
-    "--warning",
-    "--info",
-    "--popover",
-    "--popover-foreground",
-    "--success-foreground",
-    "--warning-foreground",
-    "--info-foreground",
-  ]
-
-  const rootBlockMatch = css.match(/:root\s*\{([^}]+)\}/)
-  const darkBlockMatch = css.match(/\.dark\s*\{([^}]+)\}/)
-
-  if (!rootBlockMatch || !darkBlockMatch) {
-    VIOLATIONS.themeParityIssues.push({
-      issue: "Missing :root or .dark block in globals.css",
-    })
-    return
-  }
-
-  const rootTokens = new Set(
-    (rootBlockMatch[1].match(/--[a-z0-9-]+(?=\s*:)/g) || []).map((t) =>
-      t.trim()
-    )
-  )
-  const darkTokens = new Set(
-    (darkBlockMatch[1].match(/--[a-z0-9-]+(?=\s*:)/g) || []).map((t) =>
-      t.trim()
-    )
-  )
-
-  for (const token of requiredTokens) {
-    if (!rootTokens.has(token)) {
-      VIOLATIONS.themeParityIssues.push({
-        issue: `Token "${token}" missing in :root theme definition`,
-      })
-    }
-    if (!darkTokens.has(token)) {
-      VIOLATIONS.themeParityIssues.push({
-        issue: `Token "${token}" missing in .dark theme definition`,
-      })
-    }
-  }
-
-  // Calculate contrast ratio helper for sRGB
-  function hexToLuminance(hex) {
-    hex = hex.replace("#", "").trim()
-    if (hex.length === 3)
-      hex = hex
-        .split("")
-        .map((c) => c + c)
-        .join("")
-    const r = parseInt(hex.substring(0, 2), 16) / 255
-    const g = parseInt(hex.substring(2, 4), 16) / 255
-    const b = parseInt(hex.substring(4, 6), 16) / 255
-
-    const a = [r, g, b].map((v) => {
-      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)
-    })
-    return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722
-  }
-
-  function getContrast(hex1, hex2) {
-    const lum1 = hexToLuminance(hex1)
-    const lum2 = hexToLuminance(hex2)
-    const brightest = Math.max(lum1, lum2)
-    const darkest = Math.min(lum1, lum2)
-    return (brightest + 0.05) / (darkest + 0.05)
-  }
-
-  const pairs = [
-    ["background", "foreground"],
-    ["card", "card-foreground"],
-    ["popover", "popover-foreground"],
-    ["primary", "primary-foreground"],
-    ["secondary", "secondary-foreground"],
-    ["muted", "muted-foreground"],
-    ["accent", "accent-foreground"],
-    ["destructive", "destructive-foreground"],
-    ["success", "success-foreground"],
-    ["warning", "warning-foreground"],
-    ["info", "info-foreground"],
-  ]
-  const readColors = (block) =>
-    Object.fromEntries(
-      [...block.matchAll(/(--[a-z0-9-]+):\s*(#[0-9a-fA-F]{3,6})/g)].map(
-        (match) => [match[1], match[2]]
-      )
-    )
-  for (const [mode, block] of [
-    ["Light", rootBlockMatch[1]],
-    ["Dark", darkBlockMatch[1]],
-  ]) {
-    const colors = readColors(block)
-    for (const [background, foreground] of pairs) {
-      const bg = colors[`--${background}`]
-      const fg = colors[`--${foreground}`]
-      if (!bg || !fg) continue
-      const contrast = getContrast(bg, fg)
-      if (contrast < 4.5)
-        VIOLATIONS.contrastIssues.push({
-          mode,
-          pair: `${background} / ${foreground}`,
-          contrast: contrast.toFixed(2),
-          req: ">= 4.5:1",
-        })
-    }
-  }
-}
-
-// ── 2. SOVEREIGN PACKAGE GENESIS CONTRACT ───────────────────────────────────
-function auditPackageGenesisContracts() {
-  const packagesDir = path.join(ROOT_DIR, "packages")
-  if (!fs.existsSync(packagesDir)) return
-
-  const entries = fs.readdirSync(packagesDir, { withFileTypes: true })
-  for (const entry of entries) {
-    if (!entry.isDirectory() || IGNORE_DIRS.has(entry.name)) continue
-    totalPackagesAudited++
-    const pkgDir = path.join(packagesDir, entry.name)
-    const pkgJsonPath = path.join(pkgDir, "package.json")
-    const tsconfigPath = path.join(pkgDir, "tsconfig.json")
-    const srcIndexTs = path.join(pkgDir, "src", "index.ts")
-    const srcIndexTsx = path.join(pkgDir, "src", "index.tsx")
-    const srcIndexJs = path.join(pkgDir, "src", "index.js")
-    const directIndexTs = path.join(pkgDir, "index.ts")
-    const directIndexTsx = path.join(pkgDir, "index.tsx")
-    const directIndexJs = path.join(pkgDir, "index.js")
-    const readmePath = path.join(pkgDir, "README.md")
-
-    if (!fs.existsSync(pkgJsonPath)) {
-      VIOLATIONS.packageContractIssues.push({
-        pkg: entry.name,
-        issue: "Missing package.json manifest",
-      })
-      continue
-    }
-
-    try {
-      const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, "utf-8"))
-      if (
-        !pkgJson.name ||
-        (!pkgJson.name.startsWith("@workspace/") &&
-          !pkgJson.name.startsWith("@moon/"))
-      ) {
-        VIOLATIONS.packageContractIssues.push({
-          pkg: entry.name,
-          issue: `Non-canonical namespace: "${pkgJson.name}" (must be @workspace/* or @moon/*)`,
-        })
-      }
-      if (!pkgJson.version || !pkgJson.version.match(/^\d+\.\d+\.\d+/)) {
-        VIOLATIONS.packageContractIssues.push({
-          pkg: entry.name,
-          issue: `Invalid or missing SemVer version in package.json: "${pkgJson.version}"`,
-        })
-      }
-    } catch (e) {
-      VIOLATIONS.packageContractIssues.push({
-        pkg: entry.name,
-        issue: "Invalid JSON in package.json",
-      })
-    }
-
-    const hasEntrypoint =
-      fs.existsSync(srcIndexTs) ||
-      fs.existsSync(srcIndexTsx) ||
-      fs.existsSync(srcIndexJs) ||
-      fs.existsSync(directIndexTs) ||
-      fs.existsSync(directIndexTsx) ||
-      fs.existsSync(directIndexJs) ||
-      entry.name === "eslint-config" ||
-      entry.name === "typescript-config"
-
-    if (!hasEntrypoint) {
-      VIOLATIONS.packageContractIssues.push({
-        pkg: entry.name,
-        issue: "Missing public entrypoint (src/index.ts or src/index.tsx)",
-      })
-    }
-
-    if (
-      !fs.existsSync(tsconfigPath) &&
-      entry.name !== "eslint-config" &&
-      entry.name !== "typescript-config"
-    ) {
-      VIOLATIONS.packageContractIssues.push({
-        pkg: entry.name,
-        issue: "Missing tsconfig.json configuration",
-      })
-    }
-
-    if (!fs.existsSync(readmePath)) {
-      VIOLATIONS.packageContractIssues.push({
-        pkg: entry.name,
-        issue: "Missing mandatory architectural README.md",
-      })
-    }
-  }
-}
-
-// ── 3. GHOST FOLDERS & LEGACY FILENAMES ──────────────────────────────────────
-function checkGhostFolders(dir) {
+function walk(dir) {
   if (!fs.existsSync(dir)) return
-  const entries = fs.readdirSync(dir, { withFileTypes: true })
-
-  for (const entry of entries) {
-    if (IGNORE_DIRS.has(entry.name)) continue
-
-    const fullPath = path.join(dir, entry.name)
-    const rel = path.relative(ROOT_DIR, fullPath).replace(/\\/g, "/")
-
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const file = path.join(dir, entry.name); const pathname = rel(file)
     if (entry.isDirectory()) {
-      if (
-        entry.name === "@core" ||
-        entry.name === "@modules" ||
-        entry.name === "hud"
-      ) {
-        VIOLATIONS.ghostFolders.push({ path: rel, type: "directory" })
-      }
-      checkGhostFolders(fullPath)
-    } else if (entry.isFile()) {
-      if (
-        entry.name.startsWith("hud-") ||
-        entry.name.startsWith("cosmic-") ||
-        entry.name.includes(".cosmic.")
-      ) {
-        VIOLATIONS.legacyComponentNaming.push({
-          path: rel,
-          issue: `Legacy filename convention: "${entry.name}"`,
-        })
-      }
+      if (SKIP_DIRS.has(entry.name)) { inventory.skipped++; continue }
+      if (["@core", "@modules", "hud"].includes(entry.name)) add("ghostPaths", { path: pathname, type: "directory" })
+      walk(file); continue
     }
+    inventory.files++
+    if (/^hud(?:[-_.]|$)/i.test(entry.name)) add("filenameExports", { file: pathname, kind: "filename", token: entry.name })
+    if (!TEXT_EXTS.has(path.extname(entry.name).toLowerCase()) && !/^\.env(?:\.|$)/.test(entry.name)) continue
+    let content
+    try { content = fs.readFileSync(file, "utf8") } catch { continue }
+    if (content.includes("\0")) continue
+    inventory.text++; const classes = classesFor(pathname); classes.forEach((name) => { inventory.classes[name] = (inventory.classes[name] || 0) + 1 })
+    auditFile(pathname, content, classes)
   }
 }
 
-// ── 4. RECURSIVE SCANNER ACROSS SUPPORTED EXTENSIONS ─────────────────────────
-const SCAN_EXTENSIONS = new Set([
-  ".ts",
-  ".tsx",
-  ".js",
-  ".mjs",
-  ".cjs",
-  ".css",
-  ".scss",
-  ".json",
-])
-
-function scanDirectory(dir) {
-  if (!fs.existsSync(dir)) return
-  const entries = fs.readdirSync(dir, { withFileTypes: true })
-
-  for (const entry of entries) {
-    if (IGNORE_DIRS.has(entry.name)) continue
-
-    const fullPath = path.join(dir, entry.name)
-
-    if (entry.isDirectory()) {
-      scanDirectory(fullPath)
-    } else if (entry.isFile()) {
-      const ext = path.extname(entry.name).toLowerCase()
-      if (SCAN_EXTENSIONS.has(ext)) {
-        auditFile(fullPath)
-      }
+function auditFile(file, content, classes) {
+  const lines = content.split(/\r?\n/); const isTest = classes.includes("tests"); const isDocs = classes.includes("docs"); const domain = domainRule(file)
+  if (lines.length > 400) add("maxLines", { file, lineCount: lines.length, classes })
+  if (classes.includes("application-source") && !classes.includes("docs") && /['"]use client['"]/.test(content) && !/^['"]use client['"]$/.test(lines[0]?.trim())) add("useClientPlacement", { file, line: 1, content: lines[0]?.trim() || "" })
+  for (const tag of content.match(/<a\s+[^>]*target=["']_blank["'][^>]*>/gis) || []) if (!classes.includes("docs") && (!/noopener/i.test(tag) || !/noreferrer/i.test(tag))) add("unsafeLinks", { file, snippet: tag.replace(/\s+/g, " ").slice(0, 100) })
+  if (content.includes("dangerouslySetInnerHTML") && !/DOMPurify|sanitize/i.test(content)) add("rawHtml", { file })
+  for (const match of content.matchAll(/\bexport\s+(?:default\s+)?(?:const|let|var|function|class|interface|type|enum)\s+([A-Za-z_$][\w$]*)/g)) if (/^HUD|HUD|useHUD/i.test(match[1])) add("filenameExports", { file, kind: "export", token: match[1] })
+  for (let index = 0; index < lines.length; index++) {
+    const line = lines[index]; const trimmed = line.trim(); const code = trimmed.replace(/^\/\/.*$/, "")
+    if (!code || /^\/\*|^\*/.test(code)) continue
+    const base = { file, line: index + 1, classes }
+    const userFacing = />([^<{]*?)<|\b(?:title|label|placeholder|description|message|aria-label|heading|subtitle|buttonText|copy)\s*[:=]/i.test(code)
+    if (!isDocs && !policyDoc(file) && userFacing) for (const value of codeStrings(code).concat([...code.matchAll(/>([^<{]*?)</g)].map((m) => m[1]))) { const term = FORBIDDEN_WORDS.find((word) => new RegExp(`\\b${word.replace(" ", "\\s+")}\\b`, "i").test(value)); if (term) { add("forbiddenTerminology", { ...base, term, snippet: trimmed.slice(0, 120) }); break } }
+    const unsupported = code.match(UNSUPPORTED_COLOR_RE); if (unsupported && !isDocs) add("unsupportedColorFormats", { ...base, format: unsupported[0] })
+    for (const match of code.matchAll(COLOR_RE)) {
+      const literal = match[0]; const exception = domain && visualizationContext(code)
+      if (exception) { add("domainExceptions", { ...base, rule: domain.id, kind: "color", value: literal, reason: domain.reason }); continue }
+      if (isDocs || isCanonicalTokenLine(file, code)) continue
+      if (isTest && /^#(?:00F0FF|00FF66|FFE600|A100FF|FF0055|05070A|0A0F17)$/i.test(literal)) continue
+      add("hardcodedColors", { ...base, value: literal })
     }
+    if (/(?:box-shadow|text-shadow|drop-shadow|shadow-\[)/i.test(code)) {
+      if (domain && visualizationContext(code)) add("domainExceptions", { ...base, rule: domain.id, kind: "shadow", reason: domain.reason })
+      else if (!isTokenSource(file) && !isDocs) add("shadows", { ...base, snippet: trimmed.slice(0, 120) })
+    }
+    const effect = code.match(/(?:backdrop-blur|\bblur[-(]|bg-(?:gradient|radial)|(?:linear|radial)-gradient|@keyframes|animation\s*:|animate-(?:pulse|ping|spin|bounce|\[))/i)
+    const decorative = effect && /absolute|fixed|inset-|pointer-events-none|opacity-|bg-gradient|background(?:-image)?|::before|::after/i.test(code)
+    if (decorative) {
+      if (domain) add("domainExceptions", { ...base, rule: domain.id, kind: "decorative-effect", value: effect[0], reason: domain.reason })
+      else if (!isTokenSource(file) && !/panel-glass|bg-(?:cosmic|dense)-grid|laser-conduit|@keyframes (?:heroShake|textGlow|holoScan|starTwinkle|cosmicDrift|breathingCyan|radarPulse)/.test(code)) add("decorativeEffects", { ...base, effect: effect[0] })
+    }
+    if (/(?:bg|text|border|stroke|fill)-primary|var\(--primary\)|--primary\s*:/.test(code) && /(?:bg-primary|background|absolute|fixed|inset-|min-h-screen|w-full|h-full)/.test(code)) add("suspiciousPrimary", { ...base, snippet: trimmed.slice(0, 120) })
+    const pairs = colorPair(code); if (!isDocs && classes.includes("application-source") && pairs && contrastRatio(pairs[0], pairs[1]) < 4.5) add("contrast", { ...base, foreground: pairs[0], background: pairs[1], ratio: Number(contrastRatio(pairs[0], pairs[1]).toFixed(2)) })
+    if (/\blocalStorage\.(?:getItem|setItem)\(/.test(code) && !isTest) add("directLocalStorage", base)
+    if (/\bconsole\.(?:log|debug)\(/.test(code) && !isTest && !isDocs && !classes.includes("tooling")) add("consoleLogs", base)
+    if (/<img\s+[^>]*>/i.test(code) && !/\balt=/.test(code)) add("missingImageAlt", base)
+    if (/const\s+(?:MOCK_|mock|DUMMY_|dummy)\w*\s*=\s*\[/.test(code) && /views?/.test(file)) add("inlineMocks", base)
+    if (/\b(?:sk-[A-Za-z0-9]{20,}|sk-ant-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|ey[A-Za-z0-9_-]{25,}\.[A-Za-z0-9_-]{25,})\b/.test(code) && !isDocs && !isTest) add("secretLeaks", base)
+    if (/https?:\/\/(?:localhost|127\.0\.0\.1):\d+/.test(code) && !isTest && !isDocs && !/api-client\.ts$/.test(file)) add("hardcodedLocalhost", base)
+    if (/from\s+["'](?:@core\/|@modules\/)/.test(code)) add("legacyImports", base)
+    if (/moon-compute/.test(file) && /from\s+["'](?:fs|http|https|pg|mysql|sqlite|node-fetch)["']/.test(code)) add("pureComputeIsolation", base)
+    if (/(?:moon-compute|moon-protocol|packages\/types)/.test(file) && /from\s+["'](?:@workspace\/(?:ui|hooks|state)|@moon\/server|@views|@app)["']/.test(code)) add("packageHierarchy", base)
+    if (/(?:moon-orm|moon-server|apps\/api)/.test(file) && /\b(?:query|raw|execute)\s*\(\s*[`"']\s*(?:SELECT|INSERT|UPDATE|DELETE)\b.*(?:\$\{|['"]\s*\+)/i.test(code) && !isTest) add("rawSql", base)
   }
 }
 
-function auditFile(filePath) {
-  totalFilesScanned++
-  const relativePath = path.relative(ROOT_DIR, filePath).replace(/\\/g, "/")
-  const content = fs.readFileSync(filePath, "utf-8")
-  const lines = content.split("\n")
+function hex(value) {
+  const named = { white: "#FFFFFF", black: "#000000", "gray-500": "#6B7280", "gray-400": "#9CA3AF", "gray-600": "#4B5563", "red-500": "#EF4444", "blue-500": "#3B82F6", "cyan-400": "#22D3EE", "amber-400": "#FBBF24", "cyber-cyan": CANONICAL.cyan, "cyber-dark": CANONICAL.dark, "cyber-panel": CANONICAL.panel }
+  if (named[value]) value = named[value]
+  if (!/^#[0-9a-f]{6}$/i.test(value)) return null
+  return [parseInt(value.slice(1, 3), 16), parseInt(value.slice(3, 5), 16), parseInt(value.slice(5, 7), 16)].map((v) => { const n = v / 255; return n <= 0.03928 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4 })
+}
+function colorPair(line) {
+  const foreground = line.match(/(?:text|color)[:-](?:\[)?([a-z]+(?:-[a-z]+)?(?:-\d+)?|white|black)(?:\])?/i)?.[1] || line.match(/\bcolor\s*:\s*(#[0-9a-f]{6})/i)?.[1]
+  const background = line.match(/(?:bg|background(?:Color)?)[ :-](?:\[)?([a-z]+(?:-[a-z]+)?(?:-\d+)?|white|black)(?:\])?/i)?.[1] || line.match(/\bbackground(?:-color)?\s*:\s*(#[0-9a-f]{6})/i)?.[1]
+  return foreground && background ? [hex(foreground), hex(background)] : null
+}
+function contrastRatio(a, b) { if (!a || !b) return 21; const l1 = 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2]; const l2 = 0.2126 * b[0] + 0.7152 * b[1] + 0.0722 * b[2]; return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05) }
 
-  const isTest = filePath.includes(".test.") || filePath.includes(".spec.")
-  const isDoc =
-    filePath.includes("README.md") || filePath.includes("constants.ts")
-  const isGlobalsCss = filePath.includes("globals.css")
-  const isScript = filePath.includes("scripts/")
-
-  const fileType = isScript
-    ? "tooling"
-    : isTest
-      ? "test"
-      : isGlobalsCss
-        ? "theme"
-        : isDoc
-          ? "documentation"
-          : relativePath.includes("tajweed")
-            ? "domain"
-            : "application"
-  filesByType[fileType]++
-
-  // Anti-monolithic file limit (400 lines) for UI views and components
-  if (
-    lines.length > 400 &&
-    !isTest &&
-    !isDoc &&
-    (relativePath.includes("views/") || relativePath.includes("components/"))
-  ) {
-    VIOLATIONS.maxLines.push({
-      file: relativePath,
-      lines: lines.length,
-      limit: 400,
-    })
-  }
-
-  // "use client" Line 1 Strict Placement in TSX files
-  if (
-    filePath.endsWith(".tsx") &&
-    (content.includes('"use client"') || content.includes("'use client'"))
-  ) {
-    const firstLine = lines[0].trim()
-    if (firstLine !== '"use client"' && firstLine !== "'use client'") {
-      VIOLATIONS.useClientPlacement.push({
-        file: relativePath,
-        line: 1,
-        content: firstLine,
-      })
-    }
-  }
-
-  // Check exported identifiers and forbidden tokens
-  lines.forEach((line, idx) => {
-    const lineNo = idx + 1
-    const trimmed = line.trim()
-    if (
-      trimmed.startsWith("//") ||
-      trimmed.startsWith("/*") ||
-      trimmed.startsWith("*")
-    )
-      return
-
-    // 1. Forbidden Visual Utilities & Banned Clip Classes
-    const forbiddenUtilMatch = line.match(
-      /\b(laser-conduit-[a-z0-9-]+|glow-[a-z0-9-]+|corner-[a-z0-9-]+|clip-card|clip-hero|clip-btn|clip-tag|clip-rune|card-clip|hero-clip|btn-clip|tag-clip|rune-clip|panel-box|panel-clip|panel-glass|corner-box|bg-space)\b/i
-    )
-    if (forbiddenUtilMatch && !isGlobalsCss) {
-      VIOLATIONS.forbiddenVisualUtilities.push({
-        file: relativePath,
-        line: lineNo,
-        token: forbiddenUtilMatch[1],
-        snippet: trimmed,
-      })
-    }
-
-    // 2. Forbidden Terminology in code/JSX/exports (case-insensitive)
-    // Note: Prophet Hud / Surah Hud (11) is excluded from forbidden HUD ban
-    const forbiddenTermMatch = line.match(
-      /\b(mission control|operator clearance|command shell|secure link|quantum stream|root_access|root access)\b/i
-    )
-    if (forbiddenTermMatch && !isDoc) {
-      VIOLATIONS.forbiddenTerminology.push({
-        file: relativePath,
-        line: lineNo,
-        token: forbiddenTermMatch[0],
-        snippet: trimmed,
-      })
-    }
-
-    // 3. Arbitrary Direct Color Utilities (cyan-*, purple-* in JSX classes outside globals.css)
-    const arbitraryColorMatch = line.match(
-      /\b(bg|text|border|from|to|via)-(cyan|purple)-[0-9]+(\/[0-9]+)?\b/
-    )
-    if (arbitraryColorMatch && !isGlobalsCss) {
-      VIOLATIONS.arbitraryColorUtilities.push({
-        file: relativePath,
-        line: lineNo,
-        token: arbitraryColorMatch[0],
-        snippet: trimmed,
-      })
-    }
-
-    // Phase 3 inventory: these are review findings, not automatic failures.
-    const suspiciousMatch = line.match(
-      /\b(bg-black|bg-white|text-white|text-black|border-white|border-black|backdrop-blur(?:-[a-z0-9]+)?|bg-gradient-[a-z-]+|drop-shadow(?:-[a-z0-9]+)?|animate-(?:spin|ping|pulse)|transition-all)\b/i
-    )
-    if (suspiciousMatch && !isGlobalsCss) {
-      VIOLATIONS.suspiciousVisualUtilities.push({
-        file: relativePath,
-        line: lineNo,
-        token: suspiciousMatch[1],
-        snippet: trimmed,
-      })
-    }
-    if (suspiciousMatch?.[1]?.startsWith("backdrop-blur"))
-      VIOLATIONS.decorativeBlur.push({
-        file: relativePath,
-        line: lineNo,
-        token: suspiciousMatch[1],
-      })
-    if (suspiciousMatch?.[1]?.startsWith("bg-gradient"))
-      VIOLATIONS.decorativeGradients.push({
-        file: relativePath,
-        line: lineNo,
-        token: suspiciousMatch[1],
-      })
-    if (suspiciousMatch?.[1]?.startsWith("animate-"))
-      VIOLATIONS.decorativeAnimation.push({
-        file: relativePath,
-        line: lineNo,
-        token: suspiciousMatch[1],
-      })
-
-    const domainMatch = line.match(
-      /\b(tajweed|madda_normal|qalaqah|idgham_[a-z_]+|ghunnah|ikhfa|iqlab)\b/i
-    )
-    if (domainMatch && isGlobalsCss) {
-      VIOLATIONS.allowedDomainSpecific.push({
-        file: relativePath,
-        line: lineNo,
-        token: domainMatch[1],
-        reason: "Quranic Tajweed visualization token",
-      })
-    }
-
-    // 4. Raw Hex Colors in Tailwind classes (e.g. bg-[#...], text-[#...])
-    const rawColorMatch = line.match(/\b(bg|text|border)-\[#[0-9a-fA-F]{3,8}\]/)
-    if (rawColorMatch && !isGlobalsCss && !isDoc) {
-      VIOLATIONS.rawColorLiterals.push({
-        file: relativePath,
-        line: lineNo,
-        token: rawColorMatch[0],
-        snippet: trimmed,
-      })
-    }
-
-    // 5. Forbidden Fonts (Orbitron permanently banned)
-    if (line.match(/\b(Orbitron|font-orbitron)\b/i) && !isGlobalsCss) {
-      VIOLATIONS.invalidTypography.push({
-        file: relativePath,
-        line: lineNo,
-        token: "Orbitron font is permanently banned",
-        snippet: trimmed,
-      })
-    }
-
-    // 6. Legacy Component & Export Naming
-    const isEslintConfig = filePath.includes("eslint-config")
-    const legacyExportMatch = line.match(
-      /\b(Cosmic[A-Z][a-zA-Z0-9]+|HUDResourceTable|HUDErrorBoundary|useHUDModal|HUD_TOKENS|HUDPanel)\b/
-    )
-    if (legacyExportMatch && !isGlobalsCss && !isEslintConfig) {
-      VIOLATIONS.legacyComponentNaming.push({
-        file: relativePath,
-        line: lineNo,
-        token: legacyExportMatch[1],
-        snippet: trimmed,
-      })
-    }
-
-    // 7. Legacy @core / @modules Imports
-    const coreImportMatch = line.match(
-      /from\s+["'](@core\/|@modules\/)[^"']+["']/
-    )
-    if (coreImportMatch) {
-      VIOLATIONS.legacyCoreImports.push({
-        file: relativePath,
-        line: lineNo,
-        token: coreImportMatch[1],
-        snippet: trimmed,
-      })
-    }
-
-    // 8. Pure Compute Isolation (zero DB/network in @moon/compute)
-    if (
-      relativePath.includes("moon-compute") &&
-      line.match(/from\s+["'](fs|http|https|pg|mysql|sqlite|node-fetch)["']/)
-    ) {
-      VIOLATIONS.pureComputeIsolation.push({
-        file: relativePath,
-        line: lineNo,
-        snippet: trimmed,
-      })
-    }
-
-    // 9. Secret Leaks
-    const secretMatch = line.match(
-      /\b(sk-[a-zA-Z0-9]{20,}|sk-ant-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{20,}|ey[a-zA-Z0-9_-]{25,}\.[a-zA-Z0-9_-]{25,})\b/
-    )
-    if (secretMatch && !isTest && !isDoc) {
-      VIOLATIONS.secretLeaks.push({
-        file: relativePath,
-        line: lineNo,
-        secretType: secretMatch[0].slice(0, 7) + "...",
-      })
-    }
-  })
+function auditPackages() {
+  const dir = path.join(ROOT, "packages"); if (!fs.existsSync(dir)) return
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (!entry.isDirectory() || SKIP_DIRS.has(entry.name)) continue; inventory.packages++
+    const base = path.join(dir, entry.name); const pkgFile = path.join(base, "package.json"); const issue = (text) => add("packageContract", { package: entry.name, issue: text })
+    if (!fs.existsSync(pkgFile)) { issue("Missing package.json"); continue }
+    let pkg; try { pkg = JSON.parse(fs.readFileSync(pkgFile, "utf8")) } catch { issue("Invalid package.json"); continue }
+    if (!/^@(workspace|moon)\//.test(pkg.name || "")) issue(`Non-canonical namespace: ${pkg.name || "missing"}`)
+    if (!/^\d+\.\d+\.\d+/.test(pkg.version || "")) issue(`Invalid SemVer version: ${pkg.version || "missing"}`)
+    if (!pkg.exports && !["eslint-config", "typescript-config"].includes(entry.name)) issue("Missing explicit exports map")
+    if (!fs.existsSync(path.join(base, "src", "index.ts")) && !fs.existsSync(path.join(base, "src", "index.tsx")) && !fs.existsSync(path.join(base, "src", "index.js")) && !fs.existsSync(path.join(base, "index.ts")) && !["eslint-config", "typescript-config"].includes(entry.name)) issue("Missing public entrypoint")
+    if (!fs.existsSync(path.join(base, "tsconfig.json")) && !["eslint-config", "typescript-config"].includes(entry.name)) issue("Missing tsconfig.json")
+    const readme = path.join(base, "README.md"); if (!fs.existsSync(readme)) issue("Missing architectural README.md"); else { const text = fs.readFileSync(readme, "utf8"); if (!text.includes("# ◈")) issue("README missing '# ◈' title"); if (!/VERSION|Version|SYS-VER/i.test(text)) issue("README missing version declaration"); if (!/Usage|Quickstart|Running Locally|Installation|Overview/i.test(text)) issue("README missing usage guide"); if (!/Verification|Test|Build|Typecheck/i.test(text) && !["eslint-config", "typescript-config"].includes(entry.name)) issue("README missing verification instructions") }
+    const source = path.join(base, "src", "index.ts"); if (fs.existsSync(source)) { const text = fs.readFileSync(source, "utf8"); if (/models\s*:\s*\[/.test(text)) { if (!fs.existsSync(path.join(base, "src", "demo-data.ts")) && !fs.existsSync(path.join(base, "src", "demo-data.js"))) issue("Model addon missing src/demo-data.ts"); if (!text.includes("loadDemoData")) issue("Model addon missing loadDemoData export"); if (!fs.existsSync(path.join(base, "src", "views.ts")) && !fs.existsSync(path.join(base, "src", "views.js"))) issue("Model addon missing src/views.ts"); if (!/views/.test(text)) issue("Model addon missing views export") } } }
 }
 
-// ── AUDITOR EXECUTION ────────────────────────────────────────────────────────
-console.log(
-  `${BOLD}${CYAN}◈ MOONWITNESS — ENTERPRISE DESIGN SYSTEM AUDITOR (PHASE 3)${RESET}`
-)
-console.log(
-  `${PURPLE}Executing forensic multi-pillar inspection across workspace projects & Genesis contracts...${RESET}\n`
-)
-
-auditThemeParityAndContrast()
-auditPackageGenesisContracts()
-
-for (const target of TARGET_DIRS) {
-  checkGhostFolders(path.join(ROOT_DIR, target))
-  scanDirectory(path.join(ROOT_DIR, target))
+function auditThemeParity() {
+  const cssFile = "packages/ui/src/styles/globals.css"; const tokenFile = "packages/ui/src/tokens/theme-tokens.ts"; const css = path.join(ROOT, cssFile); const token = path.join(ROOT, tokenFile)
+  const cssText = fs.existsSync(css) ? fs.readFileSync(css, "utf8") : ""; const tokenText = fs.existsSync(token) ? fs.readFileSync(token, "utf8") : ""
+  for (const [name, value] of Object.entries(CANONICAL)) { const tokenName = `cyber-${name}`; if (!new RegExp(`--${tokenName}\\s*:`).test(cssText)) add("themeParity", { file: cssFile, issue: `Missing --${tokenName}` }); if (!tokenText.toUpperCase().includes(value.toUpperCase())) add("themeParity", { file: tokenFile, issue: `Missing canonical ${tokenName} value` }) }
+  for (const portal of ["apps/web/app/layout.tsx", "apps/command-center/app/layout.tsx"]) { const file = path.join(ROOT, portal); const text = fs.existsSync(file) ? fs.readFileSync(file, "utf8") : ""; if (!text.includes("@workspace/ui/globals.css")) add("themeParity", { file: portal, issue: "Portal does not import shared globals.css" }); if (!/\bdark\b/.test(text)) add("themeParity", { file: portal, issue: "Portal does not opt into the shared dark theme" }) }
 }
 
-// ── CONSTITUTIONAL REPORT ───────────────────────────────────────────────────
-console.log(
-  `${BOLD}═══════════════════════════════════════════════════════════════════════════${RESET}`
-)
-console.log(
-  `Scanned ${BOLD}${totalFilesScanned}${RESET} files across ${BOLD}${totalPackagesAudited}${RESET} workspace packages.\n`
-)
-console.log(`${BOLD}${CYAN}▶ FILE CLASSIFICATION${RESET}`)
-for (const [type, count] of Object.entries(filesByType)) {
-  console.log(`  • ${type}: ${count === 0 ? "NOT SCANNED" : count}`)
-}
-console.log()
-
-// Genesis Contract
-console.log(`${BOLD}${CYAN}▶ SOVEREIGN PACKAGE GENESIS CONTRACT${RESET}`)
-if (VIOLATIONS.packageContractIssues.length === 0) {
-  console.log(
-    `  ${GREEN}✓ [GENESIS CONTRACT] All ${totalPackagesAudited} workspace packages adhere 100% to Genesis Mandates!${RESET}`
-  )
-} else {
-  console.log(
-    `  ${RED}❌ [GENESIS CONTRACT] Package Genesis Contract Violations Detected:${RESET}`
-  )
-  VIOLATIONS.packageContractIssues.forEach((p) =>
-    console.log(`     • ${BOLD}${p.pkg}${RESET}: ${p.issue}`)
-  )
-}
-console.log()
-
-// Pillar I: Theme Parity & Contrast
-console.log(
-  `${BOLD}${CYAN}▶ PILLAR I: THEME PARITY & ACCESSIBILITY (WCAG AA)${RESET}`
-)
-if (
-  VIOLATIONS.themeParityIssues.length === 0 &&
-  VIOLATIONS.contrastIssues.length === 0
-) {
-  console.log(
-    `  ${GREEN}✓ [THEME PARITY] Light & Dark mode canonical theme tokens in full parity!${RESET}`
-  )
-  console.log(
-    `  ${GREEN}✓ [ACCESSIBILITY] WCAG AA contrast ratio (> 4.5:1) verified!${RESET}`
-  )
-} else {
-  VIOLATIONS.themeParityIssues.forEach((t) =>
-    console.log(`  ${RED}❌ [THEME PARITY] ${t.issue}${RESET}`)
-  )
-  VIOLATIONS.contrastIssues.forEach((c) =>
-    console.log(
-      `  ${RED}❌ [CONTRAST] ${c.mode} ${c.pair || "background / foreground"}: Contrast ${c.contrast} fails requirement (${c.req})${RESET}`
-    )
-  )
-}
-console.log()
-
-console.log(`${BOLD}${CYAN}▶ PHASE 3 VISUAL INVENTORY${RESET}`)
-console.log(
-  `  ${YELLOW}• [SUSPICIOUS] ${VIOLATIONS.suspiciousVisualUtilities.length} visual utility usages require review (not automatic failures).${RESET}`
-)
-console.log(
-  `  ${GREEN}✓ [ALLOWED DOMAIN-SPECIFIC] ${VIOLATIONS.allowedDomainSpecific.length} Tajweed visualization token usages remain explicitly scoped to globals.css.${RESET}`
-)
-console.log()
-
-// Pillar II: Zero-Drift Semantic Token & Terminology
-console.log(`${BOLD}${CYAN}▶ PHASE 4 GOVERNANCE CATEGORIES${RESET}`)
-console.log(
-  `  • FORBIDDEN TERMINOLOGY: ${VIOLATIONS.forbiddenTerminology.length}`
-)
-console.log(
-  `  • FORBIDDEN FILE NAMES: ${VIOLATIONS.legacyComponentNaming.length}`
-)
-console.log(
-  `  • FORBIDDEN VISUAL UTILITIES: ${VIOLATIONS.forbiddenVisualUtilities.length}`
-)
-console.log(
-  `  • ARBITRARY COLORS: ${VIOLATIONS.arbitraryColorUtilities.length + VIOLATIONS.rawColorLiterals.length}`
-)
-console.log(
-  `  • ARBITRARY SHADOWS: ${VIOLATIONS.arbitraryShadows.length === 0 ? "NOT SCANNED" : VIOLATIONS.arbitraryShadows.length}`
-)
-console.log(
-  `  • DECORATIVE GRADIENTS: ${VIOLATIONS.suspiciousVisualUtilities.filter((v) => v.token.startsWith("bg-gradient")).length}`
-)
-console.log(
-  `  • DECORATIVE BLUR: ${VIOLATIONS.suspiciousVisualUtilities.filter((v) => v.token.startsWith("backdrop-blur")).length}`
-)
-console.log(
-  `  • DECORATIVE ANIMATION: ${VIOLATIONS.suspiciousVisualUtilities.filter((v) => v.token.startsWith("animate-")).length}`
-)
-console.log(
-  `  • SUSPICIOUS PRIMARY USAGE: ${VIOLATIONS.suspiciousVisualUtilities.filter((v) => /primary/.test(v.snippet)).length}`
-)
-console.log(`  • DOMAIN EXCEPTIONS: ${VIOLATIONS.allowedDomainSpecific.length}`)
-console.log()
-
-// Pillar II: Zero-Drift Semantic Token & Terminology
-console.log(
-  `${BOLD}${CYAN}▶ PILLAR II: ZERO-DRIFT SEMANTIC TOKENS & VISUAL GOVERNANCE${RESET}`
-)
-if (VIOLATIONS.forbiddenVisualUtilities.length === 0) {
-  console.log(
-    `  ${GREEN}✓ [FORBIDDEN UTILITIES] Custom clip/laser/glow/space utilities: CLEAN (0 detected)${RESET}`
-  )
-} else {
-  console.log(
-    `  ${RED}❌ [FORBIDDEN UTILITIES] Violations Detected (${VIOLATIONS.forbiddenVisualUtilities.length}):${RESET}`
-  )
-  VIOLATIONS.forbiddenVisualUtilities
-    .slice(0, 10)
-    .forEach((v) =>
-      console.log(
-        `     • ${BOLD}${v.file}:${v.line}${RESET} ➔ ${RED}${v.token}${RESET}`
-      )
-    )
+function printCategory(name, label, critical = false) {
+  const items = findings[name]; const mark = items.length ? (critical ? "❌" : "⚠️") : "✓"; console.log(`${mark} ${label}: ${items.length}`)
+  for (const item of items.slice(0, 12)) console.log(`   • ${JSON.stringify(item)}`)
+  if (items.length > 12) console.log(`   • … ${items.length - 12} more (counted, not suppressed)`)
 }
 
-if (VIOLATIONS.arbitraryColorUtilities.length === 0) {
-  console.log(
-    `  ${GREEN}✓ [ARBITRARY COLORS] Direct cyan-*/purple-* color utilities: CLEAN (0 detected)${RESET}`
-  )
-} else {
-  console.log(
-    `  ${RED}❌ [ARBITRARY COLORS] Arbitrary Color Utilities Detected (${VIOLATIONS.arbitraryColorUtilities.length}):${RESET}`
-  )
-  VIOLATIONS.arbitraryColorUtilities
-    .slice(0, 10)
-    .forEach((v) =>
-      console.log(
-        `     • ${BOLD}${v.file}:${v.line}${RESET} ➔ ${RED}${v.token}${RESET}`
-      )
-    )
-}
-
-if (VIOLATIONS.rawColorLiterals.length === 0) {
-  console.log(
-    `  ${GREEN}✓ [RAW COLOR LITERALS] Hardcoded Hex Literals in UI: CLEAN (0 detected)${RESET}`
-  )
-} else {
-  console.log(
-    `  ${RED}❌ [RAW COLOR LITERALS] Hardcoded Hex Literals Detected (${VIOLATIONS.rawColorLiterals.length}):${RESET}`
-  )
-  VIOLATIONS.rawColorLiterals
-    .slice(0, 10)
-    .forEach((v) =>
-      console.log(
-        `     • ${BOLD}${v.file}:${v.line}${RESET} ➔ ${RED}${v.token}${RESET}`
-      )
-    )
-}
-
-if (VIOLATIONS.forbiddenTerminology.length === 0) {
-  console.log(
-    `  ${GREEN}✓ [TERMINOLOGY] Theatrical/Sci-Fi Terminology: CLEAN (0 detected)${RESET}`
-  )
-} else {
-  console.log(
-    `  ${RED}❌ [TERMINOLOGY] Forbidden Terminology Detected (${VIOLATIONS.forbiddenTerminology.length}):${RESET}`
-  )
-  VIOLATIONS.forbiddenTerminology
-    .slice(0, 10)
-    .forEach((v) =>
-      console.log(
-        `     • ${BOLD}${v.file}:${v.line}${RESET} ➔ ${RED}${v.token}${RESET}`
-      )
-    )
-}
-
-if (VIOLATIONS.invalidTypography.length === 0) {
-  console.log(
-    `  ${GREEN}✓ [TYPOGRAPHY] Canonical Fonts (Geist, JetBrains Mono, Amiri; Zero Orbitron): CLEAN${RESET}`
-  )
-} else {
-  console.log(
-    `  ${RED}❌ [TYPOGRAPHY] Forbidden Font Usages Detected (${VIOLATIONS.invalidTypography.length}):${RESET}`
-  )
-  VIOLATIONS.invalidTypography.forEach((v) =>
-    console.log(
-      `     • ${BOLD}${v.file}:${v.line}${RESET} ➔ ${RED}${v.token}${RESET}`
-    )
-  )
-}
-
-if (
-  VIOLATIONS.ghostFolders.length === 0 &&
-  VIOLATIONS.legacyComponentNaming.length === 0
-) {
-  console.log(
-    `  ${GREEN}✓ [TOPOLOGY & NAMING] Zero Ghost Folders & Zero Cosmic/HUD Component Naming: CLEAN${RESET}`
-  )
-} else {
-  VIOLATIONS.ghostFolders.forEach((g) =>
-    console.log(`  ${RED}❌ [GHOST FOLDER] ${g.path}${RESET}`)
-  )
-  VIOLATIONS.legacyComponentNaming.forEach((l) =>
-    console.log(
-      `  ${RED}❌ [LEGACY NAMING] ${l.path || l.file}: ${l.issue || l.token}${RESET}`
-    )
-  )
-}
-
-if (VIOLATIONS.legacyCoreImports.length === 0) {
-  console.log(
-    `  ${GREEN}✓ [DEPENDENCY FLOW] Layered Dependency Flow (Zero @core/@modules): CLEAN${RESET}`
-  )
-} else {
-  console.log(
-    `  ${RED}❌ [DEPENDENCY FLOW] Legacy Core Imports Detected:${RESET}`
-  )
-  VIOLATIONS.legacyCoreImports.forEach((c) =>
-    console.log(`     • ${BOLD}${c.file}:${c.line}${RESET} ➔ ${c.token}`)
-  )
-}
-console.log()
-
-// Pillar III: React & Next.js Conventions
-console.log(
-  `${BOLD}${CYAN}▶ PILLAR III: REACT 19 & COMPUTATIONAL ISOLATION${RESET}`
-)
-if (VIOLATIONS.useClientPlacement.length === 0) {
-  console.log(
-    `  ${GREEN}✓ [CLIENT DIRECTIVE] "use client" Line 1 Strict Placement: CLEAN${RESET}`
-  )
-} else {
-  console.log(`  ${RED}❌ [CLIENT DIRECTIVE] "use client" Misplaced:${RESET}`)
-  VIOLATIONS.useClientPlacement.forEach((u) =>
-    console.log(`     • ${BOLD}${u.file}:${u.line}${RESET}`)
-  )
-}
-
-if (VIOLATIONS.pureComputeIsolation.length === 0) {
-  console.log(
-    `  ${GREEN}✓ [COMPUTE ISOLATION] Pure Mathematical Engine Isolation (@moon/compute): CLEAN${RESET}`
-  )
-} else {
-  console.log(
-    `  ${RED}❌ [COMPUTE ISOLATION] DB/Network imports in @moon/compute:${RESET}`
-  )
-  VIOLATIONS.pureComputeIsolation.forEach((p) =>
-    console.log(`     • ${BOLD}${p.file}:${p.line}${RESET}`)
-  )
-}
-console.log()
-
-// Pillar IV: Security
-console.log(`${BOLD}${CYAN}▶ PILLAR IV: SECURITY & CREDENTIAL SAFETY${RESET}`)
-if (VIOLATIONS.secretLeaks.length === 0) {
-  console.log(
-    `  ${GREEN}✓ [SECURITY] Zero Plaintext Secrets / API Keys in Code: CLEAN (0 leaks)${RESET}`
-  )
-} else {
-  console.log(`  ${RED}❌ [SECURITY] Potential Secret Leaks Detected:${RESET}`)
-  VIOLATIONS.secretLeaks.forEach((s) =>
-    console.log(`     • ${BOLD}${s.file}:${s.line}${RESET} ➔ ${s.secretType}`)
-  )
-}
-console.log()
-
-// Summary Calculation
-const totalCriticalViolations =
-  VIOLATIONS.packageContractIssues.length +
-  VIOLATIONS.themeParityIssues.length +
-  VIOLATIONS.contrastIssues.length +
-  VIOLATIONS.forbiddenVisualUtilities.length +
-  VIOLATIONS.arbitraryColorUtilities.length +
-  VIOLATIONS.rawColorLiterals.length +
-  VIOLATIONS.forbiddenTerminology.length +
-  VIOLATIONS.invalidTypography.length +
-  VIOLATIONS.ghostFolders.length +
-  VIOLATIONS.legacyComponentNaming.length +
-  VIOLATIONS.legacyCoreImports.length +
-  VIOLATIONS.useClientPlacement.length +
-  VIOLATIONS.pureComputeIsolation.length +
-  VIOLATIONS.secretLeaks.length
-
-console.log(
-  `${BOLD}═══════════════════════════════════════════════════════════════════════════${RESET}`
-)
-if (totalCriticalViolations === 0) {
-  console.log(
-    `  ${BOLD}${GREEN}🎉 TRUE ZERO-DRIFT CONSTITUTIONAL HARMONY: 0 VIOLATIONS ACROSS ALL PILLARS!${RESET}\n`
-  )
-  process.exit(0)
-} else {
-  console.log(
-    `  ${BOLD}${RED}❌ FAILED AUDIT: ${totalCriticalViolations} CRITICAL CONSTITUTIONAL VIOLATIONS DETECTED!${RESET}\n`
-  )
-  process.exit(1)
-}
+console.log("◈ MOONWITNESS OS — CONSTITUTIONAL AUDITOR V9.5")
+console.log("Inventorying application source, theme, domain visualization, tests, docs, and tooling...\n")
+auditPackages(); auditThemeParity(); walk(ROOT)
+console.log(`Scanned ${inventory.files} files (${inventory.text} text files) across ${inventory.packages} packages; generated directories excluded: ${inventory.skipped}.`)
+console.log(`Classified files: ${Object.entries(inventory.classes).map(([key, value]) => `${key}=${value}`).join(", ")}\n`)
+console.log("REQUESTED AUDIT CATEGORIES")
+printCategory("forbiddenTerminology", "Forbidden terminology")
+printCategory("filenameExports", "Forbidden filenames / exports", true)
+printCategory("hardcodedColors", "Hardcoded colors", true)
+printCategory("hardcodedLocalhost", "Hardcoded localhost URLs", true)
+printCategory("shadows", "Shadows / glows")
+printCategory("decorativeEffects", "Decorative blur / gradients / animation")
+printCategory("themeParity", "Theme parity", true)
+printCategory("contrast", "Contrast")
+printCategory("suspiciousPrimary", "Suspicious primary use")
+printCategory("domainExceptions", "Domain visualization exceptions")
+printCategory("unsupportedColorFormats", "Unsupported color formats", true)
+console.log("\nCONSTITUTIONAL / SECURITY AUDITS")
+for (const [name, label, critical] of [["maxLines", "Files over 400 lines"], ["ghostPaths", "Ghost paths", true], ["legacyImports", "Legacy imports", true], ["useClientPlacement", "use client placement", true], ["inlineMocks", "Inline mocks"], ["pureComputeIsolation", "Pure compute isolation", true], ["packageHierarchy", "Package hierarchy", true], ["packageContract", "Package genesis contract", true], ["secretLeaks", "Secret leaks", true], ["unsafeLinks", "Unsafe links", true], ["rawHtml", "Unsanitized HTML"], ["rawSql", "Raw SQL concatenation", true], ["directLocalStorage", "Direct localStorage"], ["consoleLogs", "Console logging"], ["missingImageAlt", "Missing image alt"]]) printCategory(name, label, critical)
+const critical = ["filenameExports", "hardcodedColors", "hardcodedLocalhost", "themeParity", "unsupportedColorFormats", "ghostPaths", "legacyImports", "useClientPlacement", "pureComputeIsolation", "packageHierarchy", "packageContract", "secretLeaks", "unsafeLinks", "rawSql"].reduce((total, name) => total + findings[name].length, 0)
+console.log(`\n${critical ? `⚠️ ${critical} critical finding(s) require review.` : "🎉 SUPREME ARCHITECTURAL HARMONY: 0 critical findings."}`)
+process.exitCode = critical ? 1 : 0
