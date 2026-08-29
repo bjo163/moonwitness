@@ -31,7 +31,7 @@ export function LoginView() {
       router.push("/dashboard")
     } catch (err: any) {
       cosmicAudio.playModalPulse()
-      setErrorMsg(err?.message || "AUTHENTICATION FAILED. INVALID CLEARANCE.")
+      setErrorMsg(err?.message || "Invalid email or password. Please try again.")
       setLoading(false)
     }
   }
@@ -44,7 +44,7 @@ export function LoginView() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-cyber-dark font-sans text-white selection:bg-cyber-cyan/30 selection:text-white">
-      {/* Background Holographic Atmosphere */}
+      {/* Background Atmosphere */}
       <div className="pointer-events-none absolute inset-0 z-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,240,255,0.08),rgba(255,255,255,0))]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_120%,rgba(161,0,255,0.08),rgba(255,255,255,0))]" />
@@ -60,28 +60,28 @@ export function LoginView() {
           <h1 className="text-2xl font-bold tracking-tight text-white uppercase sm:text-3xl">
             MOONWITNESS OS
           </h1>
-          <p className="mt-1 font-mono text-xs tracking-wider text-muted-foreground uppercase">
-            Command Center // Clearance Gateway
+          <p className="mt-1 text-xs text-muted-foreground">
+            Sign in to access the Command Center
           </p>
         </div>
 
-        {/* Tactical Glass Form Card */}
+        {/* Glass Form Card */}
         <div className="relative rounded-2xl border border-white/10 bg-card/85 p-8 shadow-xl backdrop-blur-xl">
           {errorMsg && (
-            <div className="mb-5 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-center text-xs font-medium text-red-400">
+            <div className="mb-5 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-center text-xs font-medium text-destructive">
               {errorMsg}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Operator Identifier */}
+            {/* Email Field */}
             <div className="space-y-1.5">
               <label className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
                 <Mail className="h-3.5 w-3.5 text-cyber-cyan" />
-                Operator Callsign / Email
+                Email Address
               </label>
               <input
-                type="text"
+                type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -90,11 +90,11 @@ export function LoginView() {
               />
             </div>
 
-            {/* Tactical Access Key */}
+            {/* Password Field */}
             <div className="space-y-1.5">
               <label className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
                 <Lock className="h-3.5 w-3.5 text-cyber-cyan" />
-                Security Access Key
+                Password
               </label>
               <input
                 type="password"
@@ -106,27 +106,27 @@ export function LoginView() {
               />
             </div>
 
-            {/* Clearance Preset Buttons */}
+            {/* Demo Accounts Preset Buttons */}
             <div className="pt-2">
-              <span className="mb-2 block font-mono text-[10px] text-muted-foreground uppercase">
-                Quick Clearance Presets:
+              <span className="mb-2 block text-[11px] font-medium text-muted-foreground">
+                Demo Accounts:
               </span>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => handleQuickPreset("commander@moonwitness.os", "password123")}
-                  className="flex items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-2 font-mono text-xs text-foreground transition-colors hover:border-cyber-purple/50 hover:bg-cyber-purple/10"
+                  className="flex items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-cyber-purple/50 hover:bg-cyber-purple/10"
                 >
                   <KeyRound className="h-3.5 w-3.5 text-cyber-purple" />
-                  COMMANDER
+                  Commander
                 </button>
                 <button
                   type="button"
                   onClick={() => handleQuickPreset("admin@moonwitness.org", "admin123")}
-                  className="flex items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-2 font-mono text-xs text-foreground transition-colors hover:border-cyber-cyan/50 hover:bg-cyber-cyan/10"
+                  className="flex items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-cyber-cyan/50 hover:bg-cyber-cyan/10"
                 >
                   <Sparkles className="h-3.5 w-3.5 text-cyber-cyan" />
-                  ADMIN ROOT
+                  Administrator
                 </button>
               </div>
             </div>
@@ -140,21 +140,21 @@ export function LoginView() {
               {loading ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  AUTHENTICATING CLEARANCE...
+                  Signing in...
                 </>
               ) : (
                 <>
-                  INITIALIZE SESSION <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  Sign In <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </>
               )}
             </button>
           </form>
         </div>
 
-        {/* Tactical Footer */}
+        {/* Footer */}
         <div className="mt-6 text-center">
-          <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">
-            RESTRICTED ACCESS // DIVINE COMMAND MATRIX V9.5
+          <p className="text-xs text-muted-foreground">
+            Protected System • MoonWitness OS V9.5
           </p>
         </div>
       </main>

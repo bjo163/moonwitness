@@ -292,37 +292,37 @@ Corner accent indicators match the semantic state family:
 
 ---
 
-## 10 — WRITING & TERMINOLOGY GUIDE
+## 10 — MODERN SHADCN/UI & VERCEL TERMINOLOGY GUIDE
 
-| ❌ NEVER | ✅ ALWAYS |
-|----------|---------|
-| Website | Operating System |
-| Page | Module / Window |
-| Click here | Launch / Execute |
-| User | Operator |
-| Settings | System Configuration |
-| Loading... | SYNCHRONIZING... |
-| Error | SIGNAL LOST / SYSTEM FAULT |
-| Success | OPERATION COMPLETE |
-| Search | QUERY DATABASE |
-| Logout | TERMINATE SESSION |
+Clear, human-centered, and industry-standard copywriting aligned with standard Vercel and shadcn/ui UX patterns:
+
+| Context / Action | Standard Terminology (Recommended) | Avoid (Overly Cryptic / Jargon) |
+|---|---|---|
+| **Authentication** | Sign In / Log In / Sign Out | Clearance Gate / Terminate Session / Initialize Session |
+| **Credentials** | Email / Password | Operator Callsign / Tactical Access Key / Auth Cipher |
+| **Identity** | User / Admin / Account / Profile | Operator / Agent Unit / Subject ID |
+| **Navigation** | Dashboard / Overview / Settings / Page | Window / Sector Matrix / System Node |
+| **Actions** | Submit / Save Changes / Cancel / Delete | Execute Directive / Commit Matrix / Purge Data |
+| **Data Querying** | Search... / Filter records... | Query Database / Holo-Scan Buffer / Matrix Filter |
+| **Feedback States** | Loading... / Saving... / Syncing... | SYNCHRONIZING TELEMETRY... / BUFFERING VOID... |
+| **Alerts & Status** | Success / Error / Active / Offline | OPERATION COMPLETE / SIGNAL LOST / SYSTEM FAULT |
 
 ---
 
 ## 11 — CONSTITUTIONAL CODE DISCIPLINE (THE 30 SUPREME LAWS)
 
-> **The codebase IS the product. Dirty code = corrupted system.**
+> **The codebase IS the product. Clean architecture = reliable system.**
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════╗
-║              ◈ THE 30 SUPREME CONSTITUTIONAL LAWS (V9.0) ◈               ║
+║              ◈ THE 30 SUPREME CONSTITUTIONAL LAWS (V9.5) ◈               ║
 ╠══════════════════════════════════════════════════════════════════════════╣
 ║                                                                          ║
-║  PILLAR I: VISUAL DNA & DESIGN TOKENS                                    ║
+║  PILLAR I: VISUAL DNA & SHADCN/UI DESIGN TOKENS                          ║
 ║  01. Zero-Drift Cyber Palette (--cyber-* semantic tokens)                ║
-║  02. Sacred Geometric Chamfers (.clip-card, .clip-hero, .clip-btn)       ║
-║  03. Apple & NASA Typography (Orbitron, JetBrains Mono, Amiri Arabic)    ║
-║  04. Unified Glassmorphism & Optical Glows                               ║
+║  02. Smooth Geometric Containers (.clip-card, .clip-hero, .clip-btn)     ║
+║  03. Standard Typography (Geist Sans, JetBrains Mono, Amiri Arabic)      ║
+║  04. Unified Glassmorphism & Refined Elevation (backdrop-blur-md)        ║
 ║  05. Procedural Web Audio Synthesis (0 MP3/WAV file dependencies)        ║
 ║                                                                          ║
 ║  PILLAR II: MONOREPO TOPOLOGY & BOUNDARIES                               ║
@@ -360,7 +360,7 @@ Corner accent indicators match the semantic state family:
 ║  27. Pristine Quranic Text Preservation (Uthmani orthography)            ║
 ║  28. Canonical Index Range Integrity (Surah 1-114, Asmaul Husna 1-99)    ║
 ║  29. Arabic Script Typography & RTL (.arabic-text encapsulation)         ║
-║  30. Cosmic Terminology Discipline (Operating System, Module, Operator)  ║
+║  30. Modern UX & Terminology Discipline (Standard Vercel/shadcn terms)   ║
 ║                                                                          ║
 ║  PILLAR VIII: SERVER-DRIVEN UI & MODEL MATRIX INTEGRITY                  ║
 ║  31. Mandatory Demo Data Contract (src/demo-data.ts per addon package)   ║
