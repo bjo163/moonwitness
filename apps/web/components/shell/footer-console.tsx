@@ -29,7 +29,7 @@ export function OSFooterConsole() {
         </div>
 
         <div className="flex items-center gap-6 font-bold text-white/50">
-          <span className="cursor-pointer transition-colors hover:text-cyan-400">
+          <span className="cursor-pointer transition-colors hover:text-primary">
             [ TELEMETRY ]
           </span>
           <span className="cursor-pointer transition-colors hover:text-fuchsia-400">
@@ -43,7 +43,7 @@ export function OSFooterConsole() {
           </span>
         </div>
 
-        <div className="hidden font-bold text-cyan-300 lg:block">
+        <div className="hidden font-bold text-primary lg:block">
           {mounted ? currentTime : "00:00:00 WIB"}
         </div>
       </div>

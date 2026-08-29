@@ -62,11 +62,11 @@ export async function generateMetadata({
   } catch {}
 
   return {
-    title: `Inspiration Q.S ${surahName} (${surahNum}:${ayahNum}) | MoonWitness Cosmic Inspiration`,
-    description: `MoonWitness Short Link — Q.S ${surahName} Ayah ${ayahNum}, Prophetic Hadiths & Cosmic Lore Transmission.`,
+    title: `Inspiration Q.S ${surahName} (${surahNum}:${ayahNum}) | MoonWitness Daily Inspiration`,
+    description: `MoonWitness Short Link — Q.S ${surahName} Ayah ${ayahNum}, Prophetic Hadiths & Scripture Reflection.`,
     openGraph: {
       title: `Inspiration Q.S ${surahName} (${surahNum}:${ayahNum})`,
-      description: `MoonWitness Short Link — Q.S ${surahName} Ayah ${ayahNum}, Prophetic Hadiths & Cosmic Lore Transmission.`,
+      description: `MoonWitness Short Link — Q.S ${surahName} Ayah ${ayahNum}, Prophetic Hadiths & Scripture Reflection.`,
       url: `/s/${id}`,
     },
   }
@@ -149,10 +149,10 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
     <div className="mx-auto max-w-4xl space-y-6 px-4 sm:px-6">
       <ContextBlock
         title={`INSPIRATION Q.S ${surahName} (${surahNum}:${ayahNum})`}
-        subtitle="MoonWitness Short Link — Prophetic Hadiths & Cosmic Lore Transmission."
-        operation="TACTICAL-SHARE"
-        status="ONLINE"
-        accentColor="knowledge"
+        subtitle="MoonWitness Short Link — Prophetic Hadiths & Scripture Reflection."
+        operation="SHARE-VIEW"
+        status="ACTIVE"
+        accentColor="primary"
       />
 
       {/* FULL SHORT SHARE CARD */}

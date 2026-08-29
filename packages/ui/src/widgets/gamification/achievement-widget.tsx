@@ -52,7 +52,7 @@ export function AchievementWidget() {
           </div>
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
             <div
-              className="h-full bg-gradient-to-r from-fuchsia-500 to-purple-400"
+              className="h-full bg-gradient-to-r from-fuchsia-500 to-transparent"
               style={{ width: `${progressToNextLevel}%` }}
             />
           </div>

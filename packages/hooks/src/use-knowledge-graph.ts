@@ -85,12 +85,12 @@ const DEFAULT_GRAPH_DATA: KnowledgeGraphFullData = {
   topEntities: [
     { n: "Rasulullah ﷺ", col: "text-emerald-400", i: "Users", c: 6236 },
     { n: "Makkah", col: "text-amber-400", i: "Map", c: 489 },
-    { n: "Madinah", col: "text-cyan-400", i: "Map", c: 512 },
+    { n: "Madinah", col: "text-primary", i: "Map", c: 512 },
     { n: "Bukhari", col: "text-fuchsia-400", i: "BookOpen", c: 7563 },
   ],
   entityTypes: [
     { id: "prophets", n: "Prophets & Messengers", c: 25, col: "text-emerald-400", i: "Users" },
-    { id: "companions", n: "Companions (Sahabah)", c: 313, col: "text-cyan-400", i: "Users" },
+    { id: "companions", n: "Companions (Sahabah)", c: 313, col: "text-primary", i: "Users" },
     { id: "places", n: "Sacred Sites & Cities", c: 48, col: "text-amber-400", i: "Map" },
     { id: "scriptures", n: "Scriptures & Books", c: 9, col: "text-fuchsia-400", i: "BookOpen" },
   ],

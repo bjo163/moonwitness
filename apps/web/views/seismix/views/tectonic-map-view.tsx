@@ -374,12 +374,12 @@ export function TectonicMapView() {
       {currentPlate && <PlateDetail plate={currentPlate} />}
 
       {/* Boundary types legend */}
-      <Panel level="level3" accentColor="system">
+      <Panel level="level3" accentColor="primary">
         <PanelHeader
           title="PLATE BOUNDARY TYPES"
           icon={Compass}
           status="REFERENCE"
-          accentColor="system"
+          accentColor="primary"
         />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">

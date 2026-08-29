@@ -37,19 +37,19 @@ export function OSMissionControlOverview() {
       borderColor="cyan"
       className="relative"
     >
-      {/* ═══ LAYER 1: DEEP SPACE SCI-FI GRADIENT & NEBULA BACKGROUND ═════════ */}
+      {/* ═══ LAYER 1: DEEP SPACE modern GRADIENT & NEBULA BACKGROUND ═════════ */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="bg-radial-gradient absolute top-1/3 left-1/2 h-[600px] w-[900px] -translate-x-1/2 -translate-y-1/2 from-blue-900/20 via-cyan-950/10 to-transparent blur-[140px]" />
+        <div className="bg-radial-gradient absolute top-1/3 left-1/2 h-[600px] w-[900px] -translate-x-1/2 -translate-y-1/2 from-blue-900/20 via-transparent to-transparent blur-[140px]" />
       </div>
 
       <div className="relative z-10 space-y-10">
         {/* Top Header Badge */}
         {/* Top Header Badge */}
-        <SectionBadge number="03" label="MISSION CONTROL OVERVIEW" />
+        <SectionBadge number="03" label="operations overview OVERVIEW" />
 
-        {/* ═══ LAYER 3 & 4: MAIN MISSION CONTROL COMMAND DECK (From Image 4) ══ */}
+        {/* ═══ LAYER 3 & 4: MAIN operations overview COMMAND DECK (From Image 4) ══ */}
         <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
-          {/* LEFT: MISSION CONTROL TITLE & DOCTRINE PANEL (Col 1-3) */}
+          {/* LEFT: operations overview TITLE & DOCTRINE PANEL (Col 1-3) */}
           <div className="bg-background flex flex-col justify-between space-y-6 rounded-xl border-2 border-primary/50 p-6 shadow-sm sm:p-7 lg:col-span-3">
             <div>
               <h2 className="font-mono text-4xl leading-tight font-black tracking-widest uppercase sm:text-5xl">
@@ -124,7 +124,7 @@ export function OSMissionControlOverview() {
               <div className="from-space to-space/50 absolute inset-0 bg-gradient-to-t via-transparent" />
             </div>
 
-            {/* Spinning Holographic Earth Globe Illusion (Using generated studio art /assets/holo_globe.png) */}
+            {/* Spinning digital Earth Globe Illusion (Using generated studio art /assets/holo_globe.png) */}
             <div className="relative my-auto flex h-72 w-full items-center justify-center">
               {/* Animated orbital rings */}
               <div
@@ -132,13 +132,13 @@ export function OSMissionControlOverview() {
                 style={{ animationDuration: "50s" }}
               />
               <div
-                className="animate-spin-slow pointer-events-none absolute h-72 w-72 rounded-full border border-cyan-500/25"
+                className="animate-spin-slow pointer-events-none absolute h-72 w-72 rounded-full border border-border"
                 style={{
                   animationDirection: "reverse",
                   animationDuration: "80s",
                 }}
               />
-              <div className="bg-radial-gradient pointer-events-none absolute bottom-1 h-8 w-56 animate-pulse rounded-[50%] from-cyan-400/50 via-blue-600/20 to-transparent blur-md" />
+              <div className="bg-radial-gradient pointer-events-none absolute bottom-1 h-8 w-56 animate-pulse rounded-[50%] from-primary/10 via-blue-600/20 to-transparent blur-md" />
 
               {/* Real Earth Photo */}
               <div className="relative flex h-64 w-64 items-center justify-center overflow-hidden rounded-full border border-primary/30 drop-shadow-sm">
@@ -150,7 +150,7 @@ export function OSMissionControlOverview() {
                   alt="Earth from Space"
                   className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                 />
-                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-900/20 to-transparent mix-blend-screen" />
+                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-primary/10 to-transparent mix-blend-screen" />
               </div>
             </div>
 
@@ -164,9 +164,9 @@ export function OSMissionControlOverview() {
                   </div>
                   <div className="text-primary">• 6,236 Ayat</div>
                 </div>
-                <div className="bg-background/90 rounded-r-sm border-l-2 border-purple-400 py-1 pl-2.5 shadow-sm">
+                <div className="bg-background/90 rounded-r-sm border-l-2 border-border py-1 pl-2.5 shadow-sm">
                   <div className="text-xs font-black text-white">HADITH</div>
-                  <div className="text-purple-300">• 75,000+</div>
+                  <div className="text-primary">• 75,000+</div>
                 </div>
                 <div className="bg-background/90 border-danger rounded-r-sm border-l-2 py-1 pl-2.5 shadow-sm">
                   <div className="text-xs font-black text-white">HISTORY</div>
@@ -241,7 +241,7 @@ export function OSMissionControlOverview() {
               ].map((card, idx) => (
                 <div
                   key={idx}
-                  className="bg-background flex flex-col justify-between rounded-lg border border-cyan-500/40 p-3 text-center shadow-inner transition-colors hover:border-cyan-300"
+                  className="bg-background flex flex-col justify-between rounded-lg border border-border p-3 text-center shadow-inner transition-colors hover:border-border"
                 >
                   <div className="flex items-center justify-center gap-1.5 truncate text-[9px] font-black tracking-wider text-primary uppercase">
                     <card.icon
@@ -265,7 +265,7 @@ export function OSMissionControlOverview() {
 
             {/* GLOBAL ACTIVITIES LIVE FEED (From Image 4 right world map radar & chronological log) */}
             <div className="bg-background flex flex-1 flex-col justify-between rounded-xl border-2 border-primary/50 p-6 shadow-sm">
-              <div className="mb-4 flex items-center justify-between border-b border-cyan-500/40 pb-3.5 text-xs font-black uppercase">
+              <div className="mb-4 flex items-center justify-between border-b border-border pb-3.5 text-xs font-black uppercase">
                 <div className="flex items-center gap-2.5 tracking-wider text-primary">
                   <Radio className="h-4 w-4 animate-pulse text-emerald-400" />
                   <span>GLOBAL ACTIVITIES LIVE FEED</span>
@@ -283,11 +283,11 @@ export function OSMissionControlOverview() {
                   {/* Live observation pins */}
                   <span className="absolute top-1/3 left-1/3 h-2.5 w-2.5 animate-ping rounded-full bg-emerald-400 shadow-sm" />
                   <span
-                    className="absolute right-1/3 bottom-1/3 h-2.5 w-2.5 animate-ping rounded-full bg-cyan-400 shadow-sm"
+                    className="absolute right-1/3 bottom-1/3 h-2.5 w-2.5 animate-ping rounded-full bg-primary shadow-sm"
                     style={{ animationDelay: "500ms" }}
                   />
                   <span
-                    className="absolute top-1/2 right-1/4 h-2.5 w-2.5 animate-ping rounded-full bg-purple-400 shadow-sm"
+                    className="absolute top-1/2 right-1/4 h-2.5 w-2.5 animate-ping rounded-full bg-primary shadow-sm"
                     style={{ animationDelay: "1s" }}
                   />
                 </div>
@@ -349,7 +349,7 @@ export function OSMissionControlOverview() {
         </div>
 
         {/* ═══ LAYER 5 & 3: SCRIPTURE TICKER RIBBON (From Image 4 middle strip) ══ */}
-        <div className="mt-10 flex items-center justify-center gap-4 rounded-sm border-y-2 border-primary bg-gradient-to-r from-blue-950/70 via-cyan-950/90 to-blue-950/70 px-8 py-5 text-center font-mono text-xs font-bold tracking-wider text-cyan-200 shadow-sm sm:text-sm md:text-base">
+        <div className="mt-10 flex items-center justify-center gap-4 rounded-sm border-y-2 border-primary bg-gradient-to-r from-blue-950/70 via-transparent to-blue-950/70 px-8 py-5 text-center font-mono text-xs font-bold tracking-wider text-primary shadow-sm sm:text-sm md:text-base">
           <Sparkles className="h-5 w-5 shrink-0 animate-pulse text-primary drop-shadow-sm" />
           <span className="italic drop-shadow-sm">
             &ldquo;Indeed, in the creation of the heavens and the earth, and the

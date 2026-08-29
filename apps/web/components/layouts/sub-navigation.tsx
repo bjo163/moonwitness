@@ -62,16 +62,16 @@ export function SubNavigation({ links }: SubNavigationProps) {
                 href={link.href}
                 className={`group flex shrink-0 snap-start items-center gap-2.5 rounded px-4 py-2 transition-all duration-300 ${
                   isActive
-                    ? "border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 shadow-sm"
+                    ? "border border-border bg-primary/10 text-primary shadow-sm"
                     : "border border-transparent text-primary hover:bg-white/5 hover:text-primary"
                 } `}
               >
                 <div className="relative">
                   {isActive && (
-                    <span className="absolute inset-0 animate-ping rounded-full bg-cyan-400 opacity-40" />
+                    <span className="absolute inset-0 animate-ping rounded-full bg-primary opacity-40" />
                   )}
                   <Icon
-                    className={`relative z-10 h-3.5 w-3.5 ${isActive ? "text-cyan-400" : "text-primary transition-colors group-hover:text-cyan-400"}`}
+                    className={`relative z-10 h-3.5 w-3.5 ${isActive ? "text-primary" : "text-primary transition-colors group-hover:text-primary"}`}
                   />
                 </div>
                 <span className="font-mono text-[10px] font-bold tracking-[0.2em] uppercase">

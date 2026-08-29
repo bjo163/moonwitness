@@ -34,7 +34,7 @@ export function OSObservatorySystems() {
       id="observatory"
       className="relative z-10 overflow-hidden border-b border-primary/30 py-20 font-mono text-foreground"
     >
-      {/* ═══ LAYER 1: DEEP SPACE SCI-FI GRADIENT & NEBULA MATRIX ═════════════ */}
+      {/* ═══ LAYER 1: DEEP SPACE modern GRADIENT & NEBULA MATRIX ═════════════ */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -44,7 +44,7 @@ export function OSObservatorySystems() {
         }}
       >
         <div className="theme-grid-bg absolute inset-0 opacity-20" />
-        <div className="bg-radial-gradient absolute bottom-1/3 left-1/2 h-[700px] w-[1300px] -translate-x-1/2 from-cyan-950/25 via-blue-900/15 to-transparent blur-[160px]" />
+        <div className="bg-radial-gradient absolute bottom-1/3 left-1/2 h-[700px] w-[1300px] -translate-x-1/2 from-primary/10 via-blue-900/15 to-transparent blur-[160px]" />
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,240,255,0.02)_1px,transparent_1px)] bg-[size:100%_4px]" />
       </div>
 
@@ -65,7 +65,7 @@ export function OSObservatorySystems() {
           </div>
 
           {/* Atomic Clock & Date Terminal Badge */}
-          <div className="bg-background/40 flex shrink-0 items-center gap-4 rounded-xl border border-cyan-500/30 p-4 shadow-sm backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/50">
+          <div className="bg-background/40 flex shrink-0 items-center gap-4 rounded-xl border border-border p-4 shadow-sm backdrop-blur-xl transition-all duration-500 hover:border-border">
             <Clock className="h-10 w-10 shrink-0 animate-pulse text-primary drop-shadow-sm" />
             <div className="text-left">
               <div className="font-mono text-2xl font-black tracking-widest text-white drop-shadow-sm">

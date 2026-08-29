@@ -15,7 +15,7 @@ import { HomeAEQ4Section } from "./09-home-aeq4-section"
 
 export function HomeView() {
   return (
-    <div className="bg-background flex min-h-screen flex-col overflow-x-hidden font-sans text-foreground selection:bg-cyan-500 selection:text-black">
+    <div className="bg-background flex min-h-screen flex-col overflow-x-hidden font-sans text-foreground selection:bg-primary selection:text-black">
       {/* 1. HERO SECTION */}
       <HomeHeroSection />
 

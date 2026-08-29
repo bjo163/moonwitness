@@ -7,7 +7,7 @@ export function MissionStats() {
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
       {/* Top Banner (Spans Full) */}
-      <div className="relative flex flex-col items-center justify-between overflow-hidden rounded-xl border border-cyan-500/30 bg-black/40 p-6 backdrop-blur-md md:flex-row lg:col-span-3">
+      <div className="relative flex flex-col items-center justify-between overflow-hidden rounded-xl border border-border bg-black/40 p-6 backdrop-blur-md md:flex-row lg:col-span-3">
         <div className="absolute inset-0 z-0 opacity-40">
           <img
             src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
@@ -20,14 +20,14 @@ export function MissionStats() {
         <div className="relative z-10 flex w-full flex-col items-center justify-between gap-6 md:flex-row">
           <div className="flex gap-8">
             <div>
-              <p className="font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
+              <p className="font-sans text-[10px] font-bold tracking-widest text-primary/70 uppercase">
                 Mission ID
               </p>
               <div className="mt-1 flex items-center gap-2">
                 <span className="font-mono text-base font-bold text-white">
                   MW-2025-05-26-71345
                 </span>
-                <button className="text-cyan-500/50 transition-colors hover:text-cyan-400">
+                <button className="text-primary/50 transition-colors hover:text-primary">
                   <Copy className="h-4 w-4" />
                 </button>
               </div>
@@ -37,7 +37,7 @@ export function MissionStats() {
               <div className="relative flex h-14 w-14 items-center justify-center">
                 <svg className="h-full w-full -rotate-90" viewBox="0 0 36 36">
                   <path
-                    className="text-cyan-950"
+                    className="text-primary"
                     strokeWidth="3"
                     stroke="currentColor"
                     fill="none"
@@ -58,7 +58,7 @@ export function MissionStats() {
                 </span>
               </div>
               <div>
-                <p className="font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
+                <p className="font-sans text-[10px] font-bold tracking-widest text-primary/70 uppercase">
                   Profile Completion
                 </p>
                 <p className="font-sans text-xs font-semibold text-emerald-400">
@@ -78,7 +78,7 @@ export function MissionStats() {
             <p className="mt-1 font-sans text-xs text-slate-300 italic drop-shadow-md">
               "And say, 'My Lord, increase me in knowledge.'"
             </p>
-            <p className="font-mono text-[9px] text-cyan-400 drop-shadow-md">
+            <p className="font-mono text-[9px] text-primary drop-shadow-md">
               (Qur'an 20:114)
             </p>
           </div>
@@ -86,14 +86,14 @@ export function MissionStats() {
       </div>
 
       {/* Cards */}
-      <div className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-cyan-500/20 bg-black/40 p-6 backdrop-blur-md">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-purple-600/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+      <div className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-border bg-black/40 p-6 backdrop-blur-md">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
         <div>
-          <p className="font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
+          <p className="font-sans text-[10px] font-bold tracking-widest text-primary/70 uppercase">
             Knowledge Level
           </p>
           <div className="mt-4 flex items-center gap-4">
-            <div className="relative flex h-14 w-12 items-center justify-center text-cyan-400 drop-shadow-sm">
+            <div className="relative flex h-14 w-12 items-center justify-center text-primary drop-shadow-sm">
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
@@ -109,7 +109,7 @@ export function MissionStats() {
               <h4 className="font-sans text-xl font-bold text-white">
                 Level 7
               </h4>
-              <p className="font-sans text-xs text-cyan-400">
+              <p className="font-sans text-xs text-primary">
                 Explorer of Truth
               </p>
             </div>
@@ -121,7 +121,7 @@ export function MissionStats() {
             <span>2,150 XP to next level</span>
           </div>
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
-            <div className="relative h-full w-[78.5%] rounded-full bg-gradient-to-r from-cyan-500 to-blue-500">
+            <div className="relative h-full w-[78.5%] rounded-full bg-gradient-to-r from-primary/10 to-blue-500">
               <div className="absolute top-0 right-0 bottom-0 w-10 animate-[translateX_2s_infinite] bg-white/20 blur-[2px]"></div>
             </div>
           </div>

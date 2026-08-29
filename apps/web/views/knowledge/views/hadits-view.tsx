@@ -71,7 +71,7 @@ export function HaditsPortalView() {
   })
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-card pb-12 font-sans text-white selection:bg-cyan-500/30">
+    <div className="min-h-screen overflow-x-hidden bg-card pb-12 font-sans text-white selection:bg-primary/10">
       {/* 1. Top Compendiums Stats Bar */}
       <HaditsCompendiumsBar totalHadiths={totalHadiths} />
 
@@ -83,7 +83,7 @@ export function HaditsPortalView() {
               <h1 className="font-mono text-2xl font-black tracking-widest text-white uppercase drop-shadow-md sm:text-3xl">
                 HADITH TRANSMISSION COMPENDIUM
               </h1>
-              <span className="rounded border border-cyan-500/30 bg-cyan-500/10 px-2 py-0.5 font-mono text-[9px] font-bold text-cyan-400">
+              <span className="rounded border border-border bg-primary/10 px-2 py-0.5 font-mono text-[9px] font-bold text-primary">
                 KUTUBUT TIS&apos;AH
               </span>
             </div>
@@ -93,7 +93,7 @@ export function HaditsPortalView() {
           </div>
 
           <div className="text-right">
-            <div className="font-arabic text-xl text-cyan-400/90 drop-shadow-sm">
+            <div className="font-arabic text-xl text-primary/90 drop-shadow-sm">
               تَرَكْتُ فِيكُمْ أَمْرَيْنِ لَنْ تَضِلُّوا مَا تَمَسَّكْتُمْ بِهِمَا
             </div>
             <p className="font-mono text-[9px] text-white/40 italic">
@@ -119,7 +119,7 @@ export function HaditsPortalView() {
           {/* LEFT: Hadith Cards List */}
           <div className="space-y-4 lg:col-span-2">
             {loading && hadithData.length === 0 ? (
-              <div className="flex h-64 items-center justify-center rounded-xl border border-white/5 bg-card font-mono text-xs text-cyan-400">
+              <div className="flex h-64 items-center justify-center rounded-xl border border-white/5 bg-card font-mono text-xs text-primary">
                 SYNCHRONIZING HADITH TELEMETRY...
               </div>
             ) : filteredHadiths.length === 0 ? (

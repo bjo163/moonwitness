@@ -24,7 +24,7 @@ export function AchievementsList() {
       description: "Published 5 research papers",
       date: "10 May 2025",
       icon: FileText,
-      color: "text-cyan-400 border-cyan-400/30",
+      color: "text-primary border-border",
     },
     {
       title: "Knowledge Sharer",
@@ -43,12 +43,12 @@ export function AchievementsList() {
   ]
 
   return (
-    <div className="rounded-xl border border-cyan-500/20 bg-black/40 p-6 backdrop-blur-md">
+    <div className="rounded-xl border border-border bg-black/40 p-6 backdrop-blur-md">
       <div className="mb-6 flex items-center justify-between">
-        <h3 className="font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
+        <h3 className="font-sans text-[10px] font-bold tracking-widest text-primary/70 uppercase">
           Achievements
         </h3>
-        <button className="font-sans text-[9px] text-cyan-500 transition-colors hover:text-cyan-400">
+        <button className="font-sans text-[9px] text-primary transition-colors hover:text-primary">
           View All
         </button>
       </div>

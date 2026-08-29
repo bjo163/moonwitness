@@ -114,7 +114,7 @@ export function HomePlanetaryTelemetryWidget() {
       </div>
 
       <div className="mt-6 flex items-center gap-2 border-t border-primary/20 pt-3 font-sans text-[10px] font-medium tracking-[0.2em] text-primary/70 uppercase">
-        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400" />{" "}
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />{" "}
         SYSTEM ACTIVE
       </div>
     </div>

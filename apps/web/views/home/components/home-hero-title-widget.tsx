@@ -68,7 +68,7 @@ export function HomeHeroTitleWidget({
 
   return (
     <div className="my-auto space-y-7 text-left lg:col-span-8">
-      <div className="inline-flex items-center gap-2.5 rounded-r-sm border-l-4 border-primary bg-gradient-to-r from-cyan-950/80 via-primary to-transparent px-4 py-1.5 font-mono text-xs font-bold tracking-[0.22em] text-primary uppercase shadow-sm">
+      <div className="inline-flex items-center gap-2.5 rounded-r-sm border-l-4 border-primary bg-gradient-to-r from-primary/10 via-primary to-transparent px-4 py-1.5 font-mono text-xs font-bold tracking-[0.22em] text-primary uppercase shadow-sm">
         <span>GLOBAL ESCHATOLOGY & DIVINE OBSERVATORY SYSTEM</span>
       </div>
 
@@ -106,7 +106,7 @@ export function HomeHeroTitleWidget({
             className={`group relative mt-6 inline-flex origin-bottom-left -rotate-2 animate-in cursor-pointer items-center gap-3 overflow-hidden border-y border-r border-l-4 px-5 py-2.5 backdrop-blur-md transition-all delay-500 duration-300 duration-1000 fill-mode-both fade-in slide-in-from-top-12 xl:absolute xl:-bottom-3 xl:left-[450px] xl:mt-0 ${
               isDecoding
                 ? "animate-[buttonGlitch_0.5s_infinite,godExplode_41s_forwards] border-red-500 bg-red-900/50 text-white shadow-sm"
-                : "border-cyan-500/40 border-l-cyan-400 bg-cyan-500/10 shadow-sm hover:rotate-0 hover:bg-cyan-400 hover:text-black hover:shadow-sm"
+                : "border-border border-l-cyan-400 bg-primary/10 shadow-sm hover:rotate-0 hover:bg-primary hover:text-black hover:shadow-sm"
             }`}
             title="Decode Today's Transmission"
           >
@@ -115,10 +115,10 @@ export function HomeHeroTitleWidget({
             />
             <span className="relative flex h-2 w-2">
               <span
-                className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${isDecoding ? "animate-[ping_0.1s_infinite] bg-white" : "bg-cyan-400 group-hover:bg-black"}`}
+                className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${isDecoding ? "animate-[ping_0.1s_infinite] bg-white" : "bg-primary group-hover:bg-black"}`}
               />
               <span
-                className={`relative inline-flex h-2 w-2 rounded-full ${isDecoding ? "bg-white" : "bg-cyan-400 group-hover:bg-black"}`}
+                className={`relative inline-flex h-2 w-2 rounded-full ${isDecoding ? "bg-white" : "bg-primary group-hover:bg-black"}`}
               />
             </span>
             <div className="flex flex-col items-start leading-tight">
@@ -147,7 +147,7 @@ export function HomeHeroTitleWidget({
 
       <div className="grid max-w-2xl grid-cols-1 gap-6 border-l-2 border-white/10 py-1 pt-2 pl-4 font-mono text-xs sm:grid-cols-3">
         <div className="group flex items-start gap-3">
-          <div className="shrink-0 rounded-full border border-primary bg-cyan-500/10 p-2 text-primary shadow-sm transition-colors group-hover:bg-cyan-400 group-hover:text-black">
+          <div className="shrink-0 rounded-full border border-primary bg-primary/10 p-2 text-primary shadow-sm transition-colors group-hover:bg-primary group-hover:text-black">
             <Moon className="h-4 w-4" />
           </div>
           <div>
@@ -161,7 +161,7 @@ export function HomeHeroTitleWidget({
         </div>
 
         <div className="group flex items-start gap-3">
-          <div className="shrink-0 rounded-full border border-primary bg-cyan-500/10 p-2 text-primary shadow-sm transition-colors group-hover:bg-cyan-400 group-hover:text-black">
+          <div className="shrink-0 rounded-full border border-primary bg-primary/10 p-2 text-primary shadow-sm transition-colors group-hover:bg-primary group-hover:text-black">
             <BookOpen className="h-4 w-4" />
           </div>
           <div>
@@ -175,7 +175,7 @@ export function HomeHeroTitleWidget({
         </div>
 
         <div className="group flex items-start gap-3">
-          <div className="shrink-0 rounded-full border border-primary bg-cyan-500/10 p-2 text-primary shadow-sm transition-colors group-hover:bg-cyan-400 group-hover:text-black">
+          <div className="shrink-0 rounded-full border border-primary bg-primary/10 p-2 text-primary shadow-sm transition-colors group-hover:bg-primary group-hover:text-black">
             <Landmark className="h-4 w-4" />
           </div>
           <div>

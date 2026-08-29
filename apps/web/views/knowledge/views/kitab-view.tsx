@@ -126,7 +126,7 @@ export function KitabPortalView() {
             </div>
           </div>
 
-          <button className="group flex w-full items-center justify-center gap-2 rounded-full border border-purple-500/30 bg-purple-600/10 px-6 py-2.5 text-[10px] font-black text-purple-300 transition-all hover:bg-purple-600/30 md:w-auto">
+          <button className="group flex w-full items-center justify-center gap-2 rounded-full border border-border bg-primary/10 px-6 py-2.5 text-[10px] font-black text-primary transition-all hover:bg-primary/30 md:w-auto">
             <Sparkles className="h-3.5 w-3.5" />
             AI COMPARE
           </button>
@@ -161,7 +161,7 @@ export function KitabPortalView() {
             </div>
           </div>
           <div className="group flex cursor-pointer items-center gap-3">
-            <Network className="h-5 w-5 text-white/30 transition-colors group-hover:text-purple-400" />
+            <Network className="h-5 w-5 text-white/30 transition-colors group-hover:text-primary" />
             <div>
               <div className="text-[9px] font-black tracking-widest text-white uppercase">
                 Text Comparison Lab

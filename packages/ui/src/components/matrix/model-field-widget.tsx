@@ -13,19 +13,19 @@ const getApiBase = () => {
   return `http://127.0.0.1:${APP_PORTS.API_BACKEND}`
 }
 
-export interface CosmicFieldWidgetProps {
+export interface ModelFieldWidgetProps {
   field: FieldMeta
   value: any
   onChange?: (val: any) => void
   disabled?: boolean
 }
 
-export function CosmicFieldWidget({
+export function ModelFieldWidget({
   field,
   value,
   onChange,
   disabled = false,
-}: CosmicFieldWidgetProps) {
+}: ModelFieldWidgetProps) {
   const [comodelOptions, setComodelOptions] = useState<{ id: number; name: string }[]>([])
   const [comodelLoading, setComodelLoading] = useState(false)
   const [quickCreating, setQuickCreating] = useState(false)

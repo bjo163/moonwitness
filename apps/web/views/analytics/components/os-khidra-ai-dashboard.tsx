@@ -120,7 +120,7 @@ export function OSKhidraAiDashboard() {
               <div className="h-4 w-4 animate-pulse rounded-full bg-emerald-400 shadow-sm" />
               {/* Orbiting particle */}
               <div
-                className="animate-spin-slow absolute h-1.5 w-1.5 rounded-full bg-cyan-400"
+                className="animate-spin-slow absolute h-1.5 w-1.5 rounded-full bg-primary"
                 style={{ top: "10%", left: "80%" }}
               />
             </div>

@@ -72,11 +72,11 @@ const COLOR_MAP = {
     btnEdit: "border-amber-500/40 bg-amber-500/10 text-amber-500 hover:bg-amber-500/20",
   },
   purple: {
-    border: "border-purple-500/30 hover:border-purple-500/60",
-    headerGlow: "via-purple-500",
-    badge: "bg-purple-500/10 text-purple-500 border-purple-500/30",
-    searchRing: "focus:border-purple-500/60 focus:ring-purple-500/20",
-    btnEdit: "border-purple-500/40 bg-purple-500/10 text-purple-500 hover:bg-purple-500/20",
+    border: "border-border hover:border-border",
+    headerGlow: "via-transparent",
+    badge: "bg-muted text-primary border-border",
+    searchRing: "focus:border-border focus:ring-purple-500/20",
+    btnEdit: "border-border bg-muted text-primary hover:bg-muted",
   },
   pink: {
     border: "border-rose-500/30 hover:border-rose-500/60",

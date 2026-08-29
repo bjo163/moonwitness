@@ -233,7 +233,7 @@ export function InspirationCommentsClient({
                 <span
                   className={`rounded-md border px-2 py-0.5 font-mono text-[9px] font-black uppercase ${
                     userProfile.role === "admin"
-                      ? "border-purple-500/40 bg-purple-500/10 text-purple-500"
+                      ? "border-border bg-muted text-primary"
                       : "border-emerald-500/40 bg-emerald-500/10 text-emerald-500"
                   }`}
                 >
@@ -308,7 +308,7 @@ export function InspirationCommentsClient({
         </p>
       ) : (
         <div className="relative mt-2">
-          {/* Holographic fade at the bottom */}
+          {/* digital fade at the bottom */}
           <div className="pointer-events-none absolute right-0 bottom-0 left-0 z-10 h-12 bg-gradient-to-t -background to-transparent" />
 
           <div
@@ -342,7 +342,7 @@ export function InspirationCommentsClient({
                       </span>
 
                       {isAdmin && (
-                        <span className="rounded-md border border-purple-500/40 bg-purple-500/10 text-purple-500 px-1.5 py-0 font-mono text-[8px]">
+                        <span className="rounded-md border border-border bg-muted text-primary px-1.5 py-0 font-mono text-[8px]">
                           👑 ADMIN
                         </span>
                       )}

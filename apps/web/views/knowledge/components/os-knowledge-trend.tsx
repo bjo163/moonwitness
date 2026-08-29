@@ -47,15 +47,15 @@ export function OSKnowledgeTrend() {
       {/* ═══ LAYER 1: DEEP SPACE BACKGROUND ══════════════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
         <div className="theme-grid-bg absolute inset-0 opacity-30" />
-        <div className="bg-radial-gradient absolute top-1/3 left-1/2 h-[900px] w-[1400px] -translate-x-1/2 from-blue-900/10 via-purple-900/5 to-transparent blur-[120px]" />
+        <div className="bg-radial-gradient absolute top-1/3 left-1/2 h-[900px] w-[1400px] -translate-x-1/2 from-blue-900/10 via-transparent to-transparent blur-[120px]" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1600px] space-y-4 px-4">
         {/* ═══ TOP HEADER (Blueprint 13) ══════════════════════════════════════ */}
         <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-4 xl:flex-row xl:items-center">
           <div className="flex items-center gap-4">
-            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
-              <span className="rounded-xs bg-cyan-500 px-1.5 py-0.5 font-black text-black">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-border px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
+              <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-black">
                 13
               </span>
               <span>KNOWLEDGE TREND ENGINE</span>
@@ -65,14 +65,14 @@ export function OSKnowledgeTrend() {
             </h2>
           </div>
 
-          <div className="border-b-2 border-primary bg-gradient-to-t from-cyan-950/40 to-transparent p-3 text-center xl:text-left">
+          <div className="border-b-2 border-primary bg-gradient-to-t from-primary/10 to-transparent p-3 text-center xl:text-left">
             <div
               className="font-arabic mb-1 text-sm font-bold text-primary"
               dir="rtl"
             >
               قُلْ سِيرُوا فِي الْأَرْضِ فَانظُرُوا كَيْفَ بَدَأَ الْخَلْقَ
             </div>
-            <div className="font-sans text-[9px] text-cyan-100 italic">
+            <div className="font-sans text-[9px] text-primary italic">
               Say, [O Muhammad], "Travel through the land and observe how was
               the creation..."{" "}
               <span className="ml-1 font-mono font-black text-primary not-italic">
@@ -239,7 +239,7 @@ export function OSKnowledgeTrend() {
               ].map((h, i) => (
                 <div
                   key={i}
-                  className="flex-1 bg-cyan-500/40"
+                  className="flex-1 bg-primary/10"
                   style={{ height: `${h}%` }}
                 />
               ))}
@@ -263,14 +263,14 @@ export function OSKnowledgeTrend() {
             <div className="bg-background relative mb-3 min-h-[150px] flex-1 overflow-hidden rounded-lg border border-white/5">
               {/* Heatmap Graphic Simulation */}
               <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjMDAwIiBmaWxsLW9wYWNpdHk9IjAuMCIvPgo8Y2lyY2xlIGN4PSI0IiBjeT0iNCIgcj0iMC41IiBmaWxsPSIjMzBENDc0Ii8+Cjwvc3ZnPg==')] [mask-image:radial-gradient(ellipse_at_center,white,transparent_80%)] opacity-30" />
-              {/* Glowing regions */}
+              {/* ambienting regions */}
               <div className="absolute top-[50%] left-[75%] h-8 w-12 rounded-full bg-rose-500/40 blur-xl" />{" "}
               {/* Indonesia/Malaysia */}
               <div className="absolute top-[45%] left-[65%] h-10 w-10 rounded-full bg-amber-500/30 blur-xl" />{" "}
               {/* India */}
               <div className="absolute top-[35%] left-[55%] h-8 w-12 rounded-full bg-rose-500/30 blur-xl" />{" "}
               {/* Middle East */}
-              <div className="absolute top-[25%] left-[20%] h-10 w-16 rounded-full bg-purple-500/20 blur-xl" />{" "}
+              <div className="absolute top-[25%] left-[20%] h-10 w-16 rounded-full bg-muted blur-xl" />{" "}
               {/* North America */}
               <div className="absolute top-[30%] left-[45%] h-10 w-10 rounded-full bg-blue-500/20 blur-xl" />{" "}
               {/* Europe */}
@@ -318,7 +318,7 @@ export function OSKnowledgeTrend() {
                 TRENDING TIMELINE
               </div>
               <div className="flex overflow-hidden rounded bg-white/5">
-                <button className="border border-primary/30 bg-cyan-900/50 px-2 py-1 text-[8px] text-primary">
+                <button className="border border-primary/30 bg-muted px-2 py-1 text-[8px] text-primary">
                   Line
                 </button>
                 <button className="border border-transparent px-2 py-1 text-[8px] text-primary">

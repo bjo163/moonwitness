@@ -113,7 +113,7 @@ RAW INTELLIGENCE DATA FOR TODAY:
         const imgResponse = await ai.models.generateContent({
           model: "gemini-2.5-flash-image",
           contents:
-            "A highly detailed, sci-fi cosmic dashboard display showing global intelligence telemetry data. The theme is 'The Stillness Before the Shift'. It features a dark, glowing neon green and cyan holographic map of the world. There are floating data panels showing climate stability, economic market consolidation, and clear status indicators. The style should be modern, clean, and hyper-realistic, looking like a dashboard from an advanced cosmic observation terminal.",
+            "A highly detailed, modern enterprise dashboard display showing global intelligence analytical data. The theme is 'The Stillness Before the Shift'. It features a dark, clean map of the world with analytical metrics. There are structured data panels showing climate stability, economic market consolidation, and clear status indicators. The style should be modern, clean, and hyper-realistic, looking like an executive intelligence analytics dashboard.",
           config: { responseModalities: ["Image"] },
         })
 

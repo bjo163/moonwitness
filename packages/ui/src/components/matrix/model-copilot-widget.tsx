@@ -4,18 +4,18 @@ import React, { useState } from "react"
 import { Sparkles, X, Send, Bot } from "lucide-react"
 import type { ModelSchema } from "@workspace/types"
 
-export interface CosmicCopilotWidgetProps {
+export interface ModelCopilotWidgetProps {
   schema: ModelSchema
   records: any[]
 }
 
-export function CosmicCopilotWidget({ schema, records }: CosmicCopilotWidgetProps) {
+export function ModelCopilotWidget({ schema, records }: ModelCopilotWidgetProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState("")
   const [messages, setMessages] = useState<Array<{ role: "ai" | "user"; text: string }>>([
     {
       role: "ai",
-      text: `AI Assistant ready for [${schema.name}]. ${records.length} records loaded. How may I assist your analysis?`,
+      text: `Assistant ready for [${schema.name}]. ${records.length} records loaded. How may I assist your analysis?`,
     },
   ])
   const [thinking, setThinking] = useState(false)
@@ -53,21 +53,21 @@ export function CosmicCopilotWidget({ schema, records }: CosmicCopilotWidgetProp
       {/* Floating Copilot Trigger Button */}
       <button
         onClick={() => setIsOpen((v) => !v)}
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground rounded-full text-xs font-semibold hover:bg-primary/90 shadow-lg transition-all hover:scale-105"
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground rounded-full text-xs font-semibold hover:bg-primary/90 shadow-md transition-transform hover:scale-105"
       >
         <Sparkles className="w-4 h-4" />
-        <span>AI Copilot</span>
+        <span>Assistant</span>
       </button>
 
       {/* Floating Copilot Dialog */}
       {isOpen && (
-        <div className="fixed bottom-20 right-6 z-50 w-96 max-h-[500px] bg-card border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden backdrop-blur-xl font-sans animate-in slide-in-from-bottom-5">
+        <div className="fixed bottom-20 right-6 z-50 w-96 max-h-[500px] bg-card border border-border rounded-2xl shadow-xl flex flex-col overflow-hidden font-sans">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-border/40 bg-muted/30">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/40">
             <div className="flex items-center gap-2">
               <Bot className="w-4 h-4 text-primary" />
               <span className="text-xs font-bold text-foreground">
-                Copilot • {schema.name}
+                Assistant • {schema.name}
               </span>
             </div>
             <button
@@ -79,7 +79,7 @@ export function CosmicCopilotWidget({ schema, records }: CosmicCopilotWidgetProp
           </div>
 
           {/* Quick Prompts */}
-          <div className="flex gap-1.5 p-2.5 bg-muted/20 border-b border-border/40 overflow-x-auto text-[11px]">
+          <div className="flex gap-1.5 p-2.5 bg-muted/20 border-b border-border overflow-x-auto text-[11px]">
             <button
               onClick={() => handleAsk("Summarize active records")}
               className="px-2.5 py-1 bg-secondary border border-border rounded-md text-foreground hover:bg-accent flex-shrink-0 font-medium"
@@ -108,7 +108,7 @@ export function CosmicCopilotWidget({ schema, records }: CosmicCopilotWidgetProp
                 className={`p-2.5 rounded-xl text-xs leading-relaxed ${
                   m.role === "user"
                     ? "bg-primary text-primary-foreground ml-6 text-right"
-                    : "bg-muted text-foreground mr-4 border border-border/40"
+                    : "bg-muted text-foreground mr-4 border border-border"
                 }`}
               >
                 {m.text}
@@ -127,7 +127,7 @@ export function CosmicCopilotWidget({ schema, records }: CosmicCopilotWidgetProp
               e.preventDefault()
               handleAsk()
             }}
-            className="flex items-center gap-2 p-2.5 border-t border-border/40 bg-muted/20"
+            className="flex items-center gap-2 p-2.5 border-t border-border bg-muted/20"
           >
             <input
               type="text"

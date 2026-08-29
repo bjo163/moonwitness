@@ -59,7 +59,7 @@ export function DoaHeroStats({
       label: "DIAKSES HARI INI",
       value: "12,843",
       sub: "Akses",
-      color: "text-purple-400"
+      color: "text-primary"
     },
   ]
 

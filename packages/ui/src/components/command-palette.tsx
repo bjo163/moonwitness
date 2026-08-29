@@ -161,12 +161,12 @@ export function CommandPalette({
   return (
     <div className="fixed inset-0 z-[99999] flex items-start justify-center bg-black/80 p-4 pt-20 backdrop-blur-md animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-cyan-500/40 bg-card/95 font-mono shadow-sm"
+        className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-border bg-card/95 font-mono shadow-sm"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Header Bar */}
-        <div className="flex items-center gap-3 border-b border-cyan-500/20 px-4 py-3.5">
-          <Search className="h-5 w-5 text-cyan-400" />
+        <div className="flex items-center gap-3 border-b border-border px-4 py-3.5">
+          <Search className="h-5 w-5 text-primary" />
           <input
             type="text"
             value={query}
@@ -175,7 +175,7 @@ export function CommandPalette({
             autoFocus
             className="flex-1 bg-transparent font-sans text-sm text-white placeholder-zinc-500 outline-none"
           />
-          <kbd className="hidden items-center gap-1 rounded border border-cyan-500/30 bg-cyan-950/40 px-2 py-0.5 text-[10px] text-cyan-400 sm:inline-flex">
+          <kbd className="hidden items-center gap-1 rounded border border-border bg-muted px-2 py-0.5 text-[10px] text-primary sm:inline-flex">
             <Command className="h-3 w-3" /> K
           </kbd>
         </div>
@@ -192,11 +192,11 @@ export function CommandPalette({
                 <button
                   key={`${item.label}-${index}`}
                   onClick={() => handleSelect(item)}
-                  className="flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-left transition-all hover:bg-cyan-500/10 hover:text-cyan-300 group"
+                  className="flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-left transition-all hover:bg-primary/10 hover:text-primary group"
                 >
                   <div className="flex items-center gap-3">
                     {item.category.includes("Portal") || item.category.includes("HOME") ? (
-                      <Orbit className="h-4 w-4 text-cyan-400" />
+                      <Orbit className="h-4 w-4 text-primary" />
                     ) : item.category.includes("Scripture") ? (
                       <BookOpen className="h-4 w-4 text-emerald-400" />
                     ) : item.category.includes("Hadith") ? (
@@ -204,10 +204,10 @@ export function CommandPalette({
                     ) : item.category.includes("Command Center") ? (
                       <ShieldCheck className="h-4 w-4 text-fuchsia-400" />
                     ) : (
-                      <Sparkles className="h-4 w-4 text-cyan-400" />
+                      <Sparkles className="h-4 w-4 text-primary" />
                     )}
                     <div>
-                      <div className="text-xs font-semibold text-zinc-100 group-hover:text-cyan-300">
+                      <div className="text-xs font-semibold text-zinc-100 group-hover:text-primary">
                         {item.label}
                       </div>
                       <div className="text-[10px] text-zinc-500 uppercase tracking-wider">
@@ -218,7 +218,7 @@ export function CommandPalette({
                   {item.isExternal ? (
                     <ExternalLink className="h-3.5 w-3.5 text-zinc-500 group-hover:text-fuchsia-400" />
                   ) : (
-                    <span className="text-[10px] text-zinc-500 group-hover:text-cyan-400 tracking-widest uppercase">
+                    <span className="text-[10px] text-zinc-500 group-hover:text-primary tracking-widest uppercase">
                       GO ↵
                     </span>
                   )}
@@ -235,7 +235,7 @@ export function CommandPalette({
             <span>Select <kbd className="rounded border border-white/20 px-1 py-0.5 text-[8px]">↵</kbd></span>
             <span>Close <kbd className="rounded border border-white/20 px-1 py-0.5 text-[8px]">ESC</kbd></span>
           </div>
-          <div className="text-cyan-400">MOONWITNESS OS TELEMETRY</div>
+          <div className="text-primary">MOONWITNESS OS TELEMETRY</div>
         </div>
       </div>
     </div>

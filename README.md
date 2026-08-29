@@ -37,7 +37,7 @@ MoonWitness follows a strict **Model-First & Enterprise Standard** architecture 
                                       ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                     MOON SERVER & BACKEND RUNTIME (Port 4000)               │
-│        apps/api · @moon/server · Cron Runner & BullMQ CosmicWorker Pool     │
+│        apps/api · @moon/server · Cron Runner & BullMQ TaskWorker Pool     │
 └─────────────────────────────────────┬───────────────────────────────────────┘
                                       │
                                       ▼
@@ -121,7 +121,7 @@ moonwitness/
 - **`[PRINT BRIEFING]`**: Zero-dependency `@media print` engine generating Apple/NASA-grade printable documents with dynamic SHA-256 cryptographic verification checksums.
 
 ### 3. ⚡ BullMQ-Class Job Queue & Scheduled Cron Runner (`@moon/cron`)
-- **`IrQueueJob` & `CosmicQueue`**: High-concurrency worker pool with exponential backoff retries (`backoffMs * 2^(attempts-1)`) and progress callbacks.
+- **`IrQueueJob` & `TaskQueue`**: High-concurrency worker pool with exponential backoff retries (`backoffMs * 2^(attempts-1)`) and progress callbacks.
 - **`IrCron` & `IrCronLog`**: Autonomous periodic scheduler polling every 30s.
 
 ### 4. 🤖 Autonomous Workflows & Outbound Webhook Mesh (`@moon/khidra`)

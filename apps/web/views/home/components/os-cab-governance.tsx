@@ -19,10 +19,10 @@ const CAB_FEATURES = [
     description:
       "Full RFC lifecycle management. Submit, review, approve, and implement system changes with full risk classification and audit history.",
     accent: "rgba(161,0,255,0.8)",
-    accentClass: "text-purple-500",
-    borderClass: "border-purple-500/30 hover:border-purple-500/60",
+    accentClass: "text-primary",
+    borderClass: "border-border hover:border-border",
     glowClass: "hover:shadow-sm",
-    bgClass: "bg-purple-500/5 hover:bg-purple-500/10",
+    bgClass: "bg-muted hover:bg-muted",
   },
   {
     icon: CalendarCheck,
@@ -31,10 +31,10 @@ const CAB_FEATURES = [
     description:
       "Schedule and document Change Advisory Board sessions. Assign chairs, capture minutes, and formalize agenda items.",
     accent: "rgba(161,0,255,0.8)",
-    accentClass: "text-purple-500",
-    borderClass: "border-purple-500/30 hover:border-purple-500/60",
+    accentClass: "text-primary",
+    borderClass: "border-border hover:border-border",
     glowClass: "hover:shadow-sm",
-    bgClass: "bg-purple-500/5 hover:bg-purple-500/10",
+    bgClass: "bg-muted hover:bg-muted",
   },
   {
     icon: Gavel,
@@ -43,10 +43,10 @@ const CAB_FEATURES = [
     description:
       "Formally record CAB verdicts with rationale, outcome, and decision authority. Immutable governance audit trail.",
     accent: "rgba(161,0,255,0.8)",
-    accentClass: "text-purple-500",
-    borderClass: "border-purple-500/30 hover:border-purple-500/60",
+    accentClass: "text-primary",
+    borderClass: "border-border hover:border-border",
     glowClass: "hover:shadow-sm",
-    bgClass: "bg-purple-500/5 hover:bg-purple-500/10",
+    bgClass: "bg-muted hover:bg-muted",
   },
   {
     icon: FolderKanban,
@@ -55,10 +55,10 @@ const CAB_FEATURES = [
     description:
       "Track implementation projects spawned from approved RFCs. Monitor milestones from initiation through delivery.",
     accent: "rgba(161,0,255,0.8)",
-    accentClass: "text-purple-500",
-    borderClass: "border-purple-500/30 hover:border-purple-500/60",
+    accentClass: "text-primary",
+    borderClass: "border-border hover:border-border",
     glowClass: "hover:shadow-sm",
-    bgClass: "bg-purple-500/5 hover:bg-purple-500/10",
+    bgClass: "bg-muted hover:bg-muted",
   },
   {
     icon: ClipboardList,
@@ -67,10 +67,10 @@ const CAB_FEATURES = [
     description:
       "Atomic task tracking tied to changes and projects. Assign, prioritize, and close work items with full traceability.",
     accent: "rgba(161,0,255,0.8)",
-    accentClass: "text-purple-500",
-    borderClass: "border-purple-500/30 hover:border-purple-500/60",
+    accentClass: "text-primary",
+    borderClass: "border-border hover:border-border",
     glowClass: "hover:shadow-sm",
-    bgClass: "bg-purple-500/5 hover:bg-purple-500/10",
+    bgClass: "bg-muted hover:bg-muted",
   },
 ]
 
@@ -87,15 +87,15 @@ export function OSCabGovernance() {
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <span className="relative flex h-2 w-2">
-              <span className="bg-purple-500 absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" />
-              <span className="bg-purple-500 relative inline-flex h-2 w-2 rounded-full" />
+              <span className="bg-primary absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" />
+              <span className="bg-primary relative inline-flex h-2 w-2 rounded-full" />
             </span>
-            <span className="text-purple-500/70 font-mono text-[10px] font-black tracking-[0.3em] uppercase">
+            <span className="text-primary/70 font-mono text-[10px] font-black tracking-[0.3em] uppercase">
               MODULE C-01 • ACTIVE
             </span>
           </div>
           {cabSummary?.data && (
-            <div className="flex items-center gap-2 font-mono text-[10px] text-purple-500">
+            <div className="flex items-center gap-2 font-mono text-[10px] text-primary">
               <span>ACTIVE RFCS: {cabSummary.data.metrics?.submitted || cabSummary.data.changes?.length || 14}</span>
               <span>•</span>
               <span className="text-emerald-400">APPROVED: {cabSummary.data.metrics?.approved || 12}</span>
@@ -170,10 +170,10 @@ export function OSCabGovernance() {
         })}
 
         {/* CTA Card */}
-        <div className="group border-purple-500/20 bg-purple-500/5 rounded-xl hover:border-purple-500/50 hover:bg-purple-500/10 relative flex flex-col items-center justify-center gap-4 border p-5 transition-all duration-300 hover:shadow-sm">
-          <ShieldCheck className="text-purple-500/60 group-hover:text-purple-500 h-10 w-10 transition-colors" />
+        <div className="group border-border bg-muted rounded-xl hover:border-border hover:bg-muted relative flex flex-col items-center justify-center gap-4 border p-5 transition-all duration-300 hover:shadow-sm">
+          <ShieldCheck className="text-primary/60 group-hover:text-primary h-10 w-10 transition-colors" />
           <div className="text-center">
-            <p className="text-purple-500 font-mono text-xs font-black tracking-widest uppercase">
+            <p className="text-primary font-mono text-xs font-black tracking-widest uppercase">
               LAUNCH CAB CONSOLE
             </p>
             <p className="mt-1 font-mono text-[10px] text-slate-500">
@@ -182,7 +182,7 @@ export function OSCabGovernance() {
           </div>
           <Link
             href="/command-center/cab"
-            className="rounded-lg border-purple-500 text-purple-500 hover:bg-purple-500 flex items-center gap-2 border px-4 py-2 text-xs font-bold tracking-widest uppercase transition-all duration-200 hover:text-black"
+            className="rounded-lg border-border text-primary hover:bg-primary flex items-center gap-2 border px-4 py-2 text-xs font-bold tracking-widest uppercase transition-all duration-200 hover:text-black"
           >
             [ OPEN CAB ] <ArrowRight className="h-3 w-3" />
           </Link>

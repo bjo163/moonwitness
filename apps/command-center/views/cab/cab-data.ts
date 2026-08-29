@@ -129,8 +129,8 @@ export const Q4Q_LEVELS = [
     name: "Deep-Knowing Human",
     arabicTerm: "Ma'rifah (Al-Ma'rifah)",
     icon: Sparkles,
-    color: "text-purple-500",
-    border: "border-purple-500/30",
+    color: "text-primary",
+    border: "border-border",
     coreQuestion: "What is the deeper reality behind what I perceive?",
     quranRef: "QS 59:19",
     torahRef: "Deut 6:4-5",
@@ -219,6 +219,6 @@ export const STATUS_CONFIG: Record<UpgradeStatus, { label: string; color: string
   ACTIVE: { label: "ACTIVE", color: "text-emerald-500 border-emerald-500/40" },
   COMPLETE: {
     label: "COMPLETE",
-    color: "text-purple-500 border-purple-500/30",
+    color: "text-primary border-border",
   },
 }

@@ -33,14 +33,14 @@ export function NavbarProfileMenu({
     return (
       <Link
         href="/auth/login"
-        className="group flex items-center gap-2 font-mono text-[10px] tracking-widest uppercase transition-colors hover:text-cyan-300"
+        className="group flex items-center gap-2 font-mono text-[10px] tracking-widest uppercase transition-colors hover:text-primary"
       >
-        <span className="text-primary group-hover:text-cyan-400">MISSION STATUS</span>
-        <span className="flex items-center gap-1.5 font-bold text-cyan-400 drop-shadow-sm group-hover:text-white">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400 shadow-sm group-hover:bg-white" />
+        <span className="text-primary group-hover:text-primary">MISSION STATUS</span>
+        <span className="flex items-center gap-1.5 font-bold text-primary drop-shadow-sm group-hover:text-white">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary shadow-sm group-hover:bg-white" />
           ONLINE
         </span>
-        <span className="ml-2 rounded border border-cyan-500/30 bg-cyan-500/10 px-1.5 py-0.5 text-[8px] text-cyan-400 opacity-50 group-hover:opacity-100">
+        <span className="ml-2 rounded border border-border bg-primary/10 px-1.5 py-0.5 text-[8px] text-primary opacity-50 group-hover:opacity-100">
           LOGIN &rarr;
         </span>
       </Link>
@@ -51,19 +51,19 @@ export function NavbarProfileMenu({
     <>
       <button
         onClick={() => setProfileDropdownOpen((prev) => !prev)}
-        className="group flex items-center gap-3 transition-colors hover:text-cyan-300"
+        className="group flex items-center gap-3 transition-colors hover:text-primary"
       >
         <AutoAvatar seed={userProfile?.name || "Anonymous"} size={36} />
         <div className="flex flex-col items-start text-left font-mono tracking-widest uppercase">
-          <span className="text-[9px] font-bold text-white group-hover:text-cyan-300">
+          <span className="text-[9px] font-bold text-white group-hover:text-primary">
             {userProfile.name?.substring(0, MAX_NAME_DISPLAY_LENGTH) || "PLAYER"}
           </span>
-          <span className="text-[7px] text-cyan-500">{userProfile.role || "PUBLIC"}</span>
+          <span className="text-[7px] text-primary">{userProfile.role || "PUBLIC"}</span>
         </div>
       </button>
 
       {profileDropdownOpen && (
-        <div className="bg-card/95 absolute top-full right-0 mt-2 w-56 rounded-xl border border-cyan-500/30 p-2 shadow-sm backdrop-blur-xl">
+        <div className="bg-card/95 absolute top-full right-0 mt-2 w-56 rounded-xl border border-border p-2 shadow-sm backdrop-blur-xl">
           <div className="mb-2 border-b border-white/10 pb-2 pl-2 font-mono text-[9px] text-white/50 uppercase">
             SYSTEM ACTIONS
           </div>
@@ -71,7 +71,7 @@ export function NavbarProfileMenu({
             <Link
               href="/auth/profile"
               onClick={() => setProfileDropdownOpen(false)}
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-[10px] font-bold text-cyan-400 transition-colors hover:bg-cyan-500/10 hover:text-cyan-300"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary/10 hover:text-primary"
             >
               <UserIcon className="h-4 w-4" /> PLAYER IDENTITY
             </Link>

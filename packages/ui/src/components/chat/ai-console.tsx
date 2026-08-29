@@ -7,7 +7,7 @@ import { THEME_TOKENS, type ThemeAccentColor } from "../../tokens/theme-tokens"
 export function AIStreamTerminal({
   lines,
   prefix = ">",
-  accentColor = "system",
+  accentColor="primary",
 }: {
   lines: string[]
   prefix?: string

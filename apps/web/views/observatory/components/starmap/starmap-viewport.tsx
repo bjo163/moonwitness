@@ -40,7 +40,7 @@ export function StarmapViewport({
             {/* Orion-like sample stars */}
             <div className="absolute top-16 left-28 h-2 w-2 rounded-full bg-white shadow-sm" />
             <div className="absolute top-20 right-24 h-2.5 w-2.5 rounded-full bg-amber-300 shadow-sm" />
-            <div className="absolute bottom-20 left-24 h-2 w-2 rounded-full bg-cyan-300 shadow-sm" />
+            <div className="absolute bottom-20 left-24 h-2 w-2 rounded-full bg-primary shadow-sm" />
             <div className="absolute bottom-16 right-28 h-2 w-2 rounded-full bg-white shadow-sm" />
 
             {/* Belt stars */}

@@ -40,7 +40,7 @@ export function OSKnowledgeDock() {
       id: "HADITH",
       sub: "The Prophetic Wisdom",
       color: "#A855F7",
-      bgBorder: "border-purple-500",
+      bgBorder: "border-border",
       img: "/assets/mod_hadith.png",
       stats: [
         { l: "TOPICS", v: "284" },
@@ -129,9 +129,9 @@ export function OSKnowledgeDock() {
 
   return (
     <Section id="knowledge-modules" borderColor="cyan" className="relative">
-      {/* ═══ LAYER 1: DEEP SPACE SCI-FI GRADIENT & WIREFRAME GRID ════════════ */}
+      {/* ═══ LAYER 1: DEEP SPACE modern GRADIENT & WIREFRAME GRID ════════════ */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="bg-radial-gradient absolute top-1/4 left-1/2 h-[600px] w-[1200px] -translate-x-1/2 from-cyan-950/20 via-blue-950/10 to-transparent blur-[150px]" />
+        <div className="bg-radial-gradient absolute top-1/4 left-1/2 h-[600px] w-[1200px] -translate-x-1/2 from-primary/10 via-blue-950/10 to-transparent blur-[150px]" />
       </div>
 
       <div className="relative z-10 space-y-12">
@@ -188,7 +188,7 @@ export function OSKnowledgeDock() {
               className={`group bg-background/90 relative rounded-xl border-2 p-4 ${m.bgBorder}/60 hover:${m.bgBorder} flex min-h-[360px] cursor-pointer flex-col justify-between overflow-hidden shadow-sm transition-all duration-300 hover:scale-105`}
               style={{ boxShadow: `0 0 30px ${m.color}15` }}
             >
-              {/* Top accent glow line */}
+              {/* Top accent ambient line */}
               <div
                 className="absolute inset-x-0 top-0 h-1"
                 style={{
@@ -301,7 +301,7 @@ export function OSKnowledgeDock() {
               </div>
             </div>
 
-            {/* Glowing CTA button matching Blueprint 04 */}
+            {/* ambienting CTA button matching Blueprint 04 */}
             <div className="mt-6 border-t border-white/10 pt-4">
               <Link
                 href="/kitab/quran"
@@ -441,7 +441,7 @@ export function OSKnowledgeDock() {
                   { d: "TUE", h: 55, col: "#3B82F6" },
                   { d: "WED", h: 30, col: "#3B82F6" },
                   { d: "THU", h: 65, col: "#3B82F6" },
-                  { d: "FRI", h: 100, col: "#00F0FF", glow: true },
+                  { d: "FRI", h: 100, col: "#00F0FF", highlight: true },
                   { d: "SAT", h: 75, col: "#10B981" },
                   { d: "SUN", h: 50, col: "#3B82F6" },
                 ].map((bar, i) => (
@@ -454,11 +454,11 @@ export function OSKnowledgeDock() {
                       style={{
                         height: `${bar.h}%`,
                         backgroundColor: bar.col,
-                        boxShadow: bar.glow ? "0 0 10px #00F0FF" : "none",
+                        boxShadow: bar.highlight ? "0 0 10px #00F0FF" : "none",
                       }}
                     />
                     <span
-                      className={`font-mono text-[8px] font-black ${bar.glow ? "text-primary" : "text-primary"}`}
+                      className={`font-mono text-[8px] font-black ${bar.highlight ? "text-primary" : "text-primary"}`}
                     >
                       {bar.d}
                     </span>
@@ -470,7 +470,7 @@ export function OSKnowledgeDock() {
         </div>
 
         {/* ═══ BOTTOM SEARCH BAR & SCRIPTURE BANNER (Blueprint 04 Footer) ════ */}
-        <div className="bg-background flex flex-col items-center justify-between gap-6 rounded-xl border-2 border-cyan-500/40 p-5 shadow-sm md:flex-row">
+        <div className="bg-background flex flex-col items-center justify-between gap-6 rounded-xl border-2 border-border p-5 shadow-sm md:flex-row">
           {/* Left Quote */}
           <div className="flex max-w-xl items-center gap-3 font-serif text-xs text-primary italic md:text-sm">
             <span className="shrink-0 font-serif text-3xl text-primary not-italic opacity-50">

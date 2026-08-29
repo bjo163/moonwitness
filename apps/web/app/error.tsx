@@ -16,7 +16,7 @@ export default function GlobalError({
   }, [error])
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-black p-4 font-mono text-cyan-500">
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-black p-4 font-mono text-primary">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.1)_0%,transparent_70%)]" />
 
       <div className="relative z-10 flex w-full max-w-lg animate-in flex-col items-center justify-center space-y-6 rounded-2xl border border-red-500/50 bg-black/60 p-8 text-center shadow-sm backdrop-blur-xl duration-500 zoom-in">

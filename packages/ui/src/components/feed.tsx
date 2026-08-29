@@ -32,10 +32,10 @@ export function Feed({ feed }: KnowledgeFeedProps) {
     activeTab === "All" ? feed : feed.filter((f) => f.category === activeTab)
 
   return (
-    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
-      <div className="mb-4 flex items-center justify-between border-b border-cyan-500/10 pb-4">
+    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-border p-5 backdrop-blur-xl">
+      <div className="mb-4 flex items-center justify-between border-b border-border pb-4">
         <div>
-          <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
+          <h3 className="font-sans text-xs font-bold tracking-wider text-primary uppercase">
             Knowledge Feed
           </h3>
           <p className="font-sans text-[10px] text-primary/60">
@@ -52,8 +52,8 @@ export function Feed({ feed }: KnowledgeFeedProps) {
             onClick={() => setActiveTab(tab)}
             className={`rounded-md border px-3 py-1 font-mono text-[10px] whitespace-nowrap transition-colors ${
               activeTab === tab
-                ? "border-cyan-400 bg-cyan-500/10 text-cyan-400"
-                : "border-cyan-500/10 text-primary/60 hover:border-cyan-500/30 hover:text-white"
+                ? "border-border bg-primary/10 text-primary"
+                : "border-border text-primary/60 hover:border-border hover:text-white"
             }`}
           >
             {tab}
@@ -65,9 +65,9 @@ export function Feed({ feed }: KnowledgeFeedProps) {
         {filteredFeed.map((item) => (
           <div
             key={item.id}
-            className="flex gap-4 rounded-xl border border-cyan-500/5 bg-black/20 p-3 transition-colors hover:border-cyan-500/20 hover:bg-black/40"
+            className="flex gap-4 rounded-xl border border-border bg-black/20 p-3 transition-colors hover:border-border hover:bg-black/40"
           >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-cyan-500/20 bg-cyan-500/5 text-cyan-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-primary/10 text-primary">
               <BookOpen className="h-5 w-5" />
             </div>
             <div className="min-w-0 flex-1">
@@ -78,7 +78,7 @@ export function Feed({ feed }: KnowledgeFeedProps) {
                 <span className="truncate font-sans text-xs text-primary/60">
                   {item.subtitle}
                 </span>
-                <span className="shrink-0 rounded bg-cyan-500/10 px-2 py-0.5 font-mono text-[9px] text-cyan-400">
+                <span className="shrink-0 rounded bg-primary/10 px-2 py-0.5 font-mono text-[9px] text-primary">
                   {item.category}
                 </span>
               </div>
@@ -92,7 +92,7 @@ export function Feed({ feed }: KnowledgeFeedProps) {
         ))}
       </div>
 
-      <button className="mt-4 flex items-center justify-center gap-2 border-t border-cyan-500/10 pt-4 font-mono text-[10px] font-medium text-cyan-400 uppercase hover:text-cyan-300">
+      <button className="mt-4 flex items-center justify-center gap-2 border-t border-border pt-4 font-mono text-[10px] font-medium text-primary uppercase hover:text-primary">
         View All Feed <ArrowRight className="h-3 w-3" />
       </button>
     </div>

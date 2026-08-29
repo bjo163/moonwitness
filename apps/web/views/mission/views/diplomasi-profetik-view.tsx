@@ -81,7 +81,7 @@ export function DiplomasiProfetikView() {
           subtitle="Pelajari cara diplomasi lembut (Soft Diplomacy), teknik negosiasi tingkat tinggi, dan penandatanganan perjanjian damai yang dilakukan oleh Rasulullah SAW (e.g. Piagam Madinah, Perjanjian Hudaibiyyah)."
           operation="PROPHETIC-DIPLOMACY-SIM"
           status="ONLINE"
-          accentColor="knowledge"
+          accentColor="primary"
         />
 
         {/* Scenario Card */}
@@ -90,7 +90,7 @@ export function DiplomasiProfetikView() {
             <span className="text-xs font-bold text-primary">
               {scenario.title}
             </span>
-            <span className="rounded-md border border-purple-500/40 bg-purple-500/10 text-purple-500 px-2 py-0.5 font-mono text-[9px]">
+            <span className="rounded-md border border-border bg-muted text-primary px-2 py-0.5 font-mono text-[9px]">
               SKENARIO {selectedScenarioIdx + 1} / {DIPLOMACY_SCENARIOS.length}
             </span>
           </div>

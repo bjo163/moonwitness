@@ -13,19 +13,19 @@ const getApiBase = () => {
   return `http://127.0.0.1:${APP_PORTS.API_BACKEND}`
 }
 
-export interface CosmicImportModalProps {
+export interface ModelImportModalProps {
   isOpen: boolean
   onClose: () => void
   schema: ModelSchema
   onImportSuccess?: () => void
 }
 
-export function CosmicImportModal({
+export function ModelImportModal({
   isOpen,
   onClose,
   schema,
   onImportSuccess,
-}: CosmicImportModalProps) {
+}: ModelImportModalProps) {
   const [csvText, setCsvText] = useState("")
   const [headers, setHeaders] = useState<string[]>([])
   const [rows, setRows] = useState<string[][]>([])
@@ -146,7 +146,8 @@ export function CosmicImportModal({
 
     setImporting(false)
     setImportStats({ success: successCount, failed: failedCount })
-    if (onImportSuccess && failedCount === 0) {
+
+    if (successCount > 0 && onImportSuccess) {
       setTimeout(onImportSuccess, 1200)
     }
   }
@@ -154,10 +155,10 @@ export function CosmicImportModal({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
       <div className="relative w-full max-w-3xl max-h-[90vh] bg-card border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden font-sans">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border/40 bg-muted/30">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-muted/30">
           <div>
             <span className="text-[10px] text-primary font-mono tracking-wider uppercase">
               {schema.name} • Batch Import Wizard
@@ -212,7 +213,7 @@ export function CosmicImportModal({
                   setError(null)
                   setImportStats(null)
                 }}
-                placeholder="name,priority,stageId&#10;System Optimization,high,1&#10;Security Patch,critical,2"
+                placeholder="name,priority,stageId&#10;Task Optimization,high,1&#10;Security Patch,critical,2"
                 rows={4}
                 className="w-full bg-background border border-border rounded-lg p-2.5 text-foreground text-[11px] font-mono placeholder:text-muted-foreground focus:border-primary focus:outline-none"
               />
@@ -222,14 +223,14 @@ export function CosmicImportModal({
           {/* Header Mapping Section */}
           {headers.length > 0 && (
             <div className="space-y-3">
-              <div className="flex items-center justify-between border-b border-border/40 pb-1">
+              <div className="flex items-center justify-between border-b border-border pb-1">
                 <span className="font-semibold text-primary uppercase text-[11px]">Field Mapping Configuration</span>
                 <span className="text-[10px] text-muted-foreground">{rows.length} rows detected</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {headers.map((h) => (
-                  <div key={h} className="flex items-center justify-between gap-2 p-2 bg-muted/30 border border-border/40 rounded-lg">
+                  <div key={h} className="flex items-center justify-between gap-2 p-2 bg-muted/30 border border-border rounded-lg">
                     <span className="font-medium text-foreground truncate max-w-[120px] text-xs">{h}</span>
                     <ArrowRight className="w-3.5 h-3.5 text-primary flex-shrink-0" />
                     <select
@@ -268,7 +269,7 @@ export function CosmicImportModal({
         </div>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-between px-6 py-4 border-t border-border/40 bg-muted/30">
+        <div className="flex items-center justify-between px-6 py-4 border-t border-border bg-muted/30">
           <button
             onClick={onClose}
             className="px-4 py-2 bg-secondary border border-border rounded-lg text-secondary-foreground hover:bg-accent text-xs font-medium transition-all"

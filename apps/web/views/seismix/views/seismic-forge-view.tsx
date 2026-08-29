@@ -196,7 +196,7 @@ function SeismographCanvas({
     ctx.stroke()
     ctx.shadowBlur = 0
 
-    // Glow fill beneath
+    // ambient fill beneath
     ctx.globalAlpha = 0.05
     ctx.fillStyle = color
     ctx.lineTo(w, h)
@@ -240,16 +240,16 @@ function SeismographCanvas({
 function MagnitudeBadge({ magnitude }: { magnitude: number }) {
   const getLevel = () => {
     if (magnitude >= MAGNITUDE_THRESHOLD.strong)
-      return { label: "SEVERE", color: "#FF0055", glow: "rgba(255,0,85,0.4)" }
+      return { label: "SEVERE", color: "#FF0055", highlight: "rgba(255,0,85,0.4)" }
     if (magnitude >= MAGNITUDE_THRESHOLD.moderate)
-      return { label: "STRONG", color: "#FFE600", glow: "rgba(255,230,0,0.3)" }
+      return { label: "STRONG", color: "#FFE600", highlight: "rgba(255,230,0,0.3)" }
     if (magnitude >= MAGNITUDE_THRESHOLD.minor)
       return {
         label: "MODERATE",
         color: "#FF9900",
-        glow: "rgba(255,153,0,0.25)",
+        highlight: "rgba(255,153,0,0.25)",
       }
-    return { label: "MINOR", color: "#00FF66", glow: "rgba(0,255,102,0.2)" }
+    return { label: "MINOR", color: "#00FF66", highlight: "rgba(0,255,102,0.2)" }
   }
 
   const level = getLevel()
@@ -261,7 +261,7 @@ function MagnitudeBadge({ magnitude }: { magnitude: number }) {
         color: level.color,
         borderColor: `${level.color}50`,
         background: `${level.color}12`,
-        boxShadow: `0 0 15px ${level.glow}`,
+        boxShadow: `0 0 15px ${level.color}`,
       }}
     >
       <span
@@ -467,7 +467,7 @@ export function SeismicForgeView() {
           label="MAX DEPTH"
           value={`${TECTONIC_STATS.maxDepth} km`}
           icon={Layers}
-          accentColor="system"
+          accentColor="primary"
         />
         <Stat
           label="ACTIVE ZONES"
@@ -480,7 +480,7 @@ export function SeismicForgeView() {
           label="P-WAVE VEL"
           value={TECTONIC_STATS.pWaveVelocity}
           icon={Zap}
-          accentColor="system"
+          accentColor="primary"
         />
         <Stat
           label="S-WAVE VEL"
@@ -658,12 +658,12 @@ export function SeismicForgeView() {
           </div>
         </Panel>
 
-        <Panel level="level3" accentColor="system" className="lg:col-span-2">
+        <Panel level="level3" accentColor="primary" className="lg:col-span-2">
           <PanelHeader
             title="CRUSTAL DYNAMICS MONITOR"
             icon={TrendingUp}
             status="ANALYZING"
-            accentColor="system"
+            accentColor="primary"
           />
 
           {/* Simplified magnitude distribution bars */}

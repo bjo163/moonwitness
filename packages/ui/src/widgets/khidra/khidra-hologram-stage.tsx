@@ -5,7 +5,7 @@ import React from "react"
 export function KhidraHologramStage() {
   return (
     <div className="relative flex h-full w-full items-center justify-center">
-      {/* Glow Behind Hologram */}
+      {/* ambient Behind Hologram */}
       <div className="absolute top-1/2 left-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-[100px]" />
 
       {/* The Hologram Image */}

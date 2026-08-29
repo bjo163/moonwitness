@@ -97,7 +97,7 @@ export function HadithsView() {
         <div className="space-y-1">
           <span className="font-extrabold text-foreground">{h.book}</span>
           <div className="flex items-center gap-1.5">
-            <Badge variant="secondary" className="bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/30 text-[9px] font-semibold">
+            <Badge variant="secondary" className="bg-muted text-primary dark:text-primary border border-border text-[9px] font-semibold">
               No. {h.number}
             </Badge>
             <Badge variant="outline" className="text-[9px]">
@@ -133,7 +133,7 @@ export function HadithsView() {
           subtitle="Entri, revisi terjemahan, dan sinkronisasi koleksi Kitab 9 Imam untuk konsumsi jamaah secara real-time."
           operation="HADITH-CATALOG-MGMT"
           status="ONLINE"
-          accentColor="knowledge"
+          accentColor="primary"
         />
 
         {notification && (
@@ -154,7 +154,7 @@ export function HadithsView() {
           headerActions={
             <Button
               onClick={() => addModal.open()}
-              className="flex items-center gap-2 rounded-lg border border-purple-500/40 bg-purple-500/10 px-4 py-1.5 text-xs font-semibold text-purple-600 dark:text-purple-400 hover:bg-purple-500/20"
+              className="flex items-center gap-2 rounded-lg border border-border bg-muted px-4 py-1.5 text-xs font-semibold text-primary dark:text-primary hover:bg-muted"
             >
               <span>+ Tambah Hadits</span>
             </Button>

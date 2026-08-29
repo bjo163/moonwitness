@@ -11,7 +11,7 @@ export function PanelHeader({
   title,
   status = "ACTIVE",
   icon: Icon,
-  accentColor = "system",
+  accentColor = "primary",
   subtitle,
 }: {
   title: string
@@ -20,27 +20,20 @@ export function PanelHeader({
   accentColor?: ThemeAccentColor
   subtitle?: string
 }) {
-  const colorHex =
-    THEME_TOKENS.colors[accentColor] || THEME_TOKENS.colors.system
+  const colorHex = THEME_TOKENS.colors[accentColor] || THEME_TOKENS.colors.primary
 
   return (
-    <div
-      className="mb-4 border-b pb-3 border-border/40"
-    >
+    <div className="mb-4 border-b pb-3 border-border">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2.5">
           {Icon ? (
-            <div
-              className="flex h-7 w-7 items-center justify-center rounded-lg border border-border/50 bg-background/50"
-            >
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-muted/40">
               <Icon className="h-3.5 w-3.5" style={{ color: colorHex }} />
             </div>
           ) : (
-            <span className="text-xs font-bold text-emerald-500">◉</span>
+            <span className="text-xs font-bold text-primary">◉</span>
           )}
-          <h3
-            className="text-sm font-bold tracking-wide text-foreground uppercase sm:text-base"
-          >
+          <h3 className="text-sm font-bold tracking-wide text-foreground uppercase sm:text-base">
             {title}
           </h3>
         </div>
@@ -50,7 +43,7 @@ export function PanelHeader({
             className="h-1.5 w-1.5 animate-pulse rounded-full"
             style={{ background: colorHex }}
           />
-          <span style={{ color: colorHex }}>STATUS {status}</span>
+          <span style={{ color: colorHex }}>{status}</span>
         </div>
       </div>
 
@@ -66,7 +59,7 @@ export function PanelHeader({
 export function Panel({
   children,
   level = "level2",
-  accentColor = "system",
+  accentColor = "primary",
   className = "",
   style = {},
 }: {
@@ -81,7 +74,7 @@ export function Panel({
 
   return (
     <div
-      className={`rounded-xl border border-border/40 bg-card/90 backdrop-blur-md ${levelConfig.padding} relative shadow-sm transition-all duration-200 ${className}`}
+      className={`rounded-xl border border-border bg-card ${levelConfig.padding} relative shadow-sm transition-colors ${className}`}
       style={{
         ...style,
       }}

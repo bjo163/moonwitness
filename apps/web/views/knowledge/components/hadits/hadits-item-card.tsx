@@ -40,14 +40,14 @@ export function HaditsItemCard({ hadith, isActive, onClick }: HaditsItemCardProp
       onClick={onClick}
       className={`group relative cursor-pointer rounded-xl border p-5 transition-all duration-300 ${
         isActive
-          ? "border-cyan-500/50 bg-card shadow-sm"
+          ? "border-border bg-card shadow-sm"
           : "border-white/5 bg-card hover:border-white/20 hover:bg-card"
       }`}
     >
       {/* Top Metadata Strip */}
       <div className="mb-4 flex items-center justify-between gap-2 border-b border-white/5 pb-3">
         <div className="flex items-center gap-2 font-mono text-[10px]">
-          <span className="flex h-5 items-center justify-center rounded bg-white/5 px-2 font-black text-cyan-400">
+          <span className="flex h-5 items-center justify-center rounded bg-white/5 px-2 font-black text-primary">
             #{hadith.id}
           </span>
           <span className="text-white/60">{hadith.ref}</span>
@@ -79,16 +79,16 @@ export function HaditsItemCard({ hadith, isActive, onClick }: HaditsItemCardProp
 
       {/* Card Action Footnotes */}
       <div className="flex items-center justify-between border-t border-white/5 pt-3 text-[10px] text-white/40">
-        <div className="flex items-center gap-1 font-mono text-cyan-400/80">
+        <div className="flex items-center gap-1 font-mono text-primary/80">
           <Quote className="h-3 w-3" />
           <span>Universal Wisdom Corpus</span>
         </div>
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-1 font-mono hover:text-cyan-400">
+          <button className="flex items-center gap-1 font-mono hover:text-primary">
             <BookOpen className="h-3 w-3" />
             <span>Takhrij</span>
           </button>
-          <button className="flex items-center gap-1 font-mono hover:text-cyan-400">
+          <button className="flex items-center gap-1 font-mono hover:text-primary">
             <LinkIcon className="h-3 w-3" />
             <span>Sanad Graph</span>
           </button>

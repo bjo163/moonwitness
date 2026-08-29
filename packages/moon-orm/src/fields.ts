@@ -30,7 +30,7 @@ export interface FieldDef<T extends string = string> {
   help?: string
   /** Human-readable label for UI display (auto-inferred from field name if omitted) */
   label?: string
-  /** Preferred rendering widget hint for the Cosmic Matrix Engine */
+  /** Preferred rendering widget hint for the celestial Matrix Engine */
   widget?: WidgetHint
   /** Field is read-only in form views */
   readonly?: boolean

@@ -7,7 +7,7 @@ import { Button } from "./button"
 import { ThemeToggle } from "./theme-toggle"
 import { apiPost } from "@moon/client"
 import { APP_PORTS } from "@workspace/types"
-import { cosmicAudio } from "./cosmic-sound-synthesizer"
+import { soundEngine } from "./audio-synthesizer"
 
 const getApiBase = () => {
   if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_API_URL) {
@@ -41,7 +41,7 @@ export function Topbar({
   const [showNotifications, setShowNotifications] = useState(false)
   const [notifications] = useState([
     { id: 1, title: "Cron Loop Active", text: "Background runner polling every 30s", time: "Just now", type: "info" },
-    { id: 2, title: "Worker Queue Standby", text: "CosmicWorker default pool online (5 slots)", time: "1m ago", type: "success" },
+    { id: 2, title: "Worker Queue Standby", text: "TaskWorker default pool online (5 slots)", time: "1m ago", type: "success" },
     { id: 3, title: "Ephemeris Synced", text: "Prayer azimuths recalculated", time: "5m ago", type: "info" },
   ])
 
@@ -56,13 +56,13 @@ export function Topbar({
     setSeedResult(null)
     try {
       const res = await apiPost<any>(`${getApiBase()}/api/system/demo-seed`, {})
-      cosmicAudio.playHarmonic528()
+      soundEngine.playHarmonic528()
       setSeedResult(res?.message || "Demo matrix seeded successfully!")
       setTimeout(() => {
         window.location.reload()
       }, 1500)
     } catch (e: any) {
-      cosmicAudio.playAlertTone()
+      soundEngine.playAlertTone()
       setSeedResult(`Failed: ${e?.message || e}`)
     } finally {
       setSeeding(false)

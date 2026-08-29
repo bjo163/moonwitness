@@ -47,7 +47,7 @@ export function SunPositionView() {
       <div className="relative mb-6 grid min-h-[450px] grid-cols-1 gap-8 overflow-hidden rounded-2xl border border-white/10 bg-background p-6 md:p-10 lg:grid-cols-12">
         {/* Column 1: The Divine Figure (Span 4) */}
         <div className="relative flex min-h-[400px] items-end justify-center lg:col-span-4">
-          {/* Background Ambient Glow */}
+          {/* Background Ambient ambient */}
           <div className="absolute top-[45%] left-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/10 blur-[80px]"></div>
 
           {/* Intense Sun Behind Figure */}
@@ -90,11 +90,11 @@ export function SunPositionView() {
             <div className="flex items-start gap-3">
               <Sun className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" />
               <div>
-                <p className="font-mono text-[9px] leading-relaxed text-cyan-200">
+                <p className="font-mono text-[9px] leading-relaxed text-primary">
                   "I AM THE LIGHT OF THE WORLD. WHOEVER FOLLOWS ME WILL NEVER
                   WALK IN DARKNESS, BUT WILL HAVE THE LIGHT OF LIFE."
                 </p>
-                <span className="mt-2 block text-[8px] tracking-widest text-cyan-500 uppercase">
+                <span className="mt-2 block text-[8px] tracking-widest text-primary uppercase">
                   - JOHN 8:12
                 </span>
               </div>
@@ -107,8 +107,8 @@ export function SunPositionView() {
           {/* Sub-col 1: Mission Status */}
           <div className="flex flex-col justify-center gap-4">
             <div className="mb-2 flex items-center gap-2 border-b border-white/10 pb-2">
-              <Target className="h-3 w-3 text-cyan-500" />
-              <span className="text-[9px] font-bold tracking-widest text-cyan-400 uppercase">
+              <Target className="h-3 w-3 text-primary" />
+              <span className="text-[9px] font-bold tracking-widest text-primary uppercase">
                 MISSION STATUS
               </span>
               <span className="ml-auto flex items-center gap-1.5 text-[8px] font-bold text-emerald-400 uppercase">
@@ -147,7 +147,7 @@ export function SunPositionView() {
               </div>
             ))}
 
-            <button className="group mt-4 flex w-full items-center justify-center gap-2 rounded border border-cyan-500/30 bg-transparent px-4 py-3 text-[8px] tracking-widest text-cyan-400 uppercase transition-colors hover:bg-cyan-500/10">
+            <button className="group mt-4 flex w-full items-center justify-center gap-2 rounded border border-border bg-transparent px-4 py-3 text-[8px] tracking-widest text-primary uppercase transition-colors hover:bg-primary/10">
               VIEW FULL BRIEFING{" "}
               <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
             </button>
@@ -158,7 +158,7 @@ export function SunPositionView() {
             <h3 className="font-arabic mb-4 text-right text-2xl leading-loose text-amber-400 drop-shadow-sm">
               اللَّهُ نُورُ السَّمَاوَاتِ وَالْأَرْضِ
             </h3>
-            <p className="mb-4 text-[9px] leading-relaxed text-cyan-400">
+            <p className="mb-4 text-[9px] leading-relaxed text-primary">
               Allah is the Light of the Heavens and the Earth.
             </p>
             <p className="text-[8px] leading-relaxed text-white/50">
@@ -284,7 +284,7 @@ export function SunPositionView() {
           </div>
 
           <div className="relative mt-4 flex min-h-[220px] w-full items-end">
-            {/* The Glowing Arc */}
+            {/* The ambienting Arc */}
             <svg
               viewBox="0 0 100 50"
               className="absolute inset-x-0 bottom-10 h-full w-full overflow-visible drop-shadow-sm"
@@ -729,7 +729,7 @@ export function SunPositionView() {
                   {b.v}
                 </div>
                 <div
-                  className={`w-full max-w-[14px] rounded-t-sm transition-all duration-1000 ${b.act ? "bg-amber-400 shadow-sm" : "bg-cyan-600/50 hover:bg-cyan-500/80"}`}
+                  className={`w-full max-w-[14px] rounded-t-sm transition-all duration-1000 ${b.act ? "bg-amber-400 shadow-sm" : "bg-primary/50 hover:bg-primary/10"}`}
                   style={{ height: b.h }}
                 />
                 <div className="mt-2 font-mono text-[7px] text-muted-foreground">
@@ -1147,7 +1147,7 @@ export function SunPositionView() {
                 <div className="h-0.5 w-2 bg-amber-500" /> Energy
               </span>
               <span className="flex items-center gap-1">
-                <div className="h-0.5 w-2 bg-purple-500" /> Sleep
+                <div className="h-0.5 w-2 bg-primary" /> Sleep
               </span>
             </div>
             {/* Simple CSS Grid Chart Mockup */}
@@ -1182,7 +1182,7 @@ export function SunPositionView() {
           </div>
           <div className="mb-6 grid grid-cols-2 gap-4">
             {[
-              { l: "CPU", v: 23, c: "text-cyan-400", s: "#22D3EE" },
+              { l: "CPU", v: 23, c: "text-primary", s: "#22D3EE" },
               { l: "RAM", v: 48, c: "text-amber-400", s: "#FBBF24" },
               { l: "DISK", v: 61, c: "text-emerald-400", s: "#34D399" },
               { l: "NET", v: 18, c: "text-rose-400", s: "#FB7185" },
@@ -1295,7 +1295,7 @@ export function SunPositionView() {
         </div>
       </div>
 
-      {/* ═══ ADVANCED SCI-FI ASTRONOMY ROW ═══ */}
+      {/* ═══ ADVANCED modern ASTRONOMY ROW ═══ */}
       <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Qibla Solar Alignment */}
         <div className="group relative flex flex-col overflow-hidden rounded-xl border border-white/5 bg-card p-5 lg:col-span-4">
@@ -1309,7 +1309,7 @@ export function SunPositionView() {
           </div>
 
           <div className="relative my-4 flex h-40 w-full items-center justify-center">
-            {/* Sci-Fi Compass SVG */}
+            {/* modern Compass SVG */}
             <svg
               viewBox="0 0 200 200"
               className="absolute inset-0 h-full w-full animate-[spin_60s_linear_infinite] opacity-30"
@@ -1377,7 +1377,7 @@ export function SunPositionView() {
                 Real-time solar frequency monitor
               </p>
             </div>
-            <span className="rounded border border-cyan-400/20 bg-cyan-400/10 px-2 py-0.5 text-[7px] font-bold tracking-widest text-cyan-400">
+            <span className="rounded border border-border bg-primary/10 px-2 py-0.5 text-[7px] font-bold tracking-widest text-primary">
               UVA/UVB SAFE
             </span>
           </div>
@@ -1461,7 +1461,7 @@ export function SunPositionView() {
               <div className="mb-1 tracking-widest text-muted-foreground uppercase">
                 OZONE BLOCKING
               </div>
-              <div className="font-mono font-bold text-cyan-400">
+              <div className="font-mono font-bold text-primary">
                 98.5% EFFICIENT
               </div>
             </div>

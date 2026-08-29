@@ -196,7 +196,7 @@ registerWitnessRoutes()
 registerMizanRoutes()
 registerCabRoutes()
 
-// Cosmic Matrix Engine: Register view manifests across all 16 addon packages
+// celestial Matrix Engine: Register view manifests across all 16 addon packages
 registerViewManifests({
   ...baseViews,
   ...performanceViews,

@@ -1,32 +1,22 @@
 "use client"
 
 import React, { useState, useMemo } from "react"
-import { Calendar, ChevronLeft, ChevronRight, Clock, Eye, Layers } from "lucide-react"
+import { Calendar } from "lucide-react"
 
-interface CosmicTimelineViewProps {
+interface ModelTimelineViewProps {
   schema: any
   records: any[]
   onRecordClick?: (record: any) => void
 }
 
-export function CosmicTimelineView({ schema, records, onRecordClick }: CosmicTimelineViewProps) {
+export function ModelTimelineView({ schema, records, onRecordClick }: ModelTimelineViewProps) {
   const [zoomMode, setZoomMode] = useState<"days" | "weeks" | "months">("weeks")
-  const [currentDateOffset, setCurrentDateOffset] = useState(0)
 
-  // Identify date fields in schema
-  const dateFields = useMemo(() => {
-    const fields = schema?.fields || {}
-    return Object.keys(fields).filter((key) => {
-      const type = fields[key]?.type
-      return type === "datetime" || type === "date" || key.toLowerCase().includes("date") || key.includes("At")
-    })
-  }, [schema])
-
-  const nameField = schema?.viewManifest?.kanban?.titleField || "name"
-  const stageField = schema?.viewManifest?.kanban?.groupBy || "stageId"
+  const nameField = schema?.views?.kanban?.titleField || "name"
+  const stageField = schema?.views?.kanban?.groupBy || "stageId"
 
   // Calculate global date bounds
-  const { minTime, maxTime, totalDuration } = useMemo(() => {
+  const { minTime, totalDuration } = useMemo(() => {
     const now = Date.now()
     let min = now - 14 * 86400000
     let max = now + 30 * 86400000
@@ -63,46 +53,46 @@ export function CosmicTimelineView({ schema, records, onRecordClick }: CosmicTim
   }, [minTime, totalDuration])
 
   return (
-    <div className="flex flex-col gap-4 font-mono text-xs">
+    <div className="flex flex-col gap-4 font-sans text-xs">
       {/* Controls Bar */}
-      <div className="flex items-center justify-between border border-cyan-500/20 bg-black/60 p-3 backdrop-blur-md">
+      <div className="flex items-center justify-between border border-border bg-card p-3 rounded-xl shadow-sm">
         <div className="flex items-center gap-3">
-          <Calendar className="h-4 w-4 text-cyan-400" />
-          <span className="font-bold tracking-wider text-cyan-300 uppercase">
-            GANTT TIMELINE MATRIX: {schema?.name || "RECORDS"}
+          <Calendar className="h-4 w-4 text-primary" />
+          <span className="font-bold text-foreground">
+            Timeline View: {schema?.name || "Records"}
           </span>
-          <span className="rounded bg-cyan-950/60 px-2 py-0.5 text-[10px] text-cyan-400 border border-cyan-500/30">
-            {records.length} NODES
+          <span className="rounded-md bg-muted px-2 py-0.5 text-[10px] text-muted-foreground border border-border font-mono font-semibold">
+            {records.length} Records
           </span>
         </div>
 
         <div className="flex items-center gap-2">
           <button
             onClick={() => setZoomMode("days")}
-            className={`px-2.5 py-1 text-[10px] uppercase transition-all ${
+            className={`px-2.5 py-1 text-xs rounded-md font-medium transition-colors ${
               zoomMode === "days"
-                ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/50"
-                : "bg-black/40 text-slate-400 hover:text-white border border-white/10"
+                ? "bg-primary text-primary-foreground"
+                : "bg-secondary text-secondary-foreground hover:bg-accent"
             }`}
           >
             Days
           </button>
           <button
             onClick={() => setZoomMode("weeks")}
-            className={`px-2.5 py-1 text-[10px] uppercase transition-all ${
+            className={`px-2.5 py-1 text-xs rounded-md font-medium transition-colors ${
               zoomMode === "weeks"
-                ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/50"
-                : "bg-black/40 text-slate-400 hover:text-white border border-white/10"
+                ? "bg-primary text-primary-foreground"
+                : "bg-secondary text-secondary-foreground hover:bg-accent"
             }`}
           >
             Weeks
           </button>
           <button
             onClick={() => setZoomMode("months")}
-            className={`px-2.5 py-1 text-[10px] uppercase transition-all ${
+            className={`px-2.5 py-1 text-xs rounded-md font-medium transition-colors ${
               zoomMode === "months"
-                ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/50"
-                : "bg-black/40 text-slate-400 hover:text-white border border-white/10"
+                ? "bg-primary text-primary-foreground"
+                : "bg-secondary text-secondary-foreground hover:bg-accent"
             }`}
           >
             Months
@@ -111,25 +101,25 @@ export function CosmicTimelineView({ schema, records, onRecordClick }: CosmicTim
       </div>
 
       {/* Timeline Grid Canvas */}
-      <div className="overflow-x-auto border border-cyan-500/20 bg-black/80 backdrop-blur-md">
+      <div className="overflow-x-auto border border-border bg-card rounded-xl shadow-sm">
         {/* Time Header Scale */}
-        <div className="relative h-10 border-b border-cyan-500/20 bg-cyan-950/30">
+        <div className="relative h-10 border-b border-border bg-muted/40">
           {timelineMarkers.map((marker, idx) => (
             <div
               key={idx}
               className="absolute top-2 flex -translate-x-1/2 flex-col items-center"
               style={{ left: `${marker.percent}%` }}
             >
-              <span className="text-[10px] text-slate-400">{marker.label}</span>
-              <div className="h-2 w-px bg-cyan-500/30" />
+              <span className="text-[10px] text-muted-foreground">{marker.label}</span>
+              <div className="h-2 w-px bg-border" />
             </div>
           ))}
         </div>
 
         {/* Rows */}
-        <div className="divide-y divide-white/5 py-2">
+        <div className="divide-y divide-border/60 py-2">
           {records.length === 0 ? (
-            <div className="py-12 text-center text-slate-500">NO ACTIVE RECORDS DETECTED IN TIMELINE SPAN</div>
+            <div className="py-12 text-center text-muted-foreground">No active records in this timeline range.</div>
           ) : (
             records.map((r, idx) => {
               const startRaw = r.dateStart || r.createdAt || r.createDate || Date.now()
@@ -145,11 +135,11 @@ export function CosmicTimelineView({ schema, records, onRecordClick }: CosmicTim
               return (
                 <div
                   key={r.id || idx}
-                  className="group relative flex h-12 items-center px-4 hover:bg-cyan-500/5 transition-colors"
+                  className="group relative flex h-12 items-center px-4 hover:bg-muted/40 transition-colors"
                 >
                   {/* Left Label */}
-                  <div className="w-48 shrink-0 truncate pr-4 text-xs font-semibold text-slate-200">
-                    <span className="text-cyan-400 mr-1.5">#{r.id}</span>
+                  <div className="w-48 shrink-0 truncate pr-4 text-xs font-semibold text-foreground">
+                    <span className="text-primary mr-1.5 font-mono">#{r.id}</span>
                     {r[nameField] || "Unnamed Record"}
                   </div>
 
@@ -157,7 +147,7 @@ export function CosmicTimelineView({ schema, records, onRecordClick }: CosmicTim
                   <div className="relative h-full flex-1">
                     <div
                       onClick={() => onRecordClick?.(r)}
-                      className="absolute top-2 h-8 cursor-pointer rounded border border-cyan-500/40 bg-cyan-950/60 transition-all hover:scale-[1.01] hover:border-cyan-400 hover:shadow-sm"
+                      className="absolute top-2 h-8 cursor-pointer rounded-md border border-primary/40 bg-primary/10 transition-all hover:bg-primary/20 hover:border-primary"
                       style={{
                         left: `${leftPct}%`,
                         width: `${widthPct}%`,
@@ -165,17 +155,17 @@ export function CosmicTimelineView({ schema, records, onRecordClick }: CosmicTim
                     >
                       {/* Progress Bar Fill */}
                       <div
-                        className="h-full bg-cyan-500/20"
+                        className="h-full bg-primary/20 rounded-md"
                         style={{ width: `${progress}%` }}
                       />
 
                       {/* Bar Content */}
                       <div className="absolute inset-0 flex items-center justify-between px-2 text-[10px]">
-                        <span className="truncate font-bold text-cyan-200">
+                        <span className="truncate font-semibold text-primary">
                           {r[nameField]}
                         </span>
                         {r[stageField] && (
-                          <span className="rounded bg-black/60 px-1.5 py-0.5 text-[9px] text-cyan-300">
+                          <span className="rounded bg-background/80 px-1.5 py-0.5 text-[9px] text-foreground font-mono">
                             {r[stageField]}
                           </span>
                         )}

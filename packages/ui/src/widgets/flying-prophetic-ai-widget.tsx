@@ -37,7 +37,7 @@ export function FlyingPropheticAIWidget() {
 
   return (
     <>
-      {/* FLYING WIDGET PILL (Mengapung elegan di kanan bawah di atas HUD Taskbar) */}
+      {/* FLYING WIDGET PILL (Mengapung elegan di kanan bawah di atas display Taskbar) */}
       <div className="group fixed right-3 bottom-12 z-[8888] flex items-center gap-2 sm:right-6 sm:bottom-14">
         <button
           type="button"
@@ -45,7 +45,7 @@ export function FlyingPropheticAIWidget() {
           className="group bg-background/95 hover:bg-background border-success/80 hover:border-success relative flex cursor-pointer items-center gap-2 rounded-full border-2 px-3.5 py-2 text-foreground shadow-sm backdrop-blur-lg transition-all duration-300 hover:shadow-sm active:scale-95 sm:px-4 sm:py-2.5"
           title="Open KHIDRA AI - Quranic Wisdom Terminal"
         >
-          {/* Animasi Orb Glow & Pulse Dot */}
+          {/* Animasi Orb ambient & Pulse Dot */}
           <div className="bg-success/20 border-success/50 relative flex h-6 w-6 items-center justify-center rounded-full border transition-transform duration-300 group-hover:rotate-12 sm:h-7 sm:w-7">
             <Cpu className="text-success h-4 w-4 animate-pulse" />
             <span className="absolute -top-1 -right-1 flex h-2 w-2 sm:h-2.5 sm:w-2.5">

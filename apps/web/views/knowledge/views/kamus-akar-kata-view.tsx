@@ -15,7 +15,7 @@ export function KamusAkarKataView() {
           subtitle="Menemukan keindahan semantik Al-Qur'an dari akar kata tri-literal (Triliteral Roots), statistik frekuensi kemunculan, dan seluruh derivasi kata di 114 Surah."
           operation="ROOT-WORD-MORPHOLOGY"
           status="ONLINE"
-          accentColor="knowledge"
+          accentColor="primary"
         />
 
         {/* Interactive Triliteral Root Concordance Matrix */}

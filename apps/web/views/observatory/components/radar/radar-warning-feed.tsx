@@ -8,7 +8,7 @@ import { fetchEarthquakes } from "@moon/client"
 const DEFAULT_ALERTS = [
   { title: "Tropical Depression Warning", loc: "Sunda Strait / Indian Ocean", lvl: "ADVISORY", color: "text-amber-400" },
   { title: "High Wave Convection", loc: "South Java Sea (2.5m - 4.0m)", lvl: "WATCH", color: "text-blue-400" },
-  { title: "Squall Line Cell", loc: "Malacca Strait", lvl: "NOTICE", color: "text-cyan-400" },
+  { title: "Squall Line Cell", loc: "Malacca Strait", lvl: "NOTICE", color: "text-primary" },
 ]
 
 export function RadarWarningFeed() {
@@ -19,7 +19,7 @@ export function RadarWarningFeed() {
         const mag = f.properties?.mag || 0
         const place = f.properties?.place || "Seismic Station"
         const lvl = mag >= 5 ? "ALERT" : mag >= 4 ? "WATCH" : "NOTICE"
-        const color = mag >= 5 ? "text-rose-400" : mag >= 4 ? "text-amber-400" : "text-cyan-400"
+        const color = mag >= 5 ? "text-rose-400" : mag >= 4 ? "text-amber-400" : "text-primary"
         return {
           title: `M${mag.toFixed(1)} Seismic Activity`,
           loc: place,
@@ -55,8 +55,8 @@ export function RadarWarningFeed() {
       </div>
 
       {/* 2. Quranic Reflection on Winds & Clouds */}
-      <div className="rounded-xl border border-cyan-500/20 bg-gradient-to-b from-card -background p-5 shadow-lg">
-        <div className="mb-2 flex items-center gap-2 text-cyan-400">
+      <div className="rounded-xl border border-border bg-gradient-to-b from-card -background p-5 shadow-lg">
+        <div className="mb-2 flex items-center gap-2 text-primary">
           <BookOpen className="h-4 w-4" />
           <span className="font-black uppercase">Ar-Rum (The Romans)</span>
         </div>
@@ -69,7 +69,7 @@ export function RadarWarningFeed() {
           &ldquo;It is Allah who sends the winds, and they stir up clouds, and spread them in the sky however He wills.&rdquo;
         </p>
 
-        <div className="mt-2 text-[8px] text-cyan-400/60">
+        <div className="mt-2 text-[8px] text-primary/60">
           QS. Ar-Rum 30:48
         </div>
       </div>

@@ -8,7 +8,6 @@ export const THEME_TOKENS = {
     mutedForeground: "var(--muted-foreground)",
     accent: "var(--accent)",
     destructive: "var(--destructive)",
-    danger: "var(--destructive)",
     success: "var(--success)",
     warning: "var(--warning)",
     info: "var(--info)",
@@ -19,10 +18,6 @@ export const THEME_TOKENS = {
     border: "var(--border)",
     input: "var(--input)",
     ring: "var(--ring)",
-    system: "var(--primary)",
-    mission: "var(--primary)",
-    celestial: "var(--warning)",
-    knowledge: "var(--primary)",
   },
 
   borders: {
@@ -82,48 +77,6 @@ export const THEME_TOKENS = {
       "MoonWitness is a unified knowledge platform connecting celestial observation, historical reflection, and sacred scriptures.",
     primaryCta: "Explore Observatory",
     secondaryCta: "Learn the Framework",
-  },
-
-  framework: {
-    title: "THE MOONWITNESS KNOWLEDGE FRAMEWORK",
-    subtitle: "RGB → LIGHT",
-    supportingText:
-      "Light does not represent omniscience itself. Rather, it symbolizes the integration of Reality (Haqiqah), Flourishing (Falāḥ), and Wisdom (Ḥikmah) into a coherent understanding.",
-    red: {
-      code: "RED",
-      name: "HAQIQAH",
-      subtitle: "Reality • History • Truth",
-      desc: "Discover reality through history, scripture, human civilization, and historical reflection.",
-      hex: "#FF3355",
-    },
-    green: {
-      code: "GREEN",
-      name: "FALĀḤ",
-      subtitle: "Creation • Universe • Growth",
-      desc: "Observe creation, explore the universe, study astronomy, and understand the living world.",
-      hex: "#00FF66",
-    },
-    blue: {
-      code: "BLUE",
-      name: "ḤIKMAH",
-      subtitle: "Wisdom • Reflection • Insight",
-      desc: "Transform knowledge into wisdom through reflection, critical thinking, understanding, and meaningful application.",
-      hex: "#00F0FF",
-    },
-    light: {
-      code: "LIGHT",
-      name: "ILLUMINATION",
-      subtitle: "Integrated Understanding",
-      desc: "Where Reality, Flourishing, and Wisdom become one coherent understanding.",
-      hex: "#FFFFFF",
-    },
-    missionTitle: "OUR MISSION",
-    missionText1:
-      "MoonWitness exists to connect humanity, creation, and wisdom into one living observatory.",
-    missionText2:
-      "We believe understanding grows through observation, reflection, and continuous learning.",
-    principles:
-      "Reality → Growth → Wisdom → Light // Observe → Learn → Reflect → Illuminate",
   },
 } as const
 

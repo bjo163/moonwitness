@@ -3,21 +3,21 @@
 import { useRealtimeStream } from "./realtime-stream"
 import type { SSETopicName, SSETopicPayload } from "@moon/protocol"
 
-export interface UseCosmicTelemetryOptions<K extends SSETopicName> {
+export interface UseRealtimeTelemetryOptions<K extends SSETopicName> {
   initialData?: SSETopicPayload<K>
   onMessage?: (payload: SSETopicPayload<K>) => void
   onError?: (err: Event) => void
 }
 
 /**
- * ◈ useCosmicTelemetry — Strongly-Typed Reactive SSE Hook
+ * ◈ useRealtimeTelemetry — Strongly-Typed Reactive SSE Hook
  *
  * Subscribes to backend Server-Sent Event channels mapped to @moon/protocol topics.
  * Returns strictly-typed telemetry payload matching the topic's Zod schema.
  */
-export function useCosmicTelemetry<K extends SSETopicName>(
+export function useRealtimeTelemetry<K extends SSETopicName>(
   topic: K,
-  options: UseCosmicTelemetryOptions<K> = {}
+  options: UseRealtimeTelemetryOptions<K> = {}
 ) {
   const { initialData, onMessage, onError } = options
 

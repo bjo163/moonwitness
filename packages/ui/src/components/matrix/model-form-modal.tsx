@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from "react"
 import { X, Save, AlertCircle, MessageSquare, CalendarCheck, CheckCircle2, Printer, History } from "lucide-react"
 import type { ModelSchema } from "@workspace/types"
-import { CosmicFieldWidget } from "./cosmic-field-widget"
+import { ModelFieldWidget } from "./model-field-widget"
 import { apiGet, apiPost, apiDelete } from "@moon/client"
 import { APP_PORTS } from "@workspace/types"
-import { cosmicAudio } from "../cosmic-sound-synthesizer"
+import { soundEngine } from "../audio-synthesizer"
 import { printRecordBriefing } from "../../lib/report-printer"
 
 const getApiBase = () => {
@@ -16,7 +16,7 @@ const getApiBase = () => {
   return `http://127.0.0.1:${APP_PORTS.API_BACKEND}`
 }
 
-export interface CosmicFormModalProps {
+export interface ModelFormModalProps {
   isOpen: boolean
   onClose: () => void
   schema: ModelSchema
@@ -24,13 +24,13 @@ export interface CosmicFormModalProps {
   onSave: (vals: Record<string, any>) => Promise<void>
 }
 
-export function CosmicFormModal({
+export function ModelFormModal({
   isOpen,
   onClose,
   schema,
   initialRecord,
   onSave,
-}: CosmicFormModalProps) {
+}: ModelFormModalProps) {
   const [formData, setFormData] = useState<Record<string, any>>({})
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -110,7 +110,7 @@ export function CosmicFormModal({
       if (def.required && !def.readonly && !def.invisible) {
         const val = formData[key]
         if (val === undefined || val === null || val === "") {
-          cosmicAudio.playAlertTone()
+          soundEngine.playAlertTone()
           setError(`Required field missing: ${def.label}`)
           setSaving(false)
           return
@@ -132,10 +132,10 @@ export function CosmicFormModal({
 
     try {
       await onSave(cleanedPayload)
-      cosmicAudio.playSuccessChime()
+      soundEngine.playSuccessChime()
       onClose()
     } catch (err: any) {
-      cosmicAudio.playAlertTone()
+      soundEngine.playAlertTone()
       setError(err?.message || "Failed to persist record.")
     } finally {
       setSaving(false)
@@ -186,10 +186,10 @@ export function CosmicFormModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
       <div className="relative w-full max-w-3xl max-h-[90vh] bg-card border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden font-sans">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border/40 bg-muted/30">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-muted/30">
           <div>
             <span className="text-[10px] font-mono text-primary tracking-wider uppercase">
               {schema.name} • {isEdit ? `Record #${initialRecord?.id}` : "New Record"}
@@ -204,7 +204,7 @@ export function CosmicFormModal({
                 type="button"
                 onClick={() => printRecordBriefing(schema, formData)}
                 title="Print Record Report"
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-secondary border border-border rounded-lg text-xs font-medium text-secondary-foreground hover:bg-accent transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-secondary border border-border rounded-lg text-xs font-medium text-secondary-foreground hover:bg-accent transition-colors"
               >
                 <Printer className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Print Report</span>
@@ -231,7 +231,7 @@ export function CosmicFormModal({
           {/* Sections */}
           {sections.map((sec, idx) => (
             <div key={idx} className="space-y-3">
-              <h3 className="text-xs font-bold text-primary tracking-wider uppercase border-b border-border/40 pb-1">
+              <h3 className="text-xs font-bold text-primary tracking-wider uppercase border-b border-border pb-1">
                 {sec.title}
               </h3>
               <div
@@ -247,7 +247,7 @@ export function CosmicFormModal({
                       <label className="block text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
                         {fieldDef.label} {fieldDef.required && <span className="text-destructive">*</span>}
                       </label>
-                      <CosmicFieldWidget
+                      <ModelFieldWidget
                         field={fieldDef}
                         value={formData[fKey]}
                         onChange={(val) => handleFieldChange(fKey, val)}
@@ -262,7 +262,7 @@ export function CosmicFormModal({
 
           {/* Scheduled Activities Panel */}
           {isEdit && formConfig?.chatter && (
-            <div className="space-y-3 pt-4 border-t border-border/40">
+            <div className="space-y-3 pt-4 border-t border-border">
               <h3 className="flex items-center gap-2 text-xs font-bold text-amber-500 tracking-wider uppercase">
                 <CalendarCheck className="w-3.5 h-3.5" /> Scheduled Activities & Reminders
               </h3>
@@ -314,7 +314,7 @@ export function CosmicFormModal({
 
           {/* Universal Chatter Widget */}
           {isEdit && formConfig?.chatter && (
-            <div className="space-y-3 pt-4 border-t border-border/40">
+            <div className="space-y-3 pt-4 border-t border-border">
               <h3 className="flex items-center gap-2 text-xs font-bold text-primary tracking-wider uppercase">
                 <MessageSquare className="w-3.5 h-3.5" /> Comments & Activity Log
               </h3>
@@ -323,7 +323,7 @@ export function CosmicFormModal({
                   <p className="text-[11px] text-muted-foreground font-sans">No communication records attached.</p>
                 ) : (
                   messages.map((m) => (
-                    <div key={m.id} className="p-2 bg-muted/40 border border-border/40 rounded-lg text-xs">
+                    <div key={m.id} className="p-2 bg-muted/40 border border-border rounded-lg text-xs">
                       <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
                         <span>{m.messageType?.toUpperCase() || "LOG"}</span>
                         <span>{new Date(m.createdAt).toLocaleString()}</span>
@@ -354,7 +354,7 @@ export function CosmicFormModal({
 
           {/* Mutation History & Audit Trail */}
           {isEdit && formConfig?.chatter && (
-            <div className="space-y-3 pt-3 border-t border-border/40">
+            <div className="space-y-3 pt-3 border-t border-border">
               <h3 className="text-xs font-bold text-primary tracking-wider uppercase flex items-center gap-2">
                 <History className="w-3.5 h-3.5 text-primary" />
                 Change History ({versions.length})
@@ -364,7 +364,7 @@ export function CosmicFormModal({
                   <p className="text-[11px] text-muted-foreground font-sans">No change history recorded.</p>
                 ) : (
                   versions.map((v) => (
-                    <div key={v.id} className="p-2 bg-muted/30 border border-border/40 rounded-lg text-xs">
+                    <div key={v.id} className="p-2 bg-muted/30 border border-border rounded-lg text-xs">
                       <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
                         <span className="text-primary font-semibold">{v.summary || "Update"}</span>
                         <span>{new Date(v.createdAt).toLocaleString()}</span>
@@ -383,7 +383,7 @@ export function CosmicFormModal({
         </form>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 px-6 py-3 border-t border-border/40 bg-muted/30">
+        <div className="flex items-center justify-end gap-3 px-6 py-3 border-t border-border bg-muted/30">
           <button
             type="button"
             onClick={onClose}

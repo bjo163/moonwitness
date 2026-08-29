@@ -457,12 +457,12 @@ export function WaveformLabView() {
         </Panel>
 
         {/* Parameter controls */}
-        <Panel level="level2" accentColor="system">
+        <Panel level="level2" accentColor="primary">
           <PanelHeader
             title="PARAMETERS"
             icon={Sliders}
             status="ADJUSTABLE"
-            accentColor="system"
+            accentColor="primary"
           />
 
           <div className="space-y-5">

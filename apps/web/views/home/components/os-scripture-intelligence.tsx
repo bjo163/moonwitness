@@ -78,7 +78,7 @@ export function OSScriptureIntelligence() {
       {/* ═══ LAYER 1: DEEP SPACE MATRIX BACKGROUND ═══════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
         <div className="theme-grid-bg absolute inset-0 opacity-30" />
-        <div className="bg-radial-gradient absolute top-1/3 left-1/2 h-[800px] w-[1000px] -translate-x-1/2 from-emerald-900/15 via-cyan-900/10 to-transparent blur-[120px]" />
+        <div className="bg-radial-gradient absolute top-1/3 left-1/2 h-[800px] w-[1000px] -translate-x-1/2 from-emerald-900/15 via-transparent to-transparent blur-[120px]" />
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,240,255,0.02)_1px,transparent_1px)] bg-[size:100%_4px]" />
       </div>
 
@@ -86,8 +86,8 @@ export function OSScriptureIntelligence() {
         {/* ═══ TOP HEADER (Blueprint 08) ══════════════════════════════════════ */}
         <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-6 xl:flex-row xl:items-start">
           <div className="max-w-2xl space-y-4">
-            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
-              <span className="rounded-xs bg-cyan-500 px-1.5 py-0.5 font-black text-black">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-border px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
+              <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-black">
                 08
               </span>
               <span>SCRIPTURE INTELLIGENCE</span>
@@ -104,7 +104,7 @@ export function OSScriptureIntelligence() {
             >
               أَفَلَا يَتَدَبَّرُونَ الْقُرْآنَ أَمْ عَلَىٰ قُلُوبٍ أَقْفَالُهَا
             </div>
-            <div className="font-sans text-[11px] text-cyan-100 italic">
+            <div className="font-sans text-[11px] text-primary italic">
               "Then do they not reflect upon the Qur'an, or are there locks upon
               [their] hearts?"{" "}
               <span className="mt-1 ml-1 block font-mono font-black text-primary not-italic xl:mt-0 xl:inline">
@@ -199,12 +199,12 @@ export function OSScriptureIntelligence() {
                     onClick={() => setActiveFilter(f)}
                     className={`flex items-center gap-1.5 rounded border px-3 py-1.5 transition-all ${
                       activeFilter === f
-                        ? "border-primary bg-cyan-500/20 text-primary shadow-sm"
+                        ? "border-primary bg-primary/10 text-primary shadow-sm"
                         : "bg-background border-white/15 text-primary hover:border-primary/50"
                     }`}
                   >
                     {activeFilter === f && (
-                      <span className="h-1.5 w-1.5 animate-ping rounded-full bg-cyan-400" />
+                      <span className="h-1.5 w-1.5 animate-ping rounded-full bg-primary" />
                     )}{" "}
                     {f}
                   </button>
@@ -330,7 +330,7 @@ export function OSScriptureIntelligence() {
                 </div>
               </div>
 
-              {/* Glowing Brain Graphic Simulation */}
+              {/* ambienting Brain Graphic Simulation */}
               <div className="mt-6 flex justify-center opacity-60 mix-blend-screen drop-shadow-sm filter">
                 <Brain className="h-24 w-24 animate-pulse text-blue-500/50" />
               </div>

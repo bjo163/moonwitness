@@ -5,7 +5,7 @@ import IrQueueJob from './models/ir-queue-job.js'
 export { loadDemoData } from './demo-data.js'
 export { views } from './views.js'
 export { CronRunner, globalCronRunner, computeNextCallDate } from './runner.js'
-export { CosmicQueue, CosmicWorker } from './queue.js'
+export { TaskQueue, TaskWorker } from './queue.js'
 export type { Job, JobOptions, JobProcessor } from './queue.js'
 export { IrCron, IrCronLog, IrQueueJob }
 

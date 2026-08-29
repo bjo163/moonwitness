@@ -38,7 +38,7 @@ export function RadarMapPanel({ rainTimestamp }: RadarMapPanelProps) {
       </MapContainer>
 
       {/* Radar Overlay Controls Badge */}
-      <div className="absolute top-3 left-3 z-[1000] rounded border border-cyan-500/30 bg-card px-3 py-1.5 font-mono text-[9px] text-cyan-300 backdrop-blur-md">
+      <div className="absolute top-3 left-3 z-[1000] rounded border border-border bg-card px-3 py-1.5 font-mono text-[9px] text-primary backdrop-blur-md">
         RAINVIEWER DOPPLER COMPOSITE {rainTimestamp > 0 ? `• TS: ${rainTimestamp}` : "• LIVE"}
       </div>
     </div>

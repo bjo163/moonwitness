@@ -99,7 +99,7 @@ export function MatriksKitabView() {
           subtitle="Menampilkan keselarasan ayat-ayat pembawa kebenaran tauhid dari Al-Qur'anul Karim, Taurat, Zabur, dan Injil dalam satu matriks komparatif ilmiah."
           operation="CROSS-SCRIPTURE-ANALYSIS"
           status="ONLINE"
-          accentColor="knowledge"
+          accentColor="primary"
         />
 
         {/* Theme Selectors */}
@@ -190,7 +190,7 @@ export function MatriksKitabView() {
                   <Compass className="h-4 w-4 text-primary" />
                   INJIL (GOSPEL)
                 </span>
-                <span className="rounded-md border border-purple-500/40 bg-purple-500/10 text-purple-500 px-2 py-0.5 font-mono text-[8px]">
+                <span className="rounded-md border border-border bg-muted text-primary px-2 py-0.5 font-mono text-[8px]">
                   {activePassage.gospel.ref}
                 </span>
               </div>

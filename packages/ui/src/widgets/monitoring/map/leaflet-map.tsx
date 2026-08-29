@@ -58,10 +58,10 @@ const flightIcon = (track: number) =>
     iconAnchor: [8, 8],
   })
 
-// Custom icon for Cyber Attacks
+// Custom icon for digital Attacks
 const cyberIcon = new L.DivIcon({
   className: "bg-transparent",
-  html: `<div class="h-4 w-4 bg-purple-500 rounded-sm rotate-45 animate-pulse shadow-sm"></div>`,
+  html: `<div class="h-4 w-4 bg-primary rounded-sm rotate-45 animate-pulse shadow-sm"></div>`,
   iconSize: [16, 16],
   iconAnchor: [8, 8],
 })
@@ -154,7 +154,7 @@ export function LeafletMap({
           </Marker>
         ))}
 
-        {/* Render Cyber Attacks */}
+        {/* Render digital Attacks */}
         {cyberAttacks.map((attack) => (
           <React.Fragment key={attack.id}>
             {/* Draw attack trajectory line */}

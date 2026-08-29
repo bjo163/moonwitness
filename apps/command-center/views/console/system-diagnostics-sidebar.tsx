@@ -11,17 +11,17 @@ export function SystemDiagnosticsSidebar() {
       label: "CORE CPU LOAD",
       val: "38.2%",
       icon: Cpu,
-      color: "text-cyan-400",
-      bg: "bg-cyan-500/10",
-      border: "border-cyan-500/30",
+      color: "text-primary",
+      bg: "bg-primary/10",
+      border: "border-border",
     },
     {
       label: "MEMORY BUFFER",
       val: "1.4 / 4.0 GB",
       icon: Database,
-      color: "text-purple-400",
-      bg: "bg-purple-500/10",
-      border: "border-purple-500/30",
+      color: "text-primary",
+      bg: "bg-muted",
+      border: "border-border",
     },
     {
       label: "NET LATENCY",
@@ -43,9 +43,9 @@ export function SystemDiagnosticsSidebar() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-xl border border-cyan-500/30 bg-black/60 p-5 shadow-sm backdrop-blur-md">
+      <div className="rounded-xl border border-border bg-black/60 p-5 shadow-sm backdrop-blur-md">
         <h3 className="mb-4 flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-white uppercase">
-          <ShieldCheck className="h-4 w-4 text-cyan-400" />
+          <ShieldCheck className="h-4 w-4 text-primary" />
           Hardware Telemetry ({TELEMETRY_METRIC_COUNT} Nodes)
         </h3>
 

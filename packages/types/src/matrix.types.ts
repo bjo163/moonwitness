@@ -1,5 +1,5 @@
 /**
- * ◈ COSMIC MATRIX ENGINE — VIEW MANIFEST TYPE SYSTEM
+ * ◈ MODEL MATRIX ENGINE — VIEW MANIFEST TYPE SYSTEM
  *
  * Declarative view configuration for the Server-Driven UI architecture.
  * Each addon package exports a `views` object mapping model names to ViewManifest.
@@ -9,11 +9,11 @@
 /** Model record representation */
 export type ModelRecord = Record<string, any>
 
-/** Available view modes in the Cosmic Matrix Engine */
+/** Available view modes in the Matrix Engine */
 export type MatrixViewMode = 'table' | 'kanban' | 'metrics'
 
-/** Accent color tokens aligned with the Deep Space Sci-Fi Divine OS palette */
-export type MatrixAccentColor = 'cyan' | 'green' | 'yellow' | 'purple' | 'pink'
+/** Semantic accent color variants */
+export type MatrixAccentColor = 'primary' | 'secondary' | 'success' | 'warning' | 'info'
 
 /** Table view configuration */
 export interface MatrixTableConfig {
@@ -45,12 +45,12 @@ export interface MatrixKanbanConfig {
 
 /** Form header action button */
 export interface MatrixFormAction {
-  /** Button label text (UPPERCASE in the Sci-Fi OS terminal) */
+  /** Button label text */
   label: string
-  /** RPC method name on the Vertex model class */
+  /** RPC method name on the model class */
   action: string
   /** Button visual variant */
-  variant?: 'primary' | 'warning' | 'danger'
+  variant?: 'primary' | 'warning' | 'destructive'
   /** Optional confirmation dialog message */
   confirm?: string
 }
@@ -94,7 +94,7 @@ export interface MatrixMetricsConfig {
 export interface ViewManifest {
   /** Default view mode when opening this model */
   defaultView: MatrixViewMode
-  /** Accent color for the Sci-Fi Deep Space theme */
+  /** Accent color for the theme */
   accentColor?: MatrixAccentColor
   /** Lucide icon name for navigation and headers */
   icon?: string

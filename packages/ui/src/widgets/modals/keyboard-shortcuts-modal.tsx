@@ -39,12 +39,12 @@ const SHORTCUTS_LIST: ShortcutItem[] = [
   },
   {
     keyCombo: "ALT + T",
-    action: "Buka Legend Panduan Tajwid Warna Neon",
+    action: "Buka Legend Panduan Tajwid Berwarna",
     category: "READING",
   },
   {
     keyCombo: "?",
-    action: "Tampilkan Modal Panduan Shortcuts HUD Ini",
+    action: "Tampilkan Modal Panduan Pintasan Ini",
     category: "SYSTEM",
   },
 ]

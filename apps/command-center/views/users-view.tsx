@@ -9,7 +9,7 @@ function MetricWidget({ label, value, sub, color, icon }: { label: string; value
   const colorMap = {
     cyan: { text: "text-primary", border: "border-primary/30", sub: "text-primary/80" },
     emerald: { text: "text-emerald-500", border: "border-emerald-500/30", sub: "text-emerald-500/80" },
-    purple: { text: "text-purple-500", border: "border-purple-500/30", sub: "text-purple-500/80" },
+    purple: { text: "text-primary", border: "border-border", sub: "text-primary/80" },
     amber: { text: "text-amber-500", border: "border-amber-500/30", sub: "text-amber-500/80" },
   }
   const c = colorMap[color]
@@ -43,11 +43,11 @@ export function UsersView() {
         const displayName = row.nickname || row.login || "Unavailable"
         return (
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-cyan-500/30 bg-cyan-900/50">
+            <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-border bg-muted">
               {row.avatarUrl || row.avatar ? (
                 <img src={row.avatarUrl || row.avatar} alt={displayName} className="h-full w-full object-cover" />
               ) : (
-                <div className="text-xs text-cyan-400">{displayName.charAt(0).toUpperCase()}</div>
+                <div className="text-xs text-primary">{displayName.charAt(0).toUpperCase()}</div>
               )}
             </div>
             <div className="flex flex-col">
@@ -121,7 +121,7 @@ export function UsersView() {
         return (
           <div className="flex flex-wrap gap-1">
             {roleNames.slice(0, 3).map((role: string, i: number) => (
-              <span key={i} className="rounded border border-purple-900/30 bg-purple-900/20 px-1.5 py-0.5 text-[10px] text-purple-400">
+              <span key={i} className="rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] text-primary">
                 {role}
               </span>
             ))}
@@ -136,9 +136,9 @@ export function UsersView() {
 
   const topWidgets = usersLoading ? (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <div className="h-24 animate-pulse rounded-xl border border-cyan-900/30 bg-black/40" />
+      <div className="h-24 animate-pulse rounded-xl border border-border bg-black/40" />
       <div className="h-24 animate-pulse rounded-xl border border-emerald-900/30 bg-black/40" />
-      <div className="h-24 animate-pulse rounded-xl border border-purple-900/30 bg-black/40" />
+      <div className="h-24 animate-pulse rounded-xl border border-border bg-black/40" />
       <div className="h-24 animate-pulse rounded-xl border border-amber-900/30 bg-black/40" />
     </div>
   ) : (
@@ -167,7 +167,7 @@ export function UsersView() {
           </div>
           <div className="flex items-center justify-between">
             <span>2FA Enabled</span>
-            <span className="font-semibold text-purple-500">{twoFactorUsers}</span>
+            <span className="font-semibold text-primary">{twoFactorUsers}</span>
           </div>
         </div>
       </div>
@@ -191,7 +191,7 @@ export function UsersView() {
         subtitle="Manage system users, login, level, and 2FA status."
         operation="USER-MGMT"
         status="ONLINE"
-        accentColor="system"
+        accentColor="primary"
       />
 
       <MoonDataTable

@@ -419,7 +419,7 @@ export function IntelligenceGraphView() {
       />
 
       <div className="rounded-xl border border-border/40 bg-card/90 bg-background relative flex h-[700px] flex-col overflow-hidden border-2 border-primary/50 shadow-sm">
-        {/* Top Bar HUD */}
+        {/* Top Bar display */}
         <div className="pointer-events-none absolute top-0 left-0 z-10 flex w-full items-center justify-between p-4">
           <div className="flex items-center gap-3">
             <Network className="h-5 w-5 animate-pulse text-primary" />
@@ -448,7 +448,7 @@ export function IntelligenceGraphView() {
               <span className="h-2 w-2 rounded-full bg-amber-500" /> KONSEP
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-purple-500" />{" "}
+              <span className="h-2 w-2 rounded-full bg-primary" />{" "}
               KITAB/SUMBER
             </span>
           </div>
@@ -460,7 +460,7 @@ export function IntelligenceGraphView() {
           className="z-0 h-full w-full cursor-crosshair"
         />
 
-        {/* Selected Node HUD */}
+        {/* Selected Node display */}
         {hoveredNode && (
           <div className="pointer-events-none absolute right-6 bottom-6 z-10 max-w-[300px] border border-primary bg-black/80 p-4 shadow-sm backdrop-blur-md">
             <div className="mb-2 flex items-center gap-2 border-b border-primary/20 pb-2">

@@ -79,7 +79,7 @@ export function DailyTransmissionView() {
         style={{ animationDelay: "200ms" }}
       >
         <h2 className="flex items-center gap-3 text-xs font-medium tracking-[0.3em] text-primary uppercase">
-          <span className="h-px w-8 bg-cyan-500/50" />
+          <span className="h-px w-8 bg-primary/10" />
           Active Transmission
         </h2>
         <DailyInspirationClient />
@@ -98,7 +98,7 @@ export function DailyTransmissionView() {
 
           <div className="flex items-center gap-4 rounded-xl border border-white/5 bg-black/40 px-4 py-2 text-[10px] font-medium tracking-widest uppercase backdrop-blur-md">
             <span className="text-primary">Unlocked Verses</span>
-            <span className="text-xl font-light text-cyan-400 drop-shadow-sm">
+            <span className="text-xl font-light text-primary drop-shadow-sm">
               {totalCount} / 6.236
             </span>
           </div>
@@ -124,12 +124,12 @@ export function DailyTransmissionView() {
             {history.map((item) => (
               <div
                 key={`${item.sequenceNumber}-${item.dateStr}-${item.period.code}`}
-                className="bg-background/80 space-y-6 rounded-2xl border border-white/5 p-6 shadow-sm backdrop-blur-2xl transition-all hover:border-cyan-500/20 sm:p-8"
+                className="bg-background/80 space-y-6 rounded-2xl border border-white/5 p-6 shadow-sm backdrop-blur-2xl transition-all hover:border-border sm:p-8"
               >
                 {/* Item Header */}
                 <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/5 pb-4">
                   <div className="flex items-center gap-4">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-cyan-500/20 bg-cyan-500/10 text-xs font-medium text-cyan-400 shadow-sm">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-primary/10 text-xs font-medium text-primary shadow-sm">
                       #{item.sequenceNumber}
                     </span>
                     <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[9px] font-medium tracking-widest text-primary uppercase">
@@ -180,9 +180,9 @@ export function DailyTransmissionView() {
                     {/* 2 Paired Asmaul Husna */}
                     <div className="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-2">
                       {item.asmaulSurah && (
-                        <div className="flex items-center justify-between gap-4 rounded-lg border border-cyan-500/10 bg-cyan-500/5 p-4">
+                        <div className="flex items-center justify-between gap-4 rounded-lg border border-border bg-primary/10 p-4">
                           <div>
-                            <span className="mb-1 block text-[9px] font-medium tracking-widest text-cyan-500/70 uppercase">
+                            <span className="mb-1 block text-[9px] font-medium tracking-widest text-primary/70 uppercase">
                               SURAH PAIR RUNIC #{item.ayah.surahNumber}
                             </span>
                             <span className="block text-xs font-medium text-foreground">
@@ -193,7 +193,7 @@ export function DailyTransmissionView() {
                               &ldquo;{item.asmaulSurah.translation_id}&rdquo;
                             </span>
                           </div>
-                          <span className="font-serif text-xl font-bold text-cyan-400 drop-shadow-sm">
+                          <span className="font-serif text-xl font-bold text-primary drop-shadow-sm">
                             {item.asmaulSurah.name_arabic}
                           </span>
                         </div>

@@ -61,7 +61,7 @@ export function HomeCelestialFeedWidget() {
             />
           </div>
           <div className="mt-1.5 flex w-full items-center justify-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-sm" />
+            <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-sm" />
             <span className="text-[9px] font-bold tracking-wider text-primary uppercase">
               LUNAR OPTICS
             </span>
@@ -85,7 +85,7 @@ export function HomeCelestialFeedWidget() {
             />
           </div>
           <div className="mt-1.5 flex w-full items-center justify-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-500 shadow-sm" />
+            <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-sm" />
             <span className="text-[9px] font-bold tracking-wider text-primary uppercase">
               GOES-19 EARTH
             </span>

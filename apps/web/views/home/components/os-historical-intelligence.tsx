@@ -137,7 +137,7 @@ export function OSHistoricalIntelligence() {
       id="historical-intelligence"
       className="bg-background relative z-10 overflow-hidden border-b border-primary/30 py-20 font-mono text-foreground"
     >
-      {/* ═══ LAYER 1: DEEP SPACE SCI-FI GRADIENT ═════════════════════════════ */}
+      {/* ═══ LAYER 1: DEEP SPACE modern GRADIENT ═════════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
         <div className="theme-grid-bg absolute inset-0 opacity-25" />
         <div className="bg-radial-gradient absolute top-1/2 left-1/4 h-[800px] w-[800px] from-teal-900/15 via-transparent to-transparent blur-[120px]" />
@@ -258,7 +258,7 @@ export function OSHistoricalIntelligence() {
                 </div>
               </div>
               <div className="relative mt-4 h-1 w-full rounded-full bg-white/10">
-                <div className="absolute right-[5%] left-[10%] h-full bg-gradient-to-r from-teal-400 to-cyan-400 shadow-sm" />
+                <div className="absolute right-[5%] left-[10%] h-full bg-gradient-to-r from-teal-400 to-transparent shadow-sm" />
                 <div className="absolute top-1/2 left-[10%] h-3 w-3 -translate-y-1/2 rounded-full bg-white shadow-sm" />
                 <div className="absolute top-1/2 right-[5%] h-3 w-3 -translate-y-1/2 rounded-full bg-white shadow-sm" />
               </div>

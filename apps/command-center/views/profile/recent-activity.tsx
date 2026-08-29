@@ -39,22 +39,22 @@ export function RecentActivity() {
       time: "15:48 WIB",
       icon: Brain,
       tag: "KHIDRA AI",
-      color: "text-cyan-400 border-cyan-400/30",
+      color: "text-primary border-border",
     },
   ]
 
   return (
-    <div className="h-full rounded-xl border border-cyan-500/20 bg-black/40 p-6 backdrop-blur-md">
+    <div className="h-full rounded-xl border border-border bg-black/40 p-6 backdrop-blur-md">
       <div className="mb-6 flex items-center justify-between">
-        <h3 className="font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
+        <h3 className="font-sans text-[10px] font-bold tracking-widest text-primary/70 uppercase">
           Recent Activity
         </h3>
-        <button className="font-sans text-[9px] text-cyan-500 transition-colors hover:text-cyan-400">
+        <button className="font-sans text-[9px] text-primary transition-colors hover:text-primary">
           View All
         </button>
       </div>
 
-      <div className="relative space-y-6 before:absolute before:inset-0 before:ml-5 before:h-full before:w-0.5 before:-translate-x-px before:bg-gradient-to-b before:from-cyan-500/50 before:via-cyan-500/10 before:to-transparent md:before:mx-auto md:before:translate-x-0">
+      <div className="relative space-y-6 before:absolute before:inset-0 before:ml-5 before:h-full before:w-0.5 before:-translate-x-px before:bg-gradient-to-b before:from-primary/10 before:via-transparent before:to-transparent md:before:mx-auto md:before:translate-x-0">
         {activities.map((act, i) => (
           <div
             key={i}
@@ -88,7 +88,7 @@ export function RecentActivity() {
                     {act.description}
                   </p>
                 </div>
-                <div className="hidden items-center gap-1 self-start rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2 py-1 font-sans text-[9px] whitespace-nowrap text-cyan-500/70 sm:flex xl:self-auto">
+                <div className="hidden items-center gap-1 self-start rounded-full border border-border bg-primary/10 px-2 py-1 font-sans text-[9px] whitespace-nowrap text-primary/70 sm:flex xl:self-auto">
                   {act.tag}
                   <svg
                     className="h-2 w-2 shrink-0"

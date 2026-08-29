@@ -153,11 +153,11 @@ const HADITH_SNIPPETS = [
 
 const AudioWave = () => (
   <div className="flex items-center justify-center gap-1.5 opacity-80">
-    <div className="h-4 w-1 animate-[audioWave_0.9s_ease-in-out_infinite] rounded-full bg-cyan-400" />
-    <div className="h-4 w-1 animate-[audioWave_1.2s_ease-in-out_infinite_0.2s] rounded-full bg-cyan-400" />
-    <div className="h-4 w-1 animate-[audioWave_0.8s_ease-in-out_infinite_0.4s] rounded-full bg-cyan-400" />
-    <div className="h-4 w-1 animate-[audioWave_1.1s_ease-in-out_infinite_0.1s] rounded-full bg-cyan-400" />
-    <div className="h-4 w-1 animate-[audioWave_1.3s_ease-in-out_infinite_0.3s] rounded-full bg-cyan-400" />
+    <div className="h-4 w-1 animate-[audioWave_0.9s_ease-in-out_infinite] rounded-full bg-primary" />
+    <div className="h-4 w-1 animate-[audioWave_1.2s_ease-in-out_infinite_0.2s] rounded-full bg-primary" />
+    <div className="h-4 w-1 animate-[audioWave_0.8s_ease-in-out_infinite_0.4s] rounded-full bg-primary" />
+    <div className="h-4 w-1 animate-[audioWave_1.1s_ease-in-out_infinite_0.1s] rounded-full bg-primary" />
+    <div className="h-4 w-1 animate-[audioWave_1.3s_ease-in-out_infinite_0.3s] rounded-full bg-primary" />
   </div>
 )
 
@@ -247,18 +247,18 @@ const DivineMatrixRain = ({ active }: { active: boolean }) => {
       <MatrixLayer
         words={TRAITS}
         delay={3}
-        colorClass="text-purple-400/50 font-sans tracking-widest"
+        colorClass="text-primary/50 font-sans tracking-widest"
         shadowColor="rgba(192, 132, 252, 0.5)"
         colCount={5}
         speedMult={1.5}
         sizeClasses={["text-xl", "text-2xl"]}
       />
 
-      {/* Phase 2: Ayah Words (Starts at 6s, medium speed, glowing cyan) */}
+      {/* Phase 2: Ayah Words (Starts at 6s, medium speed, ambienting cyan) */}
       <MatrixLayer
         words={AYAH_WORDS}
         delay={6}
-        colorClass="text-cyan-400/60 font-mono tracking-widest"
+        colorClass="text-primary/60 font-mono tracking-widest"
         shadowColor="rgba(34, 211, 238, 0.8)"
         colCount={6}
         speedMult={1.2}
@@ -280,7 +280,7 @@ const DivineMatrixRain = ({ active }: { active: boolean }) => {
       <MatrixLayer
         words={NAMES_OF_ALLAH}
         delay={15}
-        colorClass="text-cyan-200 font-arabic"
+        colorClass="text-primary font-arabic"
         shadowColor="rgba(165, 243, 252, 1)"
         colCount={10}
         speedMult={0.5}
@@ -720,7 +720,7 @@ export function HomeHeroSection() {
           </div>
 
           <div className="absolute inset-0 animate-[pulse_0.5s_infinite] bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.1)_0%,transparent_70%)]" />
-          <div className="absolute inset-0 animate-pulse border-[4px] border-cyan-400/50 shadow-sm" />
+          <div className="absolute inset-0 animate-pulse border-[4px] border-border shadow-sm" />
           <div className="absolute inset-0 bg-[linear-gradient(rgba(0,240,255,0.03)_1px,transparent_1px)] bg-[length:100%_4px]" />
           <div className="pointer-events-none absolute inset-0 flex animate-[smoothSubliminal_2s_infinite] items-center justify-center">
             <span className="font-sans text-5xl font-black tracking-[0.8em] text-white drop-shadow-sm md:text-8xl">
@@ -748,27 +748,27 @@ export function HomeHeroSection() {
 
           {extraDivineData && (
             <>
-              <div className="font-arabic pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 -rotate-90 animate-pulse text-4xl whitespace-nowrap text-cyan-500/30 md:left-12 md:text-6xl">
+              <div className="font-arabic pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 -rotate-90 animate-pulse text-4xl whitespace-nowrap text-primary/30 md:left-12 md:text-6xl">
                 {extraDivineData.asmaulLeft}
               </div>
-              <div className="font-arabic pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 rotate-90 animate-pulse text-4xl whitespace-nowrap text-cyan-500/30 md:right-12 md:text-6xl">
+              <div className="font-arabic pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 rotate-90 animate-pulse text-4xl whitespace-nowrap text-primary/30 md:right-12 md:text-6xl">
                 {extraDivineData.asmaulRight}
               </div>
 
               <div className="pointer-events-none absolute top-12 left-1/2 flex w-full max-w-2xl -translate-x-1/2 flex-col items-center gap-1 px-4 opacity-60">
-                <div className="font-mono text-[10px] tracking-[0.3em] text-cyan-400">
+                <div className="font-mono text-[10px] tracking-[0.3em] text-primary">
                   {extraDivineData.bookQuote.book}
                 </div>
-                <div className="font-sans text-xs tracking-widest text-cyan-100 italic">
+                <div className="font-sans text-xs tracking-widest text-primary italic">
                   "{extraDivineData.bookQuote.text}"
                 </div>
               </div>
 
               <div className="pointer-events-none absolute bottom-28 left-1/2 flex w-full max-w-3xl -translate-x-1/2 flex-col items-center gap-1 px-4 opacity-60">
-                <div className="font-mono text-[10px] tracking-[0.3em] text-cyan-400">
+                <div className="font-mono text-[10px] tracking-[0.3em] text-primary">
                   PROPHETIC TRADITION (HADITH)
                 </div>
-                <div className="font-sans text-xs tracking-widest text-cyan-100 italic">
+                <div className="font-sans text-xs tracking-widest text-primary italic">
                   "{extraDivineData.hadith}"
                 </div>
               </div>
@@ -778,7 +778,7 @@ export function HomeHeroSection() {
           <div className="flex w-full max-w-4xl flex-col items-center gap-8">
             <div className="flex flex-col items-center gap-3">
               <AudioWave />
-              <div className="font-mono text-[9px] tracking-[0.4em] text-cyan-500/70 uppercase">
+              <div className="font-mono text-[9px] tracking-[0.4em] text-primary/70 uppercase">
                 Receiving Divine Frequency
               </div>
             </div>
@@ -789,11 +789,11 @@ export function HomeHeroSection() {
             >
               {dailyData.ayah?.textArabic}
             </h2>
-            <div className="rounded-full border border-cyan-500/30 bg-cyan-950/50 px-6 py-2 font-mono text-sm tracking-widest text-cyan-300 shadow-sm">
+            <div className="rounded-full border border-border bg-muted px-6 py-2 font-mono text-sm tracking-widest text-primary shadow-sm">
               Q.S {dailyData.ayah?.surahName?.toUpperCase()}{" "}
               {dailyData.ayah?.surahNumber}:{dailyData.ayah?.ayahNumber}
             </div>
-            <p className="max-w-2xl font-sans text-sm leading-relaxed font-light tracking-wide text-cyan-50 italic opacity-90 md:text-base lg:text-lg">
+            <p className="max-w-2xl font-sans text-sm leading-relaxed font-light tracking-wide text-primary italic opacity-90 md:text-base lg:text-lg">
               "{dailyData.ayah?.translationId}"
             </p>
           </div>
@@ -843,13 +843,13 @@ export function HomeHeroSection() {
         <div className="theme-grid-bg absolute inset-0 opacity-15" />
       </div>
 
-      {/* ═══ LEVEL UP HUD NOTIFICATION (Sleek, Minimalist, Top-Left) ═══ */}
+      {/* ═══ LEVEL UP display NOTIFICATION (Sleek, Minimalist, Top-Left) ═══ */}
       {isLevelUp && (
         <div className="pointer-events-none fixed top-24 left-10 z-[1000] flex flex-col items-start">
-          <div className="relative flex w-[280px] animate-in flex-col gap-3 rounded-lg border border-cyan-500/30 bg-black/40 p-5 shadow-sm backdrop-blur-md duration-700 ease-out fill-mode-forwards slide-in-from-left-10 fade-in">
+          <div className="relative flex w-[280px] animate-in flex-col gap-3 rounded-lg border border-border bg-black/40 p-5 shadow-sm backdrop-blur-md duration-700 ease-out fill-mode-forwards slide-in-from-left-10 fade-in">
             <div className="flex items-center gap-2">
-              <div className="h-2 w-2 animate-pulse rounded-full bg-cyan-400 shadow-sm" />
-              <div className="font-mono text-[10px] font-bold tracking-[0.3em] text-cyan-400">
+              <div className="h-2 w-2 animate-pulse rounded-full bg-primary shadow-sm" />
+              <div className="font-mono text-[10px] font-bold tracking-[0.3em] text-primary">
                 SYSTEM OVERRIDE COMPLETE
               </div>
             </div>
@@ -858,24 +858,24 @@ export function HomeHeroSection() {
               RANK ASCENDED
             </h1>
 
-            <div className="mt-2 flex w-full flex-col gap-2 font-mono text-[11px] text-cyan-100/70">
-              <div className="flex animate-in justify-between border-b border-cyan-500/10 pb-1 delay-[300ms] fill-mode-both fade-in slide-in-from-left-2">
+            <div className="mt-2 flex w-full flex-col gap-2 font-mono text-[11px] text-primary/70">
+              <div className="flex animate-in justify-between border-b border-border pb-1 delay-[300ms] fill-mode-both fade-in slide-in-from-left-2">
                 <span className="tracking-widest">FAITH SYNC</span>
-                <span className="text-cyan-300">+{xpData.iman} XP</span>
+                <span className="text-primary">+{xpData.iman} XP</span>
               </div>
-              <div className="flex animate-in justify-between border-b border-cyan-500/10 pb-1 delay-[600ms] fill-mode-both fade-in slide-in-from-left-2">
+              <div className="flex animate-in justify-between border-b border-border pb-1 delay-[600ms] fill-mode-both fade-in slide-in-from-left-2">
                 <span className="tracking-widest">PIETY RESONANCE</span>
-                <span className="text-cyan-300">+{xpData.taqwa} XP</span>
+                <span className="text-primary">+{xpData.taqwa} XP</span>
               </div>
-              <div className="flex animate-in justify-between border-b border-cyan-500/10 pb-1 delay-[900ms] fill-mode-both fade-in slide-in-from-left-2">
+              <div className="flex animate-in justify-between border-b border-border pb-1 delay-[900ms] fill-mode-both fade-in slide-in-from-left-2">
                 <span className="tracking-widest">KNOWLEDGE DB</span>
-                <span className="text-cyan-300">+{xpData.ilm} XP</span>
+                <span className="text-primary">+{xpData.ilm} XP</span>
               </div>
             </div>
 
             {/* Futuristic Data Bar */}
-            <div className="mt-2 w-full border border-cyan-500/20 bg-black/60 p-0.5">
-              <div className="h-1 w-0 animate-[fillBar_2.5s_ease-out_forwards_1.2s] bg-cyan-400 shadow-sm" />
+            <div className="mt-2 w-full border border-border bg-black/60 p-0.5">
+              <div className="h-1 w-0 animate-[fillBar_2.5s_ease-out_forwards_1.2s] bg-primary shadow-sm" />
             </div>
           </div>
         </div>
@@ -884,7 +884,7 @@ export function HomeHeroSection() {
       {/* Foreground Content */}
       <main className="relative z-20 mx-auto my-8 flex w-full max-w-7xl flex-1 flex-col justify-center px-6 sm:my-16 sm:px-10">
         <div className="mb-4">
-          <h2 className="font-mono text-[10px] font-black tracking-[0.3em] text-cyan-500/50 uppercase">
+          <h2 className="font-mono text-[10px] font-black tracking-[0.3em] text-primary/50 uppercase">
             [ SECTION 01 : HERO COMMAND ]
           </h2>
         </div>

@@ -40,12 +40,12 @@ export function OSAnalyticsInsights() {
   return (
     <section
       id="analytics"
-      className="bg-background relative z-10 overflow-hidden border-b border-purple-500/30 py-20 font-mono text-foreground"
+      className="bg-background relative z-10 overflow-hidden border-b border-border py-20 font-mono text-foreground"
     >
       {/* ═══ LAYER 1: DEEP SPACE MATRIX BACKGROUND ═══════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
         <div className="theme-grid-bg absolute inset-0 opacity-30" />
-        <div className="bg-radial-gradient absolute top-1/4 right-1/4 h-[800px] w-[800px] from-purple-900/15 via-blue-900/10 to-transparent blur-[120px]" />
+        <div className="bg-radial-gradient absolute top-1/4 right-1/4 h-[800px] w-[800px] from-primary/10 via-blue-900/10 to-transparent blur-[120px]" />
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(168,85,247,0.02)_1px,transparent_1px)] bg-[size:100%_4px]" />
       </div>
 
@@ -53,8 +53,8 @@ export function OSAnalyticsInsights() {
         {/* ═══ TOP HEADER (Blueprint 09) ══════════════════════════════════════ */}
         <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-6 lg:flex-row lg:items-end">
           <div className="max-w-xl space-y-4">
-            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-purple-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-purple-300 uppercase shadow-sm">
-              <span className="rounded-xs bg-purple-500 px-1.5 py-0.5 font-black text-black">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-border px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
+              <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-black">
                 09
               </span>
               <span>ANALYTICS & INSIGHTS</span>
@@ -222,7 +222,7 @@ export function OSAnalyticsInsights() {
                   style={{ transform: "rotate(45deg)" }}
                 />
                 <div
-                  className="absolute inset-2 rounded-full border-[6px] border-purple-500 border-b-transparent border-l-transparent"
+                  className="absolute inset-2 rounded-full border-[6px] border-border border-b-transparent border-l-transparent"
                   style={{ transform: "rotate(-20deg)" }}
                 />
                 <div
@@ -290,7 +290,7 @@ export function OSAnalyticsInsights() {
               </div>
             </div>
 
-            <button className="mt-4 flex w-full items-center justify-center gap-2 rounded border border-cyan-500/40 bg-transparent py-3 text-[10px] font-black tracking-widest text-primary uppercase transition-colors hover:bg-primary/10">
+            <button className="mt-4 flex w-full items-center justify-center gap-2 rounded border border-border bg-transparent py-3 text-[10px] font-black tracking-widest text-primary uppercase transition-colors hover:bg-primary/10">
               VIEW DETAILED ANALYTICS <ArrowRight className="h-3.5 w-3.5" />
             </button>
           </div>
@@ -304,7 +304,7 @@ export function OSAnalyticsInsights() {
               </div>
 
               <div className="mb-6 flex gap-2 text-[9px] font-bold tracking-wider">
-                <button className="flex-1 rounded border border-cyan-500/40 bg-primary/20 py-1.5 text-primary">
+                <button className="flex-1 rounded border border-border bg-primary/20 py-1.5 text-primary">
                   7 DAYS
                 </button>
                 <button className="flex-1 rounded border border-white/10 bg-transparent py-1.5 text-primary transition-colors hover:border-white/30">
@@ -384,7 +384,7 @@ export function OSAnalyticsInsights() {
               {/* Chart Legend */}
               <div className="mt-4 flex items-center justify-between text-[8px] font-bold tracking-wider text-white uppercase">
                 <span className="flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />{" "}
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />{" "}
                   READING
                 </span>
                 <span className="flex items-center gap-1.5">
@@ -392,7 +392,7 @@ export function OSAnalyticsInsights() {
                   STUDY
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-purple-400" />{" "}
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />{" "}
                   RESEARCH
                 </span>
                 <span className="flex items-center gap-1.5">
@@ -522,7 +522,7 @@ export function OSAnalyticsInsights() {
                   style={{ transform: "rotate(45deg)" }}
                 />
                 <div
-                  className="absolute inset-0 rounded-full border-[6px] border-purple-500 border-b-transparent border-l-transparent"
+                  className="absolute inset-0 rounded-full border-[6px] border-border border-b-transparent border-l-transparent"
                   style={{ transform: "rotate(-45deg)" }}
                 />
                 <div
@@ -705,7 +705,7 @@ export function OSAnalyticsInsights() {
             ].map((h, i) => (
               <div
                 key={i}
-                className="w-0.5 bg-cyan-400"
+                className="w-0.5 bg-primary"
                 style={{ height: `${h}px` }}
               />
             ))}

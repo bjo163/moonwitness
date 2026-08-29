@@ -6,7 +6,7 @@ export function ObservatoryRightColumn({ obs }: { obs: any }) {
   return (
     <div className="flex flex-col justify-between space-y-5 lg:col-span-3">
       {/* Upcoming Events List */}
-      <div className="bg-background/40 hover:bg-background/60 space-y-3.5 rounded-xl border border-cyan-500/30 p-5 shadow-sm backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/50">
+      <div className="bg-background/40 hover:bg-background/60 space-y-3.5 rounded-xl border border-border p-5 shadow-sm backdrop-blur-xl transition-all duration-500 hover:border-border">
         <div className="flex items-center justify-between border-b border-white/10 pb-2 text-xs font-black tracking-wider text-primary uppercase">
           <span>| UPCOMING EVENTS</span>
           <Sparkles className="h-3.5 w-3.5 animate-pulse text-amber-400" />

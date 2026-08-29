@@ -28,7 +28,7 @@ export function ProfileCard({
 
   return (
     <div className="relative overflow-hidden rounded-xl border border-primary/30 bg-card/90 p-6 shadow-sm backdrop-blur-md">
-      {/* Background Grid & Glow */}
+      {/* Background Grid & ambient */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#0891b211_1px,transparent_1px),linear-gradient(to_bottom,#0891b211_1px,transparent_1px)] bg-[size:1rem_1rem]"></div>
       <div className="absolute top-0 right-0 h-64 w-64 translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-[80px]"></div>
 

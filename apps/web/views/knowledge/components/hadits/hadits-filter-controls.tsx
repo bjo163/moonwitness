@@ -36,7 +36,7 @@ export function HaditsFilterControls({
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search by keyword, narrator, book, or number..."
-          className="w-full rounded-xl border border-white/10 bg-card py-2.5 pr-4 pl-10 text-xs text-white placeholder-white/30 transition-all outline-none focus:border-cyan-500/50 focus:bg-card"
+          className="w-full rounded-xl border border-white/10 bg-card py-2.5 pr-4 pl-10 text-xs text-white placeholder-white/30 transition-all outline-none focus:border-border focus:bg-card"
         />
       </div>
 
@@ -48,7 +48,7 @@ export function HaditsFilterControls({
             onClick={() => onGradeChange(grade)}
             className={`rounded-lg border px-3 py-1.5 font-mono text-[10px] font-bold uppercase transition-all ${
               selectedGrade === grade
-                ? "border-cyan-500/50 bg-cyan-500/20 text-cyan-300 shadow-sm"
+                ? "border-border bg-primary/10 text-primary shadow-sm"
                 : "border-white/5 bg-card text-white/50 hover:border-white/20 hover:text-white"
             }`}
           >

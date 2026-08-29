@@ -73,7 +73,7 @@ export function AnalisisTrenView() {
       <div className="mx-auto max-w-5xl space-y-6 px-4 sm:px-6">
         {/* System Breadcrumb */}
 
-        {/* Tactical Context Block */}
+        {/* strategic Context Block */}
         <ContextBlock
           title={t("TABAYYUN TREND ANALYZER", "ANALISIS TREN TABAYYUN")}
           subtitle={t(
@@ -82,7 +82,7 @@ export function AnalisisTrenView() {
           )}
           operation="TABAYYUN-VERIFY-ENGINE"
           status="ONLINE"
-          accentColor="celestial"
+          accentColor="warning"
         />
 
         {/* Trend Visualizations */}
@@ -90,7 +90,7 @@ export function AnalisisTrenView() {
           <MetricChart
             title="TABAYYUN INDEX DISTRIBUTION"
             subtitle="Haqq vs Batil verification ratio over 30 days"
-            accentColor="celestial"
+            accentColor="warning"
             height={128}
             data={[
               { label: "W1", value: 65 },
@@ -115,12 +115,12 @@ export function AnalisisTrenView() {
         </div>
 
         {/* Live Trends Catalog */}
-        <Panel level="level2" accentColor="celestial">
+        <Panel level="level2" accentColor="warning">
           <PanelHeader
             title="// VIRAL TRENDS & TABAYYUN VERIFICATION MATRIX"
             status="ACTIVE"
             icon={Flame}
-            accentColor="celestial"
+            accentColor="warning"
             subtitle="Verified information telemetry filtered through Quranic ethics (Q.S Al-Hujurat 49:6)."
           />
 
@@ -132,7 +132,7 @@ export function AnalisisTrenView() {
                 "HAQQ INDEX",
                 "STATUS",
               ]}
-              accentColor="celestial"
+              accentColor="warning"
               rows={liveTrends.map((tr) => [
                 <div key="1" className="flex max-w-xs flex-col gap-1">
                   <span className="text-[9px] font-bold tracking-wider text-accent">

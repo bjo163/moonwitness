@@ -12,9 +12,9 @@ export type LogItem = {
 function getLogSenderStyle(sender: LogItem["sender"]) {
   switch (sender) {
     case "SYSTEM":
-      return "text-cyan-400 font-bold border border-cyan-500/30 bg-cyan-500/10 px-1.5 py-0.5 rounded text-[10px]"
+      return "text-primary font-bold border border-border bg-primary/10 px-1.5 py-0.5 rounded text-[10px]"
     case "KHIDRA_AI":
-      return "text-purple-400 font-bold border border-purple-500/30 bg-purple-500/10 px-1.5 py-0.5 rounded text-[10px]"
+      return "text-primary font-bold border border-border bg-muted px-1.5 py-0.5 rounded text-[10px]"
     case "SUCCESS":
       return "text-emerald-400 font-bold border border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0.5 rounded text-[10px]"
     case "WARN":
@@ -56,7 +56,7 @@ export function TerminalLogViewer({ logs }: { logs: LogItem[] }) {
           <p
             className={`font-mono leading-relaxed break-words ${
               item.sender === "USER"
-                ? "font-semibold text-cyan-300"
+                ? "font-semibold text-primary"
                 : "text-gray-300"
             }`}
           >

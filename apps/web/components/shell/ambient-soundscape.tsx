@@ -11,7 +11,7 @@ type AmbientTrack = {
 }
 
 const AMBIENT_PRESETS: AmbientTrack[] = [
-  { id: "cosmic", name: "Cosmic Space Hum", freq: 108, type: "sine" },
+  { id: "cosmic", name: "Space Ambient", freq: 108, type: "sine" },
   { id: "rain", name: "Sacred Rain Frequency", freq: 174, type: "triangle" },
   { id: "oasis", name: "Oasis Stream Harmony", freq: 285, type: "sine" },
   { id: "breeze", name: "Desert Night Breeze", freq: 432, type: "sine" },

@@ -28,14 +28,14 @@ export function HaditsCompendiumsBar({ totalHadiths }: HaditsCompendiumsBarProps
     ? data.books.map((b: any, i: number) => ({
         n: b.name,
         v: (b.totalItems || 0).toLocaleString(),
-        c: ["bg-emerald-500", "bg-blue-500", "bg-amber-500", "bg-cyan-500"][i % 4],
+        c: ["bg-emerald-500", "bg-blue-500", "bg-amber-500", "bg-primary"][i % 4],
       }))
     : DEFAULT_HADITH_COMPENDIUMS
 
   return (
     <div className="border-b border-white/10 bg-muted py-2 px-4 shadow-inner">
       <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-4 overflow-x-auto text-[10px] text-white/50 no-scrollbar">
-        <div className="flex shrink-0 items-center gap-2 font-mono text-cyan-400">
+        <div className="flex shrink-0 items-center gap-2 font-mono text-primary">
           <Database className="h-3.5 w-3.5" />
           <span className="font-black">TOTAL CORPUS:</span>
           <span className="font-bold text-white">{totalHadiths.toLocaleString()} HADITHS</span>

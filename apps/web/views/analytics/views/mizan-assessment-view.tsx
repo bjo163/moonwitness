@@ -55,9 +55,9 @@ export function MizanAssessmentView() {
       shadow: "shadow-primary/30",
     },
     purple: {
-      text: "text-purple-500",
-      border: "border-purple-500",
-      bg: "bg-purple-500",
+      text: "text-primary",
+      border: "border-border",
+      bg: "bg-primary",
       shadow: "shadow-purple-500/30",
     },
     amber: {
@@ -78,8 +78,8 @@ export function MizanAssessmentView() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 px-4 pb-20 md:px-0">
-      {/* HUD Context Block */}
-      <div className="rounded-xl border border-purple-500/30 bg-card/80 p-6 shadow-purple-500/30 backdrop-blur-md">
+      {/* display Context Block */}
+      <div className="rounded-xl border border-border bg-card/80 p-6 shadow-purple-500/30 backdrop-blur-md">
         <div className="mb-4 flex items-start justify-between">
           <div>
             <h1 className="font-sans text-3xl font-black tracking-wider text-white uppercase">
@@ -94,7 +94,7 @@ export function MizanAssessmentView() {
             <div className="font-mono text-[10px] tracking-widest text-slate-400">
               OPERATION
             </div>
-            <div className="font-mono text-xs font-bold text-purple-500">
+            <div className="font-mono text-xs font-bold text-primary">
               SIMULATION-MODE
             </div>
           </div>
@@ -144,18 +144,18 @@ export function MizanAssessmentView() {
             <button
               onClick={() => setBalanceSatisfied(!balanceSatisfied)}
               aria-pressed={balanceSatisfied}
-              className={`rounded-xl flex items-center gap-4 border p-4 transition-all duration-300 ${balanceSatisfied ? "-translate-y-0.5 border-purple-500/50 bg-purple-500/10 shadow-purple-500/30" : "border-slate-800/50 bg-black/40 hover:border-purple-500/50"}`}
+              className={`rounded-xl flex items-center gap-4 border p-4 transition-all duration-300 ${balanceSatisfied ? "-translate-y-0.5 border-border bg-muted shadow-purple-500/30" : "border-slate-800/50 bg-black/40 hover:border-border"}`}
             >
               <div
-                className={`flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors ${balanceSatisfied ? "border-purple-500 bg-purple-500/20" : "border-slate-700"}`}
+                className={`flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors ${balanceSatisfied ? "border-border bg-muted" : "border-slate-700"}`}
               >
                 {balanceSatisfied && (
-                  <div className="h-2.5 w-2.5 rounded-full bg-purple-500" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-primary" />
                 )}
               </div>
               <div className="flex flex-col items-start text-left">
                 <span
-                  className={`text-sm font-bold ${balanceSatisfied ? "text-purple-500" : "text-white"}`}
+                  className={`text-sm font-bold ${balanceSatisfied ? "text-primary" : "text-white"}`}
                 >
                   Balance Satisfied
                 </span>

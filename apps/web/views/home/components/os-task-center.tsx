@@ -55,15 +55,15 @@ export function OSTaskCenter() {
       {/* ═══ LAYER 1: DEEP SPACE BACKGROUND ══════════════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
         <div className="theme-grid-bg absolute inset-0 opacity-20" />
-        <div className="bg-radial-gradient absolute top-1/4 right-1/4 h-[800px] w-[1200px] from-cyan-900/10 via-blue-900/5 to-transparent blur-[120px]" />
+        <div className="bg-radial-gradient absolute top-1/4 right-1/4 h-[800px] w-[1200px] from-primary/10 via-blue-900/5 to-transparent blur-[120px]" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1700px] space-y-4 px-4">
         {/* ═══ TOP HEADER (Blueprint 16) ══════════════════════════════════════ */}
         <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-4 xl:flex-row xl:items-center">
           <div className="flex items-center gap-4">
-            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
-              <span className="rounded-xs bg-cyan-500 px-1.5 py-0.5 font-black text-black">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-border px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
+              <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-black">
                 16
               </span>
               <span>TASK CENTER</span>
@@ -151,7 +151,7 @@ export function OSTaskCenter() {
 
             {/* AI Task Assistant */}
             <div className="bg-background group relative overflow-hidden rounded-xl border-2 border-primary/30 p-4 shadow-sm">
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/20 to-transparent opacity-50 transition-opacity group-hover:opacity-100" />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-50 transition-opacity group-hover:opacity-100" />
 
               <div className="relative z-10 mb-3 flex items-center justify-between">
                 <div className="text-[9px] font-black tracking-widest text-primary uppercase">
@@ -174,7 +174,7 @@ export function OSTaskCenter() {
                   <div className="mb-1 text-[10px] font-bold text-white">
                     Hi, I&apos;m KHIDRA.
                   </div>
-                  <div className="font-sans text-[8px] leading-relaxed text-cyan-100/70">
+                  <div className="font-sans text-[8px] leading-relaxed text-primary/70">
                     I can help you plan, prioritize, and execute tasks more
                     effectively.
                   </div>
@@ -293,7 +293,7 @@ export function OSTaskCenter() {
               </div>
 
               <div className="grid grid-cols-2 gap-3 lg:grid-cols-6">
-                <div className="bg-background col-span-2 flex flex-col items-center justify-center rounded border-b-2 border-cyan-500 p-3 text-center">
+                <div className="bg-background col-span-2 flex flex-col items-center justify-center rounded border-b-2 border-border p-3 text-center">
                   <div className="mb-1 text-[8px] font-bold tracking-widest text-primary uppercase">
                     TOTAL TASKS
                   </div>
@@ -513,7 +513,7 @@ export function OSTaskCenter() {
                       {row.proj}
                     </div>
                     <div className="col-span-2 flex items-center gap-1.5 truncate text-primary">
-                      <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-cyan-950">
+                      <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-muted">
                         <User className="h-2.5 w-2.5 text-primary" />
                       </div>
                       {row.asg}
@@ -801,7 +801,7 @@ export function OSTaskCenter() {
                     style={{ transform: "rotate(45deg)" }}
                   />
                   <div
-                    className="absolute inset-0 rounded-full border-[4px] border-purple-500 border-t-transparent border-l-transparent"
+                    className="absolute inset-0 rounded-full border-[4px] border-border border-t-transparent border-l-transparent"
                     style={{ transform: "rotate(135deg)" }}
                   />
 
@@ -831,7 +831,7 @@ export function OSTaskCenter() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="flex items-center gap-1.5 text-white/80">
-                      <span className="h-1.5 w-1.5 rounded-full bg-purple-500" />{" "}
+                      <span className="h-1.5 w-1.5 rounded-full bg-primary" />{" "}
                       Review
                     </span>
                     <span className="font-mono text-primary">6 (15%)</span>
@@ -950,7 +950,7 @@ export function OSTaskCenter() {
                   },
                 ].map((tm, i) => (
                   <div key={i} className="flex items-center gap-2">
-                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cyan-950">
+                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-muted">
                       <User className="h-3 w-3 text-primary" />
                     </div>
                     <div className="w-24 truncate text-white/80">{tm.n}</div>

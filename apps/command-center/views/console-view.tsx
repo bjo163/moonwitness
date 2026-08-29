@@ -23,7 +23,7 @@ const INITIAL_LOGS: LogItem[] = [
     id: "2",
     timestamp: "00:00:02",
     sender: "SYSTEM",
-    message: "Connecting to Core Khidra AI Services & Quantum Nodes...",
+    message: "Connecting to Core Khidra AI Services & system nodes...",
   },
   {
     id: "3",
@@ -104,9 +104,9 @@ function ConsoleQuickCommands({ onSelect }: { onSelect: (cmd: string) => void })
         <button
           key={item.cmd}
           onClick={() => onSelect(item.cmd)}
-          className="group flex items-center gap-1.5 rounded border border-cyan-500/30 bg-cyan-950/40 px-2.5 py-1 font-mono text-[11px] text-cyan-300 shadow-sm transition-all hover:border-cyan-400 hover:bg-cyan-500/20 hover:text-white"
+          className="group flex items-center gap-1.5 rounded border border-border bg-muted px-2.5 py-1 font-mono text-[11px] text-primary shadow-sm transition-all hover:border-border hover:bg-primary/10 hover:text-white"
         >
-          <Zap className="h-3 w-3 text-cyan-400 transition-transform group-hover:scale-110" />
+          <Zap className="h-3 w-3 text-primary transition-transform group-hover:scale-110" />
           <span className="font-bold">{item.label}</span>
           <span className="hidden text-[9px] text-primary/40 sm:inline">
             ({item.desc})
@@ -119,19 +119,19 @@ function ConsoleQuickCommands({ onSelect }: { onSelect: (cmd: string) => void })
 
 function TerminalWindowHeader() {
   return (
-    <div className="flex items-center justify-between border-b border-cyan-500/30 bg-cyan-950/30 px-5 py-3">
+    <div className="flex items-center justify-between border-b border-border bg-muted px-5 py-3">
       <div className="flex items-center gap-3">
         <div className="flex gap-1.5">
           <span className="h-3 w-3 rounded-full bg-rose-500/70" />
           <span className="h-3 w-3 rounded-full bg-amber-500/70" />
           <span className="h-3 w-3 rounded-full bg-emerald-500/70" />
         </div>
-        <span className="font-mono text-xs font-bold tracking-widest text-cyan-300 uppercase">
-          TERMINAL // ROOT_ACCESS_CONSOLE
+        <span className="font-mono text-xs font-bold tracking-widest text-primary uppercase">
+          Developer Console
         </span>
       </div>
-      <span className="animate-pulse font-mono text-[10px] text-cyan-400/60 uppercase">
-        &bull; SECURE LINK ACTIVE
+      <span className="animate-pulse font-mono text-[10px] text-primary/60 uppercase">
+        &bull; Connected
       </span>
     </div>
   )
@@ -237,7 +237,7 @@ export function ConsoleView() {
       case "matrix":
         appendLog(
           "SYSTEM",
-          "01001101 01001111 01001111 01001110 01010111 01001001 01010100 01001110 01000101 01010011 01010011 - Quantum Stream Verified."
+          "01001101 01001111 01001111 01001110 01010111 01001001 01010100 01001110 01000101 01010011 01010011 - Stream Verified."
         )
         break
       case "clear":

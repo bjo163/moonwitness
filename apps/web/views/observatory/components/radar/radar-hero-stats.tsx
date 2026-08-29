@@ -29,7 +29,7 @@ export function RadarHeroStats({
       val: `${windSpeed} km/h`,
       sub: `Vector ${windDirection}° • Calibrated`,
       icon: Wind,
-      color: "text-cyan-400",
+      color: "text-primary",
     },
     {
       label: "TEMPERATURE",
@@ -59,7 +59,7 @@ export function RadarHeroStats({
       {/* 1. Header Banner */}
       <div className="flex flex-col items-start justify-between gap-4 border-b border-white/10 pb-4 md:flex-row md:items-center">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-400">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-primary/10 text-primary">
             <Radio className="h-5 w-5 animate-pulse" />
           </div>
           <div>
@@ -67,7 +67,7 @@ export function RadarHeroStats({
               <h1 className="font-mono text-2xl font-black tracking-widest text-white uppercase drop-shadow-md sm:text-3xl">
                 ATMOSPHERIC DOPPLER RADAR
               </h1>
-              <span className="rounded border border-cyan-500/30 bg-cyan-500/10 px-2 py-0.5 font-mono text-[9px] font-bold text-cyan-400">
+              <span className="rounded border border-border bg-primary/10 px-2 py-0.5 font-mono text-[9px] font-bold text-primary">
                 SATELLITE TELEMETRY
               </span>
             </div>

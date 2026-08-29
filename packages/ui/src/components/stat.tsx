@@ -14,10 +14,10 @@ export function Stat({
   value,
   trend,
   icon: Icon,
-  accentColor = "system",
+  accentColor="primary",
   className = "",
 }: StatProps) {
-  let accentClass = "text-cyan-400 border-cyan-500/30"
+  let accentClass = "text-primary border-border"
   if (accentColor === "warning") accentClass = "text-amber-400 border-amber-500/30"
   if (accentColor === "accent" || accentColor === "danger") accentClass = "text-red-400 border-red-500/30"
   if (accentColor === "knowledge") accentClass = "text-fuchsia-400 border-fuchsia-500/30"

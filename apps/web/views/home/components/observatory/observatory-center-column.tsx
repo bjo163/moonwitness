@@ -6,9 +6,9 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
   const [activeTab, setActiveTab] = useState("CELESTIAL VIEW")
 
   return (
-    <div className="bg-background/40 relative flex min-h-[500px] flex-col justify-between overflow-hidden rounded-2xl border border-cyan-500/40 p-6 shadow-sm backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/60 lg:col-span-6">
+    <div className="bg-background/40 relative flex min-h-[500px] flex-col justify-between overflow-hidden rounded-2xl border border-border p-6 shadow-sm backdrop-blur-xl transition-all duration-500 hover:border-border lg:col-span-6">
       {/* Top View Selector Tabs */}
-      <div className="bg-background/60 z-10 mx-auto mb-6 flex w-full max-w-lg items-center justify-center gap-2 rounded-lg border border-cyan-500/30 p-1.5 shadow-inner backdrop-blur-md">
+      <div className="bg-background/60 z-10 mx-auto mb-6 flex w-full max-w-lg items-center justify-center gap-2 rounded-lg border border-border p-1.5 shadow-inner backdrop-blur-md">
         {["CELESTIAL VIEW", "ORBIT VIEW", "HEMISPHERE", "DEEP SKY"].map(
           (tab) => (
             <button
@@ -16,7 +16,7 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
               onClick={() => setActiveTab(tab)}
               className={`flex-1 rounded py-1.5 text-[10px] font-black tracking-wider uppercase transition-all ${
                 activeTab === tab
-                  ? "border border-cyan-500/50 bg-cyan-500/20 text-cyan-400 shadow-sm"
+                  ? "border border-border bg-primary/10 text-primary shadow-sm"
                   : "text-primary hover:text-white"
               }`}
             >
@@ -29,7 +29,7 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
       {/* Center Orbital Viewport Illusion */}
       <div className="relative my-4 flex min-h-[320px] w-full flex-1 items-center justify-center">
         {/* Starry space background graphic */}
-        <div className="absolute inset-0 flex items-center justify-center overflow-hidden rounded-xl border border-cyan-500/20 bg-black/40">
+        <div className="absolute inset-0 flex items-center justify-center overflow-hidden rounded-xl border border-border bg-black/40">
           <img
             src="/assets/hero_bg.png"
             alt="Deep Space Matrix"
@@ -70,7 +70,7 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
               className="h-full w-full object-cover"
             />
           </div>
-          <div className="bg-background/80 mt-3 rounded-full border border-cyan-500/40 px-3 py-1 text-center shadow-sm backdrop-blur-md">
+          <div className="bg-background/80 mt-3 rounded-full border border-border px-3 py-1 text-center shadow-sm backdrop-blur-md">
             <span className="font-mono text-xs font-black tracking-widest text-primary uppercase">
               ◎ MOON // 384,400 KM
             </span>
@@ -108,12 +108,12 @@ export function ObservatoryCenterColumn({ obs }: { obs: any }) {
 
       {/* Bottom 4 Diagnostic Pills */}
       <div className="z-10 grid grid-cols-2 gap-2 border-t border-white/10 pt-4 text-center font-mono text-[10px] font-black uppercase sm:grid-cols-4">
-        <span className="flex items-center justify-center gap-1.5 rounded border border-cyan-500/40 bg-cyan-950/40 px-2 py-1 text-primary shadow-sm backdrop-blur-sm">
-          <span className="h-1.5 w-1.5 animate-ping rounded-full bg-cyan-400" />{" "}
+        <span className="flex items-center justify-center gap-1.5 rounded border border-border bg-muted px-2 py-1 text-primary shadow-sm backdrop-blur-sm">
+          <span className="h-1.5 w-1.5 animate-ping rounded-full bg-primary" />{" "}
           ORBIT TRACE ON
         </span>
-        <span className="flex items-center justify-center gap-1.5 rounded border border-purple-400/40 bg-purple-950/40 px-2 py-1 text-purple-300 shadow-sm backdrop-blur-sm">
-          <span className="h-1.5 w-1.5 rounded-full bg-purple-400" /> STAR FIELD
+        <span className="flex items-center justify-center gap-1.5 rounded border border-border bg-muted px-2 py-1 text-primary shadow-sm backdrop-blur-sm">
+          <span className="h-1.5 w-1.5 rounded-full bg-primary" /> STAR FIELD
           ON
         </span>
         <span className="flex items-center justify-center gap-1.5 rounded border border-blue-400/40 bg-blue-950/40 px-2 py-1 text-blue-300 shadow-sm backdrop-blur-sm">

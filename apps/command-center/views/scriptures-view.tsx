@@ -202,7 +202,7 @@ export function ScripturesView() {
           subtitle="Kelola daftar ayat suci Al-Qur'an dan Kitab lainnya yang akan disinkronkan ke seluruh jamaah (Global Sync)."
           operation="SCRIPTURE-DATABASE-MGMT"
           status="ONLINE"
-          accentColor="system"
+          accentColor="primary"
         />
 
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">

@@ -150,9 +150,9 @@ export function ModalTrigger({
     <button
       onClick={onClick}
       title={title}
-      className={`inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-xs text-foreground transition-all hover:border-cyan-500/50 hover:bg-cyan-500/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-500 ${className}`}
+      className={`inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-xs text-foreground transition-all hover:border-border hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-500 ${className}`}
     >
-      {Icon && <Icon className="h-3.5 w-3.5 text-cyan-400" />}
+      {Icon && <Icon className="h-3.5 w-3.5 text-primary" />}
       <span className={hideLabelOnMobile ? "hidden sm:inline" : ""}>{label}</span>
     </button>
   )

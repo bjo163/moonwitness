@@ -65,9 +65,9 @@ const getBriefingIcon = (iconName: string, colorClass: string) => {
 // Subcomponents
 function MissionCard({ missions }: { missions: Mission[] }) {
   return (
-    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
+    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-border p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
+        <h3 className="font-sans text-xs font-bold tracking-wider text-primary uppercase">
           Today&apos;s Mission
         </h3>
       </div>
@@ -95,7 +95,7 @@ function MissionCard({ missions }: { missions: Mission[] }) {
           </div>
         ))}
       </div>
-      <button className="mt-4 flex items-center justify-center gap-2 font-mono text-[10px] font-medium text-cyan-400 uppercase hover:text-cyan-300">
+      <button className="mt-4 flex items-center justify-center gap-2 font-mono text-[10px] font-medium text-primary uppercase hover:text-primary">
         View All Missions <ArrowRight className="h-3 w-3" />
       </button>
     </div>
@@ -104,9 +104,9 @@ function MissionCard({ missions }: { missions: Mission[] }) {
 
 function PrayerCard({ prayers }: { prayers: Prayer[] }) {
   return (
-    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
+    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-border p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
+        <h3 className="font-sans text-xs font-bold tracking-wider text-primary uppercase">
           Today&apos;s Prayer
         </h3>
         <span className="font-mono text-[10px] text-primary/50">
@@ -117,26 +117,26 @@ function PrayerCard({ prayers }: { prayers: Prayer[] }) {
         {prayers.map((p) => (
           <div
             key={p.name}
-            className={`flex items-center justify-between rounded-lg p-2 ${p.status === "next" ? "border border-cyan-500/30 bg-cyan-500/10" : ""}`}
+            className={`flex items-center justify-between rounded-lg p-2 ${p.status === "next" ? "border border-border bg-primary/10" : ""}`}
           >
             <div className="flex items-center gap-3">
               <Moon
-                className={`h-4 w-4 ${p.status === "next" ? "text-cyan-400" : "text-primary/50"}`}
+                className={`h-4 w-4 ${p.status === "next" ? "text-primary" : "text-primary/50"}`}
               />
               <span
-                className={`font-sans text-sm ${p.status === "next" ? "font-bold text-cyan-400" : "text-white"}`}
+                className={`font-sans text-sm ${p.status === "next" ? "font-bold text-primary" : "text-white"}`}
               >
                 {p.name}
               </span>
             </div>
             <div className="flex items-center gap-3 font-mono text-sm">
               <span
-                className={p.status === "next" ? "text-cyan-400" : "text-white"}
+                className={p.status === "next" ? "text-primary" : "text-white"}
               >
                 {p.time}
               </span>
               {p.countdown && (
-                <span className="rounded bg-cyan-500/20 px-2 py-0.5 text-xs text-cyan-400">
+                <span className="rounded bg-primary/10 px-2 py-0.5 text-xs text-primary">
                   {p.countdown}
                 </span>
               )}
@@ -144,11 +144,11 @@ function PrayerCard({ prayers }: { prayers: Prayer[] }) {
           </div>
         ))}
       </div>
-      <div className="mt-4 flex items-center justify-between border-t border-cyan-500/20 pt-4">
+      <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
         <span className="flex items-center gap-1 font-mono text-[10px] text-emerald-400">
           <Circle className="h-2 w-2 fill-emerald-400" /> Prayer Sync: Online
         </span>
-        <button className="flex items-center gap-2 font-mono text-[10px] font-medium text-cyan-400 uppercase hover:text-cyan-300">
+        <button className="flex items-center gap-2 font-mono text-[10px] font-medium text-primary uppercase hover:text-primary">
           View Prayer Times <ArrowRight className="h-3 w-3" />
         </button>
       </div>
@@ -160,7 +160,7 @@ function AIBriefingCard({ briefings }: { briefings: Briefing[] }) {
   const getColorClass = (c: string) => {
     switch (c) {
       case "cyan":
-        return "text-cyan-400"
+        return "text-primary"
       case "danger":
         return "text-red-400"
       case "amber":
@@ -168,14 +168,14 @@ function AIBriefingCard({ briefings }: { briefings: Briefing[] }) {
       case "success":
         return "text-emerald-400"
       default:
-        return "text-cyan-400"
+        return "text-primary"
     }
   }
 
   return (
-    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
+    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-border p-5 backdrop-blur-xl">
       <div className="mb-4">
-        <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
+        <h3 className="font-sans text-xs font-bold tracking-wider text-primary uppercase">
           AI Briefing
         </h3>
         <p className="font-sans text-[10px] text-primary/60">
@@ -199,7 +199,7 @@ function AIBriefingCard({ briefings }: { briefings: Briefing[] }) {
           </div>
         ))}
       </div>
-      <button className="mt-4 flex items-center justify-center gap-2 font-mono text-[10px] font-medium text-cyan-400 uppercase hover:text-cyan-300">
+      <button className="mt-4 flex items-center justify-center gap-2 font-mono text-[10px] font-medium text-primary uppercase hover:text-primary">
         Open KHIDRA AI <ArrowRight className="h-3 w-3" />
       </button>
     </div>
@@ -208,9 +208,9 @@ function AIBriefingCard({ briefings }: { briefings: Briefing[] }) {
 
 function MoonObservatoryCard({ moon }: { moon: MoonData }) {
   return (
-    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
+    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-border p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
+        <h3 className="font-sans text-xs font-bold tracking-wider text-primary uppercase">
           Moon Observatory
         </h3>
         <span className="flex items-center gap-1 font-mono text-[10px] text-emerald-400">
@@ -218,7 +218,7 @@ function MoonObservatoryCard({ moon }: { moon: MoonData }) {
         </span>
       </div>
       <div className="relative mb-4 flex justify-center">
-        {/* Render a simple glowing moon visual */}
+        {/* Render a simple ambienting moon visual */}
         <div className="relative h-24 w-24 overflow-hidden rounded-full bg-slate-200 shadow-sm">
           <div
             className="absolute inset-0 bg-black opacity-30"
@@ -248,7 +248,7 @@ function MoonObservatoryCard({ moon }: { moon: MoonData }) {
           <span className="text-emerald-400">{moon.visibility}</span>
         </div>
       </div>
-      <button className="mt-4 flex items-center justify-center gap-2 font-mono text-[10px] font-medium text-cyan-400 uppercase hover:text-cyan-300">
+      <button className="mt-4 flex items-center justify-center gap-2 font-mono text-[10px] font-medium text-primary uppercase hover:text-primary">
         Open Observatory <ArrowRight className="h-3 w-3" />
       </button>
     </div>

@@ -81,7 +81,7 @@ export function ToolkitRasulullahView() {
       <div className="mx-auto max-w-5xl space-y-6 px-4 sm:px-6">
         {/* Standard System Breadcrumb (Task 15) */}
 
-        {/* Standard Tactical Context Block (Task 16) */}
+        {/* Standard strategic Context Block (Task 16) */}
         <ContextBlock
           title={t(
             "TOOLKITS PERADABAN RASULULLAH SAW",

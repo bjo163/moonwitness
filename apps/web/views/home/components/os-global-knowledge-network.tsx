@@ -267,10 +267,10 @@ export function OSGlobalKnowledgeNetwork() {
                 <div className="h-full w-full bg-[radial-gradient(ellipse_at_center,rgba(0,240,255,0.1)_0%,transparent_70%)]" />
                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjMDAwIiBmaWxsLW9wYWNpdHk9IjAuMCIvPgo8Y2lyY2xlIGN4PSI0IiBjeT0iNCIgcj0iMC41IiBmaWxsPSIjMzBENDc0Ii8+Cjwvc3ZnPg==')] opacity-50" />
 
-                {/* Glowing Nodes representing activity across the world */}
-                <div className="absolute top-[40%] left-[20%] h-3 w-3 animate-pulse rounded-full bg-cyan-400 shadow-sm" />
+                {/* ambienting Nodes representing activity across the world */}
+                <div className="absolute top-[40%] left-[20%] h-3 w-3 animate-pulse rounded-full bg-primary shadow-sm" />
                 <div className="absolute top-[30%] left-[45%] h-2 w-2 rounded-full bg-emerald-400 shadow-sm" />
-                <div className="absolute top-[25%] left-[55%] h-5 w-5 animate-pulse rounded-full bg-purple-500 shadow-sm" />
+                <div className="absolute top-[25%] left-[55%] h-5 w-5 animate-pulse rounded-full bg-primary shadow-sm" />
                 <div className="absolute top-[50%] left-[75%] h-3 w-3 rounded-full bg-amber-400 shadow-sm" />
                 <div className="absolute top-[60%] left-[80%] h-2 w-2 rounded-full bg-blue-400 shadow-sm" />
 
@@ -391,7 +391,7 @@ export function OSGlobalKnowledgeNetwork() {
                         👤
                       </div>
                     ))}
-                    <div className="z-10 flex h-6 w-6 items-center justify-center rounded-full border border-black bg-cyan-900 text-[8px] font-bold text-primary">
+                    <div className="z-10 flex h-6 w-6 items-center justify-center rounded-full border border-black bg-muted text-[8px] font-bold text-primary">
                       +124
                     </div>
                   </div>

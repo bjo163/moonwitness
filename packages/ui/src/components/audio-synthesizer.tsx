@@ -1,20 +1,20 @@
 "use client"
 
-import React, { useState, useEffect, useCallback } from "react"
-import { Volume2, VolumeX, Radio } from "lucide-react"
+import React, { useState, useEffect } from "react"
+import { Volume2, VolumeX } from "lucide-react"
 
 /**
- * Procedural Web Audio API Cosmic Synthesizer
- * Produces crisp sci-fi telemetry sound effects without any external asset dependencies
+ * Procedural Web Audio API Synthesizer
+ * Produces crisp notification and interaction sound effects without any external asset dependencies
  */
-class CosmicAudioEngine {
+class SystemAudioEngine {
   private ctx: AudioContext | null = null
-  private isMuted: boolean = false
+  private isMuted: boolean = true
 
   constructor() {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("mw_audio_muted")
-      this.isMuted = saved === "true"
+      this.isMuted = saved !== null ? saved === "true" : true
     }
   }
 
@@ -72,7 +72,6 @@ class CosmicAudioEngine {
     this.initContext()
     if (!this.ctx) return
 
-    // 528Hz Solfeggio resonant frequency chord
     const freqs = [528, 792, 1056]
     freqs.forEach((f, idx) => {
       if (!this.ctx) return
@@ -156,7 +155,7 @@ class CosmicAudioEngine {
     this.initContext()
     if (!this.ctx) return
 
-    const notes = [523.25, 659.25, 783.99, 1046.5] // C5 Major chord
+    const notes = [523.25, 659.25, 783.99, 1046.5]
     notes.forEach((freq, i) => {
       if (!this.ctx) return
       const osc = this.ctx.createOscillator()
@@ -199,16 +198,16 @@ class CosmicAudioEngine {
   }
 }
 
-export const cosmicAudio = new CosmicAudioEngine()
+export const soundEngine = new SystemAudioEngine()
 
 /**
- * Floating HUD Audio Controls Button
+ * Enterprise Audio Toggle Control
  */
-export function CosmicAudioToggle({ className = "" }: { className?: string }) {
+export function AudioToggle({ className = "" }: { className?: string }) {
   const [isMuted, setIsMuted] = useState(true)
 
   useEffect(() => {
-    setIsMuted(cosmicAudio.getMuted())
+    setIsMuted(soundEngine.getMuted())
 
     const handleToggle = (e: any) => {
       setIsMuted(e.detail.isMuted)
@@ -218,32 +217,32 @@ export function CosmicAudioToggle({ className = "" }: { className?: string }) {
   }, [])
 
   const handleToggleAudio = () => {
-    const muted = cosmicAudio.toggleMute()
+    const muted = soundEngine.toggleMute()
     setIsMuted(muted)
     if (!muted) {
-      cosmicAudio.playAlignmentChime()
+      soundEngine.playAlignmentChime()
     }
   }
 
   return (
     <button
       onClick={handleToggleAudio}
-      title={isMuted ? "Enable Cosmic Audio (Press M)" : "Mute Cosmic Audio (Press M)"}
-      className={`group flex items-center gap-1.5 px-2.5 py-1 rounded-lg border font-mono text-[10px] transition-all ${
+      title={isMuted ? "Enable Audio (Press M)" : "Mute Audio (Press M)"}
+      className={`group flex items-center gap-1.5 px-2.5 py-1 rounded-lg border font-mono text-[10px] transition-colors ${
         isMuted
-          ? "border-zinc-800 bg-black/60 text-zinc-500 hover:text-zinc-300"
-          : "border-cyan-500/40 bg-cyan-950/40 text-cyan-300 shadow-sm"
+          ? "border-border bg-card text-muted-foreground hover:text-foreground"
+          : "border-primary/40 bg-primary/10 text-primary shadow-sm"
       } ${className}`}
     >
       {isMuted ? (
         <VolumeX className="h-3.5 w-3.5" />
       ) : (
-        <Volume2 className="h-3.5 w-3.5 animate-pulse text-cyan-400" />
+        <Volume2 className="h-3.5 w-3.5 text-primary" />
       )}
       <span className="hidden sm:inline">
-        {isMuted ? "AUDIO: OFF" : "AUDIO: ACTIVE"}
+        {isMuted ? "Audio: Off" : "Audio: On"}
       </span>
-      <kbd className="hidden lg:inline text-[8px] bg-white/10 px-1 rounded text-zinc-400">
+      <kbd className="hidden lg:inline text-[8px] bg-muted px-1 rounded text-muted-foreground">
         M
       </kbd>
     </button>

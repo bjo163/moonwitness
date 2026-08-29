@@ -107,7 +107,7 @@ export function Cosmic3DBackground() {
           speed: Math.random() * 8 + 12,
           angle: Math.PI / 4 + (Math.random() - 0.5) * 0.1, // around 45 degrees diagonal downward
           opacity: 1,
-          color: Math.random() > 0.4 ? "0, 240, 255" : "139, 92, 246", // Neon Cyan (#00F0FF) or Violet (#8B5CF6)
+          color: Math.random() > 0.4 ? "0, 240, 255" : "139, 92, 246", // accent Cyan (#00F0FF) or Violet (#8B5CF6)
         })
       }
     }
@@ -178,7 +178,7 @@ export function Cosmic3DBackground() {
         ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha.toFixed(2)})`
         ctx.fill()
 
-        // Celestial Bloom Glow for Layer 3 (Foreground) Stars
+        // Celestial Bloom ambient for Layer 3 (Foreground) Stars
         if (star.layer === 3 && star.alpha > 0.6) {
           ctx.beginPath()
           ctx.arc(drawX, drawY, star.size * 2.2, 0, Math.PI * 2)
@@ -239,9 +239,9 @@ export function Cosmic3DBackground() {
   return (
     <div className="pointer-events-none fixed inset-0 z-[-1] overflow-hidden bg-slate-950">
       {/* Deep Celestial Aurora Mesh (GPU Hardware Accelerated) */}
-      <div className="absolute -top-[25%] -left-[15%] h-[75vw] w-[75vw] animate-[pulse_14s_ease-in-out_infinite] rounded-full bg-gradient-to-tr from-cyan-400/15 via-cyan-600/10 to-transparent blur-[160px] will-change-transform" />
-      <div className="absolute -right-[15%] -bottom-[25%] h-[80vw] w-[80vw] animate-[pulse_18s_ease-in-out_infinite_2s] rounded-full bg-gradient-to-br from-purple-500/15 via-indigo-500/10 to-transparent blur-[170px] will-change-transform" />
-      <div className="absolute top-[25%] left-[30%] h-[55vw] w-[55vw] animate-[pulse_22s_ease-in-out_infinite_5s] rounded-full bg-gradient-to-r from-cyan-400/5 via-blue-500/10 to-purple-500/5 blur-[180px] will-change-transform" />
+      <div className="absolute -top-[25%] -left-[15%] h-[75vw] w-[75vw] animate-[pulse_14s_ease-in-out_infinite] rounded-full bg-gradient-to-tr from-primary/10 via-transparent to-transparent blur-[160px] will-change-transform" />
+      <div className="absolute -right-[15%] -bottom-[25%] h-[80vw] w-[80vw] animate-[pulse_18s_ease-in-out_infinite_2s] rounded-full bg-gradient-to-br from-primary/10 via-indigo-500/10 to-transparent blur-[170px] will-change-transform" />
+      <div className="absolute top-[25%] left-[30%] h-[55vw] w-[55vw] animate-[pulse_22s_ease-in-out_infinite_5s] rounded-full bg-gradient-to-r from-primary/10 via-blue-500/10 to-transparent blur-[180px] will-change-transform" />
 
       {/* Zero-Dependency Quantum Starfield & Kinetic Comets Canvas */}
       <canvas

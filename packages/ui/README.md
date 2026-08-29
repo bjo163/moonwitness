@@ -65,7 +65,7 @@ export function Observatory() {
         title="OBSERVATORY TELEMETRY"
         subtitle="Live astronomical positions and solar alignments."
         status="ONLINE"
-        accentColor="celestial"
+        accentColor="warning"
       />
       <CelestialMoonSphere phase={0.5} size={280} interactive={true} />
       <CelestialQiblaCompass size={300} />

@@ -89,7 +89,7 @@ export function AudioSpectrogram({
   }, [analyser, isActive, width, height, barCount, accentColor])
 
   return (
-    <div className="flex items-center gap-2 rounded border border-cyan-500/20 bg-black/60 p-1 backdrop-blur-md">
+    <div className="flex items-center gap-2 rounded border border-border bg-black/60 p-1 backdrop-blur-md">
       <canvas
         ref={canvasRef}
         width={width}

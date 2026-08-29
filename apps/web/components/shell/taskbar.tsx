@@ -140,7 +140,7 @@ export function Taskbar() {
 
   return (
     <div
-      className="fixed right-0 bottom-0 left-0 z-[50] border-t border-cyan-500/20 bg-black/50 font-mono shadow-sm backdrop-blur-xl select-none"
+      className="fixed right-0 bottom-0 left-0 z-[50] border-t border-border bg-black/50 font-mono shadow-sm backdrop-blur-xl select-none"
       style={{ height: "44px" }}
     >
       <div className="flex h-full items-center justify-between gap-1 px-2 text-[10px] tracking-widest uppercase sm:gap-2 sm:px-6">
@@ -175,8 +175,8 @@ export function Taskbar() {
             className="hidden items-center gap-1.5 sm:flex"
             title="Network Latency"
           >
-            <Activity className="h-3 w-3 text-cyan-400" />
-            <strong className="font-black text-cyan-400">12MS</strong>
+            <Activity className="h-3 w-3 text-primary" />
+            <strong className="font-black text-primary">12MS</strong>
           </span>
 
           <span className="hidden h-3 w-px bg-white/10 md:block" />
@@ -186,8 +186,8 @@ export function Taskbar() {
             className="hidden items-center gap-1.5 md:flex"
             title="Qibla Direction"
           >
-            <Compass className="h-3 w-3 text-cyan-400" />
-            <strong className="font-black text-cyan-400">295.14°</strong>
+            <Compass className="h-3 w-3 text-primary" />
+            <strong className="font-black text-primary">295.14°</strong>
           </span>
 
           <span className="hidden h-3 w-px bg-white/10 lg:block" />
@@ -256,7 +256,7 @@ export function Taskbar() {
         </div>
 
         {/* ── CENTER: Clock ──────────────────────────────────────── */}
-        <div className="flex shrink-0 items-center gap-1.5 rounded border border-cyan-500/20 bg-cyan-950/20 px-3 py-0.5 font-black text-cyan-300 shadow-sm">
+        <div className="flex shrink-0 items-center gap-1.5 rounded border border-border bg-muted px-3 py-0.5 font-black text-primary shadow-sm">
           <span>{timeStr || "00:00:00"}</span>
           <span className="hidden text-[9px] text-white/50 sm:inline">WIB</span>
         </div>
@@ -265,8 +265,8 @@ export function Taskbar() {
         <div className="flex shrink-0 items-center gap-4 text-primary sm:gap-6">
           {/* Audio Player — compact inline */}
           <div className="flex items-center gap-1 sm:gap-2">
-            <Music className="hidden h-3 w-3 animate-pulse text-cyan-400 sm:block" />
-            <span className="hidden max-w-[120px] truncate font-bold text-cyan-400 sm:inline-block">
+            <Music className="hidden h-3 w-3 animate-pulse text-primary sm:block" />
+            <span className="hidden max-w-[120px] truncate font-bold text-primary sm:inline-block">
               #{currentSurah.number} {currentSurah.name}
             </span>
 
@@ -274,14 +274,14 @@ export function Taskbar() {
             <div className="flex items-center gap-1 sm:ml-2">
               <button
                 aria-label="Previous"
-                className="flex items-center justify-center p-1 transition-colors hover:text-cyan-400"
+                className="flex items-center justify-center p-1 transition-colors hover:text-primary"
               >
                 <SkipBack className="h-3 w-3" />
               </button>
               <button
                 onClick={togglePlay}
                 aria-label={isPlaying ? "Pause" : "Play"}
-                className="flex items-center justify-center p-1 text-cyan-400 transition-colors hover:text-emerald-400"
+                className="flex items-center justify-center p-1 text-primary transition-colors hover:text-emerald-400"
               >
                 {isPlaying ? (
                   <Pause className="h-3.5 w-3.5 text-emerald-400" />
@@ -291,7 +291,7 @@ export function Taskbar() {
               </button>
               <button
                 aria-label="Next"
-                className="flex items-center justify-center p-1 transition-colors hover:text-cyan-400"
+                className="flex items-center justify-center p-1 transition-colors hover:text-primary"
               >
                 <SkipForward className="h-3 w-3" />
               </button>
@@ -302,7 +302,7 @@ export function Taskbar() {
               <button
                 onClick={toggleLoop}
                 aria-label="Toggle Loop"
-                className={`flex items-center justify-center p-1 transition-colors ${isLooping ? "text-fuchsia-400" : "text-cyan-400/50 hover:text-cyan-400"}`}
+                className={`flex items-center justify-center p-1 transition-colors ${isLooping ? "text-fuchsia-400" : "text-primary/50 hover:text-primary"}`}
               >
                 <Repeat className="h-3 w-3" />
               </button>
@@ -313,7 +313,7 @@ export function Taskbar() {
                   )
                 }
                 aria-label="Toggle Speed"
-                className="flex items-center gap-1 p-1 text-[9px] font-bold text-cyan-400/80 transition-colors hover:text-cyan-400"
+                className="flex items-center gap-1 p-1 text-[9px] font-bold text-primary/80 transition-colors hover:text-primary"
               >
                 <Gauge className="h-3 w-3" />
                 {playbackRate}x

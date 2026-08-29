@@ -364,7 +364,7 @@ export function DailyInspirationClient() {
       crackleGain.connect(ctx.destination)
 
       crackle.frequency.setValueAtTime(150, now)
-      crackle.frequency.exponentialRampToValueAtTime(1200, now + 0.3) // Sweep up for sci-fi feel
+      crackle.frequency.exponentialRampToValueAtTime(1200, now + 0.3) // Sweep up for modern feel
 
       // 2. Modulator to create the "Zzzzzzt" stutter effect (Square wave LFO at 50Hz)
       const modulator = ctx.createOscillator()
@@ -772,7 +772,7 @@ export function DailyInspirationClient() {
     90: "CITY WALK",
     91: "SUN OATH",
     92: "NIGHT SHIFT",
-    93: "MORNING GLOW",
+    93: "MORNING DAWN",
     94: "RELIEF ERA",
     95: "FIG SEASON",
     96: "FIRST READ",
@@ -806,26 +806,26 @@ export function DailyInspirationClient() {
 [PENTING: Gunakan orientasi vertikal (aspect ratio 9:16). Sebelum membuat gambar, ACAK secara otomatis 3 elemen di bawah ini agar hasil gambarnya selalu unik, bervariasi, dan futuristik!]
 
 **1. ACAK FORMAT/MEDIUM GAMBAR (Pilih 1 secara acak):**
-- Cinematic Game Poster (Gaya cover game AAA/film fiksi ilmiah dengan teks dramatis).
+- Cinematic Game Poster (Gaya cover game AAA/film dengan teks dramatis).
 - Manga/Comic Book Panel (Terdapat panel komik terpisah, garis aksi cepat, dan efek suara komik).
 - RPG Game UI Screen (Gambar seolah-olah screenshot dari game, lengkap dengan Bar HP, Inventory, dan kotak dialog).
-- Holographic Infographic (Banyak elemen grafis sci-fi, statistik absurd, peta digital, dan data fiksi).
-- Rare Trading Card (Desain seperti kartu TCG Yu-Gi-Oh!/Pokemon, tapi bernuansa cyber, lengkap dengan bintang/status card).
+- Analytical Infographic (Banyak elemen grafis analitis, statistik visual, peta digital, dan data informatif).
+- Rare Trading Card (Desain seperti kartu TCG kartu koleksi, lengkap dengan bintang/status card).
 
 **2. ACAK GAYA VISUAL (Pilih 1 secara acak):**
-- Cyberpunk 2077 Street-art (Neon terang, distopia, jalanan kotor tapi futuristik)
+- Modern Street-art (Pencahayaan terang, dinamis, jalanan modern)
 - Y2K Retro-Futurism (Gaya estetika tahun 2000-an, material krom, warna pop cerah)
-- Mecha / Sci-Fi Anime (Gaya mecha Jepang, dramatis, kosmik, ledakan energi)
-- Vaporwave / Synthwave (Warna ungu/pink neon, estetika 80-an retro-modern)
+- Mecha / Anime Art (Gaya mecha Jepang, dramatis, kosmik, ledakan energi)
+- Synthwave Vector (Warna gradien tajam, estetika 80-an retro-modern)
 
 **3. ACAK KOMPOSISI KONTRAS (Pilih 1 secara acak untuk membedakan "Makna Spiritual" vs "Kelakuan Manusia Zaman Now"):**
 - Diagonal Split-Screen (Terpotong miring secara tajam dan dramatis).
-- Hologram Projection (Satu adegan adalah dunia nyata, adegan lain diproyeksikan dari kacamata VR/layar raksasa).
+- Digital Projection (Satu adegan adalah dunia nyata, adegan lain diproyeksikan dari kacamata VR/layar raksasa).
 - Mirror/Puddle Reflection (Karakter melihat ke cermin/genangan air, tapi bayangan yang dipantulkan adalah realitas yang berbeda).
-- Glitch Portal (Gambar setengah tersedot ke portal dimensi atau layar error).
+- Dimension Portal (Gambar terbagi ke dua ruang realitas yang berbeda).
 
 **Instruksi Elemen Tetap (Wajib Ada di semua format):**
-1. **JUDUL BESAR**: "GOD PROMISE - [1-2 Kata Bahasa Inggris]". Kata tambahannya harus bergaya hype/slang/gamers menyesuaikan ayat. Gunakan font ala Cyberpunk/Game.
+1. **JUDUL BESAR**: "GOD PROMISE - [1-2 Kata Bahasa Inggris]". Kata tambahannya harus bergaya dinamis menyesuaikan ayat. Gunakan font modern tebal.
 2. **KARAKTER UTAMA**: 
    - **"Rocksoul"**: Visualisasikan mirip Crayon Shinchan tapi memakai hoodie techwear/gamer, kacamata futuristik/headset RGB, ekspresi tengil & absurd.
    - **"Master"**: Visualisasikan mirip Master Muthen Roshi tapi bergaya cyborg/cyberpunk.
@@ -876,7 +876,7 @@ ${transmissionText}`
     return (
       <div className="my-8 flex h-64 w-full flex-col items-center justify-center rounded-2xl border border-white/5 bg-black/40 font-sans backdrop-blur-xl">
         <div className="mb-2 flex animate-pulse items-center gap-3 text-primary">
-          <span className="h-2 w-2 rounded-full bg-cyan-400 shadow-sm" />
+          <span className="h-2 w-2 rounded-full bg-primary shadow-sm" />
           <span className="text-xs font-light tracking-[0.3em] uppercase">
             ACQUIRING TRANSMISSION...
           </span>
@@ -947,18 +947,18 @@ ${transmissionText}`
 
   return (
     <section className="my-8 font-sans">
-      {/* ──── TOP HUD (Sleek Dashboard Header) ──── */}
+      {/* ──── TOP display (Sleek Dashboard Header) ──── */}
       <div className="mb-4 flex flex-wrap items-center justify-between border-b border-white/10 pb-3 text-[9px] tracking-widest text-white/70 uppercase">
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400 shadow-sm"></span>
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary shadow-sm"></span>
             GLOBAL SIGNAL{" "}
-            <span className="font-bold text-cyan-400">ONLINE</span>
+            <span className="font-bold text-primary">ONLINE</span>
           </div>
           <div className="flex items-center gap-2 text-blue-300">
             <Moon className="h-3 w-3" />
             {data.prayerPeriod?.name?.toUpperCase() || "NIGHT CYCLE"}{" "}
-            <span className="font-medium text-cyan-400">{liveTime}</span>
+            <span className="font-medium text-primary">{liveTime}</span>
           </div>
         </div>
 
@@ -973,7 +973,7 @@ ${transmissionText}`
                     ? t("COPIED", "TERSALIN")
                     : t("COPY LINK", "SALIN TAUTAN")
                 }
-                className="flex h-6 w-6 items-center justify-center rounded bg-white/5 text-[10px] text-cyan-400 transition-colors hover:bg-cyan-500/20 hover:text-cyan-300"
+                className="flex h-6 w-6 items-center justify-center rounded bg-white/5 text-[10px] text-primary transition-colors hover:bg-primary/10 hover:text-primary"
               >
                 <LinkIcon className="h-3 w-3" />
               </button>
@@ -1034,7 +1034,7 @@ ${transmissionText}`
                 {[40, 70, 45, 90, 65, 80, 50, 100, 60, 30].map((h, i) => (
                   <div
                     key={i}
-                    className="w-[2px] rounded-t bg-cyan-500/50"
+                    className="w-[2px] rounded-t bg-primary/10"
                     style={{ height: `${h}%` }}
                   ></div>
                 ))}
@@ -1044,16 +1044,16 @@ ${transmissionText}`
         )}
       </div>
 
-      {/* ═══ TACTICAL MISSION SCREEN CONTAINER (The Premium Glow Card) ═══ */}
+      {/* ═══ strategic MISSION SCREEN CONTAINER (The Premium ambient Card) ═══ */}
       <div
         id="whatsapp-share-card"
         className={`relative w-full overflow-hidden rounded-[2rem] border border-white/5 p-6 font-sans text-white shadow-sm backdrop-blur-2xl sm:p-10 ${
           isZapping
-            ? "translate-x-[2px] -translate-y-[2px] bg-cyan-500/30 brightness-150 contrast-125 saturate-150 transition-none"
+            ? "translate-x-[2px] -translate-y-[2px] bg-primary/10 brightness-150 contrast-125 saturate-150 transition-none"
             : "bg-card transition-all duration-700"
         }`}
       >
-        {/* Cosmic Background Image with Mask Transparency (Matching Home Page) */}
+        {/* celestial Background Image with Mask Transparency (Matching Home Page) */}
         <div
           className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
           style={{
@@ -1073,7 +1073,7 @@ ${transmissionText}`
         <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-r -background -background to-transparent" />
 
         {/* Hologram Bar Effect */}
-        <div className="absolute top-0 left-0 h-[1px] w-full bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent opacity-50" />
+        <div className="absolute top-0 left-0 h-[1px] w-full bg-gradient-to-r from-transparent via-transparent to-transparent opacity-50" />
 
         {/* ──── HEADER BRANDING ──── */}
         <div className="relative z-10 mb-8 flex flex-wrap items-center justify-between gap-4">
@@ -1082,8 +1082,8 @@ ${transmissionText}`
               onClick={triggerZapEffect}
               className={`flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border bg-gradient-to-br shadow-sm transition-transform hover:scale-105 active:scale-95 ${
                 isZapping
-                  ? "scale-110 border-cyan-400 bg-cyan-400/50 shadow-sm"
-                  : "border-blue-500/30 from-blue-500/20 to-purple-500/10"
+                  ? "scale-110 border-border bg-primary/50 shadow-sm"
+                  : "border-blue-500/30 from-blue-500/20 to-transparent"
               }`}
               title="Play Futuristic Scan Sound"
             >
@@ -1148,7 +1148,7 @@ ${transmissionText}`
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="3"
-                    className="text-cyan-400 transition-all duration-1000 ease-linear"
+                    className="text-primary transition-all duration-1000 ease-linear"
                     strokeDasharray="289"
                     strokeDashoffset={
                       289 - (289 * (nextPrayer?.percentage || 0)) / 100
@@ -1189,11 +1189,11 @@ ${transmissionText}`
                 {/* Header with Minimalist Action Icons & Surah Details */}
                 <div className="mb-8 flex flex-wrap items-center justify-between border-b border-white/10 pb-4">
                   <div className="flex flex-col items-start gap-1 sm:flex-row sm:items-center sm:gap-3">
-                    <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-1.5 text-[10px] font-medium tracking-widest text-cyan-400 uppercase">
+                    <span className="rounded-full border border-border bg-primary/10 px-4 py-1.5 text-[10px] font-medium tracking-widest text-primary uppercase">
                       Q.S {data.ayah.surahName.toUpperCase()}{" "}
                       {data.ayah.surahNumber}:{data.ayah.ayahNumber}
                     </span>
-                    <span className="ml-2 text-[10px] tracking-[0.2em] text-cyan-300/60 uppercase italic sm:ml-0">
+                    <span className="ml-2 text-[10px] tracking-[0.2em] text-primary/60 uppercase italic sm:ml-0">
                       "
                       {SURAH_TRANSLATIONS_EN[data.ayah.surahNumber] ||
                         "The Surah"}
@@ -1211,7 +1211,7 @@ ${transmissionText}`
                         />
                         <button
                           onClick={toggleAudio}
-                          className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest text-white transition-colors hover:text-cyan-400"
+                          className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest text-white transition-colors hover:text-primary"
                           title="Play Audio Recitation"
                         >
                           {isPlayingAudio ? (
@@ -1260,7 +1260,7 @@ ${transmissionText}`
 
                 {/* Latin */}
                 {data.ayah.textLatin && (
-                  <p className="mb-12 text-right font-serif text-base font-medium text-cyan-400 italic drop-shadow-sm">
+                  <p className="mb-12 text-right font-serif text-base font-medium text-primary italic drop-shadow-sm">
                     "{data.ayah.textLatin}"
                   </p>
                 )}
@@ -1268,7 +1268,7 @@ ${transmissionText}`
                 {/* 3-Column Footer grid for Ayah details */}
                 <div className="mt-auto grid grid-cols-1 gap-8 border-t border-white/10 pt-8 md:grid-cols-3">
                   <div className="border-r border-white/10 pr-6">
-                    <h4 className="mb-3 text-[10px] tracking-[0.2em] text-cyan-500 uppercase">
+                    <h4 className="mb-3 text-[10px] tracking-[0.2em] text-primary uppercase">
                       Translation
                     </h4>
                     <p className="text-sm leading-relaxed font-light text-gray-200">
@@ -1276,7 +1276,7 @@ ${transmissionText}`
                     </p>
                   </div>
                   <div className="border-r border-white/10 pr-6">
-                    <h4 className="mb-3 text-[10px] tracking-[0.2em] text-cyan-400 uppercase">
+                    <h4 className="mb-3 text-[10px] tracking-[0.2em] text-primary uppercase">
                       Tafsir &amp; Lore Notes
                     </h4>
                     <p className="text-sm leading-relaxed font-light text-slate-200 italic">
@@ -1284,7 +1284,7 @@ ${transmissionText}`
                     </p>
                   </div>
                   <div>
-                    <h4 className="mb-3 text-[10px] tracking-[0.2em] text-cyan-400 uppercase">
+                    <h4 className="mb-3 text-[10px] tracking-[0.2em] text-primary uppercase">
                       Source
                     </h4>
                     <p className="text-sm leading-relaxed font-light text-slate-300">
@@ -1402,15 +1402,15 @@ ${transmissionText}`
             )}
 
             {data.wisdom ? (
-              <div className="relative overflow-hidden rounded-2xl border border-cyan-500/20 bg-gradient-to-br -background to-background/80 p-8 shadow-lg backdrop-blur-xl transition-colors hover:border-cyan-500/40">
-                <div className="pointer-events-none absolute top-[10%] right-[-10%] h-40 w-40 rounded-full border border-cyan-500/10 bg-cyan-500/10 blur-2xl" />
+              <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br -background to-background/80 p-8 shadow-lg backdrop-blur-xl transition-colors hover:border-border">
+                <div className="pointer-events-none absolute top-[10%] right-[-10%] h-40 w-40 rounded-full border border-border bg-primary/10 blur-2xl" />
                 <div className="relative z-10 mb-8 flex items-center gap-3">
-                  <span className="text-base text-cyan-500">🪐</span>
-                  <h4 className="text-[11px] tracking-[0.2em] text-cyan-400 uppercase">
+                  <span className="text-base text-primary">🪐</span>
+                  <h4 className="text-[11px] tracking-[0.2em] text-primary uppercase">
                     Sacred Scripture Reflection
                   </h4>
                 </div>
-                <div className="relative z-10 mb-6 rounded-xl border border-cyan-500/10 bg-black/40 p-6">
+                <div className="relative z-10 mb-6 rounded-xl border border-border bg-black/40 p-6">
                   <p className="text-base leading-relaxed font-light text-white italic drop-shadow-md">
                     "
                     {lang === "en"
@@ -1419,7 +1419,7 @@ ${transmissionText}`
                     "
                   </p>
                 </div>
-                <p className="relative z-10 text-[9px] tracking-[0.2em] text-cyan-300 uppercase">
+                <p className="relative z-10 text-[9px] tracking-[0.2em] text-primary uppercase">
                   SOURCE KEY:{" "}
                   {lang === "en"
                     ? data.wisdom.sourceEn || data.wisdom.source

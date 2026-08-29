@@ -9,7 +9,7 @@ export function HomeHistorySection() {
       className="relative flex min-h-screen flex-col gap-10 py-20"
     >
       <div className="mx-auto mb-4 w-full max-w-[1700px] px-6 sm:px-10">
-        <h2 className="font-mono text-[10px] font-black tracking-[0.3em] text-cyan-500/50 uppercase">
+        <h2 className="font-mono text-[10px] font-black tracking-[0.3em] text-primary/50 uppercase">
           [ SECTION 04 : HISTORICAL INTELLIGENCE ]
         </h2>
       </div>

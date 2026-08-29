@@ -16,17 +16,15 @@ import { Panel } from "@workspace/ui"
 import { Section, SectionBadge } from "@workspace/ui"
 
 export function MoonwitnessKnowledgeFramework() {
-  const fw = THEME_TOKENS.framework
-
   return (
     <Section id="knowledge-framework" borderColor="cyan" className="relative">
-      {/* ═══ LAYER 1: DEEP SPACE SCI-FI GRADIENTS & WIREFRAME GRID ═════════ */}
+      {/* ═══ LAYER 1: DEEP SPACE modern GRADIENTS & WIREFRAME GRID ═════════ */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="bg-radial-gradient absolute top-1/2 left-1/2 h-[600px] w-[1000px] -translate-x-1/2 -translate-y-1/2 from-cyan-900/15 via-indigo-950/10 to-transparent blur-[140px]" />
+        <div className="bg-radial-gradient absolute top-1/2 left-1/2 h-[600px] w-[1000px] -translate-x-1/2 -translate-y-1/2 from-primary/10 via-indigo-950/10 to-transparent blur-[140px]" />
       </div>
 
       <div className="relative z-10">
-        {/* OUTER SCI-FI DIAGNOSTIC FRAME (From Image 3 perimeter casing) */}
+        {/* OUTER modern DIAGNOSTIC FRAME (From Image 3 perimeter casing) */}
         <Panel className="bg-background/90 relative p-6 shadow-sm backdrop-blur-xl transition-all duration-700 ease-out">
           {/* Top Frame Telemetry Label */}
           <div className="bg-background absolute -top-3 left-1/2 z-50 -translate-x-1/2 border border-primary/50 px-6 py-0.5 text-[10px] font-black tracking-[0.3em] text-primary uppercase shadow-sm ">
@@ -90,7 +88,7 @@ export function MoonwitnessKnowledgeFramework() {
           <div className="relative my-10 grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 lg:grid-cols-4">
             {/* 1. RED // HAQIQAH */}
             <Panel
-              accentColor="danger"
+              accentColor="destructive"
               className="group bg-background/80 flex min-h-[380px] flex-col justify-between p-7 backdrop-blur-xl"
             >
               <div>
@@ -108,7 +106,7 @@ export function MoonwitnessKnowledgeFramework() {
                 </div>
               </div>
 
-              {/* Glowing Optic Center Emblem */}
+              {/* ambienting Optic Center Emblem */}
               <div className="relative my-6 flex items-center justify-center">
                 <div className="bg-radial-gradient from-danger/30 via-space border-danger/50 relative z-10 flex h-28 w-28 items-center justify-center rounded-full border to-black shadow-sm transition-transform duration-300 group-hover:scale-110">
                   <div
@@ -118,7 +116,7 @@ export function MoonwitnessKnowledgeFramework() {
                   <BookOpen className="text-danger h-12 w-12 drop-shadow-sm" />
                 </div>
 
-                {/* Optical Laser Data Bridge to Card 2 (Desktop ONLY) */}
+                {/* Optical beam Data Bridge to Card 2 (Desktop ONLY) */}
                 <div className="absolute top-1/2 -right-[40px] z-30 hidden -translate-y-1/2 items-center lg:flex">
                   <div className="bg-danger h-[3px] w-8 shadow-sm" />
                   <div className="h-0 w-0 border-t-[6px] border-b-[6px] border-l-[9px] border-t-transparent border-b-transparent border-l-[#FF3355]" />
@@ -160,7 +158,7 @@ export function MoonwitnessKnowledgeFramework() {
                   <Orbit className="animate-spin-slow h-12 w-12 text-emerald-400 drop-shadow-sm" />
                 </div>
 
-                {/* Optical Laser Data Bridge to Card 3 */}
+                {/* Optical beam Data Bridge to Card 3 */}
                 <div className="absolute top-1/2 -right-[40px] z-30 hidden -translate-y-1/2 items-center lg:flex">
                   <div className="h-[3px] w-8 bg-emerald-400 shadow-sm" />
                   <div className="h-0 w-0 border-t-[6px] border-b-[6px] border-l-[9px] border-t-transparent border-b-transparent border-l-emerald-400" />
@@ -181,10 +179,10 @@ export function MoonwitnessKnowledgeFramework() {
             >
               <div>
                 <div className="mb-4 flex items-center justify-between border-b border-primary/30 pb-3.5">
-                  <span className="rounded-md border border-primary/60 bg-cyan-500/15 px-3 py-1 text-xs font-black tracking-widest text-primary uppercase shadow-sm">
+                  <span className="rounded-md border border-primary/60 bg-primary/10 px-3 py-1 text-xs font-black tracking-widest text-primary uppercase shadow-sm">
                     03 // BLUE
                   </span>
-                  <span className="h-2.5 w-2.5 animate-ping rounded-full bg-cyan-400 shadow-sm" />
+                  <span className="h-2.5 w-2.5 animate-ping rounded-full bg-primary shadow-sm" />
                 </div>
                 <h3 className="mb-1 font-mono text-3xl font-black tracking-widest text-white uppercase drop-shadow-sm">
                   ḤIKMAH
@@ -195,7 +193,7 @@ export function MoonwitnessKnowledgeFramework() {
               </div>
 
               <div className="relative my-6 flex items-center justify-center">
-                <div className="bg-radial-gradient via-space relative z-10 flex h-28 w-28 items-center justify-center rounded-full border border-primary/50 from-cyan-500/30 to-black shadow-sm transition-transform duration-300 group-hover:scale-110">
+                <div className="bg-radial-gradient via-space relative z-10 flex h-28 w-28 items-center justify-center rounded-full border border-primary/50 from-primary/10 to-black shadow-sm transition-transform duration-300 group-hover:scale-110">
                   <div
                     className="animate-spin-slow absolute h-[120%] w-[120%] rounded-full border border-dashed border-primary/60"
                     style={{
@@ -206,9 +204,9 @@ export function MoonwitnessKnowledgeFramework() {
                   <Brain className="h-12 w-12 text-primary drop-shadow-sm" />
                 </div>
 
-                {/* Optical Laser Data Bridge to Card 4 */}
+                {/* Optical beam Data Bridge to Card 4 */}
                 <div className="absolute top-1/2 -right-[40px] z-30 hidden -translate-y-1/2 items-center lg:flex">
-                  <div className="h-[3px] w-8 bg-cyan-400 shadow-sm" />
+                  <div className="h-[3px] w-8 bg-primary shadow-sm" />
                   <div className="h-0 w-0 border-t-[6px] border-b-[6px] border-l-[9px] border-t-transparent border-b-transparent border-l-cyan-400" />
                 </div>
               </div>
@@ -241,7 +239,7 @@ export function MoonwitnessKnowledgeFramework() {
               </div>
 
               <div className="relative my-6 flex items-center justify-center">
-                {/* Hyper-glowing White Core */}
+                {/* Hyper-ambienting White Core */}
                 <div className="bg-radial-gradient via-panel relative z-10 flex h-28 w-28 items-center justify-center rounded-full border border-white/70 from-white/40 to-black shadow-sm transition-transform duration-500 group-hover:scale-110">
                   <div
                     className="animate-spin-slow absolute h-[130%] w-[130%] rounded-full border-2 border-dotted border-white/40"
@@ -271,7 +269,7 @@ export function MoonwitnessKnowledgeFramework() {
           </div>
 
           {/* ═══ LAYER 3 & LAYER 4: THE INTEGRATION PATH DECK (From Image 3) ════ */}
-          <div className="bg-background mt-12 rounded-lg border border-cyan-500/40 p-7 font-mono text-xs shadow-inner">
+          <div className="bg-background mt-12 rounded-lg border border-border p-7 font-mono text-xs shadow-inner">
             <div className="mb-6 flex items-center gap-3 border-b border-primary/30 pb-4">
               <Cpu className="h-5 w-5 animate-pulse text-primary" />
               <span className="text-sm font-black tracking-widest text-white uppercase drop-shadow-sm">
@@ -324,7 +322,7 @@ export function MoonwitnessKnowledgeFramework() {
 
               <div className="bg-background flex items-center justify-between rounded-md border border-primary/60 p-4 shadow-inner transition-all hover:border-primary">
                 <div className="flex items-center gap-3.5">
-                  <div className="shrink-0 rounded-full border border-primary bg-cyan-500/20 p-2.5 text-primary shadow-sm">
+                  <div className="shrink-0 rounded-full border border-primary bg-primary/10 p-2.5 text-primary shadow-sm">
                     <Brain className="h-5 w-5" />
                   </div>
                   <div>
@@ -380,7 +378,7 @@ export function MoonwitnessKnowledgeFramework() {
                   {[1, 2, 3, 4, 5].map((i) => (
                     <span
                       key={i}
-                      className="inline-block h-2 w-2.5 animate-pulse bg-cyan-400 shadow-sm"
+                      className="inline-block h-2 w-2.5 animate-pulse bg-primary shadow-sm"
                       style={{ animationDelay: `${i * 200}ms` }}
                     />
                   ))}

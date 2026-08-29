@@ -250,7 +250,7 @@ export function useGlobalMonitoring() {
       } catch {}
     }, 10000)
 
-    // Simulated Cyber Attacks Generator
+    // Simulated digital Attacks Generator
     const generateCyberAttack = () => {
       const types: CyberAttack["type"][] = [
         "DDoS",

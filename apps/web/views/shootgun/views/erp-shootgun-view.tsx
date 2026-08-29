@@ -146,11 +146,11 @@ export function ERPShootgunView() {
         subtitle="Create and maintain operation records for the public archive."
         operation="SHOOTGUN-OPS"
         status="ONLINE"
-        accentColor="system"
+        accentColor="primary"
       />
 
-      <section className="border border-cyan-400/20 bg-black/40 backdrop-blur-md">
-        <div className="flex flex-col gap-4 border-b border-cyan-400/20 p-4 sm:flex-row sm:items-center sm:justify-between">
+      <section className="border border-border bg-black/40 backdrop-blur-md">
+        <div className="flex flex-col gap-4 border-b border-border p-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-sm font-semibold tracking-wider text-white">
               OPERATION RECORDS
@@ -161,7 +161,7 @@ export function ERPShootgunView() {
           </div>
           <button
             onClick={openCreate}
-            className="inline-flex h-9 items-center justify-center gap-2 bg-cyan-400 px-3 text-xs font-semibold text-slate-950 hover:bg-cyan-300"
+            className="inline-flex h-9 items-center justify-center gap-2 bg-primary px-3 text-xs font-semibold text-slate-950 hover:bg-primary"
           >
             <Plus className="size-4" /> ADD OPERATION
           </button>
@@ -175,7 +175,7 @@ export function ERPShootgunView() {
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[760px] text-left text-xs">
-            <thead className="border-b border-cyan-400/15 text-slate-500">
+            <thead className="border-b border-border text-slate-500">
               <tr>
                 <th className="px-4 py-3 font-medium">NAME</th>
                 <th className="px-4 py-3 font-medium">ARGUMENT</th>
@@ -187,7 +187,7 @@ export function ERPShootgunView() {
               {operations.map((operation) => (
                 <tr
                   key={operation.id}
-                  className="border-b border-cyan-400/10 text-slate-300"
+                  className="border-b border-border text-slate-300"
                 >
                   <td className="px-4 py-3 font-medium text-white">
                     {operation.name}
@@ -205,7 +205,7 @@ export function ERPShootgunView() {
                           href={operation.targetUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1.5 text-slate-400 hover:text-cyan-300"
+                          className="p-1.5 text-slate-400 hover:text-primary"
                           title="Open target"
                         >
                           <ExternalLink className="size-4" />
@@ -213,7 +213,7 @@ export function ERPShootgunView() {
                       )}
                       <button
                         onClick={() => openEdit(operation)}
-                        className="p-1.5 text-slate-400 hover:text-cyan-300"
+                        className="p-1.5 text-slate-400 hover:text-primary"
                         title="Edit operation"
                       >
                         <Pencil className="size-4" />
@@ -248,9 +248,9 @@ export function ERPShootgunView() {
         <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/75 p-4 sm:items-center">
           <form
             onSubmit={save}
-            className="my-4 w-full max-w-3xl border border-cyan-400/30 bg-slate-950 shadow-2xl"
+            className="my-4 w-full max-w-3xl border border-border bg-slate-950 shadow-2xl"
           >
-            <div className="flex items-center justify-between border-b border-cyan-400/20 p-4">
+            <div className="flex items-center justify-between border-b border-border p-4">
               <div>
                 <h2 className="text-sm font-semibold text-white">
                   {editingId ? "EDIT OPERATION" : "NEW OPERATION"}
@@ -277,7 +277,7 @@ export function ERPShootgunView() {
                   onChange={(event) =>
                     setForm({ ...form, name: event.target.value })
                   }
-                  className="h-9 w-full border border-cyan-400/20 bg-black/40 px-3 text-sm text-white outline-none focus:border-cyan-300"
+                  className="h-9 w-full border border-border bg-black/40 px-3 text-sm text-white outline-none focus:border-border"
                 />
               </label>
               <label className="space-y-1.5">
@@ -288,7 +288,7 @@ export function ERPShootgunView() {
                   onChange={(event) =>
                     setForm({ ...form, targetUrl: event.target.value })
                   }
-                  className="h-9 w-full border border-cyan-400/20 bg-black/40 px-3 text-sm text-white outline-none focus:border-cyan-300"
+                  className="h-9 w-full border border-border bg-black/40 px-3 text-sm text-white outline-none focus:border-border"
                 />
               </label>
               <label className="space-y-1.5">
@@ -299,7 +299,7 @@ export function ERPShootgunView() {
                   onChange={(event) =>
                     setForm({ ...form, targetImage: event.target.value })
                   }
-                  className="h-9 w-full border border-cyan-400/20 bg-black/40 px-3 text-sm text-white outline-none focus:border-cyan-300"
+                  className="h-9 w-full border border-border bg-black/40 px-3 text-sm text-white outline-none focus:border-border"
                 />
               </label>
               <label className="space-y-1.5 sm:col-span-2">
@@ -309,7 +309,7 @@ export function ERPShootgunView() {
                   onChange={(event) =>
                     setForm({ ...form, argument: event.target.value })
                   }
-                  className="min-h-24 w-full border border-cyan-400/20 bg-black/40 p-3 text-sm text-white outline-none focus:border-cyan-300"
+                  className="min-h-24 w-full border border-border bg-black/40 p-3 text-sm text-white outline-none focus:border-border"
                 />
               </label>
               <label className="space-y-1.5 sm:col-span-2">
@@ -319,12 +319,12 @@ export function ERPShootgunView() {
                   onChange={(event) =>
                     setForm({ ...form, wisdom: event.target.value })
                   }
-                  className="min-h-24 w-full border border-cyan-400/20 bg-black/40 p-3 text-sm text-white outline-none focus:border-cyan-300"
+                  className="min-h-24 w-full border border-border bg-black/40 p-3 text-sm text-white outline-none focus:border-border"
                 />
               </label>
               <label className="space-y-1.5 sm:col-span-2">
                 <span className="flex items-center gap-2 text-xs text-slate-300">
-                  <ScrollText className="size-4 text-cyan-300" /> Verse
+                  <ScrollText className="size-4 text-primary" /> Verse
                   references
                 </span>
                 <select
@@ -339,7 +339,7 @@ export function ERPShootgunView() {
                       ),
                     })
                   }
-                  className="h-48 w-full border border-cyan-400/20 bg-black/40 p-2 text-xs text-white outline-none focus:border-cyan-300"
+                  className="h-48 w-full border border-border bg-black/40 p-2 text-xs text-white outline-none focus:border-border"
                 >
                   {verses.map((verse) => (
                     <option key={verse.id} value={verse.id}>
@@ -353,7 +353,7 @@ export function ERPShootgunView() {
                 </span>
               </label>
             </div>
-            <div className="flex justify-end gap-3 border-t border-cyan-400/20 p-4">
+            <div className="flex justify-end gap-3 border-t border-border p-4">
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
@@ -363,7 +363,7 @@ export function ERPShootgunView() {
               </button>
               <button
                 disabled={isSaving}
-                className="inline-flex h-9 items-center gap-2 bg-cyan-400 px-4 text-xs font-semibold text-slate-950 disabled:opacity-60"
+                className="inline-flex h-9 items-center gap-2 bg-primary px-4 text-xs font-semibold text-slate-950 disabled:opacity-60"
               >
                 <Save className="size-4" />
                 {isSaving ? "SAVING..." : "SAVE OPERATION"}

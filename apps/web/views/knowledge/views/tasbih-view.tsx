@@ -169,7 +169,7 @@ export function TasbihView() {
           })}
         </div>
 
-        {/* Main Interactive Counter HUD Console */}
+        {/* Main Interactive Counter display Console */}
         <div className="rounded-xl border border-border/40 bg-card/90 border-success/50 bg-background/95 space-y-6 border p-8 text-center shadow-sm">
           {/* Target Selector */}
           <div className="border-success/20 flex items-center justify-between border-b pb-4 text-xs font-bold">

@@ -57,7 +57,7 @@ export type MoonDataTableProps = {
   customActions?: React.ReactNode
 }
 
-export function ModelDataTable({
+export function MoonDataTable({
   modelName,
   title,
   description,
@@ -148,9 +148,9 @@ export function ModelDataTable({
         <div
           className={`flex flex-col gap-4 ${sideWidgets ? "w-full xl:w-3/4" : "w-full"}`}
         >
-          <div className="flex flex-col overflow-hidden rounded-xl border border-cyan-900/30 bg-black/40 shadow-sm backdrop-blur-md">
+          <div className="flex flex-col overflow-hidden rounded-xl border border-border bg-black/40 shadow-sm backdrop-blur-md">
             {/* Toolbar / Header */}
-            <div className="flex flex-col gap-4 border-b border-cyan-900/30 p-4">
+            <div className="flex flex-col gap-4 border-b border-border p-4">
               {/* Tabs & Primary Actions */}
               <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
                 {tabs && tabs.length > 0 ? (
@@ -161,7 +161,7 @@ export function ModelDataTable({
                         onClick={() => onTabChange && onTabChange(tab.id)}
                         className={`border-b-2 pb-2 text-xs font-semibold tracking-wider whitespace-nowrap uppercase transition-colors ${
                           activeTab === tab.id
-                            ? "border-cyan-400 text-cyan-400"
+                            ? "border-border text-primary"
                             : "border-transparent text-slate-500 hover:text-slate-300"
                         }`}
                       >
@@ -171,7 +171,7 @@ export function ModelDataTable({
                   </div>
                 ) : (
                   <div className="flex items-center gap-3">
-                    <div className="rounded-lg border border-cyan-500/20 bg-cyan-500/10 p-2 text-cyan-400">
+                    <div className="rounded-lg border border-border bg-primary/10 p-2 text-primary">
                       {icon}
                     </div>
                     <div>
@@ -190,7 +190,7 @@ export function ModelDataTable({
                       setFormData({})
                       setIsAddOpen(true)
                     }}
-                    className="h-8 bg-cyan-500 px-3 text-xs font-semibold text-black shadow-sm hover:bg-cyan-400"
+                    className="h-8 bg-primary px-3 text-xs font-semibold text-black shadow-sm hover:bg-primary"
                   >
                     <Plus className="mr-1 h-4 w-4" />
                     ADD RECORD
@@ -206,7 +206,7 @@ export function ModelDataTable({
                     placeholder="Search records..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="h-8 border-cyan-900/50 bg-black/50 pl-9 text-xs text-slate-200 focus-visible:ring-cyan-500/50"
+                    className="h-8 border-border bg-black/50 pl-9 text-xs text-slate-200 focus-visible:ring-cyan-500/50"
                   />
                 </div>
 
@@ -220,11 +220,11 @@ export function ModelDataTable({
             <div className="w-full overflow-x-auto">
               <table className="w-full border-collapse text-left">
                 <thead>
-                  <tr className="border-b border-cyan-900/30 bg-white/[0.02]">
+                  <tr className="border-b border-border bg-white/[0.02]">
                     <th className="w-12 px-4 py-3 text-center text-[10px] font-bold tracking-widest text-slate-500 uppercase">
                       <input
                         type="checkbox"
-                        className="rounded border-cyan-900/50 bg-black/50"
+                        className="rounded border-border bg-black/50"
                       />
                     </th>
                     {columns
@@ -249,7 +249,7 @@ export function ModelDataTable({
                         colSpan={columns.length + 2}
                         className="px-4 py-12 text-center"
                       >
-                        <Loader2 className="mx-auto mb-2 h-6 w-6 animate-spin text-cyan-500" />
+                        <Loader2 className="mx-auto mb-2 h-6 w-6 animate-spin text-primary" />
                         <span className="text-xs tracking-widest text-slate-400 uppercase">
                           Loading...
                         </span>
@@ -279,12 +279,12 @@ export function ModelDataTable({
                     filteredData.map((row: any) => (
                       <tr
                         key={row.id}
-                        className="group border-b border-cyan-900/10 transition-colors hover:bg-white/[0.02]"
+                        className="group border-b border-border transition-colors hover:bg-white/[0.02]"
                       >
                         <td className="px-4 py-3 text-center">
                           <input
                             type="checkbox"
-                            className="rounded border-cyan-900/50 bg-black/50"
+                            className="rounded border-border bg-black/50"
                           />
                         </td>
                         {columns
@@ -303,7 +303,7 @@ export function ModelDataTable({
                           <div className="flex items-center justify-end gap-2 opacity-50 transition-opacity group-hover:opacity-100">
                             <button
                               onClick={() => openEdit(row)}
-                              className="rounded bg-white/5 p-1.5 text-slate-400 transition-colors hover:bg-cyan-500/20 hover:text-cyan-400"
+                              className="rounded bg-white/5 p-1.5 text-slate-400 transition-colors hover:bg-primary/10 hover:text-primary"
                             >
                               <Edit className="h-3.5 w-3.5" />
                             </button>
@@ -326,7 +326,7 @@ export function ModelDataTable({
             </div>
 
             {/* Table Footer / Pagination */}
-            <div className="flex items-center justify-between border-t border-cyan-900/30 p-4">
+            <div className="flex items-center justify-between border-t border-border p-4">
               <span className="text-[10px] tracking-wider text-slate-500">
                 Showing {filteredData.length} records
               </span>
@@ -335,7 +335,7 @@ export function ModelDataTable({
                 <button className="flex h-6 w-6 items-center justify-center rounded text-[10px] text-slate-500 hover:bg-white/5">
                   &lt;
                 </button>
-                <button className="flex h-6 w-6 items-center justify-center rounded border border-cyan-500/30 bg-cyan-500/20 text-[10px] text-cyan-400">
+                <button className="flex h-6 w-6 items-center justify-center rounded border border-border bg-primary/10 text-[10px] text-primary">
                   1
                 </button>
                 <button className="flex h-6 w-6 items-center justify-center rounded text-[10px] text-slate-500 hover:bg-white/5">
@@ -359,9 +359,9 @@ export function ModelDataTable({
 
       {/* Add Dialog */}
       <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-        <DialogContent className="border-cyan-900/50 bg-slate-950">
+        <DialogContent className="border-border bg-slate-950">
           <DialogHeader>
-            <DialogTitle className="text-sm font-bold tracking-wider text-cyan-400 uppercase">
+            <DialogTitle className="text-sm font-bold tracking-wider text-primary uppercase">
               Add New {title}
             </DialogTitle>
             <DialogDescription className="text-xs">
@@ -389,7 +389,7 @@ export function ModelDataTable({
                     }
                     value={formData[col.name] || ""}
                     onChange={handleInputChange}
-                    className="border-cyan-900/50 bg-black/50 text-slate-200 focus-visible:ring-cyan-500/50"
+                    className="border-border bg-black/50 text-slate-200 focus-visible:ring-cyan-500/50"
                     required={col.required}
                   />
                 </div>
@@ -406,7 +406,7 @@ export function ModelDataTable({
             <Button
               onClick={() => handleSave(false)}
               disabled={isSubmitting}
-              className="h-8 bg-cyan-500 px-6 text-xs font-semibold text-black shadow-sm hover:bg-cyan-400"
+              className="h-8 bg-primary px-6 text-xs font-semibold text-black shadow-sm hover:bg-primary"
             >
               {isSubmitting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -420,9 +420,9 @@ export function ModelDataTable({
 
       {/* Edit Dialog */}
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <DialogContent className="border-cyan-900/50 bg-slate-950">
+        <DialogContent className="border-border bg-slate-950">
           <DialogHeader>
-            <DialogTitle className="text-sm font-bold tracking-wider text-cyan-400 uppercase">
+            <DialogTitle className="text-sm font-bold tracking-wider text-primary uppercase">
               Edit {title}
             </DialogTitle>
             <DialogDescription className="text-xs">
@@ -450,7 +450,7 @@ export function ModelDataTable({
                     }
                     value={formData[col.name] || ""}
                     onChange={handleInputChange}
-                    className="border-cyan-900/50 bg-black/50 text-slate-200 focus-visible:ring-cyan-500/50"
+                    className="border-border bg-black/50 text-slate-200 focus-visible:ring-cyan-500/50"
                     required={col.required}
                   />
                 </div>
@@ -467,7 +467,7 @@ export function ModelDataTable({
             <Button
               onClick={() => handleSave(true)}
               disabled={isSubmitting}
-              className="h-8 bg-cyan-500 px-6 text-xs font-semibold text-black shadow-sm hover:bg-cyan-400"
+              className="h-8 bg-primary px-6 text-xs font-semibold text-black shadow-sm hover:bg-primary"
             >
               {isSubmitting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

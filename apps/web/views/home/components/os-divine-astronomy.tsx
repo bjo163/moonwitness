@@ -149,7 +149,7 @@ export function OSDivineAstronomy() {
                     }`}
                   >
                     <div
-                      className={`rounded-full p-1.5 ${item.active ? "bg-cyan-500/20" : "bg-white/5"}`}
+                      className={`rounded-full p-1.5 ${item.active ? "bg-primary/10" : "bg-white/5"}`}
                     >
                       <item.icon
                         className="h-4 w-4"
@@ -224,7 +224,7 @@ export function OSDivineAstronomy() {
           </div>
 
           {/* CENTER CANVAS: 3D CELESTIAL ORRERY (Col 4-9) */}
-          <div className="bg-background relative flex min-h-[500px] flex-col overflow-hidden rounded-2xl border-2 border-cyan-500/40 p-1 shadow-sm lg:col-span-6">
+          <div className="bg-background relative flex min-h-[500px] flex-col overflow-hidden rounded-2xl border-2 border-border p-1 shadow-sm lg:col-span-6">
             {/* Deep Space Background image */}
             <div className="absolute inset-0 z-0">
               <img
@@ -239,7 +239,7 @@ export function OSDivineAstronomy() {
             <div className="absolute top-1/2 left-1/2 z-0 h-[60%] w-[110%] -translate-x-1/2 -translate-y-1/2 -rotate-12 transform rounded-[50%] border border-primary/20" />
             <div className="absolute top-1/2 left-1/2 z-0 h-[40%] w-[80%] -translate-x-1/2 -translate-y-1/2 rotate-12 transform rounded-[50%] border border-blue-400/20" />
 
-            {/* HUD OVERLAYS (Z-10) */}
+            {/* display OVERLAYS (Z-10) */}
             <div className="pointer-events-none relative z-10 flex h-full w-full flex-col justify-between p-4">
               {/* TOP PANELS: Moon & Sun Stats */}
               <div className="flex w-full items-start justify-between">
@@ -594,12 +594,12 @@ export function OSDivineAstronomy() {
           </div>
 
           {/* Astronomical Insight (Col 9-12) */}
-          <div className="bg-background flex flex-col justify-center rounded-xl border-2 border-cyan-500/40 p-5 shadow-sm md:col-span-4">
+          <div className="bg-background flex flex-col justify-center rounded-xl border-2 border-border p-5 shadow-sm md:col-span-4">
             <div className="mb-2 flex items-center justify-between text-[10px] font-black tracking-widest text-primary uppercase">
               <span>ASTRONOMICAL INSIGHT</span>
               <BookOpen className="h-4 w-4 text-primary/50" />
             </div>
-            <div className="border-l-2 border-cyan-500 pl-3 font-serif text-xs leading-relaxed text-blue-100/90 italic lg:text-sm">
+            <div className="border-l-2 border-border pl-3 font-serif text-xs leading-relaxed text-blue-100/90 italic lg:text-sm">
               "The heavens declare the glory of God; and the firmament shows his
               handiwork."
             </div>

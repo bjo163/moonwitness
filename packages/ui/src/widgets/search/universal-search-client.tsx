@@ -69,7 +69,7 @@ export function UniversalSearchClient() {
   return (
     <div>
       {/* Search Input Bar */}
-      <div className="search-glow relative mb-6 rounded-2xl border border-border bg-card shadow-sm">
+      <div className=" relative mb-6 rounded-2xl border border-border bg-card shadow-sm">
         <svg
           className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-muted-foreground"
           fill="none"

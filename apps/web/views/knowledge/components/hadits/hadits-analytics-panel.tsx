@@ -41,7 +41,7 @@ export function HaditsAnalyticsPanel() {
       {/* 2. Top Narrators / Ruwat */}
       <div className="rounded-xl border border-white/10 bg-card p-4 shadow-lg">
         <div className="mb-3 flex items-center gap-2">
-          <Layers className="h-4 w-4 text-cyan-400" />
+          <Layers className="h-4 w-4 text-primary" />
           <span className="font-mono text-xs font-black tracking-wider text-white uppercase">
             Top Narrators (Al-Mukthirun)
           </span>
@@ -57,11 +57,11 @@ export function HaditsAnalyticsPanel() {
           ].map((narrator, i) => (
             <div
               key={i}
-              className="flex items-center justify-between rounded border border-white/5 bg-white/[0.02] p-2 hover:border-cyan-500/30"
+              className="flex items-center justify-between rounded border border-white/5 bg-white/[0.02] p-2 hover:border-border"
             >
               <div>
                 <div className="font-bold text-white/90">{narrator.name}</div>
-                <div className="text-[8px] text-cyan-400/70">{narrator.role}</div>
+                <div className="text-[8px] text-primary/70">{narrator.role}</div>
               </div>
               <span className="text-[9px] text-white/40">{narrator.count}</span>
             </div>
@@ -70,8 +70,8 @@ export function HaditsAnalyticsPanel() {
       </div>
 
       {/* 3. Prophetic Wisdom Highlight */}
-      <div className="relative overflow-hidden rounded-xl border border-cyan-500/20 bg-gradient-to-b from-card -background p-4 shadow-lg">
-        <div className="mb-2 flex items-center gap-2 text-cyan-400">
+      <div className="relative overflow-hidden rounded-xl border border-border bg-gradient-to-b from-card -background p-4 shadow-lg">
+        <div className="mb-2 flex items-center gap-2 text-primary">
           <BookOpen className="h-4 w-4" />
           <span className="font-mono text-[10px] font-black uppercase">Jawami&apos; al-Kalim</span>
         </div>
@@ -81,7 +81,7 @@ export function HaditsAnalyticsPanel() {
         <p className="text-[10px] text-white/60 italic">
           &ldquo;Actions are judged solely by intentions.&rdquo;
         </p>
-        <div className="mt-2 font-mono text-[8px] text-cyan-400/60">
+        <div className="mt-2 font-mono text-[8px] text-primary/60">
           Sahih Bukhari #1 • Sahih Muslim #1907
         </div>
       </div>

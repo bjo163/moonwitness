@@ -76,21 +76,21 @@ export function AuthTerminalWidget() {
 
   return (
     <div className="relative w-full max-w-[480px] p-6 text-left">
-      {/* HUD Header */}
+      {/* display Header */}
       <div className="mb-6 flex flex-col items-center text-center">
-        <div className="relative mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-cyan-500 shadow-sm">
-          <Fingerprint className="h-8 w-8 text-cyan-400" />
+        <div className="relative mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-border shadow-sm">
+          <Fingerprint className="h-8 w-8 text-primary" />
         </div>
         <h1 className="font-mono text-3xl font-black tracking-[0.2em] text-white uppercase drop-shadow-sm">
           MOONWITNESS OS
         </h1>
-        <p className="mt-2 font-mono text-[10px] font-bold tracking-widest text-cyan-500 uppercase">
+        <p className="mt-2 font-mono text-[10px] font-bold tracking-widest text-primary uppercase">
           CELESTIAL ACCESS PROTOCOL //{" "}
           {activeTab === "login" ? "AUTHENTICATION" : "REGISTRATION"}
         </p>
       </div>
 
-      <div className="mb-8 w-full border-b border-cyan-500/30" />
+      <div className="mb-8 w-full border-b border-border" />
 
       {/* Mode Switcher */}
       {!adminPortalSelection && (
@@ -104,8 +104,8 @@ export function AuthTerminalWidget() {
             }}
             className={`flex items-center justify-center gap-2 border py-3 transition-all ${
               activeTab === "login"
-                ? "border-cyan-400 text-cyan-400 shadow-sm"
-                : "border-white/10 text-primary/40 hover:border-cyan-500/30 hover:text-cyan-500"
+                ? "border-border text-primary shadow-sm"
+                : "border-white/10 text-primary/40 hover:border-border hover:text-primary"
             }`}
           >
             <Lock className="h-3.5 w-3.5" /> LOGIN
@@ -119,8 +119,8 @@ export function AuthTerminalWidget() {
             }}
             className={`flex items-center justify-center gap-2 border py-3 transition-all ${
               activeTab === "register"
-                ? "border-cyan-400 text-cyan-400 shadow-sm"
-                : "border-white/10 text-primary/40 hover:border-cyan-500/30 hover:text-cyan-500"
+                ? "border-border text-primary shadow-sm"
+                : "border-white/10 text-primary/40 hover:border-border hover:text-primary"
             }`}
           >
             <User className="h-3.5 w-3.5" /> REGISTER
@@ -177,12 +177,12 @@ export function AuthTerminalWidget() {
 
             <button
               onClick={() => router.push("/home")}
-              className="group rounded-md relative flex items-center justify-between border border-cyan-500/40 bg-cyan-500/10 p-4 transition-all hover:bg-cyan-500/20 hover:shadow-sm"
+              className="group rounded-md relative flex items-center justify-between border border-border bg-primary/10 p-4 transition-all hover:bg-primary/10 hover:shadow-sm"
             >
               <div className="flex items-center gap-4">
-                <User className="h-6 w-6 text-cyan-400" />
+                <User className="h-6 w-6 text-primary" />
                 <div className="text-left">
-                  <h3 className="font-mono text-sm font-black text-cyan-400">
+                  <h3 className="font-mono text-sm font-black text-primary">
                     PUBLIC OBSERVATORY
                   </h3>
                   <p className="font-mono text-[9px] text-primary/70">
@@ -190,7 +190,7 @@ export function AuthTerminalWidget() {
                   </p>
                 </div>
               </div>
-              <span className="font-mono text-[10px] font-bold text-cyan-500 opacity-50 group-hover:opacity-100">
+              <span className="font-mono text-[10px] font-bold text-primary opacity-50 group-hover:opacity-100">
                 ENTER &rarr;
               </span>
             </button>
@@ -211,8 +211,8 @@ export function AuthTerminalWidget() {
           )}
 
           <div className="space-y-1.5">
-            <label className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-cyan-500 uppercase">
-              <span className="h-1.5 w-1.5 rounded-full bg-cyan-500" /> EMAIL
+            <label className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-primary uppercase">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary" /> EMAIL
               IDENTITY
             </label>
             <input
@@ -221,15 +221,15 @@ export function AuthTerminalWidget() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full border border-cyan-500/10 bg-black/40 px-4 py-3 text-xs text-white placeholder:text-primary/30 focus:border-cyan-500/50 focus:bg-cyan-500/5 focus:ring-0 focus:outline-none"
+              className="w-full border border-border bg-black/40 px-4 py-3 text-xs text-white placeholder:text-primary/30 focus:border-border focus:bg-primary/10 focus:ring-0 focus:outline-none"
             />
           </div>
 
           {activeTab === "register" && (
             <>
               <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-cyan-500 uppercase">
-                  <span className="h-1.5 w-1.5 rounded-full bg-cyan-500" />{" "}
+                <label className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-primary uppercase">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />{" "}
                   PLAYER NAME
                 </label>
                 <input
@@ -238,13 +238,13 @@ export function AuthTerminalWidget() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="w-full border border-cyan-500/10 bg-black/40 px-4 py-3 text-xs text-white placeholder:text-primary/30 focus:border-cyan-500/50 focus:bg-cyan-500/5 focus:ring-0 focus:outline-none"
+                  className="w-full border border-border bg-black/40 px-4 py-3 text-xs text-white placeholder:text-primary/30 focus:border-border focus:bg-primary/10 focus:ring-0 focus:outline-none"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-cyan-500 uppercase">
-                  <span className="h-1.5 w-1.5 rounded-full bg-cyan-500" />{" "}
+                <label className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-primary uppercase">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />{" "}
                   ASSIGNMENT DIRECTIVE
                 </label>
                 <div className="grid grid-cols-3 gap-2">
@@ -253,8 +253,8 @@ export function AuthTerminalWidget() {
                     onClick={() => setRole("public")}
                     className={`flex flex-col items-center justify-center gap-2 border p-3 transition-colors ${
                       role === "public"
-                        ? "border-cyan-400 text-cyan-400"
-                        : "border-white/10 text-primary/40 hover:border-cyan-500/30"
+                        ? "border-border text-primary"
+                        : "border-white/10 text-primary/40 hover:border-border"
                     }`}
                   >
                     <User className="h-4 w-4" />
@@ -265,8 +265,8 @@ export function AuthTerminalWidget() {
                     onClick={() => setRole("admin")}
                     className={`flex flex-col items-center justify-center gap-2 border p-3 transition-colors ${
                       role === "admin"
-                        ? "border-cyan-400 text-cyan-400"
-                        : "border-white/10 text-primary/40 hover:border-cyan-500/30"
+                        ? "border-border text-primary"
+                        : "border-white/10 text-primary/40 hover:border-border"
                     }`}
                   >
                     <ShieldCheck className="h-4 w-4" />
@@ -279,8 +279,8 @@ export function AuthTerminalWidget() {
                     onClick={() => setRole("console")}
                     className={`flex flex-col items-center justify-center gap-2 border p-3 transition-colors ${
                       role === "console"
-                        ? "border-cyan-400 text-cyan-400"
-                        : "border-white/10 text-primary/40 hover:border-cyan-500/30"
+                        ? "border-border text-primary"
+                        : "border-white/10 text-primary/40 hover:border-border"
                     }`}
                   >
                     <Terminal className="h-4 w-4" />
@@ -292,8 +292,8 @@ export function AuthTerminalWidget() {
           )}
 
           <div className="space-y-1.5">
-            <label className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-cyan-500 uppercase">
-              <span className="h-1.5 w-1.5 rounded-full bg-cyan-500" /> SECURE
+            <label className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-primary uppercase">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary" /> SECURE
               PROTOCOL KEY
             </label>
             <input
@@ -302,14 +302,14 @@ export function AuthTerminalWidget() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full border border-cyan-500/10 bg-black/40 px-4 py-3 text-xs text-white placeholder:text-primary/30 focus:border-cyan-500/50 focus:bg-cyan-500/5 focus:ring-0 focus:outline-none"
+              className="w-full border border-border bg-black/40 px-4 py-3 text-xs text-white placeholder:text-primary/30 focus:border-border focus:bg-primary/10 focus:ring-0 focus:outline-none"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="group relative mt-6 flex w-full items-center justify-center overflow-hidden bg-cyan-500 py-3.5 font-mono text-xs font-black tracking-widest text-black transition-all hover:bg-cyan-400 hover:shadow-sm"
+            className="group relative mt-6 flex w-full items-center justify-center overflow-hidden bg-primary py-3.5 font-mono text-xs font-black tracking-widest text-black transition-all hover:bg-primary hover:shadow-sm"
           >
             <span className="absolute inset-0 w-full -translate-x-full bg-white/40 transition-all duration-700 ease-in-out group-hover:translate-x-full" />
             {loading

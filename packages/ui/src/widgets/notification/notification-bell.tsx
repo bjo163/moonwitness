@@ -48,7 +48,7 @@ export function NotificationBell() {
       case "achievement":
         return "text-amber-300 bg-amber-500/20"
       default:
-        return "text-cyan-400 bg-cyan-500/10"
+        return "text-primary bg-primary/10"
     }
   }
 
@@ -56,7 +56,7 @@ export function NotificationBell() {
     <div className="relative" ref={panelRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative flex h-9 w-9 items-center justify-center rounded-full border border-cyan-500/30 bg-black/40 text-cyan-400 transition-colors hover:border-cyan-400 hover:bg-cyan-950/50 hover:text-cyan-300"
+        className="relative flex h-9 w-9 items-center justify-center rounded-full border border-border bg-black/40 text-primary transition-colors hover:border-border hover:bg-muted hover:text-primary"
       >
         <Bell className="h-4 w-4" />
         {mounted && unreadCount > 0 && (
@@ -67,17 +67,17 @@ export function NotificationBell() {
       </button>
 
       {isOpen && (
-        <div className="bg-background/95 absolute top-full right-0 z-[100] mt-2 w-80 overflow-hidden rounded-xl border border-cyan-500/30 shadow-sm backdrop-blur-xl sm:w-96">
+        <div className="bg-background/95 absolute top-full right-0 z-[100] mt-2 w-80 overflow-hidden rounded-xl border border-border shadow-sm backdrop-blur-xl sm:w-96">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-cyan-500/20 bg-black/40 px-4 py-3">
-            <h3 className="font-mono text-[10px] font-bold tracking-widest text-cyan-300 uppercase">
+          <div className="flex items-center justify-between border-b border-border bg-black/40 px-4 py-3">
+            <h3 className="font-mono text-[10px] font-bold tracking-widest text-primary uppercase">
               System Notifications
             </h3>
             <div className="flex items-center gap-2">
               <button
                 onClick={markAllAsRead}
                 title="Mark all as read"
-                className="rounded p-1 text-cyan-500 transition-colors hover:bg-cyan-500/10 hover:text-cyan-300"
+                className="rounded p-1 text-primary transition-colors hover:bg-primary/10 hover:text-primary"
               >
                 <Check className="h-3.5 w-3.5" />
               </button>
@@ -95,8 +95,8 @@ export function NotificationBell() {
           <div className="max-h-96 overflow-y-auto">
             {notifications.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-10 text-center opacity-50">
-                <Bell className="mb-2 h-8 w-8 text-cyan-500" />
-                <p className="font-mono text-xs text-cyan-400">
+                <Bell className="mb-2 h-8 w-8 text-primary" />
+                <p className="font-mono text-xs text-primary">
                   NO NEW TRANSMISSIONS
                 </p>
               </div>
@@ -105,7 +105,7 @@ export function NotificationBell() {
                 {notifications.map((notif) => (
                   <div
                     key={notif.id}
-                    className={`flex flex-col gap-2 px-4 py-3 transition-colors hover:bg-white/5 ${!notif.read ? "bg-cyan-500/5" : ""}`}
+                    className={`flex flex-col gap-2 px-4 py-3 transition-colors hover:bg-white/5 ${!notif.read ? "bg-primary/10" : ""}`}
                     onClick={() => {
                       if (!notif.read) markAsRead(notif.id)
                     }}
@@ -123,7 +123,7 @@ export function NotificationBell() {
                           >
                             {notif.title}
                           </h4>
-                          <span className="ml-2 shrink-0 font-mono text-[9px] text-cyan-500/50">
+                          <span className="ml-2 shrink-0 font-mono text-[9px] text-primary/50">
                             {new Date(notif.timestamp).toLocaleTimeString([], {
                               hour: "2-digit",
                               minute: "2-digit",
@@ -131,7 +131,7 @@ export function NotificationBell() {
                           </span>
                         </div>
                         <p
-                          className={`mt-0.5 font-mono text-[10px] leading-relaxed ${!notif.read ? "text-cyan-100" : "text-slate-400"}`}
+                          className={`mt-0.5 font-mono text-[10px] leading-relaxed ${!notif.read ? "text-primary" : "text-slate-400"}`}
                         >
                           {notif.message}
                         </p>
@@ -139,7 +139,7 @@ export function NotificationBell() {
                         {notif.actionUrl && (
                           <Link
                             href={notif.actionUrl}
-                            className="mt-2 inline-block rounded border border-cyan-500/30 px-2 py-1 font-mono text-[9px] font-bold tracking-widest text-cyan-400 uppercase transition-colors hover:bg-cyan-500/20 hover:text-cyan-300"
+                            className="mt-2 inline-block rounded border border-border px-2 py-1 font-mono text-[9px] font-bold tracking-widest text-primary uppercase transition-colors hover:bg-primary/10 hover:text-primary"
                           >
                             {notif.actionLabel || "View Action"}
                           </Link>
@@ -147,7 +147,7 @@ export function NotificationBell() {
                       </div>
                       {!notif.read && (
                         <div className="shrink-0 pt-1">
-                          <div className="h-2 w-2 rounded-full bg-cyan-400 shadow-sm" />
+                          <div className="h-2 w-2 rounded-full bg-primary shadow-sm" />
                         </div>
                       )}
                     </div>

@@ -2,7 +2,7 @@
 
 import React, { Suspense } from "react"
 import { usePathname, useRouter } from "next/navigation"
-import { Sidebar, Topbar, CommandPalette, CosmicAudioToggle, ErrorBoundary } from "@workspace/ui"
+import { Sidebar, Topbar, CommandPalette, AudioToggle, ErrorBoundary } from "@workspace/ui"
 import { useAuthSession } from "@moon/client"
 
 export function CommandCenterShell({ children }: { children: React.ReactNode }) {
@@ -60,7 +60,7 @@ export function CommandCenterShell({ children }: { children: React.ReactNode }) 
       </div>
       <CommandPalette />
       <div className="fixed bottom-4 right-4 z-40 hidden sm:block">
-        <CosmicAudioToggle />
+        <AudioToggle />
       </div>
     </div>
   )

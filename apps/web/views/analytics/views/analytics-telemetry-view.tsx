@@ -126,8 +126,8 @@ export function AnalyticsTelemetryView() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-cyan-500/20 bg-black/40 p-6 backdrop-blur-xl transition-all hover:border-cyan-500/50">
-          <div className="mb-4 flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-cyan-400 uppercase">
+        <div className="rounded-2xl border border-border bg-black/40 p-6 backdrop-blur-xl transition-all hover:border-border">
+          <div className="mb-4 flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-primary uppercase">
             <Clock className="h-4 w-4" /> Core Uptime
           </div>
           <div className="font-mono text-4xl font-black text-white">
@@ -156,9 +156,9 @@ export function AnalyticsTelemetryView() {
 
       <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Chart Section */}
-        <div className="flex min-h-[250px] flex-col rounded-2xl border border-cyan-500/20 bg-black/40 p-6 backdrop-blur-xl md:min-h-[400px] lg:col-span-2">
+        <div className="flex min-h-[250px] flex-col rounded-2xl border border-border bg-black/40 p-6 backdrop-blur-xl md:min-h-[400px] lg:col-span-2">
           <h2 className="mb-6 flex items-center gap-2 text-lg font-semibold text-white">
-            <TrendingUp className="h-5 w-5 text-cyan-400" />
+            <TrendingUp className="h-5 w-5 text-primary" />
             Historical Traffic (mx.metric)
           </h2>
 
@@ -222,12 +222,12 @@ export function AnalyticsTelemetryView() {
         </div>
 
         {/* Live Logs Section */}
-        <div className="flex h-[300px] flex-col rounded-2xl border border-cyan-500/20 bg-black/40 p-6 backdrop-blur-xl md:h-[400px]">
+        <div className="flex h-[300px] flex-col rounded-2xl border border-border bg-black/40 p-6 backdrop-blur-xl md:h-[400px]">
           <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-            <TerminalSquare className="h-5 w-5 text-cyan-400" />
+            <TerminalSquare className="h-5 w-5 text-primary" />
             Live Engine Logs
           </h2>
-          <div className="flex-1 overflow-y-auto rounded-xl border border-cyan-500/10 bg-black/60 p-4 font-mono text-xs">
+          <div className="flex-1 overflow-y-auto rounded-xl border border-border bg-black/60 p-4 font-mono text-xs">
             <ul className="space-y-2">
               {logs.length === 0 && (
                 <li className="text-slate-600 italic">
@@ -249,7 +249,7 @@ export function AnalyticsTelemetryView() {
                     <span className={`${color} shrink-0 font-bold`}>
                       [{log.level}]
                     </span>
-                    <span className="shrink-0 text-cyan-400">
+                    <span className="shrink-0 text-primary">
                       {log.context}:
                     </span>
                     <span className={`${color} break-words`}>

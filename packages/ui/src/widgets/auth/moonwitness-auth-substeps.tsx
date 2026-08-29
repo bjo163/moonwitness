@@ -63,19 +63,19 @@ export function WelcomeStep({
 }) {
   return (
     <div className="flex animate-in flex-col items-center justify-center space-y-8 duration-500 fade-in zoom-in">
-      <div className="relative mb-4 flex h-24 w-24 items-center justify-center rounded-full border border-cyan-500/50 bg-black/40 shadow-sm">
+      <div className="relative mb-4 flex h-24 w-24 items-center justify-center rounded-full border border-border bg-black/40 shadow-sm">
         <div
-          className="absolute inset-0 animate-spin rounded-full border-2 border-dashed border-cyan-500/30"
+          className="absolute inset-0 animate-spin rounded-full border-2 border-dashed border-border"
           style={{ animationDuration: "20s" }}
         />
-        <OrbitIcon className="h-12 w-12 text-cyan-400 drop-shadow-sm" />
+        <OrbitIcon className="h-12 w-12 text-primary drop-shadow-sm" />
       </div>
 
       <div className="text-center">
         <h1 className="mb-2 font-mono text-4xl font-black tracking-[0.2em] text-white drop-shadow-sm">
           MOONWITNESS OS
         </h1>
-        <p className="font-sans text-xs font-semibold tracking-[0.3em] text-cyan-400 uppercase">
+        <p className="font-sans text-xs font-semibold tracking-[0.3em] text-primary uppercase">
           GLOBAL DIVINE OBSERVATORY SYSTEM
         </p>
       </div>
@@ -87,14 +87,14 @@ export function WelcomeStep({
 
       <button
         onClick={() => onStateChange("LOGIN")}
-        className="group relative mt-4 flex items-center justify-center gap-3 overflow-hidden rounded-full border border-cyan-400 bg-cyan-500/10 px-8 py-3 font-sans text-sm font-bold text-cyan-300 transition-all hover:bg-cyan-500/20 hover:shadow-sm"
+        className="group relative mt-4 flex items-center justify-center gap-3 overflow-hidden rounded-full border border-border bg-primary/10 px-8 py-3 font-sans text-sm font-bold text-primary transition-all hover:bg-primary/10 hover:shadow-sm"
       >
         <span className="absolute inset-0 w-full -translate-x-full bg-white/10 transition-all duration-700 ease-in-out group-hover:translate-x-full" />
         BEGIN JOURNEY{" "}
         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
       </button>
 
-      <button className="flex items-center gap-2 font-sans text-xs text-primary/50 transition-colors hover:text-cyan-400">
+      <button className="flex items-center gap-2 font-sans text-xs text-primary/50 transition-colors hover:text-primary">
         <span className="flex h-4 w-4 items-center justify-center rounded-full border border-current">
           ?
         </span>{" "}
@@ -110,7 +110,7 @@ export function WorkspaceStep({
   onSelectWorkspace: (path: string) => void
 }) {
   return (
-    <div className="w-full max-w-[420px] animate-in rounded-2xl border border-cyan-500/20 bg-slate-950/80 p-8 shadow-sm backdrop-blur-xl duration-500 slide-in-from-right">
+    <div className="w-full max-w-[420px] animate-in rounded-2xl border border-border bg-slate-950/80 p-8 shadow-sm backdrop-blur-xl duration-500 slide-in-from-right">
       <div className="mb-8 text-center">
         <h2 className="font-sans text-2xl font-bold tracking-wider text-white uppercase">
           SELECT WORKSPACE
@@ -123,22 +123,22 @@ export function WorkspaceStep({
       <div className="space-y-3">
         <button
           onClick={() => onSelectWorkspace("/home")}
-          className="group relative flex w-full items-center justify-between rounded-xl border border-cyan-500/40 bg-cyan-500/10 p-4 transition-all hover:bg-cyan-500/20 hover:shadow-sm"
+          className="group relative flex w-full items-center justify-between rounded-xl border border-border bg-primary/10 p-4 transition-all hover:bg-primary/10 hover:shadow-sm"
         >
           <div className="flex items-center gap-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-500/20">
-              <Globe className="h-5 w-5 text-cyan-400" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Globe className="h-5 w-5 text-primary" />
             </div>
             <div className="text-left">
-              <h3 className="font-sans text-sm font-bold text-cyan-100">
+              <h3 className="font-sans text-sm font-bold text-primary">
                 MoonWitness OS
               </h3>
-              <p className="font-sans text-[10px] text-cyan-400/70">
+              <p className="font-sans text-[10px] text-primary/70">
                 Global Knowledge Observatory
               </p>
             </div>
           </div>
-          <span className="rounded-full border border-cyan-500/30 bg-cyan-500/20 px-2.5 py-1 font-sans text-[9px] font-bold text-cyan-300">
+          <span className="rounded-full border border-border bg-primary/10 px-2.5 py-1 font-sans text-[9px] font-bold text-primary">
             Current
           </span>
         </button>
@@ -217,7 +217,7 @@ export function TwoFactorStep({
   onStateChange: (state: AuthState) => void
 }) {
   return (
-    <div className="w-full max-w-[420px] animate-in rounded-2xl border border-cyan-500/20 bg-slate-950/80 p-8 text-center shadow-sm backdrop-blur-xl duration-500 slide-in-from-right">
+    <div className="w-full max-w-[420px] animate-in rounded-2xl border border-border bg-slate-950/80 p-8 text-center shadow-sm backdrop-blur-xl duration-500 slide-in-from-right">
       <h2 className="mb-2 font-sans text-2xl font-bold tracking-wider text-white uppercase">
         TWO-FACTOR AUTHENTICATION
       </h2>
@@ -226,8 +226,8 @@ export function TwoFactorStep({
       </p>
 
       <div className="mb-8 flex justify-center">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full border border-cyan-500/30 bg-cyan-500/10 shadow-sm">
-          <Shield className="h-8 w-8 text-cyan-400" />
+        <div className="flex h-16 w-16 items-center justify-center rounded-full border border-border bg-primary/10 shadow-sm">
+          <Shield className="h-8 w-8 text-primary" />
         </div>
       </div>
 
@@ -238,7 +238,7 @@ export function TwoFactorStep({
             type="text"
             value={num}
             readOnly
-            className="h-14 w-12 rounded-xl border border-cyan-500/30 bg-black/60 text-center font-mono text-xl text-white shadow-inner focus:outline-none"
+            className="h-14 w-12 rounded-xl border border-border bg-black/60 text-center font-mono text-xl text-white shadow-inner focus:outline-none"
           />
         ))}
       </div>
@@ -248,21 +248,21 @@ export function TwoFactorStep({
       <div className="mb-6 flex items-center justify-center gap-2 text-xs text-primary/60">
         <input
           type="checkbox"
-          className="rounded border-cyan-500/30 bg-black/50 text-cyan-500 focus:ring-0 focus:ring-offset-0"
+          className="rounded border-border bg-black/50 text-primary focus:ring-0 focus:ring-offset-0"
         />
         Trust this device for 30 days
       </div>
 
       <button
         onClick={() => onStateChange("WORKSPACE")}
-        className="mb-6 w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-sm"
+        className="mb-6 w-full rounded-xl bg-gradient-to-r from-primary/10 to-transparent py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-sm"
       >
         VERIFY CODE
       </button>
 
       <p className="text-xs text-primary/60">
         Having trouble?{" "}
-        <span className="cursor-pointer text-cyan-400 hover:underline">
+        <span className="cursor-pointer text-primary hover:underline">
           Use backup code
         </span>
       </p>
@@ -283,7 +283,7 @@ export function Forgot1Step({
   const forgotPassword = async (email: string) => apiPost("/api/auth/forgot-password", { email })
 
   return (
-    <div className="w-full max-w-[420px] animate-in rounded-2xl border border-cyan-500/20 bg-slate-950/80 p-8 text-center shadow-sm backdrop-blur-xl duration-500 slide-in-from-right">
+    <div className="w-full max-w-[420px] animate-in rounded-2xl border border-border bg-slate-950/80 p-8 text-center shadow-sm backdrop-blur-xl duration-500 slide-in-from-right">
       <h2 className="mb-2 font-sans text-2xl font-bold tracking-wider text-white uppercase">
         RESET PASSWORD
       </h2>
@@ -305,7 +305,7 @@ export function Forgot1Step({
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none"
+          className="w-full rounded-xl border border-border bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-border focus:bg-primary/10 focus:outline-none"
           placeholder="johnny@moonwitness.org"
         />
       </div>
@@ -325,7 +325,7 @@ export function Forgot1Step({
             setLoading(false)
           }
         }}
-        className="mb-8 w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-sm disabled:opacity-50"
+        className="mb-8 w-full rounded-xl bg-gradient-to-r from-primary/10 to-transparent py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-sm disabled:opacity-50"
       >
         {loading ? "SENDING..." : "SEND RESET LINK"}
       </button>
@@ -334,7 +334,7 @@ export function Forgot1Step({
         Remember your password?{" "}
         <button
           onClick={() => onStateChange("LOGIN")}
-          className="font-semibold text-cyan-400 hover:text-cyan-300"
+          className="font-semibold text-primary hover:text-primary"
         >
           Login
         </button>
@@ -358,7 +358,7 @@ export function Forgot2Step({
   const verifyOtp = async (email: string, code: string) => apiPost("/api/auth/verify-otp", { email, code })
 
   return (
-    <div className="w-full max-w-[420px] animate-in rounded-2xl border border-cyan-500/20 bg-slate-950/80 p-8 text-center shadow-sm backdrop-blur-xl duration-500 slide-in-from-right">
+    <div className="w-full max-w-[420px] animate-in rounded-2xl border border-border bg-slate-950/80 p-8 text-center shadow-sm backdrop-blur-xl duration-500 slide-in-from-right">
       <h2 className="mb-2 font-sans text-2xl font-bold tracking-wider text-white uppercase">
         CHECK YOUR EMAIL
       </h2>
@@ -381,7 +381,7 @@ export function Forgot2Step({
           onChange={(e) =>
             setCode(e.target.value.replace(/\D/g, "").slice(0, 6))
           }
-          className="w-full rounded-xl border border-cyan-500/30 bg-black/60 px-4 py-4 text-center text-2xl font-bold tracking-[1em] text-white shadow-inner focus:border-cyan-400 focus:outline-none"
+          className="w-full rounded-xl border border-border bg-black/60 px-4 py-4 text-center text-2xl font-bold tracking-[1em] text-white shadow-inner focus:border-border focus:outline-none"
           placeholder="000000"
         />
       </div>
@@ -407,14 +407,14 @@ export function Forgot2Step({
             setLoading(false)
           }
         }}
-        className="mb-8 w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-sm disabled:opacity-50"
+        className="mb-8 w-full rounded-xl bg-gradient-to-r from-primary/10 to-transparent py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-sm disabled:opacity-50"
       >
         {loading ? "VERIFYING..." : "VERIFY CODE"}
       </button>
 
       <button
         onClick={() => onStateChange("LOGIN")}
-        className="text-xs font-semibold text-cyan-400 hover:text-cyan-300"
+        className="text-xs font-semibold text-primary hover:text-primary"
       >
         Back to Login
       </button>
@@ -439,7 +439,7 @@ export function Reset3Step({
     apiPost("/api/auth/reset-password", { email, code, password })
 
   return (
-    <div className="w-full max-w-[420px] animate-in rounded-2xl border border-cyan-500/20 bg-slate-950/80 p-8 text-center shadow-sm backdrop-blur-xl duration-500 slide-in-from-right">
+    <div className="w-full max-w-[420px] animate-in rounded-2xl border border-border bg-slate-950/80 p-8 text-center shadow-sm backdrop-blur-xl duration-500 slide-in-from-right">
       <h2 className="mb-2 font-sans text-2xl font-bold tracking-wider text-white uppercase">
         CREATE NEW PASSWORD
       </h2>
@@ -461,7 +461,7 @@ export function Reset3Step({
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none"
+          className="w-full rounded-xl border border-border bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-border focus:bg-primary/10 focus:outline-none"
         />
       </div>
 
@@ -482,7 +482,7 @@ export function Reset3Step({
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          className="w-full rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none"
+          className="w-full rounded-xl border border-border bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-border focus:bg-primary/10 focus:outline-none"
         />
       </div>
 
@@ -500,7 +500,7 @@ export function Reset3Step({
             setLoading(false)
           }
         }}
-        className="w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-sm disabled:opacity-50"
+        className="w-full rounded-xl bg-gradient-to-r from-primary/10 to-transparent py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-sm disabled:opacity-50"
       >
         {loading ? "SAVING..." : "RESET PASSWORD"}
       </button>
@@ -514,7 +514,7 @@ export function VerificationStep({
   onStateChange: (state: AuthState) => void
 }) {
   return (
-    <div className="w-full max-w-[420px] animate-in rounded-2xl border border-cyan-500/20 bg-slate-950/80 p-8 text-center shadow-sm backdrop-blur-xl duration-500 slide-in-from-right">
+    <div className="w-full max-w-[420px] animate-in rounded-2xl border border-border bg-slate-950/80 p-8 text-center shadow-sm backdrop-blur-xl duration-500 slide-in-from-right">
       <h2 className="mb-2 font-sans text-2xl font-bold tracking-wider text-white uppercase">
         VERIFY YOUR ACCOUNT
       </h2>
@@ -524,11 +524,11 @@ export function VerificationStep({
       </p>
 
       <div className="relative mb-8 flex justify-center">
-        <div className="flex h-20 w-20 items-center justify-center rounded-full border border-cyan-500/30 bg-black/60 shadow-inner">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full border border-border bg-black/60 shadow-inner">
           <User className="h-10 w-10 text-primary/40" />
         </div>
-        <div className="absolute right-1/2 bottom-0 translate-x-8 rounded-full border border-cyan-500/30 bg-slate-950 p-1">
-          <div className="rounded-full bg-cyan-500/20 p-1 text-cyan-400">
+        <div className="absolute right-1/2 bottom-0 translate-x-8 rounded-full border border-border bg-slate-950 p-1">
+          <div className="rounded-full bg-primary/10 p-1 text-primary">
             <Globe className="h-3 w-3" />
           </div>
         </div>
@@ -543,7 +543,7 @@ export function VerificationStep({
             type="text"
             value="Johnny Rocksoul"
             readOnly
-            className="w-full rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none"
+            className="w-full rounded-xl border border-border bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-border focus:bg-primary/10 focus:outline-none"
           />
         </div>
         <div className="flex gap-4">
@@ -551,7 +551,7 @@ export function VerificationStep({
             <label className="font-sans text-xs font-medium text-primary/80">
               Country
             </label>
-            <select className="w-full appearance-none rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none">
+            <select className="w-full appearance-none rounded-xl border border-border bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-border focus:bg-primary/10 focus:outline-none">
               <option>Indonesia</option>
             </select>
           </div>
@@ -559,7 +559,7 @@ export function VerificationStep({
             <label className="font-sans text-xs font-medium text-primary/80">
               Timezone
             </label>
-            <select className="w-full appearance-none rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none">
+            <select className="w-full appearance-none rounded-xl border border-border bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-border focus:bg-primary/10 focus:outline-none">
               <option>(UTC+7) Jakarta</option>
             </select>
           </div>
@@ -568,7 +568,7 @@ export function VerificationStep({
 
       <button
         onClick={() => onStateChange("2FA")}
-        className="w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-sm"
+        className="w-full rounded-xl bg-gradient-to-r from-primary/10 to-transparent py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-sm"
       >
         SAVE & CONTINUE
       </button>

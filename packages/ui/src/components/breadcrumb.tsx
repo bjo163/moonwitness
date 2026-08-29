@@ -129,11 +129,11 @@ export function BreadcrumbTrail({
         <React.Fragment key={i}>
           {i > 0 && <span className="text-slate-600">/</span>}
           {p.href ? (
-            <a href={p.href} className="text-slate-400 hover:text-cyan-400 transition-colors">
+            <a href={p.href} className="text-slate-400 hover:text-primary transition-colors">
               {p.label}
             </a>
           ) : (
-            <span className="font-bold text-cyan-400">{p.label}</span>
+            <span className="font-bold text-primary">{p.label}</span>
           )}
         </React.Fragment>
       ))}

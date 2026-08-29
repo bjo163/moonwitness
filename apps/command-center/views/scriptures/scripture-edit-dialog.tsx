@@ -117,7 +117,7 @@ export function ScriptureEditDialog({
             <Button variant="outline" type="button" onClick={onClose}>
               Batal
             </Button>
-            <Button type="submit" className="bg-purple-600 font-bold text-white hover:bg-purple-700">
+            <Button type="submit" className="bg-primary font-bold text-white hover:bg-primary">
               💾 Simpan Terjemahan & Tafsir
             </Button>
           </div>

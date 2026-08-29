@@ -86,8 +86,8 @@ export function QuranRootMatrix({ className = "" }: { className?: string }) {
   return (
     <div className={`flex flex-col font-mono text-white ${className}`}>
       {/* Search Header */}
-      <div className="flex items-center gap-3 bg-card p-4 rounded-xl border border-cyan-500/30">
-        <Search className="h-5 w-5 text-cyan-400" />
+      <div className="flex items-center gap-3 bg-card p-4 rounded-xl border border-border">
+        <Search className="h-5 w-5 text-primary" />
         <input
           type="text"
           value={query}
@@ -95,7 +95,7 @@ export function QuranRootMatrix({ className = "" }: { className?: string }) {
           placeholder="Search Arabic Root (e.g. 'ش ه د' or 'Sh-H-D' or 'Moon')..."
           className="flex-1 bg-transparent font-sans text-sm outline-none placeholder-zinc-500"
         />
-        <span className="text-[10px] text-zinc-500 bg-cyan-950/40 border border-cyan-500/30 px-2 py-1 rounded">
+        <span className="text-[10px] text-zinc-500 bg-muted border border-border px-2 py-1 rounded">
           CONCORDANCE MATRIX
         </span>
       </div>
@@ -110,12 +110,12 @@ export function QuranRootMatrix({ className = "" }: { className?: string }) {
               onClick={() => setSelectedRoot(r)}
               className={`w-full p-4 rounded-xl border text-left transition-all ${
                 selectedRoot.root === r.root
-                  ? "border-cyan-400 bg-cyan-950/40 shadow-sm"
-                  : "border-white/10 bg-card/80 hover:border-cyan-500/30"
+                  ? "border-border bg-muted shadow-sm"
+                  : "border-white/10 bg-card/80 hover:border-border"
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xl font-bold font-serif text-cyan-300">
+                <span className="text-xl font-bold font-serif text-primary">
                   {r.root}
                 </span>
                 <span className="text-xs text-emerald-400 font-bold bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-500/30">
@@ -129,13 +129,13 @@ export function QuranRootMatrix({ className = "" }: { className?: string }) {
         </div>
 
         {/* Detailed Breakdown Right */}
-        <div className="lg:col-span-2 rounded-2xl border border-cyan-500/30 bg-card/90 p-6 space-y-6 shadow-xl backdrop-blur-md">
+        <div className="lg:col-span-2 rounded-2xl border border-border bg-card/90 p-6 space-y-6 shadow-xl backdrop-blur-md">
           {/* Header Card */}
           <div className="flex items-start justify-between border-b border-white/10 pb-4">
             <div>
-              <div className="text-3xl font-bold font-serif text-cyan-300">{selectedRoot.root}</div>
+              <div className="text-3xl font-bold font-serif text-primary">{selectedRoot.root}</div>
               <div className="mt-1 text-sm font-bold text-zinc-300">
-                Root Transliteration: <span className="text-cyan-400">{selectedRoot.transliteration}</span>
+                Root Transliteration: <span className="text-primary">{selectedRoot.transliteration}</span>
               </div>
               <div className="mt-1 text-xs text-zinc-400">{selectedRoot.primaryMeaning}</div>
             </div>
@@ -147,7 +147,7 @@ export function QuranRootMatrix({ className = "" }: { className?: string }) {
 
           {/* Derived Morphology Branches */}
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-widest mb-3">
+            <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest mb-3">
               <GitBranch className="h-4 w-4" />
               <span>Morphological Derivatives</span>
             </div>

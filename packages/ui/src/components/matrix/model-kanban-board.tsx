@@ -5,7 +5,7 @@ import { Plus, User, Clock } from "lucide-react"
 import type { ModelSchema } from "@workspace/types"
 import { apiGet } from "@moon/client"
 import { APP_PORTS } from "@workspace/types"
-import { cosmicAudio } from "../cosmic-sound-synthesizer"
+import { soundEngine } from "../audio-synthesizer"
 
 const getApiBase = () => {
   if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_API_URL) {
@@ -14,7 +14,7 @@ const getApiBase = () => {
   return `http://127.0.0.1:${APP_PORTS.API_BACKEND}`
 }
 
-export interface CosmicKanbanBoardProps {
+export interface ModelKanbanBoardProps {
   schema: ModelSchema
   records: any[]
   loading?: boolean
@@ -23,14 +23,14 @@ export interface CosmicKanbanBoardProps {
   onCardStageChange?: (record: any, newStageKey: string | number) => Promise<void>
 }
 
-export function CosmicKanbanBoard({
+export function ModelKanbanBoard({
   schema,
   records,
   loading = false,
   onCardClick,
   onCreateInColumn,
   onCardStageChange,
-}: CosmicKanbanBoardProps) {
+}: ModelKanbanBoardProps) {
   const kanbanConfig = schema.views?.kanban
   const groupField = kanbanConfig?.groupBy || "stageId"
   const groupFieldDef = schema.fields[groupField]
@@ -114,7 +114,7 @@ export function CosmicKanbanBoard({
     if (typeof currentVal === "object" && currentVal !== null) currentVal = currentVal.id
 
     if (String(currentVal) !== String(targetColumnKey)) {
-      cosmicAudio.playDropPing()
+      soundEngine.playDropPing()
       if (onCardStageChange) {
         await onCardStageChange(draggedRecord, targetColumnKey)
       }
@@ -158,14 +158,14 @@ export function CosmicKanbanBoard({
             onDragOver={(e) => handleDragOver(e, col.key)}
             onDragLeave={(e) => handleDragLeave(e, col.key)}
             onDrop={(e) => handleDrop(e, col.key)}
-            className={`w-80 flex-shrink-0 bg-card/90 border rounded-xl flex flex-col max-h-[75vh] shadow-sm transition-all ${
+            className={`w-80 flex-shrink-0 bg-card border rounded-xl flex flex-col max-h-[75vh] shadow-sm transition-all ${
               isTarget
                 ? "border-primary bg-primary/5 shadow-md"
-                : "border-border/50"
+                : "border-border"
             }`}
           >
             {/* Column Header */}
-            <div className="flex items-center justify-between px-3.5 py-3 border-b border-border/40 bg-muted/30">
+            <div className="flex items-center justify-between px-3.5 py-3 border-b border-border bg-muted/30">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-foreground tracking-wide uppercase">
                   {col.label}
@@ -188,7 +188,7 @@ export function CosmicKanbanBoard({
             {/* Column Cards List */}
             <div className="flex-1 overflow-y-auto p-3 space-y-2.5 min-h-[120px]">
               {items.length === 0 ? (
-                <div className="py-6 text-center text-[11px] text-muted-foreground/60 font-sans">
+                <div className="py-6 text-center text-[11px] text-muted-foreground font-sans">
                   {isTarget ? "Drop record here" : "No records in stage"}
                 </div>
               ) : (
@@ -205,10 +205,10 @@ export function CosmicKanbanBoard({
                       draggable={true}
                       onDragStart={(e) => handleDragStart(e, card)}
                       onClick={() => onCardClick?.(card)}
-                      className={`p-3 bg-background/90 border rounded-lg cursor-grab active:cursor-grabbing transition-all group relative select-none shadow-sm ${
+                      className={`p-3 bg-background border rounded-lg cursor-grab active:cursor-grabbing transition-all group relative select-none shadow-sm ${
                         isDragging
                           ? "opacity-40 border-dashed border-primary"
-                          : "border-border/50 hover:border-primary/60 hover:shadow-md"
+                          : "border-border hover:border-primary/60 hover:shadow-md"
                       }`}
                     >
                       <div className="flex items-center justify-between text-[10px] mb-1.5">
@@ -231,7 +231,7 @@ export function CosmicKanbanBoard({
                         </p>
                       )}
 
-                      <div className="flex items-center justify-between mt-2 pt-2 border-t border-border/30 text-[10px] text-muted-foreground font-mono">
+                      <div className="flex items-center justify-between mt-2 pt-2 border-t border-border text-[10px] text-muted-foreground font-mono">
                         <span className="text-primary/70">#{card.id}</span>
                         {card.assigneeId && (
                           <span className="flex items-center gap-1">

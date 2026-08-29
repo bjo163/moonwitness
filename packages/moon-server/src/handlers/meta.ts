@@ -383,7 +383,7 @@ export function handleMetaModels(
 
 /**
  * Handle /api/meta/model/:name endpoint — returns rich schema for a single model.
- * This is the core schema introspection API for the Cosmic Matrix Engine.
+ * This is the core schema introspection API for the celestial Matrix Engine.
  */
 export function handleMetaModel(
   req: IncomingMessage,

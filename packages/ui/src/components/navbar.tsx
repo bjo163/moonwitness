@@ -123,9 +123,9 @@ export function Navbar({
   }
 
   return (
-    <header className="bg-background/90 fixed inset-x-0 top-0 z-50 border-b border-cyan-500/30 font-mono text-white shadow-sm backdrop-blur-md select-none">
+    <header className="bg-background/90 fixed inset-x-0 top-0 z-50 border-b border-border font-mono text-white shadow-sm backdrop-blur-md select-none">
       {/* Topmost Subtle Telemetry Line */}
-      <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-60" />
+      <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-transparent to-transparent opacity-60" />
 
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-8">
         {/* LEFT: ORBIT LOGO & BRANDING (From Image 2 top-left) */}
@@ -133,18 +133,18 @@ export function Navbar({
           href="/home"
           className="group flex cursor-pointer items-center gap-3.5"
         >
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-full border border-cyan-400/50 bg-black/60 shadow-sm transition-colors group-hover:border-cyan-300">
+          <div className="relative flex h-10 w-10 items-center justify-center rounded-full border border-border bg-black/60 shadow-sm transition-colors group-hover:border-border">
             <div
-              className="animate-spin-slow absolute h-[115%] w-[115%] rounded-full border border-dashed border-cyan-400/40"
+              className="animate-spin-slow absolute h-[115%] w-[115%] rounded-full border border-dashed border-border"
               style={{ animationDuration: "20s" }}
             />
-            <Orbit className="h-5 w-5 text-cyan-400 drop-shadow-sm transition-transform duration-300 group-hover:scale-110" />
+            <Orbit className="h-5 w-5 text-primary drop-shadow-sm transition-transform duration-300 group-hover:scale-110" />
           </div>
           <div>
             <div className="text-sm font-black tracking-widest whitespace-nowrap text-white uppercase drop-shadow-sm sm:text-base">
               MOONWITNESS OS
             </div>
-            <div className="font-sans text-[9px] font-semibold tracking-[0.2em] whitespace-nowrap text-cyan-300 uppercase">
+            <div className="font-sans text-[9px] font-semibold tracking-[0.2em] whitespace-nowrap text-primary uppercase">
               GLOBAL DIVINE OBSERVATORY
             </div>
           </div>
@@ -163,7 +163,7 @@ export function Navbar({
                   (pathname !== "/home" &&
                     (pathname === link.href ||
                       pathname?.startsWith(link.href + "/")))
-                    ? "text-cyan-300"
+                    ? "text-primary"
                     : "text-primary hover:text-white"
                 }`}
               >
@@ -186,7 +186,7 @@ export function Navbar({
                 {((pathname === "/home" &&
                   activeSection === link.label.toLowerCase()) ||
                   (pathname !== "/home" && pathname === link.href)) && (
-                  <span className="absolute bottom-0 left-0 h-[1px] w-full bg-cyan-400 shadow-sm" />
+                  <span className="absolute bottom-0 left-0 h-[1px] w-full bg-primary shadow-sm" />
                 )}
                 <span className="absolute bottom-0 left-0 h-[1px] w-0 bg-white opacity-50 transition-all duration-300 group-hover:w-full" />
               </Link>
@@ -194,14 +194,14 @@ export function Navbar({
               {/* Dropdown Menu (Glassmorphism) */}
               {link.subLinks && (
                 <div className="invisible absolute top-full left-0 z-50 mt-2 w-56 translate-y-2 opacity-0 transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                  <div className="bg-background/90 flex flex-col gap-1 rounded-xl border border-cyan-500/20 p-2 shadow-sm backdrop-blur-xl">
+                  <div className="bg-background/90 flex flex-col gap-1 rounded-xl border border-border p-2 shadow-sm backdrop-blur-xl">
                     {link.subLinks.map((sub: { label: string; href: string; icon?: string }) => (
                       <Link
                         key={sub.label}
                         href={sub.href}
                         className={`block rounded-lg px-4 py-3 text-[10px] font-medium tracking-widest uppercase transition-all ${
                           pathname === sub.href
-                            ? "border border-cyan-500/20 bg-cyan-500/10 text-cyan-300"
+                            ? "border border-border bg-primary/10 text-primary"
                             : "border border-transparent text-primary hover:bg-white/5 hover:text-white"
                         }`}
                       >
@@ -217,21 +217,21 @@ export function Navbar({
 
         {/* RIGHT: MISSION STATUS & AUDIO WAVEFORM */}
         <div className="flex items-center gap-4">
-          <div className="bg-background/80 relative flex items-center gap-4 rounded-full border border-cyan-500/20 px-4 py-1.5 shadow-sm backdrop-blur-md">
+          <div className="bg-background/80 relative flex items-center gap-4 rounded-full border border-border px-4 py-1.5 shadow-sm backdrop-blur-md">
             {user ? (
               <>
                 <button
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                  className="group flex items-center gap-3 transition-colors hover:text-cyan-300"
+                  className="group flex items-center gap-3 transition-colors hover:text-primary"
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full border border-cyan-400/40 bg-cyan-950/60 font-mono text-[10px] font-bold text-cyan-300 shadow-sm">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-muted font-mono text-[10px] font-bold text-primary shadow-sm">
                     {user.name ? user.name.substring(0, 2).toUpperCase() : "OP"}
                   </div>
                   <div className="flex flex-col items-start text-left font-mono tracking-widest uppercase">
-                    <span className="text-[9px] font-bold text-white group-hover:text-cyan-300">
+                    <span className="text-[9px] font-bold text-white group-hover:text-primary">
                       {user.name?.substring(0, MAX_NAME_DISPLAY_LENGTH) || "OPERATOR"}
                     </span>
-                    <span className="text-[7px] text-cyan-500">
+                    <span className="text-[7px] text-primary">
                       {user.role || "PUBLIC"}
                     </span>
                   </div>
@@ -239,7 +239,7 @@ export function Navbar({
 
                 {/* Profile Dropdown */}
                 {profileDropdownOpen && (
-                  <div className="bg-background/95 absolute top-full right-0 mt-2 w-56 rounded-xl border border-cyan-500/30 p-2 shadow-sm backdrop-blur-xl">
+                  <div className="bg-background/95 absolute top-full right-0 mt-2 w-56 rounded-xl border border-border p-2 shadow-sm backdrop-blur-xl">
                     <div className="mb-2 border-b border-white/10 pb-2 pl-2 font-mono text-[9px] text-white/50 uppercase">
                       SYSTEM ACTIONS
                     </div>
@@ -248,7 +248,7 @@ export function Navbar({
                       <Link
                         href="/auth/profile"
                         onClick={() => setProfileDropdownOpen(false)}
-                        className="flex items-center gap-3 rounded-lg px-3 py-2 text-[10px] font-bold text-cyan-400 transition-colors hover:bg-cyan-500/10 hover:text-cyan-300"
+                        className="flex items-center gap-3 rounded-lg px-3 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary/10 hover:text-primary"
                       >
                         <UserIcon className="h-4 w-4" /> PLAYER IDENTITY
                       </Link>
@@ -296,16 +296,16 @@ export function Navbar({
             ) : (
               <Link
                 href="/auth/login"
-                className="group flex items-center gap-2 font-mono text-[10px] tracking-widest uppercase transition-colors hover:text-cyan-300"
+                className="group flex items-center gap-2 font-mono text-[10px] tracking-widest uppercase transition-colors hover:text-primary"
               >
-                <span className="text-primary group-hover:text-cyan-400">
+                <span className="text-primary group-hover:text-primary">
                   MISSION STATUS
                 </span>
-                <span className="flex items-center gap-1.5 font-bold text-cyan-400 drop-shadow-sm group-hover:text-white">
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400 shadow-sm group-hover:bg-white" />
+                <span className="flex items-center gap-1.5 font-bold text-primary drop-shadow-sm group-hover:text-white">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary shadow-sm group-hover:bg-white" />
                   ONLINE
                 </span>
-                <span className="ml-2 rounded border border-cyan-500/30 bg-cyan-500/10 px-1.5 py-0.5 text-[8px] text-cyan-400 opacity-50 group-hover:opacity-100">
+                <span className="ml-2 rounded border border-border bg-primary/10 px-1.5 py-0.5 text-[8px] text-primary opacity-50 group-hover:opacity-100">
                   LOGIN &rarr;
                 </span>
               </Link>
@@ -318,7 +318,7 @@ export function Navbar({
               {EQUALIZER_BASE_HEIGHTS.map((h, i) => (
                 <span
                   key={i}
-                  className="inline-block w-[1px] bg-cyan-400 opacity-70"
+                  className="inline-block w-[1px] bg-primary opacity-70"
                   style={{
                     height: `${Math.max(2, (h * ((i % EQUALIZER_MOD_FACTOR) + 1)) % EQUALIZER_MAX_HEIGHT)}px`,
                     animationDelay: `${i * EQUALIZER_DELAY_STEP_MS}ms`,
@@ -336,7 +336,7 @@ export function Navbar({
           {/* Mobile menu toggle button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="rounded-md border border-cyan-500/40 bg-black/60 p-2 text-cyan-300 transition-colors hover:border-cyan-400 hover:text-white lg:hidden"
+            className="rounded-md border border-border bg-black/60 p-2 text-primary transition-colors hover:border-border hover:text-white lg:hidden"
             aria-label="Toggle Navigation"
           >
             {mobileMenuOpen ? (
@@ -354,14 +354,14 @@ export function Navbar({
 
       {/* Mobile Nav Overlay */}
       {mobileMenuOpen && (
-        <div className="bg-background animate-in space-y-4 border-t border-cyan-500/30 p-6 shadow-2xl duration-200 fade-in lg:hidden">
+        <div className="bg-background animate-in space-y-4 border-t border-border p-6 shadow-2xl duration-200 fade-in lg:hidden">
           <div className="flex flex-col gap-3 text-xs font-bold tracking-widest uppercase">
             {navLinks.map((link) => (
               <div key={link.label} className="flex flex-col gap-2">
                 <Link
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href, link.label)}
-                  className="rounded-md border border-cyan-500/30 bg-black/60 p-3 text-center shadow-inner transition-all hover:border-cyan-400 hover:text-cyan-300"
+                  className="rounded-md border border-border bg-black/60 p-3 text-center shadow-inner transition-all hover:border-border hover:text-primary"
                 >
                   {link.label}
                 </Link>
@@ -373,7 +373,7 @@ export function Navbar({
                           key={sub.label}
                           href={sub.href}
                           onClick={(e) => handleNavClick(e, sub.href, sub.label)}
-                          className="rounded-md border border-white/10 bg-white/5 p-2 text-center text-[9px] text-primary transition-all hover:text-cyan-300"
+                          className="rounded-md border border-white/10 bg-white/5 p-2 text-center text-[9px] text-primary transition-all hover:text-primary"
                         >
                           {sub.label}
                         </Link>

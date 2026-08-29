@@ -43,12 +43,12 @@ export function KitabAdditionalGrid({
         </div>
 
         <div className="relative flex flex-col justify-center gap-2 overflow-hidden rounded-xl border border-white/5 bg-card p-4 shadow-lg">
-          <div className="absolute top-[-10%] right-[-10%] h-16 w-16 rounded-full bg-cyan-500/5" />
+          <div className="absolute top-[-10%] right-[-10%] h-16 w-16 rounded-full bg-primary/10" />
           <div className="text-[9px] font-black tracking-widest text-white/40 uppercase">
             PROPHETS MENTIONED
           </div>
           <div className="flex items-center gap-3">
-            <User className="h-8 w-8 text-cyan-500/40" />
+            <User className="h-8 w-8 text-primary/40" />
             <div>
               <div className="text-2xl font-black text-white">
                 {totalProphets > 0 ? totalProphets : "124"}
@@ -103,7 +103,7 @@ export function KitabAdditionalGrid({
       <div className="rounded-xl border border-white/5 bg-card p-5 shadow-lg">
         <div className="mb-4 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div className="flex items-center gap-2">
-            <Bookmark className="h-3 w-3 text-cyan-500" />
+            <Bookmark className="h-3 w-3 text-primary" />
             <span className="text-[10px] font-black tracking-widest text-white uppercase">
               OTHER SACRED SCRIPTURES <span className="text-white/40">(ADDITIONAL)</span>
             </span>

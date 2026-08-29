@@ -8,7 +8,7 @@ export function KnowledgeHubView() {
     <div className="p-8">
       <div className="mb-8">
         <h1 className="flex items-center gap-3 text-3xl font-black tracking-widest text-white uppercase">
-          <Brain className="h-8 w-8 text-cyan-400" />
+          <Brain className="h-8 w-8 text-primary" />
           Knowledge Hub
         </h1>
         <p className="mt-2 text-zinc-400">

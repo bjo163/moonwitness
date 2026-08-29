@@ -23,7 +23,7 @@ export function ExpertiseBadges() {
     {
       label: "Space Observation",
       icon: Activity,
-      color: "text-cyan-400 border-cyan-400/30 bg-cyan-400/10",
+      color: "text-primary border-border bg-primary/10",
     },
     {
       label: "History & Civilization",
@@ -38,8 +38,8 @@ export function ExpertiseBadges() {
   ]
 
   return (
-    <div className="rounded-xl border border-cyan-500/20 bg-black/40 p-6 backdrop-blur-md">
-      <h3 className="mb-6 font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
+    <div className="rounded-xl border border-border bg-black/40 p-6 backdrop-blur-md">
+      <h3 className="mb-6 font-sans text-[10px] font-bold tracking-widest text-primary/70 uppercase">
         Expertise & Interests
       </h3>
 

@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { ShieldCheck, Lock, Mail, ArrowRight, Loader2, Sparkles, KeyRound } from "lucide-react"
 import { useAuthSession } from "@moon/client"
-import { cosmicAudio } from "@workspace/ui"
+import { soundEngine } from "@workspace/ui"
 
 export function LoginView() {
   const router = useRouter()
@@ -21,16 +21,16 @@ export function LoginView() {
     setErrorMsg("")
 
     try {
-      cosmicAudio.playTacticalClick()
+      soundEngine.playClick()
       await login({
         email,
         password,
       })
 
-      cosmicAudio.playAlignmentChime()
+      soundEngine.playSuccessChime()
       router.push("/dashboard")
     } catch (err: any) {
-      cosmicAudio.playModalPulse()
+      soundEngine.playAlertTone()
       setErrorMsg(err?.message || "Invalid email or password. Please try again.")
       setLoading(false)
     }
@@ -39,7 +39,7 @@ export function LoginView() {
   const handleQuickPreset = (presetEmail: string, presetPass: string) => {
     setEmail(presetEmail)
     setPassword(presetPass)
-    cosmicAudio.playClick()
+    soundEngine.playClick()
   }
 
   return (
@@ -48,7 +48,7 @@ export function LoginView() {
       <div className="pointer-events-none absolute inset-0 z-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,240,255,0.08),rgba(255,255,255,0))]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_120%,rgba(161,0,255,0.08),rgba(255,255,255,0))]" />
-        <div className="bg-cosmic-grid absolute inset-0 opacity-40" />
+        <div className="bg-muted/20 absolute inset-0 opacity-40" />
       </div>
 
       <main className="relative z-10 w-full max-w-md p-6">
@@ -115,9 +115,9 @@ export function LoginView() {
                 <button
                   type="button"
                   onClick={() => handleQuickPreset("commander@moonwitness.os", "password123")}
-                  className="flex items-center justify-center gap-1.5 rounded-lg border border-border/40 bg-secondary/50 px-2.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-purple-500/50 hover:bg-purple-500/10"
+                  className="flex items-center justify-center gap-1.5 rounded-lg border border-border/40 bg-secondary/50 px-2.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-border hover:bg-muted"
                 >
-                  <KeyRound className="h-3.5 w-3.5 text-purple-500" />
+                  <KeyRound className="h-3.5 w-3.5 text-primary" />
                   Commander
                 </button>
                 <button

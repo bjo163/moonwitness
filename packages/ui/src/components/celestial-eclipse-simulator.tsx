@@ -51,13 +51,13 @@ export function CelestialEclipseSimulator({
   return (
     <div className={`flex flex-col items-center justify-center font-mono ${className}`}>
       {/* Simulation Viewport */}
-      <div className="relative h-72 w-full max-w-lg overflow-hidden rounded-2xl border border-cyan-500/30 bg-card shadow-sm flex items-center justify-center">
+      <div className="relative h-72 w-full max-w-lg overflow-hidden rounded-2xl border border-border bg-card shadow-sm flex items-center justify-center">
         {/* Background Starfield */}
         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]" />
 
         {/* Solar Corona Flares (Prominent during totality) */}
         {isTotality && (
-          <div className="absolute h-48 w-48 rounded-full bg-gradient-to-r from-amber-400 via-cyan-400 to-indigo-500 blur-2xl opacity-80 animate-pulse" />
+          <div className="absolute h-48 w-48 rounded-full bg-gradient-to-r from-amber-400 via-transparent to-indigo-500 blur-2xl opacity-80 animate-pulse" />
         )}
 
         {/* Sun Sphere (Fixed at Center) */}
@@ -67,7 +67,7 @@ export function CelestialEclipseSimulator({
 
         {/* Moon Disk (Moving along orbital trajectory) */}
         <div
-          className="absolute z-20 h-36 w-36 rounded-full bg-card border border-cyan-500/20 shadow-sm transition-transform duration-75 ease-out"
+          className="absolute z-20 h-36 w-36 rounded-full bg-card border border-border shadow-sm transition-transform duration-75 ease-out"
           style={{
             transform: `translate(${xOffset}px, ${yOffset}px)`,
           }}
@@ -84,7 +84,7 @@ export function CelestialEclipseSimulator({
         )}
 
         {/* Telemetry In-Viewport Watermark */}
-        <div className="absolute bottom-3 left-4 z-30 text-[10px] text-cyan-400">
+        <div className="absolute bottom-3 left-4 z-30 text-[10px] text-primary">
           CHRONO • {getContactPhase(progress)}
         </div>
         <div className="absolute bottom-3 right-4 z-30 text-[10px] font-bold text-amber-400">
@@ -93,7 +93,7 @@ export function CelestialEclipseSimulator({
       </div>
 
       {/* Control Deck */}
-      <div className="mt-4 w-full max-w-lg space-y-3 bg-card/80 p-4 rounded-xl border border-cyan-500/20 backdrop-blur-md">
+      <div className="mt-4 w-full max-w-lg space-y-3 bg-card/80 p-4 rounded-xl border border-border backdrop-blur-md">
         {/* Timeline Scrubber */}
         <div className="flex items-center gap-3">
           <span className="text-[10px] text-zinc-500">C1</span>
@@ -107,7 +107,7 @@ export function CelestialEclipseSimulator({
               setIsPlaying(false)
               setProgress(parseFloat(e.target.value))
             }}
-            className="h-1.5 flex-1 appearance-none rounded-lg bg-cyan-950 accent-cyan-400 cursor-pointer"
+            className="h-1.5 flex-1 appearance-none rounded-lg bg-muted accent-cyan-400 cursor-pointer"
           />
           <span className="text-[10px] text-zinc-500">C4</span>
         </div>
@@ -117,7 +117,7 @@ export function CelestialEclipseSimulator({
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsPlaying(!isPlaying)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-cyan-500/30 bg-cyan-950/40 text-cyan-300 hover:bg-cyan-500/20 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-muted text-primary hover:bg-primary/10 transition-colors"
             >
               {isPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
               <span>{isPlaying ? "PAUSE" : "SIMULATE"}</span>
@@ -143,7 +143,7 @@ export function CelestialEclipseSimulator({
           </div>
 
           <div className="text-[10px] text-zinc-400">
-            MODE: <span className="text-cyan-300">{eclipseType.replace("_", " ")}</span>
+            MODE: <span className="text-primary">{eclipseType.replace("_", " ")}</span>
           </div>
         </div>
       </div>

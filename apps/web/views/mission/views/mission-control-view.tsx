@@ -172,7 +172,7 @@ export function MissionControlView() {
         subtitle="Pusat monitoring kemanusiaan global untuk melacak zona krisis dan merumuskan strategi bantuan, diplomasi, dan resolusi perdamaian."
         operation="SATELLITE-MAPPING"
         status="ONLINE"
-        accentColor="danger"
+        accentColor="destructive"
       />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">

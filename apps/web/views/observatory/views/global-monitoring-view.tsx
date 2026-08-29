@@ -35,7 +35,7 @@ import { MaritimeTrafficWidget } from "@workspace/ui"
 import { GlobalClimateWidget } from "@workspace/ui"
 import { FinancialMarketsWidget } from "@workspace/ui"
 
-// Humanity & Cyber Widgets
+// Humanity & digital Widgets
 import { GlobalPopulationWidget } from "@workspace/ui"
 import { DigitalConsciousnessWidget } from "@workspace/ui"
 import { TrendingTopicsWidget } from "@workspace/ui"

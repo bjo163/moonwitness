@@ -40,7 +40,7 @@ export function MissionBadges() {
       name: "Community Helper",
       level: "Level 1",
       icon: HelpCircle,
-      color: "text-cyan-400 border-cyan-400",
+      color: "text-primary border-border",
     },
     {
       name: "Consistent Learner",
@@ -57,12 +57,12 @@ export function MissionBadges() {
   ]
 
   return (
-    <div className="h-full rounded-xl border border-cyan-500/20 bg-black/40 p-6 backdrop-blur-md">
+    <div className="h-full rounded-xl border border-border bg-black/40 p-6 backdrop-blur-md">
       <div className="mb-6 flex items-center justify-between">
-        <h3 className="font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
+        <h3 className="font-sans text-[10px] font-bold tracking-widest text-primary/70 uppercase">
           Mission Badges
         </h3>
-        <button className="font-sans text-[9px] text-cyan-500 transition-colors hover:text-cyan-400">
+        <button className="font-sans text-[9px] text-primary transition-colors hover:text-primary">
           View All
         </button>
       </div>
@@ -73,7 +73,7 @@ export function MissionBadges() {
             key={i}
             className="group flex cursor-pointer flex-col items-center"
           >
-            {/* Hexagon shape roughly approximated using rotated squares or just a glowing container */}
+            {/* Hexagon shape roughly approximated using rotated squares or just a ambienting container */}
             <div
               className={`relative flex h-12 w-12 items-center justify-center rounded-lg border-2 bg-black/50 transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-110 ${badge.color}`}
             >

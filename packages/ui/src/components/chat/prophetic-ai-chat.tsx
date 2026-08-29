@@ -271,7 +271,7 @@ export function PropheticAIChatTerminal({
                   <div
                     className={`max-w-[96%] rounded-sm p-4 text-xs leading-relaxed font-normal shadow-lg transition-all sm:max-w-[85%] sm:text-sm ${
                       msg.role === "user"
-                        ? "rounded-tr-none border border-primary/60 bg-cyan-950/40 font-mono text-primary shadow-sm"
+                        ? "rounded-tr-none border border-primary/60 bg-muted font-mono text-primary shadow-sm"
                         : "border-success text-success rounded-tl-none border bg-emerald-950/60 font-sans shadow-sm"
                     }`}
                   >

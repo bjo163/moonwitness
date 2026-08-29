@@ -23,7 +23,7 @@ export function MissionSummary() {
       label: "Research Contributions",
       value: "128",
       icon: Beaker,
-      color: "text-cyan-400",
+      color: "text-primary",
     },
     {
       label: "Observations Submitted",
@@ -52,8 +52,8 @@ export function MissionSummary() {
   ]
 
   return (
-    <div className="rounded-xl border border-cyan-500/20 bg-black/40 p-6 backdrop-blur-md">
-      <h3 className="mb-6 font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
+    <div className="rounded-xl border border-border bg-black/40 p-6 backdrop-blur-md">
+      <h3 className="mb-6 font-sans text-[10px] font-bold tracking-widest text-primary/70 uppercase">
         Mission Summary
       </h3>
 
@@ -91,7 +91,7 @@ export function MissionSummary() {
         ))}
       </div>
 
-      <button className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg border border-cyan-500/30 bg-cyan-500/10 py-2.5 font-sans text-[10px] font-bold text-cyan-400 transition-colors hover:bg-cyan-500/20">
+      <button className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-primary/10 py-2.5 font-sans text-[10px] font-bold text-primary transition-colors hover:bg-primary/10">
         View Full Statistics <ArrowRight className="h-3 w-3" />
       </button>
     </div>

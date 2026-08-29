@@ -27,8 +27,8 @@ export function DiagnostikHikmahView() {
             <span className="hidden sm:inline">QURAN CORE:</span>
             <span>ONLINE</span>
           </div>
-          <div className="flex items-center gap-1 text-[10px] font-bold text-purple-300 uppercase">
-            <Sparkles className="h-3 w-3 text-purple-400" />
+          <div className="flex items-center gap-1 text-[10px] font-bold text-primary uppercase">
+            <Sparkles className="h-3 w-3 text-primary" />
             <span>GEMINI 3.6</span>
           </div>
         </div>

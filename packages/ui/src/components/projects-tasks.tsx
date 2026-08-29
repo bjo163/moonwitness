@@ -30,9 +30,9 @@ type ProjectsTasksProps = {
 function ActiveProjects({ projects = [] }: { projects?: Project[] }) {
   const projectList = Array.isArray(projects) ? projects : []
   return (
-    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
+    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-border p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
+        <h3 className="font-sans text-xs font-bold tracking-wider text-primary uppercase">
           Active Projects
         </h3>
         <span className="font-mono text-[10px] text-primary/60">
@@ -44,10 +44,10 @@ function ActiveProjects({ projects = [] }: { projects?: Project[] }) {
         {projectList.map((p) => (
           <div
             key={p.id}
-            className="group cursor-pointer rounded-xl border border-cyan-500/10 bg-black/20 p-4 transition-all hover:border-cyan-500/30 hover:bg-black/40"
+            className="group cursor-pointer rounded-xl border border-border bg-black/20 p-4 transition-all hover:border-border hover:bg-black/40"
           >
             <div className="mb-3 flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-cyan-500/20 bg-cyan-500/10 text-cyan-400 group-hover:bg-cyan-500/20">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-primary/10 text-primary group-hover:bg-primary/10">
                 <FolderKanban className="h-5 w-5" />
               </div>
               <div className="min-w-0 flex-1">
@@ -58,14 +58,14 @@ function ActiveProjects({ projects = [] }: { projects?: Project[] }) {
                   {p.subtitle}
                 </p>
               </div>
-              <span className="font-mono text-xs font-bold text-cyan-400">
+              <span className="font-mono text-xs font-bold text-primary">
                 {p.progress}%
               </span>
             </div>
             {/* Progress Bar */}
             <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/60">
               <div
-                className="h-full bg-cyan-400 transition-all duration-1000 ease-out"
+                className="h-full bg-primary transition-all duration-1000 ease-out"
                 style={{ width: `${p.progress}%` }}
               />
             </div>
@@ -73,7 +73,7 @@ function ActiveProjects({ projects = [] }: { projects?: Project[] }) {
         ))}
       </div>
 
-      <button className="mt-4 flex w-full items-center justify-center gap-2 font-mono text-[10px] font-medium text-cyan-400 uppercase hover:text-cyan-300">
+      <button className="mt-4 flex w-full items-center justify-center gap-2 font-mono text-[10px] font-medium text-primary uppercase hover:text-primary">
         View All Projects <ArrowRight className="h-3 w-3" />
       </button>
     </div>
@@ -102,9 +102,9 @@ function TasksOverview({
       ]
 
   return (
-    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
+    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-border p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
+        <h3 className="font-sans text-xs font-bold tracking-wider text-primary uppercase">
           Tasks Overview
         </h3>
         <span className="font-mono text-[10px] text-primary/60">
@@ -114,7 +114,7 @@ function TasksOverview({
 
       <div className="mb-6 flex items-center gap-6">
         {/* Doughnut Chart Mock */}
-        <div className="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-full border-4 border-cyan-400/20 border-t-cyan-400 border-r-cyan-400">
+        <div className="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-full border-4 border-border border-t-cyan-400 border-r-cyan-400">
           <div className="text-center">
             <span className="block font-sans text-2xl font-bold text-white">
               {stats.total}
@@ -129,7 +129,7 @@ function TasksOverview({
         <div className="flex-1 space-y-2 font-mono text-xs">
           <div className="flex items-center justify-between">
             <span className="flex items-center gap-2 text-primary/80">
-              <span className="h-2 w-2 rounded-full bg-cyan-400" />
+              <span className="h-2 w-2 rounded-full bg-primary" />
               Today
             </span>
             <span className="text-white">{stats.today}</span>
@@ -159,7 +159,7 @@ function TasksOverview({
       </div>
 
       {/* Task List */}
-      <div className="flex-1 space-y-2 border-t border-cyan-500/10 pt-4">
+      <div className="flex-1 space-y-2 border-t border-border pt-4">
         {list.map((t) => (
           <div
             key={t.id}
@@ -186,7 +186,7 @@ function TasksOverview({
         ))}
       </div>
 
-      <button className="mt-4 flex w-full items-center justify-center gap-2 border-t border-cyan-500/10 pt-4 font-mono text-[10px] font-medium text-cyan-400 uppercase hover:text-cyan-300">
+      <button className="mt-4 flex w-full items-center justify-center gap-2 border-t border-border pt-4 font-mono text-[10px] font-medium text-primary uppercase hover:text-primary">
         View All Tasks <ArrowRight className="h-3 w-3" />
       </button>
     </div>

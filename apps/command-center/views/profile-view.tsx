@@ -59,14 +59,14 @@ export function ErpProfileView() {
         <div className="space-y-6 lg:col-span-4 xl:col-span-3">
           <ProfileCard profileData={profileData} isOwnProfile={isOwnProfile} />
           <MissionSummary />
-          <div className="rounded-xl border border-cyan-500/20 bg-black/40 p-4 backdrop-blur-md">
-            <h3 className="mb-4 font-sans text-[10px] font-bold tracking-widest text-cyan-500 uppercase">
+          <div className="rounded-xl border border-border bg-black/40 p-4 backdrop-blur-md">
+            <h3 className="mb-4 font-sans text-[10px] font-bold tracking-widest text-primary uppercase">
               System Status
             </h3>
             <div className="relative flex flex-col items-center justify-center p-8">
-              <div className="absolute h-32 w-32 animate-[spin_8s_linear_infinite] rounded-full border border-cyan-500/30" />
+              <div className="absolute h-32 w-32 animate-[spin_8s_linear_infinite] rounded-full border border-border" />
               <div className="absolute h-24 w-24 animate-[spin_4s_linear_infinite_reverse] rounded-full border-t border-r border-fuchsia-500/50" />
-              <div className="absolute h-16 w-16 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite] rounded-full border-b border-l border-cyan-400/80" />
+              <div className="absolute h-16 w-16 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite] rounded-full border-b border-l border-border" />
               <div className="z-10 text-center">
                 <span className="block font-sans text-xs text-emerald-400">
                   All Systems Operational
@@ -76,7 +76,7 @@ export function ErpProfileView() {
                 </span>
               </div>
             </div>
-            <button className="mt-4 w-full rounded-md border border-cyan-500/30 px-3 py-2 font-sans text-[10px] text-cyan-400 transition-colors hover:bg-cyan-500/10">
+            <button className="mt-4 w-full rounded-md border border-border px-3 py-2 font-sans text-[10px] text-primary transition-colors hover:bg-primary/10">
               View System Health &rarr;
             </button>
           </div>

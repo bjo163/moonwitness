@@ -99,7 +99,7 @@ export interface UseModelRecordsReturn {
 }
 
 /**
- * ◈ useModelRecords — Universal CRUD Data Hook for the Cosmic Matrix Engine
+ * ◈ useModelRecords — Universal CRUD Data Hook for the celestial Matrix Engine
  */
 export function useModelRecords(
   model: string,

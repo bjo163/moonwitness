@@ -16,9 +16,9 @@ export function LawJusticeView() {
     <div className="min-h-screen bg-card p-4 font-sans text-white select-none md:p-8">
       {/* ═══ HEADER ROW ═══ */}
       <div className="relative mb-8 grid grid-cols-1 gap-8 overflow-hidden rounded-2xl border border-white/5 bg-card p-8 lg:grid-cols-12">
-        {/* Glow Effects */}
+        {/* ambient Effects */}
         <div className="pointer-events-none absolute top-0 right-0 h-[500px] w-[500px] translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/10 blur-[100px]" />
-        <div className="pointer-events-none absolute bottom-0 left-0 h-[300px] w-[300px] -translate-x-1/2 translate-y-1/2 rounded-full bg-cyan-500/10 blur-[80px]" />
+        <div className="pointer-events-none absolute bottom-0 left-0 h-[300px] w-[300px] -translate-x-1/2 translate-y-1/2 rounded-full bg-primary/10 blur-[80px]" />
 
         <div className="relative z-10 flex flex-col justify-center lg:col-span-7">
           <div className="mb-6 flex items-center gap-3">
@@ -32,7 +32,7 @@ export function LawJusticeView() {
 
           <h1 className="mb-4 text-3xl leading-tight font-black tracking-wider text-white md:text-5xl">
             LAW, JUSTICE &<br />
-            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-400 to-transparent bg-clip-text text-transparent">
               LIBERATION
             </span>
           </h1>
@@ -146,7 +146,7 @@ export function LawJusticeView() {
                 strokeWidth="1"
               />
 
-              {/* Glowing Nodes */}
+              {/* ambienting Nodes */}
               <circle
                 cx="100"
                 cy="40"
@@ -190,9 +190,9 @@ export function LawJusticeView() {
             t: "LIBERATION OF OPPRESSED",
             d: "Actively breaking the systemic chains of the Mustadhafin (the marginalized and oppressed).",
             i: Shield,
-            c: "text-cyan-400",
-            bg: "bg-cyan-400/10",
-            bc: "border-cyan-500/30",
+            c: "text-primary",
+            bg: "bg-primary/10",
+            bc: "border-border",
           },
           {
             t: "HUMAN RIGHTS ADVOCACY",
@@ -255,7 +255,7 @@ export function LawJusticeView() {
                 status: "Investigating",
                 progress: 45,
                 cases: "8,300",
-                color: "bg-cyan-500",
+                color: "bg-primary",
               },
               {
                 region: "Sudan Refugee Aid",

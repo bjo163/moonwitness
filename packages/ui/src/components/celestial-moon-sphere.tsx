@@ -57,7 +57,7 @@ export function CelestialMoonSphere({
 
     ctx.clearRect(0, 0, size, size)
 
-    // 1. Cosmic Atmosphere Outer Glow
+    // 1. celestial Atmosphere Outer ambient
     const outerGlow = ctx.createRadialGradient(cx, cy, radius * 0.8, cx, cy, radius * 1.35)
     outerGlow.addColorStop(0, "rgba(0, 240, 255, 0.15)")
     outerGlow.addColorStop(0.5, "rgba(0, 240, 255, 0.04)")
@@ -197,9 +197,9 @@ export function CelestialMoonSphere({
         {/* Orbit Crosshair Overlay on Hover */}
         {isHovered && interactive && (
           <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center animate-in fade-in duration-300">
-            <div className="h-full w-full rounded-full border border-cyan-400/20 border-dashed animate-spin [animation-duration:40s]" />
-            <div className="absolute h-4 w-4 border-t border-l border-cyan-400/80" />
-            <div className="absolute h-4 w-4 border-b border-r border-cyan-400/80" />
+            <div className="h-full w-full rounded-full border border-border border-dashed animate-spin [animation-duration:40s]" />
+            <div className="absolute h-4 w-4 border-t border-l border-border" />
+            <div className="absolute h-4 w-4 border-b border-r border-border" />
           </div>
         )}
       </div>
@@ -207,7 +207,7 @@ export function CelestialMoonSphere({
       {/* Telemetry Readout */}
       {showTelemetry && (
         <div className="mt-4 flex flex-col items-center gap-1 font-mono">
-          <div className="flex items-center gap-2 text-[10px] tracking-widest text-cyan-400 uppercase">
+          <div className="flex items-center gap-2 text-[10px] tracking-widest text-primary uppercase">
             <Orbit className="h-3 w-3 animate-spin [animation-duration:12s]" />
             <span>{getPhaseName(phase)}</span>
           </div>

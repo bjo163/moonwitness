@@ -55,7 +55,7 @@ export function PsikologiJiwaView() {
       <div className="mx-auto max-w-5xl space-y-6 px-4 sm:px-6">
         {/* System Breadcrumb */}
 
-        {/* Tactical Context Block */}
+        {/* strategic Context Block */}
         <ContextBlock
           title={t(
             "NAFS PSYCHOLOGY & MENTAL HEALTH",
@@ -67,16 +67,16 @@ export function PsikologiJiwaView() {
           )}
           operation="NAFS-PSYCHOLOGY-MATRIX"
           status="ONLINE"
-          accentColor="knowledge"
+          accentColor="primary"
         />
 
         {/* 3 Nafs Stages */}
-        <Panel level="level2" accentColor="knowledge">
+        <Panel level="level2" accentColor="primary">
           <PanelHeader
             title="// THE 3 STAGES OF NAFS PSYCHOLOGY IN AL-QUR'AN"
             status="ACTIVE"
             icon={Heart}
-            accentColor="knowledge"
+            accentColor="primary"
             subtitle="Spiritual evolution stages from emotional turmoil to absolute inner peace."
           />
 
@@ -90,7 +90,7 @@ export function PsikologiJiwaView() {
                   <h4 className="text-sm font-bold text-foreground">
                     {st.stageName}
                   </h4>
-                  <span className="rounded-md border border-purple-500/40 bg-purple-500/10 text-purple-500 px-2 py-0.5 font-mono text-[9px] font-bold">
+                  <span className="rounded-md border border-border bg-muted text-primary px-2 py-0.5 font-mono text-[9px] font-bold">
                     {st.quranRef}
                   </span>
                 </div>

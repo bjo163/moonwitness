@@ -2,7 +2,7 @@
 
 import React from "react"
 import { useParams } from "next/navigation"
-import { CosmicModelWorkspace } from "@workspace/ui"
+import { ModelWorkspace } from "@workspace/ui"
 import { ModuleGuard } from "@workspace/error"
 
 export default function DynamicMatrixModelPage() {
@@ -20,7 +20,7 @@ export default function DynamicMatrixModelPage() {
 
   return (
     <ModuleGuard moduleId={`matrix-${model}`}>
-      <CosmicModelWorkspace model={model} />
+      <ModelWorkspace model={model} />
     </ModuleGuard>
   )
 }

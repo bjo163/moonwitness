@@ -4,17 +4,17 @@ import React, { useState, useMemo } from "react"
 import { Grid3X3, ArrowRight, X, Eye } from "lucide-react"
 import type { ModelSchema, ModelRecord } from "@workspace/types"
 
-export interface CosmicPivotGridProps {
+export interface ModelPivotGridProps {
   schema: ModelSchema
   records: ModelRecord[]
   onRecordClick?: (rec: ModelRecord) => void
 }
 
-export function CosmicPivotGrid({
+export function ModelPivotGrid({
   schema,
   records,
   onRecordClick,
-}: CosmicPivotGridProps) {
+}: ModelPivotGridProps) {
   // Extract categorizable fields (selection, many2one, string, status)
   const candidateFields = useMemo(() => {
     return Object.entries(schema.fields)
@@ -96,7 +96,7 @@ export function CosmicPivotGrid({
   return (
     <div className="space-y-6">
       {/* Pivot Controls Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-card/90 border border-border/40 rounded-xl shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-card border border-border rounded-xl shadow-sm">
         <div className="flex items-center gap-3">
           <Grid3X3 className="w-5 h-5 text-primary" />
           <span className="text-xs font-bold text-foreground uppercase tracking-wide">
@@ -140,11 +140,11 @@ export function CosmicPivotGrid({
       </div>
 
       {/* Pivot Matrix Table */}
-      <div className="overflow-x-auto border border-border/40 rounded-xl bg-card/90 shadow-sm">
+      <div className="overflow-x-auto border border-border rounded-xl bg-card shadow-sm">
         <table className="w-full text-left border-collapse font-sans text-xs">
           <thead>
-            <tr className="border-b border-border/40 bg-muted/40 text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">
-              <th className="py-3 px-4 bg-muted/50 border-r border-border/40 sticky left-0 z-10">
+            <tr className="border-b border-border bg-muted/40 text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">
+              <th className="py-3 px-4 bg-muted/50 border-r border-border sticky left-0 z-10">
                 {schema.fields[rowField]?.label || rowField} ↓ \ {schema.fields[colField]?.label || colField} →
               </th>
               {colValues.map((cVal) => (
@@ -152,17 +152,17 @@ export function CosmicPivotGrid({
                   {cVal}
                 </th>
               ))}
-              <th className="py-3 px-4 text-center bg-primary/10 text-primary font-bold border-l border-border/40">
+              <th className="py-3 px-4 text-center bg-primary/10 text-primary font-bold border-l border-border">
                 Total
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border/30">
+          <tbody className="divide-y divide-border">
             {rowValues.map((rVal) => {
               let rowSum = 0
               return (
                 <tr key={rVal} className="hover:bg-muted/30 transition-colors">
-                  <td className="py-3 px-4 font-semibold text-foreground bg-muted/20 border-r border-border/40 sticky left-0 z-10">
+                  <td className="py-3 px-4 font-semibold text-foreground bg-muted/20 border-r border-border sticky left-0 z-10">
                     {rVal}
                   </td>
                   {colValues.map((cVal) => {
@@ -190,7 +190,7 @@ export function CosmicPivotGrid({
                       </td>
                     )
                   })}
-                  <td className="py-3 px-4 text-center font-bold text-primary bg-primary/5 border-l border-border/40">
+                  <td className="py-3 px-4 text-center font-bold text-primary bg-primary/5 border-l border-border">
                     {rowSum}
                   </td>
                 </tr>
@@ -215,9 +215,9 @@ export function CosmicPivotGrid({
 
       {/* Selected Cell Records Inspection Modal */}
       {selectedCell && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
           <div className="w-full max-w-2xl bg-card border border-border rounded-xl shadow-2xl overflow-hidden font-sans">
-            <div className="flex items-center justify-between px-5 py-3.5 border-b border-border/40 bg-muted/30">
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-border bg-muted/30">
               <div>
                 <span className="text-[10px] text-primary uppercase tracking-wider font-semibold">
                   Drilldown ({selectedCell.records.length} records)
@@ -239,7 +239,7 @@ export function CosmicPivotGrid({
                     setSelectedCell(null)
                     onRecordClick?.(rec)
                   }}
-                  className="flex items-center justify-between p-2.5 bg-background border border-border/50 hover:border-primary/50 rounded-lg cursor-pointer transition-all group"
+                  className="flex items-center justify-between p-2.5 bg-background border border-border hover:border-primary/50 rounded-lg cursor-pointer transition-colors group"
                 >
                   <span className="text-xs text-foreground group-hover:text-primary">
                     #{rec.id} — {rec[schema.recName || "name"] || `#${rec.id}`}

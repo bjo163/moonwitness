@@ -130,12 +130,12 @@ export function DataTable<T = any>({
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <div className={`space-y-6 ${sideWidgets ? "lg:col-span-8" : "lg:col-span-12"}`}>
-          <Card className="border-cyan-900/40 bg-black/60 shadow-xl backdrop-blur-md">
-            <CardHeader className="border-b border-cyan-900/30 pb-4">
+          <Card className="border-border bg-black/60 shadow-xl backdrop-blur-md">
+            <CardHeader className="border-b border-border pb-4">
               <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
                 <div className="flex items-center gap-3">
                   {icon && (
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-cyan-500/30 bg-cyan-950/40 text-cyan-400">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-muted text-primary">
                       {icon}
                     </div>
                   )}
@@ -157,7 +157,7 @@ export function DataTable<T = any>({
                       setEditingId(null)
                       setIsAddOpen(true)
                     }}
-                    className="flex h-9 items-center gap-2 border border-cyan-500/50 bg-cyan-950/60 font-sans text-xs font-semibold text-cyan-300 hover:bg-cyan-900/60"
+                    className="flex h-9 items-center gap-2 border border-border bg-muted font-sans text-xs font-semibold text-primary hover:bg-muted"
                   >
                     <Plus className="h-4 w-4" /> Add Record
                   </Button>
@@ -165,14 +165,14 @@ export function DataTable<T = any>({
               </div>
 
               {tabs && tabs.length > 0 && (
-                <div className="mt-4 flex flex-wrap gap-2 border-t border-cyan-900/30 pt-3">
+                <div className="mt-4 flex flex-wrap gap-2 border-t border-border pt-3">
                   {tabs.map((tab) => (
                     <button
                       key={tab.id}
                       onClick={() => onTabChange?.(tab.id)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-bold font-mono transition-all ${
                         activeTab === tab.id
-                          ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
+                          ? "bg-primary/10 text-primary border border-border"
                           : "text-slate-400 hover:text-white"
                       }`}
                     >
@@ -189,7 +189,7 @@ export function DataTable<T = any>({
                     placeholder="Search records..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="h-9 border-cyan-900/50 bg-black/40 pl-9 font-sans text-xs text-white placeholder:text-slate-500 focus:border-cyan-500/50"
+                    className="h-9 border-border bg-black/40 pl-9 font-sans text-xs text-white placeholder:text-slate-500 focus:border-border"
                   />
                 </div>
                 {filterWidgets && <div className="flex items-center gap-2">{filterWidgets}</div>}
@@ -204,13 +204,13 @@ export function DataTable<T = any>({
                     variant="ghost"
                     size="sm"
                     onClick={() => fetch(filters)}
-                    className="text-cyan-400 hover:text-cyan-300"
+                    className="text-primary hover:text-primary"
                   >
                     Retry
                   </Button>
                 </div>
               ) : loading ? (
-                <div className="flex items-center justify-center p-12 text-cyan-400">
+                <div className="flex items-center justify-center p-12 text-primary">
                   <Loader2 className="h-6 w-6 animate-spin" />
                 </div>
               ) : filteredData.length === 0 ? (
@@ -220,7 +220,7 @@ export function DataTable<T = any>({
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs font-sans text-slate-300">
-                    <thead className="border-b border-cyan-900/30 bg-cyan-950/20 text-[10px] font-bold text-cyan-400 uppercase tracking-wider">
+                    <thead className="border-b border-border bg-muted text-[10px] font-bold text-primary uppercase tracking-wider">
                       <tr>
                         {columns
                           .filter((col) => !col.hideInTable)
@@ -234,7 +234,7 @@ export function DataTable<T = any>({
                     </thead>
                     <tbody className="divide-y divide-cyan-900/20 font-mono">
                       {filteredData.map((row: any) => (
-                        <tr key={row.id} className="hover:bg-cyan-950/20 transition-colors">
+                        <tr key={row.id} className="hover:bg-muted transition-colors">
                           {columns
                             .filter((col) => !col.hideInTable)
                             .map((col) => (
@@ -252,7 +252,7 @@ export function DataTable<T = any>({
                                   setFormData(row)
                                   setIsEditOpen(true)
                                 }}
-                                className="h-7 w-7 p-0 text-slate-400 hover:text-cyan-400"
+                                className="h-7 w-7 p-0 text-slate-400 hover:text-primary"
                               >
                                 <Edit className="h-3.5 w-3.5" />
                               </Button>
@@ -285,9 +285,9 @@ export function DataTable<T = any>({
 
       {/* Add / Edit Dialogs */}
       <Dialog open={isAddOpen || isEditOpen} onOpenChange={(open) => { if (!open) { setIsAddOpen(false); setIsEditOpen(false); setSubmitError(null); } }}>
-        <DialogContent className="border-cyan-900/50 bg-card text-white">
+        <DialogContent className="border-border bg-card text-white">
           <DialogHeader>
-            <DialogTitle className="font-sans text-sm uppercase text-cyan-400 font-bold">
+            <DialogTitle className="font-sans text-sm uppercase text-primary font-bold">
               {isEditOpen ? `Edit Record (#${editingId})` : `Add New Record`}
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-400">
@@ -306,7 +306,7 @@ export function DataTable<T = any>({
                     value={formData[c.name] || ""}
                     onChange={handleInputChange}
                     placeholder={`Enter ${c.label}...`}
-                    className="border-cyan-900/40 bg-black text-xs text-white"
+                    className="border-border bg-black text-xs text-white"
                   />
                 </div>
               ))}
@@ -318,7 +318,7 @@ export function DataTable<T = any>({
             <Button
               onClick={() => handleSave(isEditOpen)}
               disabled={isSubmitting}
-              className="bg-cyan-600 text-white hover:bg-cyan-500 font-bold text-xs"
+              className="bg-primary text-white hover:bg-primary font-bold text-xs"
             >
               {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : isEditOpen ? "Save Changes" : "Create Record"}
             </Button>
@@ -328,5 +328,3 @@ export function DataTable<T = any>({
     </div>
   )
 }
-
-export { DataTable as MoonDataTable }

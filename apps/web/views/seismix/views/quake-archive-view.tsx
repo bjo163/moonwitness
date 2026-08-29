@@ -154,12 +154,12 @@ const HISTORIC_QUAKES: HistoricQuake[] = [
 // ── MAGNITUDE COLOR SYSTEM ───────────────────────────────
 function getMagnitudeStyle(mag: number) {
   if (mag >= 9.0)
-    return { color: "#FF0055", glow: "rgba(255,0,85,0.3)", label: "MEGA" }
+    return { color: "#FF0055", highlight: "rgba(255,0,85,0.3)", label: "MEGA" }
   if (mag >= 8.0)
-    return { color: "#FF3355", glow: "rgba(255,51,85,0.25)", label: "GREAT" }
+    return { color: "#FF3355", highlight: "rgba(255,51,85,0.25)", label: "GREAT" }
   if (mag >= 7.0)
-    return { color: "#FF9900", glow: "rgba(255,153,0,0.2)", label: "MAJOR" }
-  return { color: "#FFE600", glow: "rgba(255,230,0,0.2)", label: "STRONG" }
+    return { color: "#FF9900", highlight: "rgba(255,153,0,0.2)", label: "MAJOR" }
+  return { color: "#FFE600", highlight: "rgba(255,230,0,0.2)", label: "STRONG" }
 }
 
 const TYPE_COLORS = {
@@ -196,7 +196,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
                 color: magStyle.color,
                 borderColor: `${magStyle.color}50`,
                 background: `${magStyle.color}12`,
-                boxShadow: `0 0 10px ${magStyle.glow}`,
+                boxShadow: `0 0 10px ${magStyle.color}`,
               }}
             >
               M {quake.magnitude.toFixed(1)}
@@ -213,7 +213,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
               {quake.type.replace("-", " ")}
             </span>
             {quake.tsunamiGenerated && (
-              <span className="rounded-md border border-cyan-500/30 bg-cyan-500/8 px-1.5 py-0.5 font-mono text-[7px] font-bold tracking-widest text-cyan-400">
+              <span className="rounded-md border border-border bg-primary/10 px-1.5 py-0.5 font-mono text-[7px] font-bold tracking-widest text-primary">
                 TSUNAMI
               </span>
             )}
@@ -291,7 +291,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
               </span>
               <span
                 className={`font-mono text-xs font-bold ${
-                  quake.tsunamiGenerated ? "text-cyan-400" : "text-primary"
+                  quake.tsunamiGenerated ? "text-primary" : "text-primary"
                 }`}
               >
                 {quake.tsunamiGenerated ? "YES" : "NO"}
@@ -311,12 +311,12 @@ function MagnitudeTimeline({ quakes }: { quakes: HistoricQuake[] }) {
   )
 
   return (
-    <Panel level="level3" accentColor="system">
+    <Panel level="level3" accentColor="primary">
       <PanelHeader
         title="MAGNITUDE TIMELINE"
         icon={TrendingUp}
         status="HISTORICAL"
-        accentColor="system"
+        accentColor="primary"
       />
 
       <div className="space-y-2">
@@ -335,7 +335,7 @@ function MagnitudeTimeline({ quakes }: { quakes: HistoricQuake[] }) {
                   style={{
                     width: `${barWidth}%`,
                     background: `linear-gradient(90deg, ${magStyle.color}40, ${magStyle.color})`,
-                    boxShadow: `0 0 8px ${magStyle.glow}`,
+                    boxShadow: `0 0 8px ${magStyle.color}`,
                   }}
                 />
               </div>

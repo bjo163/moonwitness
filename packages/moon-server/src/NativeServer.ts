@@ -332,7 +332,7 @@ export class NativeServer {
       return handleMetaModels(req, res)
     }
 
-    // Cosmic Matrix Engine: Rich single-model schema introspection
+    // celestial Matrix Engine: Rich single-model schema introspection
     const metaModelMatch = req.url?.match(/^\/api\/meta\/model\/([a-z0-9.-]+)(?:\?.*)?$/)
     if (req.method === 'GET' && metaModelMatch) {
       return handleMetaModel(req, res, metaModelMatch[1]!)

@@ -141,7 +141,7 @@ export function HomeAEQ4Section() {
 
   return (
     <section className="relative w-full overflow-hidden py-16">
-      {/* Cosmic background glow */}
+      {/* celestial background ambient */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -239,7 +239,7 @@ export function HomeAEQ4Section() {
             className={`rounded-xl p-4 ${
               isPreEra
                 ? "border border-yellow-400/30 bg-black/60 shadow-sm"
-                : "border-purple-500/30 border bg-black/60 shadow-sm"
+                : "border-border border bg-black/60 shadow-sm"
             } `}
           >
             <div className="mb-2 flex items-center gap-2">
@@ -358,7 +358,7 @@ export function HomeAEQ4Section() {
               label="MOMENT"
               kitab="GOSPEL"
               value={aeq.moment}
-              color="border-purple-500/25"
+              color="border-border"
               desc="Kehadiran — detik ini, napas ini"
             />
           </div>

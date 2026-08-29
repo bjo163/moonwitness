@@ -1,7 +1,7 @@
 /**
  * ◈ MOON ORM — VIEW MANIFEST TYPE DEFINITIONS
  *
- * Declarative view configuration interfaces for the Cosmic Matrix Engine.
+ * Declarative view configuration interfaces for the celestial Matrix Engine.
  */
 
 export type MatrixViewMode = 'table' | 'kanban' | 'metrics'

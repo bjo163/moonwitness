@@ -1,4 +1,4 @@
-// ◈ MOONWITNESS OS — REUSABLE HUD COMPOSITE WIDGETS
+// ◈ MOONWITNESS OS — REUSABLE display COMPOSITE WIDGETS
 // Exported from @workspace/ui and @workspace/ui/widgets
 
 export { FlyingPropheticAIWidget } from "./flying-prophetic-ai-widget"
@@ -35,7 +35,7 @@ export { KeyboardShortcutsModal } from "./modals/keyboard-shortcuts-modal"
 export { ShareCardGeneratorModal } from "./modals/share-card-generator-modal"
 
 // CRUD
-export { ModelDataTable } from "./crud/moon-data-table"
+export { MoonDataTable } from "./crud/moon-data-table"
 
 // Monitoring
 export { GlobalStatusWidget } from "./monitoring/global-status-widget"

@@ -3,19 +3,19 @@
 import React, { useState } from "react"
 import { Table, LayoutGrid, Grid3X3, Calendar, Plus, RefreshCw, AlertCircle } from "lucide-react"
 import { useModelSchema, useModelRecords } from "@workspace/hooks"
-import { CosmicDataTable } from "./cosmic-data-table"
-import { CosmicKanbanBoard } from "./cosmic-kanban-board"
-import { CosmicPivotGrid } from "./cosmic-pivot-grid"
-import { CosmicTimelineView } from "./cosmic-timeline-view"
-import { CosmicFormModal } from "./cosmic-form-modal"
-import { CosmicCopilotWidget } from "./cosmic-copilot-widget"
+import { ModelDataTable } from "./model-data-table"
+import { ModelKanbanBoard } from "./model-kanban-board"
+import { ModelPivotGrid } from "./model-pivot-grid"
+import { ModelTimelineView } from "./model-timeline-view"
+import { ModelFormModal } from "./model-form-modal"
+import { ModelCopilotWidget } from "./model-copilot-widget"
 import type { MatrixViewMode } from "@workspace/types"
 
-export interface CosmicModelWorkspaceProps {
+export interface ModelWorkspaceProps {
   model: string
 }
 
-export function CosmicModelWorkspace({ model }: CosmicModelWorkspaceProps) {
+export function ModelWorkspace({ model }: ModelWorkspaceProps) {
   const { schema, loading: schemaLoading, error: schemaError, refetch: refetchSchema } = useModelSchema(model)
   const {
     records,
@@ -97,7 +97,7 @@ export function CosmicModelWorkspace({ model }: CosmicModelWorkspaceProps) {
   return (
     <div className="space-y-6">
       {/* Workspace Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 bg-card/90 border border-border/40 rounded-xl backdrop-blur-md shadow-sm">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 bg-card border border-border rounded-xl shadow-sm">
         <div>
           <div className="flex items-center gap-2 text-[10px] font-mono text-primary tracking-wider uppercase">
             <span>MODEL</span>
@@ -116,7 +116,7 @@ export function CosmicModelWorkspace({ model }: CosmicModelWorkspaceProps) {
 
         {/* View Switcher & Action */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center bg-muted/40 border border-border/40 rounded-lg p-0.5">
+          <div className="flex items-center bg-muted border border-border rounded-lg p-0.5">
             <button
               onClick={() => setActiveView("table")}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
@@ -172,19 +172,19 @@ export function CosmicModelWorkspace({ model }: CosmicModelWorkspaceProps) {
 
       {/* View Render */}
       {activeView === ("timeline" as any) ? (
-        <CosmicTimelineView
+        <ModelTimelineView
           schema={schema}
           records={records}
           onRecordClick={handleOpenEdit}
         />
       ) : activeView === ("pivot" as any) ? (
-        <CosmicPivotGrid
+        <ModelPivotGrid
           schema={schema}
           records={records}
           onRecordClick={handleOpenEdit}
         />
       ) : activeView === "kanban" && hasKanban ? (
-        <CosmicKanbanBoard
+        <ModelKanbanBoard
           schema={schema}
           records={records}
           loading={recordsLoading}
@@ -200,7 +200,7 @@ export function CosmicModelWorkspace({ model }: CosmicModelWorkspaceProps) {
           }}
         />
       ) : (
-        <CosmicDataTable
+        <ModelDataTable
           schema={schema}
           records={records}
           loading={recordsLoading}
@@ -212,7 +212,7 @@ export function CosmicModelWorkspace({ model }: CosmicModelWorkspaceProps) {
       )}
 
       {/* Universal Form Modal */}
-      <CosmicFormModal
+      <ModelFormModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         schema={schema}
@@ -221,7 +221,7 @@ export function CosmicModelWorkspace({ model }: CosmicModelWorkspaceProps) {
       />
 
       {/* Floating AI Copilot */}
-      <CosmicCopilotWidget schema={schema} records={records} />
+      <ModelCopilotWidget schema={schema} records={records} />
     </div>
   )
 }

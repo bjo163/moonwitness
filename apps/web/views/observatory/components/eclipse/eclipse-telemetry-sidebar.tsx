@@ -49,7 +49,7 @@ export function EclipseTelemetrySidebar({ astro, isSolar }: EclipseTelemetrySide
 
           <div className="rounded bg-white/[0.02] p-2.5">
             <div className="text-white/40">Solar Wind Speed</div>
-            <div className="text-sm font-black text-cyan-400">{astro.speed} km/s</div>
+            <div className="text-sm font-black text-primary">{astro.speed} km/s</div>
           </div>
         </div>
       </div>
