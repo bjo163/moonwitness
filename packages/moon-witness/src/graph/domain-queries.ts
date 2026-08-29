@@ -7,6 +7,9 @@ import WxFigureName from '../models/wx-figure-name.js'
 import WxFigureRole from '../models/wx-figure-role.js'
 import WxPassage from '../models/wx-passage.js'
 import WxScripture from '../models/wx-scripture.js'
+import WxRelationType from '../models/wx-relation-type.js'
+import WxEvidence from '../models/wx-evidence.js'
+import WxProvenance from '../models/wx-provenance.js'
 import { WitnessGraphService, type Loose } from './service.js'
 
 const MAX_QUERY_LIMIT = 100
@@ -205,6 +208,126 @@ export async function figureMentions(env: Ctx, figureEntityId: number, limit?: n
     if (mentions.length >= boundedLimit(limit)) break
   }
   return { figure, mentions }
+}
+
+export interface RelationshipExplorationResult {
+  centerEntity: Loose | null
+  depth: number
+  outbound: Array<{ relation: Loose; targetEntity: Loose | null; relationType: Loose | null }>
+  inbound: Array<{ relation: Loose; sourceEntity: Loose | null; relationType: Loose | null }>
+  totalCount: number
+}
+
+export async function exploreRelationships(
+  env: Ctx,
+  entityId: number,
+  options: { relationTypeCode?: string; limit?: number; depth?: number } = {}
+): Promise<RelationshipExplorationResult | null> {
+  const centerEntity = await WitnessGraphService.entity(env, entityId)
+  if (!centerEntity) return null
+
+  const maxRows = boundedLimit(options.limit)
+  const [outboundRels, inboundRels] = await Promise.all([
+    WitnessGraphService.outboundRelations(env, entityId, options.relationTypeCode),
+    WitnessGraphService.inboundRelations(env, entityId, options.relationTypeCode)
+  ])
+
+  const outbound: RelationshipExplorationResult['outbound'] = []
+  for (const rel of outboundRels.slice(0, maxRows)) {
+    const toId = relationId(rel, 'toEntityId', 'to_entity_id')
+    const typeId = relationId(rel, 'relationTypeId', 'relation_type_id')
+    const [targetEntity, relType] = await Promise.all([
+      WitnessGraphService.entity(env, toId),
+      (await WxRelationType.fetch(WxRelationType, env, [['id', '=', typeId], ['active', '=', true]]))[0] ?? null
+    ])
+    outbound.push({ relation: rel, targetEntity, relationType: relType })
+  }
+
+  const inbound: RelationshipExplorationResult['inbound'] = []
+  for (const rel of inboundRels.slice(0, maxRows)) {
+    const fromId = relationId(rel, 'fromEntityId', 'from_entity_id')
+    const typeId = relationId(rel, 'relationTypeId', 'relation_type_id')
+    const [sourceEntity, relType] = await Promise.all([
+      WitnessGraphService.entity(env, fromId),
+      (await WxRelationType.fetch(WxRelationType, env, [['id', '=', typeId], ['active', '=', true]]))[0] ?? null
+    ])
+    inbound.push({ relation: rel, sourceEntity, relationType: relType })
+  }
+
+  return {
+    centerEntity,
+    depth: boundedDepth(options.depth),
+    outbound,
+    inbound,
+    totalCount: outbound.length + inbound.length
+  }
+}
+
+export interface EvidenceExplorationResult {
+  targetId: number
+  targetType: 'ASSERTION' | 'CONTENT' | 'ENTITY'
+  evidence: Array<{
+    id: number
+    relation: string
+    polarity: string
+    weightBp: number
+    sourceReference: string | null
+    provenance: Loose | null
+    content: Loose | null
+  }>
+  totalCount: number
+}
+
+export async function exploreEvidence(
+  env: Ctx,
+  params: { assertionId?: number; contentId?: number; entityId?: number; limit?: number }
+): Promise<EvidenceExplorationResult> {
+  const maxRows = boundedLimit(params.limit)
+  const filters: any[] = [['active', '=', true]]
+  let targetType: EvidenceExplorationResult['targetType'] = 'ASSERTION'
+  let targetId = 0
+
+  if (params.assertionId) {
+    filters.push(['assertionId', '=', params.assertionId])
+    targetType = 'ASSERTION'
+    targetId = params.assertionId
+  } else if (params.contentId) {
+    filters.push(['contentId', '=', params.contentId])
+    targetType = 'CONTENT'
+    targetId = params.contentId
+  } else if (params.entityId) {
+    filters.push(['evidenceEntityId', '=', params.entityId])
+    targetType = 'ENTITY'
+    targetId = params.entityId
+  }
+
+  const evidenceRows = await WxEvidence.fetch(WxEvidence, env, filters, undefined, { limit: maxRows, order: 'id ASC' })
+  const evidence: EvidenceExplorationResult['evidence'] = []
+
+  for (const row of evidenceRows) {
+    const provId = relationId(row, 'provenanceId', 'provenance_id')
+    const contentId = relationId(row, 'contentId', 'content_id')
+    const [prov, content] = await Promise.all([
+      provId ? (await WxProvenance.fetch(WxProvenance, env, [['id', '=', provId], ['active', '=', true]]))[0] ?? null : null,
+      contentId ? (await WxContent.fetch(WxContent, env, [['id', '=', contentId], ['active', '=', true]]))[0] ?? null : null
+    ])
+    evidence.push({
+      id: idOf(row),
+      relation: String(row.relation ?? 'SUPPORTS'),
+      polarity: String(row.polarity ?? 'AFFIRMED'),
+      weightBp: Number(row.weightBp ?? row.weight_bp ?? 0),
+      sourceReference: row.sourceReference ?? row.source_reference ?? null,
+      provenance: prov,
+      content
+    })
+  }
+
+  return {
+    targetId,
+    targetType,
+    evidence,
+    totalCount: evidence.length
+  }
 }
 
 export const DOMAIN_QUERY_LIMITS = {

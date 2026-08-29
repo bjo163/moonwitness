@@ -8,7 +8,9 @@ import {
   findEntities,
   passageByReference,
   passageContent,
-  passageTree
+  passageTree,
+  exploreRelationships,
+  exploreEvidence
 } from './domain-queries.js'
 
 const HEADERS = {
@@ -125,6 +127,44 @@ export function registerWitnessGraphRoutes(jwtSecret: string): void {
       const result = await figureMentions(requestEnv(req, jwtSecret), entityId, integer(query(req).get('limit')))
       if (!result) return send(res, 404, { error: 'Person entity not found' })
       send(res, 200, { ...result, count: result.mentions.length })
+    }, jwtSecret)
+  })
+
+  globalRoutes.push({
+    method: 'GET',
+    path: '/api/witness/graph/relations',
+    handler: guard(async (req, res) => {
+      const params = query(req)
+      const entityId = integer(params.get('entityId'))
+      if (!entityId || entityId < 1) return send(res, 400, { error: 'entityId parameter is required' })
+      const result = await exploreRelationships(requestEnv(req, jwtSecret), entityId, {
+        relationTypeCode: params.get('relationType') ?? undefined,
+        limit: integer(params.get('limit')),
+        depth: integer(params.get('depth'))
+      })
+      if (!result) return send(res, 404, { error: 'Entity not found' })
+      send(res, 200, result)
+    }, jwtSecret)
+  })
+
+  globalRoutes.push({
+    method: 'GET',
+    path: '/api/witness/graph/evidence',
+    handler: guard(async (req, res) => {
+      const params = query(req)
+      const assertionId = integer(params.get('assertionId'))
+      const contentId = integer(params.get('contentId'))
+      const entityId = integer(params.get('entityId'))
+      if (!assertionId && !contentId && !entityId) {
+        return send(res, 400, { error: 'Provide at least one of assertionId, contentId, or entityId' })
+      }
+      const result = await exploreEvidence(requestEnv(req, jwtSecret), {
+        assertionId,
+        contentId,
+        entityId,
+        limit: integer(params.get('limit'))
+      })
+      send(res, 200, result)
     }, jwtSecret)
   })
 }
