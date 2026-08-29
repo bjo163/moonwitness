@@ -12,9 +12,9 @@ export function TaskCenterWidget() {
       <div className="mb-4 text-[8px] text-primary">My Tasks Overview</div>
 
       <div className="flex flex-1 items-center gap-4 xl:flex-col">
-        <div className="relative flex h-28 w-28 shrink-0 items-center justify-center rounded-full border-8 border-primary shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+        <div className="relative flex h-28 w-28 shrink-0 items-center justify-center rounded-full border-8 border-primary shadow-sm">
           <div
-            className="absolute inset-0 rounded-full border-[8px] border-secondary border-r-transparent border-b-transparent shadow-[0_0_10px_#0088FF]"
+            className="absolute inset-0 rounded-full border-[8px] border-secondary border-r-transparent border-b-transparent shadow-sm"
             style={{ transform: "rotate(-20deg)" }}
           />
           <div

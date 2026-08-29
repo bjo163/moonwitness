@@ -23,8 +23,8 @@ export function CurrentFocus() {
           <div className="absolute top-1/2 left-1/2 h-16 w-16 origin-top-left animate-[spin_3s_linear_infinite] border-l-2 border-cyan-400 bg-gradient-to-br from-cyan-400/40 to-transparent" />
 
           {/* Blips */}
-          <div className="absolute top-1/4 right-1/4 h-2 w-2 animate-pulse rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]" />
-          <div className="absolute bottom-1/3 left-1/4 h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]" />
+          <div className="absolute top-1/4 right-1/4 h-2 w-2 animate-pulse rounded-full bg-cyan-400 shadow-sm" />
+          <div className="absolute bottom-1/3 left-1/4 h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400 shadow-sm" />
         </div>
 
         {/* Details */}

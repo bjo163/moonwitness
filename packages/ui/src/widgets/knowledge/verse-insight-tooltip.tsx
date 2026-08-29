@@ -57,7 +57,7 @@ export function VerseInsightTooltip({
       {children}
 
       {showTooltip && (
-        <div className="bg-background/95 absolute bottom-full left-1/2 z-50 mb-2 w-72 -translate-x-1/2 animate-in rounded-xl border border-cyan-500/30 p-4 shadow-[0_0_20px_rgba(0,240,255,0.15)] backdrop-blur-md fade-in slide-in-from-bottom-2 md:w-96">
+        <div className="bg-background/95 absolute bottom-full left-1/2 z-50 mb-2 w-72 -translate-x-1/2 animate-in rounded-xl border border-cyan-500/30 p-4 shadow-sm backdrop-blur-md fade-in slide-in-from-bottom-2 md:w-96">
           <div className="mb-2 flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-cyan-400" />
             <span className="font-sans text-[10px] font-black tracking-widest text-white uppercase">

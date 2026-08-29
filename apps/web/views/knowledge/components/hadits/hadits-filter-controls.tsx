@@ -36,7 +36,7 @@ export function HaditsFilterControls({
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search by keyword, narrator, book, or number..."
-          className="w-full rounded-xl border border-white/10 bg-[#080E1C] py-2.5 pr-4 pl-10 text-xs text-white placeholder-white/30 transition-all outline-none focus:border-cyan-500/50 focus:bg-[#0B1528]"
+          className="w-full rounded-xl border border-white/10 bg-card py-2.5 pr-4 pl-10 text-xs text-white placeholder-white/30 transition-all outline-none focus:border-cyan-500/50 focus:bg-card"
         />
       </div>
 
@@ -48,8 +48,8 @@ export function HaditsFilterControls({
             onClick={() => onGradeChange(grade)}
             className={`rounded-lg border px-3 py-1.5 font-mono text-[10px] font-bold uppercase transition-all ${
               selectedGrade === grade
-                ? "border-cyan-500/50 bg-cyan-500/20 text-cyan-300 shadow-[0_0_10px_rgba(0,240,255,0.2)]"
-                : "border-white/5 bg-[#080E1C] text-white/50 hover:border-white/20 hover:text-white"
+                ? "border-cyan-500/50 bg-cyan-500/20 text-cyan-300 shadow-sm"
+                : "border-white/5 bg-card text-white/50 hover:border-white/20 hover:text-white"
             }`}
           >
             {grade}
@@ -62,14 +62,14 @@ export function HaditsFilterControls({
         <button
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
-          className="flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-[#080E1C] transition-colors hover:bg-white/5 disabled:opacity-30"
+          className="flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-card transition-colors hover:bg-white/5 disabled:opacity-30"
         >
           <ChevronsLeft className="h-4 w-4" />
         </button>
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-[#080E1C] transition-colors hover:bg-white/5 disabled:opacity-30"
+          className="flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-card transition-colors hover:bg-white/5 disabled:opacity-30"
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
@@ -79,14 +79,14 @@ export function HaditsFilterControls({
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          className="flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-[#080E1C] transition-colors hover:bg-white/5 disabled:opacity-30"
+          className="flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-card transition-colors hover:bg-white/5 disabled:opacity-30"
         >
           <ChevronRight className="h-4 w-4" />
         </button>
         <button
           onClick={() => onPageChange(totalPages)}
           disabled={currentPage >= totalPages}
-          className="flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-[#080E1C] transition-colors hover:bg-white/5 disabled:opacity-30"
+          className="flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-card transition-colors hover:bg-white/5 disabled:opacity-30"
         >
           <ChevronsRight className="h-4 w-4" />
         </button>

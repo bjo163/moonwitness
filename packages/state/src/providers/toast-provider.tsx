@@ -123,7 +123,7 @@ function ToastItem({
       role="alert"
       aria-live="assertive"
       aria-atomic="true"
-      className={`panel-clip w-80 border sm:w-96 ${cfg.borderClass} bg-space/98 relative flex items-start gap-3 overflow-hidden px-4 py-3 font-mono backdrop-blur-md transition-all duration-280 ${exiting ? "translate-x-4 opacity-0" : "translate-x-0 opacity-100"} `}
+      className={`rounded-xl bg-card w-80 border sm:w-96 ${cfg.borderClass} bg-card/98 relative flex items-start gap-3 overflow-hidden px-4 py-3 font-mono backdrop-blur-md transition-all duration-280 ${exiting ? "translate-x-4 opacity-0" : "translate-x-0 opacity-100"} `}
       style={{ boxShadow: `0 0 30px ${cfg.glow}, 0 4px 20px rgba(0,0,0,0.6)` }}
     >
       <div

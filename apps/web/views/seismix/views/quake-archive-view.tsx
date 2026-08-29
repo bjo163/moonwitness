@@ -191,7 +191,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
           <div className="mb-1 flex flex-wrap items-center gap-2">
             {/* Magnitude badge */}
             <span
-              className="tag-clip flex items-center gap-1 border px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest"
+              className="rounded-md flex items-center gap-1 border px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest"
               style={{
                 color: magStyle.color,
                 borderColor: `${magStyle.color}50`,
@@ -203,7 +203,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
             </span>
             {/* Type badge */}
             <span
-              className="tag-clip border px-1.5 py-0.5 font-mono text-[7px] font-bold tracking-widest uppercase"
+              className="rounded-md border px-1.5 py-0.5 font-mono text-[7px] font-bold tracking-widest uppercase"
               style={{
                 color: typeColor,
                 borderColor: `${typeColor}30`,
@@ -213,7 +213,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
               {quake.type.replace("-", " ")}
             </span>
             {quake.tsunamiGenerated && (
-              <span className="tag-clip border border-cyan-500/30 bg-cyan-500/8 px-1.5 py-0.5 font-mono text-[7px] font-bold tracking-widest text-cyan-400">
+              <span className="rounded-md border border-cyan-500/30 bg-cyan-500/8 px-1.5 py-0.5 font-mono text-[7px] font-bold tracking-widest text-cyan-400">
                 TSUNAMI
               </span>
             )}

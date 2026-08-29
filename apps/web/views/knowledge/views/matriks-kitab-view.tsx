@@ -108,9 +108,9 @@ export function MatriksKitabView() {
             <button
               key={idx}
               onClick={() => setActiveTab(idx)}
-              className={`tag-clip border px-4 py-2.5 text-xs font-extrabold tracking-wider transition-all ${
+              className={`rounded-md border px-4 py-2.5 text-xs font-extrabold tracking-wider transition-all ${
                 activeTab === idx
-                  ? "border-primary bg-primary/20 text-primary shadow-[0_0_15px_rgba(0,240,255,0.4)]"
+                  ? "border-primary bg-primary/20 text-primary shadow-sm"
                   : "bg-background border-primary/20 text-primary hover:text-white"
               }`}
             >
@@ -121,7 +121,7 @@ export function MatriksKitabView() {
 
         {/* Comparative Matrix Display Grid */}
         <div className="space-y-4">
-          <div className="bg-panel tag-clip space-y-1 border border-primary/30 p-4">
+          <div className="bg-panel rounded-md space-y-1 border border-primary/30 p-4">
             <span className="text-[10px] font-bold text-primary uppercase">
               {/* FOKUS TEMA MATRIKS: */}
             </span>
@@ -133,13 +133,13 @@ export function MatriksKitabView() {
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {/* Al-Qur'an Card */}
-            <div className="rounded-xl border border-border/40 bg-card/90 bg-background/95 space-y-3 border border-primary/60 p-5 shadow-[0_0_20px_rgba(0,240,255,0.2)]">
+            <div className="rounded-xl border border-border/40 bg-card/90 bg-background/95 space-y-3 border border-primary/60 p-5 shadow-sm">
               <div className="flex items-center justify-between border-b border-primary/20 pb-2">
                 <span className="font-sans flex items-center gap-1.5 text-xs font-bold text-primary">
                   <BookOpen className="h-4 w-4 text-primary" />
                   AL-QUR'ANUL KARIM
                 </span>
-                <span className="tag-clip tag-clip px-2 py-0.5 text-[8px]">
+                <span className="rounded-md rounded-md px-2 py-0.5 text-[8px]">
                   {activePassage.quran.ref}
                 </span>
               </div>

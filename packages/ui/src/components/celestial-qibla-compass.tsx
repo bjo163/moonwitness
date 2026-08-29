@@ -100,8 +100,8 @@ export function CelestialQiblaCompass({
         <div
           className={`absolute inset-0 rounded-full border transition-all duration-300 ${
             isLocked
-              ? "border-emerald-400 shadow-[0_0_50px_rgba(0,255,102,0.4)] bg-emerald-950/20"
-              : "border-cyan-500/30 shadow-[0_0_30px_rgba(0,240,255,0.15)] bg-card/80"
+              ? "border-emerald-400 shadow-sm bg-emerald-950/20"
+              : "border-cyan-500/30 shadow-sm bg-card/80"
           } backdrop-blur-md`}
         />
 
@@ -146,7 +146,7 @@ export function CelestialQiblaCompass({
             }}
           >
             <div className="flex flex-col items-center">
-              <div className="h-5 w-5 rounded-full border border-emerald-400 bg-emerald-500/30 p-0.5 shadow-[0_0_15px_rgba(0,255,102,0.8)] animate-pulse flex items-center justify-center">
+              <div className="h-5 w-5 rounded-full border border-emerald-400 bg-emerald-500/30 p-0.5 shadow-sm animate-pulse flex items-center justify-center">
                 <div className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
               </div>
               <span className="mt-1 text-[8px] font-black tracking-widest text-emerald-400">
@@ -161,7 +161,7 @@ export function CelestialQiblaCompass({
           <div
             className={`h-16 w-16 rounded-full border flex flex-col items-center justify-center transition-all ${
               isLocked
-                ? "border-emerald-400 bg-emerald-950/60 text-emerald-300 shadow-[0_0_20px_rgba(0,255,102,0.6)]"
+                ? "border-emerald-400 bg-emerald-950/60 text-emerald-300 shadow-sm"
                 : "border-cyan-500/40 bg-black/60 text-cyan-400"
             }`}
           >
@@ -181,7 +181,7 @@ export function CelestialQiblaCompass({
 
         {/* Top Fixed Needle Pointer */}
         <div className="absolute top-1 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
-          <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[10px] border-t-cyan-400 drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]" />
+          <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[10px] border-t-cyan-400 drop-shadow-sm" />
         </div>
       </div>
 

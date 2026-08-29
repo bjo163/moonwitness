@@ -42,7 +42,7 @@ export function FlyingPropheticAIWidget() {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="group bg-background/95 hover:bg-background border-success/80 hover:border-success relative flex cursor-pointer items-center gap-2 rounded-full border-2 px-3.5 py-2 text-foreground shadow-[0_0_25px_rgba(0,255,102,0.45)] backdrop-blur-lg transition-all duration-300 hover:shadow-[0_0_35px_rgba(0,255,102,0.7)] active:scale-95 sm:px-4 sm:py-2.5"
+          className="group bg-background/95 hover:bg-background border-success/80 hover:border-success relative flex cursor-pointer items-center gap-2 rounded-full border-2 px-3.5 py-2 text-foreground shadow-sm backdrop-blur-lg transition-all duration-300 hover:shadow-sm active:scale-95 sm:px-4 sm:py-2.5"
           title="Open KHIDRA AI - Quranic Wisdom Terminal"
         >
           {/* Animasi Orb Glow & Pulse Dot */}
@@ -72,7 +72,7 @@ export function FlyingPropheticAIWidget() {
         createPortal(
           <div className="bg-background fixed inset-0 z-[999999] flex animate-in flex-col overflow-hidden font-mono text-foreground duration-200 zoom-in-95 fade-in">
             {/* Header Overlay yang Ringkas & Bersih */}
-            <div className="bg-background border-success/40 z-10 flex h-11 shrink-0 items-center justify-between border-b px-3 shadow-[0_4px_25px_rgba(0,255,102,0.15)] sm:px-6">
+            <div className="bg-background border-success/40 z-10 flex h-11 shrink-0 items-center justify-between border-b px-3 shadow-sm sm:px-6">
               <div className="flex items-center gap-2.5">
                 <div className="bg-success/20 border-success/60 flex h-6 w-6 items-center justify-center rounded-full border">
                   <Bot className="text-success h-3.5 w-3.5 animate-pulse" />
@@ -92,7 +92,7 @@ export function FlyingPropheticAIWidget() {
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="bg-success/20 hover:bg-success/40 border-success flex cursor-pointer items-center gap-1.5 rounded-sm border px-3 py-1.5 text-xs font-bold text-foreground uppercase shadow-[0_0_15px_rgba(0,255,102,0.3)] transition-all active:scale-95"
+                  className="bg-success/20 hover:bg-success/40 border-success flex cursor-pointer items-center gap-1.5 rounded-sm border px-3 py-1.5 text-xs font-bold text-foreground uppercase shadow-sm transition-all active:scale-95"
                   title="Minimize to Floating Orb [ESC]"
                 >
                   <Minimize2 className="text-success h-4 w-4" />

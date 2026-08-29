@@ -134,7 +134,7 @@ export function SeismicTectonicRadar({
   return (
     <div className={`flex flex-col font-mono ${className}`}>
       {/* Radar Canvas Container */}
-      <div className="relative w-full overflow-hidden rounded-2xl border border-cyan-500/30 bg-[#040812]/90 shadow-[0_0_40px_rgba(0,240,255,0.15)]">
+      <div className="relative w-full overflow-hidden rounded-2xl border border-cyan-500/30 bg-muted/90 shadow-sm">
         <canvas
           ref={canvasRef}
           style={{ width: "100%", height }}
@@ -161,7 +161,7 @@ export function SeismicTectonicRadar({
             onClick={() => setActiveEvent(ev)}
             className={`p-3 rounded-xl border text-left transition-all ${
               activeEvent.id === ev.id
-                ? "border-cyan-400 bg-cyan-950/30 text-white shadow-[0_0_20px_rgba(0,240,255,0.2)]"
+                ? "border-cyan-400 bg-cyan-950/30 text-white shadow-sm"
                 : "border-white/10 bg-card/80 text-zinc-400 hover:border-cyan-500/40"
             }`}
           >

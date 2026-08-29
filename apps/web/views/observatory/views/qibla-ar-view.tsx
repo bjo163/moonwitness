@@ -167,7 +167,7 @@ export function QiblaArView() {
         accentColor="success"
       />
 
-      <div className="rounded-xl border border-border/40 bg-card/90 bg-background relative space-y-6 overflow-hidden border-2 border-primary/50 p-8 text-center shadow-[0_0_50px_rgba(0,240,255,0.25)]">
+      <div className="rounded-xl border border-border/40 bg-card/90 bg-background relative space-y-6 overflow-hidden border-2 border-primary/50 p-8 text-center shadow-sm">
         {/* Header Bar */}
         <div className="flex items-center justify-between border-b border-primary/20 pb-3 text-xs">
           <div className="flex items-center gap-2 font-bold text-primary">
@@ -175,7 +175,7 @@ export function QiblaArView() {
             <span>SATELLITE QIBLA RADAR</span>
           </div>
           <span
-            className={`tag-clip tag-clip px-2 py-0.5 text-[9px] font-bold ${isAligned ? "bg-success text-black shadow-[0_0_15px_#00FF66]" : "bg-warning text-black"}`}
+            className={`rounded-md rounded-md px-2 py-0.5 text-[9px] font-bold ${isAligned ? "bg-success text-black shadow-sm" : "bg-warning text-black"}`}
           >
             {isAligned ? "● TARGET LOCKED" : "○ SCANNING HORIZON"}
           </span>
@@ -224,7 +224,7 @@ export function QiblaArView() {
 
         {/* Status Telemetry Dashboard */}
         <div className="grid grid-cols-2 gap-3 pt-4 text-xs sm:grid-cols-4">
-          <div className="bg-panel tag-clip border border-primary/20 p-3 text-left">
+          <div className="bg-panel rounded-md border border-primary/20 p-3 text-left">
             <span className="block flex items-center gap-1 text-[8px] text-primary/50">
               <MapPin className="h-3 w-3" /> LATITUDE
             </span>
@@ -232,7 +232,7 @@ export function QiblaArView() {
               {location ? location.lat.toFixed(4) : "---"}°
             </span>
           </div>
-          <div className="bg-panel tag-clip border border-primary/20 p-3 text-left">
+          <div className="bg-panel rounded-md border border-primary/20 p-3 text-left">
             <span className="block flex items-center gap-1 text-[8px] text-primary/50">
               <MapPin className="h-3 w-3" /> LONGITUDE
             </span>
@@ -241,7 +241,7 @@ export function QiblaArView() {
             </span>
           </div>
 
-          <div className="bg-panel tag-clip border border-primary/20 p-3 text-left">
+          <div className="bg-panel rounded-md border border-primary/20 p-3 text-left">
             <span className="block text-[8px] text-primary/50">
               COMPASS HEADING
             </span>
@@ -251,7 +251,7 @@ export function QiblaArView() {
           </div>
 
           <div
-            className={`bg-panel tag-clip border p-3 text-left ${isAligned ? "border-success bg-success/10" : "border-primary/20"}`}
+            className={`bg-panel rounded-md border p-3 text-left ${isAligned ? "border-success bg-success/10" : "border-primary/20"}`}
           >
             <span className="block text-[8px] text-primary/50">
               QIBLA TARGET

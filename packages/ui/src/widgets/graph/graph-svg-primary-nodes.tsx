@@ -4,35 +4,35 @@ export function GraphSvgPrimaryNodes() {
   return (
     <>
       <defs>
-        <filter id="svg-glow-emerald" x="-50%" y="-50%" width="200%" height="200%">
+        <filter id="node-shadow-emerald" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="8" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
-        <filter id="svg-glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
+        <filter id="node-shadow-cyan" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="6" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
-        <filter id="svg-glow-blue" x="-50%" y="-50%" width="200%" height="200%">
+        <filter id="node-shadow-blue" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="6" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
-        <filter id="svg-glow-yellow" x="-50%" y="-50%" width="200%" height="200%">
+        <filter id="node-shadow-yellow" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="6" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
-        <filter id="svg-glow-purple" x="-50%" y="-50%" width="200%" height="200%">
+        <filter id="node-shadow-purple" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="6" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
@@ -48,73 +48,59 @@ export function GraphSvgPrimaryNodes() {
         <path d="M 0,0 L 200,-150" />
         <path d="M 0,0 L 250,50" />
         <path d="M 0,0 L 150,200" />
-        <path d="M 0,0 L 0,220" />
         <path d="M 0,0 L -150,200" />
         <path d="M 0,0 L -250,50" />
       </g>
 
-      {/* Connecting Lines (Categories to Children) */}
-      <g
-        className="stroke-white/15"
-        strokeWidth="1"
-        fill="none"
-        strokeDasharray="3 3"
-      >
-        <path d="M -200,-150 L -300,-220" />
-        <path d="M -200,-150 L -350,-180" />
-        <path
-          d="M -200,-150 L -380,-120"
-          className="stroke-primary opacity-50"
-          strokeDasharray="none"
-        />
-        <path d="M -200,-150 L -360,-60" />
-
-        <path d="M 0,-200 L -50,-280" />
-        <path d="M 0,-200 L 50,-290" />
-        <path d="M 0,-200 L 100,-260" />
-        <path d="M 0,-200 L 120,-200" />
-
-        <path d="M -250,50 L -380,-10" />
-        <path d="M -250,50 L -390,30" />
-        <path d="M -250,50 L -370,70" />
-        <path d="M -250,50 L -340,110" />
-        <path d="M -250,50 L -300,140" />
-
-        <path d="M 200,-150 L 280,-220" />
-        <path d="M 200,-150 L 330,-180" />
-        <path d="M 200,-150 L 350,-130" />
-        <path d="M 200,-150 L 330,-80" />
-
-        <path d="M 250,50 L 350,-10" />
-        <path d="M 250,50 L 380,30" />
-        <path d="M 250,50 L 370,80" />
-        <path d="M 250,50 L 330,120" />
-        <path d="M 250,50 L 280,150" />
-
-        <path d="M 150,200 L 250,180" />
-        <path d="M 150,200 L 280,220" />
-        <path d="M 150,200 L 250,260" />
-        <path d="M 150,200 L 200,290" />
-
-        <path d="M 0,220 L -80,290" />
-        <path d="M 0,220 L 0,310" />
-        <path d="M 0,220 L 80,290" />
-
-        <path d="M -150,200 L -250,180" />
-        <path d="M -150,200 L -290,220" />
-        <path d="M -150,200 L -260,270" />
-        <path d="M -150,200 L -200,300" />
+      {/* Category Inter-connections */}
+      <g className="stroke-white/10" strokeWidth="1" strokeDasharray="3 3" fill="none">
+        <path d="M -200,-150 L 0,-200" />
+        <path d="M 0,-200 L 200,-150" />
+        <path d="M 200,-150 L 250,50" />
+        <path d="M 250,50 L 150,200" />
+        <path d="M 150,200 L -150,200" />
+        <path d="M -150,200 L -250,50" />
+        <path d="M -250,50 L -200,-150" />
       </g>
 
-      {/* Cross Connections */}
-      <g
-        className="stroke-warning/40"
-        strokeWidth="1"
-        fill="none"
-        strokeDasharray="4 4"
-      >
-        <path d="M -380,-120 Q -100,50 80,290" />
-        <path d="M -380,-120 Q -50,-200 -50,-280" />
+      {/* Level 2 Entity Connections */}
+      <g className="stroke-white/5" strokeWidth="0.8" fill="none">
+        {/* Prophets entities */}
+        <path d="M -200,-150 L -280,-190" />
+        <path d="M -200,-150 L -290,-130" />
+        <path d="M -200,-150 L -240,-220" />
+        {/* Qur'an entities */}
+        <path d="M 0,-200 L -60,-270" />
+        <path d="M 0,-200 L 0,-280" />
+        <path d="M 0,-200 L 60,-270" />
+        {/* Hadith entities */}
+        <path d="M 200,-150 L 280,-190" />
+        <path d="M 200,-150 L 290,-130" />
+        <path d="M 200,-150 L 240,-220" />
+        {/* Astronomy entities */}
+        <path d="M 250,50 L 330,20" />
+        <path d="M 250,50 L 340,70" />
+        <path d="M 250,50 L 320,110" />
+        {/* Ethics entities */}
+        <path d="M 150,200 L 200,270" />
+        <path d="M 150,200 L 140,285" />
+        <path d="M 150,200 L 225,230" />
+        {/* Civilization entities */}
+        <path d="M -150,200 L -200,270" />
+        <path d="M -150,200 L -140,285" />
+        <path d="M -150,200 L -225,230" />
+        {/* Eschatology entities */}
+        <path d="M -250,50 L -330,20" />
+        <path d="M -250,50 L -340,70" />
+        <path d="M -250,50 L -320,110" />
+      </g>
+
+      {/* Cross-Domain Insight Connections (Dashed Gold) */}
+      <g className="stroke-accent/30" strokeWidth="1" strokeDasharray="4 4" fill="none">
+        <path d="M -200,-150 Q 0,-70 200,-150" />
+        <path d="M 0,-200 Q 150,-50 250,50" />
+        <path d="M 250,50 Q 50,150 -150,200" />
+        <path d="M -250,50 Q -50,50 150,200" />
       </g>
 
       {/* ==== NODES ==== */}
@@ -125,7 +111,7 @@ export function GraphSvgPrimaryNodes() {
           r="45"
           className="stroke-success fill-black"
           strokeWidth="2"
-          filter="url(#glow-emerald)"
+          filter="url(#node-shadow-emerald)"
         />
         <circle
           r="35"
@@ -164,7 +150,7 @@ export function GraphSvgPrimaryNodes() {
           r="30"
           className="fill-black stroke-secondary"
           strokeWidth="2"
-          filter="url(#svg-glow-cyan)"
+          filter="url(#node-shadow-cyan)"
         />
         <path
           d="M-8,-5 Q0,-15 8,-5 L10,10 L-10,10 Z"
@@ -208,7 +194,7 @@ export function GraphSvgPrimaryNodes() {
           r="30"
           className="stroke-warning fill-black"
           strokeWidth="2"
-          filter="url(#svg-glow-yellow)"
+          filter="url(#node-shadow-yellow)"
         />
         <path
           d="M-10,-10 L10,-10 L10,10 L-10,10 Z"
@@ -248,27 +234,27 @@ export function GraphSvgPrimaryNodes() {
       <g transform="translate(200,-150)">
         <circle
           r="30"
-          className="stroke-knowledge fill-black"
+          className="stroke-primary fill-black"
           strokeWidth="2"
-          filter="url(#glow-purple)"
+          filter="url(#node-shadow-purple)"
         />
         <path
           d="M-12,-10 L-2,-10 L-2,10 L-12,10 Z"
           fill="none"
-          className="stroke-knowledge"
+          className="stroke-primary"
           strokeWidth="1.5"
         />
         <path
           d="M2,-10 L12,-10 L12,10 L2,10 Z"
           fill="none"
-          className="stroke-knowledge"
+          className="stroke-primary"
           strokeWidth="1.5"
         />
         <text
           x="0"
           y="45"
           textAnchor="middle"
-          className="fill-knowledge"
+          className="fill-primary"
           fontSize="10"
           fontWeight="bold"
           letterSpacing="1"

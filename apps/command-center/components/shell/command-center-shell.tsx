@@ -32,11 +32,11 @@ export function CommandCenterShell({ children }: { children: React.ReactNode }) 
   // If not authenticated yet on protected route, show clearance gate loader
   if (!isAuthenticated) {
     return (
-      <div className="flex min-h-screen w-full items-center justify-center bg-[#030508] font-mono text-cyan-400">
+      <div className="flex min-h-screen w-full items-center justify-center bg-background font-sans text-foreground">
         <div className="flex flex-col items-center gap-3">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-          <span className="text-[10px] tracking-widest text-primary/70 uppercase">
-            VERIFYING OPERATOR CLEARANCE...
+          <span className="text-xs font-medium text-muted-foreground">
+            Verifying access...
           </span>
         </div>
       </div>

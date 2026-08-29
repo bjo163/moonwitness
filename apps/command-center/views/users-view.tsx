@@ -88,7 +88,7 @@ export function UsersView() {
         const dot = enabled ? "bg-emerald-500" : "bg-slate-500"
         return (
           <div className="flex items-center gap-2">
-            <span className={`h-1.5 w-1.5 rounded-full ${dot} shadow-[0_0_5px_currentColor]`} />
+            <span className={`h-1.5 w-1.5 rounded-full ${dot} shadow-sm`} />
             <span className={`text-xs ${color}`}>{enabled ? 'Enabled' : 'Disabled'}</span>
           </div>
         )

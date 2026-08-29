@@ -82,7 +82,7 @@ export function DoaHeroStats({
         </div>
 
         <div className="text-right">
-          <div className="font-arabic text-xl text-emerald-400 drop-shadow-[0_0_10px_rgba(0,255,102,0.3)]">
+          <div className="font-arabic text-xl text-emerald-400 drop-shadow-sm">
             ادْعُونِي أَسْتَجِبْ لَكُمْ
           </div>
           <p className="font-mono text-[9px] text-white/40 italic">
@@ -96,7 +96,7 @@ export function DoaHeroStats({
         {stats.map((stat, i) => (
           <div
             key={i}
-            className="flex items-center gap-3 rounded-xl border border-white/5 bg-[#080E1C] p-3 shadow-md"
+            className="flex items-center gap-3 rounded-xl border border-white/5 bg-card p-3 shadow-md"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/5 bg-white/[0.02]">
               <stat.icon className={`h-5 w-5 ${stat.color}`} />
@@ -119,7 +119,7 @@ export function DoaHeroStats({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search supplication by title, Arabic keyword, or translation..."
-            className="w-full rounded-xl border border-white/10 bg-[#080E1C] py-2.5 pr-4 pl-10 text-xs text-white placeholder-white/30 transition-all outline-none focus:border-emerald-500/50 focus:bg-[#0B1528]"
+            className="w-full rounded-xl border border-white/10 bg-card py-2.5 pr-4 pl-10 text-xs text-white placeholder-white/30 transition-all outline-none focus:border-emerald-500/50 focus:bg-card"
           />
         </div>
 
@@ -130,8 +130,8 @@ export function DoaHeroStats({
               onClick={() => onTabChange(tab)}
               className={`rounded-lg border px-3 py-1.5 font-mono text-[10px] font-bold whitespace-nowrap uppercase transition-all ${
                 activeTab === tab
-                  ? "border-emerald-500/50 bg-emerald-500/20 text-emerald-300 shadow-[0_0_10px_rgba(0,255,102,0.2)]"
-                  : "border-white/5 bg-[#080E1C] text-white/50 hover:border-white/20 hover:text-white"
+                  ? "border-emerald-500/50 bg-emerald-500/20 text-emerald-300 shadow-sm"
+                  : "border-white/5 bg-card text-white/50 hover:border-white/20 hover:text-white"
               }`}
             >
               {tab}

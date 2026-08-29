@@ -23,7 +23,7 @@ export function DoaCardItem({ item }: DoaCardItemProps) {
   const target = item.repetition || 1
 
   return (
-    <div className="group relative rounded-xl border border-white/10 bg-[#080E1C] p-5 shadow-lg transition-all duration-300 hover:border-emerald-500/40 hover:bg-[#0B1528]">
+    <div className="group relative rounded-xl border border-white/10 bg-card p-5 shadow-lg transition-all duration-300 hover:border-emerald-500/40 hover:bg-card">
       {/* Top Metadata */}
       <div className="mb-4 flex items-center justify-between border-b border-white/5 pb-3">
         <div>
@@ -47,7 +47,7 @@ export function DoaCardItem({ item }: DoaCardItemProps) {
       </div>
 
       {/* Arabic Text */}
-      <div className="font-arabic my-4 text-right text-xl leading-relaxed text-white/95 drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] sm:text-2xl">
+      <div className="font-arabic my-4 text-right text-xl leading-relaxed text-white/95 drop-shadow-sm sm:text-2xl">
         {item.arabic}
       </div>
 

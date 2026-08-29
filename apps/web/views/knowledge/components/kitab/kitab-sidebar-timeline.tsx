@@ -21,7 +21,7 @@ export function KitabLeftSidebar() {
           ].map((item, i) => (
             <button
               key={i}
-              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-xs font-bold transition-all ${i === 0 ? "border border-blue-500/30 bg-blue-500/20 text-blue-300 shadow-[0_0_10px_rgba(59,130,246,0.1)]" : "text-white/60 hover:bg-white/5 hover:text-white"}`}
+              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-xs font-bold transition-all ${i === 0 ? "border border-blue-500/30 bg-blue-500/20 text-blue-300 shadow-sm" : "text-white/60 hover:bg-white/5 hover:text-white"}`}
             >
               <BookOpen
                 className={`h-3.5 w-3.5 ${i === 0 ? "text-blue-400" : "text-white/30"}`}
@@ -65,7 +65,7 @@ export function KitabLeftSidebar() {
         {["All Languages", "All Topics", "All Periods", "All Traditions"].map((f, i) => (
           <select
             key={i}
-            className="w-full appearance-none rounded-lg border border-white/5 bg-[#0A1224] px-3 py-2 text-[10px] text-white/60 transition-colors outline-none focus:border-blue-500/50"
+            className="w-full appearance-none rounded-lg border border-white/5 bg-card px-3 py-2 text-[10px] text-white/60 transition-colors outline-none focus:border-blue-500/50"
           >
             <option>{f}</option>
           </select>
@@ -106,7 +106,7 @@ export function KitabRightTimeline() {
 
   return (
     <div className="w-full flex-shrink-0 space-y-4 lg:w-56">
-      <div className="rounded-xl border border-white/5 bg-[#0A1224] p-5 shadow-lg">
+      <div className="rounded-xl border border-white/5 bg-card p-5 shadow-lg">
         <h3 className="mb-5 text-[9px] font-black tracking-widest text-blue-400 uppercase">
           Revelation Timeline
         </h3>
@@ -115,7 +115,7 @@ export function KitabRightTimeline() {
           {timelineItems.map((item, i) => (
             <div key={i} className="group relative flex items-start gap-4">
               <div
-                className="z-10 flex h-8 w-8 items-center justify-center rounded-full border-[3px] border-[#0A1224] bg-blue-500/20 text-blue-400 shadow-[0_0_0_1px_rgba(255,255,255,0.1)]"
+                className="z-10 flex h-8 w-8 items-center justify-center rounded-full border-[3px] border-border bg-blue-500/20 text-blue-400 shadow-sm"
               >
                 <BookOpen className="h-3.5 w-3.5" />
               </div>
@@ -157,7 +157,7 @@ export function KitabRightTimeline() {
       </div>
 
       {/* Arabic Quote */}
-      <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-xl border border-amber-500/20 bg-[#0A1224] p-5 text-center shadow-lg">
+      <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-xl border border-amber-500/20 bg-card p-5 text-center shadow-lg">
         <div className="absolute inset-0 bg-gradient-to-t from-amber-500/10 to-transparent opacity-50" />
         <div className="font-arabic relative z-10 mb-2 text-xl text-amber-400 drop-shadow-md">
           كُلُّ نَفْسٍ ذَائِقَةُ الْمَوْتِ

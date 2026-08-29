@@ -73,7 +73,7 @@ export function RecentActivity() {
 
               {/* Timeline Node */}
               <div
-                className={`z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border bg-black shadow-[0_0_10px_rgba(0,0,0,0.5)] ${act.color}`}
+                className={`z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border bg-black shadow-sm ${act.color}`}
               >
                 <act.icon className="h-3.5 w-3.5" />
               </div>

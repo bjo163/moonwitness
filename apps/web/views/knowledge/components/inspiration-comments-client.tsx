@@ -162,7 +162,7 @@ export function InspirationCommentsClient({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="tag-clip tag-clip text-[10px]">
+          <span className="rounded-md rounded-md text-[10px]">
             💬 HOLOGRAM COMMUNITY CHAT
           </span>
           <span className="text-[10px] font-black text-primary">
@@ -198,7 +198,7 @@ export function InspirationCommentsClient({
       {/* Write Comment Form */}
       <form
         onSubmit={handleSubmitComment}
-        className="bg-panel/90 space-y-3 panel-glass p-4 card-clip"
+        className="bg-panel/90 space-y-3 rounded-xl border border-border/40 bg-card/90 p-4 rounded-xl"
       >
         {!userProfile ? (
           <div className="space-y-2 py-4 text-center">
@@ -253,7 +253,7 @@ export function InspirationCommentsClient({
               onChange={(e) => setCommentText(e.target.value)}
               required
               rows={2}
-              className="tag-clip bg-background w-full border border-primary/30 p-3 text-xs text-foreground placeholder:text-primary focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
+              className="rounded-md bg-background w-full border border-primary/30 p-3 text-xs text-foreground placeholder:text-primary focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
             />
 
             <div className="flex items-center justify-between pt-1">
@@ -295,7 +295,7 @@ export function InspirationCommentsClient({
           {[1, 2].map((i) => (
             <div
               key={i}
-              className="h-16 w-full animate-pulse panel-glass card-clip"
+              className="h-16 w-full animate-pulse rounded-xl border border-border/40 bg-card/90 rounded-xl"
             />
           ))}
         </div>
@@ -309,7 +309,7 @@ export function InspirationCommentsClient({
       ) : (
         <div className="relative mt-2">
           {/* Holographic fade at the bottom */}
-          <div className="pointer-events-none absolute right-0 bottom-0 left-0 z-10 h-12 bg-gradient-to-t from-[#040C1A] to-transparent" />
+          <div className="pointer-events-none absolute right-0 bottom-0 left-0 z-10 h-12 bg-gradient-to-t -background to-transparent" />
 
           <div
             className="hide-scrollbar max-h-[400px] space-y-2.5 overflow-y-auto pb-12"
@@ -326,7 +326,7 @@ export function InspirationCommentsClient({
               return (
                 <div
                   key={c.id}
-                  className={`space-y-1.5 panel-glass p-3.5 card-clip ${
+                  className={`space-y-1.5 rounded-xl border border-border/40 bg-card/90 p-3.5 rounded-xl ${
                     isAdmin
                       ? "border-secondary/40 bg-secondary/10"
                       : "bg-panel border-primary/20"

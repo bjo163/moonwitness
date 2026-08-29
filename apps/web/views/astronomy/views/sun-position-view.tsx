@@ -51,15 +51,15 @@ export function SunPositionView() {
           <div className="absolute top-[45%] left-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/10 blur-[80px]"></div>
 
           {/* Intense Sun Behind Figure */}
-          <div className="absolute top-[45%] left-1/2 h-[220px] w-[220px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-400 mix-blend-screen shadow-[0_0_120px_50px_rgba(251,191,36,0.8)] blur-[6px]"></div>
+          <div className="absolute top-[45%] left-1/2 h-[220px] w-[220px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-400 mix-blend-screen shadow-sm blur-[6px]"></div>
           {/* Inner Bright Sun */}
           <div className="absolute top-[45%] left-1/2 h-[180px] w-[180px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white opacity-90 mix-blend-screen blur-[8px]"></div>
 
           {/* Outer Sun Corona */}
-          <div className="absolute top-[45%] left-1/2 h-[350px] w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[1px] border-yellow-300/40 shadow-[0_0_30px_rgba(251,191,36,0.2)_inset]"></div>
+          <div className="absolute top-[45%] left-1/2 h-[350px] w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[1px] border-yellow-300/40 shadow-sm"></div>
 
           {/* Floor Ring */}
-          <div className="absolute bottom-6 left-1/2 h-[60px] w-[320px] -translate-x-1/2 rounded-[100%] border-[3px] border-amber-400 shadow-[0_0_30px_rgba(251,191,36,0.8)] blur-[2px]"></div>
+          <div className="absolute bottom-6 left-1/2 h-[60px] w-[320px] -translate-x-1/2 rounded-[100%] border-[3px] border-amber-400 shadow-sm blur-[2px]"></div>
           <div className="absolute bottom-6 left-1/2 h-[60px] w-[320px] -translate-x-1/2 rounded-[100%] border-[1px] border-white/80 blur-[0px]"></div>
 
           {/* Dark floor fade to hide figure cut-off */}
@@ -68,7 +68,7 @@ export function SunPositionView() {
           <img
             src="/assets/hero/24-hero.png"
             alt="Divine Figure"
-            className="relative z-10 h-[100%] max-h-[420px] w-auto object-contain drop-shadow-[0_0_15px_rgba(0,0,0,0.8)]"
+            className="relative z-10 h-[100%] max-h-[420px] w-auto object-contain drop-shadow-sm"
             style={{ objectPosition: "bottom center" }}
           />
         </div>
@@ -134,8 +134,8 @@ export function SunPositionView() {
             ].map((d, i) => (
               <div key={i} className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <Target className="h-3 w-3 text-[#8F9FB3]" />
-                  <span className="text-[7px] tracking-widest text-[#8F9FB3] uppercase">
+                  <Target className="h-3 w-3 text-muted-foreground" />
+                  <span className="text-[7px] tracking-widest text-muted-foreground uppercase">
                     {d.l}
                   </span>
                 </div>
@@ -155,7 +155,7 @@ export function SunPositionView() {
 
           {/* Sub-col 2: Arabic Verse */}
           <div className="flex flex-col justify-center border-l border-white/5 pl-6">
-            <h3 className="font-arabic mb-4 text-right text-2xl leading-loose text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.3)]">
+            <h3 className="font-arabic mb-4 text-right text-2xl leading-loose text-amber-400 drop-shadow-sm">
               اللَّهُ نُورُ السَّمَاوَاتِ وَالْأَرْضِ
             </h3>
             <p className="mb-4 text-[9px] leading-relaxed text-cyan-400">
@@ -164,7 +164,7 @@ export function SunPositionView() {
             <p className="text-[8px] leading-relaxed text-white/50">
               The sun runs on its course for a specified term.
               <br />
-              <span className="mt-2 block text-[#8F9FB3]">
+              <span className="mt-2 block text-muted-foreground">
                 - Q.S. Ya-Sin (36:38)
               </span>
             </p>
@@ -242,13 +242,13 @@ export function SunPositionView() {
         ].map((m, i) => (
           <div
             key={i}
-            className="flex flex-col items-center justify-center rounded-xl border border-white/5 bg-[#040C1A] p-4 transition-colors hover:border-amber-500/20"
+            className="flex flex-col items-center justify-center rounded-xl border border-white/5 bg-card p-4 transition-colors hover:border-amber-500/20"
           >
             <div className="mb-2 flex items-center gap-2">
               <m.icon
-                className={`h-4 w-4 ${m.color} drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]`}
+                className={`h-4 w-4 ${m.color} drop-shadow-sm`}
               />
-              <span className="text-[8px] tracking-widest text-[#8F9FB3] uppercase">
+              <span className="text-[8px] tracking-widest text-muted-foreground uppercase">
                 {m.label}
               </span>
             </div>
@@ -265,13 +265,13 @@ export function SunPositionView() {
       {/* ═══ CORE VISUALIZATIONS ROW ═══ */}
       <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Solar Arc Trajectory */}
-        <div className="relative flex flex-col overflow-hidden rounded-xl border border-white/5 bg-[#040C1A] p-5 lg:col-span-5">
+        <div className="relative flex flex-col overflow-hidden rounded-xl border border-white/5 bg-card p-5 lg:col-span-5">
           <div className="mb-6 flex items-start justify-between">
             <div>
               <h3 className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
                 SOLAR ARC TRAJECTORY
               </h3>
-              <p className="text-[9px] text-[#8F9FB3]">
+              <p className="text-[9px] text-muted-foreground">
                 Real-time sun path based on your location
               </p>
             </div>
@@ -287,7 +287,7 @@ export function SunPositionView() {
             {/* The Glowing Arc */}
             <svg
               viewBox="0 0 100 50"
-              className="absolute inset-x-0 bottom-10 h-full w-full overflow-visible drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]"
+              className="absolute inset-x-0 bottom-10 h-full w-full overflow-visible drop-shadow-sm"
             >
               <path
                 d="M 5 45 Q 50 -10 95 45"
@@ -325,14 +325,14 @@ export function SunPositionView() {
                 cy="17.5"
                 r="4"
                 fill="#facc15"
-                className="drop-shadow-[0_0_8px_rgba(250,204,21,1)]"
+                className="drop-shadow-sm"
               />
               <circle cx="72.5" cy="27" r="1.5" fill="#ea580c" />
               <circle cx="95" cy="45" r="1.5" fill="#1e3a8a" />
             </svg>
 
             {/* Mountain / Terrain Silhouette Mock */}
-            <div className="absolute inset-x-0 bottom-6 z-0 h-16 border-b border-amber-500/20 bg-gradient-to-t from-[#020813] to-transparent opacity-90"></div>
+            <div className="absolute inset-x-0 bottom-6 z-0 h-16 border-b border-amber-500/20 bg-gradient-to-t -background to-transparent opacity-90"></div>
 
             {/* Time Labels */}
             <div className="absolute top-[5px] left-[50%] z-10 flex -translate-x-1/2 flex-col items-center">
@@ -375,25 +375,25 @@ export function SunPositionView() {
 
           <div className="mt-6 grid grid-cols-4 gap-4 border-t border-white/5 pt-6 text-[9px]">
             <div>
-              <div className="mb-1 tracking-widest text-[#8F9FB3] uppercase">
+              <div className="mb-1 tracking-widest text-muted-foreground uppercase">
                 LOCATION
               </div>
               <div className="font-mono text-white">-6.251, 107.873</div>
             </div>
             <div>
-              <div className="mb-1 tracking-widest text-[#8F9FB3] uppercase">
+              <div className="mb-1 tracking-widest text-muted-foreground uppercase">
                 DATE
               </div>
               <div className="font-mono text-white">30 JULY 2026</div>
             </div>
             <div>
-              <div className="mb-1 tracking-widest text-[#8F9FB3] uppercase">
+              <div className="mb-1 tracking-widest text-muted-foreground uppercase">
                 DAY LENGTH
               </div>
               <div className="font-mono text-white">12h 42m</div>
             </div>
             <div>
-              <div className="mb-1 tracking-widest text-[#8F9FB3] uppercase">
+              <div className="mb-1 tracking-widest text-muted-foreground uppercase">
                 NEXT SUNRISE
               </div>
               <div className="font-mono text-white">05:46:12</div>
@@ -402,18 +402,18 @@ export function SunPositionView() {
         </div>
 
         {/* Sunlight Exposure Recommendation */}
-        <div className="flex flex-col rounded-xl border border-white/5 bg-[#040C1A] p-5 lg:col-span-3">
+        <div className="flex flex-col rounded-xl border border-white/5 bg-card p-5 lg:col-span-3">
           <div className="mb-6">
             <h3 className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
               SUNLIGHT EXPOSURE RECOMMENDATION
             </h3>
-            <p className="text-[9px] text-[#8F9FB3]">
+            <p className="text-[9px] text-muted-foreground">
               Based on your skin type & UV Index
             </p>
           </div>
 
           <div className="relative mt-6 mb-8 flex justify-center">
-            <div className="relative flex h-32 w-32 items-center justify-center rounded-full border-[6px] border-[#0F172A] shadow-[0_0_30px_rgba(251,191,36,0.15)]">
+            <div className="relative flex h-32 w-32 items-center justify-center rounded-full border-[6px] border-border shadow-sm">
               {/* Simulated SVG progress arc for the orange circle */}
               <svg className="absolute inset-0 h-full w-full -rotate-90">
                 <circle
@@ -445,7 +445,7 @@ export function SunPositionView() {
 
           <div className="mb-4 grid grid-cols-2 gap-4 border-t border-white/10 pt-4">
             <div className="text-center">
-              <div className="mb-1 text-[7px] tracking-widest text-[#8F9FB3] uppercase">
+              <div className="mb-1 text-[7px] tracking-widest text-muted-foreground uppercase">
                 OPTIMAL TIME
               </div>
               <div className="font-mono text-[10px] text-white">
@@ -482,12 +482,12 @@ export function SunPositionView() {
         </div>
 
         {/* Vitamin D Synthesis */}
-        <div className="flex flex-col rounded-xl border border-white/5 bg-[#040C1A] p-5 lg:col-span-4">
+        <div className="flex flex-col rounded-xl border border-white/5 bg-card p-5 lg:col-span-4">
           <div className="mb-6">
             <h3 className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
               VITAMIN D SYNTHESIS
             </h3>
-            <p className="text-[9px] text-[#8F9FB3]">
+            <p className="text-[9px] text-muted-foreground">
               How your body produces Vitamin D from sunlight
             </p>
           </div>
@@ -495,7 +495,7 @@ export function SunPositionView() {
           <div className="mt-6 flex gap-6">
             {/* Left Graphics */}
             <div className="mt-2 flex flex-col items-center gap-2">
-              <Sun className="h-6 w-6 text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]" />
+              <Sun className="h-6 w-6 text-amber-400 drop-shadow-sm" />
               <div className="h-8 w-[1px] bg-white/10"></div>
               <div className="h-4 w-4 rounded-sm border-[2px] border-rose-400/80"></div>
               <div className="h-8 w-[1px] bg-white/10"></div>
@@ -537,7 +537,7 @@ export function SunPositionView() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="mb-1 text-[7px] tracking-widest text-[#8F9FB3] uppercase">
+                    <div className="mb-1 text-[7px] tracking-widest text-muted-foreground uppercase">
                       DAILY NEED
                     </div>
                     <div className="font-mono text-[10px] font-bold text-amber-400">
@@ -554,12 +554,12 @@ export function SunPositionView() {
       {/* ═══ DATA MONITORING ROW ═══ */}
       <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         {/* Vitamin D Level Monitor */}
-        <div className="flex flex-col items-center justify-between rounded-xl border border-white/5 bg-[#040C1A] p-5">
+        <div className="flex flex-col items-center justify-between rounded-xl border border-white/5 bg-card p-5">
           <div className="mb-4 w-full text-left">
             <h3 className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
               VITAMIN D LEVEL MONITOR
             </h3>
-            <p className="text-[9px] text-[#8F9FB3]">Blood 25(OH)D Estimate</p>
+            <p className="text-[9px] text-muted-foreground">Blood 25(OH)D Estimate</p>
           </div>
 
           <div className="relative mt-2 mb-6 flex h-36 w-36 items-center justify-center">
@@ -585,7 +585,7 @@ export function SunPositionView() {
                 strokeDasharray="283"
                 strokeDashoffset="23"
                 strokeLinecap="round"
-                className="drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
+                className="drop-shadow-sm"
               />
             </svg>
             <div className="relative z-10 text-center">
@@ -598,7 +598,7 @@ export function SunPositionView() {
             </div>
           </div>
 
-          <div className="flex w-full justify-center gap-6 text-[8px] text-[#8F9FB3]">
+          <div className="flex w-full justify-center gap-6 text-[8px] text-muted-foreground">
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-1.5">
                 <div className="h-2 w-2 rounded bg-rose-500" /> 0-20% Deficient
@@ -625,12 +625,12 @@ export function SunPositionView() {
         </div>
 
         {/* Sunlight Benefits */}
-        <div className="rounded-xl border border-white/5 bg-[#040C1A] p-5">
+        <div className="rounded-xl border border-white/5 bg-card p-5">
           <div className="mb-6">
             <h3 className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
               SUNLIGHT BENEFITS
             </h3>
-            <p className="text-[9px] text-[#8F9FB3]">
+            <p className="text-[9px] text-muted-foreground">
               Powered by Sunlight & Science
             </p>
           </div>
@@ -668,7 +668,7 @@ export function SunPositionView() {
                   <div className="mb-0.5 text-[9px] font-bold tracking-widest text-white uppercase">
                     {b.t}
                   </div>
-                  <div className="text-[8px] leading-relaxed text-[#8F9FB3]">
+                  <div className="text-[8px] leading-relaxed text-muted-foreground">
                     {b.d}
                   </div>
                 </div>
@@ -678,12 +678,12 @@ export function SunPositionView() {
         </div>
 
         {/* Today's Sunlight Exposure */}
-        <div className="flex flex-col rounded-xl border border-white/5 bg-[#040C1A] p-5">
+        <div className="flex flex-col rounded-xl border border-white/5 bg-card p-5">
           <div className="mb-4">
             <h3 className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
               TODAY'S SUNLIGHT EXPOSURE
             </h3>
-            <p className="text-[9px] text-[#8F9FB3]">
+            <p className="text-[9px] text-muted-foreground">
               Daily Sunlight Exposure Tracker
             </p>
           </div>
@@ -692,7 +692,7 @@ export function SunPositionView() {
             <div>
               <div className="font-mono text-3xl font-black text-white">
                 10.2{" "}
-                <span className="text-sm font-normal text-[#8F9FB3]">hrs</span>
+                <span className="text-sm font-normal text-muted-foreground">hrs</span>
               </div>
               <div className="mt-1 text-[8px] font-bold tracking-widest text-emerald-400 uppercase">
                 DAILY AVERAGE
@@ -729,10 +729,10 @@ export function SunPositionView() {
                   {b.v}
                 </div>
                 <div
-                  className={`w-full max-w-[14px] rounded-t-sm transition-all duration-1000 ${b.act ? "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]" : "bg-cyan-600/50 hover:bg-cyan-500/80"}`}
+                  className={`w-full max-w-[14px] rounded-t-sm transition-all duration-1000 ${b.act ? "bg-amber-400 shadow-sm" : "bg-cyan-600/50 hover:bg-cyan-500/80"}`}
                   style={{ height: b.h }}
                 />
-                <div className="mt-2 font-mono text-[7px] text-[#8F9FB3]">
+                <div className="mt-2 font-mono text-[7px] text-muted-foreground">
                   {b.l}
                 </div>
               </div>
@@ -741,13 +741,13 @@ export function SunPositionView() {
 
           <div className="mt-6 grid grid-cols-3 gap-2 border-t border-white/5 pt-5 text-[9px]">
             <div>
-              <div className="mb-1 tracking-widest text-[#8F9FB3] uppercase">
+              <div className="mb-1 tracking-widest text-muted-foreground uppercase">
                 GOAL
               </div>
               <div className="font-mono text-white">8.0 hrs</div>
             </div>
             <div>
-              <div className="mb-1 tracking-widest text-[#8F9FB3] uppercase">
+              <div className="mb-1 tracking-widest text-muted-foreground uppercase">
                 ACHIEVED
               </div>
               <div className="font-mono text-emerald-400 text-white">
@@ -755,7 +755,7 @@ export function SunPositionView() {
               </div>
             </div>
             <div>
-              <div className="mb-1 tracking-widest text-[#8F9FB3] uppercase">
+              <div className="mb-1 tracking-widest text-muted-foreground uppercase">
                 CONSISTENCY
               </div>
               <div className="font-mono text-white">92%</div>
@@ -764,12 +764,12 @@ export function SunPositionView() {
         </div>
 
         {/* Sunlight & Mood Boost */}
-        <div className="flex flex-col rounded-xl border border-white/5 bg-[#040C1A] p-5">
+        <div className="flex flex-col rounded-xl border border-white/5 bg-card p-5">
           <div className="mb-4">
             <h3 className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
               SUNLIGHT & MOOD BOOST
             </h3>
-            <p className="text-[9px] text-[#8F9FB3]">
+            <p className="text-[9px] text-muted-foreground">
               Light exposure vs mood correlation
             </p>
           </div>
@@ -787,7 +787,7 @@ export function SunPositionView() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="drop-shadow-[0_0_5px_rgba(52,211,153,0.5)]"
+                className="drop-shadow-sm"
               />
               <path
                 d="M 0 85 L 30 70 L 60 70 L 90 55 L 120 50 L 150 35 L 180 40 L 200 30"
@@ -799,7 +799,7 @@ export function SunPositionView() {
                 strokeLinejoin="round"
               />
             </svg>
-            <div className="absolute inset-x-0 bottom-0 flex justify-between border-b border-white/10 px-1 pb-1 font-mono text-[7px] text-[#8F9FB3]">
+            <div className="absolute inset-x-0 bottom-0 flex justify-between border-b border-white/10 px-1 pb-1 font-mono text-[7px] text-muted-foreground">
               <span>0</span>
               <span>5</span>
               <span>10</span>
@@ -812,7 +812,7 @@ export function SunPositionView() {
 
           <div className="mt-8 grid grid-cols-2 gap-4 border-t border-white/5 pt-4">
             <div>
-              <div className="mb-1 text-[8px] tracking-widest text-[#8F9FB3] uppercase">
+              <div className="mb-1 text-[8px] tracking-widest text-muted-foreground uppercase">
                 MOOD SCORE
               </div>
               <div className="font-mono text-2xl font-bold text-white">84%</div>
@@ -821,7 +821,7 @@ export function SunPositionView() {
               </div>
             </div>
             <div>
-              <div className="mb-1 text-[8px] tracking-widest text-[#8F9FB3] uppercase">
+              <div className="mb-1 text-[8px] tracking-widest text-muted-foreground uppercase">
                 ENERGY LEVEL
               </div>
               <div className="font-mono text-2xl font-bold text-white">76%</div>
@@ -836,12 +836,12 @@ export function SunPositionView() {
       {/* ═══ TOOLKITS & ACTIONS ROW ═══ */}
       <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Toolkits */}
-        <div className="rounded-xl border border-white/5 bg-[#040C1A] p-5 lg:col-span-6">
+        <div className="rounded-xl border border-white/5 bg-card p-5 lg:col-span-6">
           <div className="mb-6">
             <h3 className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
               SUNLIGHT INTELLIGENT TOOLKITS
             </h3>
-            <p className="text-[9px] text-[#8F9FB3]">
+            <p className="text-[9px] text-muted-foreground">
               Operational tools to optimize your light, health & life
             </p>
           </div>
@@ -907,7 +907,7 @@ export function SunPositionView() {
                   <div className="mb-1 text-[8px] font-bold tracking-widest text-white uppercase">
                     {t.l}
                   </div>
-                  <div className="text-[7px] leading-relaxed text-[#8F9FB3]">
+                  <div className="text-[7px] leading-relaxed text-muted-foreground">
                     {t.d}
                   </div>
                 </div>
@@ -917,12 +917,12 @@ export function SunPositionView() {
         </div>
 
         {/* Spiritual Light Connection */}
-        <div className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-white/5 bg-[#040C1A] p-5 lg:col-span-3">
+        <div className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-white/5 bg-card p-5 lg:col-span-3">
           <div className="relative z-10 mb-4">
             <h3 className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
               SPIRITUAL LIGHT CONNECTION
             </h3>
-            <p className="text-[9px] text-[#8F9FB3]">
+            <p className="text-[9px] text-muted-foreground">
               Align your heart with the Light
             </p>
           </div>
@@ -974,7 +974,7 @@ export function SunPositionView() {
             <p className="font-mono text-[10px] leading-relaxed text-amber-400 italic">
               "The true light shines in the heart that beats the truth."
             </p>
-            <p className="mt-2 text-[7px] tracking-widest text-[#8F9FB3] uppercase">
+            <p className="mt-2 text-[7px] tracking-widest text-muted-foreground uppercase">
               - INSPIRED BY AR-RUH (17:85)
             </p>
           </div>
@@ -987,11 +987,11 @@ export function SunPositionView() {
               className="h-full w-full object-contain"
             />
           </div>
-          <div className="pointer-events-none absolute right-0 bottom-0 h-[100px] w-[180px] bg-gradient-to-t from-[#040C1A] to-transparent" />
+          <div className="pointer-events-none absolute right-0 bottom-0 h-[100px] w-[180px] bg-gradient-to-t -background to-transparent" />
         </div>
 
         {/* Quick Actions */}
-        <div className="flex flex-col rounded-xl border border-white/5 bg-[#040C1A] p-5 lg:col-span-3">
+        <div className="flex flex-col rounded-xl border border-white/5 bg-card p-5 lg:col-span-3">
           <div className="mb-6">
             <h3 className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
               QUICK ACTIONS
@@ -1015,7 +1015,7 @@ export function SunPositionView() {
                     {q.l}
                   </span>
                 </div>
-                <ChevronRight className="h-3 w-3 text-[#8F9FB3] group-hover:text-amber-400" />
+                <ChevronRight className="h-3 w-3 text-muted-foreground group-hover:text-amber-400" />
               </button>
             ))}
           </div>
@@ -1025,7 +1025,7 @@ export function SunPositionView() {
       {/* ═══ ANALYTICS & SYSTEMS ROW ═══ */}
       <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Recent Activity */}
-        <div className="rounded-xl border border-white/5 bg-[#040C1A] p-5 lg:col-span-3">
+        <div className="rounded-xl border border-white/5 bg-card p-5 lg:col-span-3">
           <div className="mb-6 flex items-center justify-between">
             <h3 className="text-[10px] font-bold tracking-widest text-white uppercase">
               RECENT ACTIVITY
@@ -1035,7 +1035,7 @@ export function SunPositionView() {
               LIVE FEED
             </span>
           </div>
-          <div className="mb-3 grid grid-cols-12 border-b border-white/10 pb-2 text-[7px] tracking-widest text-[#8F9FB3] uppercase">
+          <div className="mb-3 grid grid-cols-12 border-b border-white/10 pb-2 text-[7px] tracking-widest text-muted-foreground uppercase">
             <div className="col-span-3">TIME</div>
             <div className="col-span-6">ACTIVITY</div>
             <div className="col-span-3 text-right">STATUS</div>
@@ -1093,16 +1093,16 @@ export function SunPositionView() {
         </div>
 
         {/* Light Impact Analytics */}
-        <div className="flex flex-col rounded-xl border border-white/5 bg-[#040C1A] p-5 lg:col-span-4">
+        <div className="flex flex-col rounded-xl border border-white/5 bg-card p-5 lg:col-span-4">
           <div className="mb-5">
             <h3 className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
               LIGHT IMPACT ANALYTICS
             </h3>
-            <p className="text-[9px] text-[#8F9FB3]">30 DAYS OVERVIEW</p>
+            <p className="text-[9px] text-muted-foreground">30 DAYS OVERVIEW</p>
           </div>
           <div className="mb-6 grid grid-cols-4 gap-3">
             <div>
-              <div className="mb-1 text-[7px] leading-tight tracking-widest text-[#8F9FB3] uppercase">
+              <div className="mb-1 text-[7px] leading-tight tracking-widest text-muted-foreground uppercase">
                 HEALTH IMPROVEMENT
               </div>
               <div className="flex items-center gap-1 text-sm font-bold text-emerald-400">
@@ -1110,7 +1110,7 @@ export function SunPositionView() {
               </div>
             </div>
             <div>
-              <div className="mb-1 text-[7px] leading-tight tracking-widest text-[#8F9FB3] uppercase">
+              <div className="mb-1 text-[7px] leading-tight tracking-widest text-muted-foreground uppercase">
                 MOOD ENHANCEMENT
               </div>
               <div className="flex items-center gap-1 text-sm font-bold text-emerald-400">
@@ -1118,7 +1118,7 @@ export function SunPositionView() {
               </div>
             </div>
             <div>
-              <div className="mb-1 text-[7px] leading-tight tracking-widest text-[#8F9FB3] uppercase">
+              <div className="mb-1 text-[7px] leading-tight tracking-widest text-muted-foreground uppercase">
                 ENERGY BOOST
               </div>
               <div className="flex items-center gap-1 text-sm font-bold text-emerald-400">
@@ -1126,7 +1126,7 @@ export function SunPositionView() {
               </div>
             </div>
             <div>
-              <div className="mb-1 text-[7px] leading-tight tracking-widest text-[#8F9FB3] uppercase">
+              <div className="mb-1 text-[7px] leading-tight tracking-widest text-muted-foreground uppercase">
                 SLEEP QUALITY
               </div>
               <div className="flex items-center gap-1 text-sm font-bold text-emerald-400">
@@ -1136,7 +1136,7 @@ export function SunPositionView() {
           </div>
 
           <div className="flex-1 border-t border-white/5 pt-4">
-            <div className="mb-3 flex justify-between text-[8px] tracking-widest text-[#8F9FB3] uppercase">
+            <div className="mb-3 flex justify-between text-[8px] tracking-widest text-muted-foreground uppercase">
               <span className="flex items-center gap-1">
                 <div className="h-0.5 w-2 bg-emerald-500" /> Health
               </span>
@@ -1173,12 +1173,12 @@ export function SunPositionView() {
         </div>
 
         {/* System Resources */}
-        <div className="flex flex-col rounded-xl border border-white/5 bg-[#040C1A] p-5 lg:col-span-2">
+        <div className="flex flex-col rounded-xl border border-white/5 bg-card p-5 lg:col-span-2">
           <div className="mb-6">
             <h3 className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
               SYSTEM RESOURCES
             </h3>
-            <p className="text-[9px] text-[#8F9FB3]">Operational Status</p>
+            <p className="text-[9px] text-muted-foreground">Operational Status</p>
           </div>
           <div className="mb-6 grid grid-cols-2 gap-4">
             {[
@@ -1217,7 +1217,7 @@ export function SunPositionView() {
                     {r.v}%
                   </div>
                 </div>
-                <div className="text-[7px] tracking-widest text-[#8F9FB3] uppercase">
+                <div className="text-[7px] tracking-widest text-muted-foreground uppercase">
                   {r.l}
                 </div>
               </div>
@@ -1246,16 +1246,16 @@ export function SunPositionView() {
         </div>
 
         {/* Global Sunlight Map */}
-        <div className="flex flex-col rounded-xl border border-white/5 bg-[#040C1A] p-5 lg:col-span-3">
+        <div className="flex flex-col rounded-xl border border-white/5 bg-card p-5 lg:col-span-3">
           <div className="mb-4">
             <h3 className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
               GLOBAL SUNLIGHT MAP
             </h3>
-            <p className="text-[9px] text-[#8F9FB3]">
+            <p className="text-[9px] text-muted-foreground">
               Real-time Sunlight Intensity
             </p>
           </div>
-          <div className="relative flex flex-1 items-center justify-center overflow-hidden rounded-lg border border-white/5 bg-[#020813]">
+          <div className="relative flex flex-1 items-center justify-center overflow-hidden rounded-lg border border-white/5 bg-card">
             {/* SVG Map Silhouette */}
             <svg
               viewBox="0 0 800 400"
@@ -1298,12 +1298,12 @@ export function SunPositionView() {
       {/* ═══ ADVANCED SCI-FI ASTRONOMY ROW ═══ */}
       <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Qibla Solar Alignment */}
-        <div className="group relative flex flex-col overflow-hidden rounded-xl border border-white/5 bg-[#040C1A] p-5 lg:col-span-4">
+        <div className="group relative flex flex-col overflow-hidden rounded-xl border border-white/5 bg-card p-5 lg:col-span-4">
           <div className="relative z-10 mb-4">
             <h3 className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
               QIBLA SOLAR ALIGNMENT
             </h3>
-            <p className="text-[9px] text-[#8F9FB3]">
+            <p className="text-[9px] text-muted-foreground">
               Sun's relation to the Sacred Mosque
             </p>
           </div>
@@ -1335,7 +1335,7 @@ export function SunPositionView() {
             </svg>
 
             {/* Center Kaaba representation */}
-            <div className="relative z-10 flex h-10 w-10 rotate-45 items-center justify-center border-[2px] border-amber-500/50 bg-[#0F172A] shadow-[0_0_15px_rgba(251,191,36,0.3)]">
+            <div className="relative z-10 flex h-10 w-10 rotate-45 items-center justify-center border-[2px] border-amber-500/50 bg-muted shadow-sm">
               <div className="h-6 w-6 border border-amber-400/30" />
               <div className="absolute -top-6 -right-6 font-mono text-[6px] text-emerald-400">
                 21.42° N
@@ -1349,7 +1349,7 @@ export function SunPositionView() {
           </div>
 
           <div className="relative z-10 mt-auto">
-            <div className="mb-2 grid grid-cols-5 border-b border-white/5 pb-2 text-[7px] tracking-widest text-[#8F9FB3] uppercase">
+            <div className="mb-2 grid grid-cols-5 border-b border-white/5 pb-2 text-[7px] tracking-widest text-muted-foreground uppercase">
               <div>FAJR</div>
               <div className="text-center">DHUHR</div>
               <div className="text-center">ASR</div>
@@ -1367,13 +1367,13 @@ export function SunPositionView() {
         </div>
 
         {/* Electromagnetic Spectrum */}
-        <div className="relative flex flex-col overflow-hidden rounded-xl border border-white/5 bg-[#040C1A] p-5 lg:col-span-4">
+        <div className="relative flex flex-col overflow-hidden rounded-xl border border-white/5 bg-card p-5 lg:col-span-4">
           <div className="relative z-10 mb-6 flex items-start justify-between">
             <div>
               <h3 className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
                 ELECTROMAGNETIC SPECTRUM
               </h3>
-              <p className="text-[9px] text-[#8F9FB3]">
+              <p className="text-[9px] text-muted-foreground">
                 Real-time solar frequency monitor
               </p>
             </div>
@@ -1450,7 +1450,7 @@ export function SunPositionView() {
 
           <div className="relative z-10 mt-auto grid grid-cols-2 gap-4 border-t border-white/5 pt-4 text-[9px]">
             <div>
-              <div className="mb-1 tracking-widest text-[#8F9FB3] uppercase">
+              <div className="mb-1 tracking-widest text-muted-foreground uppercase">
                 SOLAR FLARE STATUS
               </div>
               <div className="font-mono font-bold text-emerald-400">
@@ -1458,7 +1458,7 @@ export function SunPositionView() {
               </div>
             </div>
             <div className="text-right">
-              <div className="mb-1 tracking-widest text-[#8F9FB3] uppercase">
+              <div className="mb-1 tracking-widest text-muted-foreground uppercase">
                 OZONE BLOCKING
               </div>
               <div className="font-mono font-bold text-cyan-400">
@@ -1469,12 +1469,12 @@ export function SunPositionView() {
         </div>
 
         {/* Cellular Photon Absorption */}
-        <div className="group relative flex flex-col overflow-hidden rounded-xl border border-white/5 bg-[#040C1A] p-5 lg:col-span-4">
+        <div className="group relative flex flex-col overflow-hidden rounded-xl border border-white/5 bg-card p-5 lg:col-span-4">
           <div className="relative z-10 mb-4">
             <h3 className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
               CELLULAR PHOTON ABSORPTION
             </h3>
-            <p className="text-[9px] text-[#8F9FB3]">
+            <p className="text-[9px] text-muted-foreground">
               Near-Infrared impact on Mitochondria
             </p>
           </div>
@@ -1504,9 +1504,9 @@ export function SunPositionView() {
 
             {/* Photons hitting */}
             <div className="absolute top-1/2 left-[10%] flex -translate-y-1/2 animate-pulse gap-1">
-              <div className="h-1.5 w-1.5 rounded-full bg-amber-400 drop-shadow-[0_0_5px_rgba(251,191,36,1)]" />
-              <div className="h-1.5 w-1.5 rounded-full bg-amber-400 drop-shadow-[0_0_5px_rgba(251,191,36,1)]" />
-              <div className="h-1.5 w-1.5 rounded-full bg-amber-400 drop-shadow-[0_0_5px_rgba(251,191,36,1)]" />
+              <div className="h-1.5 w-1.5 rounded-full bg-amber-400 drop-shadow-sm" />
+              <div className="h-1.5 w-1.5 rounded-full bg-amber-400 drop-shadow-sm" />
+              <div className="h-1.5 w-1.5 rounded-full bg-amber-400 drop-shadow-sm" />
             </div>
 
             {/* ATP Output */}
@@ -1535,13 +1535,13 @@ export function SunPositionView() {
 
       {/* ═══ FOOTER ROW ═══ */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <div className="flex items-start gap-4 rounded-xl border border-white/5 bg-[#040C1A] p-6">
+        <div className="flex items-start gap-4 rounded-xl border border-white/5 bg-card p-6">
           <Sun className="h-8 w-8 shrink-0 text-amber-400" />
           <div>
             <div className="mb-1.5 text-[10px] font-bold tracking-widest text-white uppercase">
               DAILY LIGHT REMINDER
             </div>
-            <p className="mb-3 text-[9px] leading-relaxed text-[#8F9FB3]">
+            <p className="mb-3 text-[9px] leading-relaxed text-muted-foreground">
               Don't forget to get 15-30 minutes of sunlight every morning. Your
               body, mind, and soul need it.
             </p>
@@ -1551,11 +1551,11 @@ export function SunPositionView() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-white/5 bg-[#040C1A] p-6">
+        <div className="rounded-xl border border-white/5 bg-card p-6">
           <div className="mb-2 text-[10px] font-bold tracking-widest text-white uppercase">
             PROPHETIC WISDOM
           </div>
-          <p className="text-[10px] leading-relaxed text-[#8F9FB3] italic">
+          <p className="text-[10px] leading-relaxed text-muted-foreground italic">
             "The example of the believers in their mutual love, mercy and
             compassion is like one body; when one part suffers, the whole body
             responds with wakefulness and fever."
@@ -1565,22 +1565,22 @@ export function SunPositionView() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-white/5 bg-[#040C1A] p-6">
+        <div className="rounded-xl border border-white/5 bg-card p-6">
           <div className="mb-2 text-[10px] font-bold tracking-widest text-white uppercase">
             ANCIENT WISDOM
           </div>
-          <p className="text-[10px] leading-relaxed text-[#8F9FB3] italic">
+          <p className="text-[10px] leading-relaxed text-muted-foreground italic">
             "Sunlight is the best medicine. It heals the body, uplifts the
             spirit, and illuminates the soul."
           </p>
         </div>
 
-        <div className="group relative flex cursor-pointer items-center justify-between overflow-hidden rounded-xl border border-white/5 bg-[#040C1A] p-6">
+        <div className="group relative flex cursor-pointer items-center justify-between overflow-hidden rounded-xl border border-white/5 bg-card p-6">
           <div className="relative z-10">
             <div className="mb-1 text-[10px] font-bold tracking-widest text-white uppercase">
               COUNTDOWN TO NEXT SUNRISE
             </div>
-            <p className="mb-4 text-[9px] leading-relaxed text-[#8F9FB3]">
+            <p className="mb-4 text-[9px] leading-relaxed text-muted-foreground">
               Prepare for another day of light
             </p>
             <div className="flex gap-4 font-mono text-3xl font-black text-white md:text-4xl">
@@ -1590,24 +1590,24 @@ export function SunPositionView() {
                   HOURS
                 </span>
               </div>
-              <div className="animate-pulse text-[#8F9FB3]">:</div>
+              <div className="animate-pulse text-muted-foreground">:</div>
               <div className="flex flex-col items-center">
                 27
                 <span className="mt-1 font-sans text-[7px] tracking-widest text-amber-400">
                   MINUTES
                 </span>
               </div>
-              <div className="animate-pulse text-[#8F9FB3]">:</div>
+              <div className="animate-pulse text-muted-foreground">:</div>
               <div className="flex flex-col items-center text-amber-400">
                 26
-                <span className="mt-1 font-sans text-[7px] tracking-widest text-[#8F9FB3]">
+                <span className="mt-1 font-sans text-[7px] tracking-widest text-muted-foreground">
                   SECONDS
                 </span>
               </div>
             </div>
           </div>
           <div className="relative z-10 mr-2 flex flex-col items-center transition-transform group-hover:scale-110 lg:mr-6">
-            <Sunrise className="mb-2 h-8 w-8 text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.6)]" />
+            <Sunrise className="mb-2 h-8 w-8 text-amber-400 drop-shadow-sm" />
             <div className="text-[8px] font-bold tracking-widest text-amber-400 uppercase">
               Next Sunrise
             </div>

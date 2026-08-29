@@ -95,7 +95,7 @@ export function DiplomasiProfetikView() {
             </span>
           </div>
 
-          <p className="bg-panel tag-clip border border-primary/20 p-4 text-xs leading-relaxed text-foreground">
+          <p className="bg-panel rounded-md border border-primary/20 p-4 text-xs leading-relaxed text-foreground">
             &ldquo;{scenario.context}&rdquo;
           </p>
 
@@ -104,7 +104,7 @@ export function DiplomasiProfetikView() {
               <button
                 key={idx}
                 onClick={() => setChosenOption(idx)}
-                className={`tag-clip w-full cursor-pointer space-y-2 border p-4 text-left text-xs transition-all ${
+                className={`rounded-md w-full cursor-pointer space-y-2 border p-4 text-left text-xs transition-all ${
                   chosenOption === idx
                     ? opt.isPropheticChoice
                       ? "border-success bg-success/15 text-success"

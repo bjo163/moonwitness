@@ -93,7 +93,7 @@ export function MissionStats() {
             Knowledge Level
           </p>
           <div className="mt-4 flex items-center gap-4">
-            <div className="relative flex h-14 w-12 items-center justify-center text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">
+            <div className="relative flex h-14 w-12 items-center justify-center text-cyan-400 drop-shadow-sm">
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
@@ -135,8 +135,8 @@ export function MissionStats() {
         </p>
         <div className="mt-4 flex flex-1 items-center justify-center">
           <div className="relative">
-            <Trophy className="absolute top-1/2 -left-10 h-8 w-8 -translate-y-1/2 text-amber-500 drop-shadow-[0_0_15px_rgba(245,158,11,0.6)]" />
-            <h4 className="bg-gradient-to-b from-amber-200 to-amber-500 bg-clip-text font-mono text-4xl font-bold text-transparent drop-shadow-[0_2px_10px_rgba(245,158,11,0.2)]">
+            <Trophy className="absolute top-1/2 -left-10 h-8 w-8 -translate-y-1/2 text-amber-500 drop-shadow-sm" />
+            <h4 className="bg-gradient-to-b from-amber-200 to-amber-500 bg-clip-text font-mono text-4xl font-bold text-transparent drop-shadow-sm">
               #1,248
             </h4>
           </div>
@@ -157,7 +157,7 @@ export function MissionStats() {
           <div className="absolute inset-0 flex items-center justify-center opacity-20">
             <div className="h-24 w-24 animate-[spin_10s_linear_infinite] rounded-full border border-dashed border-emerald-500" />
           </div>
-          <h4 className="bg-gradient-to-b from-emerald-200 to-emerald-500 bg-clip-text font-mono text-4xl font-bold text-transparent drop-shadow-[0_2px_10px_rgba(16,185,129,0.2)]">
+          <h4 className="bg-gradient-to-b from-emerald-200 to-emerald-500 bg-clip-text font-mono text-4xl font-bold text-transparent drop-shadow-sm">
             8,640
           </h4>
         </div>

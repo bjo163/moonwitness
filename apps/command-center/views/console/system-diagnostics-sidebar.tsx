@@ -43,7 +43,7 @@ export function SystemDiagnosticsSidebar() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-xl border border-cyan-500/30 bg-black/60 p-5 shadow-[0_0_25px_rgba(6,182,212,0.08)] backdrop-blur-md">
+      <div className="rounded-xl border border-cyan-500/30 bg-black/60 p-5 shadow-sm backdrop-blur-md">
         <h3 className="mb-4 flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-white uppercase">
           <ShieldCheck className="h-4 w-4 text-cyan-400" />
           Hardware Telemetry ({TELEMETRY_METRIC_COUNT} Nodes)

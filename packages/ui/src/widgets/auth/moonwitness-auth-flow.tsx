@@ -37,7 +37,7 @@ export function MoonwitnessAuthFlow() {
   }
 
   const renderLogin = () => (
-    <div className="w-full max-w-[420px] animate-in rounded-2xl border border-cyan-500/20 bg-slate-950/80 p-8 shadow-[0_0_40px_rgba(0,150,255,0.1)] backdrop-blur-xl duration-500 slide-in-from-bottom-4">
+    <div className="w-full max-w-[420px] animate-in rounded-2xl border border-cyan-500/20 bg-slate-950/80 p-8 shadow-sm backdrop-blur-xl duration-500 slide-in-from-bottom-4">
       <div className="mb-8 text-center">
         <h2 className="font-sans text-2xl font-bold text-white">
           WELCOME BACK
@@ -121,7 +121,7 @@ export function MoonwitnessAuthFlow() {
         <button
           type="submit"
           disabled={loading}
-          className="mt-6 w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] disabled:opacity-50"
+          className="mt-6 w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-sm disabled:opacity-50"
         >
           {loading ? "AUTHENTICATING..." : "LOGIN"}
         </button>
@@ -140,7 +140,7 @@ export function MoonwitnessAuthFlow() {
   )
 
   const renderRegister = () => (
-    <div className="w-full max-w-[480px] animate-in rounded-2xl border border-cyan-500/20 bg-slate-950/80 p-8 shadow-[0_0_40px_rgba(0,150,255,0.1)] backdrop-blur-xl duration-500 slide-in-from-bottom-4">
+    <div className="w-full max-w-[480px] animate-in rounded-2xl border border-cyan-500/20 bg-slate-950/80 p-8 shadow-sm backdrop-blur-xl duration-500 slide-in-from-bottom-4">
       <div className="mb-8 text-center">
         <h2 className="font-sans text-2xl font-bold tracking-wider text-white uppercase">
           CREATE YOUR ACCOUNT
@@ -247,7 +247,7 @@ export function MoonwitnessAuthFlow() {
         <button
           type="submit"
           disabled={loading}
-          className="mt-6 w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] disabled:opacity-50"
+          className="mt-6 w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-sm disabled:opacity-50"
         >
           {loading ? "CREATING ACCOUNT..." : "CREATE ACCOUNT"}
         </button>

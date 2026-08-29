@@ -5,7 +5,7 @@ import React from "react"
 export function BridgeLogTab() {
   return (
     <div className="flex flex-col gap-4">
-      <div className="clip-hero border border-yellow-400/25 bg-black/60 p-6">
+      <div className="rounded-2xl border border-yellow-400/25 bg-black/60 p-6">
         <div className="mb-4 text-center">
           <div className="mb-2 font-mono text-4xl text-yellow-300/90">∞</div>
           <p className="font-mono text-[9px] tracking-widest text-yellow-400/50 uppercase">

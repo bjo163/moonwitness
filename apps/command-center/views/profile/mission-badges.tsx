@@ -34,7 +34,7 @@ export function MissionBadges() {
       level: "Special",
       icon: Star,
       color:
-        "text-yellow-400 border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.3)]",
+        "text-yellow-400 border-yellow-400 shadow-sm",
     },
     {
       name: "Community Helper",

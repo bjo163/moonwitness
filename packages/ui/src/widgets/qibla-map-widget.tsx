@@ -34,7 +34,7 @@ export function QiblaMapWidget() {
   if (!mounted) return null
 
   return (
-    <div className="panel-box border-success/40 bg-background/90 space-y-4 border p-4 font-mono shadow-[0_0_20px_rgba(0,255,102,0.15)] sm:p-5">
+    <div className="rounded-xl border border-border/40 bg-card border-success/40 bg-background/90 space-y-4 border p-4 font-mono shadow-sm sm:p-5">
       <div className="border-success/20 flex items-center justify-between border-b pb-2.5">
         <div className="flex items-center gap-2">
           <Globe className="text-success h-4 w-4 animate-pulse" />
@@ -48,7 +48,7 @@ export function QiblaMapWidget() {
       </div>
 
       <div className="grid grid-cols-1 gap-3 text-xs md:grid-cols-3">
-        <div className="bg-panel border-success/20 tag-clip space-y-1 border p-3">
+        <div className="bg-panel border-success/20 rounded-md space-y-1 border p-3">
           <span className="block text-[8px] text-primary uppercase">
             {/* KOORDINAT GPS LOKAL */}
           </span>
@@ -58,7 +58,7 @@ export function QiblaMapWidget() {
           </div>
         </div>
 
-        <div className="bg-panel border-success/20 tag-clip space-y-1 border p-3">
+        <div className="bg-panel border-success/20 rounded-md space-y-1 border p-3">
           <span className="block text-[8px] text-primary uppercase">
             {/* SUDUT AZIMUTH KIBLAT */}
           </span>
@@ -67,7 +67,7 @@ export function QiblaMapWidget() {
           </div>
         </div>
 
-        <div className="bg-panel border-success/20 tag-clip space-y-1 border p-3">
+        <div className="bg-panel border-success/20 rounded-md space-y-1 border p-3">
           <span className="block text-[8px] text-primary uppercase">
             {/* JARAK LINTASAN KA&apos;BAH */}
           </span>

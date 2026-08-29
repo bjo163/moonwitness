@@ -4,11 +4,11 @@ import { Moon, Clock, Compass, Sparkles, Radio, MapPin } from "lucide-react"
 
 export function ObservatoryBottomDeck() {
   return (
-    <div className="bg-background/40 grid grid-cols-1 items-center gap-6 rounded-xl border border-cyan-500/30 p-6 shadow-[0_0_40px_rgba(0,200,255,0.08)] backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/50 lg:grid-cols-12">
+    <div className="bg-background/40 grid grid-cols-1 items-center gap-6 rounded-xl border border-cyan-500/30 p-6 shadow-sm backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/50 lg:grid-cols-12">
       {/* LEFT: QUICK ACCESS OBSERVATORY TOOLKIT (Col 1-5) */}
       <div className="space-y-3 lg:col-span-5">
         <div className="flex items-center gap-2 text-xs font-black tracking-wider text-white uppercase">
-          <span className="h-2 w-2 animate-pulse rounded-full bg-cyan-400 shadow-[0_0_8px_#00F0FF]" />
+          <span className="h-2 w-2 animate-pulse rounded-full bg-cyan-400 shadow-sm" />
           <span>QUICK ACCESS TOOLS</span>
         </div>
 
@@ -86,7 +86,7 @@ export function ObservatoryBottomDeck() {
         </div>
         <div className="flex items-center justify-end gap-1.5 font-mono text-[10px] font-bold text-emerald-400">
           <span>ACTIVE REGION</span>
-          <span className="h-2 w-2 animate-ping rounded-full bg-emerald-400 shadow-[0_0_8px_#10B981]" />
+          <span className="h-2 w-2 animate-ping rounded-full bg-emerald-400 shadow-sm" />
         </div>
         <div className="font-mono text-[9px] text-primary">
           GPS ACCURACY LOCKED // 0.01M

@@ -140,7 +140,7 @@ export function Taskbar() {
 
   return (
     <div
-      className="fixed right-0 bottom-0 left-0 z-[50] border-t border-cyan-500/20 bg-black/50 font-mono shadow-[0_-10px_30px_rgba(0,240,255,0.05)] backdrop-blur-xl select-none"
+      className="fixed right-0 bottom-0 left-0 z-[50] border-t border-cyan-500/20 bg-black/50 font-mono shadow-sm backdrop-blur-xl select-none"
       style={{ height: "44px" }}
     >
       <div className="flex h-full items-center justify-between gap-1 px-2 text-[10px] tracking-widest uppercase sm:gap-2 sm:px-6">
@@ -151,7 +151,7 @@ export function Taskbar() {
             className="flex items-center gap-1.5 font-bold text-emerald-400"
             title="System Online"
           >
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_8px_#10B981]" />
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400 shadow-sm" />
             <span className="hidden sm:inline">SYS</span>
           </span>
 
@@ -230,7 +230,7 @@ export function Taskbar() {
               <strong
                 className={`font-black ${
                   sunInfo.duhaStatus === "AFDHAL"
-                    ? "text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.6)]"
+                    ? "text-amber-400 drop-shadow-sm"
                     : sunInfo.duhaStatus === "ACTIVE"
                       ? "text-amber-400"
                       : sunInfo.altitude > 0
@@ -244,7 +244,7 @@ export function Taskbar() {
                 <span
                   className={`text-[9px] font-bold ${
                     sunInfo.duhaStatus === "AFDHAL"
-                      ? "text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.6)]"
+                      ? "text-amber-400 drop-shadow-sm"
                       : "text-emerald-400/70"
                   }`}
                 >
@@ -256,7 +256,7 @@ export function Taskbar() {
         </div>
 
         {/* ── CENTER: Clock ──────────────────────────────────────── */}
-        <div className="flex shrink-0 items-center gap-1.5 rounded border border-cyan-500/20 bg-cyan-950/20 px-3 py-0.5 font-black text-cyan-300 shadow-[0_0_10px_rgba(0,240,255,0.1)]">
+        <div className="flex shrink-0 items-center gap-1.5 rounded border border-cyan-500/20 bg-cyan-950/20 px-3 py-0.5 font-black text-cyan-300 shadow-sm">
           <span>{timeStr || "00:00:00"}</span>
           <span className="hidden text-[9px] text-white/50 sm:inline">WIB</span>
         </div>

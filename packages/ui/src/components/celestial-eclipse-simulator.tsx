@@ -51,7 +51,7 @@ export function CelestialEclipseSimulator({
   return (
     <div className={`flex flex-col items-center justify-center font-mono ${className}`}>
       {/* Simulation Viewport */}
-      <div className="relative h-72 w-full max-w-lg overflow-hidden rounded-2xl border border-cyan-500/30 bg-[#03060A] shadow-[0_0_50px_rgba(0,240,255,0.15)] flex items-center justify-center">
+      <div className="relative h-72 w-full max-w-lg overflow-hidden rounded-2xl border border-cyan-500/30 bg-card shadow-sm flex items-center justify-center">
         {/* Background Starfield */}
         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]" />
 
@@ -61,13 +61,13 @@ export function CelestialEclipseSimulator({
         )}
 
         {/* Sun Sphere (Fixed at Center) */}
-        <div className="relative z-10 h-36 w-36 rounded-full bg-gradient-to-tr from-amber-500 via-yellow-300 to-white shadow-[0_0_60px_rgba(255,200,0,0.8)] flex items-center justify-center">
+        <div className="relative z-10 h-36 w-36 rounded-full bg-gradient-to-tr from-amber-500 via-yellow-300 to-white shadow-sm flex items-center justify-center">
           <div className="h-full w-full rounded-full bg-amber-400/20 blur-sm" />
         </div>
 
         {/* Moon Disk (Moving along orbital trajectory) */}
         <div
-          className="absolute z-20 h-36 w-36 rounded-full bg-[#05080E] border border-cyan-500/20 shadow-[inset_0_0_20px_rgba(0,0,0,0.9)] transition-transform duration-75 ease-out"
+          className="absolute z-20 h-36 w-36 rounded-full bg-card border border-cyan-500/20 shadow-sm transition-transform duration-75 ease-out"
           style={{
             transform: `translate(${xOffset}px, ${yOffset}px)`,
           }}
@@ -76,7 +76,7 @@ export function CelestialEclipseSimulator({
         {/* Totality Diamond Ring Flare */}
         {coveragePercent >= 92 && coveragePercent < 98 && (
           <div
-            className="absolute z-30 h-4 w-4 rounded-full bg-white shadow-[0_0_25px_#ffffff,0_0_50px_#00F0FF] animate-ping"
+            className="absolute z-30 h-4 w-4 rounded-full bg-white shadow-sm animate-ping"
             style={{
               transform: `translate(${xOffset * 0.8}px, ${yOffset * 0.8}px)`,
             }}

@@ -25,7 +25,7 @@ export function EightLevelsTab() {
             onClick={() => setSelected(isSelected ? null : lvl.level)}
             className={`rounded-xl w-full border text-left transition-all duration-200 hover:translate-y-[-1px] ${
               isSelected
-                ? `${lvl.border} bg-black/70 shadow-[0_0_20px_rgba(0,0,0,0.5)]`
+                ? `${lvl.border} bg-black/70 shadow-sm`
                 : "border-white/5 bg-black/30 hover:border-white/15"
             }`}
           >

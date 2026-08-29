@@ -157,7 +157,7 @@ export function CosmicTimelineView({ schema, records, onRecordClick }: CosmicTim
                   <div className="relative h-full flex-1">
                     <div
                       onClick={() => onRecordClick?.(r)}
-                      className="absolute top-2 h-8 cursor-pointer rounded border border-cyan-500/40 bg-cyan-950/60 transition-all hover:scale-[1.01] hover:border-cyan-400 hover:shadow-[0_0_12px_rgba(0,240,255,0.3)]"
+                      className="absolute top-2 h-8 cursor-pointer rounded border border-cyan-500/40 bg-cyan-950/60 transition-all hover:scale-[1.01] hover:border-cyan-400 hover:shadow-sm"
                       style={{
                         left: `${leftPct}%`,
                         width: `${widthPct}%`,

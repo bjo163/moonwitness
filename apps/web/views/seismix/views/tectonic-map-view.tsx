@@ -196,7 +196,7 @@ function PlateCard({
           </span>
         </div>
         <span
-          className="tag-clip border px-1.5 py-0.5 font-mono text-[7px] font-bold tracking-widest uppercase"
+          className="rounded-md border px-1.5 py-0.5 font-mono text-[7px] font-bold tracking-widest uppercase"
           style={{
             color: riskColor,
             borderColor: `${riskColor}40`,
@@ -304,7 +304,7 @@ function PlateDetail({ plate }: { plate: TectonicPlate }) {
           {plate.neighbors.map((n) => (
             <span
               key={n}
-              className="tag-clip border border-primary/20 bg-primary/5 px-2 py-1 font-mono text-[8px] font-bold tracking-widest text-foreground uppercase"
+              className="rounded-md border border-primary/20 bg-primary/5 px-2 py-1 font-mono text-[8px] font-bold tracking-widest text-foreground uppercase"
             >
               {n}
             </span>

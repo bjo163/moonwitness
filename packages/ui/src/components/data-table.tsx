@@ -285,7 +285,7 @@ export function DataTable<T = any>({
 
       {/* Add / Edit Dialogs */}
       <Dialog open={isAddOpen || isEditOpen} onOpenChange={(open) => { if (!open) { setIsAddOpen(false); setIsEditOpen(false); setSubmitError(null); } }}>
-        <DialogContent className="border-cyan-900/50 bg-[#05080E] text-white">
+        <DialogContent className="border-cyan-900/50 bg-card text-white">
           <DialogHeader>
             <DialogTitle className="font-sans text-sm uppercase text-cyan-400 font-bold">
               {isEditOpen ? `Edit Record (#${editingId})` : `Add New Record`}

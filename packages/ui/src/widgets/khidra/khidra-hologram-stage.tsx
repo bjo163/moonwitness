@@ -12,7 +12,7 @@ export function KhidraHologramStage() {
       <img
         src="/assets/khidra_hologram.png"
         alt="Khidra Hologram"
-        className="relative z-10 h-auto max-h-[70vh] w-auto object-contain mix-blend-screen drop-shadow-[0_0_25px_rgba(0,255,65,0.4)]"
+        className="relative z-10 h-auto max-h-[70vh] w-auto object-contain mix-blend-screen drop-shadow-sm"
         style={{ filter: "contrast(1.2) brightness(1.1)" }}
       />
 
@@ -22,7 +22,7 @@ export function KhidraHologramStage() {
         style={{ transform: "translate(-50%, 0) rotateX(75deg)" }}
       >
         {/* Ring 1 */}
-        <div className="absolute h-[400px] w-[400px] rounded-full border border-primary/60 shadow-[0_0_15px_#00FF41,inset_0_0_15px_#00FF41]" />
+        <div className="absolute h-[400px] w-[400px] rounded-full border border-primary/60 shadow-sm" />
         {/* Ring 2 */}
         <div className="absolute h-[450px] w-[450px] animate-[spin_10s_linear_infinite] rounded-full border border-dashed border-primary/40" />
         {/* Ring 3 */}
@@ -33,7 +33,7 @@ export function KhidraHologramStage() {
       </div>
 
       {/* Floating Chat Bubble */}
-      <div className="absolute top-1/3 left-10 z-20 hidden max-w-[200px] animate-pulse rounded-lg border border-primary/40 panel-glass p-4 font-mono shadow-[0_0_20px_rgba(0,255,65,0.2)] lg:block">
+      <div className="absolute top-1/3 left-10 z-20 hidden max-w-[200px] animate-pulse rounded-lg border border-primary/40 rounded-xl border border-border/40 bg-card/90 p-4 font-mono shadow-sm lg:block">
         <div className="mb-2 text-sm font-bold text-primary">
           I&apos;m Khidra.
         </div>
@@ -46,19 +46,19 @@ export function KhidraHologramStage() {
       <div className="absolute top-1/3 right-10 z-20 hidden flex-col gap-4 font-mono text-[9px] tracking-widest uppercase lg:flex">
         <div className="flex flex-col items-end gap-1">
           <span className="text-primary/60">KNOWLEDGE INDEX</span>
-          <span className="text-lg font-bold text-primary drop-shadow-[0_0_5px_#00FF41]">
+          <span className="text-lg font-bold text-primary drop-shadow-sm">
             98.7%
           </span>
         </div>
         <div className="flex flex-col items-end gap-1">
           <span className="text-primary/60">RESPONSE ACCURACY</span>
-          <span className="text-lg font-bold text-primary drop-shadow-[0_0_5px_#00FF41]">
+          <span className="text-lg font-bold text-primary drop-shadow-sm">
             96.2%
           </span>
         </div>
         <div className="flex flex-col items-end gap-1">
           <span className="text-primary/60">SOURCES VERIFIED</span>
-          <span className="text-lg font-bold text-primary drop-shadow-[0_0_5px_#00FF41]">
+          <span className="text-lg font-bold text-primary drop-shadow-sm">
             12.0M+
           </span>
         </div>

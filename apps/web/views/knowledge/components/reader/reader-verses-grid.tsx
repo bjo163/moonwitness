@@ -85,7 +85,7 @@ export function ReaderVersesGrid({
         ))}
       </div>
 
-      <div className="relative overflow-hidden rounded-xl border border-white/5 bg-[#0A1224] p-5 md:p-6">
+      <div className="relative overflow-hidden rounded-xl border border-white/5 bg-card p-5 md:p-6">
         {/* Header Content */}
         <div className="mb-6 flex flex-col items-start justify-between gap-3 border-b border-white/10 pb-4 md:flex-row md:items-center">
           <div>

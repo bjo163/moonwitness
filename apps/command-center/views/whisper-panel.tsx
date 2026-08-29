@@ -182,12 +182,12 @@ export function MercyButton({ requestId, onMercySent }: MercyButtonProps) {
     <button
       onClick={handleMercy}
       title="Kirim MERCY — DIVINE whisper rahmat"
-      className={`group clip-btn flex items-center gap-1.5 border px-3 py-1.5 font-mono text-[9px] font-bold tracking-widest uppercase transition-all duration-300 ${
+      className={`group rounded-lg flex items-center gap-1.5 border px-3 py-1.5 font-mono text-[9px] font-bold tracking-widest uppercase transition-all duration-300 ${
         glowing
-          ? "border-yellow-300/80 bg-yellow-400/20 text-yellow-200 shadow-[0_0_20px_rgba(255,230,0,0.4)]"
+          ? "border-yellow-300/80 bg-yellow-400/20 text-yellow-200 shadow-sm"
           : sent
             ? "border-yellow-400/50 bg-yellow-400/10 text-yellow-300"
-            : "border-yellow-400/20 bg-transparent text-yellow-400/50 hover:border-yellow-400/50 hover:bg-yellow-400/10 hover:text-yellow-300 hover:shadow-[0_0_12px_rgba(255,230,0,0.2)]"
+            : "border-yellow-400/20 bg-transparent text-yellow-400/50 hover:border-yellow-400/50 hover:bg-yellow-400/10 hover:text-yellow-300 hover:shadow-sm"
       } `}
     >
       <Heart
@@ -545,7 +545,7 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
                 <button
                   key={tier}
                   onClick={() => setSelectedTier(tier)}
-                  className={`clip-btn flex flex-1 items-center justify-center gap-1 border px-2 py-1.5 font-mono text-[8px] font-bold tracking-widest uppercase transition-all ${
+                  className={`rounded-lg flex flex-1 items-center justify-center gap-1 border px-2 py-1.5 font-mono text-[8px] font-bold tracking-widest uppercase transition-all ${
                     selectedTier === tier
                       ? `${cfg.border} ${cfg.color} ${cfg.bg}`
                       : "border-border/40 text-muted-foreground hover:border-border/70"
@@ -574,7 +574,7 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
             <button
               onClick={handleSend}
               disabled={!inputValue.trim()}
-              className="clip-btn border border-yellow-400/30 bg-yellow-400/10 px-3 py-2 text-yellow-400 transition-all hover:bg-yellow-400/20 hover:shadow-[0_0_10px_rgba(255,230,0,0.15)] disabled:cursor-not-allowed disabled:opacity-30"
+              className="rounded-lg border border-yellow-400/30 bg-yellow-400/10 px-3 py-2 text-yellow-400 transition-all hover:bg-yellow-400/20 hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-30"
             >
               <Send className="h-3.5 w-3.5" />
             </button>

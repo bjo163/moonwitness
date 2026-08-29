@@ -24,8 +24,8 @@ export function AsmaulHusnaCardItem({ item, isActive, onClick }: AsmaulHusnaCard
       onClick={onClick}
       className={`group relative cursor-pointer rounded-xl border p-4 transition-all duration-300 ${
         isActive
-          ? "border-indigo-500/50 bg-[#0E1736] shadow-[0_0_20px_rgba(161,0,255,0.15)]"
-          : "border-white/5 bg-[#080E1C] hover:border-white/20 hover:bg-[#0A1224]"
+          ? "border-indigo-500/50 bg-muted shadow-sm"
+          : "border-white/5 bg-card hover:border-white/20 hover:bg-card"
       }`}
     >
       <div className="mb-2 flex items-center justify-between border-b border-white/5 pb-2">
@@ -35,7 +35,7 @@ export function AsmaulHusnaCardItem({ item, isActive, onClick }: AsmaulHusnaCard
         <span className="font-mono text-[9px] text-white/40">{item.ref}</span>
       </div>
 
-      <div className="font-arabic my-2 text-center text-2xl text-white/95 drop-shadow-[0_0_8px_rgba(255,255,255,0.15)]">
+      <div className="font-arabic my-2 text-center text-2xl text-white/95 drop-shadow-sm">
         {item.arabic}
       </div>
 

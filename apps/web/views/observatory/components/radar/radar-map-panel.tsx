@@ -19,11 +19,11 @@ interface RadarMapPanelProps {
 
 export function RadarMapPanel({ rainTimestamp }: RadarMapPanelProps) {
   return (
-    <div className="relative min-h-[420px] overflow-hidden rounded-xl border border-white/10 bg-[#050B16] shadow-2xl">
+    <div className="relative min-h-[420px] overflow-hidden rounded-xl border border-white/10 bg-muted shadow-2xl">
       <MapContainer
         center={[-2.5, 118.0]}
         zoom={5}
-        className="h-[420px] w-full bg-[#050B16]"
+        className="h-[420px] w-full bg-muted"
       >
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
@@ -38,7 +38,7 @@ export function RadarMapPanel({ rainTimestamp }: RadarMapPanelProps) {
       </MapContainer>
 
       {/* Radar Overlay Controls Badge */}
-      <div className="absolute top-3 left-3 z-[1000] rounded border border-cyan-500/30 bg-[#080E1C]/90 px-3 py-1.5 font-mono text-[9px] text-cyan-300 backdrop-blur-md">
+      <div className="absolute top-3 left-3 z-[1000] rounded border border-cyan-500/30 bg-card px-3 py-1.5 font-mono text-[9px] text-cyan-300 backdrop-blur-md">
         RAINVIEWER DOPPLER COMPOSITE {rainTimestamp > 0 ? `• TS: ${rainTimestamp}` : "• LIVE"}
       </div>
     </div>

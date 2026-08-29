@@ -35,7 +35,7 @@ export function KitabCanonicalGrid({ cards }: KitabCanonicalGridProps) {
       {cards.map((card) => (
         <div
           key={card.id}
-          className="group relative flex flex-col overflow-hidden rounded-xl border border-white/10 bg-[#040914] shadow-2xl transition-all duration-300 hover:border-blue-500/40"
+          className="group relative flex flex-col overflow-hidden rounded-xl border border-white/10 bg-card shadow-2xl transition-all duration-300 hover:border-blue-500/40"
         >
           {/* Number Badge */}
           <div className="absolute top-3 left-3 z-20 flex h-6 w-6 items-center justify-center rounded border border-amber-500/30 bg-black/50 text-[10px] font-black text-amber-400 backdrop-blur-md">
@@ -47,14 +47,14 @@ export function KitabCanonicalGrid({ cards }: KitabCanonicalGridProps) {
           </div>
 
           {/* Image Cover */}
-          <div className="relative flex h-44 w-full items-center justify-center overflow-hidden border-b border-white/5 bg-[#0A1224]">
+          <div className="relative flex h-44 w-full items-center justify-center overflow-hidden border-b border-white/5 bg-card">
             <Image
               src={card.image}
               alt={card.name}
               fill
               className="object-cover opacity-80 transition-all duration-[2s] group-hover:scale-110 group-hover:opacity-100"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#040914] to-transparent opacity-80" />
+            <div className="absolute inset-0 bg-gradient-to-t -background to-transparent opacity-80" />
           </div>
 
           {/* Card Body */}

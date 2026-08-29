@@ -148,13 +148,13 @@ export function OSHistoricalIntelligence() {
         {/* ═══ SECTION HEADER: MATCHING BLUEPRINT 06 ═════════════════════════ */}
         <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-6 xl:flex-row xl:items-end">
           <div className="max-w-3xl space-y-4">
-            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-teal-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-teal-300 uppercase shadow-[0_0_15px_rgba(20,184,166,0.3)]">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-teal-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-teal-300 uppercase shadow-sm">
               <span className="rounded-xs bg-teal-500 px-1.5 py-0.5 font-black text-black">
                 06
               </span>
               <span>HISTORICAL INTELLIGENCE</span>
             </div>
-            <h2 className="font-mono text-2xl font-black tracking-wider text-white uppercase drop-shadow-[0_0_12px_rgba(255,255,255,0.7)] sm:text-4xl">
+            <h2 className="font-mono text-2xl font-black tracking-wider text-white uppercase drop-shadow-sm sm:text-4xl">
               Timeline of Prophets, Civilizations, and Divine Events
             </h2>
           </div>
@@ -172,7 +172,7 @@ export function OSHistoricalIntelligence() {
               ].map((f, i) => (
                 <button
                   key={i}
-                  className={`border px-3 py-1.5 ${i === 0 ? "border-teal-400 bg-teal-900/40 text-teal-300 shadow-[0_0_10px_rgba(20,184,166,0.3)]" : "border-white/15 hover:border-teal-500/50"} shrink-0 rounded transition-all`}
+                  className={`border px-3 py-1.5 ${i === 0 ? "border-teal-400 bg-teal-900/40 text-teal-300 shadow-sm" : "border-white/15 hover:border-teal-500/50"} shrink-0 rounded transition-all`}
                 >
                   {f}
                 </button>
@@ -196,7 +196,7 @@ export function OSHistoricalIntelligence() {
             {/* Timeline Overview & Hologram */}
             <Panel
               accentColor="secondary"
-              className="bg-background/80 group flex cursor-pointer flex-col p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/50 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+              className="bg-background/80 group flex cursor-pointer flex-col p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/50 hover:shadow-sm"
             >
               <div className="mb-4 text-xs font-black tracking-wider text-teal-400 uppercase">
                 TIMELINE OVERVIEW
@@ -204,9 +204,9 @@ export function OSHistoricalIntelligence() {
 
               <div className="bg-radial-gradient relative mb-4 flex h-40 w-full items-center justify-center overflow-hidden rounded-full border border-teal-500/20 from-teal-900/40 to-transparent shadow-inner">
                 <div className="theme-grid-bg absolute inset-0 opacity-40 mix-blend-overlay" />
-                <Globe className="animate-spin-slow h-24 w-24 text-teal-400/50 drop-shadow-[0_0_12px_#14B8A6] filter" />
-                <div className="absolute top-1/2 left-0 h-px w-full bg-teal-400/30 shadow-[0_0_8px_#14B8A6]" />
-                <div className="absolute top-0 left-1/2 h-full w-px bg-teal-400/30 shadow-[0_0_8px_#14B8A6]" />
+                <Globe className="animate-spin-slow h-24 w-24 text-teal-400/50 drop-shadow-sm filter" />
+                <div className="absolute top-1/2 left-0 h-px w-full bg-teal-400/30 shadow-sm" />
+                <div className="absolute top-0 left-1/2 h-full w-px bg-teal-400/30 shadow-sm" />
               </div>
 
               <div className="grid grid-cols-4 gap-2 border-t border-white/10 pt-4 text-center">
@@ -258,9 +258,9 @@ export function OSHistoricalIntelligence() {
                 </div>
               </div>
               <div className="relative mt-4 h-1 w-full rounded-full bg-white/10">
-                <div className="absolute right-[5%] left-[10%] h-full bg-gradient-to-r from-teal-400 to-cyan-400 shadow-[0_0_8px_rgba(20,184,166,0.6)]" />
-                <div className="absolute top-1/2 left-[10%] h-3 w-3 -translate-y-1/2 rounded-full bg-white shadow-[0_0_10px_#FFF]" />
-                <div className="absolute top-1/2 right-[5%] h-3 w-3 -translate-y-1/2 rounded-full bg-white shadow-[0_0_10px_#FFF]" />
+                <div className="absolute right-[5%] left-[10%] h-full bg-gradient-to-r from-teal-400 to-cyan-400 shadow-sm" />
+                <div className="absolute top-1/2 left-[10%] h-3 w-3 -translate-y-1/2 rounded-full bg-white shadow-sm" />
+                <div className="absolute top-1/2 right-[5%] h-3 w-3 -translate-y-1/2 rounded-full bg-white shadow-sm" />
               </div>
             </Panel>
 
@@ -301,7 +301,7 @@ export function OSHistoricalIntelligence() {
           {/* RIGHT MAIN CAROUSELS (Col 4-12) */}
           <div className="space-y-6 lg:col-span-9">
             {/* TOP CAROUSEL: THE JOURNEY OF GUIDANCE */}
-            <div className="bg-background relative rounded-xl border-2 border-white/10 p-6 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+            <div className="bg-background relative rounded-xl border-2 border-white/10 p-6 shadow-sm">
               <div className="mb-4 flex items-center justify-between text-xs font-black tracking-widest text-primary uppercase">
                 <span>--- THE JOURNEY OF GUIDANCE ---</span>
               </div>
@@ -377,7 +377,7 @@ export function OSHistoricalIntelligence() {
             </div>
 
             {/* MIDDLE CAROUSEL: MAJOR CIVILIZATIONS */}
-            <div className="bg-background relative rounded-xl border-2 border-white/10 p-6 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+            <div className="bg-background relative rounded-xl border-2 border-white/10 p-6 shadow-sm">
               <div className="mb-4 text-xs font-black tracking-widest text-primary uppercase">
                 --- MAJOR CIVILIZATIONS & KINGDOMS ---
               </div>
@@ -431,9 +431,9 @@ export function OSHistoricalIntelligence() {
             </div>
             <div className="relative flex min-h-[140px] w-full flex-1 items-center justify-center rounded-lg border border-dashed border-teal-500/20 p-2">
               <Globe className="h-full w-full text-teal-900/30" />
-              <div className="absolute top-1/2 left-1/2 h-2 w-2 animate-ping rounded-full bg-amber-400 shadow-[0_0_10px_#F59E0B]" />
+              <div className="absolute top-1/2 left-1/2 h-2 w-2 animate-ping rounded-full bg-amber-400 shadow-sm" />
               <div
-                className="absolute top-1/3 left-1/3 h-1.5 w-1.5 animate-ping rounded-full bg-teal-400 shadow-[0_0_10px_#14B8A6]"
+                className="absolute top-1/3 left-1/3 h-1.5 w-1.5 animate-ping rounded-full bg-teal-400 shadow-sm"
                 style={{ animationDelay: "500ms" }}
               />
             </div>
@@ -442,7 +442,7 @@ export function OSHistoricalIntelligence() {
           {/* CENTER: KEY HISTORICAL EVENTS */}
           <Panel
             accentColor="primary"
-            className="bg-background/90 border border-primary/30 p-8 shadow-[0_0_50px_rgba(0,200,255,0.15)] backdrop-blur-xl"
+            className="bg-background/90 border border-primary/30 p-8 shadow-sm backdrop-blur-xl"
           >
             <div className="mb-4 text-xs font-black tracking-widest text-primary uppercase">
               --- KEY HISTORICAL EVENTS ---
@@ -455,7 +455,7 @@ export function OSHistoricalIntelligence() {
                   className="group flex cursor-pointer items-center justify-between rounded px-1.5 py-1 transition-colors hover:bg-white/5"
                 >
                   <div className="flex items-center gap-2 text-white/90">
-                    <span className="h-1.5 w-1.5 rounded-full bg-teal-400 shadow-[0_0_6px_#14B8A6] group-hover:animate-ping" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-teal-400 shadow-sm group-hover:animate-ping" />
                     <span className="truncate transition-colors group-hover:text-teal-300">
                       {evt.title}
                     </span>
@@ -495,7 +495,7 @@ export function OSHistoricalIntelligence() {
                 Indeed in the stories of the past there is a lesson for those of
                 understanding.
               </div>
-              <div className="mt-4 font-mono text-[11px] font-black text-teal-400 drop-shadow-[0_0_8px_#14B8A6]">
+              <div className="mt-4 font-mono text-[11px] font-black text-teal-400 drop-shadow-sm">
                 Qur&apos;an 12:111
               </div>
             </div>

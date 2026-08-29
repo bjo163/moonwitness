@@ -71,7 +71,7 @@ export function UpgradeCouncilTab() {
             key={req.id}
             className={`rounded-xl border bg-black/50 transition-all duration-300 ${
               isOpen
-                ? "border-yellow-400/40 shadow-[0_0_20px_rgba(255,230,0,0.08)]"
+                ? "border-yellow-400/40 shadow-sm"
                 : "border-white/10"
             }`}
           >

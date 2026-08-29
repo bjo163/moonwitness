@@ -84,7 +84,7 @@ export function PwaRegister() {
       )}
 
       {showInstallBanner && !isOffline && (
-        <div className="bg-space/90 fixed bottom-16 left-1/2 z-50 flex -translate-x-1/2 items-center gap-4 rounded-xl border border-cyan-500/30 p-4 shadow-[0_0_25px_rgba(0,240,255,0.2)] backdrop-blur-md">
+        <div className="bg-card/90 fixed bottom-16 left-1/2 z-50 flex -translate-x-1/2 items-center gap-4 rounded-xl border border-cyan-500/30 p-4 shadow-sm backdrop-blur-md">
           <div className="flex flex-col">
             <span className="font-sans text-sm font-bold tracking-wider text-white uppercase">
               Install MoonWitness OS
@@ -102,7 +102,7 @@ export function PwaRegister() {
             </button>
             <button
               onClick={handleInstallClick}
-              className="rounded bg-cyan-500 px-3 py-1 font-mono text-[10px] font-bold text-black shadow-[0_0_10px_rgba(0,240,255,0.4)] hover:bg-cyan-400"
+              className="rounded bg-cyan-500 px-3 py-1 font-mono text-[10px] font-bold text-black shadow-sm hover:bg-cyan-400"
             >
               INSTALL
             </button>

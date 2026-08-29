@@ -54,7 +54,7 @@ export function OSKnowledgeTrend() {
         {/* ═══ TOP HEADER (Blueprint 13) ══════════════════════════════════════ */}
         <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-4 xl:flex-row xl:items-center">
           <div className="flex items-center gap-4">
-            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
               <span className="rounded-xs bg-cyan-500 px-1.5 py-0.5 font-black text-black">
                 13
               </span>
@@ -159,7 +159,7 @@ export function OSKnowledgeTrend() {
               ].map((tr, i) => (
                 <div
                   key={i}
-                  className="bg-background group flex flex-col justify-between rounded-xl border border-white/10 p-3 shadow-[0_0_15px_rgba(0,0,0,0.5)] transition-colors hover:border-white/30"
+                  className="bg-background group flex flex-col justify-between rounded-xl border border-white/10 p-3 shadow-sm transition-colors hover:border-white/30"
                 >
                   <div className="mb-2 flex items-center gap-2">
                     <tr.i className="h-3.5 w-3.5" style={{ color: tr.c }} />
@@ -202,7 +202,7 @@ export function OSKnowledgeTrend() {
             <div className="flex items-center justify-between">
               <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-4 border-primary">
                 <div
-                  className="absolute inset-0 rounded-full border-[4px] border-emerald-400 border-r-transparent border-b-transparent shadow-[0_0_10px_#10B981]"
+                  className="absolute inset-0 rounded-full border-[4px] border-emerald-400 border-r-transparent border-b-transparent shadow-sm"
                   style={{ transform: "rotate(45deg)" }}
                 />
                 <div
@@ -734,14 +734,14 @@ export function OSKnowledgeTrend() {
                   stroke="#00F0FF"
                   strokeWidth="1.5"
                   strokeDasharray="2 2"
-                  className="drop-shadow-[0_0_5px_#00F0FF]"
+                  className="drop-shadow-sm"
                 />
               </svg>
             </div>
           </div>
 
           {/* AI Insight by Khidra */}
-          <div className="bg-background flex items-center gap-4 rounded-xl border-2 border-emerald-500/30 p-4 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+          <div className="bg-background flex items-center gap-4 rounded-xl border-2 border-emerald-500/30 p-4 shadow-sm">
             <div className="bg-background relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-emerald-500/50">
               <img
                 alt="Media"

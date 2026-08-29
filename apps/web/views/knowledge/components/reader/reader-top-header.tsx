@@ -18,7 +18,7 @@ export function ReaderTopHeader({
   stats,
 }: ReaderTopHeaderProps) {
   return (
-    <div className="sticky top-0 z-50 border-b border-white/10 bg-[#040914]/80 backdrop-blur-xl">
+    <div className="sticky top-0 z-50 border-b border-white/10 bg-card backdrop-blur-xl">
       <div className="flex flex-col items-start justify-between gap-4 px-6 py-4 md:flex-row md:items-center">
         <div className="max-w-2xl flex-1">
           <div className="mb-2 flex items-center gap-4">

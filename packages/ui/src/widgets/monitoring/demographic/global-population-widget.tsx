@@ -51,7 +51,7 @@ export function GlobalPopulationWidget() {
 
       <div className="flex flex-1 flex-col items-center justify-center py-4">
         <Users className="mb-2 h-8 w-8 text-white/20" />
-        <div className="font-mono text-3xl font-black tracking-widest text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+        <div className="font-mono text-3xl font-black tracking-widest text-white drop-shadow-sm">
           {population.toLocaleString("en-US")}
         </div>
         <div className="mt-1 text-[10px] font-bold tracking-widest text-primary uppercase">

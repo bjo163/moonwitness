@@ -190,7 +190,7 @@ export function RandomWarpGenerator() {
       {/* Warp Trigger Button (Task 6) */}
       <button
         onClick={triggerWarp}
-        className="btn-primary btn-primary-purple group flex items-center justify-center gap-2 px-3.5 py-1.5 text-[10px] shadow-[0_0_20px_rgba(161,0,255,0.5)] transition-all  hover:border-primary"
+        className="btn-primary btn-primary-purple group flex items-center justify-center gap-2 px-3.5 py-1.5 text-[10px] shadow-sm transition-all  hover:border-primary"
         suppressHydrationWarning
       >
         <span
@@ -216,7 +216,7 @@ export function RandomWarpGenerator() {
         createPortal(
           <div className="bg-background/95 fixed inset-0 z-[99999] flex items-center justify-center p-4 font-mono backdrop-blur-2xl">
             <div
-              className=" bg-card relative my-auto flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden border border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.35)] card-clip"
+              className=" bg-card relative my-auto flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden border border-primary/50 shadow-sm rounded-xl"
             >
               <div className="holo-scan-bar" />
 
@@ -276,12 +276,12 @@ export function RandomWarpGenerator() {
                         &ldquo;{warpData.textLatin}&rdquo;
                       </p>
 
-                      <div className="bg-background tag-clip border border-primary/20 p-3 text-xs text-foreground/90">
+                      <div className="bg-background rounded-md border border-primary/20 p-3 text-xs text-foreground/90">
                         &ldquo;{warpData.translationId}&rdquo;
                       </div>
 
                       {/* Hadith Note */}
-                      <div className="tag-clip border border-secondary/40 bg-secondary/15 p-3 text-xs text-primary">
+                      <div className="rounded-md border border-secondary/40 bg-secondary/15 p-3 text-xs text-primary">
                         <span className="mb-1 block font-bold text-accent">
                           📜 KAITAN HADITS NABAWI:
                         </span>

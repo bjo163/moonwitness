@@ -251,7 +251,7 @@ export function Cosmic3DBackground() {
       />
 
       {/* Deep Abyss Vignette Gradient for High Contrast Typography */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#030509]/30 via-transparent to-[#030509]/85" />
+      <div className="absolute inset-0 bg-gradient-to-b from-card/30 via-transparent to-background/85" />
     </div>
   )
 }

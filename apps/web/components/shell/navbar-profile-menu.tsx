@@ -36,8 +36,8 @@ export function NavbarProfileMenu({
         className="group flex items-center gap-2 font-mono text-[10px] tracking-widest uppercase transition-colors hover:text-cyan-300"
       >
         <span className="text-primary group-hover:text-cyan-400">MISSION STATUS</span>
-        <span className="flex items-center gap-1.5 font-bold text-cyan-400 drop-shadow-[0_0_5px_#00F0FF] group-hover:text-white">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400 shadow-[0_0_8px_#00F0FF] group-hover:bg-white" />
+        <span className="flex items-center gap-1.5 font-bold text-cyan-400 drop-shadow-sm group-hover:text-white">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400 shadow-sm group-hover:bg-white" />
           ONLINE
         </span>
         <span className="ml-2 rounded border border-cyan-500/30 bg-cyan-500/10 px-1.5 py-0.5 text-[8px] text-cyan-400 opacity-50 group-hover:opacity-100">
@@ -63,7 +63,7 @@ export function NavbarProfileMenu({
       </button>
 
       {profileDropdownOpen && (
-        <div className="bg-space/95 absolute top-full right-0 mt-2 w-56 rounded-xl border border-cyan-500/30 p-2 shadow-[0_10px_30px_rgba(0,0,0,0.8)] backdrop-blur-xl">
+        <div className="bg-card/95 absolute top-full right-0 mt-2 w-56 rounded-xl border border-cyan-500/30 p-2 shadow-sm backdrop-blur-xl">
           <div className="mb-2 border-b border-white/10 pb-2 pl-2 font-mono text-[9px] text-white/50 uppercase">
             SYSTEM ACTIONS
           </div>

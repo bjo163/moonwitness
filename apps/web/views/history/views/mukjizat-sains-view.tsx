@@ -86,7 +86,7 @@ export function MukjizatSainsView() {
             {SCIENCE_MIRACLES.map((sm) => (
               <div
                 key={sm.id}
-                className="bg-background tag-clip space-y-3 border border-secondary/30 p-5"
+                className="bg-background rounded-md space-y-3 border border-secondary/30 p-5"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-secondary/20 pb-2">
                   <h4 className="text-sm font-bold text-foreground">
@@ -102,7 +102,7 @@ export function MukjizatSainsView() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 pt-1 text-xs sm:grid-cols-2">
-                  <div className="bg-background tag-clip border border-secondary/20 p-3">
+                  <div className="bg-background rounded-md border border-secondary/20 p-3">
                     <p className="text-[9px] font-bold text-primary uppercase">
                       {/* PENEMUAN SAINS MODERN ({sm.discoveryYear}): */}
                     </p>
@@ -111,7 +111,7 @@ export function MukjizatSainsView() {
                     </p>
                   </div>
 
-                  <div className="bg-background tag-clip border border-secondary/20 p-3">
+                  <div className="bg-background rounded-md border border-secondary/20 p-3">
                     <p className="text-[9px] font-bold text-primary uppercase">
                       {/* ANALISIS HARMONISASI WAHYU & SAINS: */}
                     </p>

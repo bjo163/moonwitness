@@ -33,7 +33,7 @@ L.Icon.Default.mergeOptions({
 // Custom red icon for earthquakes
 const earthquakeIcon = new L.DivIcon({
   className: "bg-transparent",
-  html: `<div class="h-3 w-3 animate-ping rounded-full bg-red-500 opacity-75 shadow-[0_0_15px_#FF0055]"></div><div class="h-3 w-3 rounded-full bg-red-600 absolute top-0 left-0"></div>`,
+  html: `<div class="h-3 w-3 animate-ping rounded-full bg-red-500 opacity-75 shadow-sm"></div><div class="h-3 w-3 rounded-full bg-red-600 absolute top-0 left-0"></div>`,
   iconSize: [12, 12],
   iconAnchor: [6, 6],
 })
@@ -43,7 +43,7 @@ const issIcon = new L.DivIcon({
   className: "bg-transparent",
   html: `<div class="relative flex items-center justify-center h-8 w-8">
            <div class="absolute h-full w-full animate-spin-slow rounded-full border border-dashed border-primary/50"></div>
-           <div class="h-4 w-4 bg-primary rounded shadow-[0_0_20px_#00F0FF] animate-pulse"></div>
+           <div class="h-4 w-4 bg-primary rounded shadow-sm animate-pulse"></div>
          </div>`,
   iconSize: [32, 32],
   iconAnchor: [16, 16],
@@ -61,7 +61,7 @@ const flightIcon = (track: number) =>
 // Custom icon for Cyber Attacks
 const cyberIcon = new L.DivIcon({
   className: "bg-transparent",
-  html: `<div class="h-4 w-4 bg-purple-500 rounded-sm rotate-45 animate-pulse shadow-[0_0_10px_#A855F7]"></div>`,
+  html: `<div class="h-4 w-4 bg-purple-500 rounded-sm rotate-45 animate-pulse shadow-sm"></div>`,
   iconSize: [16, 16],
   iconAnchor: [8, 8],
 })
@@ -98,7 +98,7 @@ export function LeafletMap({
       <MapContainer
         key={mapKey}
         center={[20, 0]}
-        className="h-full w-full bg-[#0a0f18]"
+        className="h-full w-full bg-card"
         style={{ height: "100%", width: "100%" }}
         zoomControl={false}
       >

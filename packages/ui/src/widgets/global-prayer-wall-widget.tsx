@@ -59,7 +59,7 @@ export function GlobalPrayerWallWidget() {
   }
 
   return (
-    <div className="panel-box border-success/40 bg-background/95 space-y-4 border p-6 font-mono shadow-[0_0_30px_rgba(0,255,102,0.15)]">
+    <div className="rounded-xl border border-border/40 bg-card border-success/40 bg-background/95 space-y-4 border p-6 font-mono shadow-sm">
       <div className="border-success/20 flex flex-wrap items-center justify-between gap-2 border-b pb-3">
         <div className="flex items-center gap-2">
           <Globe className="text-emerald-500 h-4 w-4 animate-pulse" />
@@ -84,10 +84,9 @@ export function GlobalPrayerWallWidget() {
         <button
           onClick={handleSendPrayer}
           className="flex shrink-0 items-center gap-1.5 px-4 py-2.5 text-xs font-semibold rounded-lg bg-emerald-500/10 text-emerald-500 border border-emerald-500/40 hover:bg-emerald-500/20 transition-colors"
-          }}
         >
           <Send className="h-3.5 w-3.5" />
-          <span>KIRIM</span>
+          <span>Kirim Doa</span>
         </button>
       </div>
 
@@ -96,7 +95,7 @@ export function GlobalPrayerWallWidget() {
         {prayers.map((p) => (
           <div
             key={p.id}
-            className="bg-background border-success/20 tag-clip space-y-1 border p-3 text-xs"
+            className="bg-background border-success/20 rounded-md space-y-1 border p-3 text-xs"
           >
             <div className="flex items-center justify-between text-[9px]">
               <span className="text-success font-bold">

@@ -53,20 +53,20 @@ export function OSAnalyticsInsights() {
         {/* ═══ TOP HEADER (Blueprint 09) ══════════════════════════════════════ */}
         <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-6 lg:flex-row lg:items-end">
           <div className="max-w-xl space-y-4">
-            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-purple-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-purple-300 uppercase shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-purple-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-purple-300 uppercase shadow-sm">
               <span className="rounded-xs bg-purple-500 px-1.5 py-0.5 font-black text-black">
                 09
               </span>
               <span>ANALYTICS & INSIGHTS</span>
             </div>
-            <h2 className="font-mono text-xl font-black tracking-widest text-white uppercase drop-shadow-[0_0_12px_rgba(255,255,255,0.7)] sm:text-3xl">
+            <h2 className="font-mono text-xl font-black tracking-widest text-white uppercase drop-shadow-sm sm:text-3xl">
               Knowledge. Progress. Impact.
             </h2>
           </div>
 
           <div className="flex flex-1 flex-col items-center justify-center p-4">
             <div
-              className="font-arabic mb-2 text-sm font-bold text-primary drop-shadow-[0_0_8px_#00F0FF] md:text-base"
+              className="font-arabic mb-2 text-sm font-bold text-primary drop-shadow-sm md:text-base"
               dir="rtl"
             >
               وَقُل رَّبِّ زِدْنِي عِلْمًا
@@ -81,7 +81,7 @@ export function OSAnalyticsInsights() {
 
           <div className="flex shrink-0 items-center gap-6">
             <div className="text-right">
-              <div className="font-mono text-2xl font-black tracking-widest text-white drop-shadow-[0_0_8px_#FFF]">
+              <div className="font-mono text-2xl font-black tracking-widest text-white drop-shadow-sm">
                 {clockWIB}
               </div>
               <div className="mt-1 text-[9px] font-bold text-primary uppercase">
@@ -119,7 +119,7 @@ export function OSAnalyticsInsights() {
               TODAY'S SNAPSHOT
             </div>
 
-            <div className="bg-background flex items-start gap-3 rounded-lg border border-primary/30 p-3 shadow-[0_0_15px_rgba(0,240,255,0.1)]">
+            <div className="bg-background flex items-start gap-3 rounded-lg border border-primary/30 p-3 shadow-sm">
               <div className="shrink-0 rounded border border-primary/30 bg-primary/20 p-2 text-primary">
                 <BookOpen className="h-4 w-4" />
               </div>
@@ -137,7 +137,7 @@ export function OSAnalyticsInsights() {
               </div>
             </div>
 
-            <div className="bg-background flex items-start gap-3 rounded-lg border border-amber-500/30 p-3 shadow-[0_0_15px_rgba(245,158,11,0.1)]">
+            <div className="bg-background flex items-start gap-3 rounded-lg border border-amber-500/30 p-3 shadow-sm">
               <div className="shrink-0 rounded border border-amber-500/30 bg-amber-950/50 p-2 text-amber-400">
                 <Scroll className="h-4 w-4" />
               </div>
@@ -180,7 +180,7 @@ export function OSAnalyticsInsights() {
               </div>
             </div>
 
-            <div className="bg-background group flex cursor-pointer items-center justify-between rounded-lg border border-emerald-500/30 p-3 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+            <div className="bg-background group flex cursor-pointer items-center justify-between rounded-lg border border-emerald-500/30 p-3 shadow-sm">
               <div className="flex items-center gap-3">
                 <div className="shrink-0 rounded border border-emerald-500/30 bg-emerald-950/50 p-2 text-emerald-400">
                   <Clock className="h-4 w-4 animate-pulse" />
@@ -207,7 +207,7 @@ export function OSAnalyticsInsights() {
           </div>
 
           {/* CENTER: KNOWLEDGE PROGRESS (Col 4-8) */}
-          <div className="bg-background flex flex-col justify-between rounded-xl border-2 border-primary/30 p-6 shadow-[0_0_40px_rgba(0,240,255,0.1)] lg:col-span-5">
+          <div className="bg-background flex flex-col justify-between rounded-xl border-2 border-primary/30 p-6 shadow-sm lg:col-span-5">
             <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
               KNOWLEDGE PROGRESS
             </div>
@@ -218,7 +218,7 @@ export function OSAnalyticsInsights() {
                 {/* 3 Rings */}
                 <div className="absolute inset-0 rounded-full border-[8px] border-primary" />
                 <div
-                  className="absolute inset-0 rounded-full border-[8px] border-primary border-t-transparent border-l-transparent shadow-[0_0_20px_#00F0FF]"
+                  className="absolute inset-0 rounded-full border-[8px] border-primary border-t-transparent border-l-transparent shadow-sm"
                   style={{ transform: "rotate(45deg)" }}
                 />
                 <div
@@ -238,7 +238,7 @@ export function OSAnalyticsInsights() {
                     <br />
                     PROGRESS
                   </div>
-                  <div className="text-4xl font-black text-primary drop-shadow-[0_0_12px_#00F0FF]">
+                  <div className="text-4xl font-black text-primary drop-shadow-sm">
                     68%
                   </div>
                 </div>
@@ -352,7 +352,7 @@ export function OSAnalyticsInsights() {
                     fill="none"
                     stroke="#00F0FF"
                     strokeWidth="1.5"
-                    className="drop-shadow-[0_0_3px_#00F0FF]"
+                    className="drop-shadow-sm"
                   />
                   {/* Green line */}
                   <polyline
@@ -475,7 +475,7 @@ export function OSAnalyticsInsights() {
             </div>
 
             <div className="mb-6 flex items-center gap-4">
-              <Flame className="h-10 w-10 animate-pulse text-rose-500 drop-shadow-[0_0_10px_#F43F5E]" />
+              <Flame className="h-10 w-10 animate-pulse text-rose-500 drop-shadow-sm" />
               <div>
                 <div className="font-mono text-3xl leading-none font-black text-primary">
                   100
@@ -493,7 +493,7 @@ export function OSAnalyticsInsights() {
               {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => (
                 <div key={i} className="flex flex-col items-center gap-2">
                   <span className="text-white">{day}</span>
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500 drop-shadow-[0_0_5px_#10B981]" />
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500 drop-shadow-sm" />
                 </div>
               ))}
             </div>
@@ -511,7 +511,7 @@ export function OSAnalyticsInsights() {
             </div>
 
             <div className="flex items-center justify-between gap-4">
-              <div className="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-full border-[6px] border-primary shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+              <div className="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-full border-[6px] border-primary shadow-sm">
                 {/* 4 Colored arcs */}
                 <div
                   className="absolute inset-0 rounded-full border-[6px] border-emerald-400 border-t-transparent border-l-transparent"
@@ -571,7 +571,7 @@ export function OSAnalyticsInsights() {
           </div>
 
           {/* Panel 3: Weekly Goal */}
-          <div className="bg-background flex flex-col justify-between rounded-xl border border-emerald-500/30 p-5 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+          <div className="bg-background flex flex-col justify-between rounded-xl border border-emerald-500/30 p-5 shadow-sm">
             <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
               WEEKLY GOAL
             </div>
@@ -579,7 +579,7 @@ export function OSAnalyticsInsights() {
             <div className="flex items-center justify-between gap-4">
               <div className="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-full border-4 border-emerald-950">
                 <div
-                  className="absolute inset-0 rounded-full border-4 border-emerald-400 border-l-transparent shadow-[0_0_15px_#10B981]"
+                  className="absolute inset-0 rounded-full border-4 border-emerald-400 border-l-transparent shadow-sm"
                   style={{ transform: "rotate(-45deg)" }}
                 />
 

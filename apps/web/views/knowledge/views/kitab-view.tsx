@@ -82,7 +82,7 @@ export function KitabPortalView() {
   }))
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#040914] pb-10 font-sans text-white selection:bg-blue-500/30">
+    <div className="min-h-screen overflow-x-hidden bg-card pb-10 font-sans text-white selection:bg-blue-500/30">
       {/* Background Ambience */}
       <div className="pointer-events-none fixed inset-0 z-0">
         <div className="absolute top-0 left-1/2 h-[400px] w-full max-w-[1000px] -translate-x-1/2 rounded-full bg-blue-600/10 blur-[150px]" />
@@ -113,7 +113,7 @@ export function KitabPortalView() {
             <input
               type="text"
               placeholder="Search verses, keywords, topic across all scriptures..."
-              className="w-full rounded-full border border-white/10 bg-[#0A1224] py-2.5 pr-16 pl-11 text-xs text-white shadow-inner transition-all outline-none focus:border-blue-500/50"
+              className="w-full rounded-full border border-white/10 bg-card py-2.5 pr-16 pl-11 text-xs text-white shadow-inner transition-all outline-none focus:border-blue-500/50"
             />
             <div className="absolute top-1/2 right-4 flex -translate-y-1/2 gap-1">
               <kbd className="rounded border border-white/10 bg-white/10 px-1.5 py-0.5 text-[9px] text-white/50">

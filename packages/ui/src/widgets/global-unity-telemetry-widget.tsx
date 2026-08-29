@@ -29,7 +29,7 @@ export function GlobalUnityTelemetryWidget() {
 
   return (
     <div className="flex items-center gap-1.5 font-mono">
-      <div className="tag-clip text-success border-success/50 bg-success/10 flex items-center gap-1 border px-2 py-0.5 text-[8px] font-bold">
+      <div className="rounded-md text-success border-success/50 bg-success/10 flex items-center gap-1 border px-2 py-0.5 text-[8px] font-bold">
         <Signal className="text-success h-3 w-3 animate-pulse" />
         <span>[ UNITY SIGNAL: {unityIndex}% ]</span>
         <span className="text-primary">

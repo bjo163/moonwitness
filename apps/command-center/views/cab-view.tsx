@@ -43,7 +43,7 @@ export function ErpCabView() {
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
-      <div className="clip-hero border border-yellow-400/20 bg-card/90 p-5 shadow-sm">
+      <div className="rounded-2xl border border-yellow-400/20 bg-card/90 p-5 shadow-sm">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="font-mono text-[9px] tracking-widest text-yellow-400/50 uppercase">
@@ -94,9 +94,9 @@ export function ErpCabView() {
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={[
-              "clip-btn flex items-center gap-2 border px-4 py-2 font-mono text-[10px] font-bold tracking-widest uppercase transition-all duration-200",
+              "rounded-lg flex items-center gap-2 border px-4 py-2 font-mono text-[10px] font-bold tracking-widest uppercase transition-all duration-200",
               activeTab === tab.id
-                ? "border-yellow-400/50 bg-yellow-400/10 text-yellow-400 shadow-[0_0_15px_rgba(255,230,0,0.15)]"
+                ? "border-yellow-400/50 bg-yellow-400/10 text-yellow-400 shadow-sm"
                 : "border-border/40 text-muted-foreground hover:border-border/70 hover:text-foreground",
             ].join(" ")}
           >

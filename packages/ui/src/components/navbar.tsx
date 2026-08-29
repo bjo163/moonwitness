@@ -123,7 +123,7 @@ export function Navbar({
   }
 
   return (
-    <header className="bg-background/90 fixed inset-x-0 top-0 z-50 border-b border-cyan-500/30 font-mono text-white shadow-[0_4px_30px_rgba(0,0,0,0.85)] backdrop-blur-md select-none">
+    <header className="bg-background/90 fixed inset-x-0 top-0 z-50 border-b border-cyan-500/30 font-mono text-white shadow-sm backdrop-blur-md select-none">
       {/* Topmost Subtle Telemetry Line */}
       <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-60" />
 
@@ -133,15 +133,15 @@ export function Navbar({
           href="/home"
           className="group flex cursor-pointer items-center gap-3.5"
         >
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-full border border-cyan-400/50 bg-black/60 shadow-[0_0_15px_rgba(0,240,255,0.25)] transition-colors group-hover:border-cyan-300">
+          <div className="relative flex h-10 w-10 items-center justify-center rounded-full border border-cyan-400/50 bg-black/60 shadow-sm transition-colors group-hover:border-cyan-300">
             <div
               className="animate-spin-slow absolute h-[115%] w-[115%] rounded-full border border-dashed border-cyan-400/40"
               style={{ animationDuration: "20s" }}
             />
-            <Orbit className="h-5 w-5 text-cyan-400 drop-shadow-[0_0_8px_#00F0FF] transition-transform duration-300 group-hover:scale-110" />
+            <Orbit className="h-5 w-5 text-cyan-400 drop-shadow-sm transition-transform duration-300 group-hover:scale-110" />
           </div>
           <div>
-            <div className="text-sm font-black tracking-widest whitespace-nowrap text-white uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.7)] sm:text-base">
+            <div className="text-sm font-black tracking-widest whitespace-nowrap text-white uppercase drop-shadow-sm sm:text-base">
               MOONWITNESS OS
             </div>
             <div className="font-sans text-[9px] font-semibold tracking-[0.2em] whitespace-nowrap text-cyan-300 uppercase">
@@ -186,7 +186,7 @@ export function Navbar({
                 {((pathname === "/home" &&
                   activeSection === link.label.toLowerCase()) ||
                   (pathname !== "/home" && pathname === link.href)) && (
-                  <span className="absolute bottom-0 left-0 h-[1px] w-full bg-cyan-400 shadow-[0_0_8px_#00F0FF]" />
+                  <span className="absolute bottom-0 left-0 h-[1px] w-full bg-cyan-400 shadow-sm" />
                 )}
                 <span className="absolute bottom-0 left-0 h-[1px] w-0 bg-white opacity-50 transition-all duration-300 group-hover:w-full" />
               </Link>
@@ -194,7 +194,7 @@ export function Navbar({
               {/* Dropdown Menu (Glassmorphism) */}
               {link.subLinks && (
                 <div className="invisible absolute top-full left-0 z-50 mt-2 w-56 translate-y-2 opacity-0 transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                  <div className="bg-background/90 flex flex-col gap-1 rounded-xl border border-cyan-500/20 p-2 shadow-[0_20px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl">
+                  <div className="bg-background/90 flex flex-col gap-1 rounded-xl border border-cyan-500/20 p-2 shadow-sm backdrop-blur-xl">
                     {link.subLinks.map((sub: { label: string; href: string; icon?: string }) => (
                       <Link
                         key={sub.label}
@@ -217,14 +217,14 @@ export function Navbar({
 
         {/* RIGHT: MISSION STATUS & AUDIO WAVEFORM */}
         <div className="flex items-center gap-4">
-          <div className="bg-background/80 relative flex items-center gap-4 rounded-full border border-cyan-500/20 px-4 py-1.5 shadow-[0_0_15px_rgba(0,240,255,0.05)] backdrop-blur-md">
+          <div className="bg-background/80 relative flex items-center gap-4 rounded-full border border-cyan-500/20 px-4 py-1.5 shadow-sm backdrop-blur-md">
             {user ? (
               <>
                 <button
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                   className="group flex items-center gap-3 transition-colors hover:text-cyan-300"
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full border border-cyan-400/40 bg-cyan-950/60 font-mono text-[10px] font-bold text-cyan-300 shadow-[0_0_10px_rgba(0,240,255,0.2)]">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full border border-cyan-400/40 bg-cyan-950/60 font-mono text-[10px] font-bold text-cyan-300 shadow-sm">
                     {user.name ? user.name.substring(0, 2).toUpperCase() : "OP"}
                   </div>
                   <div className="flex flex-col items-start text-left font-mono tracking-widest uppercase">
@@ -239,7 +239,7 @@ export function Navbar({
 
                 {/* Profile Dropdown */}
                 {profileDropdownOpen && (
-                  <div className="bg-background/95 absolute top-full right-0 mt-2 w-56 rounded-xl border border-cyan-500/30 p-2 shadow-[0_10px_30px_rgba(0,0,0,0.8)] backdrop-blur-xl">
+                  <div className="bg-background/95 absolute top-full right-0 mt-2 w-56 rounded-xl border border-cyan-500/30 p-2 shadow-sm backdrop-blur-xl">
                     <div className="mb-2 border-b border-white/10 pb-2 pl-2 font-mono text-[9px] text-white/50 uppercase">
                       SYSTEM ACTIONS
                     </div>
@@ -301,8 +301,8 @@ export function Navbar({
                 <span className="text-primary group-hover:text-cyan-400">
                   MISSION STATUS
                 </span>
-                <span className="flex items-center gap-1.5 font-bold text-cyan-400 drop-shadow-[0_0_5px_#00F0FF] group-hover:text-white">
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400 shadow-[0_0_8px_#00F0FF] group-hover:bg-white" />
+                <span className="flex items-center gap-1.5 font-bold text-cyan-400 drop-shadow-sm group-hover:text-white">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400 shadow-sm group-hover:bg-white" />
                   ONLINE
                 </span>
                 <span className="ml-2 rounded border border-cyan-500/30 bg-cyan-500/10 px-1.5 py-0.5 text-[8px] text-cyan-400 opacity-50 group-hover:opacity-100">

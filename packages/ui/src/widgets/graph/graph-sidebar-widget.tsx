@@ -127,8 +127,8 @@ export function GraphSidebarWidget() {
         <div className="px-1">
           <div className="bg-background relative mb-2 h-1 rounded-full">
             <div className="absolute inset-y-0 right-[30%] left-[20%] rounded-full bg-primary" />
-            <div className="absolute top-1/2 left-[20%] h-2.5 w-2.5 -translate-y-1/2 cursor-pointer rounded-full border border-primary bg-white shadow-[0_0_5px_#00F0FF]" />
-            <div className="absolute top-1/2 right-[30%] h-2.5 w-2.5 -translate-y-1/2 cursor-pointer rounded-full border border-primary bg-white shadow-[0_0_5px_#00F0FF]" />
+            <div className="absolute top-1/2 left-[20%] h-2.5 w-2.5 -translate-y-1/2 cursor-pointer rounded-full border border-primary bg-white shadow-sm" />
+            <div className="absolute top-1/2 right-[30%] h-2.5 w-2.5 -translate-y-1/2 cursor-pointer rounded-full border border-primary bg-white shadow-sm" />
           </div>
           <div className="flex justify-between font-mono text-[8px] text-primary">
             <span>-4000</span>

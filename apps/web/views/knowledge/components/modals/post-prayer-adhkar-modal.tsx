@@ -142,7 +142,7 @@ export function PostPrayerAdhkarModal() {
           <div className="pt-2">
             <button
               onClick={handleTap}
-              className="mx-auto flex h-32 w-32 cursor-pointer flex-col items-center justify-center rounded-full border-4 border-accent bg-accent/15 shadow-[0_0_30px_rgba(255,230,0,0.3)] transition-all hover:bg-accent/30 active:scale-95"
+              className="mx-auto flex h-32 w-32 cursor-pointer flex-col items-center justify-center rounded-full border-4 border-accent bg-accent/15 shadow-sm transition-all hover:bg-accent/30 active:scale-95"
             >
               <span className="text-3xl font-black text-accent">
                 {currentCount}

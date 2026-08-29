@@ -156,13 +156,13 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
       />
 
       {/* FULL SHORT SHARE CARD */}
-      <div className=" relative space-y-6 overflow-hidden panel-glass p-6 card-clip sm:p-10">
+      <div className=" relative space-y-6 overflow-hidden rounded-xl border border-border/40 bg-card/90 p-6 rounded-xl sm:p-10">
         <div className="holo-scan-bar" />
 
         {/* Header Branding */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-primary/20 pb-4">
           <div className="flex items-center gap-3">
-            <div className="tag-clip flex h-10 w-10 items-center justify-center border border-secondary/50 bg-secondary/20 text-xl font-bold">
+            <div className="rounded-md flex h-10 w-10 items-center justify-center border border-secondary/50 bg-secondary/20 text-xl font-bold">
               🌙
             </div>
             <div>
@@ -188,7 +188,7 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
           arabicText={ayahData.textArabic}
           translation={ayahData.textId || ayahData.textEn}
         >
-          <div className="bg-background/90 space-y-4 panel-glass p-6 card-clip">
+          <div className="bg-background/90 space-y-4 rounded-xl border border-border/40 bg-card/90 p-6 rounded-xl">
             <div
               className="arabic-text py-2 text-right text-2xl leading-[2.3] font-bold text-foreground sm:text-4xl"
               style={{ textShadow: "0 0 10px rgba(0,240,255,0.15)" }}
@@ -205,13 +205,13 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
               </p>
             )}
 
-            <div className="bg-panel tag-clip border border-primary/20 p-4">
+            <div className="bg-panel rounded-md border border-primary/20 p-4">
               <p className="font-mono text-xs leading-relaxed text-foreground/90">
                 &ldquo;{ayahData.textId || ayahData.textEn}&rdquo;
               </p>
             </div>
 
-            <div className="tag-clip border border-accent/30 bg-accent/5 p-4 text-xs">
+            <div className="rounded-md border border-accent/30 bg-accent/5 p-4 text-xs">
               <div className="mb-1 flex items-center gap-2 font-bold text-accent">
                 <span>💡</span>
                 <span>DIVINE TAFSIR & LORE NOTES:</span>
@@ -227,7 +227,7 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
         {/* Asmaul Husna Pairs */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {asmaulSurah && (
-            <div className=" flex items-center justify-between panel-glass p-4 card-clip">
+            <div className=" flex items-center justify-between rounded-xl border border-border/40 bg-card/90 p-4 rounded-xl">
               <div>
                 <span className="block text-[9px] font-black text-primary uppercase">
                   ✨ SURAH PAIR RUNIC #{surahNum}
@@ -246,7 +246,7 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
           )}
 
           {asmaulAyah && (
-            <div className=" flex items-center justify-between panel-glass p-4 card-clip">
+            <div className=" flex items-center justify-between rounded-xl border border-border/40 bg-card/90 p-4 rounded-xl">
               <div>
                 <span className="block text-[9px] font-black text-primary uppercase">
                   ✨ AYAH PAIR RUNIC #{ayahNum}
@@ -267,14 +267,14 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
 
         {/* Hadith Block */}
         {hadithData && (
-          <div className=" space-y-3 panel-glass p-5 card-clip">
+          <div className=" space-y-3 rounded-xl border border-border/40 bg-card/90 p-5 rounded-xl">
             <div className="flex items-center gap-2 text-[10px] font-bold text-destructive">
               <span>⚔️</span>
               <span className="uppercase">
                 PROPHETIC COMMAND (HADITH {bookName.toUpperCase()} #
                 {hadithData.number})
               </span>
-              <span className="tag-clip bg-destructive/20 px-1 text-[8px] text-destructive">
+              <span className="rounded-md bg-destructive/20 px-1 text-[8px] text-destructive">
                 {"SHAHIH"}
               </span>
             </div>
@@ -286,7 +286,7 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
         )}
 
         {/* Universal Wisdom Block */}
-        <div className=" space-y-3 panel-glass p-5 card-clip">
+        <div className=" space-y-3 rounded-xl border border-border/40 bg-card/90 p-5 rounded-xl">
           <div className="flex items-center gap-2 text-[10px] font-bold text-secondary">
             <span>📜</span>
             <span className="uppercase">
@@ -313,7 +313,7 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
           <div className="flex gap-2">
             <Link
               href="/"
-              className="tag-clip inline-flex h-8 items-center justify-center bg-secondary/10 px-4 text-xs font-bold text-secondary transition-colors hover:bg-secondary hover:text-secondary-foreground"
+              className="rounded-md inline-flex h-8 items-center justify-center bg-secondary/10 px-4 text-xs font-bold text-secondary transition-colors hover:bg-secondary hover:text-secondary-foreground"
             >
               LAUNCH COMMAND CENTER
             </Link>

@@ -12,7 +12,7 @@ export function AsmaulHusnaActivePanel({ item }: AsmaulHusnaActivePanelProps) {
   return (
     <div className="sticky top-6 space-y-4">
       {/* Active Focus Card */}
-      <div className="relative overflow-hidden rounded-xl border border-indigo-500/30 bg-gradient-to-b from-[#101B42] to-[#080E1C] p-6 shadow-2xl">
+      <div className="relative overflow-hidden rounded-xl border border-indigo-500/30 bg-gradient-to-b from-card -background p-6 shadow-2xl">
         <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-indigo-500/10 blur-2xl" />
 
         <div className="relative z-10 text-center">
@@ -21,7 +21,7 @@ export function AsmaulHusnaActivePanel({ item }: AsmaulHusnaActivePanelProps) {
             <span>SELECTED ATTRIBUTE #{item.id}</span>
           </div>
 
-          <div className="font-arabic my-4 text-4xl text-white drop-shadow-[0_0_15px_rgba(161,0,255,0.4)]">
+          <div className="font-arabic my-4 text-4xl text-white drop-shadow-sm">
             {item.arabic}
           </div>
 
@@ -46,7 +46,7 @@ export function AsmaulHusnaActivePanel({ item }: AsmaulHusnaActivePanelProps) {
       </div>
 
       {/* Reflection Guidance */}
-      <div className="rounded-xl border border-white/10 bg-[#080E1C] p-4 font-mono text-xs shadow-lg">
+      <div className="rounded-xl border border-white/10 bg-card p-4 font-mono text-xs shadow-lg">
         <div className="mb-2 flex items-center gap-2 text-indigo-400">
           <Info className="h-4 w-4" />
           <span className="font-bold uppercase">Spiritual Reflection</span>

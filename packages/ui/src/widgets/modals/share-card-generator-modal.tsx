@@ -63,7 +63,7 @@ export function ShareCardGeneratorModal({
         maxWidth="max-w-lg"
       >
         <div className="space-y-4 p-6">
-          <div className="panel-box bg-background relative space-y-4 overflow-hidden border-2 border-primary/50 p-6 shadow-2xl">
+          <div className="rounded-xl border border-border/40 bg-card bg-background relative space-y-4 overflow-hidden border-2 border-primary/50 p-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-primary/20 pb-3">
               <div className="flex items-center gap-2">
                 <Moon className="h-5 w-5 text-primary" />
@@ -125,7 +125,7 @@ export function ShareCardGeneratorModal({
                   ctx.strokeRect(20, 20, 760, 460)
 
                   ctx.fillStyle = "#00F0FF"
-                  ctx.font = "bold 16px Orbitron, sans-serif"
+                  ctx.font = "bold 16px Geist, sans-serif"
                   ctx.fillText(
                     `MOONWITNESS TRANSMISSION // Q.S ${surahName} (${surahNumber}:${ayahNumber})`,
                     40,

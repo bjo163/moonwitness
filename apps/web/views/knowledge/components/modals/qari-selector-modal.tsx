@@ -105,9 +105,9 @@ export function QariSelectorModal() {
               <button
                 key={qari.id}
                 onClick={() => selectQari(qari.id)}
-                className={`tag-clip flex w-full items-center justify-between border p-3.5 text-left transition-all ${
+                className={`rounded-md flex w-full items-center justify-between border p-3.5 text-left transition-all ${
                   isSelected
-                    ? "bg-success/15 border-success text-white shadow-[0_0_15px_rgba(0,255,102,0.2)]"
+                    ? "bg-success/15 border-success text-white shadow-sm"
                     : "bg-background hover:border-success/50 border-primary/20 text-muted hover:text-foreground"
                 }`}
               >
@@ -126,7 +126,7 @@ export function QariSelectorModal() {
                 </div>
 
                 {isSelected && (
-                  <div className="tag-clip bg-success/20 border-success text-success flex items-center gap-1 border px-2 py-1 text-[9px] font-bold">
+                  <div className="rounded-md bg-success/20 border-success text-success flex items-center gap-1 border px-2 py-1 text-[9px] font-bold">
                     <Check className="h-3 w-3" />
                     <span>ACTIVE</span>
                   </div>

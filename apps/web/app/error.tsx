@@ -19,12 +19,12 @@ export default function GlobalError({
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-black p-4 font-mono text-cyan-500">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.1)_0%,transparent_70%)]" />
 
-      <div className="relative z-10 flex w-full max-w-lg animate-in flex-col items-center justify-center space-y-6 rounded-2xl border border-red-500/50 bg-black/60 p-8 text-center shadow-[0_0_50px_rgba(239,68,68,0.3)] backdrop-blur-xl duration-500 zoom-in">
+      <div className="relative z-10 flex w-full max-w-lg animate-in flex-col items-center justify-center space-y-6 rounded-2xl border border-red-500/50 bg-black/60 p-8 text-center shadow-sm backdrop-blur-xl duration-500 zoom-in">
         <div className="relative flex h-24 w-24 items-center justify-center">
           <div className="absolute inset-0 animate-[spin_4s_linear_infinite] rounded-full border-2 border-dashed border-red-500/50" />
           <div className="absolute inset-2 animate-[spin_3s_linear_infinite_reverse] rounded-full border border-red-500/30" />
           <div className="absolute -inset-4 animate-pulse rounded-full bg-red-500/20 blur-xl" />
-          <AlertTriangle className="relative h-10 w-10 text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,1)]" />
+          <AlertTriangle className="relative h-10 w-10 text-red-500 drop-shadow-sm" />
         </div>
 
         <div className="w-full space-y-3">
@@ -46,7 +46,7 @@ export default function GlobalError({
 
         <button
           onClick={() => reset()}
-          className="group relative flex items-center gap-2 overflow-hidden rounded border border-red-500/50 bg-red-950/30 px-8 py-3 font-bold text-red-400 transition-all hover:bg-red-900/50 hover:text-red-300 hover:shadow-[0_0_20px_rgba(239,68,68,0.5)] active:scale-95"
+          className="group relative flex items-center gap-2 overflow-hidden rounded border border-red-500/50 bg-red-950/30 px-8 py-3 font-bold text-red-400 transition-all hover:bg-red-900/50 hover:text-red-300 hover:shadow-sm active:scale-95"
         >
           <RotateCcw className="h-4 w-4 transition-transform duration-700 group-hover:-rotate-180" />
           <span className="text-xs tracking-widest uppercase">

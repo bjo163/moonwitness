@@ -42,8 +42,8 @@ export function AsbabunNuzulModal({
         maxWidth="max-w-xl"
       >
         <div className="space-y-4 p-6 text-xs">
-          <div className="bg-background tag-clip space-y-1 border border-primary/30 p-3.5">
-            <span className="tag-clip tag-clip px-2 py-0.5 text-[8px] font-bold">
+          <div className="bg-background rounded-md space-y-1 border border-primary/30 p-3.5">
+            <span className="rounded-md rounded-md px-2 py-0.5 text-[8px] font-bold">
               Q.S {surahName} ({surahNumber}:{ayahNumber})
             </span>
             <h4 className="font-sans pt-1 text-sm font-bold text-foreground">

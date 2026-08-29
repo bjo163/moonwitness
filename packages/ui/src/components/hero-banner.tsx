@@ -14,7 +14,7 @@ export function HeroBanner({
   name?: string
 }) {
   return (
-    <div className="bg-background relative mb-6 overflow-hidden rounded-2xl border border-cyan-500/20 p-6 shadow-[0_10px_30px_rgba(0,240,255,0.05)] md:p-8">
+    <div className="bg-background relative mb-6 overflow-hidden rounded-2xl border border-cyan-500/20 p-6 shadow-sm md:p-8">
       {/* Background Earth image with dark gradient overlays */}
       <div className="pointer-events-none absolute inset-0 z-0">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-screen" />
@@ -36,7 +36,7 @@ export function HeroBanner({
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="tag-clip flex items-center gap-2 border border-cyan-500/30 bg-cyan-950/40 px-3 py-1.5 backdrop-blur-md">
+            <div className="rounded-md flex items-center gap-2 border border-cyan-500/30 bg-cyan-950/40 px-3 py-1.5 backdrop-blur-md">
               <Hexagon className="h-4 w-4 text-cyan-400" />
               <span className="font-mono text-xs text-cyan-300">
                 ACTIVE SECTOR • ALPHA
@@ -46,7 +46,7 @@ export function HeroBanner({
         </div>
 
         {/* Right Side: Mission Briefing */}
-        <div className="w-full max-w-sm rounded-xl border border-cyan-500/30 bg-black/50 p-5 shadow-[0_0_30px_rgba(0,240,255,0.1)] backdrop-blur-xl transition-all hover:border-cyan-500/50 hover:shadow-[0_0_40px_rgba(0,240,255,0.2)]">
+        <div className="w-full max-w-sm rounded-xl border border-cyan-500/30 bg-black/50 p-5 shadow-sm backdrop-blur-xl transition-all hover:border-cyan-500/50 hover:shadow-sm">
           <h3 className="mb-2 font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
             Mission Briefing
           </h3>

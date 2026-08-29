@@ -88,7 +88,7 @@ export function HomeGlobalCoordinatesWidget() {
 
   return (
     <div className="flex h-full flex-col lg:col-span-3">
-      <div className="relative flex flex-1 flex-col rounded-lg border border-primary/20 bg-black/10 p-4 shadow-[inset_0_0_20px_rgba(0,255,255,0.02)] backdrop-blur-xl sm:p-5">
+      <div className="relative flex flex-1 flex-col rounded-lg border border-primary/20 bg-black/10 p-4 shadow-sm backdrop-blur-xl sm:p-5">
         <div>
           <div className="mb-3 flex items-center justify-between border-b border-white/10 pb-2.5 text-xs font-bold tracking-wider text-primary uppercase">
             <span>GLOBAL COORDINATES</span>
@@ -117,7 +117,7 @@ export function HomeGlobalCoordinatesWidget() {
               style={{ animationDuration: "2s" }}
             />
             <div className="pointer-events-none absolute top-1/2 left-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-sm border-[1.5px] border-emerald-400" />
-            <div className="pointer-events-none absolute top-1/2 left-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400 shadow-[0_0_10px_#10B981]" />
+            <div className="pointer-events-none absolute top-1/2 left-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400 shadow-sm" />
 
             <div className="absolute bottom-2 left-2 z-10 rounded border border-emerald-500/20 bg-black/60 px-1.5 py-0.5 font-mono text-[8px] text-emerald-400 backdrop-blur-md">
               LOCKED • {gpsLocation ? gpsLocation.city : "LOCATING..."}

@@ -35,7 +35,7 @@ export function ReaderNavSidebar({
 
   return (
     <div className="space-y-6 md:col-span-3 lg:col-span-2">
-      <div className="rounded-xl border border-white/5 bg-[#0A1224] p-4">
+      <div className="rounded-xl border border-white/5 bg-card p-4">
         <h3 className="mb-4 text-[10px] font-black tracking-widest text-white/40 uppercase">
           {title}
         </h3>

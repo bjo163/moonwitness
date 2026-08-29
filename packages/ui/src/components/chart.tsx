@@ -387,7 +387,7 @@ export function MetricChart({
   const maxVal = Math.max(...data.map((d) => d.value), 1)
 
   return (
-    <div className={cn("panel-box border border-primary/20 p-4 font-mono", className)}>
+    <div className={cn("rounded-xl border border-border/40 bg-card border border-primary/20 p-4 font-mono", className)}>
       {title && <div className="text-xs font-bold tracking-wider text-primary uppercase">{title}</div>}
       {subtitle && <div className="text-[10px] text-slate-400">{subtitle}</div>}
       <div className="mt-3 flex items-end gap-2" style={{ height: typeof height === "number" ? `${height}px` : undefined }}>

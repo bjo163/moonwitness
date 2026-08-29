@@ -32,7 +32,7 @@ export function RadarWarningFeed() {
   return (
     <div className="space-y-4 font-mono text-xs">
       {/* 1. Active Weather Warnings */}
-      <div className="rounded-xl border border-white/10 bg-[#080E1C] p-5 shadow-xl">
+      <div className="rounded-xl border border-white/10 bg-card p-5 shadow-xl">
         <div className="mb-3 flex items-center justify-between border-b border-white/5 pb-2">
           <div className="flex items-center gap-2">
             <AlertTriangle className="h-4 w-4 text-amber-400" />
@@ -55,7 +55,7 @@ export function RadarWarningFeed() {
       </div>
 
       {/* 2. Quranic Reflection on Winds & Clouds */}
-      <div className="rounded-xl border border-cyan-500/20 bg-gradient-to-b from-[#0C1A36] to-[#080E1C] p-5 shadow-lg">
+      <div className="rounded-xl border border-cyan-500/20 bg-gradient-to-b from-card -background p-5 shadow-lg">
         <div className="mb-2 flex items-center gap-2 text-cyan-400">
           <BookOpen className="h-4 w-4" />
           <span className="font-black uppercase">Ar-Rum (The Romans)</span>

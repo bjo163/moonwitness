@@ -40,7 +40,7 @@ export function PropheticAIConsultantModal() {
           e.stopPropagation()
           setIsOpen(true)
         }}
-        className="bg-success/20 hover:bg-success text-success border-success/60 relative z-20 mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm border px-3 py-2.5 text-xs font-bold tracking-wider uppercase shadow-[0_0_15px_rgba(0,255,102,0.2)] transition-all duration-200 hover:text-white active:scale-95"
+        className="bg-success/20 hover:bg-success text-success border-success/60 relative z-20 mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm border px-3 py-2.5 text-xs font-bold tracking-wider uppercase shadow-sm transition-all duration-200 hover:text-white active:scale-95"
       >
         <Bot className="h-4 w-4" />
         <span>[ OPEN KHIDRA AI - FULLSCREEN OVERLAY ]</span>

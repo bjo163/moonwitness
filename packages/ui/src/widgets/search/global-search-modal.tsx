@@ -223,7 +223,7 @@ export function GlobalSearchModal() {
       {/* Search Trigger Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="tag-clip flex cursor-pointer items-center gap-2 border border-primary/40 bg-primary/10 px-3 py-1.5 text-[10px] font-bold text-primary transition-all hover:bg-primary/25"
+        className="rounded-md flex cursor-pointer items-center gap-2 border border-primary/40 bg-primary/10 px-3 py-1.5 text-[10px] font-bold text-primary transition-all hover:bg-primary/25"
         title="Buka Mesin Pencari Universal (Ctrl + K)"
       >
         <Search className="h-3.5 w-3.5 text-primary" />

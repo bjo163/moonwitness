@@ -110,7 +110,7 @@ export function QuranRootMatrix({ className = "" }: { className?: string }) {
               onClick={() => setSelectedRoot(r)}
               className={`w-full p-4 rounded-xl border text-left transition-all ${
                 selectedRoot.root === r.root
-                  ? "border-cyan-400 bg-cyan-950/40 shadow-[0_0_25px_rgba(0,240,255,0.25)]"
+                  ? "border-cyan-400 bg-cyan-950/40 shadow-sm"
                   : "border-white/10 bg-card/80 hover:border-cyan-500/30"
               }`}
             >

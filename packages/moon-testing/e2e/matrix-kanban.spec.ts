@@ -23,7 +23,7 @@ test.describe('Scenario 2: Matrix Workspace & Kanban Pipeline', () => {
     await kanbanBtn.click()
 
     // Expect columns with cards
-    const columns = page.locator('.corner-box, .rounded-lg')
+    const columns = page.locator('.rounded-xl, .rounded-lg')
     await expect(columns.first()).toBeVisible()
   })
 })

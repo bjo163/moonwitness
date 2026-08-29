@@ -12,7 +12,7 @@ import {
 export function MissionCommandWidget() {
   return (
     <div className="flex flex-col gap-4 lg:col-span-4">
-      <div className="bg-background flex flex-1 flex-col rounded-xl border-2 border-primary/30 p-4 shadow-[0_0_20px_rgba(0,240,255,0.1)]">
+      <div className="bg-background flex flex-1 flex-col rounded-xl border-2 border-primary/30 p-4 shadow-sm">
         <div className="mb-4 flex items-center justify-between">
           <div>
             <div className="text-[10px] font-black tracking-widest text-primary uppercase">

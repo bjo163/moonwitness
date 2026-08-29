@@ -28,7 +28,7 @@ export function KitabAdditionalGrid({
     <div className="space-y-6">
       {/* Bottom Center 4 Metrics Panels */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="relative flex flex-col justify-center gap-2 overflow-hidden rounded-xl border border-white/5 bg-[#0A1224] p-4 shadow-lg">
+        <div className="relative flex flex-col justify-center gap-2 overflow-hidden rounded-xl border border-white/5 bg-card p-4 shadow-lg">
           <div className="absolute top-[-10%] right-[-10%] h-16 w-16 rounded-full bg-blue-500/5" />
           <div className="text-[9px] font-black tracking-widest text-white/40 uppercase">
             KEY VERSES CROSS-REFERENCES
@@ -42,7 +42,7 @@ export function KitabAdditionalGrid({
           </div>
         </div>
 
-        <div className="relative flex flex-col justify-center gap-2 overflow-hidden rounded-xl border border-white/5 bg-[#0A1224] p-4 shadow-lg">
+        <div className="relative flex flex-col justify-center gap-2 overflow-hidden rounded-xl border border-white/5 bg-card p-4 shadow-lg">
           <div className="absolute top-[-10%] right-[-10%] h-16 w-16 rounded-full bg-cyan-500/5" />
           <div className="text-[9px] font-black tracking-widest text-white/40 uppercase">
             PROPHETS MENTIONED
@@ -58,7 +58,7 @@ export function KitabAdditionalGrid({
           </div>
         </div>
 
-        <div className="relative flex flex-col justify-center gap-2 overflow-hidden rounded-xl border border-white/5 bg-[#0A1224] p-4 shadow-lg">
+        <div className="relative flex flex-col justify-center gap-2 overflow-hidden rounded-xl border border-white/5 bg-card p-4 shadow-lg">
           <Star className="absolute right-[-10%] bottom-[-20%] h-20 w-20 rotate-12 text-blue-500/5" />
           <div className="flex items-center justify-between">
             <div className="text-[9px] font-black tracking-widest text-white/40 uppercase">
@@ -80,7 +80,7 @@ export function KitabAdditionalGrid({
           </div>
         </div>
 
-        <div className="flex flex-col justify-center gap-2 rounded-xl border border-white/5 bg-[#0A1224] p-4 shadow-lg">
+        <div className="flex flex-col justify-center gap-2 rounded-xl border border-white/5 bg-card p-4 shadow-lg">
           <div className="text-[9px] font-black tracking-widest text-white/40 uppercase">
             STUDY PATH
           </div>
@@ -100,7 +100,7 @@ export function KitabAdditionalGrid({
       </div>
 
       {/* Other Sacred Scriptures */}
-      <div className="rounded-xl border border-white/5 bg-[#0A1224] p-5 shadow-lg">
+      <div className="rounded-xl border border-white/5 bg-card p-5 shadow-lg">
         <div className="mb-4 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div className="flex items-center gap-2">
             <Bookmark className="h-3 w-3 text-cyan-500" />
@@ -128,16 +128,16 @@ export function KitabAdditionalGrid({
             <Link
               href={`/knowledge/kitab/${s.id || ""}`}
               key={idx}
-              className="group relative flex h-36 cursor-pointer flex-col overflow-hidden rounded-xl border border-white/5 bg-[#040914] shadow-lg transition-all hover:border-white/20"
+              className="group relative flex h-36 cursor-pointer flex-col overflow-hidden rounded-xl border border-white/5 bg-card shadow-lg transition-all hover:border-white/20"
             >
-              <div className="absolute inset-0 z-0 h-full w-full bg-[#0A1224]">
+              <div className="absolute inset-0 z-0 h-full w-full bg-card">
                 <Image
                   src={s.image || "/cover_eastern.png"}
                   alt={s.name}
                   fill
                   className="object-cover opacity-60 transition-all duration-[2s] group-hover:scale-110 group-hover:opacity-80"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#040914] via-[#040914]/80 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t -background -background to-transparent" />
               </div>
 
               <div className="relative z-10 flex h-full w-full flex-col justify-end p-3">

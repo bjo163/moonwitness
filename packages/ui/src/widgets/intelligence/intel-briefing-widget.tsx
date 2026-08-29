@@ -50,7 +50,7 @@ export function IntelBriefingWidget() {
     <>
       <button
         onClick={generateBriefing}
-        className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-primary/50 bg-primary/10 p-4 font-black tracking-widest text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all hover:scale-[1.02] hover:bg-primary/20"
+        className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-primary/50 bg-primary/10 p-4 font-black tracking-widest text-primary uppercase shadow-sm transition-all hover:scale-[1.02] hover:bg-primary/20"
       >
         <Radio className="h-5 w-5 animate-pulse" />
         GENERATE DAILY TRANSMISSION
@@ -58,7 +58,7 @@ export function IntelBriefingWidget() {
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
-          <div className="bg-background relative flex h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border-2 border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.15)]">
+          <div className="bg-background relative flex h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border-2 border-primary/50 shadow-sm">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-white/10 bg-black/50 p-4">
               <div className="flex items-center gap-3">
@@ -106,7 +106,7 @@ export function IntelBriefingWidget() {
                 ) : (
                   <div className="prose prose-invert max-w-none text-[11px] leading-loose whitespace-pre-wrap text-white/90">
                     {imageUrl && (
-                      <div className="mb-6 overflow-hidden rounded-lg border-2 border-primary/30 shadow-[0_0_30px_rgba(0,240,255,0.2)]">
+                      <div className="mb-6 overflow-hidden rounded-lg border-2 border-primary/30 shadow-sm">
                         <img
                           src={imageUrl}
                           alt="Intel Briefing Infographic"

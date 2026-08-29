@@ -34,7 +34,7 @@ export function LunarCalendarGrid({
   onSelectDay
 }: LunarCalendarGridProps) {
   return (
-    <div className="space-y-2 rounded-xl border border-white/10 bg-[#080E1C] p-4 shadow-xl">
+    <div className="space-y-2 rounded-xl border border-white/10 bg-card p-4 shadow-xl">
       {/* Weekday headers */}
       <div className="grid grid-cols-7 gap-1 border-b border-white/10 pb-2 text-center font-mono text-[9px] font-black text-amber-400/80 uppercase">
         {WEEKDAYS.map((d, i) => (
@@ -52,10 +52,10 @@ export function LunarCalendarGrid({
               onClick={() => onSelectDay(i)}
               className={`group relative flex min-h-[72px] cursor-pointer flex-col justify-between rounded-lg border p-2 transition-all duration-200 ${
                 isSelected
-                  ? "border-amber-500 bg-[#141A2E] shadow-[0_0_15px_rgba(255,230,0,0.2)]"
+                  ? "border-amber-500 bg-muted shadow-sm"
                   : day.isAyyamulBidh
-                  ? "border-amber-500/30 bg-[#0A1224] hover:border-amber-500/60"
-                  : "border-white/5 bg-[#050B16] hover:border-white/20 hover:bg-[#0A1224]"
+                  ? "border-amber-500/30 bg-card hover:border-amber-500/60"
+                  : "border-white/5 bg-muted hover:border-white/20 hover:bg-card"
               }`}
             >
               {/* Top Numbers */}

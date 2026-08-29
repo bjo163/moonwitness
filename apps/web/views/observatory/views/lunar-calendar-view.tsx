@@ -68,7 +68,7 @@ export function LunarCalendarView() {
 
   if (isLoading || days.length === 0 || !days[0]) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#040814] font-mono text-xs tracking-widest text-amber-400">
+      <div className="flex min-h-screen items-center justify-center bg-card font-mono text-xs tracking-widest text-amber-400">
         INITIALIZING LUNAR EPHEMERIS TELEMETRY...
       </div>
     )
@@ -77,7 +77,7 @@ export function LunarCalendarView() {
   const selectedDay: LunarDayItem = days[selectedDayIndex] || days[0]!
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#040814] pb-12 font-sans text-white selection:bg-amber-500/30">
+    <div className="min-h-screen overflow-x-hidden bg-card pb-12 font-sans text-white selection:bg-amber-500/30">
       <div className="mx-auto max-w-[1800px] space-y-6 px-4 pt-6 lg:px-6">
         {/* 1. Header Hero */}
         <LunarCalendarHero

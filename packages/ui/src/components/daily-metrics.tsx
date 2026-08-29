@@ -219,7 +219,7 @@ function MoonObservatoryCard({ moon }: { moon: MoonData }) {
       </div>
       <div className="relative mb-4 flex justify-center">
         {/* Render a simple glowing moon visual */}
-        <div className="relative h-24 w-24 overflow-hidden rounded-full bg-slate-200 shadow-[0_0_30px_rgba(255,255,255,0.4)]">
+        <div className="relative h-24 w-24 overflow-hidden rounded-full bg-slate-200 shadow-sm">
           <div
             className="absolute inset-0 bg-black opacity-30"
             style={{ clipPath: "polygon(0 0, 40% 0, 70% 100%, 0 100%)" }}

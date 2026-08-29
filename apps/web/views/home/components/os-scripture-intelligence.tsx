@@ -86,13 +86,13 @@ export function OSScriptureIntelligence() {
         {/* ═══ TOP HEADER (Blueprint 08) ══════════════════════════════════════ */}
         <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-6 xl:flex-row xl:items-start">
           <div className="max-w-2xl space-y-4">
-            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
               <span className="rounded-xs bg-cyan-500 px-1.5 py-0.5 font-black text-black">
                 08
               </span>
               <span>SCRIPTURE INTELLIGENCE</span>
             </div>
-            <h2 className="font-mono text-xl font-black tracking-widest text-white uppercase drop-shadow-[0_0_12px_rgba(255,255,255,0.7)] sm:text-3xl">
+            <h2 className="font-mono text-xl font-black tracking-widest text-white uppercase drop-shadow-sm sm:text-3xl">
               THE LIVING KNOWLEDGE DATABASE
             </h2>
           </div>
@@ -129,7 +129,7 @@ export function OSScriptureIntelligence() {
                   key={i}
                   className="group flex cursor-pointer flex-col items-center gap-1.5"
                 >
-                  <div className="bg-background flex h-10 w-10 items-center justify-center rounded-full border border-white/10 transition-all group-hover:border-primary group-hover:shadow-[0_0_10px_#00F0FF]">
+                  <div className="bg-background flex h-10 w-10 items-center justify-center rounded-full border border-white/10 transition-all group-hover:border-primary group-hover:shadow-sm">
                     <t.i className="h-4 w-4 text-primary group-hover:text-primary" />
                   </div>
                   <span className="max-w-[60px] leading-tight group-hover:text-white">
@@ -175,7 +175,7 @@ export function OSScriptureIntelligence() {
           {/* CENTER: SEMANTIC SEARCH INTERFACE (Col 4-8) */}
           <div className="flex flex-col gap-4 lg:col-span-5">
             {/* Search Input Box */}
-            <div className="bg-background flex items-center rounded-lg border border-primary/50 p-1 shadow-[0_0_20px_rgba(0,240,255,0.15)]">
+            <div className="bg-background flex items-center rounded-lg border border-primary/50 p-1 shadow-sm">
               <div className="px-4">
                 <Search className="h-5 w-5 text-primary" />
               </div>
@@ -199,7 +199,7 @@ export function OSScriptureIntelligence() {
                     onClick={() => setActiveFilter(f)}
                     className={`flex items-center gap-1.5 rounded border px-3 py-1.5 transition-all ${
                       activeFilter === f
-                        ? "border-primary bg-cyan-500/20 text-primary shadow-[0_0_10px_rgba(0,240,255,0.2)]"
+                        ? "border-primary bg-cyan-500/20 text-primary shadow-sm"
                         : "bg-background border-white/15 text-primary hover:border-primary/50"
                     }`}
                   >
@@ -290,7 +290,7 @@ export function OSScriptureIntelligence() {
           {/* RIGHT SIDEBAR: AI INSIGHTS & CROSS REFERENCES (Col 9-12) */}
           <div className="flex flex-col space-y-6 lg:col-span-4">
             {/* AI INSIGHTS */}
-            <div className="bg-background flex-1 rounded-xl border-2 border-blue-500/40 p-5 shadow-[0_0_30px_rgba(59,130,246,0.15)]">
+            <div className="bg-background flex-1 rounded-xl border-2 border-blue-500/40 p-5 shadow-sm">
               <div className="mb-4 flex items-center gap-2 text-[10px] font-black tracking-widest text-blue-400 uppercase">
                 <Brain className="h-4 w-4" /> AI INSIGHTS
               </div>
@@ -331,7 +331,7 @@ export function OSScriptureIntelligence() {
               </div>
 
               {/* Glowing Brain Graphic Simulation */}
-              <div className="mt-6 flex justify-center opacity-60 mix-blend-screen drop-shadow-[0_0_15px_#3B82F6] filter">
+              <div className="mt-6 flex justify-center opacity-60 mix-blend-screen drop-shadow-sm filter">
                 <Brain className="h-24 w-24 animate-pulse text-blue-500/50" />
               </div>
 
@@ -341,7 +341,7 @@ export function OSScriptureIntelligence() {
             </div>
 
             {/* CROSS REFERENCES */}
-            <div className="bg-background rounded-xl border border-emerald-500/40 p-5 shadow-[0_0_30px_rgba(16,185,129,0.1)]">
+            <div className="bg-background rounded-xl border border-emerald-500/40 p-5 shadow-sm">
               <div className="mb-4 flex items-center gap-2 text-[10px] font-black tracking-widest text-emerald-400 uppercase">
                 <Network className="h-4 w-4" /> CROSS REFERENCES
               </div>
@@ -351,7 +351,7 @@ export function OSScriptureIntelligence() {
                 <div className="theme-grid-bg absolute inset-0 opacity-20" />
 
                 {/* Center Node */}
-                <div className="bg-background absolute z-20 flex h-16 w-16 flex-col items-center justify-center rounded-full border-2 border-primary shadow-[0_0_20px_#00F0FF]">
+                <div className="bg-background absolute z-20 flex h-16 w-16 flex-col items-center justify-center rounded-full border-2 border-primary shadow-sm">
                   <span className="text-[9px] font-black text-white">
                     MERCY
                   </span>
@@ -467,7 +467,7 @@ export function OSScriptureIntelligence() {
                 </div>
                 <div className="text-[10px] text-white">The Most Merciful</div>
               </div>
-              <div className="font-arabic text-2xl text-emerald-500 drop-shadow-[0_0_8px_#10B981]">
+              <div className="font-arabic text-2xl text-emerald-500 drop-shadow-sm">
                 الرَّحْمَٰنُ
               </div>
             </div>
@@ -496,7 +496,7 @@ export function OSScriptureIntelligence() {
                 68%
               </div>
             </div>
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-4 border-primary/20 border-t-cyan-400 shadow-[0_0_15px_#00F0FF]">
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-4 border-primary/20 border-t-cyan-400 shadow-sm">
               <PieChart className="h-6 w-6 text-primary" />
             </div>
           </div>

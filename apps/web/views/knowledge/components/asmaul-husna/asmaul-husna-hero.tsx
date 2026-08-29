@@ -42,7 +42,7 @@ export function AsmaulHusnaHero({
             </div>
             <div>STATUS: SYNCHRONIZED</div>
           </div>
-          <div className="font-arabic text-xl text-indigo-300 drop-shadow-[0_0_10px_rgba(161,0,255,0.3)]">
+          <div className="font-arabic text-xl text-indigo-300 drop-shadow-sm">
             وَلِلَّهِ الْأَسْمَاءُ الْحُسْنَىٰ فَادْعُوهُ بِهَا
           </div>
         </div>
@@ -57,12 +57,12 @@ export function AsmaulHusnaHero({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search divine name in Arabic, transliteration, or meaning..."
-            className="w-full rounded-xl border border-white/10 bg-[#080E1C] py-2.5 pr-4 pl-10 text-xs text-white placeholder-white/30 transition-all outline-none focus:border-indigo-500/50 focus:bg-[#0B1528]"
+            className="w-full rounded-xl border border-white/10 bg-card py-2.5 pr-4 pl-10 text-xs text-white placeholder-white/30 transition-all outline-none focus:border-indigo-500/50 focus:bg-card"
           />
         </div>
 
         <div className="flex items-center gap-3 font-mono text-xs text-white/60">
-          <div className="flex items-center gap-1.5 rounded-lg border border-white/5 bg-[#080E1C] px-3 py-2 text-[10px]">
+          <div className="flex items-center gap-1.5 rounded-lg border border-white/5 bg-card px-3 py-2 text-[10px]">
             <Database className="h-3.5 w-3.5 text-indigo-400" />
             <span>TOTAL: <strong className="text-white">{totalCount} NAMES</strong></span>
           </div>

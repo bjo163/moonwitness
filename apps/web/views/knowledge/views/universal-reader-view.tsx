@@ -132,7 +132,7 @@ function ReaderContent({ id }: { id: string }) {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center space-y-4 bg-[#040914] text-white/50">
+      <div className="flex min-h-screen flex-col items-center justify-center space-y-4 bg-card text-white/50">
         <BookOpen className="h-8 w-8 animate-pulse text-blue-500/50" />
         <div className="text-xs font-bold tracking-widest uppercase">
           Unlocking Divine Codex...
@@ -143,7 +143,7 @@ function ReaderContent({ id }: { id: string }) {
 
   if (!payload) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center space-y-4 bg-[#040914] text-white">
+      <div className="flex min-h-screen flex-col items-center justify-center space-y-4 bg-card text-white">
         <p>{error || 'Error loading scripture.'}</p>
         <button
           onClick={() => router.back()}
@@ -193,7 +193,7 @@ function ReaderContent({ id }: { id: string }) {
   }
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#040914] font-sans text-white">
+    <div className="min-h-screen overflow-x-hidden bg-card font-sans text-white">
       {/* 1. TOP HEADER SECTION */}
       <ReaderTopHeader
         scriptureName={scripture_name}
@@ -242,7 +242,7 @@ export function UniversalReaderView({ id }: { id: string }) {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#040914] p-8 text-white">
+        <div className="min-h-screen bg-card p-8 text-white">
           Loading Reader...
         </div>
       }

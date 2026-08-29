@@ -17,7 +17,7 @@ type HadithItem = { text: string; reference: string }
 export function GraphEntityPanelWidget() {
   const { data, loading } = useKnowledgeGraph()
   return (
-    <div className="bg-background flex w-full shrink-0 flex-col overflow-hidden rounded-xl border border-primary/30 shadow-[0_0_20px_rgba(0,240,255,0.05)] lg:w-80">
+    <div className="bg-background flex w-full shrink-0 flex-col overflow-hidden rounded-xl border border-primary/30 shadow-sm lg:w-80">
       {/* Header */}
       <div className="flex items-start justify-between border-b border-white/10 p-4">
         <div>

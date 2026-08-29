@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Moon, Sun } from "lucide-react"
+import { Moon, Sun, Laptop } from "lucide-react"
 import { useTheme } from "next-themes"
 import { Button } from "./button"
 import { cn } from "../lib/utils"
@@ -19,9 +19,14 @@ export function ThemeToggle({ className, size = "icon-sm", ...props }: ThemeTogg
     setMounted(true)
   }, [])
 
-  const toggleTheme = () => {
-    const nextTheme = (resolvedTheme === "dark" || theme === "dark") ? "light" : "dark"
-    setTheme(nextTheme)
+  const cycleTheme = () => {
+    if (theme === "system") {
+      setTheme("light")
+    } else if (theme === "light") {
+      setTheme("dark")
+    } else {
+      setTheme("system")
+    }
   }
 
   if (!mounted) {
@@ -29,7 +34,7 @@ export function ThemeToggle({ className, size = "icon-sm", ...props }: ThemeTogg
       <Button
         variant="outline"
         size={size}
-        className={cn("rounded-lg border-border/40 bg-card/60 text-muted-foreground", className)}
+        className={cn("rounded-lg border-border bg-card text-muted-foreground", className)}
         aria-label="Toggle theme"
         disabled
       >
@@ -38,22 +43,26 @@ export function ThemeToggle({ className, size = "icon-sm", ...props }: ThemeTogg
     )
   }
 
-  const isDark = resolvedTheme === "dark" || theme === "dark"
-
   return (
     <Button
       variant="outline"
       size={size}
-      onClick={toggleTheme}
+      onClick={cycleTheme}
       className={cn(
-        "relative rounded-lg border-border/40 bg-card/60 text-foreground transition-all hover:border-primary/50 hover:bg-accent",
+        "relative rounded-lg border-border bg-card text-foreground transition-all hover:bg-accent hover:text-accent-foreground",
         className
       )}
-      aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
-      title={`Switch to ${isDark ? "Light" : "Dark"} Mode (Press D)`}
+      aria-label={`Theme: ${theme}. Click to switch theme (Light / Dark / System)`}
+      title={`Theme: ${theme || "system"} (Click to switch)`}
+      {...props}
     >
-      <Sun className="size-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-amber-500" />
-      <Moon className="absolute size-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-primary" />
+      {theme === "system" ? (
+        <Laptop className="size-4 text-muted-foreground" />
+      ) : resolvedTheme === "dark" ? (
+        <Moon className="size-4 text-primary" />
+      ) : (
+        <Sun className="size-4 text-amber-500" />
+      )}
       <span className="sr-only">Toggle theme</span>
     </Button>
   )

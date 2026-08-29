@@ -55,34 +55,34 @@ const COMMAND_DELAY_MS = 250
 
 function ConsoleHeader() {
   return (
-    <header className="flex flex-col gap-4 border-b border-cyan-500/30 pb-5 md:flex-row md:items-center md:justify-between">
+    <header className="flex flex-col gap-4 border-b border-border/40 pb-5 md:flex-row md:items-center md:justify-between">
       <div className="flex items-center gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-cyan-500/40 bg-cyan-500/10 shadow-[0_0_20px_rgba(6,182,212,0.25)]">
-          <Terminal className="h-6 w-6 animate-pulse text-cyan-400" />
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-primary/40 bg-primary/10 shadow-sm">
+          <Terminal className="h-6 w-6 text-primary" />
         </div>
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold tracking-[0.15em] text-foreground uppercase md:text-2xl">
-              DEV COMMAND SHELL
+            <h1 className="text-xl font-bold text-foreground md:text-2xl">
+              Developer Console
             </h1>
-            <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 font-mono text-[9px] tracking-widest text-emerald-400 uppercase shadow-[0_0_10px_rgba(16,185,129,0.2)]">
-              LIVE DIAGNOSTIC
+            <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 font-sans text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+              System Health
             </span>
           </div>
-          <p className="mt-1 font-mono text-[11px] tracking-widest text-muted-foreground uppercase">
-            MOONWITNESS OS SYSTEM SHELL & AI DIRECTIVES
+          <p className="mt-1 font-sans text-xs text-muted-foreground">
+            System Diagnostics & Administration Tools
           </p>
         </div>
       </div>
 
       <div className="flex items-center gap-3">
-        <div className="hidden items-center gap-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 font-mono text-xs text-purple-300 lg:flex">
-          <Sparkles className="h-4 w-4 text-purple-400" />
-          <span>KHIDRA ENGINE v9.5 (ONLINE)</span>
+        <div className="hidden items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 font-sans text-xs text-muted-foreground lg:flex">
+          <Sparkles className="h-4 w-4 text-primary" />
+          <span>Khidra Intelligence Engine</span>
         </div>
         <Button
           variant="secondary"
-          className="border border-border/50 font-mono text-xs hover:bg-secondary"
+          className="border border-border/50 text-xs hover:bg-secondary"
           onClick={() => {
             window.location.href = "/home"
           }}
@@ -96,15 +96,15 @@ function ConsoleHeader() {
 
 function ConsoleQuickCommands({ onSelect }: { onSelect: (cmd: string) => void }) {
   return (
-    <div className="flex flex-wrap items-center gap-2 border-b border-cyan-500/20 bg-black/40 px-4 py-2.5">
-      <span className="mr-2 font-mono text-[10px] tracking-widest text-cyan-400/60 uppercase">
-        QUICK DIRECTIVES:
+    <div className="flex flex-wrap items-center gap-2 border-b border-border/40 bg-muted/30 px-4 py-2.5">
+      <span className="mr-2 text-xs font-medium text-muted-foreground">
+        Quick Actions:
       </span>
       {QUICK_COMMANDS.map((item) => (
         <button
           key={item.cmd}
           onClick={() => onSelect(item.cmd)}
-          className="group flex items-center gap-1.5 rounded border border-cyan-500/30 bg-cyan-950/40 px-2.5 py-1 font-mono text-[11px] text-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.05)] transition-all hover:border-cyan-400 hover:bg-cyan-500/20 hover:text-white"
+          className="group flex items-center gap-1.5 rounded border border-cyan-500/30 bg-cyan-950/40 px-2.5 py-1 font-mono text-[11px] text-cyan-300 shadow-sm transition-all hover:border-cyan-400 hover:bg-cyan-500/20 hover:text-white"
         >
           <Zap className="h-3 w-3 text-cyan-400 transition-transform group-hover:scale-110" />
           <span className="font-bold">{item.label}</span>

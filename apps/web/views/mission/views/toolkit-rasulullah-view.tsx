@@ -128,7 +128,7 @@ export function ToolkitRasulullahView() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 pt-1 text-xs sm:grid-cols-2">
-                  <div className="bg-background border-success/20 tag-clip border p-3">
+                  <div className="bg-background border-success/20 rounded-md border p-3">
                     <p className="text-[9px] font-bold text-primary uppercase">
                       {/* FRAMEWORK OPERASIONAL: */}
                     </p>
@@ -137,7 +137,7 @@ export function ToolkitRasulullahView() {
                     </p>
                   </div>
 
-                  <div className="bg-background border-success/20 tag-clip flex flex-col justify-between border p-3">
+                  <div className="bg-background border-success/20 rounded-md flex flex-col justify-between border p-3">
                     <div>
                       <p className="text-[9px] font-bold text-primary uppercase">
                         {/* INSTRUMEN AKSI: */}

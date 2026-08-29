@@ -154,9 +154,9 @@ export function TasbihView() {
                   setActiveZikr(item)
                   setCount(0)
                 }}
-                className={`tag-clip border p-3 text-center transition-all ${
+                className={`rounded-md border p-3 text-center transition-all ${
                   isSelected
-                    ? "bg-success/20 border-success text-white shadow-[0_0_15px_rgba(0,255,102,0.3)]"
+                    ? "bg-success/20 border-success text-white shadow-sm"
                     : "bg-background border-primary/20 text-primary hover:text-white"
                 }`}
               >
@@ -170,7 +170,7 @@ export function TasbihView() {
         </div>
 
         {/* Main Interactive Counter HUD Console */}
-        <div className="rounded-xl border border-border/40 bg-card/90 border-success/50 bg-background/95 space-y-6 border p-8 text-center shadow-[0_0_40px_rgba(0,255,102,0.2)]">
+        <div className="rounded-xl border border-border/40 bg-card/90 border-success/50 bg-background/95 space-y-6 border p-8 text-center shadow-sm">
           {/* Target Selector */}
           <div className="border-success/20 flex items-center justify-between border-b pb-4 text-xs font-bold">
             <div className="flex items-center gap-2 text-primary">
@@ -186,7 +186,7 @@ export function TasbihView() {
                     setTargetCount(tVal)
                     setCount(0)
                   }}
-                  className={`tag-clip px-3 py-1 text-xs font-bold transition-all ${
+                  className={`rounded-md px-3 py-1 text-xs font-bold transition-all ${
                     targetCount === tVal
                       ? "bg-success font-black text-black"
                       : "bg-background border-success/30 border text-primary"
@@ -214,7 +214,7 @@ export function TasbihView() {
           {/* Giant Click Counter Button */}
           <button
             onClick={handleIncrement}
-            className="bg-success/10 border-success hover:bg-success/25 mx-auto flex h-48 w-48 cursor-pointer flex-col items-center justify-center space-y-1 rounded-full border-4 shadow-[0_0_30px_rgba(0,255,102,0.4)] transition-all select-none active:scale-95"
+            className="bg-success/10 border-success hover:bg-success/25 mx-auto flex h-48 w-48 cursor-pointer flex-col items-center justify-center space-y-1 rounded-full border-4 shadow-sm transition-all select-none active:scale-95"
           >
             <span className="text-success font-sans text-5xl font-black">
               {count}

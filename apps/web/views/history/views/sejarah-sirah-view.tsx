@@ -103,7 +103,7 @@ export function SejarahSirahView() {
 
         {/* Selected Event Telemetry Panel */}
         {selectedEvent && (
-          <div className="rounded-xl border border-border/40 bg-card/90 bg-background/95 space-y-4 border border-primary/50 p-6 shadow-[0_0_30px_rgba(0,240,255,0.2)]">
+          <div className="rounded-xl border border-border/40 bg-card/90 bg-background/95 space-y-4 border border-primary/50 p-6 shadow-sm">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-primary/20 pb-3">
               <div className="font-sans flex items-center gap-2">
                 <MapPin className="text-success h-5 w-5" />
@@ -117,7 +117,7 @@ export function SejarahSirahView() {
             </div>
 
             <div className="grid grid-cols-1 gap-3 text-xs sm:grid-cols-2">
-              <div className="bg-background tag-clip border border-primary/20 p-3">
+              <div className="bg-background rounded-md border border-primary/20 p-3">
                 <span className="block text-[9px] text-primary">
                   {/* LOKASI GEOGRAFIS */}
                 </span>
@@ -129,7 +129,7 @@ export function SejarahSirahView() {
                 </span>
               </div>
 
-              <div className="bg-background tag-clip border border-primary/20 p-3">
+              <div className="bg-background rounded-md border border-primary/20 p-3">
                 <span className="block text-[9px] text-primary">
                   {/* RUJUKAN AYAT & MANUSKRIP */}
                 </span>
@@ -161,14 +161,14 @@ export function SejarahSirahView() {
                 <button
                   key={idx}
                   onClick={() => setSelectedEvent(ev)}
-                  className={`tag-clip flex w-full items-center justify-between border p-4 text-left transition-all ${
+                  className={`rounded-md flex w-full items-center justify-between border p-4 text-left transition-all ${
                     isSelected
-                      ? "border-primary bg-primary/20 text-white shadow-[0_0_15px_rgba(0,240,255,0.3)]"
+                      ? "border-primary bg-primary/20 text-white shadow-sm"
                       : "bg-background border-primary/20 text-primary hover:border-primary/60 hover:text-white"
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="tag-clip bg-panel border border-primary/40 px-2.5 py-1 text-xs font-bold text-primary">
+                    <div className="rounded-md bg-panel border border-primary/40 px-2.5 py-1 text-xs font-bold text-primary">
                       #{idx + 1}
                     </div>
                     <div>
@@ -181,7 +181,7 @@ export function SejarahSirahView() {
                     </div>
                   </div>
 
-                  <span className="tag-clip tag-clip px-2 py-0.5 text-[8px] font-bold">
+                  <span className="rounded-md rounded-md px-2 py-0.5 text-[8px] font-bold">
                     {ev.category}
                   </span>
                 </button>

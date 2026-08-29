@@ -6,6 +6,9 @@
  * If no manifest is provided, the engine auto-generates views from field definitions.
  */
 
+/** Model record representation */
+export type ModelRecord = Record<string, any>
+
 /** Available view modes in the Cosmic Matrix Engine */
 export type MatrixViewMode = 'table' | 'kanban' | 'metrics'
 

@@ -45,7 +45,7 @@ export function SubNavigation({ links }: SubNavigationProps) {
   const pathname = usePathname()
 
   return (
-    <div className="bg-space/80 sticky top-16 z-40 w-full border-b border-white/5 backdrop-blur-md">
+    <div className="bg-card/80 sticky top-16 z-40 w-full border-b border-white/5 backdrop-blur-md">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <nav className="scrollbar-hide flex snap-x snap-mandatory items-center gap-2 overflow-x-auto py-3">
           {links.map((link) => {
@@ -62,7 +62,7 @@ export function SubNavigation({ links }: SubNavigationProps) {
                 href={link.href}
                 className={`group flex shrink-0 snap-start items-center gap-2.5 rounded px-4 py-2 transition-all duration-300 ${
                   isActive
-                    ? "border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 shadow-[0_0_15px_rgba(0,240,255,0.15)]"
+                    ? "border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 shadow-sm"
                     : "border border-transparent text-primary hover:bg-white/5 hover:text-primary"
                 } `}
               >

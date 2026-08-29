@@ -15,7 +15,7 @@ export function LunarTelemetryPanel({ day }: LunarTelemetryPanelProps) {
   return (
     <div className="space-y-4">
       {/* Active Phase Card */}
-      <div className="relative overflow-hidden rounded-xl border border-amber-500/30 bg-gradient-to-b from-[#141C36] to-[#080E1C] p-6 shadow-xl">
+      <div className="relative overflow-hidden rounded-xl border border-amber-500/30 bg-gradient-to-b from-card -background p-6 shadow-xl">
         <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-amber-500/10 blur-2xl" />
 
         <div className="relative z-10 text-center flex flex-col items-center">
@@ -83,7 +83,7 @@ export function LunarTelemetryPanel({ day }: LunarTelemetryPanelProps) {
       )}
 
       {/* Celestial Guidance Quote */}
-      <div className="rounded-xl border border-white/10 bg-[#080E1C] p-4 text-center font-mono text-[10px]">
+      <div className="rounded-xl border border-white/10 bg-card p-4 text-center font-mono text-[10px]">
         <div className="font-arabic mb-2 text-lg text-amber-400">
           وَالْقَمَرَ قَدَّرْنَاهُ مَنَازِلَ حَتَّىٰ عَادَ كَالْعُرْجُونِ الْقَدِيمِ
         </div>

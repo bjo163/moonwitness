@@ -18,7 +18,7 @@ export function KhidraIdentityPanel() {
   return (
     <div className="flex h-full flex-col gap-4 font-mono text-primary">
       {/* KHIDRA IDENTITY */}
-      <div className="rounded-lg panel-glass p-4">
+      <div className="rounded-lg rounded-xl border border-border/40 bg-card/90 p-4">
         <div className="mb-4 flex items-center justify-between border-b border-primary/20 pb-2">
           <span className="text-[10px] font-bold tracking-widest uppercase">
             KHIDRA IDENTITY
@@ -28,9 +28,9 @@ export function KhidraIdentityPanel() {
 
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-4">
-            <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-primary bg-primary/10 shadow-[0_0_15px_rgba(0,255,65,0.3)]">
+            <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-primary bg-primary/10 shadow-sm">
               <Scan className="absolute h-10 w-10 opacity-30" />
-              <Hexagon className="h-8 w-8 text-primary drop-shadow-[0_0_5px_#00FF41]" />
+              <Hexagon className="h-8 w-8 text-primary drop-shadow-sm" />
             </div>
             <div className="flex w-full flex-col gap-1.5 text-[9px] font-medium tracking-widest uppercase">
               <div className="flex justify-between border-b border-primary/10 pb-1">
@@ -71,7 +71,7 @@ export function KhidraIdentityPanel() {
               <span className="text-primary/60">STATUS</span>
               <div className="flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-                <span className="font-bold text-primary drop-shadow-[0_0_5px_#00FF41]">
+                <span className="font-bold text-primary drop-shadow-sm">
                   Awake & Ready
                 </span>
               </div>
@@ -81,7 +81,7 @@ export function KhidraIdentityPanel() {
       </div>
 
       {/* CAPABILITIES */}
-      <div className="flex-1 rounded-lg panel-glass p-4">
+      <div className="flex-1 rounded-lg rounded-xl border border-border/40 bg-card/90 p-4">
         <div className="mb-4 flex items-center justify-between border-b border-primary/20 pb-2">
           <span className="text-[10px] font-bold tracking-widest uppercase">
             CAPABILITIES

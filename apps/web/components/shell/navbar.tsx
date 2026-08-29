@@ -120,7 +120,7 @@ export function Navbar({
   }
 
   return (
-    <header className="bg-space/90 fixed inset-x-0 top-0 z-50 border-b border-cyan-500/30 font-mono text-white shadow-[0_4px_30px_rgba(0,0,0,0.85)] backdrop-blur-md select-none">
+    <header className="bg-card/90 fixed inset-x-0 top-0 z-50 border-b border-cyan-500/30 font-mono text-white shadow-sm backdrop-blur-md select-none">
       {/* Topmost Subtle Telemetry Line */}
       <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-60" />
 
@@ -130,15 +130,15 @@ export function Navbar({
           href="/home"
           className="group flex cursor-pointer items-center gap-3.5"
         >
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-full border border-cyan-400/50 bg-black/60 shadow-[0_0_15px_rgba(0,240,255,0.25)] transition-colors group-hover:border-cyan-300">
+          <div className="relative flex h-10 w-10 items-center justify-center rounded-full border border-cyan-400/50 bg-black/60 shadow-sm transition-colors group-hover:border-cyan-300">
             <div
               className="animate-spin-slow absolute h-[115%] w-[115%] rounded-full border border-dashed border-cyan-400/40"
               style={{ animationDuration: "20s" }}
             />
-            <Orbit className="h-5 w-5 text-cyan-400 drop-shadow-[0_0_8px_#00F0FF] transition-transform duration-300 group-hover:scale-110" />
+            <Orbit className="h-5 w-5 text-cyan-400 drop-shadow-sm transition-transform duration-300 group-hover:scale-110" />
           </div>
           <div>
-            <div className="text-sm font-black tracking-widest whitespace-nowrap text-white uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.7)] sm:text-base">
+            <div className="text-sm font-black tracking-widest whitespace-nowrap text-white uppercase drop-shadow-sm sm:text-base">
               MOONWITNESS OS
             </div>
             <div className="font-sans text-[9px] font-semibold tracking-[0.2em] whitespace-nowrap text-cyan-300 uppercase">
@@ -183,7 +183,7 @@ export function Navbar({
                 {((pathname === "/home" &&
                   activeSection === link.label.toLowerCase()) ||
                   (pathname !== "/home" && pathname === link.href)) && (
-                  <span className="absolute bottom-0 left-0 h-[1px] w-full bg-cyan-400 shadow-[0_0_8px_#00F0FF]" />
+                  <span className="absolute bottom-0 left-0 h-[1px] w-full bg-cyan-400 shadow-sm" />
                 )}
                 <span className="absolute bottom-0 left-0 h-[1px] w-0 bg-white opacity-50 transition-all duration-300 group-hover:w-full" />
               </Link>
@@ -191,7 +191,7 @@ export function Navbar({
               {/* Dropdown Menu (Glassmorphism) */}
               {link.subLinks && (
                 <div className="invisible absolute top-full left-0 z-50 mt-2 w-56 translate-y-2 opacity-0 transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                  <div className="bg-space/90 flex flex-col gap-1 rounded-xl border border-cyan-500/20 p-2 shadow-[0_20px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl">
+                  <div className="bg-card/90 flex flex-col gap-1 rounded-xl border border-cyan-500/20 p-2 shadow-sm backdrop-blur-xl">
                     {link.subLinks.map((sub) => (
                       <Link
                         key={sub.label}
@@ -218,7 +218,7 @@ export function Navbar({
             <GlobalSearchModal />
           </div>
           <NotificationBell />
-          <div className="bg-space/80 relative flex items-center gap-4 rounded-full border border-cyan-500/20 px-4 py-1.5 shadow-[0_0_15px_rgba(0,240,255,0.05)] backdrop-blur-md">
+          <div className="bg-card/80 relative flex items-center gap-4 rounded-full border border-cyan-500/20 px-4 py-1.5 shadow-sm backdrop-blur-md">
             <NavbarProfileMenu
               userProfile={userProfile}
               profileDropdownOpen={profileDropdownOpen}
@@ -268,7 +268,7 @@ export function Navbar({
 
       {/* Mobile Nav Overlay */}
       {mobileMenuOpen && (
-        <div className="bg-space animate-in space-y-4 border-t border-cyan-500/30 p-6 shadow-2xl duration-200 fade-in lg:hidden">
+        <div className="bg-card animate-in space-y-4 border-t border-cyan-500/30 p-6 shadow-2xl duration-200 fade-in lg:hidden">
           <div className="flex flex-col gap-3 text-xs font-bold tracking-widest uppercase">
             {navLinks.map((link) => (
               <div key={link.label} className="flex flex-col gap-2">

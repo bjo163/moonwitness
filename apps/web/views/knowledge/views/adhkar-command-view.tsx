@@ -94,8 +94,8 @@ export function AdhkarCommandView() {
     <div className="mx-auto w-full max-w-7xl px-4 pt-6 pb-20 font-sans sm:px-6 lg:px-8">
       {/* Header */}
       <div className="mb-10 text-center">
-        <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-cyan-500/30 bg-black/40 shadow-[0_0_20px_rgba(0,240,255,0.15)] backdrop-blur-xl">
-          <Shield className="h-8 w-8 text-cyan-400 drop-shadow-[0_0_8px_#00F0FF]" />
+        <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-cyan-500/30 bg-black/40 shadow-sm backdrop-blur-xl">
+          <Shield className="h-8 w-8 text-cyan-400 drop-shadow-sm" />
         </div>
         <h1 className="mt-6 text-3xl font-black tracking-widest text-white uppercase drop-shadow-md sm:text-4xl">
           Adhkar Command Center
@@ -116,7 +116,7 @@ export function AdhkarCommandView() {
               onClick={() => setActiveCategory(cat.id)}
               className={`flex shrink-0 snap-center items-center gap-2 rounded-full border px-5 py-2.5 text-[10px] font-bold tracking-widest uppercase transition-all ${
                 isActive
-                  ? "border-cyan-400 bg-cyan-500/20 text-cyan-300 shadow-[0_0_15px_rgba(0,240,255,0.2)]"
+                  ? "border-cyan-400 bg-cyan-500/20 text-cyan-300 shadow-sm"
                   : "border-white/10 bg-black/40 text-slate-400 hover:border-cyan-500/30 hover:text-cyan-400"
               }`}
             >
@@ -130,7 +130,7 @@ export function AdhkarCommandView() {
       {/* Dzikir Counter Modal (Active State) */}
       {activeDzikir && (
         <div className="fixed inset-0 z-[100] flex animate-in items-center justify-center bg-black/80 p-2 backdrop-blur-md duration-300 fade-in zoom-in sm:p-4">
-          <div className="hide-scrollbar bg-background/95 relative max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-cyan-500/30 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)] sm:p-8">
+          <div className="hide-scrollbar bg-background/95 relative max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-cyan-500/30 p-6 shadow-sm sm:p-8">
             <button
               onClick={() => {
                 setActiveDzikir(null)
@@ -152,7 +152,7 @@ export function AdhkarCommandView() {
 
             <div className="mb-10 text-center">
               <p
-                className="font-arabic text-4xl leading-relaxed text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] sm:text-5xl"
+                className="font-arabic text-4xl leading-relaxed text-white drop-shadow-sm sm:text-5xl"
                 dir="rtl"
               >
                 {activeDzikir.text_arabic}
@@ -170,8 +170,8 @@ export function AdhkarCommandView() {
                 onClick={handleTap}
                 className={`relative flex h-32 w-32 items-center justify-center rounded-full border-4 transition-all active:scale-95 ${
                   count >= targetCount
-                    ? "border-emerald-500 bg-emerald-500/20 text-emerald-400 shadow-[0_0_40px_rgba(16,185,129,0.4)]"
-                    : "border-cyan-500 bg-cyan-500/10 text-cyan-400 shadow-[0_0_40px_rgba(0,240,255,0.3)] hover:shadow-[0_0_60px_rgba(0,240,255,0.5)]"
+                    ? "border-emerald-500 bg-emerald-500/20 text-emerald-400 shadow-sm"
+                    : "border-cyan-500 bg-cyan-500/10 text-cyan-400 shadow-sm hover:shadow-sm"
                 }`}
               >
                 <span className="font-sans text-5xl font-black">{count}</span>
@@ -213,7 +213,7 @@ export function AdhkarCommandView() {
           {data.map((item) => (
             <div
               key={item.id}
-              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-6 transition-all hover:border-cyan-500/40 hover:bg-black/60 hover:shadow-[0_10px_30px_rgba(0,240,255,0.1)]"
+              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-6 transition-all hover:border-cyan-500/40 hover:bg-black/60 hover:shadow-sm"
             >
               <div>
                 <div className="mb-4 flex items-start justify-between">

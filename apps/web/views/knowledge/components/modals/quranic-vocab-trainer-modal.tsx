@@ -90,7 +90,7 @@ export function QuranicVocabTrainerModal() {
           {/* Flashcard Component */}
           <div
             onClick={() => setIsFlipped(!isFlipped)}
-            className="bg-background tag-clip flex min-h-48 w-full cursor-pointer flex-col items-center justify-center space-y-3 border-2 border-primary/50 p-8 transition-all hover:border-primary"
+            className="bg-background rounded-md flex min-h-48 w-full cursor-pointer flex-col items-center justify-center space-y-3 border-2 border-primary/50 p-8 transition-all hover:border-primary"
           >
             {!isFlipped ? (
               <>

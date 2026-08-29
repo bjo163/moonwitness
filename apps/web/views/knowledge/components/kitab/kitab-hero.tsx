@@ -67,7 +67,7 @@ export function KitabHero({
       {/* 1. Flat Hero Banner */}
       <div className="relative flex h-36 w-full flex-col justify-center border-b border-white/5 px-4 md:h-44 md:px-8">
         <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-xl opacity-60 mix-blend-screen">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-blue-900/40 via-[#040914] to-[#040914]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-blue-900/40 -background -background" />
           <div className="absolute bottom-0 left-1/2 h-[200px] w-[800px] -translate-x-1/2 rounded-[100%] bg-blue-500/30 blur-[100px]" />
           <div className="absolute bottom-[-50px] left-1/2 h-[100px] w-[400px] -translate-x-1/2 rounded-[100%] bg-white/40 blur-[50px]" />
         </div>
@@ -95,7 +95,7 @@ export function KitabHero({
           </div>
 
           <div className="hidden flex-shrink-0 md:block lg:text-right">
-            <div className="font-arabic mb-2 text-2xl text-white/90 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] md:text-3xl">
+            <div className="font-arabic mb-2 text-2xl text-white/90 drop-shadow-sm md:text-3xl">
               وَذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ
             </div>
             <p className="ml-auto max-w-sm text-[10px] text-white/50 italic md:text-xs">
@@ -113,7 +113,7 @@ export function KitabHero({
         {stats.map((stat, i) => (
           <div
             key={i}
-            className={`border bg-[#0A1224] ${stat.isFill ? "border-amber-500/50" : "border-white/5"} group flex cursor-default items-center gap-3 rounded-xl p-3 shadow-md transition-colors hover:bg-white/[0.02]`}
+            className={`border bg-card ${stat.isFill ? "border-amber-500/50" : "border-white/5"} group flex cursor-default items-center gap-3 rounded-xl p-3 shadow-md transition-colors hover:bg-white/[0.02]`}
           >
             <div
               className={`h-10 w-10 rounded-full ${stat.isFill ? "bg-amber-500/20" : `bg-${stat.color}-500/10`} border border-${stat.color}-500/20 flex items-center justify-center text-${stat.color}-400 transition-transform group-hover:scale-110`}
@@ -138,7 +138,7 @@ export function KitabHero({
             if (audio.isPlaying) audio.togglePlay()
             else audio.play({ number: 1, name: "Al-Fatihah" })
           }}
-          className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-blue-500/30 bg-[#0A1224] p-3 shadow-lg transition-colors hover:border-blue-500/60"
+          className="group relative flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border border-blue-500/30 bg-card p-3 shadow-lg transition-colors hover:border-blue-500/60"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
           <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-blue-300">

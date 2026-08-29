@@ -91,7 +91,7 @@ export function Modal({
 
       {/* Modal Box */}
       <div
-        className={`w-full ${maxWidth} relative flex max-h-[90vh] flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/40 shadow-[0_30px_100px_rgba(0,0,0,0.8)] backdrop-blur-2xl`}
+        className={`w-full ${maxWidth} relative flex max-h-[90vh] flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/40 shadow-sm backdrop-blur-2xl`}
       >
         {/* Subtle Top Gradient Accent */}
         <div className="absolute top-0 left-0 h-[1px] w-full bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-50" />
@@ -104,7 +104,7 @@ export function Modal({
             )}
             <h3
               id="modal-title"
-              className="text-sm font-light tracking-[0.3em] text-foreground uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] sm:text-base"
+              className="text-sm font-light tracking-[0.3em] text-foreground uppercase drop-shadow-sm sm:text-base"
             >
               {title}
             </h3>

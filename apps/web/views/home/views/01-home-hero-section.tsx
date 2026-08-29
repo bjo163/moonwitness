@@ -720,10 +720,10 @@ export function HomeHeroSection() {
           </div>
 
           <div className="absolute inset-0 animate-[pulse_0.5s_infinite] bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.1)_0%,transparent_70%)]" />
-          <div className="absolute inset-0 animate-pulse border-[4px] border-cyan-400/50 shadow-[inset_0_0_100px_rgba(34,211,238,0.3)]" />
+          <div className="absolute inset-0 animate-pulse border-[4px] border-cyan-400/50 shadow-sm" />
           <div className="absolute inset-0 bg-[linear-gradient(rgba(0,240,255,0.03)_1px,transparent_1px)] bg-[length:100%_4px]" />
           <div className="pointer-events-none absolute inset-0 flex animate-[smoothSubliminal_2s_infinite] items-center justify-center">
-            <span className="font-sans text-5xl font-black tracking-[0.8em] text-white drop-shadow-[0_0_30px_rgba(34,211,238,1)] md:text-8xl">
+            <span className="font-sans text-5xl font-black tracking-[0.8em] text-white drop-shadow-sm md:text-8xl">
               OVERRIDE
             </span>
           </div>
@@ -784,12 +784,12 @@ export function HomeHeroSection() {
             </div>
 
             <h2
-              className="font-arabic animate-[pulse_3s_ease-in-out_infinite] text-4xl leading-relaxed text-white drop-shadow-[0_0_20px_rgba(0,255,255,0.6)] md:text-5xl lg:text-7xl lg:leading-loose"
+              className="font-arabic animate-[pulse_3s_ease-in-out_infinite] text-4xl leading-relaxed text-white drop-shadow-sm md:text-5xl lg:text-7xl lg:leading-loose"
               dir="rtl"
             >
               {dailyData.ayah?.textArabic}
             </h2>
-            <div className="rounded-full border border-cyan-500/30 bg-cyan-950/50 px-6 py-2 font-mono text-sm tracking-widest text-cyan-300 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+            <div className="rounded-full border border-cyan-500/30 bg-cyan-950/50 px-6 py-2 font-mono text-sm tracking-widest text-cyan-300 shadow-sm">
               Q.S {dailyData.ayah?.surahName?.toUpperCase()}{" "}
               {dailyData.ayah?.surahNumber}:{dailyData.ayah?.ayahNumber}
             </div>
@@ -846,9 +846,9 @@ export function HomeHeroSection() {
       {/* ═══ LEVEL UP HUD NOTIFICATION (Sleek, Minimalist, Top-Left) ═══ */}
       {isLevelUp && (
         <div className="pointer-events-none fixed top-24 left-10 z-[1000] flex flex-col items-start">
-          <div className="relative flex w-[280px] animate-in flex-col gap-3 rounded-lg border border-cyan-500/30 bg-black/40 p-5 shadow-[0_0_30px_rgba(0,240,255,0.1)] backdrop-blur-md duration-700 ease-out fill-mode-forwards slide-in-from-left-10 fade-in">
+          <div className="relative flex w-[280px] animate-in flex-col gap-3 rounded-lg border border-cyan-500/30 bg-black/40 p-5 shadow-sm backdrop-blur-md duration-700 ease-out fill-mode-forwards slide-in-from-left-10 fade-in">
             <div className="flex items-center gap-2">
-              <div className="h-2 w-2 animate-pulse rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(0,240,255,1)]" />
+              <div className="h-2 w-2 animate-pulse rounded-full bg-cyan-400 shadow-sm" />
               <div className="font-mono text-[10px] font-bold tracking-[0.3em] text-cyan-400">
                 SYSTEM OVERRIDE COMPLETE
               </div>
@@ -875,7 +875,7 @@ export function HomeHeroSection() {
 
             {/* Futuristic Data Bar */}
             <div className="mt-2 w-full border border-cyan-500/20 bg-black/60 p-0.5">
-              <div className="h-1 w-0 animate-[fillBar_2.5s_ease-out_forwards_1.2s] bg-cyan-400 shadow-[0_0_10px_rgba(0,240,255,0.8)]" />
+              <div className="h-1 w-0 animate-[fillBar_2.5s_ease-out_forwards_1.2s] bg-cyan-400 shadow-sm" />
             </div>
           </div>
         </div>

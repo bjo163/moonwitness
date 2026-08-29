@@ -79,13 +79,13 @@ export function SocialMediaTrendsWidget() {
         </div>
         <div className="flex items-center gap-3 font-mono text-[10px] text-white/50">
           <div className="flex items-center gap-1">
-            <Hash className="h-3 w-3 text-[#1DA1F2]" /> X
+            <Hash className="h-3 w-3 text-foreground" /> X
           </div>
           <div className="flex items-center gap-1">
-            <PlaySquare className="h-3 w-3 text-[#FF0000]" /> YT
+            <PlaySquare className="h-3 w-3 text-foreground" /> YT
           </div>
           <div className="flex items-center gap-1">
-            <Camera className="h-3 w-3 text-[#E1306C]" /> IG
+            <Camera className="h-3 w-3 text-foreground" /> IG
           </div>
         </div>
       </div>
@@ -106,13 +106,13 @@ export function SocialMediaTrendsWidget() {
             >
               <div className="col-span-2 flex items-center gap-2 font-bold">
                 {metric.platform === "X" && (
-                  <Hash className="h-3.5 w-3.5 text-[#1DA1F2]" />
+                  <Hash className="h-3.5 w-3.5 text-foreground" />
                 )}
                 {metric.platform === "YouTube" && (
-                  <PlaySquare className="h-3.5 w-3.5 text-[#FF0000]" />
+                  <PlaySquare className="h-3.5 w-3.5 text-foreground" />
                 )}
                 {metric.platform === "Instagram" && (
-                  <Camera className="h-3.5 w-3.5 text-[#E1306C]" />
+                  <Camera className="h-3.5 w-3.5 text-foreground" />
                 )}
                 <span className="opacity-70 group-hover:opacity-100">
                   {metric.platform}

@@ -257,7 +257,7 @@ export function MizanAssessmentView() {
             <div className="flex items-center justify-between font-mono text-[10px] text-slate-400">
               <span className="flex items-center gap-1.5">
                 <span
-                  className={`h-1.5 w-1.5 rounded-full ${currentAccent.bg} shadow-[0_0_5px_currentColor]`}
+                  className={`h-1.5 w-1.5 rounded-full ${currentAccent.bg} shadow-sm`}
                 />
                 STATUS: RESOLVED
               </span>

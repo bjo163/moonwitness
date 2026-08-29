@@ -98,7 +98,7 @@ export function DailyTransmissionView() {
 
           <div className="flex items-center gap-4 rounded-xl border border-white/5 bg-black/40 px-4 py-2 text-[10px] font-medium tracking-widest uppercase backdrop-blur-md">
             <span className="text-primary">Unlocked Verses</span>
-            <span className="text-xl font-light text-cyan-400 drop-shadow-[0_0_10px_rgba(0,240,255,0.3)]">
+            <span className="text-xl font-light text-cyan-400 drop-shadow-sm">
               {totalCount} / 6.236
             </span>
           </div>
@@ -124,12 +124,12 @@ export function DailyTransmissionView() {
             {history.map((item) => (
               <div
                 key={`${item.sequenceNumber}-${item.dateStr}-${item.period.code}`}
-                className="bg-background/80 space-y-6 rounded-2xl border border-white/5 p-6 shadow-[0_10px_40px_rgba(0,0,0,0.5)] backdrop-blur-2xl transition-all hover:border-cyan-500/20 sm:p-8"
+                className="bg-background/80 space-y-6 rounded-2xl border border-white/5 p-6 shadow-sm backdrop-blur-2xl transition-all hover:border-cyan-500/20 sm:p-8"
               >
                 {/* Item Header */}
                 <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/5 pb-4">
                   <div className="flex items-center gap-4">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-cyan-500/20 bg-cyan-500/10 text-xs font-medium text-cyan-400 shadow-[0_0_10px_rgba(0,240,255,0.1)]">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-cyan-500/20 bg-cyan-500/10 text-xs font-medium text-cyan-400 shadow-sm">
                       #{item.sequenceNumber}
                     </span>
                     <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[9px] font-medium tracking-widest text-primary uppercase">
@@ -193,7 +193,7 @@ export function DailyTransmissionView() {
                               &ldquo;{item.asmaulSurah.translation_id}&rdquo;
                             </span>
                           </div>
-                          <span className="font-serif text-xl font-bold text-cyan-400 drop-shadow-[0_0_5px_rgba(0,240,255,0.3)]">
+                          <span className="font-serif text-xl font-bold text-cyan-400 drop-shadow-sm">
                             {item.asmaulSurah.name_arabic}
                           </span>
                         </div>
@@ -213,7 +213,7 @@ export function DailyTransmissionView() {
                               &ldquo;{item.asmaulAyah.translation_id}&rdquo;
                             </span>
                           </div>
-                          <span className="font-serif text-xl font-bold text-fuchsia-400 drop-shadow-[0_0_5px_rgba(217,70,239,0.3)]">
+                          <span className="font-serif text-xl font-bold text-fuchsia-400 drop-shadow-sm">
                             {item.asmaulAyah.name_arabic}
                           </span>
                         </div>

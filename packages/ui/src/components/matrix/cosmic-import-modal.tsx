@@ -71,6 +71,7 @@ export function CosmicImportModal({
         return result
       }
 
+      if (!lines[0]) return
       const parsedHeaders = splitLine(lines[0])
       const parsedRows = lines.slice(1).map(splitLine)
 
@@ -123,6 +124,7 @@ export function CosmicImportModal({
     // Construct records from mapped rows
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i]
+      if (!row) continue
       const rec: Record<string, any> = {}
 
       headers.forEach((h, hIdx) => {

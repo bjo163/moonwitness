@@ -131,7 +131,7 @@ export function GlobalMonitoringView() {
         {/* ═══ TOP HEADER ═════════════════════════════════════════════════════ */}
         <div className="flex flex-col items-center justify-between gap-4 border-b border-white/10 pb-4 xl:flex-row">
           <div className="flex items-center gap-4">
-            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-primary/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-primary/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
               <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-black">
                 12
               </span>
@@ -144,7 +144,7 @@ export function GlobalMonitoringView() {
 
           <div className="flex shrink-0 items-center gap-6">
             <div className="text-right">
-              <div className="font-mono text-xl font-black tracking-widest text-white drop-shadow-[0_0_8px_#FFF]">
+              <div className="font-mono text-xl font-black tracking-widest text-white drop-shadow-sm">
                 {clockWIB}
               </div>
               <div className="mt-0.5 text-[9px] font-bold text-primary uppercase">
@@ -163,12 +163,12 @@ export function GlobalMonitoringView() {
               </div>
               {isLoading ? (
                 <div className="text-warning mt-1 flex items-center gap-2 text-[10px] font-black">
-                  <div className="bg-warning h-2 w-2 animate-pulse rounded-full shadow-[0_0_10px_#FF9900]" />
+                  <div className="bg-warning h-2 w-2 animate-pulse rounded-full shadow-sm" />
                   SYNCHRONIZING APIs...
                 </div>
               ) : (
                 <div className="text-success mt-1 flex items-center gap-2 text-[10px] font-black">
-                  <div className="bg-success h-2 w-2 animate-pulse rounded-full shadow-[0_0_10px_#00FF66]" />
+                  <div className="bg-success h-2 w-2 animate-pulse rounded-full shadow-sm" />
                   API SYNCED
                 </div>
               )}
@@ -196,7 +196,7 @@ export function GlobalMonitoringView() {
               onClick={() => setActiveCategory(cat.id as MonitoringCategory)}
               className={`flex items-center gap-2 rounded-sm border px-4 py-2 text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${
                 activeCategory === cat.id
-                  ? "border-primary bg-primary/20 text-primary shadow-[0_0_15px_rgba(0,240,255,0.2)]"
+                  ? "border-primary bg-primary/20 text-primary shadow-sm"
                   : "bg-background border-white/10 text-white/50 hover:bg-white/5 hover:text-white"
               }`}
             >

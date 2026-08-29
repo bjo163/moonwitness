@@ -214,7 +214,7 @@ function Field({
         required={required}
         rows={3}
         maxLength={required ? 2500 : 1200}
-        className="tag-clip bg-background w-full border border-primary/30 p-3 text-xs text-foreground placeholder:text-primary/60 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
+        className="rounded-md bg-background w-full border border-primary/30 p-3 text-xs text-foreground placeholder:text-primary/60 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
       />
     </label>
   )
@@ -267,7 +267,7 @@ function ResultState({
       {parsedTasks.map((task, index) => (
         <div
           key={`${task.title}-${index}`}
-          className="tag-clip border-success/25 bg-background/70 border p-3"
+          className="rounded-md border-success/25 bg-background/70 border p-3"
         >
           <div className="border-success/20 mb-2 flex flex-wrap items-center justify-between gap-2 border-b pb-2">
             <p className="text-success text-[10px] font-bold">

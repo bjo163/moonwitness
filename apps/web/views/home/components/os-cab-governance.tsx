@@ -21,7 +21,7 @@ const CAB_FEATURES = [
     accent: "rgba(161,0,255,0.8)",
     accentClass: "text-purple-500",
     borderClass: "border-purple-500/30 hover:border-purple-500/60",
-    glowClass: "hover:shadow-[0_0_20px_rgba(161,0,255,0.2)]",
+    glowClass: "hover:shadow-sm",
     bgClass: "bg-purple-500/5 hover:bg-purple-500/10",
   },
   {
@@ -33,7 +33,7 @@ const CAB_FEATURES = [
     accent: "rgba(161,0,255,0.8)",
     accentClass: "text-purple-500",
     borderClass: "border-purple-500/30 hover:border-purple-500/60",
-    glowClass: "hover:shadow-[0_0_20px_rgba(161,0,255,0.2)]",
+    glowClass: "hover:shadow-sm",
     bgClass: "bg-purple-500/5 hover:bg-purple-500/10",
   },
   {
@@ -45,7 +45,7 @@ const CAB_FEATURES = [
     accent: "rgba(161,0,255,0.8)",
     accentClass: "text-purple-500",
     borderClass: "border-purple-500/30 hover:border-purple-500/60",
-    glowClass: "hover:shadow-[0_0_20px_rgba(161,0,255,0.2)]",
+    glowClass: "hover:shadow-sm",
     bgClass: "bg-purple-500/5 hover:bg-purple-500/10",
   },
   {
@@ -57,7 +57,7 @@ const CAB_FEATURES = [
     accent: "rgba(161,0,255,0.8)",
     accentClass: "text-purple-500",
     borderClass: "border-purple-500/30 hover:border-purple-500/60",
-    glowClass: "hover:shadow-[0_0_20px_rgba(161,0,255,0.2)]",
+    glowClass: "hover:shadow-sm",
     bgClass: "bg-purple-500/5 hover:bg-purple-500/10",
   },
   {
@@ -69,7 +69,7 @@ const CAB_FEATURES = [
     accent: "rgba(161,0,255,0.8)",
     accentClass: "text-purple-500",
     borderClass: "border-purple-500/30 hover:border-purple-500/60",
-    glowClass: "hover:shadow-[0_0_20px_rgba(161,0,255,0.2)]",
+    glowClass: "hover:shadow-sm",
     bgClass: "bg-purple-500/5 hover:bg-purple-500/10",
   },
 ]
@@ -143,7 +143,7 @@ export function OSCabGovernance() {
               {/* Icon + code */}
               <div className="flex items-start justify-between">
                 <div
-                  className={`flex h-10 w-10 items-center justify-center border ${feat.borderClass} clip-btn`}
+                  className={`flex h-10 w-10 items-center justify-center border ${feat.borderClass} rounded-lg`}
                 >
                   <Icon className={`h-5 w-5 ${feat.accentClass}`} />
                 </div>
@@ -170,7 +170,7 @@ export function OSCabGovernance() {
         })}
 
         {/* CTA Card */}
-        <div className="group border-purple-500/20 bg-purple-500/5 rounded-xl hover:border-purple-500/50 hover:bg-purple-500/10 relative flex flex-col items-center justify-center gap-4 border p-5 transition-all duration-300 hover:shadow-[0_0_30px_rgba(161,0,255,0.2)]">
+        <div className="group border-purple-500/20 bg-purple-500/5 rounded-xl hover:border-purple-500/50 hover:bg-purple-500/10 relative flex flex-col items-center justify-center gap-4 border p-5 transition-all duration-300 hover:shadow-sm">
           <ShieldCheck className="text-purple-500/60 group-hover:text-purple-500 h-10 w-10 transition-colors" />
           <div className="text-center">
             <p className="text-purple-500 font-mono text-xs font-black tracking-widest uppercase">
@@ -182,7 +182,7 @@ export function OSCabGovernance() {
           </div>
           <Link
             href="/command-center/cab"
-            className="clip-btn border-purple-500 text-purple-500 hover:bg-purple-500 flex items-center gap-2 border px-4 py-2 text-xs font-bold tracking-widest uppercase transition-all duration-200 hover:text-black"
+            className="rounded-lg border-purple-500 text-purple-500 hover:bg-purple-500 flex items-center gap-2 border px-4 py-2 text-xs font-bold tracking-widest uppercase transition-all duration-200 hover:text-black"
           >
             [ OPEN CAB ] <ArrowRight className="h-3 w-3" />
           </Link>

@@ -24,7 +24,7 @@ function Tabs({
 }
 
 const tabsListVariants = cva(
-  "group/tabs-list tag-clip bg-panel inline-flex w-fit items-center justify-center border border-primary/30 p-1 text-primary",
+  "group/tabs-list rounded-md bg-panel inline-flex w-fit items-center justify-center border border-primary/30 p-1 text-primary",
   {
     variants: {
       variant: {
@@ -58,7 +58,7 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={cn(
-        "tag-clip inline-flex cursor-pointer items-center justify-center gap-1.5 border border-transparent px-3 py-1.5 font-mono text-xs font-black tracking-widest text-primary uppercase transition-all hover:bg-primary/10 hover:text-primary data-active:border-primary data-active:bg-primary/20 data-active:text-primary data-active:shadow-[0_0_12px_rgba(0,240,255,0.3)]",
+        "rounded-md inline-flex cursor-pointer items-center justify-center gap-1.5 border border-transparent px-3 py-1.5 font-mono text-xs font-black tracking-widest text-primary uppercase transition-all hover:bg-primary/10 hover:text-primary data-active:border-primary data-active:bg-primary/20 data-active:text-primary data-active:shadow-sm",
         className
       )}
       {...props}
@@ -107,9 +107,9 @@ export function SimpleTabs({
             type="button"
             onClick={() => onChange(t.id)}
             className={cn(
-              "tag-clip flex items-center gap-1.5 border px-3 py-1.5 font-mono text-xs font-bold tracking-wider uppercase transition-all",
+              "rounded-md flex items-center gap-1.5 border px-3 py-1.5 font-mono text-xs font-bold tracking-wider uppercase transition-all",
               isActive
-                ? "border-primary bg-primary/20 text-white shadow-[0_0_10px_rgba(0,240,255,0.3)]"
+                ? "border-primary bg-primary/20 text-white shadow-sm"
                 : "border-transparent text-slate-400 hover:bg-white/5 hover:text-white"
             )}
           >

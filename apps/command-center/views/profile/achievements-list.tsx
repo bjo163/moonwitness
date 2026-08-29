@@ -57,7 +57,7 @@ export function AchievementsList() {
         {achievements.map((ach, i) => (
           <div key={i} className="group flex cursor-default items-start gap-4">
             <div
-              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border bg-black/50 ${ach.color} shadow-[inset_0_0_10px_rgba(255,255,255,0.05)] transition-transform group-hover:scale-110`}
+              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border bg-black/50 ${ach.color} shadow-sm transition-transform group-hover:scale-110`}
             >
               <ach.icon className="h-5 w-5" />
             </div>

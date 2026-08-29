@@ -18,8 +18,8 @@ export function EmptyState({
   icon?: React.ElementType
 }) {
   return (
-    <div className="panel-box bg-background flex min-h-[180px] flex-col items-center justify-center border border-primary/20 p-8 text-center">
-      <div className="tag-clip mb-3 flex h-12 w-12 items-center justify-center border border-primary/40 bg-primary/10 text-primary">
+    <div className="rounded-xl border border-border/40 bg-card bg-background flex min-h-[180px] flex-col items-center justify-center border border-primary/20 p-8 text-center">
+      <div className="rounded-md mb-3 flex h-12 w-12 items-center justify-center border border-primary/40 bg-primary/10 text-primary">
         <Icon className="h-6 w-6 animate-pulse text-primary" />
       </div>
       <h4 className="mb-1 text-sm font-black tracking-widest text-foreground uppercase">
@@ -47,7 +47,7 @@ export function LoadingState({
 }) {
   return (
     <div
-      className="panel-box bg-background flex flex-col gap-4 border border-primary/20 p-6"
+      className="rounded-xl border border-border/40 bg-card bg-background flex flex-col gap-4 border border-primary/20 p-6"
       role="status"
       aria-busy="true"
       aria-label={title}
@@ -94,7 +94,7 @@ export function LoadingState({
 export function SkeletonCard() {
   return (
     <div
-      className="panel-box bg-background flex min-h-[160px] flex-col gap-3 border border-primary/15 p-5"
+      className="rounded-xl border border-border/40 bg-card bg-background flex min-h-[160px] flex-col gap-3 border border-primary/15 p-5"
       aria-hidden="true"
     >
       <div className="flex justify-between">
@@ -133,12 +133,12 @@ export function ErrorState({
 }) {
   return (
     <div
-      className="panel-box border-danger/30 bg-background flex min-h-[180px] flex-col items-center justify-center gap-4 border p-8 text-center"
+      className="rounded-xl border border-border/40 bg-card border-danger/30 bg-background flex min-h-[180px] flex-col items-center justify-center gap-4 border p-8 text-center"
       style={{ boxShadow: "0 0 20px rgba(255,0,85,0.08)" }}
       role="alert"
       aria-live="assertive"
     >
-      <div className="border-danger/40 bg-danger/10 tag-clip flex h-12 w-12 items-center justify-center border">
+      <div className="border-danger/40 bg-danger/10 rounded-md flex h-12 w-12 items-center justify-center border">
         <XCircle className="text-danger h-6 w-6" aria-hidden="true" />
       </div>
 

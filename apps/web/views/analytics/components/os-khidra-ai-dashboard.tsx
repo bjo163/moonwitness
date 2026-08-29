@@ -62,13 +62,13 @@ export function OSKhidraAiDashboard() {
         {/* ═══ TOP HEADER (Blueprint 10) ══════════════════════════════════════ */}
         <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-6 xl:flex-row xl:items-start">
           <div className="max-w-2xl space-y-4">
-            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-emerald-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-emerald-300 uppercase shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-emerald-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-emerald-300 uppercase shadow-sm">
               <span className="rounded-xs bg-emerald-500 px-1.5 py-0.5 font-black text-black">
                 10
               </span>
               <span>KHIDRA AI</span>
             </div>
-            <h2 className="font-mono text-xl font-black tracking-widest text-white uppercase drop-shadow-[0_0_12px_rgba(255,255,255,0.7)] sm:text-3xl">
+            <h2 className="font-mono text-xl font-black tracking-widest text-white uppercase drop-shadow-sm sm:text-3xl">
               YOUR DIVINE KNOWLEDGE COMPANION
             </h2>
             <div className="max-w-xl font-sans text-xs leading-relaxed text-primary">
@@ -95,7 +95,7 @@ export function OSKhidraAiDashboard() {
 
           <div className="flex shrink-0 items-center gap-6">
             <div className="text-right">
-              <div className="font-mono text-2xl font-black tracking-widest text-white drop-shadow-[0_0_8px_#FFF]">
+              <div className="font-mono text-2xl font-black tracking-widest text-white drop-shadow-sm">
                 {clockWIB}
               </div>
               <div className="mt-1 text-[9px] font-bold text-emerald-300 uppercase">
@@ -117,7 +117,7 @@ export function OSKhidraAiDashboard() {
                 className="absolute inset-0 rounded-full border border-primary/20"
                 style={{ transform: "rotateX(70deg) rotateY(-20deg)" }}
               />
-              <div className="h-4 w-4 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_15px_#10B981]" />
+              <div className="h-4 w-4 animate-pulse rounded-full bg-emerald-400 shadow-sm" />
               {/* Orbiting particle */}
               <div
                 className="animate-spin-slow absolute h-1.5 w-1.5 rounded-full bg-cyan-400"
@@ -132,13 +132,13 @@ export function OSKhidraAiDashboard() {
           {/* LEFT SIDEBAR: KHIDRA IDENTITY (Col 1-3) */}
           <div className="flex flex-col space-y-6 lg:col-span-3">
             {/* Identity Card */}
-            <div className="bg-background rounded-xl border border-emerald-500/30 p-4 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+            <div className="bg-background rounded-xl border border-emerald-500/30 p-4 shadow-sm">
               <div className="mb-4 text-[10px] font-black tracking-widest text-emerald-400 uppercase">
                 KHIDRA IDENTITY
               </div>
 
               <div className="mb-6 flex gap-4">
-                <div className="bg-background relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                <div className="bg-background relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-emerald-500/50 shadow-sm">
                   <Star className="absolute h-6 w-6 text-emerald-400" />
                   <div className="absolute inset-0 flex rotate-45 items-center justify-center">
                     <Star className="h-6 w-6 text-emerald-400/50" />
@@ -250,7 +250,7 @@ export function OSKhidraAiDashboard() {
               <div className="absolute bottom-14 h-4 w-[40%] animate-pulse rounded-[50%] border border-white/30" />
 
               {/* The AI Hologram Character */}
-              <div className="relative z-10 flex h-[90%] w-full items-end justify-center drop-shadow-[0_0_50px_rgba(16,185,129,0.8)]">
+              <div className="relative z-10 flex h-[90%] w-full items-end justify-center drop-shadow-sm">
                 <Image
                   unoptimized
                   width={120}
@@ -266,7 +266,7 @@ export function OSKhidraAiDashboard() {
               </div>
 
               {/* Floating Chat Bubble */}
-              <div className="bg-background/80 absolute top-1/4 left-[10%] z-20 rounded-xl rounded-tr-sm border border-emerald-500/50 p-4 shadow-[0_0_20px_rgba(16,185,129,0.2)] backdrop-blur">
+              <div className="bg-background/80 absolute top-1/4 left-[10%] z-20 rounded-xl rounded-tr-sm border border-emerald-500/50 p-4 shadow-sm backdrop-blur">
                 <div className="mb-1 font-bold text-emerald-400">
                   I&apos;m Khidra.
                 </div>
@@ -396,7 +396,7 @@ export function OSKhidraAiDashboard() {
           {/* RIGHT SIDEBAR: CHAT UI (Col 9-12) */}
           <div className="flex flex-col gap-6 lg:col-span-4">
             {/* Conversation Window */}
-            <div className="bg-background flex flex-1 flex-col rounded-xl border border-emerald-500/30 p-4 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+            <div className="bg-background flex flex-1 flex-col rounded-xl border border-emerald-500/30 p-4 shadow-sm">
               <div className="mb-4 text-[10px] font-black tracking-widest text-emerald-400 uppercase">
                 KHIDRA CONVERSATION
               </div>
@@ -423,14 +423,14 @@ export function OSKhidraAiDashboard() {
 
                 {/* Khidra Message */}
                 <div className="flex gap-3">
-                  <div className="bg-background flex h-8 w-8 shrink-0 items-center justify-center rounded border border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+                  <div className="bg-background flex h-8 w-8 shrink-0 items-center justify-center rounded border border-emerald-500/50 shadow-sm">
                     <Star className="h-4 w-4 text-emerald-400" />
                   </div>
                   <div className="flex-1">
                     <div className="mb-1 text-[10px] font-bold text-emerald-400 uppercase">
                       KHIDRA
                     </div>
-                    <div className="bg-background space-y-3 rounded-lg rounded-tl-sm border border-emerald-500/30 p-3 text-xs leading-relaxed text-white/90 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                    <div className="bg-background space-y-3 rounded-lg rounded-tl-sm border border-emerald-500/30 p-3 text-xs leading-relaxed text-white/90 shadow-sm">
                       <p>
                         The Night Journey (Isra and Mi&apos;raj) is a miraculous
                         journey of Prophet Muhammad ﷺ from Masjid Al-Haram to
@@ -521,7 +521,7 @@ export function OSKhidraAiDashboard() {
         <div className="grid grid-cols-1 gap-6 pt-2 md:grid-cols-2 lg:grid-cols-4">
           {/* Status */}
           <div className="bg-background flex items-center gap-6 rounded-xl border border-white/10 p-5">
-            <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-emerald-900 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+            <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-emerald-900 shadow-sm">
               <div className="absolute inset-2 rounded-full border border-emerald-500/50" />
               <div className="animate-spin-slow absolute inset-4 rounded-full border border-emerald-400/30 border-t-emerald-400" />
               <Activity className="h-4 w-4 text-emerald-400" />
@@ -641,7 +641,7 @@ export function OSKhidraAiDashboard() {
                 className="absolute h-3 w-[80%] rounded-[50%] border border-primary/40"
                 style={{ transform: "rotate(30deg)" }}
               />
-              <Star className="h-8 w-8 animate-pulse text-emerald-400 drop-shadow-[0_0_10px_#10B981]" />
+              <Star className="h-8 w-8 animate-pulse text-emerald-400 drop-shadow-sm" />
             </div>
           </div>
         </div>
@@ -677,7 +677,7 @@ export function OSKhidraAiDashboard() {
                 <span className="text-white">100%</span>
               </div>
               <div className="h-1 overflow-hidden rounded-full bg-primary">
-                <div className="h-full w-full bg-emerald-500 shadow-[0_0_8px_#10B981]" />
+                <div className="h-full w-full bg-emerald-500 shadow-sm" />
               </div>
             </div>
             <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-500" />

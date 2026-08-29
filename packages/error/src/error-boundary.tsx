@@ -18,7 +18,7 @@ interface ErrorBoundaryState {
 /**
  * ◈ ErrorBoundary — Standard React Fault Tolerance Component
  *
- * Catches render-time JavaScript crashes in child component trees,
+ * Catches render-time JavaScript errors in child component trees,
  * logs diagnostic telemetry to CrashReporter, and renders a clean fallback.
  */
 export class ErrorBoundary extends Component<
@@ -65,42 +65,39 @@ export class ErrorBoundary extends Component<
     }
 
     return (
-      <div className="relative my-4 w-full overflow-hidden border border-cyber-pink/40 bg-[#070C14]/90 p-6 backdrop-blur-md">
-        {/* Accent glow bar */}
-        <div className="absolute top-0 right-0 left-0 h-[2px] bg-gradient-to-r from-transparent via-cyber-pink to-transparent opacity-80" />
-
+      <div className="relative my-4 w-full overflow-hidden rounded-xl border border-destructive/30 bg-destructive/5 p-6 font-sans">
         <div className="flex flex-col items-center justify-center text-center">
-          <div className="mb-3 flex items-center gap-2">
-            <span className="inline-block h-2 w-2 animate-ping bg-cyber-pink" />
-            <span className="font-mono text-xs font-black tracking-widest text-cyber-pink uppercase">
-              ◈ SIGNAL LOST — FAULT DETECTED
+          <div className="mb-2 flex items-center gap-2">
+            <span className="inline-block h-2 w-2 rounded-full bg-destructive" />
+            <span className="text-xs font-semibold text-destructive uppercase tracking-wider">
+              An error occurred
             </span>
           </div>
 
-          <h3 className="font-orbitron mb-2 text-lg font-black tracking-wider text-white uppercase">
-            {this.props.moduleId ? `MODULE FAULT [${this.props.moduleId}]` : "TELEMETRY ANOMALY"}
+          <h3 className="mb-2 text-base font-bold text-foreground">
+            {this.props.moduleId ? `Component Error (${this.props.moduleId})` : "Application Error"}
           </h3>
 
-          <p className="mb-4 max-w-md font-mono text-xs text-cyber-pink/80">
-            {error?.message || "An unexpected subsystem interruption occurred."}
+          <p className="mb-4 max-w-md text-xs text-muted-foreground">
+            {error?.message || "An unexpected error occurred while rendering this section."}
           </p>
 
           <div className="flex items-center gap-3">
             <button
               onClick={this.handleReset}
               type="button"
-              className="border border-cyber-pink/60 bg-cyber-pink/10 px-4 py-2 font-mono text-xs font-black tracking-wider text-cyber-pink uppercase transition-all hover:bg-cyber-pink/20 hover:shadow-[0_0_15px_rgba(255,0,85,0.3)] active:translate-y-0"
+              className="rounded-lg border border-border bg-card px-4 py-2 text-xs font-semibold text-foreground shadow-sm transition-colors hover:bg-accent"
             >
-              [ RE-INITIALIZE ]
+              Try Again
             </button>
             <button
               onClick={() => {
                 if (typeof window !== "undefined") window.location.reload()
               }}
               type="button"
-              className="border border-cyber-cyan/40 bg-cyber-cyan/5 px-4 py-2 font-mono text-xs font-bold tracking-wider text-cyber-cyan/80 uppercase transition-all hover:bg-cyber-cyan/15 hover:text-cyber-cyan"
+              className="rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
             >
-              [ HARD REBOOT ]
+              Reload Page
             </button>
           </div>
         </div>
@@ -108,5 +105,3 @@ export class ErrorBoundary extends Component<
     )
   }
 }
-
-

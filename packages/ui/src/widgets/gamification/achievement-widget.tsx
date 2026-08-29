@@ -33,7 +33,7 @@ export function AchievementWidget() {
     .filter(Boolean)
 
   return (
-    <div className="panel-clip w-full border border-fuchsia-500/20 bg-black/40 p-4 font-mono">
+    <div className="rounded-xl bg-card w-full border border-fuchsia-500/20 bg-black/40 p-4 font-mono">
       <div className="mb-4 flex items-center gap-2">
         <Award className="h-4 w-4 text-fuchsia-400" />
         <h3 className="text-xs font-bold tracking-widest text-white uppercase">
@@ -42,7 +42,7 @@ export function AchievementWidget() {
       </div>
 
       <div className="mb-4 flex items-center gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-fuchsia-500/50 bg-fuchsia-500/10 shadow-[0_0_15px_rgba(217,70,239,0.2)]">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-fuchsia-500/50 bg-fuchsia-500/10 shadow-sm">
           <span className="text-lg font-black text-fuchsia-400">{level}</span>
         </div>
         <div className="flex-1">

@@ -62,7 +62,7 @@ export function OSTaskCenter() {
         {/* ═══ TOP HEADER (Blueprint 16) ══════════════════════════════════════ */}
         <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-4 xl:flex-row xl:items-center">
           <div className="flex items-center gap-4">
-            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
               <span className="rounded-xs bg-cyan-500 px-1.5 py-0.5 font-black text-black">
                 16
               </span>
@@ -150,7 +150,7 @@ export function OSTaskCenter() {
             </div>
 
             {/* AI Task Assistant */}
-            <div className="bg-background group relative overflow-hidden rounded-xl border-2 border-primary/30 p-4 shadow-[0_0_20px_rgba(0,240,255,0.1)]">
+            <div className="bg-background group relative overflow-hidden rounded-xl border-2 border-primary/30 p-4 shadow-sm">
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/20 to-transparent opacity-50 transition-opacity group-hover:opacity-100" />
 
               <div className="relative z-10 mb-3 flex items-center justify-between">

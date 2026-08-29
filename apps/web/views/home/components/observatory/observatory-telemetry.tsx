@@ -69,7 +69,7 @@ export function ObservatoryTelemetry({ obs }: { obs: any }) {
               {t.label}
             </div>
             <div
-              className="my-1.5 font-mono text-base font-black text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.7)]"
+              className="my-1.5 font-mono text-base font-black text-white drop-shadow-sm"
               style={{ color: t.col }}
             >
               {t.val}

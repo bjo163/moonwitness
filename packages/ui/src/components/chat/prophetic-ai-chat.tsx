@@ -155,7 +155,7 @@ export function PropheticAIChatTerminal({
       className={
         fullWorkspace
           ? "bg-background flex h-full w-full flex-col overflow-hidden font-mono text-foreground"
-          : `panel-box bg-background/95 border-success/40 flex flex-col overflow-hidden border ${maxHeight}`
+          : `rounded-xl border border-border/40 bg-card bg-background/95 border-success/40 flex flex-col overflow-hidden border ${maxHeight}`
       }
     >
       {/* Header Compact */}
@@ -243,7 +243,7 @@ export function PropheticAIChatTerminal({
                         <button
                           type="button"
                           onClick={() => speakText(msg.id, msg.content)}
-                          className="bg-panel hover:bg-success/25 border-success/50 hover:border-success text-success flex cursor-pointer items-center gap-1 rounded-sm border px-2 py-0.5 text-[9px] font-bold shadow-[0_0_10px_rgba(0,255,102,0.15)] transition-all active:scale-95"
+                          className="bg-panel hover:bg-success/25 border-success/50 hover:border-success text-success flex cursor-pointer items-center gap-1 rounded-sm border px-2 py-0.5 text-[9px] font-bold shadow-sm transition-all active:scale-95"
                           title={
                             speakingMessageId === msg.id
                               ? "Stop Speech Playback"
@@ -271,8 +271,8 @@ export function PropheticAIChatTerminal({
                   <div
                     className={`max-w-[96%] rounded-sm p-4 text-xs leading-relaxed font-normal shadow-lg transition-all sm:max-w-[85%] sm:text-sm ${
                       msg.role === "user"
-                        ? "rounded-tr-none border border-primary/60 bg-cyan-950/40 font-mono text-primary shadow-[0_0_15px_rgba(0,240,255,0.15)]"
-                        : "border-success text-success rounded-tl-none border bg-emerald-950/60 font-sans shadow-[0_0_20px_rgba(0,255,102,0.15)]"
+                        ? "rounded-tr-none border border-primary/60 bg-cyan-950/40 font-mono text-primary shadow-sm"
+                        : "border-success text-success rounded-tl-none border bg-emerald-950/60 font-sans shadow-sm"
                     }`}
                   >
                     <div className="whitespace-pre-wrap">{msg.content}</div>
@@ -283,7 +283,7 @@ export function PropheticAIChatTerminal({
           )}
 
           {isListening && (
-            <div className="text-success bg-success/10 border-success flex w-fit animate-pulse items-center gap-2.5 rounded border px-3 py-2 font-mono text-xs shadow-[0_0_20px_rgba(0,255,102,0.3)]">
+            <div className="text-success bg-success/10 border-success flex w-fit animate-pulse items-center gap-2.5 rounded border px-3 py-2 font-mono text-xs shadow-sm">
               <Activity className="text-success h-4 w-4 animate-bounce" />
               <span className="font-bold tracking-wider">
                 {/* SPEECH RADAR ACTIVE: LISTENING TO AUDIO STREAM... */}
@@ -317,7 +317,7 @@ export function PropheticAIChatTerminal({
               }
               className={`bg-background w-full rounded-sm py-2.5 pr-20 pl-3.5 font-mono text-xs text-foreground transition-all outline-none sm:py-3 sm:pr-24 sm:pl-4 sm:text-sm ${
                 isListening
-                  ? "border-success placeholder:text-success border-2 font-bold shadow-[0_0_20px_rgba(0,255,102,0.4)]"
+                  ? "border-success placeholder:text-success border-2 font-bold shadow-sm"
                   : "border-success/40 focus:border-success border placeholder:text-primary/50"
               }`}
               disabled={isLoading}
@@ -332,7 +332,7 @@ export function PropheticAIChatTerminal({
                   onClick={toggleListen}
                   className={`cursor-pointer rounded-sm border p-1.5 transition-all duration-200 sm:p-2 ${
                     isListening
-                      ? "animate-pulse border-red-400 bg-red-500/80 text-white shadow-[0_0_15px_rgba(255,0,0,0.6)] hover:bg-red-500"
+                      ? "animate-pulse border-red-400 bg-red-500/80 text-white shadow-sm hover:bg-red-500"
                       : "bg-success/15 hover:bg-success/30 text-success border-success/50 hover:text-white"
                   }`}
                   title={

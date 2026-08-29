@@ -7,7 +7,7 @@ export function HaditsAnalyticsPanel() {
   return (
     <div className="space-y-4">
       {/* 1. Authenticity Distribution */}
-      <div className="rounded-xl border border-white/10 bg-[#080E1C] p-4 shadow-lg">
+      <div className="rounded-xl border border-white/10 bg-card p-4 shadow-lg">
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ShieldCheck className="h-4 w-4 text-emerald-400" />
@@ -39,7 +39,7 @@ export function HaditsAnalyticsPanel() {
       </div>
 
       {/* 2. Top Narrators / Ruwat */}
-      <div className="rounded-xl border border-white/10 bg-[#080E1C] p-4 shadow-lg">
+      <div className="rounded-xl border border-white/10 bg-card p-4 shadow-lg">
         <div className="mb-3 flex items-center gap-2">
           <Layers className="h-4 w-4 text-cyan-400" />
           <span className="font-mono text-xs font-black tracking-wider text-white uppercase">
@@ -70,7 +70,7 @@ export function HaditsAnalyticsPanel() {
       </div>
 
       {/* 3. Prophetic Wisdom Highlight */}
-      <div className="relative overflow-hidden rounded-xl border border-cyan-500/20 bg-gradient-to-b from-[#0B182F] to-[#080E1C] p-4 shadow-lg">
+      <div className="relative overflow-hidden rounded-xl border border-cyan-500/20 bg-gradient-to-b from-card -background p-4 shadow-lg">
         <div className="mb-2 flex items-center gap-2 text-cyan-400">
           <BookOpen className="h-4 w-4" />
           <span className="font-mono text-[10px] font-black uppercase">Jawami&apos; al-Kalim</span>

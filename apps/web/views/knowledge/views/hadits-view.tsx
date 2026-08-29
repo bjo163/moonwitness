@@ -71,7 +71,7 @@ export function HaditsPortalView() {
   })
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#040814] pb-12 font-sans text-white selection:bg-cyan-500/30">
+    <div className="min-h-screen overflow-x-hidden bg-card pb-12 font-sans text-white selection:bg-cyan-500/30">
       {/* 1. Top Compendiums Stats Bar */}
       <HaditsCompendiumsBar totalHadiths={totalHadiths} />
 
@@ -93,7 +93,7 @@ export function HaditsPortalView() {
           </div>
 
           <div className="text-right">
-            <div className="font-arabic text-xl text-cyan-400/90 drop-shadow-[0_0_10px_rgba(0,240,255,0.3)]">
+            <div className="font-arabic text-xl text-cyan-400/90 drop-shadow-sm">
               تَرَكْتُ فِيكُمْ أَمْرَيْنِ لَنْ تَضِلُّوا مَا تَمَسَّكْتُمْ بِهِمَا
             </div>
             <p className="font-mono text-[9px] text-white/40 italic">
@@ -119,11 +119,11 @@ export function HaditsPortalView() {
           {/* LEFT: Hadith Cards List */}
           <div className="space-y-4 lg:col-span-2">
             {loading && hadithData.length === 0 ? (
-              <div className="flex h-64 items-center justify-center rounded-xl border border-white/5 bg-[#080E1C] font-mono text-xs text-cyan-400">
+              <div className="flex h-64 items-center justify-center rounded-xl border border-white/5 bg-card font-mono text-xs text-cyan-400">
                 SYNCHRONIZING HADITH TELEMETRY...
               </div>
             ) : filteredHadiths.length === 0 ? (
-              <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-white/5 bg-[#080E1C] p-6 text-center font-mono text-xs text-white/40">
+              <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-white/5 bg-card p-6 text-center font-mono text-xs text-white/40">
                 <p>No hadiths matched your query or filter.</p>
               </div>
             ) : (

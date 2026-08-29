@@ -84,7 +84,7 @@ export function SanadKeilmuanView() {
             <div key={idx} className="relative pl-10">
               <div className="bg-success border-panel absolute top-3 left-2 h-4 w-4 animate-pulse rounded-full border-2" />
 
-              <div className="rounded-xl border border-border/40 bg-card/90 border-success/40 bg-background tag-clip space-y-2 border p-5">
+              <div className="rounded-xl border border-border/40 bg-card/90 border-success/40 bg-background rounded-md space-y-2 border p-5">
                 <div className="flex items-center justify-between text-[10px] font-bold text-primary">
                   <span className="text-success">
                     {/* {node.generation} */}

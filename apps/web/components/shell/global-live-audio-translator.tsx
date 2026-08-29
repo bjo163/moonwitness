@@ -32,7 +32,7 @@ export function GlobalLiveAudioTranslator() {
     <div className="relative font-mono">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="tag-clip flex cursor-pointer items-center gap-1 border border-primary/40 px-2 py-0.5 text-[8px] font-bold text-primary hover:border-primary"
+        className="rounded-md flex cursor-pointer items-center gap-1 border border-primary/40 px-2 py-0.5 text-[8px] font-bold text-primary hover:border-primary"
         title="Pilih Bahasa Penerjemah Audio Global V4.0"
       >
         <Languages className="h-3 w-3 text-primary" />
@@ -43,7 +43,7 @@ export function GlobalLiveAudioTranslator() {
       </button>
 
       {isOpen && (
-        <div className="bg-space/95 tag-clip theme-scrollbar absolute bottom-full left-0 z-50 mb-2 max-h-56 w-52 space-y-1 overflow-y-auto border border-primary/50 p-2 text-xs shadow-[0_0_20px_rgba(0,240,255,0.2)] backdrop-blur-md">
+        <div className="bg-card/95 rounded-md theme-scrollbar absolute bottom-full left-0 z-50 mb-2 max-h-56 w-52 space-y-1 overflow-y-auto border border-primary/50 p-2 text-xs shadow-sm backdrop-blur-md">
           <div className="border-b border-primary/20 px-2 py-1 text-[8px] font-bold text-primary">
             {/* 10 BAHASA GLOBAL AUDIO: */}
           </div>

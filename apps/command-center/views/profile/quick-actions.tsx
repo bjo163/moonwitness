@@ -36,7 +36,7 @@ export function QuickActions() {
             key={i}
             className="group flex items-center gap-4 rounded-lg border border-cyan-500/10 bg-white/5 p-3 text-left transition-all hover:border-cyan-500/40 hover:bg-cyan-500/10"
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-md border border-cyan-500/20 bg-black text-cyan-500 transition-all group-hover:text-cyan-400 group-hover:shadow-[0_0_10px_rgba(34,211,238,0.3)]">
+            <div className="flex h-8 w-8 items-center justify-center rounded-md border border-cyan-500/20 bg-black text-cyan-500 transition-all group-hover:text-cyan-400 group-hover:shadow-sm">
               <action.icon className="h-4 w-4" />
             </div>
             <div>

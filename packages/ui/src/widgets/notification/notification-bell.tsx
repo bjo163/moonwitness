@@ -60,14 +60,14 @@ export function NotificationBell() {
       >
         <Bell className="h-4 w-4" />
         {mounted && unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white shadow-[0_0_8px_#EF4444]">
+          <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white shadow-sm">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
       </button>
 
       {isOpen && (
-        <div className="bg-background/95 absolute top-full right-0 z-[100] mt-2 w-80 overflow-hidden rounded-xl border border-cyan-500/30 shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl sm:w-96">
+        <div className="bg-background/95 absolute top-full right-0 z-[100] mt-2 w-80 overflow-hidden rounded-xl border border-cyan-500/30 shadow-sm backdrop-blur-xl sm:w-96">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-cyan-500/20 bg-black/40 px-4 py-3">
             <h3 className="font-mono text-[10px] font-bold tracking-widest text-cyan-300 uppercase">
@@ -147,7 +147,7 @@ export function NotificationBell() {
                       </div>
                       {!notif.read && (
                         <div className="shrink-0 pt-1">
-                          <div className="h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_5px_#00F0FF]" />
+                          <div className="h-2 w-2 rounded-full bg-cyan-400 shadow-sm" />
                         </div>
                       )}
                     </div>

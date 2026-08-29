@@ -63,7 +63,7 @@ export function OSPropheticTimeline() {
         {/* ═══ TOP HEADER (Blueprint 15) ══════════════════════════════════════ */}
         <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-4 xl:flex-row xl:items-center">
           <div className="flex items-center gap-4">
-            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
               <span className="rounded-xs bg-cyan-500 px-1.5 py-0.5 font-black text-black">
                 15
               </span>
@@ -144,7 +144,7 @@ export function OSPropheticTimeline() {
         </div>
 
         {/* ═══ LAYER 2: HORIZONTAL ERA TIMELINE ═══════════════════════════════ */}
-        <div className="bg-background relative flex flex-col items-center overflow-hidden rounded-xl border border-primary/20 p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)]">
+        <div className="bg-background relative flex flex-col items-center overflow-hidden rounded-xl border border-primary/20 p-6 shadow-sm">
           {/* Era Nodes */}
           <div className="relative z-10 flex w-full max-w-[1500px] items-start justify-between pt-4 pb-12">
             {/* The Line */}
@@ -223,7 +223,7 @@ export function OSPropheticTimeline() {
                     style={{ borderColor: era.c }}
                   />
                   <era.icon
-                    className="h-6 w-6 drop-shadow-[0_0_8px_currentColor]"
+                    className="h-6 w-6 drop-shadow-sm"
                     style={{ color: era.c }}
                   />
                   {/* The dot on the line */}
@@ -465,7 +465,7 @@ export function OSPropheticTimeline() {
                   className="flex items-center gap-1.5 text-[8px] font-bold tracking-widest text-primary uppercase"
                 >
                   <span
-                    className="border-panel h-2 w-2 rounded-full border shadow-[0_0_5px_currentColor]"
+                    className="border-panel h-2 w-2 rounded-full border shadow-sm"
                     style={{ backgroundColor: lg.c, color: lg.c }}
                   />
                   {lg.n}
@@ -852,7 +852,7 @@ export function OSPropheticTimeline() {
             </div>
 
             {/* The handle */}
-            <div className="absolute left-[65%] h-4 w-4 -translate-x-1/2 cursor-pointer rounded-full border-4 border-emerald-500 bg-white shadow-[0_0_10px_#10B981] transition-transform hover:scale-125" />
+            <div className="absolute left-[65%] h-4 w-4 -translate-x-1/2 cursor-pointer rounded-full border-4 border-emerald-500 bg-white shadow-sm transition-transform hover:scale-125" />
 
             {/* Labels */}
             <div className="absolute top-4 flex w-full justify-between font-mono text-[7px] text-primary">
@@ -879,7 +879,7 @@ export function OSPropheticTimeline() {
                 <Rewind className="h-4 w-4" />
               </button>
               <button
-                className="rounded-full border border-primary/50 bg-primary/20 p-3 text-primary shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-colors hover:bg-cyan-900 hover:text-white"
+                className="rounded-full border border-primary/50 bg-primary/20 p-3 text-primary shadow-sm transition-colors hover:bg-cyan-900 hover:text-white"
                 onClick={() => setIsPlaying(!isPlaying)}
               >
                 {isPlaying ? (

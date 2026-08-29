@@ -232,7 +232,7 @@ export function CosmicAudioToggle({ className = "" }: { className?: string }) {
       className={`group flex items-center gap-1.5 px-2.5 py-1 rounded-lg border font-mono text-[10px] transition-all ${
         isMuted
           ? "border-zinc-800 bg-black/60 text-zinc-500 hover:text-zinc-300"
-          : "border-cyan-500/40 bg-cyan-950/40 text-cyan-300 shadow-[0_0_15px_rgba(0,240,255,0.25)]"
+          : "border-cyan-500/40 bg-cyan-950/40 text-cyan-300 shadow-sm"
       } ${className}`}
     >
       {isMuted ? (

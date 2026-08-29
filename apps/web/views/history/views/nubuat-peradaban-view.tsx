@@ -89,7 +89,7 @@ export function NubuatPeradabanView() {
                   <span className="bg-success h-1 w-1 rounded-full" />
                 </div>
 
-                <div className="rounded-xl border border-border/40 bg-card/90 border-success/30 bg-background tag-clip space-y-3 border p-6">
+                <div className="rounded-xl border border-border/40 bg-card/90 border-success/30 bg-background rounded-md space-y-3 border p-6">
                   <div className="border-success/20 flex flex-wrap items-center justify-between gap-2 border-b pb-2">
                     <h3 className="font-sans text-sm font-bold text-foreground">
                       {ep.epochName}

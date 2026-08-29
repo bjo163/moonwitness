@@ -33,7 +33,7 @@ export function HaditsCompendiumsBar({ totalHadiths }: HaditsCompendiumsBarProps
     : DEFAULT_HADITH_COMPENDIUMS
 
   return (
-    <div className="border-b border-white/10 bg-[#070D1E] py-2 px-4 shadow-inner">
+    <div className="border-b border-white/10 bg-muted py-2 px-4 shadow-inner">
       <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-4 overflow-x-auto text-[10px] text-white/50 no-scrollbar">
         <div className="flex shrink-0 items-center gap-2 font-mono text-cyan-400">
           <Database className="h-3.5 w-3.5" />

@@ -38,11 +38,11 @@ export function StarmapHeader({
       </div>
 
       <div className="flex items-center gap-4 text-right font-mono text-[10px]">
-        <div className="rounded-lg border border-white/5 bg-[#080E1C] px-3 py-2">
+        <div className="rounded-lg border border-white/5 bg-card px-3 py-2">
           <div className="text-white/40">RIGHT ASCENSION (RA)</div>
           <div className="font-bold text-indigo-400">{raFormatted}</div>
         </div>
-        <div className="rounded-lg border border-white/5 bg-[#080E1C] px-3 py-2">
+        <div className="rounded-lg border border-white/5 bg-card px-3 py-2">
           <div className="text-white/40">DECLINATION (DEC)</div>
           <div className="font-bold text-indigo-400">{decFormatted}</div>
         </div>

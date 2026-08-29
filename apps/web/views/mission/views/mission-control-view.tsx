@@ -177,7 +177,7 @@ export function MissionControlView() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
         {/* Radar Map (3 columns wide) */}
-        <div className="rounded-xl border border-border/40 bg-card/90 bg-background flex flex-col border-2 border-primary/50 p-1 shadow-[0_0_50px_rgba(255,51,102,0.15)] lg:col-span-3">
+        <div className="rounded-xl border border-border/40 bg-card/90 bg-background flex flex-col border-2 border-primary/50 p-1 shadow-sm lg:col-span-3">
           <div className="flex items-center justify-between border-b border-primary/20 bg-card p-3">
             <div className="flex items-center gap-2 text-xs font-bold text-primary">
               <Target className="h-4 w-4 animate-pulse text-destructive" />
@@ -198,7 +198,7 @@ export function MissionControlView() {
                 center={[25, 45]} // Centered on Middle East roughly
                 zoom={3}
                 scrollWheelZoom={true}
-                className="h-full w-full bg-[#0a0f18]"
+                className="h-full w-full bg-card"
                 zoomControl={false}
               >
                 <Tile

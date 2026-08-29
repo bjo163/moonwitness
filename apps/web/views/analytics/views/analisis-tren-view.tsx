@@ -165,7 +165,7 @@ export function AnalisisTrenView() {
                 </div>,
                 <span
                   key="4"
-                  className={`tag-clip border px-2 py-0.5 text-[8px] font-bold ${tr.tabayyunStatus === "VERIFIED_HAQQ" ? "border-success/40 text-success bg-success/10" : "border-danger/40 text-danger bg-danger/10"}`}
+                  className={`rounded-md border px-2 py-0.5 text-[8px] font-bold ${tr.tabayyunStatus === "VERIFIED_HAQQ" ? "border-success/40 text-success bg-success/10" : "border-danger/40 text-danger bg-danger/10"}`}
                 >
                   {tr.tabayyunStatus}
                 </span>,

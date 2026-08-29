@@ -40,8 +40,8 @@ export function HaditsItemCard({ hadith, isActive, onClick }: HaditsItemCardProp
       onClick={onClick}
       className={`group relative cursor-pointer rounded-xl border p-5 transition-all duration-300 ${
         isActive
-          ? "border-cyan-500/50 bg-[#0B1528] shadow-[0_0_20px_rgba(0,240,255,0.15)]"
-          : "border-white/5 bg-[#080E1C] hover:border-white/20 hover:bg-[#0A1224]"
+          ? "border-cyan-500/50 bg-card shadow-sm"
+          : "border-white/5 bg-card hover:border-white/20 hover:bg-card"
       }`}
     >
       {/* Top Metadata Strip */}
@@ -68,7 +68,7 @@ export function HaditsItemCard({ hadith, isActive, onClick }: HaditsItemCardProp
       </div>
 
       {/* Arabic Matan */}
-      <div className="font-arabic mb-4 text-right text-lg leading-relaxed text-white/95 drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] sm:text-xl">
+      <div className="font-arabic mb-4 text-right text-lg leading-relaxed text-white/95 drop-shadow-sm sm:text-xl">
         {hadith.arabic}
       </div>
 

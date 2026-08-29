@@ -171,7 +171,7 @@ export function QiblaRadarWidget() {
   if (!mounted) return null
 
   return (
-    <div className="panel-box bg-background/90 space-y-4 border border-primary/40 p-4 font-mono shadow-[0_0_20px_rgba(0,240,255,0.15)] sm:p-5">
+    <div className="rounded-xl border border-border/40 bg-card bg-background/90 space-y-4 border border-primary/40 p-4 font-mono shadow-sm sm:p-5">
       <div className="flex items-center justify-between border-b border-primary/20 pb-2.5">
         <div className="flex items-center gap-2">
           {isSyncing ? (
@@ -205,7 +205,7 @@ export function QiblaRadarWidget() {
 
       <div className="grid grid-cols-1 items-center gap-4 md:grid-cols-2">
         {/* Left: Radar Visual Scanner */}
-        <div className="bg-panel tag-clip flex items-center gap-4 border border-primary/20 p-3">
+        <div className="bg-panel rounded-md flex items-center gap-4 border border-primary/20 p-3">
           {/* Animated SVG Radar Scope */}
           <div className="relative flex h-20 w-20 shrink-0 items-center justify-center">
             <svg
@@ -298,7 +298,7 @@ export function QiblaRadarWidget() {
         </div>
 
         {/* Right: Next Prayer Countdown */}
-        <div className="bg-panel tag-clip space-y-1.5 border border-primary/20 p-3">
+        <div className="bg-panel rounded-md space-y-1.5 border border-primary/20 p-3">
           <div className="flex items-center justify-between">
             <span className="flex items-center gap-1 text-[9px] font-bold text-primary uppercase">
               <Clock className="h-3 w-3 text-accent" />

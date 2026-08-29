@@ -63,7 +63,7 @@ export function OnboardingWizard() {
   const Icon = current.icon
   return (
     <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 p-4 backdrop-blur-md">
-      <div className="panel-clip bg-background/95 relative w-full max-w-2xl animate-in border border-cyan-500/30 p-8 shadow-[0_0_50px_rgba(0,240,255,0.15)] duration-500 fade-in zoom-in">
+      <div className="rounded-xl bg-card bg-background/95 relative w-full max-w-2xl animate-in border border-cyan-500/30 p-8 shadow-sm duration-500 fade-in zoom-in">
         {/* Progress Bar */}
         <div className="absolute top-0 left-0 h-1 w-full bg-black/40">
           <div
@@ -73,7 +73,7 @@ export function OnboardingWizard() {
         </div>
 
         <div className="flex flex-col items-center text-center">
-          <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full border-2 border-cyan-500/50 bg-cyan-500/10 shadow-[0_0_30px_rgba(0,240,255,0.2)] transition-all">
+          <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full border-2 border-cyan-500/50 bg-cyan-500/10 shadow-sm transition-all">
             <Icon className="h-10 w-10 text-cyan-400" />
           </div>
 
@@ -97,7 +97,7 @@ export function OnboardingWizard() {
 
             <button
               onClick={handleNext}
-              className="flex items-center gap-2 rounded-none border border-cyan-400 bg-cyan-500/20 px-6 py-3 font-mono text-xs font-bold tracking-widest text-cyan-300 uppercase shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all hover:bg-cyan-500 hover:text-black hover:shadow-[0_0_25px_rgba(0,240,255,0.5)]"
+              className="flex items-center gap-2 rounded-none border border-cyan-400 bg-cyan-500/20 px-6 py-3 font-mono text-xs font-bold tracking-widest text-cyan-300 uppercase shadow-sm transition-all hover:bg-cyan-500 hover:text-black hover:shadow-sm"
             >
               {step === STEPS.length - 1 ? (
                 <>

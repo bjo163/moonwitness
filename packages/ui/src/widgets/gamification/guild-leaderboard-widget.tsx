@@ -30,12 +30,12 @@ export function GuildLeaderboardWidget() {
               key={g.id}
               className={`relative flex items-center justify-between overflow-hidden rounded-xl border p-3 transition-all ${
                 isMember
-                  ? "border-fuchsia-500/50 bg-fuchsia-500/10 shadow-[0_0_15px_rgba(217,70,239,0.15)]"
+                  ? "border-fuchsia-500/50 bg-fuchsia-500/10 shadow-sm"
                   : "border-transparent bg-black/40 hover:bg-black/60"
               }`}
             >
               {isMember && (
-                <div className="absolute top-0 bottom-0 left-0 w-1 bg-fuchsia-500 shadow-[0_0_10px_rgba(217,70,239,0.8)]" />
+                <div className="absolute top-0 bottom-0 left-0 w-1 bg-fuchsia-500 shadow-sm" />
               )}
               <div className="flex items-center gap-3">
                 <span className="font-mono text-xs font-bold text-fuchsia-400/50">

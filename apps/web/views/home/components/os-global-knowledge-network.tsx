@@ -37,13 +37,13 @@ export function OSGlobalKnowledgeNetwork() {
         {/* ═══ TOP HEADER (Blueprint 11) ══════════════════════════════════════ */}
         <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-6 xl:flex-row xl:items-center">
           <div className="max-w-2xl space-y-4">
-            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-blue-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-blue-300 uppercase shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-blue-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-blue-300 uppercase shadow-sm">
               <span className="rounded-xs bg-blue-500 px-1.5 py-0.5 font-black text-black">
                 11
               </span>
               <span>GLOBAL KNOWLEDGE NETWORK</span>
             </div>
-            <h2 className="font-mono text-xl font-black tracking-widest text-white uppercase drop-shadow-[0_0_12px_rgba(255,255,255,0.7)] sm:text-2xl">
+            <h2 className="font-mono text-xl font-black tracking-widest text-white uppercase drop-shadow-sm sm:text-2xl">
               TOGETHER, WE PRESERVE. TOGETHER, WE DISCOVER.
             </h2>
           </div>
@@ -90,7 +90,7 @@ export function OSGlobalKnowledgeNetwork() {
           {/* LEFT SIDEBAR: COMMUNITY & ACTIVITY (Col 1-3) */}
           <div className="flex flex-col space-y-6 lg:col-span-3">
             {/* Community Overview */}
-            <div className="bg-background rounded-xl border border-blue-500/30 p-4 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+            <div className="bg-background rounded-xl border border-blue-500/30 p-4 shadow-sm">
               <div className="mb-4 text-[10px] font-black tracking-widest text-blue-400 uppercase">
                 COMMUNITY OVERVIEW
               </div>
@@ -268,11 +268,11 @@ export function OSGlobalKnowledgeNetwork() {
                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjMDAwIiBmaWxsLW9wYWNpdHk9IjAuMCIvPgo8Y2lyY2xlIGN4PSI0IiBjeT0iNCIgcj0iMC41IiBmaWxsPSIjMzBENDc0Ii8+Cjwvc3ZnPg==')] opacity-50" />
 
                 {/* Glowing Nodes representing activity across the world */}
-                <div className="absolute top-[40%] left-[20%] h-3 w-3 animate-pulse rounded-full bg-cyan-400 shadow-[0_0_15px_#00F0FF]" />
-                <div className="absolute top-[30%] left-[45%] h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_#10B981]" />
-                <div className="absolute top-[25%] left-[55%] h-5 w-5 animate-pulse rounded-full bg-purple-500 shadow-[0_0_20px_#A855F7]" />
-                <div className="absolute top-[50%] left-[75%] h-3 w-3 rounded-full bg-amber-400 shadow-[0_0_15px_#F59E0B]" />
-                <div className="absolute top-[60%] left-[80%] h-2 w-2 rounded-full bg-blue-400 shadow-[0_0_10px_#3B82F6]" />
+                <div className="absolute top-[40%] left-[20%] h-3 w-3 animate-pulse rounded-full bg-cyan-400 shadow-sm" />
+                <div className="absolute top-[30%] left-[45%] h-2 w-2 rounded-full bg-emerald-400 shadow-sm" />
+                <div className="absolute top-[25%] left-[55%] h-5 w-5 animate-pulse rounded-full bg-purple-500 shadow-sm" />
+                <div className="absolute top-[50%] left-[75%] h-3 w-3 rounded-full bg-amber-400 shadow-sm" />
+                <div className="absolute top-[60%] left-[80%] h-2 w-2 rounded-full bg-blue-400 shadow-sm" />
 
                 {/* Connecting paths */}
                 <svg
@@ -363,7 +363,7 @@ export function OSGlobalKnowledgeNetwork() {
                 </div>
 
                 <div className="flex flex-1 flex-col items-center justify-center text-center">
-                  <div className="mb-3 h-16 w-16 overflow-hidden rounded-full shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+                  <div className="mb-3 h-16 w-16 overflow-hidden rounded-full shadow-sm">
                     <img
                       src="/assets/cam_moon.png"
                       className="h-full w-full object-cover"
@@ -674,7 +674,7 @@ export function OSGlobalKnowledgeNetwork() {
             </div>
           </div>
 
-          <div className="bg-background relative flex flex-col justify-center overflow-hidden rounded-xl border-2 border-blue-500/40 p-6 shadow-[0_0_30px_rgba(59,130,246,0.15)] lg:col-span-4">
+          <div className="bg-background relative flex flex-col justify-center overflow-hidden rounded-xl border-2 border-blue-500/40 p-6 shadow-sm lg:col-span-4">
             <div className="absolute inset-0 opacity-40">
               <div className="absolute bottom-[-50%] left-1/2 h-full w-[200%] -translate-x-1/2 rounded-[100%] border border-blue-500/30" />
               <div className="absolute bottom-[-40%] left-1/2 h-full w-[180%] -translate-x-1/2 rounded-[100%] border border-primary/20" />

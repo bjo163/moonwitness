@@ -58,7 +58,7 @@ export function EclipseTrackerView() {
   const timeRemaining = `${days}D ${hours}H ${minutes}M ${seconds}S`
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#040814] pb-12 font-sans text-white selection:bg-yellow-500/30">
+    <div className="min-h-screen overflow-x-hidden bg-card pb-12 font-sans text-white selection:bg-yellow-500/30">
       <div className="mx-auto max-w-[1800px] space-y-6 px-4 pt-6 lg:px-6">
         {/* 1. Hero & Tabs */}
         <EclipseHeroTabs

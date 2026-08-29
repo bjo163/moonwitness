@@ -148,7 +148,7 @@ export function ModelDataTable({
         <div
           className={`flex flex-col gap-4 ${sideWidgets ? "w-full xl:w-3/4" : "w-full"}`}
         >
-          <div className="flex flex-col overflow-hidden rounded-xl border border-cyan-900/30 bg-black/40 shadow-[0_0_30px_rgba(34,211,238,0.03)] backdrop-blur-md">
+          <div className="flex flex-col overflow-hidden rounded-xl border border-cyan-900/30 bg-black/40 shadow-sm backdrop-blur-md">
             {/* Toolbar / Header */}
             <div className="flex flex-col gap-4 border-b border-cyan-900/30 p-4">
               {/* Tabs & Primary Actions */}
@@ -190,7 +190,7 @@ export function ModelDataTable({
                       setFormData({})
                       setIsAddOpen(true)
                     }}
-                    className="h-8 bg-cyan-500 px-3 text-xs font-semibold text-black shadow-[0_0_15px_rgba(34,211,238,0.3)] hover:bg-cyan-400"
+                    className="h-8 bg-cyan-500 px-3 text-xs font-semibold text-black shadow-sm hover:bg-cyan-400"
                   >
                     <Plus className="mr-1 h-4 w-4" />
                     ADD RECORD
@@ -406,7 +406,7 @@ export function ModelDataTable({
             <Button
               onClick={() => handleSave(false)}
               disabled={isSubmitting}
-              className="h-8 bg-cyan-500 px-6 text-xs font-semibold text-black shadow-[0_0_15px_rgba(34,211,238,0.3)] hover:bg-cyan-400"
+              className="h-8 bg-cyan-500 px-6 text-xs font-semibold text-black shadow-sm hover:bg-cyan-400"
             >
               {isSubmitting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -467,7 +467,7 @@ export function ModelDataTable({
             <Button
               onClick={() => handleSave(true)}
               disabled={isSubmitting}
-              className="h-8 bg-cyan-500 px-6 text-xs font-semibold text-black shadow-[0_0_15px_rgba(34,211,238,0.3)] hover:bg-cyan-400"
+              className="h-8 bg-cyan-500 px-6 text-xs font-semibold text-black shadow-sm hover:bg-cyan-400"
             >
               {isSubmitting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

@@ -876,7 +876,7 @@ ${transmissionText}`
     return (
       <div className="my-8 flex h-64 w-full flex-col items-center justify-center rounded-2xl border border-white/5 bg-black/40 font-sans backdrop-blur-xl">
         <div className="mb-2 flex animate-pulse items-center gap-3 text-primary">
-          <span className="h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_10px_#00F0FF]" />
+          <span className="h-2 w-2 rounded-full bg-cyan-400 shadow-sm" />
           <span className="text-xs font-light tracking-[0.3em] uppercase">
             ACQUIRING TRANSMISSION...
           </span>
@@ -951,7 +951,7 @@ ${transmissionText}`
       <div className="mb-4 flex flex-wrap items-center justify-between border-b border-white/10 pb-3 text-[9px] tracking-widest text-white/70 uppercase">
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]"></span>
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400 shadow-sm"></span>
             GLOBAL SIGNAL{" "}
             <span className="font-bold text-cyan-400">ONLINE</span>
           </div>
@@ -1026,7 +1026,7 @@ ${transmissionText}`
                 </span>
                 <span>GLOBAL PROGRESS</span>
               </div>
-              <span className="text-lg font-bold text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]">
+              <span className="text-lg font-bold text-white drop-shadow-sm">
                 {rotationPercentFormatted}%
               </span>
               {/* Mini Waveform visualization */}
@@ -1047,10 +1047,10 @@ ${transmissionText}`
       {/* ═══ TACTICAL MISSION SCREEN CONTAINER (The Premium Glow Card) ═══ */}
       <div
         id="whatsapp-share-card"
-        className={`relative w-full overflow-hidden rounded-[2rem] border border-white/5 p-6 font-sans text-white shadow-[0_20px_60px_rgba(0,10,30,0.8)] backdrop-blur-2xl sm:p-10 ${
+        className={`relative w-full overflow-hidden rounded-[2rem] border border-white/5 p-6 font-sans text-white shadow-sm backdrop-blur-2xl sm:p-10 ${
           isZapping
             ? "translate-x-[2px] -translate-y-[2px] bg-cyan-500/30 brightness-150 contrast-125 saturate-150 transition-none"
-            : "bg-[#0a0f1d]/60 transition-all duration-700"
+            : "bg-card transition-all duration-700"
         }`}
       >
         {/* Cosmic Background Image with Mask Transparency (Matching Home Page) */}
@@ -1070,7 +1070,7 @@ ${transmissionText}`
         </div>
 
         {/* Subtle radial overlay to ensure text readability on the left */}
-        <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-r from-[#030614] via-[#030614]/80 to-transparent" />
+        <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-r -background -background to-transparent" />
 
         {/* Hologram Bar Effect */}
         <div className="absolute top-0 left-0 h-[1px] w-full bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent opacity-50" />
@@ -1080,17 +1080,17 @@ ${transmissionText}`
           <div className="flex items-center gap-4">
             <div
               onClick={triggerZapEffect}
-              className={`flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border bg-gradient-to-br shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-transform hover:scale-105 active:scale-95 ${
+              className={`flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border bg-gradient-to-br shadow-sm transition-transform hover:scale-105 active:scale-95 ${
                 isZapping
-                  ? "scale-110 border-cyan-400 bg-cyan-400/50 shadow-[0_0_40px_rgba(34,211,238,1)]"
+                  ? "scale-110 border-cyan-400 bg-cyan-400/50 shadow-sm"
                   : "border-blue-500/30 from-blue-500/20 to-purple-500/10"
               }`}
               title="Play Futuristic Scan Sound"
             >
-              <Moon className="h-6 w-6 text-blue-300 drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]" />
+              <Moon className="h-6 w-6 text-blue-300 drop-shadow-sm" />
             </div>
             <div>
-              <h3 className="text-sm font-medium tracking-[0.3em] text-blue-50 uppercase drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">
+              <h3 className="text-sm font-medium tracking-[0.3em] text-blue-50 uppercase drop-shadow-sm">
                 MOONWITNESS MISSION TERMINAL
               </h3>
               <p className="mt-1 text-[10px] font-medium tracking-[0.2em] text-blue-300/70 uppercase">
@@ -1105,7 +1105,7 @@ ${transmissionText}`
           {/* ROW 1: Current Cycle (Left) + Ayah Panel (Right) */}
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
             {/* Left: Current Cycle Timer */}
-            <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-3xl border border-white/5 bg-[#0a0f1d]/40 p-8 backdrop-blur-xl lg:col-span-3">
+            <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-3xl border border-white/5 bg-card p-8 backdrop-blur-xl lg:col-span-3">
               <div className="pointer-events-none absolute top-0 left-0 h-full w-full bg-gradient-to-b from-blue-900/10 to-transparent" />
 
               {/* Mosque Background Silhouette (Subtle) */}
@@ -1114,7 +1114,7 @@ ${transmissionText}`
               <span className="text-[9px] font-bold tracking-widest text-amber-500 uppercase">
                 CURRENT <span className="text-blue-300">CYCLE</span>
               </span>
-              <h2 className="mt-2 text-center text-2xl font-light tracking-widest text-white uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] md:text-4xl">
+              <h2 className="mt-2 text-center text-2xl font-light tracking-widest text-white uppercase drop-shadow-sm md:text-4xl">
                 {data.prayerPeriod?.name || "ISYA'"}
               </h2>
               <p className="mt-2 text-[10px] tracking-widest text-gray-400">
@@ -1125,9 +1125,9 @@ ${transmissionText}`
               </p>
 
               {/* Functional SVG Circular Timer */}
-              <div className="relative mt-8 flex h-40 w-40 items-center justify-center rounded-full shadow-[0_0_30px_rgba(79,70,229,0.2)]">
+              <div className="relative mt-8 flex h-40 w-40 items-center justify-center rounded-full shadow-sm">
                 <svg
-                  className="absolute inset-0 h-full w-full -rotate-90 transform drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
+                  className="absolute inset-0 h-full w-full -rotate-90 transform drop-shadow-sm"
                   viewBox="0 0 100 100"
                 >
                   {/* Background track */}
@@ -1250,17 +1250,17 @@ ${transmissionText}`
 
                 {/* Arabic & Number Marker */}
                 <div className="mb-4 flex items-start justify-end gap-6">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/20 bg-[#030614]/50 font-serif text-lg text-white">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/20 bg-card font-serif text-lg text-white">
                     {data.ayah.ayahNumber.toLocaleString("ar-EG")}
                   </div>
-                  <div className="arabic-text max-w-4xl text-right text-4xl leading-[2.5] font-bold text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] sm:text-5xl lg:text-6xl">
+                  <div className="arabic-text max-w-4xl text-right text-4xl leading-[2.5] font-bold text-white drop-shadow-sm sm:text-5xl lg:text-6xl">
                     {data.ayah.textArabic}
                   </div>
                 </div>
 
                 {/* Latin */}
                 {data.ayah.textLatin && (
-                  <p className="mb-12 text-right font-serif text-base font-medium text-cyan-400 italic drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]">
+                  <p className="mb-12 text-right font-serif text-base font-medium text-cyan-400 italic drop-shadow-sm">
                     "{data.ayah.textLatin}"
                   </p>
                 )}
@@ -1302,7 +1302,7 @@ ${transmissionText}`
           <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
             {/* 1. Next Verse Pair */}
             <div
-              className={`flex flex-col justify-between rounded-2xl border border-emerald-500/20 bg-[#0a0f1d]/40 p-6 backdrop-blur-xl transition-colors hover:border-emerald-500/40 ${!data.asmaulSurah ? "opacity-50" : ""}`}
+              className={`flex flex-col justify-between rounded-2xl border border-emerald-500/20 bg-card p-6 backdrop-blur-xl transition-colors hover:border-emerald-500/40 ${!data.asmaulSurah ? "opacity-50" : ""}`}
             >
               <div className="mb-4 flex items-start justify-between">
                 <h4 className="text-[10px] tracking-[0.2em] text-emerald-400 uppercase">
@@ -1316,14 +1316,14 @@ ${transmissionText}`
               </div>
               <div className="flex items-end justify-between">
                 <div>
-                  <h3 className="text-xl font-medium text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">
+                  <h3 className="text-xl font-medium text-white drop-shadow-sm">
                     {data.asmaulSurah?.nameLatin || "—"}
                   </h3>
                   <p className="mt-1 text-[11px] text-emerald-300">
                     {data.asmaulSurah ? asmaulSurahMeaning : "No pair"}
                   </p>
                 </div>
-                <div className="font-serif text-3xl font-bold text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.4)]">
+                <div className="font-serif text-3xl font-bold text-emerald-400 drop-shadow-sm">
                   {data.asmaulSurah?.nameArabic || ""}
                 </div>
               </div>
@@ -1335,7 +1335,7 @@ ${transmissionText}`
 
             {/* 2. Ayah Pair */}
             <div
-              className={`flex flex-col justify-between rounded-2xl border border-fuchsia-500/20 bg-[#0a0f1d]/40 p-6 backdrop-blur-xl transition-colors hover:border-fuchsia-500/40 ${!data.asmaulAyah ? "opacity-50" : ""}`}
+              className={`flex flex-col justify-between rounded-2xl border border-fuchsia-500/20 bg-card p-6 backdrop-blur-xl transition-colors hover:border-fuchsia-500/40 ${!data.asmaulAyah ? "opacity-50" : ""}`}
             >
               <div className="mb-4 flex items-start justify-between">
                 <h4 className="text-[10px] tracking-[0.2em] text-fuchsia-400 uppercase">
@@ -1349,14 +1349,14 @@ ${transmissionText}`
               </div>
               <div className="flex items-end justify-between">
                 <div>
-                  <h3 className="text-xl font-medium text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">
+                  <h3 className="text-xl font-medium text-white drop-shadow-sm">
                     {data.asmaulAyah?.nameLatin || "—"}
                   </h3>
                   <p className="mt-1 text-[11px] text-fuchsia-300">
                     {data.asmaulAyah ? asmaulAyahMeaning : "No pair"}
                   </p>
                 </div>
-                <div className="font-serif text-3xl font-bold text-fuchsia-400 drop-shadow-[0_0_10px_rgba(217,70,239,0.4)]">
+                <div className="font-serif text-3xl font-bold text-fuchsia-400 drop-shadow-sm">
                   {data.asmaulAyah?.nameArabic || ""}
                 </div>
               </div>
@@ -1369,7 +1369,7 @@ ${transmissionText}`
           {/* ROW 3: Lore & Wisdom */}
           <div className="mt-2 grid grid-cols-1 gap-6 md:grid-cols-2">
             {data.hadith ? (
-              <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-[#0a0f1d]/60 to-[#040816]/80 p-8 shadow-lg backdrop-blur-xl transition-colors hover:border-amber-500/40">
+              <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br -background to-background/80 p-8 shadow-lg backdrop-blur-xl transition-colors hover:border-amber-500/40">
                 <div className="mb-6 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span className="text-base text-amber-500">👑</span>
@@ -1381,7 +1381,7 @@ ${transmissionText}`
                     {hadithGradeText.toUpperCase()}
                   </span>
                 </div>
-                <h3 className="mb-6 text-[12px] font-medium tracking-[0.1em] text-amber-300 uppercase drop-shadow-[0_0_8px_rgba(251,191,36,0.4)]">
+                <h3 className="mb-6 text-[12px] font-medium tracking-[0.1em] text-amber-300 uppercase drop-shadow-sm">
                   {data.hadith.bookName} • RECORD_NO. {data.hadith.number}
                 </h3>
                 <div className="flex gap-6">
@@ -1396,13 +1396,13 @@ ${transmissionText}`
                 </div>
               </div>
             ) : (
-              <div className="flex items-center justify-center rounded-2xl border border-white/5 bg-[#0a0f1d]/20 p-8 text-xs text-white/20 backdrop-blur-xl">
+              <div className="flex items-center justify-center rounded-2xl border border-white/5 bg-card p-8 text-xs text-white/20 backdrop-blur-xl">
                 NO LORE DETECTED
               </div>
             )}
 
             {data.wisdom ? (
-              <div className="relative overflow-hidden rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-[#0a0f1d]/60 to-[#040816]/80 p-8 shadow-lg backdrop-blur-xl transition-colors hover:border-cyan-500/40">
+              <div className="relative overflow-hidden rounded-2xl border border-cyan-500/20 bg-gradient-to-br -background to-background/80 p-8 shadow-lg backdrop-blur-xl transition-colors hover:border-cyan-500/40">
                 <div className="pointer-events-none absolute top-[10%] right-[-10%] h-40 w-40 rounded-full border border-cyan-500/10 bg-cyan-500/10 blur-2xl" />
                 <div className="relative z-10 mb-8 flex items-center gap-3">
                   <span className="text-base text-cyan-500">🪐</span>
@@ -1427,7 +1427,7 @@ ${transmissionText}`
                 </p>
               </div>
             ) : (
-              <div className="flex items-center justify-center rounded-2xl border border-white/5 bg-[#0a0f1d]/20 p-8 text-xs text-white/20 backdrop-blur-xl">
+              <div className="flex items-center justify-center rounded-2xl border border-white/5 bg-card p-8 text-xs text-white/20 backdrop-blur-xl">
                 NO SCRIPTURE DETECTED
               </div>
             )}

@@ -20,7 +20,7 @@ export function EclipseTelemetrySidebar({ astro, isSolar }: EclipseTelemetrySide
   return (
     <div className="space-y-4">
       {/* 1. Solar & Space Weather Telemetry */}
-      <div className="rounded-xl border border-white/10 bg-[#080E1C] p-5 shadow-xl">
+      <div className="rounded-xl border border-white/10 bg-card p-5 shadow-xl">
         <div className="mb-4 flex items-center justify-between border-b border-white/5 pb-3">
           <div className="flex items-center gap-2">
             <Activity className="h-4 w-4 text-yellow-400" />
@@ -55,7 +55,7 @@ export function EclipseTelemetrySidebar({ astro, isSolar }: EclipseTelemetrySide
       </div>
 
       {/* 2. Islamic Prophetic Eclipse Guidance (Shalat Kusuf / Khusuf) */}
-      <div className="rounded-xl border border-yellow-500/20 bg-gradient-to-b from-[#141C36] to-[#080E1C] p-5 shadow-lg">
+      <div className="rounded-xl border border-yellow-500/20 bg-gradient-to-b from-card -background p-5 shadow-lg">
         <div className="mb-2 flex items-center gap-2 text-yellow-400">
           <BookOpen className="h-4 w-4" />
           <span className="font-mono text-xs font-black uppercase">

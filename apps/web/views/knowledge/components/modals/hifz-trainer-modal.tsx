@@ -51,7 +51,7 @@ export function HifzTrainerModal({
       >
         <div className="space-y-4 p-6 text-xs">
           <div className="flex items-center justify-between">
-            <span className="tag-clip tag-clip px-2 py-0.5 text-[8px] font-bold">
+            <span className="rounded-md rounded-md px-2 py-0.5 text-[8px] font-bold">
               Q.S {surahName} ({surahNumber}:{ayahNumber})
             </span>
             <span className="text-success text-[10px] font-bold">
@@ -63,7 +63,7 @@ export function HifzTrainerModal({
           <div className="grid grid-cols-3 gap-2">
             <button
               onClick={() => setHideMode("NONE")}
-              className={`tag-clip border py-2 text-[10px] font-bold transition-all ${
+              className={`rounded-md border py-2 text-[10px] font-bold transition-all ${
                 hideMode === "NONE"
                   ? "border-primary bg-primary/20 text-primary"
                   : "bg-background border-primary/20 text-muted"
@@ -73,7 +73,7 @@ export function HifzTrainerModal({
             </button>
             <button
               onClick={() => setHideMode("BLUR")}
-              className={`tag-clip border py-2 text-[10px] font-bold transition-all ${
+              className={`rounded-md border py-2 text-[10px] font-bold transition-all ${
                 hideMode === "BLUR"
                   ? "border-accent bg-accent/20 text-accent"
                   : "bg-background border-primary/20 text-muted"
@@ -83,7 +83,7 @@ export function HifzTrainerModal({
             </button>
             <button
               onClick={() => setHideMode("HIDE")}
-              className={`tag-clip border py-2 text-[10px] font-bold transition-all ${
+              className={`rounded-md border py-2 text-[10px] font-bold transition-all ${
                 hideMode === "HIDE"
                   ? "bg-danger/20 text-danger border-danger"
                   : "bg-background border-primary/20 text-muted"

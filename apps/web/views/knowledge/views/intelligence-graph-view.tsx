@@ -418,7 +418,7 @@ export function IntelligenceGraphView() {
         accentColor="primary"
       />
 
-      <div className="rounded-xl border border-border/40 bg-card/90 bg-background relative flex h-[700px] flex-col overflow-hidden border-2 border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.15)]">
+      <div className="rounded-xl border border-border/40 bg-card/90 bg-background relative flex h-[700px] flex-col overflow-hidden border-2 border-primary/50 shadow-sm">
         {/* Top Bar HUD */}
         <div className="pointer-events-none absolute top-0 left-0 z-10 flex w-full items-center justify-between p-4">
           <div className="flex items-center gap-3">
@@ -462,7 +462,7 @@ export function IntelligenceGraphView() {
 
         {/* Selected Node HUD */}
         {hoveredNode && (
-          <div className="pointer-events-none absolute right-6 bottom-6 z-10 max-w-[300px] border border-primary bg-black/80 p-4 shadow-[0_0_20px_rgba(0,240,255,0.2)] backdrop-blur-md">
+          <div className="pointer-events-none absolute right-6 bottom-6 z-10 max-w-[300px] border border-primary bg-black/80 p-4 shadow-sm backdrop-blur-md">
             <div className="mb-2 flex items-center gap-2 border-b border-primary/20 pb-2">
               <Scan className="animate-spin-slow h-4 w-4 text-accent" />
               <span className="text-xs font-bold tracking-widest text-primary">

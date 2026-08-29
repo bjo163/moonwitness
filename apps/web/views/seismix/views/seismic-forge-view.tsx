@@ -256,7 +256,7 @@ function MagnitudeBadge({ magnitude }: { magnitude: number }) {
 
   return (
     <div
-      className="tag-clip flex items-center gap-1.5 border px-2 py-1 font-mono text-[9px] font-bold tracking-widest"
+      className="rounded-md flex items-center gap-1.5 border px-2 py-1 font-mono text-[9px] font-bold tracking-widest"
       style={{
         color: level.color,
         borderColor: `${level.color}50`,
@@ -294,7 +294,7 @@ function EventCard({ event }: { event: SeismicEvent }) {
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div
-            className="tag-clip flex h-6 w-6 items-center justify-center border"
+            className="rounded-md flex h-6 w-6 items-center justify-center border"
             style={{
               borderColor: `${color}50`,
               background: `${color}15`,
@@ -358,7 +358,7 @@ function PulseRing() {
         />
       ))}
       <div
-        className="tag-clip flex h-14 w-14 items-center justify-center border-2"
+        className="rounded-md flex h-14 w-14 items-center justify-center border-2"
         style={{
           borderColor: "rgba(255, 230, 0, 0.6)",
           background: "rgba(255, 230, 0, 0.1)",
