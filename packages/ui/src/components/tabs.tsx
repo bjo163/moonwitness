@@ -24,11 +24,11 @@ function Tabs({
 }
 
 const tabsListVariants = cva(
-  "group/tabs-list rounded-md bg-panel inline-flex w-fit items-center justify-center border border-primary/30 p-1 text-primary",
+  "group/tabs-list inline-flex w-fit items-center justify-center rounded-md border border-border bg-muted p-1 text-muted-foreground",
   {
     variants: {
       variant: {
-        default: "bg-panel",
+        default: "bg-muted",
         line: "gap-1 border-none bg-transparent",
       },
     },
@@ -58,7 +58,7 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={cn(
-        "rounded-md inline-flex cursor-pointer items-center justify-center gap-1.5 border border-transparent px-3 py-1.5 font-mono text-xs font-black tracking-widest text-primary uppercase transition-all hover:bg-primary/10 hover:text-primary data-active:border-primary data-active:bg-primary/20 data-active:text-primary data-active:shadow-sm",
+        "inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-md border border-transparent px-3 py-1.5 font-sans text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground data-active:border-border data-active:bg-card data-active:text-foreground data-active:shadow-sm",
         className
       )}
       {...props}
@@ -97,7 +97,12 @@ export function SimpleTabs({
   className?: string
 }) {
   return (
-    <div className={cn("flex flex-wrap gap-1 border-b border-primary/20 pb-2", className)}>
+    <div
+      className={cn(
+        "flex flex-wrap gap-1 border-b border-primary/20 pb-2",
+        className
+      )}
+    >
       {tabs.map((t) => {
         const isActive = t.id === activeTab
         const Icon = t.icon
@@ -107,7 +112,7 @@ export function SimpleTabs({
             type="button"
             onClick={() => onChange(t.id)}
             className={cn(
-              "rounded-md flex items-center gap-1.5 border px-3 py-1.5 font-mono text-xs font-bold tracking-wider uppercase transition-all",
+              "flex items-center gap-1.5 rounded-md border px-3 py-1.5 font-mono text-xs font-bold tracking-wider uppercase transition-all",
               isActive
                 ? "border-primary bg-primary/20 text-white shadow-sm"
                 : "border-transparent text-slate-400 hover:bg-white/5 hover:text-white"

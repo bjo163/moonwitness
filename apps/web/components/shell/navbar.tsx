@@ -1,92 +1,45 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Orbit, Menu, X } from "lucide-react"
+import { Menu, Moon, X } from "lucide-react"
 import { useAuthSession } from "@moon/client"
 import type { NavLinkConfig } from "@workspace/types"
-import { NotificationBell, GlobalSearchModal } from "@workspace/ui"
-import { NavbarProfileMenu, type UserProfileData } from "./navbar-profile-menu"
-/* eslint-disable-next-line @typescript-eslint/no-magic-numbers -- Equalizer waveform heights */
-const EQUALIZER_BASE_HEIGHTS = [3, 7, 10, 5, 8, 4, 9, 6]
-const EQUALIZER_MOD_FACTOR = 3
-const EQUALIZER_MAX_HEIGHT = 12
-const EQUALIZER_DELAY_STEP_MS = 150
-
+import { GlobalSearchModal, NotificationBell } from "@workspace/ui"
 import { APP_PORTS, NAVIGATION_MESH } from "@workspace/types"
+import { NavbarProfileMenu, type UserProfileData } from "./navbar-profile-menu"
 
 export function Navbar({
   navLinks = NAVIGATION_MESH.portal,
 }: {
   navLinks?: readonly NavLinkConfig[] | NavLinkConfig[]
 }) {
-  const commandCenterUrl = process.env.NEXT_PUBLIC_COMMAND_CENTER_URL || `http://localhost:${APP_PORTS.COMMAND_CENTER}`
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [userProfile, setUserProfile] = useState<UserProfileData | null>(null)
-  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
-
-  const [activeSection, setActiveSection] = useState<string>("home")
+  const commandCenterUrl =
+    process.env.NEXT_PUBLIC_COMMAND_CENTER_URL ||
+    `http://localhost:${APP_PORTS.COMMAND_CENTER}`
   const { user, logout } = useAuthSession()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
+  const [userProfile, setUserProfile] = useState<UserProfileData | null>(null)
 
   useEffect(() => {
-    if (user) {
-      setUserProfile({
-        name: user.name || (user.email ? user.email.split("@")[0] : "User"),
-        email: user.email || "",
-        role: "user",
-        avatarUrl: "",
-      })
-    } else {
-      setUserProfile(null)
-    }
+    setUserProfile(
+      user
+        ? {
+            name: user.name || user.email?.split("@")[0] || "User",
+            email: user.email || "",
+            role: "user",
+            avatarUrl: "",
+          }
+        : null
+    )
   }, [user])
 
-  // ScrollSpy effect for /home page
-  useEffect(() => {
-    if (pathname !== "/home" && pathname !== "/") return
-
-    const handleScroll = () => {
-      const sections = [
-        "hero",
-        "observatory",
-        "knowledge",
-        "analytics",
-        "mission",
-      ]
-      let currentSection = "home"
-
-      for (const id of sections) {
-        const el = document.getElementById(id)
-        if (el) {
-          const rect = el.getBoundingClientRect()
-          const SCROLL_OFFSET = 250
-          // If the top offset of the viewport is inside this section
-          if (rect.top <= SCROLL_OFFSET && rect.bottom >= SCROLL_OFFSET) {
-            currentSection = id === "hero" ? "home" : id
-            break
-          }
-        }
-      }
-      setActiveSection(currentSection)
-    }
-
-    window.addEventListener("scroll", handleScroll)
-    // Initialize on mount
-    setTimeout(handleScroll, 100)
-
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [pathname])
-
-  // Hide global navbar on dedicated system portals
-  if (
-    pathname?.startsWith("/command-center") ||
-    pathname?.startsWith("/auth")
-  ) {
+  if (pathname?.startsWith("/command-center") || pathname?.startsWith("/auth"))
     return null
-  }
 
   const handleLogout = () => {
     logout()
@@ -96,129 +49,77 @@ export function Navbar({
   }
 
   const handleNavClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
+    event: React.MouseEvent<HTMLAnchorElement>,
     href: string,
     label: string
   ) => {
-    if (pathname === "/home") {
-      const targetId =
-        label.toLowerCase() === "home" ? "hero" : label.toLowerCase()
-      const el = document.getElementById(targetId)
-      if (el) {
-        e.preventDefault()
-        el.scrollIntoView({ behavior: "smooth" })
-        setMobileMenuOpen(false)
-        return
-      }
-    }
-    if (href.startsWith("#") && pathname === "/") {
-      e.preventDefault()
-      const el = document.querySelector(href)
-      if (el) el.scrollIntoView({ behavior: "smooth" })
+    if ((pathname === "/" || pathname === "/home") && !href.startsWith("/")) {
+      event.preventDefault()
+      document
+        .getElementById(
+          label.toLowerCase() === "home" ? "hero" : label.toLowerCase()
+        )
+        ?.scrollIntoView({ behavior: "smooth" })
     }
     setMobileMenuOpen(false)
   }
 
+  const isActive = (link: NavLinkConfig) =>
+    pathname === link.href || pathname?.startsWith(`${link.href}/`)
+
   return (
-    <header className="bg-card/90 fixed inset-x-0 top-0 z-50 border-b border-border font-mono text-white shadow-sm backdrop-blur-md select-none">
-      {/* Topmost Subtle Telemetry Line */}
-      <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-transparent to-transparent opacity-60" />
-
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background shadow-sm">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-8">
-        {/* LEFT: ORBIT LOGO & BRANDING (From Image 2 top-left) */}
-        <Link
-          href="/home"
-          className="group flex cursor-pointer items-center gap-3.5"
-        >
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-full border border-border bg-black/60 shadow-sm transition-colors group-hover:border-border">
-            <div
-              className="animate-spin-slow absolute h-[115%] w-[115%] rounded-full border border-dashed border-border"
-              style={{ animationDuration: "20s" }}
-            />
-            <Orbit className="h-5 w-5 text-primary drop-shadow-sm transition-transform duration-300 group-hover:scale-110" />
-          </div>
-          <div>
-            <div className="text-sm font-black tracking-widest whitespace-nowrap text-white uppercase drop-shadow-sm sm:text-base">
+        <Link href="/home" className="group flex items-center gap-3">
+          <span className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-primary transition-colors group-hover:bg-accent">
+            <Moon className="h-5 w-5" />
+          </span>
+          <span>
+            <span className="block text-sm font-semibold text-foreground sm:text-base">
               MOONWITNESS OS
-            </div>
-            <div className="font-sans text-[9px] font-semibold tracking-[0.2em] whitespace-nowrap text-primary uppercase">
+            </span>
+            <span className="block text-[10px] text-muted-foreground">
               GLOBAL DIVINE OBSERVATORY
-            </div>
-          </div>
+            </span>
+          </span>
         </Link>
-
-        {/* CENTER: STUDIO MINIMALIST NAVIGATION (Blueprint 01) */}
-        <nav className="hidden items-center gap-7 text-[11px] font-medium tracking-[0.2em] uppercase lg:flex">
+        <nav
+          className="hidden items-center gap-1 text-sm font-medium lg:flex"
+          aria-label="Primary navigation"
+        >
           {navLinks.map((link) => (
-            <div key={link.href} className="group relative py-1.5">
+            <div key={link.href} className="group relative">
               <Link
                 href={link.href}
-                onClick={(e) => handleNavClick(e, link.href, link.label)}
-                className={`flex items-center gap-1 transition-colors duration-300 ${
-                  (pathname === "/home" &&
-                    activeSection === link.label.toLowerCase()) ||
-                  (pathname !== "/home" &&
-                    (pathname === link.href ||
-                      pathname?.startsWith(link.href + "/")))
-                    ? "text-primary"
-                    : "text-primary hover:text-white"
-                }`}
+                onClick={(event) =>
+                  handleNavClick(event, link.href, link.label)
+                }
+                className={`flex items-center rounded-md px-3 py-2 transition-colors ${isActive(link) ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"}`}
               >
-                <span>{link.label}</span>
-                {link.subLinks && (
-                  <svg
-                    className="h-3 w-3 opacity-50 transition-opacity group-hover:opacity-100"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                )}
-                {((pathname === "/home" &&
-                  activeSection === link.label.toLowerCase()) ||
-                  (pathname !== "/home" && pathname === link.href)) && (
-                  <span className="absolute bottom-0 left-0 h-[1px] w-full bg-primary shadow-sm" />
-                )}
-                <span className="absolute bottom-0 left-0 h-[1px] w-0 bg-white opacity-50 transition-all duration-300 group-hover:w-full" />
+                {link.label}
               </Link>
-
-              {/* Dropdown Menu (Glassmorphism) */}
               {link.subLinks && (
-                <div className="invisible absolute top-full left-0 z-50 mt-2 w-56 translate-y-2 opacity-0 transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                  <div className="bg-card/90 flex flex-col gap-1 rounded-xl border border-border p-2 shadow-sm backdrop-blur-xl">
-                    {link.subLinks.map((sub) => (
-                      <Link
-                        key={sub.label}
-                        href={sub.href}
-                        className={`block rounded-lg px-4 py-3 text-[10px] font-medium tracking-widest uppercase transition-all ${
-                          pathname === sub.href
-                            ? "border border-border bg-primary/10 text-primary"
-                            : "border border-transparent text-primary hover:bg-white/5 hover:text-white"
-                        }`}
-                      >
-                        {sub.label}
-                      </Link>
-                    ))}
-                  </div>
+                <div className="invisible absolute top-full left-0 mt-1 w-56 translate-y-1 rounded-lg border border-border bg-card p-2 opacity-0 shadow-md transition-[opacity,visibility,transform] group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                  {link.subLinks.map((sub) => (
+                    <Link
+                      key={sub.label}
+                      href={sub.href}
+                      className={`block rounded-md px-3 py-2 text-sm transition-colors ${pathname === sub.href ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"}`}
+                    >
+                      {sub.label}
+                    </Link>
+                  ))}
                 </div>
               )}
             </div>
           ))}
         </nav>
-
-        {/* RIGHT: MISSION STATUS & AUDIO WAVEFORM (Blueprint 01) */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <div className="hidden md:block">
             <GlobalSearchModal />
           </div>
           <NotificationBell />
-          <div className="bg-card/80 relative flex items-center gap-4 rounded-full border border-border px-4 py-1.5 shadow-sm backdrop-blur-md">
+          <div className="flex items-center rounded-md border border-border bg-card px-2 py-1.5">
             <NavbarProfileMenu
               userProfile={userProfile}
               profileDropdownOpen={profileDropdownOpen}
@@ -226,32 +127,11 @@ export function Navbar({
               commandCenterUrl={commandCenterUrl}
               onLogout={handleLogout}
             />
-
-            <span className="hidden text-white/10 sm:inline">|</span>
-
-            {/* Delicate Animated Audio Equalizer */}
-            <div className="hidden h-3 items-end gap-[2px] px-1 sm:flex">
-              {EQUALIZER_BASE_HEIGHTS.map((h, i) => (
-                <span
-                  key={i}
-                  className="inline-block w-[1px] bg-primary opacity-70"
-                  style={{
-                    height: `${Math.max(2, (h * ((i % EQUALIZER_MOD_FACTOR) + 1)) % EQUALIZER_MAX_HEIGHT)}px`,
-                    animationDelay: `${i * EQUALIZER_DELAY_STEP_MS}ms`,
-                    animationDuration: "1.5s",
-                    animationIterationCount: "infinite",
-                    animationName: "pulse",
-                  }}
-                />
-              ))}
-            </div>
           </div>
-
-          {/* Mobile menu toggle button */}
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="rounded-md border border-border bg-black/60 p-2 text-primary transition-colors hover:border-border hover:text-white lg:hidden"
-            aria-label="Toggle Navigation"
+            onClick={() => setMobileMenuOpen((open) => !open)}
+            className="rounded-md border border-border bg-card p-2 text-foreground transition-colors hover:bg-accent lg:hidden"
+            aria-label="Toggle navigation"
           >
             {mobileMenuOpen ? (
               <X className="h-5 w-5" />
@@ -259,47 +139,20 @@ export function Navbar({
               <Menu className="h-5 w-5" />
             )}
           </button>
-
-          <div className="hidden cursor-pointer items-center justify-center rounded-md border border-white/10 p-2 text-white/60 transition-colors hover:text-white xl:flex">
-            <Menu className="h-5 w-5" />
-          </div>
         </div>
       </div>
-
-      {/* Mobile Nav Overlay */}
       {mobileMenuOpen && (
-        <div className="bg-card animate-in space-y-4 border-t border-border p-6 shadow-2xl duration-200 fade-in lg:hidden">
-          <div className="flex flex-col gap-3 text-xs font-bold tracking-widest uppercase">
-            {navLinks.map((link) => (
-              <div key={link.label} className="flex flex-col gap-2">
-                <Link
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href, link.label)}
-                  className="rounded-md border border-border bg-black/60 p-3 text-center shadow-inner transition-all hover:border-border hover:text-primary"
-                >
-                  {link.label}
-                </Link>
-                {link.subLinks && (
-                  <div className="grid grid-cols-2 gap-2 pl-4">
-                    {link.subLinks.map((sub) => (
-                      <Link
-                        key={sub.label}
-                        href={sub.href}
-                        onClick={(e) => handleNavClick(e, sub.href, sub.label)}
-                        className="rounded-md border border-white/10 bg-white/5 p-2 text-center text-[9px] text-primary transition-all hover:text-primary"
-                      >
-                        {sub.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-          <div className="flex items-center justify-center gap-2 border-t border-white/10 pt-3 text-center text-[11px] font-bold text-emerald-400">
-            <span className="h-2 w-2 animate-ping rounded-full bg-emerald-400" />
-            <span>MOONWITNESS SYSTEM : 100% SYNCHRONIZED</span>
-          </div>
+        <div className="space-y-2 border-t border-border bg-card p-4 shadow-md lg:hidden">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={(event) => handleNavClick(event, link.href, link.label)}
+              className={`block rounded-md border border-border px-3 py-2 text-sm transition-colors ${isActive(link) ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"}`}
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
       )}
     </header>

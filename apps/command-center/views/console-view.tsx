@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import { Terminal, Zap, Sparkles } from "lucide-react"
-import { Button } from "@workspace/ui"
+import { Button, Card, Input } from "@workspace/ui"
 import {
   fetchEarthquakes,
   fetchGoogleTrends,
@@ -35,7 +35,8 @@ const INITIAL_LOGS: LogItem[] = [
     id: "4",
     timestamp: "00:00:04",
     sender: "KHIDRA_AI",
-    message: "Greetings, Explorer. Terminal interactive interface is ready. Type 'help' to list available commands.",
+    message:
+      "Greetings, Explorer. Terminal interactive interface is ready. Type 'help' to list available commands.",
   },
 ]
 
@@ -55,9 +56,9 @@ const COMMAND_DELAY_MS = 250
 
 function ConsoleHeader() {
   return (
-    <header className="flex flex-col gap-4 border-b border-border/40 pb-5 md:flex-row md:items-center md:justify-between">
+    <header className="flex flex-col gap-4 border-b border-border pb-5 md:flex-row md:items-center md:justify-between">
       <div className="flex items-center gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-primary/40 bg-primary/10 shadow-sm">
+        <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-border bg-muted">
           <Terminal className="h-6 w-6 text-primary" />
         </div>
         <div>
@@ -65,7 +66,7 @@ function ConsoleHeader() {
             <h1 className="text-xl font-bold text-foreground md:text-2xl">
               Developer Console
             </h1>
-            <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 font-sans text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+            <span className="rounded-md border border-success/30 bg-success/10 px-2.5 py-0.5 font-sans text-xs font-medium text-success">
               System Health
             </span>
           </div>
@@ -77,7 +78,7 @@ function ConsoleHeader() {
 
       <div className="flex items-center gap-3">
         <div className="hidden items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 font-sans text-xs text-muted-foreground lg:flex">
-          <Sparkles className="h-4 w-4 text-primary" />
+          <Sparkles className="h-4 w-4 text-muted-foreground" />
           <span>Khidra Intelligence Engine</span>
         </div>
         <Button
@@ -94,9 +95,13 @@ function ConsoleHeader() {
   )
 }
 
-function ConsoleQuickCommands({ onSelect }: { onSelect: (cmd: string) => void }) {
+function ConsoleQuickCommands({
+  onSelect,
+}: {
+  onSelect: (cmd: string) => void
+}) {
   return (
-    <div className="flex flex-wrap items-center gap-2 border-b border-border/40 bg-muted/30 px-4 py-2.5">
+    <div className="flex flex-wrap items-center gap-2 border-b border-border bg-muted px-4 py-2.5">
       <span className="mr-2 text-xs font-medium text-muted-foreground">
         Quick Actions:
       </span>
@@ -104,11 +109,11 @@ function ConsoleQuickCommands({ onSelect }: { onSelect: (cmd: string) => void })
         <button
           key={item.cmd}
           onClick={() => onSelect(item.cmd)}
-          className="group flex items-center gap-1.5 rounded border border-border bg-muted px-2.5 py-1 font-mono text-[11px] text-primary shadow-sm transition-all hover:border-border hover:bg-primary/10 hover:text-white"
+          className="group flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1.5 font-mono text-xs text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
         >
           <Zap className="h-3 w-3 text-primary transition-transform group-hover:scale-110" />
           <span className="font-bold">{item.label}</span>
-          <span className="hidden text-[9px] text-primary/40 sm:inline">
+          <span className="hidden text-[9px] text-muted-foreground sm:inline">
             ({item.desc})
           </span>
         </button>
@@ -130,9 +135,7 @@ function TerminalWindowHeader() {
           Developer Console
         </span>
       </div>
-      <span className="animate-pulse font-mono text-[10px] text-primary/60 uppercase">
-        &bull; Connected
-      </span>
+      <span className="font-mono text-xs text-muted-foreground">Connected</span>
     </div>
   )
 }
@@ -212,14 +215,18 @@ export function ConsoleView() {
             `ATMOSPHERIC TELEMETRY: Temp ${data.current_weather?.temperature || 28}°C • Wind ${data.current_weather?.windspeed || 12} km/h`
           )
         } catch {
-          appendLog("SYSTEM", "WEATHER TELEMETRY: 28.5°C • Humidity 65% • Clear Sky")
+          appendLog(
+            "SYSTEM",
+            "WEATHER TELEMETRY: 28.5°C • Humidity 65% • Clear Sky"
+          )
         }
         break
       case "trends":
         try {
           const data = await fetchGoogleTrends()
           const count =
-            data?.default?.trendingSearchesDays?.[0]?.trendingSearches?.length || 0
+            data?.default?.trendingSearchesDays?.[0]?.trendingSearches
+              ?.length || 0
           appendLog(
             "SUCCESS",
             `GOOGLE TRENDS: ${count} real-time intelligence queries captured.`
@@ -267,34 +274,30 @@ export function ConsoleView() {
   }
 
   return (
-    <div className="bg-background relative min-h-screen p-6 text-foreground selection:bg-primary/30 selection:text-foreground md:p-10">
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-20">
-        <div className="theme-grid-bg absolute inset-0" />
-      </div>
-
-      <main className="relative z-10 mx-auto max-w-7xl space-y-8">
+    <div className="min-h-screen bg-background p-6 text-foreground md:p-10">
+      <main className="mx-auto max-w-7xl space-y-8">
         <ConsoleHeader />
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          <div className="flex flex-col overflow-hidden rounded-xl border border-primary/30 bg-card/90 shadow-md backdrop-blur-xl lg:col-span-2">
+          <Card className="overflow-hidden lg:col-span-2">
             <TerminalWindowHeader />
             <ConsoleQuickCommands onSelect={handleQuickSelect} />
             <TerminalLogViewer logs={logs} />
 
             <form
               onSubmit={handleSubmit}
-              className="flex items-center border-t border-primary/20 bg-card/60 px-4 py-3.5 shadow-inner"
+              className="flex items-center border-t border-border bg-card px-4 py-3.5"
             >
               <span className="mr-3 flex items-center font-mono font-bold text-primary">
-                <Terminal className="mr-2 h-4 w-4 animate-pulse text-primary" />
+                <Terminal className="mr-2 h-4 w-4 text-primary" />
                 {":~#"}
               </span>
-              <input
+              <Input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Enter AI protocol or operational command..."
-                className="flex-1 bg-transparent font-mono text-xs text-foreground placeholder:text-muted-foreground outline-none"
+                className="h-8 flex-1 border-0 bg-transparent font-mono text-xs shadow-none focus-visible:ring-0"
                 autoFocus
               />
               <button
@@ -304,7 +307,7 @@ export function ConsoleView() {
                 Submit
               </button>
             </form>
-          </div>
+          </Card>
 
           <SystemDiagnosticsSidebar />
         </div>

@@ -10,7 +10,15 @@
 
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-sans: var(--font-sans, "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  --font-sans: var(
+    --font-sans,
+    "Geist",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif
+  );
   --font-mono: var(--font-mono, "JetBrains Mono", monospace);
   --font-arabic: var(--font-arabic, "Amiri", serif);
 
@@ -72,21 +80,21 @@
   --card-foreground: #09090b;
   --popover: #ffffff;
   --popover-foreground: #09090b;
-  --primary: #0284c7;
+  --primary: #0369a1;
   --primary-foreground: #ffffff;
   --secondary: #f4f4f5;
   --secondary-foreground: #18181b;
   --muted: #f4f4f5;
-  --muted-foreground: #71717a;
+  --muted-foreground: #52525b;
   --accent: #f4f4f5;
-  --accent-foreground: #0284c7;
-  --destructive: #ef4444;
+  --accent-foreground: #0369a1;
+  --destructive: #b91c1c;
   --destructive-foreground: #ffffff;
-  --success: #10b981;
+  --success: #047857;
   --success-foreground: #ffffff;
-  --warning: #f59e0b;
+  --warning: #b45309;
   --warning-foreground: #ffffff;
-  --info: #0284c7;
+  --info: #0369a1;
   --info-foreground: #ffffff;
   --border: #e4e4e7;
   --input: #e4e4e7;
@@ -124,7 +132,7 @@
   --accent: #1e293b;
   --accent-foreground: #38bdf8;
   --destructive: #f43f5e;
-  --destructive-foreground: #f4f4f5;
+  --destructive-foreground: #090d16;
   --success: #34d399;
   --success-foreground: #090d16;
   --warning: #fbbf24;
@@ -160,7 +168,9 @@
     background-color: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans), system-ui, sans-serif;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
   }
 }
 
@@ -173,18 +183,45 @@
   letter-spacing: normal;
 }
 
-/* Tajweed Colors */
+/* Domain visualization tokens: Tajweed colors are reserved for Quranic recitation markup. */
 .tajweed-container {
   display: inline-block;
   direction: rtl;
   text-align: right;
 }
-tajweed.madda_normal, tajweed.madda_permissible, tajweed.madda_necessery { color: #f43f5e; }
-tajweed.madda_obligatory { color: #e11d48; }
-tajweed.qalaqah { color: #3b82f6; }
-tajweed.idgham_shafawi, tajweed.idgham_mutajanisayn, tajweed.idgham_mutamaathilayn, tajweed.idgham_bighunnah { color: #10b981; }
-tajweed.idgham_bilaghunnah { color: #84cc16; }
-tajweed.ghunnah { color: #14b8a6; }
-tajweed.ikhafa, tajweed.ikhfa, tajweed.ikhfa_shafawi { color: #d946ef; }
-tajweed.iqlab { color: #0ea5e9; }
-tajweed.ham_wasl, tajweed.laam_shamsiyah, tajweed.slnt { color: #64748b; }
+tajweed.madda_normal,
+tajweed.madda_permissible,
+tajweed.madda_necessery {
+  color: #f43f5e;
+}
+tajweed.madda_obligatory {
+  color: #e11d48;
+}
+tajweed.qalaqah {
+  color: #3b82f6;
+}
+tajweed.idgham_shafawi,
+tajweed.idgham_mutajanisayn,
+tajweed.idgham_mutamaathilayn,
+tajweed.idgham_bighunnah {
+  color: #10b981;
+}
+tajweed.idgham_bilaghunnah {
+  color: #84cc16;
+}
+tajweed.ghunnah {
+  color: #14b8a6;
+}
+tajweed.ikhafa,
+tajweed.ikhfa,
+tajweed.ikhfa_shafawi {
+  color: #d946ef;
+}
+tajweed.iqlab {
+  color: #0ea5e9;
+}
+tajweed.ham_wasl,
+tajweed.laam_shamsiyah,
+tajweed.slnt {
+  color: #64748b;
+}
