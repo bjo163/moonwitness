@@ -42,9 +42,9 @@ export function SunPositionView() {
   }, [])
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#020813] p-4 font-sans text-white select-none md:p-6">
+    <div className="min-h-screen overflow-x-hidden bg-cyber-dark p-4 font-sans text-white select-none md:p-6">
       {/* ═══ HEADER ROW ═══ */}
-      <div className="relative mb-6 grid min-h-[450px] grid-cols-1 gap-8 overflow-hidden rounded-2xl border border-white/10 bg-[#020813] p-6 md:p-10 lg:grid-cols-12">
+      <div className="relative mb-6 grid min-h-[450px] grid-cols-1 gap-8 overflow-hidden rounded-2xl border border-white/10 bg-cyber-dark p-6 md:p-10 lg:grid-cols-12">
         {/* Column 1: The Divine Figure (Span 4) */}
         <div className="relative flex min-h-[400px] items-end justify-center lg:col-span-4">
           {/* Background Ambient Glow */}
@@ -63,7 +63,7 @@ export function SunPositionView() {
           <div className="absolute bottom-6 left-1/2 h-[60px] w-[320px] -translate-x-1/2 rounded-[100%] border-[1px] border-white/80 blur-[0px]"></div>
 
           {/* Dark floor fade to hide figure cut-off */}
-          <div className="absolute inset-x-0 bottom-0 z-20 h-10 bg-gradient-to-t from-[#020813] to-transparent"></div>
+          <div className="absolute inset-x-0 bottom-0 z-20 h-10 bg-gradient-to-t from-cyber-dark to-transparent"></div>
 
           <img
             src="/assets/hero/24-hero.png"
