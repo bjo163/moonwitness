@@ -98,6 +98,41 @@ export const ScriptureListResponseSchema = z.object({
   scriptures: z.array(ScriptureSchema),
 })
 
+export const SearchResultItemSchema = z.object({
+  id: z.string(),
+  type: z.enum(['SCRIPTURE', 'HADITH', 'LEXICAL', 'RESEARCH', 'ENTITY']),
+  title: z.string(),
+  reference: z.string(),
+  link: z.string(),
+  snippet: z.string(),
+  language: z.string().optional(),
+  script: z.string().optional(),
+  source: z.string().optional(),
+  edition: z.string().optional(),
+  provenanceId: z.number().nullable().optional(),
+})
+
+export const SearchResponseSchema = z.object({
+  query: z.string(),
+  filter: z.string().default('ALL'),
+  total: z.number(),
+  page: z.number().default(1),
+  limit: z.number().default(20),
+  results: z.array(SearchResultItemSchema),
+})
+
+export const ReferenceLookupResponseSchema = z.object({
+  reference: z.string(),
+  resolved: z.boolean(),
+  type: z.string().optional(),
+  passage: z.record(z.unknown()).nullable().optional(),
+  content: z.array(z.record(z.unknown())).optional(),
+  translations: z.array(z.record(z.unknown())).optional(),
+  tradition: z.record(z.unknown()).nullable().optional(),
+  root: z.record(z.unknown()).nullable().optional(),
+  lexeme: z.record(z.unknown()).nullable().optional(),
+})
+
 export const QuranSearchResultSchema = z.object({
   query: z.string(),
   count: z.number(),
@@ -271,6 +306,9 @@ export type Ayah = z.infer<typeof AyahSchema>
 export type SurahDetailResponse = z.infer<typeof SurahDetailResponseSchema>
 export type SurahListResponse = z.infer<typeof SurahListResponseSchema>
 export type ScriptureListResponse = z.infer<typeof ScriptureListResponseSchema>
+export type SearchResultItem = z.infer<typeof SearchResultItemSchema>
+export type SearchResponse = z.infer<typeof SearchResponseSchema>
+export type ReferenceLookupResponse = z.infer<typeof ReferenceLookupResponseSchema>
 export type QuranSearchResult = z.infer<typeof QuranSearchResultSchema>
 
 export type HadithBook = z.infer<typeof HadithBookSchema>

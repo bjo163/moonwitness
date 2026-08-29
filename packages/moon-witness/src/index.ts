@@ -274,6 +274,16 @@ export {
   type DomainImportStats
 } from './services/canonical-corpus-importer.js'
 
+export {
+  lookupReference,
+  searchWitnessGraph,
+  normalizeArabic,
+  getSearchIndexDiagnostics,
+  type SearchOptions,
+  type SearchResult,
+  type ReferenceLookupResult
+} from './services/retrieval.js'
+
 // Models export
 export {
   // Legacy scripture/tradition models

@@ -10,6 +10,11 @@ import { getMoonData, getIslamicData, getDailyPrayerTimes } from '@moon/compute'
 import { cache } from '@moon/cache'
 import { registerWitnessGraphRoutes } from './graph/routes.js'
 import { registerWitnessEngineRoutes } from './engine-routes.js'
+import {
+  searchWitnessGraph,
+  lookupReference,
+  getSearchIndexDiagnostics
+} from './services/retrieval.js'
 
 // ═══════════════════════════════════════════
 // 📖 SCRIPTURE ROUTES
@@ -117,7 +122,61 @@ defineRoute({
   },
 })
 
-// GET /api/witness/quran/search?q=...&limit=20
+// GET /api/witness/search?q=...&filter=ALL&limit=20&page=1
+defineRoute({
+  method: 'GET',
+  path: '/api/witness/search',
+  handler: async ({ query, env }) => {
+    const q = query.q || ''
+    const filter = (query.filter || 'ALL') as any
+    const limit = Math.min(parseInt(query.limit || '20', 10), 100)
+    const page = Math.max(parseInt(query.page || '1', 10), 1)
+
+    const searchResult = await searchWitnessGraph(env, {
+      query: q,
+      filter,
+      limit,
+      page
+    })
+
+    return {
+      query: q,
+      filter,
+      total: searchResult.total,
+      page,
+      limit,
+      results: searchResult.results
+    }
+  },
+})
+
+// GET /api/witness/lookup?ref=...
+defineRoute({
+  method: 'GET',
+  path: '/api/witness/lookup',
+  handler: async ({ query, env }) => {
+    const ref = query.ref || query.reference || ''
+    if (!ref) {
+      const err = new Error('Reference query parameter required')
+      ;(err as any).statusCode = 400
+      throw err
+    }
+
+    const resolved = await lookupReference(env, ref)
+    return resolved
+  },
+})
+
+// GET /api/witness/search/diagnostics
+defineRoute({
+  method: 'GET',
+  path: '/api/witness/search/diagnostics',
+  handler: async ({ env }) => {
+    return await getSearchIndexDiagnostics(env)
+  },
+})
+
+// GET /api/witness/quran/search?q=...&limit=20 (Legacy / Compatibility route)
 defineRoute({
   method: 'GET',
   path: '/api/witness/quran/search',
@@ -130,15 +189,35 @@ defineRoute({
       throw err
     }
 
+    // Try canonical search first
+    const canonicalSearch = await searchWitnessGraph(env, {
+      query: q,
+      filter: 'SCRIPTURE',
+      limit
+    })
+
+    if (canonicalSearch.results.length > 0) {
+      return {
+        query: q,
+        count: canonicalSearch.total,
+        results: canonicalSearch.results.map((r) => ({
+          verseNumber: r.reference,
+          translationId: r.snippet,
+          textOriginal: r.title
+        }))
+      }
+    }
+
+    // Fallback to legacy models
     const Scripture = getModel('wx.scripture')
     const Verse = getModel('wx.scripture.verse')
-    if (!Scripture || !Verse) throw new Error('Models not found')
+    if (!Scripture || !Verse) {
+      return { query: q, count: 0, results: [] }
+    }
 
     const [quran] = await (Scripture as any).fetch(Scripture, env, [['slug', '=', 'quran']])
     if (!quran) {
-      const err = new Error('Quran not found')
-      ;(err as any).statusCode = 404
-      throw err
+      return { query: q, count: 0, results: [] }
     }
 
     const results = await (Verse as any).fetch(Verse, env, [
