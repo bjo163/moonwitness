@@ -1,17 +1,17 @@
 import Link from "next/link"
-import { ArrowUpRight, BookOpen, CalendarDays, Globe2, History, LineChart, MoonStar } from "lucide-react"
+import { ArrowUpRight, BookOpen, CalendarDays, History, MoonStar, Search, ShieldCheck } from "lucide-react"
 import { PublicHero } from "../hero/public-hero"
 
 const destinations = [
   { id: "observatory", icon: MoonStar, title: "Observatory", description: "Moon phases, prayer times, qibla, and celestial events grounded in your place and time.", href: "/observatory", action: "View the sky" },
-  { id: "knowledge", icon: BookOpen, title: "Knowledge", description: "A focused reading space for Qur'an, hadith, daily adhkar, and the ideas that shape a faithful life.", href: "/knowledge", action: "Start reading" },
-  { id: "history", icon: History, title: "History & reflection", description: "Trace the people, choices, and turning points that help us read the present with greater wisdom.", href: "/history", action: "Explore history" },
+  { id: "knowledge", icon: BookOpen, title: "Scripture", description: "Browse public scripture structure and open a passage with its source text and available translations.", href: "/knowledge/kitab", action: "Browse scripture" },
+  { id: "traditions", icon: History, title: "Traditions", description: "Explore hadith collections and read public tradition records with their available references.", href: "/knowledge/hadits", action: "Browse traditions" },
 ]
 
 const tools = [
   { icon: CalendarDays, title: "Calendar", href: "/observatory/lunar-calendar" },
-  { icon: Globe2, title: "Global monitoring", href: "/observatory/global-monitoring" },
-  { icon: LineChart, title: "Personal reflection", href: "/analytics" },
+  { icon: Search, title: "Corpus search", href: "/knowledge/search" },
+  { icon: ShieldCheck, title: "Sources & provenance", href: "/knowledge/sources" },
 ]
 
 export function PublicHome() {
@@ -22,9 +22,9 @@ export function PublicHome() {
       <section id="observatory" className="border-b border-border py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-6 sm:px-10">
           <div className="max-w-2xl space-y-4">
-            <p className="font-mono text-xs font-semibold tracking-[0.22em] text-primary uppercase">One place, three ways in</p>
-            <h2 className="text-3xl font-bold tracking-tight text-foreground uppercase sm:text-5xl">A clearer way to pay attention.</h2>
-            <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">Use MoonWitness as a companion for the moments that deserve more attention: the sky above you, the words you are studying, and the history you are carrying forward.</p>
+            <p className="font-mono text-xs font-semibold tracking-[0.22em] text-primary uppercase">Public knowledge, source-aware</p>
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-5xl">Read what the API can substantiate.</h2>
+            <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">MoonWitness connects public source records to readable references, translations, and provenance so you can move from discovery to careful reading.</p>
           </div>
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
             {destinations.map(({ id, icon: Icon, title, description, href, action }) => (
