@@ -15,7 +15,7 @@ function Tabs({
       data-slot="tabs"
       data-orientation={orientation}
       className={cn(
-        "group/tabs flex gap-2 font-mono data-horizontal:flex-col",
+        "group/tabs flex gap-2 data-horizontal:flex-col",
         className
       )}
       {...props}
@@ -24,7 +24,7 @@ function Tabs({
 }
 
 const tabsListVariants = cva(
-  "group/tabs-list inline-flex w-fit items-center justify-center rounded-md border border-border bg-muted p-1 text-muted-foreground",
+  "group/tabs-list inline-flex w-fit items-center justify-center rounded-lg border bg-muted p-1 text-muted-foreground",
   {
     variants: {
       variant: {
@@ -58,7 +58,7 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={cn(
-        "inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-md border border-transparent px-3 py-1.5 font-sans text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground data-active:border-border data-active:bg-card data-active:text-foreground data-active:shadow-sm",
+        "inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-md border border-transparent px-3 py-1.5 text-sm font-medium transition-colors outline-none hover:bg-background hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 data-active:bg-background data-active:text-foreground data-active:shadow-sm",
         className
       )}
       {...props}
@@ -70,7 +70,7 @@ function TabsContent({ className, ...props }: TabsPrimitive.Panel.Props) {
   return (
     <TabsPrimitive.Panel
       data-slot="tabs-content"
-      className={cn("flex-1 pt-2 font-mono text-xs outline-none", className)}
+      className={cn("flex-1 pt-2 text-sm outline-none", className)}
       {...props}
     />
   )
@@ -97,12 +97,7 @@ export function SimpleTabs({
   className?: string
 }) {
   return (
-    <div
-      className={cn(
-        "flex flex-wrap gap-1 border-b border-primary/20 pb-2",
-        className
-      )}
-    >
+    <div className={cn("flex flex-wrap gap-1 border-b pb-2", className)}>
       {tabs.map((t) => {
         const isActive = t.id === activeTab
         const Icon = t.icon
@@ -112,16 +107,16 @@ export function SimpleTabs({
             type="button"
             onClick={() => onChange(t.id)}
             className={cn(
-              "flex items-center gap-1.5 rounded-md border px-3 py-1.5 font-mono text-xs font-bold tracking-wider uppercase transition-all",
+              "flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
               isActive
-                ? "border-primary bg-primary/20 text-white shadow-sm"
-                : "border-transparent text-slate-400 hover:bg-white/5 hover:text-white"
+                ? "border-border bg-muted text-foreground shadow-sm"
+                : "border-transparent text-muted-foreground hover:bg-muted/60 hover:text-foreground"
             )}
           >
             {Icon && <Icon className="size-3.5" />}
             <span>{t.label}</span>
             {typeof t.count === "number" && (
-              <span className="rounded bg-black/40 px-1 py-0.5 text-[9px] text-primary">
+              <span className="rounded bg-background px-1.5 py-0.5 text-xs text-muted-foreground">
                 {t.count}
               </span>
             )}

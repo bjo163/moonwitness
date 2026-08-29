@@ -247,6 +247,8 @@ export function DataTable<T = any>({
                               <Button
                                 variant="ghost"
                                 size="sm"
+                                aria-label={`Edit ${title} record ${row.id}`}
+                                title={`Edit record ${row.id}`}
                                 onClick={() => {
                                   setEditingId(row.id)
                                   setFormData(row)
@@ -259,6 +261,8 @@ export function DataTable<T = any>({
                               <Button
                                 variant="ghost"
                                 size="sm"
+                                aria-label={`Delete ${title} record ${row.id}`}
+                                title={`Delete record ${row.id}`}
                                 onClick={() => handleDelete(row.id)}
                                 className="h-7 w-7 p-0 text-slate-400 hover:text-rose-400"
                               >
@@ -299,8 +303,9 @@ export function DataTable<T = any>({
               .filter((c) => !c.hideInForm)
               .map((c) => (
                 <div key={c.name} className="space-y-1.5">
-                  <Label className="text-xs text-slate-300">{c.label}</Label>
+                  <Label htmlFor={`${modelName}-${c.name}-field`} className="text-xs text-slate-300">{c.label}</Label>
                   <Input
+                    id={`${modelName}-${c.name}-field`}
                     name={c.name}
                     type={c.type || "text"}
                     value={formData[c.name] || ""}

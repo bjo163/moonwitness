@@ -107,7 +107,7 @@ function TableCaption({
 export function SimpleTable({
   headers,
   rows,
-  accentColor = "cyan",
+  accentColor: _accentColor = "primary",
   className,
 }: {
   headers: string[]
@@ -116,22 +116,22 @@ export function SimpleTable({
   className?: string
 }) {
   return (
-    <div className={cn("overflow-x-auto font-mono text-xs", className)}>
-      <table className="w-full text-left">
-        <thead>
-          <tr className="border-b border-primary/20 bg-primary/5 text-[10px] font-bold tracking-wider text-primary uppercase">
+    <div className={cn("relative w-full overflow-x-auto", className)}>
+      <table className="w-full caption-bottom text-sm">
+        <thead className="[&_tr]:border-b">
+          <tr className="bg-muted/50">
             {headers.map((h, i) => (
-              <th key={i} className="px-3 py-2">
+              <th key={i} className="h-10 px-3 text-left align-middle font-medium whitespace-nowrap text-foreground">
                 {h}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-primary/10">
+        <tbody className="[&_tr:last-child]:border-0">
           {rows.map((row, rIdx) => (
-            <tr key={rIdx} className="transition-colors hover:bg-primary/5">
+            <tr key={rIdx} className="border-b transition-colors hover:bg-muted/50">
               {row.map((cell, cIdx) => (
-                <td key={cIdx} className="px-3 py-2 text-slate-300">
+                <td key={cIdx} className="p-3 align-middle whitespace-nowrap">
                   {cell}
                 </td>
               ))}

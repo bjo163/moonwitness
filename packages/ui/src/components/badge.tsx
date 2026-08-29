@@ -6,15 +6,15 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@workspace/ui/lib/utils"
 
 const badgeVariants = cva(
-  "group/badge inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1 rounded-md border px-2 py-0.5 font-sans text-xs font-medium whitespace-nowrap transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 [&>svg]:pointer-events-none [&>svg]:size-3!",
+  "group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-colors focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [&>svg]:pointer-events-none [&>svg]:size-3!",
   {
     variants: {
       variant: {
-        default: "border-primary/30 bg-primary/10 text-primary",
-        secondary: "border-border bg-secondary text-secondary-foreground",
-        destructive: "border-destructive/30 bg-destructive/10 text-destructive",
-        outline: "border-border bg-transparent text-foreground",
-        ghost: "border-transparent bg-transparent text-muted-foreground",
+        default: "border-transparent bg-primary text-primary-foreground",
+        secondary: "border-transparent bg-secondary text-secondary-foreground",
+        destructive: "border-transparent bg-destructive/10 text-destructive dark:bg-destructive/20",
+        outline: "text-foreground",
+        ghost: "border-transparent bg-transparent text-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
     },

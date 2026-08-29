@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import { cn } from "@workspace/ui/lib/utils"
 import {
   THEME_TOKENS,
   type ThemeAccentColor,
@@ -20,42 +21,65 @@ export function PanelHeader({
   accentColor?: ThemeAccentColor
   subtitle?: string
 }) {
-  const colorToken =
-    THEME_TOKENS.colors[accentColor] || THEME_TOKENS.colors.system
+  const accentClasses: Record<ThemeAccentColor, string> = {
+    primary: "text-primary",
+    secondary: "text-secondary-foreground",
+    success: "text-success",
+    warning: "text-warning",
+    danger: "text-destructive",
+    info: "text-primary",
+    muted: "text-muted-foreground",
+    accent: "text-accent-foreground",
+    system: "text-primary",
+    mission: "text-success",
+    celestial: "text-warning",
+    knowledge: "text-accent-foreground",
+    knowledgeLight: "text-accent-foreground",
+    critical: "text-destructive",
+    textPrimary: "text-foreground",
+    textMuted: "text-muted-foreground",
+    background: "text-foreground",
+    panelBg: "text-foreground",
+    panelBorder: "text-primary",
+  }
+  const accentClass = accentClasses[accentColor] || accentClasses.system
 
   return (
     <div
-      className="mb-4 border-b border-border pb-3"
+      className="mb-4 border-b pb-3"
     >
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2.5">
           {Icon ? (
             <div
-              className="tag-clip flex h-7 w-7 items-center justify-center border border-border bg-muted/40"
+              className={cn(
+                "flex h-7 w-7 items-center justify-center rounded-md border bg-muted",
+                accentClass
+              )}
             >
-              <Icon className="h-3.5 w-3.5" style={{ color: colorToken }} />
+              <Icon className="h-3.5 w-3.5" aria-hidden="true" />
             </div>
           ) : (
             <span className="text-success text-xs font-bold">◉</span>
           )}
           <h3
-            className="text-sm font-black tracking-widest text-foreground uppercase sm:text-base"
+            className={cn(
+              "text-sm font-semibold tracking-tight text-foreground uppercase sm:text-base",
+              accentClass
+            )}
           >
             {title}
           </h3>
         </div>
 
         <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold">
-          <span
-            className="h-1.5 w-1.5 animate-pulse rounded-full"
-            style={{ background: colorToken }}
-          />
-          <span style={{ color: colorToken }}>STATUS {status}</span>
+          <span className={cn("h-1.5 w-1.5 rounded-full bg-current", accentClass)} />
+          <span className={accentClass}>STATUS {status}</span>
         </div>
       </div>
 
       {subtitle && (
-        <p className="mt-1 font-mono text-[10px] leading-normal text-muted-foreground">
+        <p className="mt-1 text-sm leading-normal text-muted-foreground">
           {subtitle}
         </p>
       )}
@@ -78,25 +102,38 @@ export function Panel({
 }) {
   const levelConfig =
     THEME_TOKENS.panelLevels[level] || THEME_TOKENS.panelLevels.level2
-  const colorToken =
-    THEME_TOKENS.colors[accentColor] || THEME_TOKENS.colors.system
+  const accentClasses: Record<ThemeAccentColor, string> = {
+    primary: "border-primary/30",
+    secondary: "border-secondary/40",
+    success: "border-success/30",
+    warning: "border-warning/30",
+    danger: "border-destructive/30",
+    info: "border-primary/30",
+    muted: "border-border",
+    accent: "border-accent/40",
+    system: "border-primary/30",
+    mission: "border-success/30",
+    celestial: "border-warning/30",
+    knowledge: "border-accent/40",
+    knowledgeLight: "border-accent/40",
+    critical: "border-destructive/30",
+    textPrimary: "border-border",
+    textMuted: "border-border",
+    background: "border-border",
+    panelBg: "border-border",
+    panelBorder: "border-primary/30",
+  }
+
   return (
     <div
-      className={`panel-box ${levelConfig.padding} relative border border-border bg-card transition-colors ${className}`}
-      style={{
-        borderWidth: levelConfig.borderWidth,
-        borderColor: `color-mix(in srgb, ${colorToken} 35%, transparent)`,
-        boxShadow: levelConfig.glow,
-        ...style,
-      }}
+      className={cn(
+        "relative rounded-xl border bg-card text-card-foreground shadow-sm transition-colors",
+        levelConfig.padding,
+        accentClasses[accentColor] || accentClasses.system,
+        className
+      )}
+      style={style}
     >
-      {/* Corner metadata tag  */}
-      <span
-        className="pointer-events-none absolute top-1 right-2 font-mono text-[10px] font-bold tracking-widest select-none"
-        style={{ color: colorToken }}
-      >
-        {levelConfig.name.toUpperCase()} • SYS.MOD
-      </span>
       {children}
     </div>
   )
