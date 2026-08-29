@@ -118,7 +118,7 @@ export function LoginView() {
                   className="flex items-center justify-center gap-1.5 rounded-lg border border-border/40 bg-secondary/50 px-2.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-border hover:bg-muted"
                 >
                   <KeyRound className="h-3.5 w-3.5 text-primary" />
-                  Commander
+                  Supervisor
                 </button>
                 <button
                   type="button"

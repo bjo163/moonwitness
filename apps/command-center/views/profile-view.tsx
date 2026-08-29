@@ -40,7 +40,7 @@ export function ErpProfileView() {
     <div className="mx-auto w-full max-w-[1600px] animate-in px-4 pb-12 duration-700 fade-in sm:px-6 lg:px-8">
       <ContextBlock
         title={isOwnProfile ? "USER PROFILE" : "PROFILE OVERVIEW"}
-        subtitle={isOwnProfile ? "Review your account identity, activity progress, and settings." : "Read-only view of a user profile in the operations terminal."}
+        subtitle={isOwnProfile ? "Review your account identity, activity progress, and settings." : "Read-only view of a user profile in the administration workspace."}
         operation="PROFILE-MGMT"
         status="ONLINE"
         accentColor="system"

@@ -12,8 +12,8 @@ export default function DynamicMatrixModelPage() {
 
   if (!model) {
     return (
-      <div className="p-8 text-center text-muted-foreground font-mono text-xs">
-        NO MODEL IDENTIFIER SPECIFIED IN ROUTE PARAMETERS.
+      <div className="p-8 text-center text-muted-foreground font-sans text-xs">
+        No model identifier specified in route parameters.
       </div>
     )
   }

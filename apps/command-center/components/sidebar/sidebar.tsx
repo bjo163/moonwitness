@@ -53,7 +53,7 @@ export function CommandCenterSidebar({
                 MoonWitness
               </span>
               <span className="block text-[11px] text-muted-foreground">
-                Operations Terminal
+                Operations & Admin
               </span>
             </div>
           </Link>

@@ -62,7 +62,7 @@ export const navigationItems: NavigationItem[] = [
   { label: "Hadith archive", href: "/hadiths", icon: BookOpen },
   { label: "Scripture database", href: "/scriptures", icon: ScrollText },
   { label: "Users", href: "/users", icon: Users },
-  { label: "Dev terminal", href: "/terminal", icon: Terminal },
+  { label: "Developer console", href: "/terminal", icon: Terminal },
 ]
 
 export const utilityItems = [
