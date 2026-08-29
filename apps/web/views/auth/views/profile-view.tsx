@@ -1,59 +1,41 @@
 "use client"
-
-import React from "react"
 import { useAuthSession } from "@moon/client"
-import { ContextBlock, EmptyState } from "@workspace/ui"
-import { LogOut } from "lucide-react"
+import { LogOut, UserRound } from "lucide-react"
+import { AccountNavigation } from "../../../components/profile/account-navigation"
 
 export function ProfileView() {
   const { user, logout } = useAuthSession()
 
   const handleLogout = () => {
-    logout()
-    if (typeof window !== "undefined") {
-      window.location.href = "/login"
+    if (confirm("Are you sure you want to log out?")) {
+      logout()
+      window.location.href = "/"
     }
   }
 
   return (
     <div
-      className="min-h-screen bg-background py-8 font-sans text-foreground"
-      suppressHydrationWarning
+      className="theme-grid-bg min-h-screen px-4 py-8 font-mono text-foreground sm:px-6"
     >
       <div className="mx-auto max-w-5xl space-y-6 px-4 sm:px-6">
-        <ContextBlock
-          title="User Profile"
-          subtitle="Account details, profile settings, and permissions."
-          operation="PROFILE"
-          status="ONLINE"
-        />
+        <header><p className="text-xs tracking-widest text-cyber-cyan/70 uppercase">Operator account</p><h1 className="mt-2 font-orbitron text-3xl uppercase">Identity matrix</h1><p className="mt-2 text-sm text-muted-foreground">User profile and clearance levels.</p></header>
+        <AccountNavigation active="Profile" />
 
         {user ? (
-          <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-border bg-card p-8 text-card-foreground shadow-sm">
-            <div className="relative flex items-center justify-center">
-              <div className="z-10 flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-border bg-muted">
-                <img
-                  src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}&backgroundColor=0f172a`}
-                  alt="Avatar"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            </div>
-            <h2 className="mt-2 text-2xl font-bold text-foreground">{user.name}</h2>
-            <p className="text-sm text-muted-foreground">{user.email}</p>
+          <div className="panel-glass clip-card flex flex-col items-center justify-center gap-4 p-8 text-cyber-cyan">
+            <div aria-hidden="true" className="clip-rune flex h-24 w-24 items-center justify-center border border-cyber-cyan/50 bg-cyber-cyan/10"><UserRound className="h-10 w-10" /></div>
+            <h2 className="mt-2 text-2xl font-bold text-foreground">{user.name || "Operator"}</h2>
+            <p className="text-cyber-cyan">{user.email}</p>
 
             <button
               onClick={handleLogout}
-              className="mt-6 flex items-center gap-2 rounded-lg border border-destructive/30 bg-destructive/10 px-6 py-2 text-xs font-semibold text-destructive transition-colors hover:bg-destructive/20"
+              className="clip-btn mt-6 flex items-center gap-2 border border-cyber-pink/50 bg-cyber-pink/10 px-6 py-2 text-cyber-pink transition-colors hover:bg-cyber-pink/20 focus:outline-none focus:ring-2 focus:ring-cyber-pink"
             >
-              <LogOut className="h-4 w-4" /> Sign Out
+              <LogOut className="h-4 w-4" /> LOGOUT SYSTEM
             </button>
           </div>
         ) : (
-          <EmptyState
-            title="Profile Not Found"
-            description="No active session detected. Please sign in to access your profile."
-          />
+          <div className="panel-glass clip-card p-8 text-center"><p className="text-lg text-foreground">Profile not found</p><p className="mt-2 text-sm text-muted-foreground">No active session detected. Please login to access clearance levels.</p></div>
         )}
       </div>
     </div>

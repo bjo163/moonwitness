@@ -58,6 +58,10 @@ export const ROUTE_MAP: Record<string, ComponentType<any>> = {
   // Auth
   "auth/login": Views.LoginView,
   "auth/profile": Views.ProfileView,
+  "auth/account": Views.AccountView,
+  "auth/settings": Views.SettingsView,
+  "auth/preferences": Views.PreferencesView,
+  "auth/notifications": Views.NotificationsView,
 
   // Seismix & Shootgun
   "seismix/quake-archive": Views.QuakeArchiveView,
