@@ -317,13 +317,17 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--border);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
   body {
-    @apply bg-[#05070A] text-[#F5F5F5] font-mono antialiased selection:bg-cyan-500/30 selection:text-cyan-200;
+    background-color: var(--cyber-dark, #05070A);
+    color: var(--foreground, #F5F5F5);
+    font-family: var(--font-mono), monospace;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
@@ -338,6 +342,9 @@
 
 /* Tajweed Colors */
 .tajweed-container {
+  display: inline-block;
+  direction: rtl;
+  text-align: right;
 }
 tajweed.madda_normal, tajweed.madda_permissible, tajweed.madda_necessery { color: #f43f5e; /* rose-500 */ }
 tajweed.madda_obligatory { color: #e11d48; /* rose-600 */ }
