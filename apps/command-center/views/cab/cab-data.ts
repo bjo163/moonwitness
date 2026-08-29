@@ -28,6 +28,8 @@ export interface UpgradeRequest {
   bridgeNote: string
   status: UpgradeStatus
   submittedAt: string
+  currentState?: string
+  proposedChange?: string
 }
 
 export const Q4Q_LEVELS = [

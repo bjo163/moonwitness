@@ -84,7 +84,9 @@ export function UpgradeCouncilTab() {
                   <span className="font-mono text-[9px] text-white/30">
                     {req.id}
                   </span>
-                  <ScriptureTagBadge tag={req.scriptureTag} />
+                  {req.scriptureTags.map((tag) => (
+                    <ScriptureTagBadge key={tag} tag={tag} />
+                  ))}
                   <StatusBadge status={req.status} />
                 </div>
                 <p className="font-sans text-sm font-bold text-white">
@@ -115,7 +117,7 @@ export function UpgradeCouncilTab() {
                         Current State
                       </p>
                       <p className="font-mono text-xs text-white/60">
-                        {req.currentState}
+                        {req.currentState || `Level ${req.levelFrom} Baseline Assessment`}
                       </p>
                     </div>
                     <div>
@@ -123,7 +125,7 @@ export function UpgradeCouncilTab() {
                         Proposed Change
                       </p>
                       <p className="font-mono text-xs text-yellow-300/80">
-                        {req.proposedChange}
+                        {req.proposedChange || req.description}
                       </p>
                     </div>
                   </div>
