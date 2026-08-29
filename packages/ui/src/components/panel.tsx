@@ -25,33 +25,27 @@ export function PanelHeader({
 
   return (
     <div
-      className="mb-4 border-b pb-3"
-      style={{ borderColor: `${colorHex}25` }}
+      className="mb-4 border-b pb-3 border-border/40"
     >
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2.5">
           {Icon ? (
             <div
-              className="tag-clip flex h-7 w-7 items-center justify-center border"
-              style={{
-                borderColor: `${colorHex}50`,
-                background: `${colorHex}15`,
-              }}
+              className="flex h-7 w-7 items-center justify-center rounded-lg border border-border/50 bg-background/50"
             >
               <Icon className="h-3.5 w-3.5" style={{ color: colorHex }} />
             </div>
           ) : (
-            <span className="text-success text-xs font-bold">◉</span>
+            <span className="text-xs font-bold text-cyber-green">◉</span>
           )}
           <h3
-            className="text-sm font-black tracking-widest text-foreground uppercase sm:text-base"
-            style={{ textShadow: `0 0 10px ${colorHex}30` }}
+            className="text-sm font-bold tracking-wide text-foreground uppercase sm:text-base"
           >
             {title}
           </h3>
         </div>
 
-        <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold">
+        <div className="flex items-center gap-1.5 font-mono text-[10px] font-medium text-muted-foreground">
           <span
             className="h-1.5 w-1.5 animate-pulse rounded-full"
             style={{ background: colorHex }}
@@ -61,7 +55,7 @@ export function PanelHeader({
       </div>
 
       {subtitle && (
-        <p className="mt-1 font-mono text-[10px] leading-normal text-primary">
+        <p className="mt-1 text-xs text-muted-foreground">
           {subtitle}
         </p>
       )}
@@ -84,26 +78,14 @@ export function Panel({
 }) {
   const levelConfig =
     THEME_TOKENS.panelLevels[level] || THEME_TOKENS.panelLevels.level2
-  const colorHex =
-    THEME_TOKENS.colors[accentColor] || THEME_TOKENS.colors.system
 
   return (
     <div
-      className={`panel-box ${levelConfig.padding} bg-space/95 relative border transition-all duration-300 ${className}`}
+      className={`rounded-xl border border-border/40 bg-card/90 backdrop-blur-md ${levelConfig.padding} relative shadow-sm transition-all duration-200 ${className}`}
       style={{
-        borderWidth: levelConfig.borderWidth,
-        borderColor: `${colorHex}35`,
-        boxShadow: levelConfig.glow,
         ...style,
       }}
     >
-      {/* Corner metadata tag  */}
-      <span
-        className="pointer-events-none absolute top-1 right-2 font-mono text-[10px] font-bold tracking-widest select-none"
-        style={{ color: `${colorHex}50` }}
-      >
-        {levelConfig.name.toUpperCase()} • SYS.MOD
-      </span>
       {children}
     </div>
   )

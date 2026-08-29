@@ -4,27 +4,27 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@workspace/ui/lib/utils"
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 cursor-pointer items-center justify-center border border-transparent font-mono text-xs font-black tracking-widest uppercase transition-all outline-none select-none btn-clip focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex shrink-0 cursor-pointer items-center justify-center rounded-lg border border-transparent font-sans text-xs font-semibold tracking-wide transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
         default:
-          "text-space bg-primary hover:bg-white hover:shadow-[0_0_20px_rgba(0,240,255,0.6)]",
+          "bg-cyber-cyan text-cyber-dark font-bold hover:bg-cyber-cyan/90 shadow-sm",
         outline:
-          "border-primary/40 bg-primary/10 text-primary shadow-[0_0_10px_rgba(0,240,255,0.15)] hover:border-primary hover:bg-primary/25 hover:text-white",
+          "border-border/60 bg-card/60 text-foreground hover:border-cyber-cyan/40 hover:bg-accent hover:text-accent-foreground",
         secondary:
-          "bg-secondary text-white hover:bg-primary hover:shadow-[0_0_20px_rgba(161,0,255,0.6)]",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost:
-          "border border-primary/25 bg-primary/5 text-primary hover:bg-primary/20 hover:text-white",
+          "text-foreground hover:bg-white/10 hover:text-foreground",
         destructive:
-          "bg-danger hover:bg-danger text-white hover:shadow-[0_0_20px_rgba(255,0,85,0.6)]",
+          "bg-destructive text-white hover:bg-destructive/90 shadow-sm",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-9 gap-1.5 px-4 py-2",
+        default: "h-9 gap-2 px-4 py-2",
         xs: "h-6 gap-1 px-2 text-[10px]",
-        sm: "h-7 gap-1 px-3 text-[11px]",
-        lg: "h-10 gap-2 px-5 text-xs",
+        sm: "h-8 gap-1.5 px-3 text-xs",
+        lg: "h-10 gap-2 px-5 text-sm",
         icon: "size-8",
         "icon-xs": "size-6",
         "icon-sm": "size-7",
