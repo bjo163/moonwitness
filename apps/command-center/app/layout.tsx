@@ -6,8 +6,8 @@ import { CommandCenterShell } from "@/components/shell"
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
 export const metadata = {
-  title: "MoonWitness OS — Command Center",
-  description: "Tactical Governance and Administrative Operations Terminal",
+  title: "MoonWitness — Command Center",
+  description: "MoonWitness administrative operations and platform management.",
 }
 
 export const dynamic = "force-dynamic"
