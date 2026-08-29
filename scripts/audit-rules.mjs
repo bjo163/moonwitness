@@ -59,6 +59,9 @@ const VIOLATIONS = {
   contrastIssues: [],
   suspiciousVisualUtilities: [],
   allowedDomainSpecific: [],
+  decorativeBlur: [],
+  decorativeGradients: [],
+  decorativeAnimation: [],
 
   // Pillar II: Topology & Boundary Rules
   ghostFolders: [],
@@ -84,6 +87,14 @@ const VIOLATIONS = {
 
 let totalFilesScanned = 0
 let totalPackagesAudited = 0
+const filesByType = {
+  application: 0,
+  theme: 0,
+  domain: 0,
+  test: 0,
+  documentation: 0,
+  tooling: 0,
+}
 
 // ── 1. THEME PARITY & CONTRAST VERIFICATION ─────────────────────────────────
 function auditThemeParityAndContrast() {
@@ -400,7 +411,18 @@ function auditFile(filePath) {
   const isGlobalsCss = filePath.includes("globals.css")
   const isScript = filePath.includes("scripts/")
 
-  if (isScript) return
+  const fileType = isScript
+    ? "tooling"
+    : isTest
+      ? "test"
+      : isGlobalsCss
+        ? "theme"
+        : isDoc
+          ? "documentation"
+          : relativePath.includes("tajweed")
+            ? "domain"
+            : "application"
+  filesByType[fileType]++
 
   // Anti-monolithic file limit (400 lines) for UI views and components
   if (
@@ -494,6 +516,24 @@ function auditFile(filePath) {
         snippet: trimmed,
       })
     }
+    if (suspiciousMatch?.[1]?.startsWith("backdrop-blur"))
+      VIOLATIONS.decorativeBlur.push({
+        file: relativePath,
+        line: lineNo,
+        token: suspiciousMatch[1],
+      })
+    if (suspiciousMatch?.[1]?.startsWith("bg-gradient"))
+      VIOLATIONS.decorativeGradients.push({
+        file: relativePath,
+        line: lineNo,
+        token: suspiciousMatch[1],
+      })
+    if (suspiciousMatch?.[1]?.startsWith("animate-"))
+      VIOLATIONS.decorativeAnimation.push({
+        file: relativePath,
+        line: lineNo,
+        token: suspiciousMatch[1],
+      })
 
     const domainMatch = line.match(
       /\b(tajweed|madda_normal|qalaqah|idgham_[a-z_]+|ghunnah|ikhfa|iqlab)\b/i
@@ -604,6 +644,11 @@ console.log(
 console.log(
   `Scanned ${BOLD}${totalFilesScanned}${RESET} files across ${BOLD}${totalPackagesAudited}${RESET} workspace packages.\n`
 )
+console.log(`${BOLD}${CYAN}▶ FILE CLASSIFICATION${RESET}`)
+for (const [type, count] of Object.entries(filesByType)) {
+  console.log(`  • ${type}: ${count === 0 ? "NOT SCANNED" : count}`)
+}
+console.log()
 
 // Genesis Contract
 console.log(`${BOLD}${CYAN}▶ SOVEREIGN PACKAGE GENESIS CONTRACT${RESET}`)
@@ -654,6 +699,38 @@ console.log(
 console.log(
   `  ${GREEN}✓ [ALLOWED DOMAIN-SPECIFIC] ${VIOLATIONS.allowedDomainSpecific.length} Tajweed visualization token usages remain explicitly scoped to globals.css.${RESET}`
 )
+console.log()
+
+// Pillar II: Zero-Drift Semantic Token & Terminology
+console.log(`${BOLD}${CYAN}▶ PHASE 4 GOVERNANCE CATEGORIES${RESET}`)
+console.log(
+  `  • FORBIDDEN TERMINOLOGY: ${VIOLATIONS.forbiddenTerminology.length}`
+)
+console.log(
+  `  • FORBIDDEN FILE NAMES: ${VIOLATIONS.legacyComponentNaming.length}`
+)
+console.log(
+  `  • FORBIDDEN VISUAL UTILITIES: ${VIOLATIONS.forbiddenVisualUtilities.length}`
+)
+console.log(
+  `  • ARBITRARY COLORS: ${VIOLATIONS.arbitraryColorUtilities.length + VIOLATIONS.rawColorLiterals.length}`
+)
+console.log(
+  `  • ARBITRARY SHADOWS: ${VIOLATIONS.arbitraryShadows.length === 0 ? "NOT SCANNED" : VIOLATIONS.arbitraryShadows.length}`
+)
+console.log(
+  `  • DECORATIVE GRADIENTS: ${VIOLATIONS.suspiciousVisualUtilities.filter((v) => v.token.startsWith("bg-gradient")).length}`
+)
+console.log(
+  `  • DECORATIVE BLUR: ${VIOLATIONS.suspiciousVisualUtilities.filter((v) => v.token.startsWith("backdrop-blur")).length}`
+)
+console.log(
+  `  • DECORATIVE ANIMATION: ${VIOLATIONS.suspiciousVisualUtilities.filter((v) => v.token.startsWith("animate-")).length}`
+)
+console.log(
+  `  • SUSPICIOUS PRIMARY USAGE: ${VIOLATIONS.suspiciousVisualUtilities.filter((v) => /primary/.test(v.snippet)).length}`
+)
+console.log(`  • DOMAIN EXCEPTIONS: ${VIOLATIONS.allowedDomainSpecific.length}`)
 console.log()
 
 // Pillar II: Zero-Drift Semantic Token & Terminology

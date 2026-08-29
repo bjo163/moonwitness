@@ -2,10 +2,20 @@
 
 import React, { Suspense } from "react"
 import { usePathname, useRouter } from "next/navigation"
-import { Sidebar, Topbar, CommandPalette, AudioToggle, ErrorBoundary } from "@workspace/ui"
+import {
+  Sidebar,
+  Topbar,
+  CommandPalette,
+  AudioToggle,
+  ErrorBoundary,
+} from "@workspace/ui"
 import { useAuthSession } from "@moon/client"
 
-export function CommandCenterShell({ children }: { children: React.ReactNode }) {
+export function CommandCenterShell({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const pathname = usePathname()
   const router = useRouter()
   const { isAuthenticated, logout } = useAuthSession()
@@ -29,7 +39,7 @@ export function CommandCenterShell({ children }: { children: React.ReactNode }) 
     return <main className="min-h-screen w-full">{children}</main>
   }
 
-  // If not authenticated yet on protected route, show clearance gate loader
+  // If not authenticated yet on protected route, show an access check loader
   if (!isAuthenticated) {
     return (
       <div className="flex min-h-screen w-full items-center justify-center bg-background font-sans text-foreground">
@@ -53,13 +63,11 @@ export function CommandCenterShell({ children }: { children: React.ReactNode }) 
           <Topbar />
         </Suspense>
         <main className="flex-1 overflow-x-hidden p-6 lg:p-8">
-          <ErrorBoundary moduleId="COMMAND_CENTER">
-            {children}
-          </ErrorBoundary>
+          <ErrorBoundary moduleId="COMMAND_CENTER">{children}</ErrorBoundary>
         </main>
       </div>
       <CommandPalette />
-      <div className="fixed bottom-4 right-4 z-40 hidden sm:block">
+      <div className="fixed right-4 bottom-4 z-40 hidden sm:block">
         <AudioToggle />
       </div>
     </div>

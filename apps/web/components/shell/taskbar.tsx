@@ -140,35 +140,35 @@ export function Taskbar() {
 
   return (
     <div
-      className="fixed right-0 bottom-0 left-0 z-[50] border-t border-border bg-black/50 font-mono shadow-sm backdrop-blur-xl select-none"
+      className="fixed right-0 bottom-0 left-0 z-[50] border-t border-border bg-card font-sans shadow-sm select-none"
       style={{ height: "44px" }}
     >
-      <div className="flex h-full items-center justify-between gap-1 px-2 text-[10px] tracking-widest uppercase sm:gap-2 sm:px-6">
+      <div className="flex h-full items-center justify-between gap-1 px-2 text-xs sm:gap-2 sm:px-6">
         {/* ── LEFT: System Status ────────────────────────────────── */}
         <div className="flex shrink-0 items-center gap-4 text-primary sm:gap-6">
           {/* SYS ONLINE indicator */}
           <span
-            className="flex items-center gap-1.5 font-bold text-emerald-400"
+            className="flex items-center gap-1.5 font-medium text-success"
             title="System Online"
           >
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400 shadow-sm" />
+            <span className="h-1.5 w-1.5 rounded-full bg-success" />
             <span className="hidden sm:inline">SYS</span>
           </span>
 
-          <span className="hidden h-3 w-px bg-white/10 sm:block" />
+          <span className="hidden h-3 w-px bg-border sm:block" />
 
           {/* Active Connections */}
           <span
-            className="hidden items-center gap-1.5 text-emerald-400/80 sm:flex"
+            className="hidden items-center gap-1.5 text-success sm:flex"
             title="Active Connections"
           >
-            <Users className="h-3 w-3 text-emerald-400" />
-            <strong className="font-black text-emerald-400">
+            <Users className="h-3 w-3 text-success" />
+            <strong className="font-semibold text-success">
               {activeConnections}
             </strong>
           </span>
 
-          <span className="hidden h-3 w-px bg-white/10 sm:block" />
+          <span className="hidden h-3 w-px bg-border sm:block" />
 
           {/* Latency */}
           <span
@@ -179,7 +179,7 @@ export function Taskbar() {
             <strong className="font-black text-primary">12MS</strong>
           </span>
 
-          <span className="hidden h-3 w-px bg-white/10 md:block" />
+          <span className="hidden h-3 w-px bg-border md:block" />
 
           {/* Qibla */}
           <span
@@ -190,7 +190,7 @@ export function Taskbar() {
             <strong className="font-black text-primary">295.14°</strong>
           </span>
 
-          <span className="hidden h-3 w-px bg-white/10 lg:block" />
+          <span className="hidden h-3 w-px bg-border lg:block" />
 
           {/* Lunar Phase */}
           {lunarInfo && (
@@ -207,7 +207,7 @@ export function Taskbar() {
             </span>
           )}
 
-          <span className="hidden h-3 w-px bg-white/10 lg:block" />
+          <span className="hidden h-3 w-px bg-border lg:block" />
 
           {/* Sun Position & Duha Status */}
           {sunInfo && (
@@ -258,14 +258,16 @@ export function Taskbar() {
         {/* ── CENTER: Clock ──────────────────────────────────────── */}
         <div className="flex shrink-0 items-center gap-1.5 rounded border border-border bg-muted px-3 py-0.5 font-black text-primary shadow-sm">
           <span>{timeStr || "00:00:00"}</span>
-          <span className="hidden text-[9px] text-white/50 sm:inline">WIB</span>
+          <span className="hidden text-[9px] text-muted-foreground sm:inline">
+            WIB
+          </span>
         </div>
 
         {/* ── RIGHT: Audio Player + Version ──────────────────────── */}
         <div className="flex shrink-0 items-center gap-4 text-primary sm:gap-6">
           {/* Audio Player — compact inline */}
           <div className="flex items-center gap-1 sm:gap-2">
-            <Music className="hidden h-3 w-3 animate-pulse text-primary sm:block" />
+            <Music className="hidden h-3 w-3 text-primary sm:block" />
             <span className="hidden max-w-[120px] truncate font-bold text-primary sm:inline-block">
               #{currentSurah.number} {currentSurah.name}
             </span>
@@ -321,17 +323,17 @@ export function Taskbar() {
             </div>
           </div>
 
-          <span className="hidden h-3 w-px bg-white/10 sm:block" />
+          <span className="hidden h-3 w-px bg-border sm:block" />
 
           {/* Audio Translate */}
           <div className="hidden md:block">
             <GlobalLiveAudioTranslator />
           </div>
 
-          <span className="hidden h-3 w-px bg-white/10 md:block" />
+          <span className="hidden h-3 w-px bg-border md:block" />
 
           {/* Version badge */}
-          <span className="rounded border border-white/20 bg-white/5 px-2 py-0.5 text-[9px] font-bold text-white/50">
+          <span className="rounded-md border border-border bg-muted px-2 py-0.5 text-[9px] font-medium text-muted-foreground">
             MW-OS V6.5
           </span>
         </div>
@@ -339,6 +341,3 @@ export function Taskbar() {
     </div>
   )
 }
-
-// Backward compatibility alias
-export { Taskbar as HUDTaskbar }

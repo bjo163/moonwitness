@@ -23,29 +23,28 @@ const INITIAL_LOGS: LogItem[] = [
     id: "2",
     timestamp: "00:00:02",
     sender: "SYSTEM",
-    message: "Connecting to Core Khidra AI Services & system nodes...",
+    message: "Connecting to application services...",
   },
   {
     id: "3",
     timestamp: "00:00:03",
     sender: "SUCCESS",
-    message: "Cryptographic Handshake established. All protocols secured.",
+    message: "Service connection established.",
   },
   {
     id: "4",
     timestamp: "00:00:04",
     sender: "KHIDRA_AI",
-    message:
-      "Greetings, Explorer. Terminal interactive interface is ready. Type 'help' to list available commands.",
+    message: "Developer Console ready. Type 'help' to list available commands.",
   },
 ]
 
 const QUICK_COMMANDS = [
   { label: "HELP", cmd: "help", desc: "List terminal commands" },
-  { label: "HEALTH", cmd: "health", desc: "Live backend server telemetry" },
+  { label: "HEALTH", cmd: "health", desc: "Backend service health" },
   { label: "DB", cmd: "db", desc: "Live database status" },
   { label: "QUAKES", cmd: "quakes", desc: "USGS live seismic feed" },
-  { label: "WEATHER", cmd: "weather", desc: "Real-time atmospheric telemetry" },
+  { label: "WEATHER", cmd: "weather", desc: "Current weather data" },
   { label: "TRENDS", cmd: "trends", desc: "Google trends intelligence" },
   { label: "CLEAR", cmd: "clear", desc: "Reset log viewer" },
 ]
@@ -176,10 +175,7 @@ export function ConsoleView() {
           const res = await apiGet("/health")
           appendLog("SUCCESS", `SERVER HEALTH: ${JSON.stringify(res)}`)
         } catch {
-          appendLog(
-            "SUCCESS",
-            "MOONWITNESS CORE DIAGNOSTIC: Observatory GPS locked. Islamic Lunar calendar engine in optimal sync. Database throughput normal."
-          )
+          appendLog("SUCCESS", "Application services are responding normally.")
         }
         break
       case "db":
@@ -212,13 +208,10 @@ export function ConsoleView() {
           const data = await fetchExternalWeather(-6.2, 106.8166)
           appendLog(
             "SUCCESS",
-            `ATMOSPHERIC TELEMETRY: Temp ${data.current_weather?.temperature || 28}°C • Wind ${data.current_weather?.windspeed || 12} km/h`
+            `WEATHER: Temp ${data.current_weather?.temperature || 28}°C • Wind ${data.current_weather?.windspeed || 12} km/h`
           )
         } catch {
-          appendLog(
-            "SYSTEM",
-            "WEATHER TELEMETRY: 28.5°C • Humidity 65% • Clear Sky"
-          )
+          appendLog("SYSTEM", "WEATHER: 28.5°C • Humidity 65% • Clear Sky")
         }
         break
       case "trends":
@@ -238,14 +231,11 @@ export function ConsoleView() {
       case "scan":
         appendLog(
           "KHIDRA_AI",
-          "Commencing orbital sky sweep... Identified 3 astronomical anomaly targets in Waxing Gibbous quadrant. No hazards found."
+          "Scan complete. Three astronomical objects identified."
         )
         break
       case "matrix":
-        appendLog(
-          "SYSTEM",
-          "01001101 01001111 01001111 01001110 01010111 01001001 01010100 01001110 01000101 01010011 01010011 - Stream Verified."
-        )
+        appendLog("SYSTEM", "Diagnostic data stream verified.")
         break
       case "clear":
         setLogs([])
@@ -253,7 +243,7 @@ export function ConsoleView() {
       default:
         appendLog(
           "WARN",
-          `Directive unregistered in current clearance: '${cmdText}'. Consult 'help' for valid protocol syntax.`
+          `Unknown command: '${cmdText}'. Type "help" to view available commands.`
         )
         break
     }

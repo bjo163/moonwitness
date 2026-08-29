@@ -45,7 +45,7 @@ export function SubNavigation({ links }: SubNavigationProps) {
   const pathname = usePathname()
 
   return (
-    <div className="bg-card/80 sticky top-16 z-40 w-full border-b border-white/5 backdrop-blur-md">
+    <div className="sticky top-16 z-40 w-full border-b border-border bg-card">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <nav className="scrollbar-hide flex snap-x snap-mandatory items-center gap-2 overflow-x-auto py-3">
           {links.map((link) => {
@@ -60,23 +60,18 @@ export function SubNavigation({ links }: SubNavigationProps) {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`group flex shrink-0 snap-start items-center gap-2.5 rounded px-4 py-2 transition-all duration-300 ${
+                className={`group flex shrink-0 snap-start items-center gap-2.5 rounded-md px-4 py-2 transition-colors ${
                   isActive
-                    ? "border border-border bg-primary/10 text-primary shadow-sm"
-                    : "border border-transparent text-primary hover:bg-white/5 hover:text-primary"
+                    ? "border border-border bg-accent text-accent-foreground shadow-sm"
+                    : "border border-transparent text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                 } `}
               >
                 <div className="relative">
-                  {isActive && (
-                    <span className="absolute inset-0 animate-ping rounded-full bg-primary opacity-40" />
-                  )}
                   <Icon
-                    className={`relative z-10 h-3.5 w-3.5 ${isActive ? "text-primary" : "text-primary transition-colors group-hover:text-primary"}`}
+                    className={`relative z-10 h-3.5 w-3.5 ${isActive ? "text-accent-foreground" : "text-muted-foreground"}`}
                   />
                 </div>
-                <span className="font-mono text-[10px] font-bold tracking-[0.2em] uppercase">
-                  {link.label}
-                </span>
+                <span className="text-sm font-medium">{link.label}</span>
               </Link>
             )
           })}
