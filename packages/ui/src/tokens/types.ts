@@ -7,67 +7,6 @@
  */
 
 // ═══════════════════════════════════════════════════════════════════════════
-// COLOR TOKENS
-// ═══════════════════════════════════════════════════════════════════════════
-
-/**
- * Primary cyber color palette
- * Core semantic colors for the Deep Space Sci-Fi Divine OS theme
- */
-export type CyberColorToken =
-  | 'cyber-cyan'
-  | 'cyber-green'
-  | 'cyber-yellow'
-  | 'cyber-purple'
-  | 'cyber-pink'
-  | 'cyber-dark'
-  | 'cyber-panel';
-
-/**
- * CSS variable values for each cyber color token. Runtime values live in globals.css.
- */
-export const CYBER_COLORS: Record<CyberColorToken, string> = {
-  'cyber-cyan': 'var(--cyber-cyan)',
-  'cyber-green': 'var(--cyber-green)',
-  'cyber-yellow': 'var(--cyber-yellow)',
-  'cyber-purple': 'var(--cyber-purple)',
-  'cyber-pink': 'var(--cyber-pink)',
-  'cyber-dark': 'var(--cyber-dark)',
-  'cyber-panel': 'var(--cyber-panel)',
-} as const;
-
-/**
- * Semantic color usage mapping
- */
-export type ColorSemantic =
-  | 'primary'      // Primary actions, navigation
-  | 'success'      // Success states, confirmations
-  | 'warning'      // Warnings, attention required
-  | 'error'        // Errors, destructive actions
-  | 'info'         // Informational, neutral
-  | 'premium'      // Premium features, special content
-  | 'background'   // Backgrounds, surfaces
-  | 'surface';     // Elevated surfaces, panels
-
-/**
- * Map semantic intentions to cyber color tokens
- */
-export const SEMANTIC_COLOR_MAP: Record<ColorSemantic, CyberColorToken> = {
-  primary: 'cyber-cyan',
-  success: 'cyber-green',
-  warning: 'cyber-yellow',
-  error: 'cyber-pink',
-  info: 'cyber-cyan',
-  premium: 'cyber-purple',
-  background: 'cyber-dark',
-  surface: 'cyber-panel',
-} as const;
-
-/**
- * Opacity variants for colors
- */
-export type OpacityLevel = 10 | 20 | 25 | 30 | 40 | 50 | 60 | 70 | 75 | 80 | 90 | 100;
-
 // ═══════════════════════════════════════════════════════════════════════════
 // SPACING TOKENS
 // ═══════════════════════════════════════════════════════════════════════════
@@ -227,11 +166,6 @@ export const GLOW_SPECS: Record<GlowIntensity, { blur: number; opacity: number; 
   critical: { blur: 60, opacity: 0.3, usage: 'Critical alerts, focus states' },
 } as const;
 
-/**
- * Glow utility types
- */
-export type GlowType = 'cyan' | 'emerald' | 'amber' | 'purple' | 'pink' | 'holo';
-
 // ═══════════════════════════════════════════════════════════════════════════
 // ANIMATION TOKENS
 // ═══════════════════════════════════════════════════════════════════════════
@@ -306,11 +240,6 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
  */
 export type PanelVariant = 'default' | 'glass' | 'solid';
 
-/**
- * Corner bracket colors
- */
-export type CornerColor = 'cyan' | 'green' | 'yellow' | 'purple' | 'pink';
-
 // ═══════════════════════════════════════════════════════════════════════════
 // UTILITY TYPES
 // ═══════════════════════════════════════════════════════════════════════════
@@ -321,20 +250,9 @@ export type CornerColor = 'cyan' | 'green' | 'yellow' | 'purple' | 'pink';
 export type TailwindClass = string;
 
 /**
- * CSS variable reference
- */
-export type CSSVar = `var(--${string})`;
-
-/**
- * Helper type for token with opacity
- */
-export type TokenWithOpacity<T extends string> = T | `${T}/${OpacityLevel}`;
-
-/**
  * Complete design token configuration
  */
 export interface DesignTokenConfig {
-  colors: typeof CYBER_COLORS;
   spacing: typeof SPACING_SCALE;
   fonts: typeof FONT_FAMILIES;
   chamfers: typeof CHAMFER_SPECS;
@@ -347,7 +265,6 @@ export interface DesignTokenConfig {
  * Export complete token configuration
  */
 export const DESIGN_TOKENS: DesignTokenConfig = {
-  colors: CYBER_COLORS,
   spacing: SPACING_SCALE,
   fonts: FONT_FAMILIES,
   chamfers: CHAMFER_SPECS,
@@ -359,13 +276,6 @@ export const DESIGN_TOKENS: DesignTokenConfig = {
 // ═══════════════════════════════════════════════════════════════════════════
 // TYPE GUARDS
 // ═══════════════════════════════════════════════════════════════════════════
-
-/**
- * Type guard for cyber color token
- */
-export function isCyberColor(value: string): value is CyberColorToken {
-  return value in CYBER_COLORS;
-}
 
 /**
  * Type guard for chamfer type
