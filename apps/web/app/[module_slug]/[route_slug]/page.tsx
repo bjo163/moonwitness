@@ -2,6 +2,7 @@ import React from "react"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import { getViewForRoute } from "@/views/route-map"
+import { GlobalMonitoringDashboard } from "@/components/observatory/global-monitoring-dashboard"
 
 export async function generateMetadata({
   params,
@@ -46,6 +47,10 @@ export default async function ModuleRoutePage({
     return null
   }
 
+  if (module_slug === "observatory" && route_slug === "global-monitoring") {
+    return <GlobalMonitoringDashboard />
+  }
+
   const Component = getViewForRoute(module_slug, route_slug)
 
   if (!Component) {
@@ -54,4 +59,3 @@ export default async function ModuleRoutePage({
 
   return <Component />
 }
-
