@@ -29,24 +29,18 @@ export function GlobalLiveAudioTranslator() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="relative font-mono">
+    <div className="relative font-sans">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="rounded-md flex cursor-pointer items-center gap-1 border border-primary/40 px-2 py-0.5 text-[8px] font-bold text-primary hover:border-primary"
-        title="Pilih Bahasa Penerjemah Audio Global V4.0"
+        className="clip-tag flex cursor-pointer items-center gap-1 border border-cyber-cyan/40 px-2 py-1 text-xs font-medium text-cyber-cyan transition-colors hover:border-cyber-cyan hover:bg-cyber-cyan/10"
+        title="Choose audio translation language"
       >
-        <Languages className="h-3 w-3 text-primary" />
-        <span>
-          [ AUDIO TRANSLATE: {selectedLang.code.toUpperCase()}{" "}
-          {selectedLang.flag} ]
-        </span>
+        <Languages className="h-3.5 w-3.5" />
+        <span>Audio · {selectedLang.code.toUpperCase()} {selectedLang.flag}</span>
       </button>
 
       {isOpen && (
-        <div className="bg-card/95 rounded-md theme-scrollbar absolute bottom-full left-0 z-50 mb-2 max-h-56 w-52 space-y-1 overflow-y-auto border border-primary/50 p-2 text-xs shadow-sm backdrop-blur-md">
-          <div className="border-b border-primary/20 px-2 py-1 text-[8px] font-bold text-primary">
-            {/* 10 BAHASA GLOBAL AUDIO: */}
-          </div>
+        <div className="clip-card theme-scrollbar absolute bottom-full left-0 z-50 mb-2 max-h-56 w-52 space-y-1 overflow-y-auto border border-cyber-cyan/40 bg-cyber-panel p-2 text-sm">
 
           {GLOBAL_LANGUAGES.map((lang) => (
             <button
@@ -55,10 +49,10 @@ export function GlobalLiveAudioTranslator() {
                 setSelectedLang(lang)
                 setIsOpen(false)
               }}
-              className={`flex w-full items-center justify-between rounded px-2 py-1.5 text-left text-xs transition-colors ${
+              className={`flex w-full items-center justify-between rounded px-2 py-1.5 text-left transition-colors ${
                 selectedLang.code === lang.code
-                  ? "bg-primary/20 font-bold text-primary"
-                  : "hover:bg-panel text-foreground"
+                  ? "bg-cyber-cyan/10 font-medium text-cyber-cyan"
+                  : "text-foreground hover:bg-accent"
               }`}
             >
               <span>

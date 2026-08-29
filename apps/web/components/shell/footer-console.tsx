@@ -21,29 +21,29 @@ export function OSFooterConsole() {
   }, [])
 
   return (
-    <footer className="z-50 w-full border-t border-white/10 bg-black/20 font-mono text-[10px] tracking-widest text-primary uppercase backdrop-blur-md">
+    <footer className="z-50 w-full border-t border-border bg-cyber-panel text-sm text-muted-foreground">
       <div className="mx-auto flex max-w-[1700px] flex-col items-center justify-between gap-4 px-6 py-3 sm:flex-row sm:px-10">
         <div className="flex items-center gap-3">
-          <ShieldCheck className="h-4 w-4 text-emerald-400" />
-          <span>© 2026 MOONWITNESS OS — GLOBAL ESCHATOLOGY OBSERVATORY</span>
+          <ShieldCheck className="h-4 w-4 text-cyber-green" />
+          <span>© 2026 MoonWitness OS — Global observation network</span>
         </div>
 
-        <div className="flex items-center gap-6 font-bold text-white/50">
-          <span className="cursor-pointer transition-colors hover:text-primary">
-            [ TELEMETRY ]
+        <div className="flex items-center gap-6 font-medium">
+          <span className="cursor-pointer transition-colors hover:text-cyber-cyan">
+            Telemetry
           </span>
-          <span className="cursor-pointer transition-colors hover:text-fuchsia-400">
-            [ PROTOCOL ]
+          <span className="cursor-pointer transition-colors hover:text-cyber-purple">
+            Protocol
           </span>
-          <span className="cursor-pointer transition-colors hover:text-white">
-            [ COMPACT ]
+          <span className="cursor-pointer transition-colors hover:text-foreground">
+            Compact
           </span>
-          <span className="cursor-pointer transition-colors hover:text-emerald-400">
-            [ KHIDRA ]
+          <span className="cursor-pointer transition-colors hover:text-cyber-green">
+            Khidra
           </span>
         </div>
 
-        <div className="hidden font-bold text-primary lg:block">
+        <div className="hidden font-mono text-xs text-cyber-cyan lg:block">
           {mounted ? currentTime : "00:00:00 WIB"}
         </div>
       </div>

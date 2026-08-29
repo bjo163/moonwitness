@@ -11,7 +11,7 @@ type AmbientTrack = {
 }
 
 const AMBIENT_PRESETS: AmbientTrack[] = [
-  { id: "cosmic", name: "Space Ambient", freq: 108, type: "sine" },
+  { id: "cosmic", name: "Cosmic Space Hum", freq: 108, type: "sine" },
   { id: "rain", name: "Sacred Rain Frequency", freq: 174, type: "triangle" },
   { id: "oasis", name: "Oasis Stream Harmony", freq: 285, type: "sine" },
   { id: "breeze", name: "Desert Night Breeze", freq: 432, type: "sine" },
@@ -119,25 +119,25 @@ export function AmbientSoundscape() {
   }
 
   return (
-    <div className="flex items-center gap-1.5 font-mono">
+    <div className="flex items-center gap-1.5 font-sans">
       <button
         onClick={togglePlay}
-        className={`rounded-md flex cursor-pointer items-center gap-1 border px-2 py-0.5 text-[8px] font-bold transition-all ${
+        className={`clip-tag flex cursor-pointer items-center gap-1 border px-2 py-1 text-xs font-medium transition-colors ${
           isPlaying
-            ? "text-success border-success/60 bg-success/10 animate-pulse"
-            : "border-primary/30 text-primary hover:border-primary"
+            ? "border-cyber-green/60 bg-cyber-green/10 text-cyber-green"
+            : "border-border text-muted-foreground hover:border-cyber-cyan hover:text-cyber-cyan"
         }`}
         title="Toggle Ambient Audio Soundscape"
       >
         {isPlaying ? (
-          <Volume2 className="text-success h-3 w-3" />
+          <Volume2 className="h-3.5 w-3.5 text-cyber-green" />
         ) : (
-          <VolumeX className="h-3 w-3 text-primary" />
+          <VolumeX className="h-3.5 w-3.5" />
         )}
         <span>
           {isPlaying
-            ? `[ ${selectedTrack.name.toUpperCase()} ]`
-            : "[ AMBIENT SOUND ]"}
+            ? selectedTrack.name
+            : "Ambient sound"}
         </span>
       </button>
     </div>

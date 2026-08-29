@@ -24,8 +24,8 @@ export function AutoBreadcrumb({ className = "" }: { className?: string }) {
       ? undefined
       : "/" + segments.slice(0, index + 1).join("/")
 
-    // Format label: replace hyphens with spaces and uppercase
-    const label = decodeURIComponent(segment).replace(/-/g, " ").toUpperCase()
+    // Format label: replace hyphens with spaces while preserving readable casing.
+    const label = decodeURIComponent(segment).replace(/-/g, " ")
 
     return { label, href }
   })

@@ -45,7 +45,7 @@ export function SubNavigation({ links }: SubNavigationProps) {
   const pathname = usePathname()
 
   return (
-    <div className="sticky top-16 z-40 w-full border-b border-border bg-card">
+    <div className="sticky top-16 z-40 w-full border-b border-border bg-cyber-panel">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <nav className="scrollbar-hide flex snap-x snap-mandatory items-center gap-2 overflow-x-auto py-3">
           {links.map((link) => {
@@ -60,18 +60,18 @@ export function SubNavigation({ links }: SubNavigationProps) {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`group flex shrink-0 snap-start items-center gap-2.5 rounded-md px-4 py-2 transition-colors ${
+                className={`group clip-btn flex shrink-0 snap-start items-center gap-2.5 border px-4 py-2 transition-colors duration-200 ${
                   isActive
-                    ? "border border-border bg-accent text-accent-foreground shadow-sm"
-                    : "border border-transparent text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                } `}
+                    ? "border-cyber-cyan/50 bg-cyber-cyan/10 text-cyber-cyan"
+                    : "border-transparent text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground"
+                }`}
               >
-                <div className="relative">
-                  <Icon
-                    className={`relative z-10 h-3.5 w-3.5 ${isActive ? "text-accent-foreground" : "text-muted-foreground"}`}
-                  />
-                </div>
-                <span className="text-sm font-medium">{link.label}</span>
+                <Icon
+                  className={`h-3.5 w-3.5 transition-colors ${isActive ? "text-cyber-cyan" : "text-muted-foreground group-hover:text-foreground"}`}
+                />
+                <span className="text-sm font-medium tracking-wide">
+                  {link.label}
+                </span>
               </Link>
             )
           })}

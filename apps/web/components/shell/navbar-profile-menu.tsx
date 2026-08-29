@@ -33,15 +33,15 @@ export function NavbarProfileMenu({
     return (
       <Link
         href="/auth/login"
-        className="group flex items-center gap-2 font-mono text-[10px] tracking-widest uppercase transition-colors hover:text-primary"
+        className="group flex items-center gap-2 text-sm transition-colors hover:text-cyber-cyan"
       >
-        <span className="text-primary group-hover:text-primary">MISSION STATUS</span>
-        <span className="flex items-center gap-1.5 font-bold text-primary drop-shadow-sm group-hover:text-white">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary shadow-sm group-hover:bg-white" />
-          ONLINE
+        <span className="text-muted-foreground group-hover:text-cyber-cyan">Session status</span>
+        <span className="flex items-center gap-1.5 font-medium text-cyber-green group-hover:text-foreground">
+          <span className="h-1.5 w-1.5 rounded-full bg-cyber-green" />
+          Online
         </span>
-        <span className="ml-2 rounded border border-border bg-primary/10 px-1.5 py-0.5 text-[8px] text-primary opacity-50 group-hover:opacity-100">
-          LOGIN &rarr;
+        <span className="ml-2 clip-tag border border-cyber-cyan/30 bg-cyber-cyan/10 px-1.5 py-0.5 text-xs text-cyber-cyan transition-opacity group-hover:opacity-100">
+          Sign in →
         </span>
       </Link>
     )
@@ -51,61 +51,61 @@ export function NavbarProfileMenu({
     <>
       <button
         onClick={() => setProfileDropdownOpen((prev) => !prev)}
-        className="group flex items-center gap-3 transition-colors hover:text-primary"
+        className="group flex items-center gap-3 transition-colors hover:text-cyber-cyan"
       >
         <AutoAvatar seed={userProfile?.name || "Anonymous"} size={36} />
-        <div className="flex flex-col items-start text-left font-mono tracking-widest uppercase">
-          <span className="text-[9px] font-bold text-white group-hover:text-primary">
-            {userProfile.name?.substring(0, MAX_NAME_DISPLAY_LENGTH) || "PLAYER"}
+        <div className="flex flex-col items-start text-left">
+          <span className="text-xs font-semibold text-foreground group-hover:text-cyber-cyan">
+            {userProfile.name?.substring(0, MAX_NAME_DISPLAY_LENGTH) || "Operator"}
           </span>
-          <span className="text-[7px] text-primary">{userProfile.role || "PUBLIC"}</span>
+          <span className="text-[10px] text-muted-foreground">{userProfile.role || "Public"}</span>
         </div>
       </button>
 
       {profileDropdownOpen && (
-        <div className="bg-card/95 absolute top-full right-0 mt-2 w-56 rounded-xl border border-border p-2 shadow-sm backdrop-blur-xl">
-          <div className="mb-2 border-b border-white/10 pb-2 pl-2 font-mono text-[9px] text-white/50 uppercase">
-            SYSTEM ACTIONS
+        <div className="absolute top-full right-0 mt-2 w-56 clip-card border border-cyber-cyan/40 bg-cyber-panel p-2">
+          <div className="mb-2 border-b border-border pb-2 pl-2 text-xs font-medium text-muted-foreground">
+            Account actions
           </div>
           <div className="flex flex-col gap-1">
             <Link
               href="/auth/profile"
               onClick={() => setProfileDropdownOpen(false)}
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary/10 hover:text-primary"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-cyber-cyan transition-colors hover:bg-accent hover:text-foreground"
             >
-              <UserIcon className="h-4 w-4" /> PLAYER IDENTITY
+              <UserIcon className="h-4 w-4" /> Profile
             </Link>
             <a
               href={`${commandCenterUrl}/dashboard`}
               onClick={() => setProfileDropdownOpen(false)}
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-[10px] font-bold text-fuchsia-400 transition-colors hover:bg-fuchsia-500/10 hover:text-fuchsia-300"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-cyber-purple transition-colors hover:bg-cyber-purple/10 hover:text-foreground"
             >
-              <ShieldCheck className="h-4 w-4" /> COMMAND CENTER ↗
+              <ShieldCheck className="h-4 w-4" /> Command center ↗
             </a>
             <a
               href={`${commandCenterUrl}/terminal`}
               onClick={() => setProfileDropdownOpen(false)}
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-[10px] font-bold text-emerald-400 transition-colors hover:bg-emerald-500/10 hover:text-emerald-300"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-cyber-green transition-colors hover:bg-cyber-green/10 hover:text-foreground"
             >
-              <Terminal className="h-4 w-4" /> DEV TERMINAL ↗
+              <Terminal className="h-4 w-4" /> Developer terminal ↗
             </a>
             <button
               disabled
-              className="flex cursor-not-allowed items-center justify-between rounded-lg px-3 py-2 text-[10px] font-bold text-primary/40 opacity-70"
+              className="flex cursor-not-allowed items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground opacity-70"
             >
               <div className="flex items-center gap-3">
-                <Orbit className="h-4 w-4" /> UNIVERSE
+                <Orbit className="h-4 w-4" /> Universe
               </div>
-              <span className="rounded-sm border border-primary/20 px-1.5 py-0.5 text-[7px] text-primary/30">
-                COMING SOON
+              <span className="clip-tag border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                Coming soon
               </span>
             </button>
-            <div className="my-1 border-t border-white/10" />
+            <div className="my-1 border-t border-border" />
             <button
               onClick={onLogout}
-              className="text-danger hover:bg-danger/10 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-[10px] font-bold transition-colors hover:text-red-400"
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-destructive transition-colors hover:bg-destructive/10 hover:text-destructive"
             >
-              <LogOut className="h-4 w-4" /> SYSTEM LOGOUT
+              <LogOut className="h-4 w-4" /> Sign out
             </button>
           </div>
         </div>
