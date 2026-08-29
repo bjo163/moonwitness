@@ -373,7 +373,7 @@ export function Taskbar() {
           <span className="hidden h-3 w-px bg-border md:block" />
 
           {/* Version badge */}
-          <span className="border border-border bg-muted px-2 py-1 text-xs text-muted-foreground clip-tag">
+          <span className="rounded border border-border bg-muted px-2 py-1 text-xs text-muted-foreground">
             MW-OS v6.5
           </span>
         </div>
