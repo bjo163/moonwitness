@@ -92,7 +92,7 @@ export function MukjizatSainsView() {
                   <h4 className="text-sm font-bold text-foreground">
                     {sm.title}
                   </h4>
-                  <span className="tag-clip tag-clip-purple tag-clip text-[9px] font-bold">
+                  <span className="clip-tag border border-cyber-purple/40 bg-cyber-purple/10 text-cyber-purple px-2 py-0.5 font-mono text-[9px] font-bold">
                     {sm.quranRef}
                   </span>
                 </div>

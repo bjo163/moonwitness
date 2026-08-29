@@ -141,7 +141,7 @@ export function ResourceTable<T = any>({
   const hasActions = onEdit || onDelete || actions
 
   return (
-    <div className={`relative overflow-hidden border bg-[#0A0F17]/90 backdrop-blur-md ${colors.border} ${className}`}>
+    <div className={`relative overflow-hidden border bg-cyber-panel/90 backdrop-blur-md ${colors.border} ${className}`}>
       {/* Top Accent Bar */}
       <div className={`absolute top-0 right-0 left-0 h-[2px] bg-gradient-to-r from-transparent ${colors.headerGlow} to-transparent opacity-80`} />
 

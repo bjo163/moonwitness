@@ -118,7 +118,7 @@ export function ToolkitRasulullahView() {
                       {/* PERAN: {tk.role} */}
                     </p>
                   </div>
-                  <span className="tag-clip tag-clip-green tag-clip text-[9px] font-bold">
+                  <span className="clip-tag border border-cyber-green/40 bg-cyber-green/10 text-cyber-green px-2 py-0.5 font-mono text-[9px] font-bold">
                     {tk.quranRef}
                   </span>
                 </div>

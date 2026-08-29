@@ -216,7 +216,7 @@ export function RandomWarpGenerator() {
         createPortal(
           <div className="bg-space/95 fixed inset-0 z-[99999] flex items-center justify-center p-4 font-mono backdrop-blur-2xl">
             <div
-              className="corner-box bg-[#0A0F17] relative my-auto flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden border border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.35)] card-clip"
+              className="corner-box bg-cyber-panel relative my-auto flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden border border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.35)] card-clip"
             >
               <div className="holo-scan-bar" />
 
@@ -258,11 +258,11 @@ export function RandomWarpGenerator() {
                   warpData && (
                     <div className="animate-in space-y-4 fade-in">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className="tag-clip tag-clip-green tag-clip text-[10px]">
+                        <span className="clip-tag border border-cyber-green/40 bg-cyber-green/10 text-cyber-green px-2 py-0.5 font-mono text-[10px]">
                           📖 Q.S {warpData.surahName} ({warpData.surahNumber}:
                           {warpData.ayahNumber})
                         </span>
-                        <span className="tag-clip tag-clip-yellow tag-clip text-[9px]">
+                        <span className="clip-tag border border-cyber-yellow/40 bg-cyber-yellow/10 text-cyber-yellow px-2 py-0.5 font-mono text-[9px]">
                           ✨ {warpData.asmaulName}
                         </span>
                       </div>

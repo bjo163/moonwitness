@@ -158,7 +158,7 @@ export function MatriksKitabView() {
                   <Scroll className="h-4 w-4 text-accent" />
                   TAURAT (TORAH)
                 </span>
-                <span className="tag-clip tag-clip-yellow tag-clip px-2 py-0.5 text-[8px]">
+                <span className="clip-tag border border-cyber-yellow/40 bg-cyber-yellow/10 text-cyber-yellow px-2 py-0.5 font-mono text-[8px]">
                   {activePassage.torah.ref}
                 </span>
               </div>
@@ -174,7 +174,7 @@ export function MatriksKitabView() {
                   <ShieldCheck className="text-success h-4 w-4" />
                   ZABUR (PSALMS)
                 </span>
-                <span className="tag-clip tag-clip-green tag-clip px-2 py-0.5 text-[8px]">
+                <span className="clip-tag border border-cyber-green/40 bg-cyber-green/10 text-cyber-green px-2 py-0.5 font-mono text-[8px]">
                   {activePassage.psalms.ref}
                 </span>
               </div>
@@ -190,7 +190,7 @@ export function MatriksKitabView() {
                   <Compass className="h-4 w-4 text-primary" />
                   INJIL (GOSPEL)
                 </span>
-                <span className="tag-clip tag-clip-purple tag-clip px-2 py-0.5 text-[8px]">
+                <span className="clip-tag border border-cyber-purple/40 bg-cyber-purple/10 text-cyber-purple px-2 py-0.5 font-mono text-[8px]">
                   {activePassage.gospel.ref}
                 </span>
               </div>

@@ -187,7 +187,13 @@ export function QiblaRadarWidget() {
           </span>
         </div>
         <span
-          className={`tag-clip tag-clip px-2 py-0.5 text-[8px] font-bold ${isSyncing ? "tag-clip-yellow animate-pulse" : errorMsg ? "tag-clip-pink" : "tag-clip-green"}`}
+          className={`clip-tag border px-2 py-0.5 font-mono text-[8px] font-bold ${
+            isSyncing
+              ? "border-cyber-yellow/40 bg-cyber-yellow/10 text-cyber-yellow animate-pulse"
+              : errorMsg
+                ? "border-cyber-pink/40 bg-cyber-pink/10 text-cyber-pink"
+                : "border-cyber-green/40 bg-cyber-green/10 text-cyber-green"
+          }`}
         >
           {isSyncing
             ? "SCANNING..."
@@ -298,7 +304,7 @@ export function QiblaRadarWidget() {
               <Clock className="h-3 w-3 text-accent" />
               NEXT CYCLE: <span className="text-accent">{nextPrayerName}</span>
             </span>
-            <span className="tag-clip tag-clip-yellow tag-clip px-1.5 py-0 text-[8px]">
+            <span className="clip-tag border border-cyber-yellow/40 bg-cyber-yellow/10 text-cyber-yellow px-1.5 py-0 font-mono text-[8px]">
               COUNTDOWN
             </span>
           </div>

@@ -4,35 +4,35 @@ export function GraphSvgPrimaryNodes() {
   return (
     <>
       <defs>
-        <filter id="glow-emerald" x="-50%" y="-50%" width="200%" height="200%">
+        <filter id="svg-glow-emerald" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="8" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
-        <filter id="glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
+        <filter id="svg-glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="6" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
-        <filter id="glow-blue" x="-50%" y="-50%" width="200%" height="200%">
+        <filter id="svg-glow-blue" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="6" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
-        <filter id="glow-yellow" x="-50%" y="-50%" width="200%" height="200%">
+        <filter id="svg-glow-yellow" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="6" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
-        <filter id="glow-purple" x="-50%" y="-50%" width="200%" height="200%">
+        <filter id="svg-glow-purple" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="6" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
@@ -164,7 +164,7 @@ export function GraphSvgPrimaryNodes() {
           r="30"
           className="fill-black stroke-secondary"
           strokeWidth="2"
-          filter="url(#glow-blue)"
+          filter="url(#svg-glow-cyan)"
         />
         <path
           d="M-8,-5 Q0,-15 8,-5 L10,10 L-10,10 Z"
@@ -208,7 +208,7 @@ export function GraphSvgPrimaryNodes() {
           r="30"
           className="stroke-warning fill-black"
           strokeWidth="2"
-          filter="url(#glow-yellow)"
+          filter="url(#svg-glow-yellow)"
         />
         <path
           d="M-10,-10 L10,-10 L10,10 L-10,10 Z"

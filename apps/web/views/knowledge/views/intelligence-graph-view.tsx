@@ -436,19 +436,19 @@ export function IntelligenceGraphView() {
 
           <div className="flex items-center gap-4 border border-primary/30 bg-black/50 p-2 text-[10px] font-bold backdrop-blur-sm">
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-[#00f0ff]" /> TOKOH
+              <span className="h-2 w-2 rounded-full bg-cyber-cyan" /> TOKOH
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-[#00ff66]" /> LOKASI
+              <span className="h-2 w-2 rounded-full bg-cyber-green" /> LOKASI
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-[#ff3366]" /> PERISTIWA
+              <span className="h-2 w-2 rounded-full bg-cyber-pink" /> PERISTIWA
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-[#ffaa00]" /> KONSEP
+              <span className="h-2 w-2 rounded-full bg-cyber-yellow" /> KONSEP
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-[#b829ff]" />{" "}
+              <span className="h-2 w-2 rounded-full bg-cyber-purple" />{" "}
               KITAB/SUMBER
             </span>
           </div>

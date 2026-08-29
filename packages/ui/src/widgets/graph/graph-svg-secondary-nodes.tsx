@@ -9,7 +9,7 @@ export function GraphSvgSecondaryNodes() {
           r="30"
           className="stroke-warning fill-black"
           strokeWidth="2"
-          filter="url(#glow-yellow)"
+          filter="url(#svg-glow-yellow)"
         />
         <ellipse
           cx="0"
@@ -101,7 +101,7 @@ export function GraphSvgSecondaryNodes() {
           r="30"
           className="fill-black stroke-secondary"
           strokeWidth="2"
-          filter="url(#glow-blue)"
+          filter="url(#svg-glow-cyan)"
         />
         <path
           d="M0,12 Q-10,0 -10,-5 A10,10 0 1,1 10,-5 Q10,0 0,12 Z"

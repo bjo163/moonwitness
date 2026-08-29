@@ -95,7 +95,7 @@ export function SanadKeilmuanView() {
                 <h3 className="font-display text-base font-black text-foreground">
                   {node.name}
                 </h3>
-                <span className="tag-clip tag-clip-yellow tag-clip text-[9px] font-bold">
+                <span className="clip-tag border border-cyber-yellow/40 bg-cyber-yellow/10 text-cyber-yellow px-2 py-0.5 font-mono text-[9px] font-bold">
                   {node.title}
                 </span>
 

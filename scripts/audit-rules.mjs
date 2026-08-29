@@ -47,12 +47,16 @@ const IGNORE_DIRS = new Set([
 const TARGET_DIRS = ["apps", "packages"]
 
 const VIOLATIONS = {
-  // Pillar I & II: Frontend & Topology
+  // Pillar I & II: Frontend & Topology & Design Tokens
   maxLines: [],
   ghostFolders: [],
   legacyHudNaming: [],
   legacyCoreImports: [],
   hardcodedHexStyles: [],
+  invalidChamferTokens: [],
+  invalidTacticalCorners: [],
+  invalidLaserConduits: [],
+  invalidGlowTokens: [],
   hardcodedLocalhost: [],
   
   // Pillar III & IV: React & Isomorphic Backend Engine
@@ -278,8 +282,8 @@ function auditFile(filePath) {
     const trimmed = line.trim()
     if (trimmed.startsWith("//") || trimmed.startsWith("/*") || trimmed.startsWith("*")) return
 
-    // Law 07: Legacy HUD Naming
-    const hudMatch = line.match(/\b(HUDResourceTable|HUDErrorBoundary|useHUDModal|HUD_TOKENS|HudAccentColor|HudPanelLevel|HUDPanel|HUDBreadcrumb)\b/)
+    // Law 07: Legacy HUD & HUD-Clip Class Naming
+    const hudMatch = line.match(/\b(HUDResourceTable|HUDErrorBoundary|useHUDModal|HUD_TOKENS|HudAccentColor|HudPanelLevel|HUDPanel|HUDBreadcrumb|hud-clip-card|hud-clip-hero|hud-clip-btn|hud-clip-tag)\b/)
     if (hudMatch) {
       VIOLATIONS.legacyHudNaming.push({
         file: relativePath,
@@ -339,14 +343,77 @@ function auditFile(filePath) {
       })
     }
 
-    // Law 01: Hardcoded Inline Hex Styles
+    // Law 01: Hardcoded Inline Hex Styles & Bypassed Cyber Tokens
     const inlineHexMatch = line.match(/style=\{\{\s*[^}]*#[0-9a-fA-F]{3,8}/)
-    if (inlineHexMatch && !isDoc && !filePath.includes("globals.css")) {
+    const arbitraryCyberHexMatch = line.match(/\b(bg|text|border|shadow)-\[#(00F0FF|A100FF|FFE600|00FF66|FF0055|05070A|0A0F17)\b/i)
+    if ((inlineHexMatch || arbitraryCyberHexMatch) && !isDoc && !filePath.includes("globals.css")) {
       VIOLATIONS.hardcodedHexStyles.push({
         file: relativePath,
         line: lineNo,
         snippet: trimmed,
       })
+    }
+
+    // Law 02: Sacred Geometric Chamfer Validation
+    const clipMatches = line.match(/\bclip-[a-z0-9-]+\b/g)
+    if (clipMatches && !filePath.includes("globals.css")) {
+      const allowedClips = new Set(["clip-card", "clip-hero", "clip-btn", "clip-tag", "clip-rune", "clip-path", "clip-text", "clip-rule"])
+      for (const token of clipMatches) {
+        if (!allowedClips.has(token) && !line.includes("bg-clip-") && !line.includes("text-clip-")) {
+          VIOLATIONS.invalidChamferTokens.push({
+            file: relativePath,
+            line: lineNo,
+            token,
+            snippet: trimmed,
+          })
+        }
+      }
+    }
+
+    // Law 04: Tactical Corner Bracket & Laser Conduit Validation
+    const cornerMatches = line.match(/\bcorner-[a-z0-9-]+\b/g)
+    if (cornerMatches && !filePath.includes("globals.css")) {
+      const allowedCorners = new Set(["corner-cyan", "corner-green", "corner-yellow", "corner-purple", "corner-pink", "corner-box"])
+      for (const token of cornerMatches) {
+        if (!allowedCorners.has(token)) {
+          VIOLATIONS.invalidTacticalCorners.push({
+            file: relativePath,
+            line: lineNo,
+            token,
+            snippet: trimmed,
+          })
+        }
+      }
+    }
+
+    const laserMatches = line.match(/\blaser-conduit-[a-z0-9-]+\b/g)
+    if (laserMatches && !filePath.includes("globals.css")) {
+      const allowedLasers = new Set(["laser-conduit-cyan", "laser-conduit-green", "laser-conduit-yellow", "laser-conduit-purple"])
+      for (const token of laserMatches) {
+        if (!allowedLasers.has(token)) {
+          VIOLATIONS.invalidLaserConduits.push({
+            file: relativePath,
+            line: lineNo,
+            token,
+            snippet: trimmed,
+          })
+        }
+      }
+    }
+
+    const glowMatches = line.match(/(?<![a-zA-Z0-9_-])glow-[a-z0-9-]+\b/g)
+    if (glowMatches && !filePath.includes("globals.css") && !line.includes('id="') && !line.includes('filter="url(')) {
+      const allowedGlows = new Set(["glow-cyan", "glow-emerald", "glow-amber", "glow-purple", "glow-pink"])
+      for (const token of glowMatches) {
+        if (!allowedGlows.has(token)) {
+          VIOLATIONS.invalidGlowTokens.push({
+            file: relativePath,
+            line: lineNo,
+            token,
+            snippet: trimmed,
+          })
+        }
+      }
     }
 
     // Law 09: Hardcoded Localhost URLs
@@ -457,6 +524,24 @@ if (VIOLATIONS.hardcodedHexStyles.length === 0) {
   console.log(`  ${GREEN}✓ [LAW 01] Zero-Drift Cyber Palette (No raw inline hex styles): CLEAN${RESET}`)
 } else {
   console.log(`  ${RED}❌ [LAW 01] Inline Hex Violations: ${VIOLATIONS.hardcodedHexStyles.length} instances${RESET}`)
+  VIOLATIONS.hardcodedHexStyles.forEach((h) => console.log(`     • ${h.file}:${h.line} -> ${h.snippet}`))
+}
+
+if (VIOLATIONS.invalidChamferTokens.length === 0) {
+  console.log(`  ${GREEN}✓ [LAW 02] Sacred Geometric Chamfers (.clip-card, .clip-hero, .clip-btn, .clip-tag, .clip-rune): CLEAN${RESET}`)
+} else {
+  console.log(`  ${RED}❌ [LAW 02] Non-Canonical Chamfer Tokens: ${VIOLATIONS.invalidChamferTokens.length} instances${RESET}`)
+  VIOLATIONS.invalidChamferTokens.forEach((c) => console.log(`     • ${c.file}:${c.line} -> ${c.token}`))
+}
+
+if (VIOLATIONS.invalidTacticalCorners.length === 0 && VIOLATIONS.invalidLaserConduits.length === 0 && VIOLATIONS.invalidGlowTokens.length === 0) {
+  console.log(`  ${GREEN}✓ [LAW 04] Tactical Corner Brackets, Optical Glows & Laser Conduits: CLEAN${RESET}`)
+} else {
+  const count = VIOLATIONS.invalidTacticalCorners.length + VIOLATIONS.invalidLaserConduits.length + VIOLATIONS.invalidGlowTokens.length
+  console.log(`  ${RED}❌ [LAW 04] Optical/Tactical Token Violations: ${count} instances${RESET}`)
+  VIOLATIONS.invalidTacticalCorners.forEach((c) => console.log(`     • corner: ${c.file}:${c.line} -> ${c.token}`))
+  VIOLATIONS.invalidLaserConduits.forEach((l) => console.log(`     • laser: ${l.file}:${l.line} -> ${l.token}`))
+  VIOLATIONS.invalidGlowTokens.forEach((g) => console.log(`     • glow: ${g.file}:${g.line} -> ${g.token}`))
 }
 
 if (VIOLATIONS.hardcodedLocalhost.length === 0) {
@@ -556,6 +641,10 @@ const criticalViolations =
   VIOLATIONS.legacyHudNaming.length +
   VIOLATIONS.legacyCoreImports.length +
   VIOLATIONS.hardcodedHexStyles.length +
+  VIOLATIONS.invalidChamferTokens.length +
+  VIOLATIONS.invalidTacticalCorners.length +
+  VIOLATIONS.invalidLaserConduits.length +
+  VIOLATIONS.invalidGlowTokens.length +
   VIOLATIONS.hardcodedLocalhost.length +
   VIOLATIONS.useClientPlacement.length +
   VIOLATIONS.pureComputeIsolation.length +

@@ -86,7 +86,7 @@ export function QuranRootMatrix({ className = "" }: { className?: string }) {
   return (
     <div className={`flex flex-col font-mono text-white ${className}`}>
       {/* Search Header */}
-      <div className="flex items-center gap-3 bg-[#0A0F17] p-4 rounded-xl border border-cyan-500/30">
+      <div className="flex items-center gap-3 bg-cyber-panel p-4 rounded-xl border border-cyan-500/30">
         <Search className="h-5 w-5 text-cyan-400" />
         <input
           type="text"
@@ -111,7 +111,7 @@ export function QuranRootMatrix({ className = "" }: { className?: string }) {
               className={`w-full p-4 rounded-xl border text-left transition-all ${
                 selectedRoot.root === r.root
                   ? "border-cyan-400 bg-cyan-950/40 shadow-[0_0_25px_rgba(0,240,255,0.25)]"
-                  : "border-white/10 bg-[#0A0F17]/80 hover:border-cyan-500/30"
+                  : "border-white/10 bg-cyber-panel/80 hover:border-cyan-500/30"
               }`}
             >
               <div className="flex items-center justify-between">
@@ -129,7 +129,7 @@ export function QuranRootMatrix({ className = "" }: { className?: string }) {
         </div>
 
         {/* Detailed Breakdown Right */}
-        <div className="lg:col-span-2 rounded-2xl border border-cyan-500/30 bg-[#0A0F17]/90 p-6 space-y-6 shadow-xl backdrop-blur-md">
+        <div className="lg:col-span-2 rounded-2xl border border-cyan-500/30 bg-cyber-panel/90 p-6 space-y-6 shadow-xl backdrop-blur-md">
           {/* Header Card */}
           <div className="flex items-start justify-between border-b border-white/10 pb-4">
             <div>

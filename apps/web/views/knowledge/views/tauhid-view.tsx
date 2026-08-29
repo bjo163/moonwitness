@@ -51,11 +51,11 @@ export function TauhidPortalView() {
           {tauhidPillars.map((pillar, idx) => (
             <div
               key={pillar.title}
-              className="corner-accent flex flex-col justify-between space-y-4 panel-glass p-6 card-clip"
+              className="corner-yellow flex flex-col justify-between space-y-4 panel-glass p-6 clip-card"
             >
               <div>
                 <div className="mb-4 flex items-center justify-between">
-                  <span className="tag-clip tag-clip-yellow tag-clip text-[9px]">
+                  <span className="clip-tag border border-cyber-yellow/40 bg-cyber-yellow/10 text-cyber-yellow px-2 py-0.5 font-mono text-[9px]">
                     PILLAR 0{idx + 1}
                   </span>
                   <span className="font-bold text-accent">☝️</span>

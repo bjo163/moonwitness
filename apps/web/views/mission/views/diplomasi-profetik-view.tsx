@@ -90,7 +90,7 @@ export function DiplomasiProfetikView() {
             <span className="text-xs font-bold text-primary">
               {scenario.title}
             </span>
-            <span className="tag-clip tag-clip-purple tag-clip text-[9px]">
+            <span className="clip-tag border border-cyber-purple/40 bg-cyber-purple/10 text-cyber-purple px-2 py-0.5 font-mono text-[9px]">
               SKENARIO {selectedScenarioIdx + 1} / {DIPLOMACY_SCENARIOS.length}
             </span>
           </div>

@@ -231,10 +231,10 @@ export function InspirationCommentsClient({
                   {userProfile.avatar} {userProfile.name}
                 </span>
                 <span
-                  className={`tag-clip px-2 py-0.5 text-[9px] font-black uppercase ${
+                  className={`clip-tag border px-2 py-0.5 font-mono text-[9px] font-black uppercase ${
                     userProfile.role === "admin"
-                      ? "tag-clip-purple"
-                      : "tag-clip-green"
+                      ? "border-cyber-purple/40 bg-cyber-purple/10 text-cyber-purple"
+                      : "border-cyber-green/40 bg-cyber-green/10 text-cyber-green"
                   }`}
                 >
                   {userProfile.role === "admin"
@@ -342,7 +342,7 @@ export function InspirationCommentsClient({
                       </span>
 
                       {isAdmin && (
-                        <span className="tag-clip tag-clip-purple tag-clip py-0 text-[8px]">
+                        <span className="clip-tag border border-cyber-purple/40 bg-cyber-purple/10 text-cyber-purple px-1.5 py-0 font-mono text-[8px]">
                           👑 ADMIN
                         </span>
                       )}

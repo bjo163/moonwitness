@@ -94,7 +94,7 @@ export function NubuatPeradabanView() {
                     <h3 className="font-display text-sm font-bold text-foreground">
                       {ep.epochName}
                     </h3>
-                    <span className="tag-clip tag-clip-green tag-clip text-[9px] font-bold">
+                    <span className="clip-tag border border-cyber-green/40 bg-cyber-green/10 text-cyber-green px-2 py-0.5 font-mono text-[9px] font-bold">
                       {ep.quranRef}
                     </span>
                   </div>

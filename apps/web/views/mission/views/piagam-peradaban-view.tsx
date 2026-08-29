@@ -123,7 +123,7 @@ export function PiagamPeradabanView() {
                   <span className="text-[10px] text-primary">
                     TANGGAL: {item.signedDate}
                   </span>
-                  <span className="tag-clip tag-clip-green tag-clip text-[8px] font-bold">
+                  <span className="clip-tag border border-cyber-green/40 bg-cyber-green/10 text-cyber-green px-2 py-0.5 font-mono text-[8px] font-bold">
                     ● {item.status}
                   </span>
                 </div>

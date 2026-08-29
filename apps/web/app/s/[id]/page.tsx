@@ -176,7 +176,7 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="tag-clip tag-clip-green tag-clip text-xs">
+            <span className="clip-tag border border-cyber-green/40 bg-cyber-green/10 text-cyber-green px-2 py-0.5 font-mono text-xs">
               📖 Q.S {surahName} ({surahNum}:{ayahNum})
             </span>
           </div>

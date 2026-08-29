@@ -111,7 +111,7 @@ export function SejarahSirahView() {
                   {selectedEvent.title}
                 </h3>
               </div>
-              <span className="tag-clip tag-clip-green tag-clip px-3 py-1 text-xs font-bold">
+              <span className="clip-tag border border-cyber-green/40 bg-cyber-green/10 text-cyber-green px-3 py-1 font-mono text-xs font-bold">
                 {selectedEvent.yearStr}
               </span>
             </div>
