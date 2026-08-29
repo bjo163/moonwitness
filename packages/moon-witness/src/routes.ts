@@ -229,6 +229,102 @@ defineRoute({
   },
 })
 
+// GET /api/witness/provenance?id=... or ?stableKey=...
+defineRoute({
+  method: 'GET',
+  path: '/api/witness/provenance',
+  handler: async ({ query, env }) => {
+    const Provenance = getModel('wx.provenance')
+    const Source = getModel('wx.source')
+    if (!Provenance) throw new Error('Model wx.provenance not found')
+
+    const id = query.id ? parseInt(query.id, 10) : 0
+    const stableKey = query.stableKey || ''
+
+    const domain: any[] = [['active', '=', true]]
+    if (id > 0) domain.push(['id', '=', id])
+    if (stableKey) domain.push(['stableKey', '=', stableKey])
+
+    const rows = await (Provenance as any).fetch(Provenance, env, domain)
+    if (rows.length === 0) {
+      const err = new Error('Provenance record not found')
+      ;(err as any).statusCode = 404
+      throw err
+    }
+
+    const prov = rows[0]
+    let sourceRecord = null
+    if (prov.sourceId && Source) {
+      const sources = await (Source as any).fetch(Source, env, [['id', '=', prov.sourceId]])
+      sourceRecord = sources[0] || null
+    }
+
+    return {
+      provenance: {
+        id: prov.id,
+        stableKey: prov.stableKey,
+        name: prov.name,
+        sourceRevision: prov.sourceRevision,
+        artifactChecksum: prov.artifactChecksum,
+        parserVersion: prov.parserVersion,
+        importerVersion: prov.importerVersion,
+        evidenceNote: prov.evidenceNote,
+        source: sourceRecord
+      }
+    }
+  },
+})
+
+// GET /api/witness/citation?reference=...
+defineRoute({
+  method: 'GET',
+  path: '/api/witness/citation',
+  handler: async ({ query, env }) => {
+    const reference = query.reference || query.ref || ''
+    if (!reference) {
+      const err = new Error('Reference query parameter required')
+      ;(err as any).statusCode = 400
+      throw err
+    }
+
+    const lookup = await lookupReference(env, reference)
+    if (!lookup.resolved) {
+      return {
+        reference,
+        citationText: reference,
+        resolved: false
+      }
+    }
+
+    let sourceName = 'Al-Qur\'an al-Karim'
+    let edition = 'Uthmani'
+    let language = 'ar'
+
+    if (lookup.type === 'HADITH') {
+      sourceName = (lookup.tradition as any)?.reference?.referenceScheme || 'Hadith Tradition'
+      edition = 'Classical Compendium'
+      language = 'ar'
+    } else if (lookup.type === 'LEXICAL') {
+      sourceName = 'Quranic Arabic Lexicon'
+      edition = 'Classical Lexicography'
+      language = 'ar'
+    }
+
+    const citationText = `${sourceName} [${edition}] — ${lookup.reference}`
+
+    return {
+      reference: lookup.reference,
+      sourceName,
+      edition,
+      language,
+      type: lookup.type,
+      citationText,
+      resolved: true,
+      deepLink: lookup.type === 'HADITH' ? `/hadiths?ref=${encodeURIComponent(lookup.reference)}` : `/scripture/1?ref=${encodeURIComponent(lookup.reference)}`
+    }
+  },
+})
+
 // ═══════════════════════════════════════════
 // 📜 HADITH & TRADITION ROUTES
 // ═══════════════════════════════════════════

@@ -21,6 +21,10 @@ export * from "./components/quran-root-matrix"
 export * from "./components/states"
 export * from "./components/section"
 export * from "./components/stat"
+export * from "./components/epistemic-badge"
+export * from "./components/citation-box"
+export * from "./components/provenance-card"
+export * from "./components/evidence-card"
 
 // Dashboard & Telemetry Widgets
 export * from "./components/hero-banner"
