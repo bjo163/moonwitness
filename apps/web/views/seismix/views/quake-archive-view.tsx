@@ -177,7 +177,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
 
   return (
     <div
-      className="panel-box bg-space/80 border transition-all duration-300"
+      className="rounded-xl border border-border/40 bg-card/90 bg-background/80 border transition-all duration-300"
       style={{
         borderColor: `${magStyle.color}20`,
       }}
@@ -257,7 +257,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
           </p>
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div className="panel-box border border-primary/10 p-2">
+            <div className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-2">
               <span className="block font-mono text-[7px] font-bold tracking-widest text-primary">
                 CASUALTIES
               </span>
@@ -265,7 +265,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
                 {quake.casualties}
               </span>
             </div>
-            <div className="panel-box border border-primary/10 p-2">
+            <div className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-2">
               <span className="block font-mono text-[7px] font-bold tracking-widest text-primary">
                 MAGNITUDE
               </span>
@@ -276,7 +276,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
                 {quake.magnitude} {magStyle.label}
               </span>
             </div>
-            <div className="panel-box border border-primary/10 p-2">
+            <div className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-2">
               <span className="block font-mono text-[7px] font-bold tracking-widest text-primary">
                 COORDINATES
               </span>
@@ -285,7 +285,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
                 {quake.coordinates.lng.toFixed(1)}°
               </span>
             </div>
-            <div className="panel-box border border-primary/10 p-2">
+            <div className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-2">
               <span className="block font-mono text-[7px] font-bold tracking-widest text-primary">
                 TSUNAMI
               </span>
@@ -426,7 +426,7 @@ export function QuakeArchiveView() {
             onClick={() =>
               setSortBy(sortBy === "magnitude" ? "date" : "magnitude")
             }
-            className="flex items-center gap-2 border border-primary/20 px-3 py-2 font-mono text-[9px] font-bold tracking-widest text-primary transition-all btn-clip hover:border-primary/40"
+            className="flex items-center gap-2 border border-primary/20 px-3 py-2 font-mono text-[9px] font-bold tracking-widest text-primary transition-all  hover:border-primary/40"
           >
             <ArrowUpDown className="h-3.5 w-3.5" />
             SORT: {sortBy === "magnitude" ? "MAGNITUDE" : "DATE"}
@@ -444,7 +444,7 @@ export function QuakeArchiveView() {
 
       {/* Stats row */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <div className="panel-box border border-primary/10 p-3 text-center">
+        <div className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-3 text-center">
           <span className="block font-mono text-[8px] font-bold tracking-widest text-primary">
             TOTAL RECORDS
           </span>
@@ -452,7 +452,7 @@ export function QuakeArchiveView() {
             {filteredQuakes.length}
           </span>
         </div>
-        <div className="panel-box border border-primary/10 p-3 text-center">
+        <div className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-3 text-center">
           <span className="block font-mono text-[8px] font-bold tracking-widest text-primary">
             MAX MAGNITUDE
           </span>
@@ -462,7 +462,7 @@ export function QuakeArchiveView() {
               : "—"}
           </span>
         </div>
-        <div className="panel-box border border-primary/10 p-3 text-center">
+        <div className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-3 text-center">
           <span className="block font-mono text-[8px] font-bold tracking-widest text-primary">
             TSUNAMI EVENTS
           </span>
@@ -470,7 +470,7 @@ export function QuakeArchiveView() {
             {filteredQuakes.filter((q) => q.tsunamiGenerated).length}
           </span>
         </div>
-        <div className="panel-box border border-primary/10 p-3 text-center">
+        <div className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-3 text-center">
           <span className="block font-mono text-[8px] font-bold tracking-widest text-primary">
             DATE RANGE
           </span>

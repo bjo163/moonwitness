@@ -40,7 +40,7 @@ export function OSDivineAstronomy() {
   return (
     <section
       id="astronomy"
-      className="bg-space relative z-10 overflow-hidden border-b border-blue-500/30 py-20 font-mono text-foreground"
+      className="bg-background relative z-10 overflow-hidden border-b border-blue-500/30 py-20 font-mono text-foreground"
     >
       {/* ═══ LAYER 1: DEEP SPACE BACKGROUND ═══════════════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
@@ -54,7 +54,7 @@ export function OSDivineAstronomy() {
         <div className="flex flex-col items-center justify-between gap-6 border-b border-white/10 pb-6 xl:flex-row">
           <div className="flex w-full items-center gap-6 xl:w-auto">
             <div className="flex flex-col gap-2">
-              <div className="bg-space inline-flex w-fit items-center gap-3 rounded-sm border-2 border-blue-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-blue-300 uppercase shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+              <div className="bg-background inline-flex w-fit items-center gap-3 rounded-sm border-2 border-blue-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-blue-300 uppercase shadow-[0_0_15px_rgba(59,130,246,0.3)]">
                 <span className="rounded-xs bg-blue-500 px-1.5 py-0.5 font-black text-black">
                   07
                 </span>
@@ -66,13 +66,13 @@ export function OSDivineAstronomy() {
             </div>
           </div>
 
-          <div className="bg-space max-w-xl flex-1 rounded-lg border border-blue-500/30 p-4 text-center font-sans text-xs leading-relaxed text-blue-100 shadow-inner xl:text-left">
+          <div className="bg-background max-w-xl flex-1 rounded-lg border border-blue-500/30 p-4 text-center font-sans text-xs leading-relaxed text-blue-100 shadow-inner xl:text-left">
             Observe the celestial order through the Moon, Sun, stars, eclipses,
             and planetary motion. Explore creation through scientific
             observation and historical records.
           </div>
 
-          <div className="bg-space flex min-w-[280px] shrink-0 items-center justify-end gap-4 rounded-xl border-2 border-blue-500/50 p-4 shadow-[0_0_25px_rgba(59,130,246,0.15)]">
+          <div className="bg-background flex min-w-[280px] shrink-0 items-center justify-end gap-4 rounded-xl border-2 border-blue-500/50 p-4 shadow-[0_0_25px_rgba(59,130,246,0.15)]">
             <div className="text-right">
               <div className="font-mono text-2xl font-black tracking-widest text-white drop-shadow-[0_0_8px_#FFF]">
                 {clockWIB}
@@ -90,7 +90,7 @@ export function OSDivineAstronomy() {
           {/* LEFT SIDEBAR: MENU & EVENTS (Col 1-3) */}
           <div className="flex flex-col space-y-6 lg:col-span-3">
             {/* Celestial Objects Menu */}
-            <div className="bg-space flex flex-col gap-1 overflow-hidden rounded-xl border border-white/10 p-1 shadow-lg">
+            <div className="bg-background flex flex-col gap-1 overflow-hidden rounded-xl border border-white/10 p-1 shadow-lg">
               <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3 text-[10px] font-black tracking-widest text-blue-400 uppercase">
                 <Globe className="h-3.5 w-3.5" /> CELESTIAL OBJECTS
               </div>
@@ -172,7 +172,7 @@ export function OSDivineAstronomy() {
             </div>
 
             {/* Upcoming Events List */}
-            <div className="bg-space flex-1 rounded-xl border border-blue-500/30 p-4 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+            <div className="bg-background flex-1 rounded-xl border border-blue-500/30 p-4 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
               <div className="mb-4 flex items-center gap-2 text-[10px] font-black tracking-widest text-blue-300 uppercase">
                 <Calendar className="h-3.5 w-3.5" /> UPCOMING EVENTS
               </div>
@@ -224,7 +224,7 @@ export function OSDivineAstronomy() {
           </div>
 
           {/* CENTER CANVAS: 3D CELESTIAL ORRERY (Col 4-9) */}
-          <div className="bg-space relative flex min-h-[500px] flex-col overflow-hidden rounded-2xl border-2 border-cyan-500/40 p-1 shadow-[0_0_50px_rgba(0,240,255,0.15)] lg:col-span-6">
+          <div className="bg-background relative flex min-h-[500px] flex-col overflow-hidden rounded-2xl border-2 border-cyan-500/40 p-1 shadow-[0_0_50px_rgba(0,240,255,0.15)] lg:col-span-6">
             {/* Deep Space Background image */}
             <div className="absolute inset-0 z-0">
               <img
@@ -244,7 +244,7 @@ export function OSDivineAstronomy() {
               {/* TOP PANELS: Moon & Sun Stats */}
               <div className="flex w-full items-start justify-between">
                 {/* MOON PANEL */}
-                <div className="bg-space/80 pointer-events-auto w-48 rounded-lg border border-primary/50 p-3 shadow-[0_0_20px_rgba(0,240,255,0.2)] backdrop-blur">
+                <div className="bg-background/80 pointer-events-auto w-48 rounded-lg border border-primary/50 p-3 shadow-[0_0_20px_rgba(0,240,255,0.2)] backdrop-blur">
                   <div className="mb-2 flex items-center gap-2 border-b border-white/10 pb-2">
                     <Moon className="h-4 w-4 text-primary" />
                     <span className="text-[11px] font-black tracking-wider text-primary">
@@ -266,7 +266,7 @@ export function OSDivineAstronomy() {
                 </div>
 
                 {/* SUN PANEL */}
-                <div className="bg-space/80 pointer-events-auto w-44 rounded-lg border border-amber-500/50 p-3 shadow-[0_0_20px_rgba(245,158,11,0.2)] backdrop-blur">
+                <div className="bg-background/80 pointer-events-auto w-44 rounded-lg border border-amber-500/50 p-3 shadow-[0_0_20px_rgba(245,158,11,0.2)] backdrop-blur">
                   <div className="mb-2 flex items-center gap-2 border-b border-white/10 pb-2">
                     <Sun className="h-4 w-4 text-amber-400" />
                     <span className="text-[11px] font-black tracking-wider text-amber-400">
@@ -321,7 +321,7 @@ export function OSDivineAstronomy() {
               {/* BOTTOM PANELS: Earth, Qibla, Constellations */}
               <div className="flex w-full items-end justify-between">
                 {/* EARTH PANEL */}
-                <div className="bg-space/80 pointer-events-auto w-44 rounded-lg border border-blue-500/50 p-3 shadow-[0_0_20px_rgba(59,130,246,0.2)] backdrop-blur">
+                <div className="bg-background/80 pointer-events-auto w-44 rounded-lg border border-blue-500/50 p-3 shadow-[0_0_20px_rgba(59,130,246,0.2)] backdrop-blur">
                   <div className="mb-2 border-b border-white/10 pb-2 text-[11px] font-black tracking-wider text-blue-400 uppercase">
                     EARTH
                   </div>
@@ -355,7 +355,7 @@ export function OSDivineAstronomy() {
           {/* RIGHT SIDEBAR: SOLAR SYSTEM & CALENDAR (Col 10-12) */}
           <div className="flex flex-col space-y-6 lg:col-span-3">
             {/* Solar System View */}
-            <div className="bg-space rounded-xl border border-blue-500/30 p-4 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+            <div className="bg-background rounded-xl border border-blue-500/30 p-4 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
               <div className="mb-3 flex items-center gap-2 text-[10px] font-black tracking-widest text-blue-300 uppercase">
                 <Target className="h-3.5 w-3.5" /> SOLAR SYSTEM VIEW
               </div>
@@ -398,7 +398,7 @@ export function OSDivineAstronomy() {
             </div>
 
             {/* Moon Phase Calendar */}
-            <div className="bg-space rounded-xl border border-primary/30 p-4 shadow-[0_0_20px_rgba(0,240,255,0.1)]">
+            <div className="bg-background rounded-xl border border-primary/30 p-4 shadow-[0_0_20px_rgba(0,240,255,0.1)]">
               <div className="mb-3 flex items-center gap-2 text-[10px] font-black tracking-widest text-primary uppercase">
                 <Moon className="h-3.5 w-3.5" /> MOON PHASE CALENDAR
               </div>
@@ -436,7 +436,7 @@ export function OSDivineAstronomy() {
             </div>
 
             {/* Celestial Timeline */}
-            <div className="bg-space flex-1 rounded-xl border border-blue-500/30 p-4 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+            <div className="bg-background flex-1 rounded-xl border border-blue-500/30 p-4 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
               <div className="mb-4 flex items-center gap-2 text-[10px] font-black tracking-widest text-blue-300 uppercase">
                 <Clock className="h-3.5 w-3.5" /> CELESTIAL TIMELINE
               </div>
@@ -454,7 +454,7 @@ export function OSDivineAstronomy() {
                   >
                     {/* Timeline Dot */}
                     <div
-                      className="bg-space flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2"
+                      className="bg-background flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2"
                       style={{
                         borderColor: ev.c,
                         boxShadow: `0 0 8px ${ev.c}40`,
@@ -484,7 +484,7 @@ export function OSDivineAstronomy() {
         {/* ═══ LAYER 3: BOTTOM TELEMETRY ROW (Blueprint 07 Footer) ════════════ */}
         <div className="grid grid-cols-1 items-stretch gap-6 pt-2 md:grid-cols-12">
           {/* Live Telemetry Stats (Col 1-4) */}
-          <div className="bg-space flex flex-col justify-between rounded-xl border border-blue-500/30 p-5 md:col-span-4">
+          <div className="bg-background flex flex-col justify-between rounded-xl border border-blue-500/30 p-5 md:col-span-4">
             <div className="mb-4 flex items-center gap-2 text-[10px] font-black tracking-widest text-blue-400 uppercase">
               <Activity className="h-3.5 w-3.5" /> LIVE TELEMETRY
             </div>
@@ -537,7 +537,7 @@ export function OSDivineAstronomy() {
           </div>
 
           {/* Current Sky Status (Col 5-8) */}
-          <div className="bg-space relative flex flex-col justify-between overflow-hidden rounded-xl border border-blue-500/30 p-5 md:col-span-4">
+          <div className="bg-background relative flex flex-col justify-between overflow-hidden rounded-xl border border-blue-500/30 p-5 md:col-span-4">
             <div className="absolute inset-0 bg-[url('/assets/hero_bg.png')] object-cover opacity-20" />
             <div className="relative z-10 mb-4 flex items-center gap-2 text-[10px] font-black tracking-widest text-white uppercase">
               <Cloudy className="h-3.5 w-3.5" /> CURRENT SKY
@@ -594,7 +594,7 @@ export function OSDivineAstronomy() {
           </div>
 
           {/* Astronomical Insight (Col 9-12) */}
-          <div className="bg-space flex flex-col justify-center rounded-xl border-2 border-cyan-500/40 p-5 shadow-[0_0_25px_rgba(0,240,255,0.15)] md:col-span-4">
+          <div className="bg-background flex flex-col justify-center rounded-xl border-2 border-cyan-500/40 p-5 shadow-[0_0_25px_rgba(0,240,255,0.15)] md:col-span-4">
             <div className="mb-2 flex items-center justify-between text-[10px] font-black tracking-widest text-primary uppercase">
               <span>ASTRONOMICAL INSIGHT</span>
               <BookOpen className="h-4 w-4 text-primary/50" />

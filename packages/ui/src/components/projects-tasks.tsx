@@ -30,7 +30,7 @@ type ProjectsTasksProps = {
 function ActiveProjects({ projects = [] }: { projects?: Project[] }) {
   const projectList = Array.isArray(projects) ? projects : []
   return (
-    <div className="bg-space/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
+    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
           Active Projects
@@ -102,7 +102,7 @@ function TasksOverview({
       ]
 
   return (
-    <div className="bg-space/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
+    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
           Tasks Overview

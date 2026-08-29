@@ -63,7 +63,7 @@ export function OnboardingWizard() {
   const Icon = current.icon
   return (
     <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 p-4 backdrop-blur-md">
-      <div className="panel-clip bg-space/95 relative w-full max-w-2xl animate-in border border-cyan-500/30 p-8 shadow-[0_0_50px_rgba(0,240,255,0.15)] duration-500 fade-in zoom-in">
+      <div className="panel-clip bg-background/95 relative w-full max-w-2xl animate-in border border-cyan-500/30 p-8 shadow-[0_0_50px_rgba(0,240,255,0.15)] duration-500 fade-in zoom-in">
         {/* Progress Bar */}
         <div className="absolute top-0 left-0 h-1 w-full bg-black/40">
           <div

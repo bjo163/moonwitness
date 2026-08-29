@@ -8,7 +8,7 @@ export function SpaceWeatherWidget({
   spaceWeather?: SpaceWeatherEvent[]
 }) {
   return (
-    <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3 xl:col-span-2">
+    <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3 xl:col-span-2">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2 text-[9px] font-black tracking-widest text-white uppercase">
           SPACE WEATHER (DONKI)

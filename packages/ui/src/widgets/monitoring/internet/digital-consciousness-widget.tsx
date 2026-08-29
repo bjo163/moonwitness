@@ -78,7 +78,7 @@ export function DigitalConsciousnessWidget() {
   }, [])
 
   return (
-    <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-8 xl:col-span-6">
+    <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-8 xl:col-span-6">
       <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-2">
         <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-primary uppercase">
           <BookOpen className="h-4 w-4" />

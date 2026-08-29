@@ -111,7 +111,7 @@ export function MatriksKitabView() {
               className={`tag-clip border px-4 py-2.5 text-xs font-extrabold tracking-wider transition-all ${
                 activeTab === idx
                   ? "border-primary bg-primary/20 text-primary shadow-[0_0_15px_rgba(0,240,255,0.4)]"
-                  : "bg-space border-primary/20 text-primary hover:text-white"
+                  : "bg-background border-primary/20 text-primary hover:text-white"
               }`}
             >
               ◆ {item.theme}
@@ -125,7 +125,7 @@ export function MatriksKitabView() {
             <span className="text-[10px] font-bold text-primary uppercase">
               {/* FOKUS TEMA MATRIKS: */}
             </span>
-            <h3 className="font-display text-base font-black text-foreground">
+            <h3 className="font-sans text-base font-black text-foreground">
               {activePassage.theme}
             </h3>
             <p className="text-xs text-primary">{activePassage.themeDesc}</p>
@@ -133,9 +133,9 @@ export function MatriksKitabView() {
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {/* Al-Qur'an Card */}
-            <div className="panel-box bg-space/95 space-y-3 border border-primary/60 p-5 shadow-[0_0_20px_rgba(0,240,255,0.2)]">
+            <div className="rounded-xl border border-border/40 bg-card/90 bg-background/95 space-y-3 border border-primary/60 p-5 shadow-[0_0_20px_rgba(0,240,255,0.2)]">
               <div className="flex items-center justify-between border-b border-primary/20 pb-2">
-                <span className="font-display flex items-center gap-1.5 text-xs font-bold text-primary">
+                <span className="font-sans flex items-center gap-1.5 text-xs font-bold text-primary">
                   <BookOpen className="h-4 w-4 text-primary" />
                   AL-QUR'ANUL KARIM
                 </span>
@@ -152,13 +152,13 @@ export function MatriksKitabView() {
             </div>
 
             {/* Taurat Card */}
-            <div className="panel-box bg-space/95 space-y-3 border border-accent/40 p-5">
+            <div className="rounded-xl border border-border/40 bg-card/90 bg-background/95 space-y-3 border border-accent/40 p-5">
               <div className="flex items-center justify-between border-b border-accent/20 pb-2">
-                <span className="font-display flex items-center gap-1.5 text-xs font-bold text-accent">
+                <span className="font-sans flex items-center gap-1.5 text-xs font-bold text-accent">
                   <Scroll className="h-4 w-4 text-accent" />
                   TAURAT (TORAH)
                 </span>
-                <span className="clip-tag border border-cyber-yellow/40 bg-cyber-yellow/10 text-cyber-yellow px-2 py-0.5 font-mono text-[8px]">
+                <span className="rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-500 px-2 py-0.5 font-mono text-[8px]">
                   {activePassage.torah.ref}
                 </span>
               </div>
@@ -168,13 +168,13 @@ export function MatriksKitabView() {
             </div>
 
             {/* Zabur Card */}
-            <div className="panel-box border-success/40 bg-space/95 space-y-3 border p-5">
+            <div className="rounded-xl border border-border/40 bg-card/90 border-success/40 bg-background/95 space-y-3 border p-5">
               <div className="border-success/20 flex items-center justify-between border-b pb-2">
-                <span className="text-success font-display flex items-center gap-1.5 text-xs font-bold">
+                <span className="text-success font-sans flex items-center gap-1.5 text-xs font-bold">
                   <ShieldCheck className="text-success h-4 w-4" />
                   ZABUR (PSALMS)
                 </span>
-                <span className="clip-tag border border-cyber-green/40 bg-cyber-green/10 text-cyber-green px-2 py-0.5 font-mono text-[8px]">
+                <span className="rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-500 px-2 py-0.5 font-mono text-[8px]">
                   {activePassage.psalms.ref}
                 </span>
               </div>
@@ -184,13 +184,13 @@ export function MatriksKitabView() {
             </div>
 
             {/* Injil Card */}
-            <div className="panel-box bg-space/95 space-y-3 border border-primary/40 p-5">
+            <div className="rounded-xl border border-border/40 bg-card/90 bg-background/95 space-y-3 border border-primary/40 p-5">
               <div className="flex items-center justify-between border-b border-primary/20 pb-2">
-                <span className="font-display flex items-center gap-1.5 text-xs font-bold text-primary">
+                <span className="font-sans flex items-center gap-1.5 text-xs font-bold text-primary">
                   <Compass className="h-4 w-4 text-primary" />
                   INJIL (GOSPEL)
                 </span>
-                <span className="clip-tag border border-cyber-purple/40 bg-cyber-purple/10 text-cyber-purple px-2 py-0.5 font-mono text-[8px]">
+                <span className="rounded-md border border-purple-500/40 bg-purple-500/10 text-purple-500 px-2 py-0.5 font-mono text-[8px]">
                   {activePassage.gospel.ref}
                 </span>
               </div>

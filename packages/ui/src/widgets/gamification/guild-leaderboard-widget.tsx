@@ -14,7 +14,7 @@ export function GuildLeaderboardWidget() {
   const sortedGuilds = [...guilds].sort((a, b) => b.xp - a.xp)
 
   return (
-    <div className="bg-space/60 rounded-2xl border border-fuchsia-500/20 p-5 backdrop-blur-xl">
+    <div className="bg-background/60 rounded-2xl border border-fuchsia-500/20 p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="font-sans text-xs font-bold tracking-wider text-fuchsia-400 uppercase">
           Global Guild Rankings

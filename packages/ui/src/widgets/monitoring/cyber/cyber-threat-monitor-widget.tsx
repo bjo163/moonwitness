@@ -10,7 +10,7 @@ export function CyberThreatMonitorWidget({
   cyberAttacks?: CyberAttack[]
 }) {
   return (
-    <div className="bg-space flex flex-col rounded-xl border border-red-500/30 p-4 shadow-[0_0_30px_rgba(255,0,0,0.1)] lg:col-span-12 xl:col-span-8">
+    <div className="bg-background flex flex-col rounded-xl border border-red-500/30 p-4 shadow-[0_0_30px_rgba(255,0,0,0.1)] lg:col-span-12 xl:col-span-8">
       <div className="mb-4 flex items-center justify-between border-b border-red-500/20 pb-2">
         <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-red-500 uppercase">
           <ShieldAlert className="h-4 w-4 animate-pulse" />

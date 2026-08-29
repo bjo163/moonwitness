@@ -101,7 +101,7 @@ export function CelestialQiblaCompass({
           className={`absolute inset-0 rounded-full border transition-all duration-300 ${
             isLocked
               ? "border-emerald-400 shadow-[0_0_50px_rgba(0,255,102,0.4)] bg-emerald-950/20"
-              : "border-cyan-500/30 shadow-[0_0_30px_rgba(0,240,255,0.15)] bg-cyber-panel/80"
+              : "border-cyan-500/30 shadow-[0_0_30px_rgba(0,240,255,0.15)] bg-card/80"
           } backdrop-blur-md`}
         />
 
@@ -191,7 +191,7 @@ export function CelestialQiblaCompass({
           className={`rounded-xl border p-3 flex flex-col items-center justify-center transition-colors ${
             isLocked
               ? "border-emerald-500/50 bg-emerald-950/20 text-emerald-300"
-              : "border-cyan-500/20 bg-cyber-panel/80 text-zinc-300"
+              : "border-cyan-500/20 bg-card/80 text-zinc-300"
           }`}
         >
           <div className="flex items-center gap-1.5 text-[10px] text-zinc-500 uppercase tracking-wider">
@@ -207,7 +207,7 @@ export function CelestialQiblaCompass({
           </div>
         </div>
 
-        <div className="rounded-xl border border-cyan-500/20 bg-cyber-panel/80 p-3 flex flex-col items-center justify-center text-zinc-300">
+        <div className="rounded-xl border border-cyan-500/20 bg-card/80 p-3 flex flex-col items-center justify-center text-zinc-300">
           <div className="flex items-center gap-1.5 text-[10px] text-zinc-500 uppercase tracking-wider">
             <MapPin className="h-3.5 w-3.5 text-amber-400" />
             Distance

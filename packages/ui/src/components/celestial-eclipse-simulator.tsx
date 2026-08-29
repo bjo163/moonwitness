@@ -93,7 +93,7 @@ export function CelestialEclipseSimulator({
       </div>
 
       {/* Control Deck */}
-      <div className="mt-4 w-full max-w-lg space-y-3 bg-cyber-panel/80 p-4 rounded-xl border border-cyan-500/20 backdrop-blur-md">
+      <div className="mt-4 w-full max-w-lg space-y-3 bg-card/80 p-4 rounded-xl border border-cyan-500/20 backdrop-blur-md">
         {/* Timeline Scrubber */}
         <div className="flex items-center gap-3">
           <span className="text-[10px] text-zinc-500">C1</span>

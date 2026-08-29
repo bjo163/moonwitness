@@ -13,7 +13,7 @@ import {
 } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
 
-const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" })
+const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-sans" })
 
 const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],

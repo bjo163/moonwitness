@@ -69,11 +69,11 @@ export function ErpCabView() {
         <div className="mt-4 flex items-center gap-2 overflow-x-auto">
           <span className="font-mono text-[9px] text-yellow-400/60">ALLAH</span>
           <span className="font-mono text-[9px] text-muted-foreground/40">→</span>
-          <span className="clip-tag border border-border/40 bg-secondary/50 px-2 py-0.5 font-mono text-[9px] text-foreground">
+          <span className="rounded-md border border-border/40 bg-secondary/50 px-2 py-0.5 font-mono text-[9px] text-foreground">
             BRIDGE / SHADOW
           </span>
           <span className="font-mono text-[9px] text-muted-foreground/40">→</span>
-          <span className="font-mono text-[9px] text-cyber-cyan/60">
+          <span className="font-mono text-[9px] text-primary/70">
             HUMAN (L1 → L8)
           </span>
           <span className="font-mono text-[9px] text-muted-foreground/40">→</span>
@@ -81,7 +81,7 @@ export function ErpCabView() {
             ALL CREATION
           </span>
           <span className="font-mono text-[9px] text-muted-foreground/40">→</span>
-          <span className="font-mono text-[9px] text-cyber-green/60">
+          <span className="font-mono text-[9px] text-emerald-500/70">
             RIDWAN ALLAH
           </span>
         </div>

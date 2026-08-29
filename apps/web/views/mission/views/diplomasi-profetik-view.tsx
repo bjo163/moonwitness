@@ -85,12 +85,12 @@ export function DiplomasiProfetikView() {
         />
 
         {/* Scenario Card */}
-        <div className="panel-box bg-space space-y-4 border border-primary/40 p-6 font-mono">
+        <div className="rounded-xl border border-border/40 bg-card/90 bg-background space-y-4 border border-primary/40 p-6 font-mono">
           <div className="flex items-center justify-between border-b border-primary/20 pb-2">
             <span className="text-xs font-bold text-primary">
               {scenario.title}
             </span>
-            <span className="clip-tag border border-cyber-purple/40 bg-cyber-purple/10 text-cyber-purple px-2 py-0.5 font-mono text-[9px]">
+            <span className="rounded-md border border-purple-500/40 bg-purple-500/10 text-purple-500 px-2 py-0.5 font-mono text-[9px]">
               SKENARIO {selectedScenarioIdx + 1} / {DIPLOMACY_SCENARIOS.length}
             </span>
           </div>
@@ -109,7 +109,7 @@ export function DiplomasiProfetikView() {
                     ? opt.isPropheticChoice
                       ? "border-success bg-success/15 text-success"
                       : "border-danger bg-danger/15 text-danger"
-                    : "bg-space border-primary/30 hover:border-primary"
+                    : "bg-background border-primary/30 hover:border-primary"
                 }`}
               >
                 <div className="flex items-center gap-2 font-bold">
@@ -131,7 +131,7 @@ export function DiplomasiProfetikView() {
                 setSelectedScenarioIdx((prev) => prev + 1)
                 setChosenOption(null)
               }}
-              className="btn-primary mt-2 w-full py-2.5 text-xs font-bold btn-clip"
+              className="btn-primary mt-2 w-full py-2.5 text-xs font-bold "
             >
               <span>SKENARIO DIPLOMASI BERIKUTNYA →</span>
             </button>

@@ -693,7 +693,7 @@ export function HomeHeroSection() {
   return (
     <section
       id="hero"
-      className={`bg-space relative flex min-h-screen w-full flex-col justify-center overflow-hidden pt-20 pb-10 font-sans text-white select-none ${
+      className={`bg-background relative flex min-h-screen w-full flex-col justify-center overflow-hidden pt-20 pb-10 font-sans text-white select-none ${
         isShaking ? "animate-[heroShake_1.2s_ease-in-out]" : ""
       }`}
     >

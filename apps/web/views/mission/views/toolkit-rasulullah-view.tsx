@@ -111,14 +111,14 @@ export function ToolkitRasulullahView() {
               <Panel key={tk.id} level="level2" accentColor="success">
                 <div className="border-success/20 mb-3 flex flex-wrap items-center justify-between gap-2 border-b pb-3">
                   <div>
-                    <h3 className="font-display text-sm font-bold text-foreground">
+                    <h3 className="font-sans text-sm font-bold text-foreground">
                       {tk.toolkitName}
                     </h3>
                     <p className="mt-0.5 text-[10px] text-primary">
                       {/* PERAN: {tk.role} */}
                     </p>
                   </div>
-                  <span className="clip-tag border border-cyber-green/40 bg-cyber-green/10 text-cyber-green px-2 py-0.5 font-mono text-[9px] font-bold">
+                  <span className="rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-500 px-2 py-0.5 font-mono text-[9px] font-bold">
                     {tk.quranRef}
                   </span>
                 </div>
@@ -128,7 +128,7 @@ export function ToolkitRasulullahView() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 pt-1 text-xs sm:grid-cols-2">
-                  <div className="bg-space border-success/20 tag-clip border p-3">
+                  <div className="bg-background border-success/20 tag-clip border p-3">
                     <p className="text-[9px] font-bold text-primary uppercase">
                       {/* FRAMEWORK OPERASIONAL: */}
                     </p>
@@ -137,7 +137,7 @@ export function ToolkitRasulullahView() {
                     </p>
                   </div>
 
-                  <div className="bg-space border-success/20 tag-clip flex flex-col justify-between border p-3">
+                  <div className="bg-background border-success/20 tag-clip flex flex-col justify-between border p-3">
                     <div>
                       <p className="text-[9px] font-bold text-primary uppercase">
                         {/* INSTRUMEN AKSI: */}

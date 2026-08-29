@@ -115,9 +115,9 @@ export function LoginView() {
                 <button
                   type="button"
                   onClick={() => handleQuickPreset("commander@moonwitness.os", "password123")}
-                  className="flex items-center justify-center gap-1.5 rounded-lg border border-border/40 bg-secondary/50 px-2.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-cyber-purple/50 hover:bg-cyber-purple/10"
+                  className="flex items-center justify-center gap-1.5 rounded-lg border border-border/40 bg-secondary/50 px-2.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-purple-500/50 hover:bg-purple-500/10"
                 >
-                  <KeyRound className="h-3.5 w-3.5 text-cyber-purple" />
+                  <KeyRound className="h-3.5 w-3.5 text-purple-500" />
                   Commander
                 </button>
                 <button
@@ -135,7 +135,7 @@ export function LoginView() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-cyber-cyan px-4 py-3 font-sans text-xs font-bold tracking-wide text-cyber-dark uppercase shadow-sm transition-all hover:bg-cyber-cyan/90 disabled:opacity-50"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 font-sans text-xs font-bold tracking-wide text-primary-foreground uppercase shadow-sm transition-all hover:bg-primary/90 disabled:opacity-50"
             >
               {loading ? (
                 <>

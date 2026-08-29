@@ -123,7 +123,7 @@ export function Navbar({
   }
 
   return (
-    <header className="bg-space/90 fixed inset-x-0 top-0 z-50 border-b border-cyan-500/30 font-mono text-white shadow-[0_4px_30px_rgba(0,0,0,0.85)] backdrop-blur-md select-none">
+    <header className="bg-background/90 fixed inset-x-0 top-0 z-50 border-b border-cyan-500/30 font-mono text-white shadow-[0_4px_30px_rgba(0,0,0,0.85)] backdrop-blur-md select-none">
       {/* Topmost Subtle Telemetry Line */}
       <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-60" />
 
@@ -194,7 +194,7 @@ export function Navbar({
               {/* Dropdown Menu (Glassmorphism) */}
               {link.subLinks && (
                 <div className="invisible absolute top-full left-0 z-50 mt-2 w-56 translate-y-2 opacity-0 transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                  <div className="bg-space/90 flex flex-col gap-1 rounded-xl border border-cyan-500/20 p-2 shadow-[0_20px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl">
+                  <div className="bg-background/90 flex flex-col gap-1 rounded-xl border border-cyan-500/20 p-2 shadow-[0_20px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl">
                     {link.subLinks.map((sub: { label: string; href: string; icon?: string }) => (
                       <Link
                         key={sub.label}
@@ -217,7 +217,7 @@ export function Navbar({
 
         {/* RIGHT: MISSION STATUS & AUDIO WAVEFORM */}
         <div className="flex items-center gap-4">
-          <div className="bg-space/80 relative flex items-center gap-4 rounded-full border border-cyan-500/20 px-4 py-1.5 shadow-[0_0_15px_rgba(0,240,255,0.05)] backdrop-blur-md">
+          <div className="bg-background/80 relative flex items-center gap-4 rounded-full border border-cyan-500/20 px-4 py-1.5 shadow-[0_0_15px_rgba(0,240,255,0.05)] backdrop-blur-md">
             {user ? (
               <>
                 <button
@@ -239,7 +239,7 @@ export function Navbar({
 
                 {/* Profile Dropdown */}
                 {profileDropdownOpen && (
-                  <div className="bg-space/95 absolute top-full right-0 mt-2 w-56 rounded-xl border border-cyan-500/30 p-2 shadow-[0_10px_30px_rgba(0,0,0,0.8)] backdrop-blur-xl">
+                  <div className="bg-background/95 absolute top-full right-0 mt-2 w-56 rounded-xl border border-cyan-500/30 p-2 shadow-[0_10px_30px_rgba(0,0,0,0.8)] backdrop-blur-xl">
                     <div className="mb-2 border-b border-white/10 pb-2 pl-2 font-mono text-[9px] text-white/50 uppercase">
                       SYSTEM ACTIONS
                     </div>
@@ -354,7 +354,7 @@ export function Navbar({
 
       {/* Mobile Nav Overlay */}
       {mobileMenuOpen && (
-        <div className="bg-space animate-in space-y-4 border-t border-cyan-500/30 p-6 shadow-2xl duration-200 fade-in lg:hidden">
+        <div className="bg-background animate-in space-y-4 border-t border-cyan-500/30 p-6 shadow-2xl duration-200 fade-in lg:hidden">
           <div className="flex flex-col gap-3 text-xs font-bold tracking-widest uppercase">
             {navLinks.map((link) => (
               <div key={link.label} className="flex flex-col gap-2">

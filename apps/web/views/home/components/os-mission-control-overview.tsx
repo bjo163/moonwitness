@@ -50,7 +50,7 @@ export function OSMissionControlOverview() {
         {/* ═══ LAYER 3 & 4: MAIN MISSION CONTROL COMMAND DECK (From Image 4) ══ */}
         <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
           {/* LEFT: MISSION CONTROL TITLE & DOCTRINE PANEL (Col 1-3) */}
-          <div className="bg-space flex flex-col justify-between space-y-6 rounded-xl border-2 border-primary/50 p-6 shadow-[0_0_40px_rgba(0,200,255,0.18)] sm:p-7 lg:col-span-3">
+          <div className="bg-background flex flex-col justify-between space-y-6 rounded-xl border-2 border-primary/50 p-6 shadow-[0_0_40px_rgba(0,200,255,0.18)] sm:p-7 lg:col-span-3">
             <div>
               <h2 className="font-mono text-4xl leading-tight font-black tracking-widest uppercase sm:text-5xl">
                 <span className="text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]">
@@ -113,7 +113,7 @@ export function OSMissionControlOverview() {
           </div>
 
           {/* CENTER: 3D HOLO-GLOBE MATRIX & 8 CALLOUT NODES (Col 4-7) */}
-          <div className="bg-space relative flex min-h-[460px] flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-primary shadow-[0_0_55px_rgba(0,240,255,0.28)] lg:col-span-4">
+          <div className="bg-background relative flex min-h-[460px] flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-primary shadow-[0_0_55px_rgba(0,240,255,0.28)] lg:col-span-4">
             {/* Real space galaxy background */}
             <div className="absolute inset-0">
               <img
@@ -158,21 +158,21 @@ export function OSMissionControlOverview() {
             <div className="pointer-events-none absolute inset-x-3 inset-y-8 flex items-center justify-between font-mono text-[11px] font-bold">
               {/* Left Column Nodes */}
               <div className="pointer-events-auto space-y-7 text-left">
-                <div className="bg-space/90 rounded-r-sm border-l-2 border-primary py-1 pl-2.5 shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+                <div className="bg-background/90 rounded-r-sm border-l-2 border-primary py-1 pl-2.5 shadow-[0_0_15px_rgba(0,240,255,0.3)]">
                   <div className="text-xs font-black text-white">
                     QUR&apos;AN
                   </div>
                   <div className="text-primary">• 6,236 Ayat</div>
                 </div>
-                <div className="bg-space/90 rounded-r-sm border-l-2 border-purple-400 py-1 pl-2.5 shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+                <div className="bg-background/90 rounded-r-sm border-l-2 border-purple-400 py-1 pl-2.5 shadow-[0_0_15px_rgba(168,85,247,0.3)]">
                   <div className="text-xs font-black text-white">HADITH</div>
                   <div className="text-purple-300">• 75,000+</div>
                 </div>
-                <div className="bg-space/90 border-danger rounded-r-sm border-l-2 py-1 pl-2.5 shadow-[0_0_15px_rgba(255,51,85,0.3)]">
+                <div className="bg-background/90 border-danger rounded-r-sm border-l-2 py-1 pl-2.5 shadow-[0_0_15px_rgba(255,51,85,0.3)]">
                   <div className="text-xs font-black text-white">HISTORY</div>
                   <div className="text-warning">• Timelines</div>
                 </div>
-                <div className="bg-space/90 rounded-r-sm border-l-2 border-emerald-400 py-1 pl-2.5 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                <div className="bg-background/90 rounded-r-sm border-l-2 border-emerald-400 py-1 pl-2.5 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
                   <div className="text-xs font-black text-white">ASTRONOMY</div>
                   <div className="text-emerald-300">• Celestial</div>
                 </div>
@@ -180,19 +180,19 @@ export function OSMissionControlOverview() {
 
               {/* Right Column Nodes */}
               <div className="pointer-events-auto space-y-7 text-right">
-                <div className="bg-space/90 rounded-l-sm border-r-2 border-emerald-400 py-1 pr-2.5 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                <div className="bg-background/90 rounded-l-sm border-r-2 border-emerald-400 py-1 pr-2.5 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
                   <div className="text-xs font-black text-white">HUMANITY</div>
                   <div className="text-emerald-300">One Family •</div>
                 </div>
-                <div className="bg-space/90 rounded-l-sm border-r-2 border-primary py-1 pr-2.5 shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+                <div className="bg-background/90 rounded-l-sm border-r-2 border-primary py-1 pr-2.5 shadow-[0_0_15px_rgba(0,240,255,0.3)]">
                   <div className="text-xs font-black text-white">CREATION</div>
                   <div className="text-primary">Signs •</div>
                 </div>
-                <div className="bg-space/90 rounded-l-sm border-r-2 border-amber-400 py-1 pr-2.5 shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+                <div className="bg-background/90 rounded-l-sm border-r-2 border-amber-400 py-1 pr-2.5 shadow-[0_0_15px_rgba(245,158,11,0.3)]">
                   <div className="text-xs font-black text-white">WISDOM</div>
                   <div className="text-amber-300">Reflection •</div>
                 </div>
-                <div className="bg-space/90 rounded-l-sm border-r-2 border-blue-400 py-1 pr-2.5 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                <div className="bg-background/90 rounded-l-sm border-r-2 border-blue-400 py-1 pr-2.5 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
                   <div className="text-xs font-black text-white">FUTURE</div>
                   <div className="text-blue-300">Guidance •</div>
                 </div>
@@ -241,7 +241,7 @@ export function OSMissionControlOverview() {
               ].map((card, idx) => (
                 <div
                   key={idx}
-                  className="bg-space flex flex-col justify-between rounded-lg border border-cyan-500/40 p-3 text-center shadow-inner transition-colors hover:border-cyan-300"
+                  className="bg-background flex flex-col justify-between rounded-lg border border-cyan-500/40 p-3 text-center shadow-inner transition-colors hover:border-cyan-300"
                 >
                   <div className="flex items-center justify-center gap-1.5 truncate text-[9px] font-black tracking-wider text-primary uppercase">
                     <card.icon
@@ -252,7 +252,7 @@ export function OSMissionControlOverview() {
                   </div>
                   <div
                     className="my-1.5 font-mono text-xl font-black tracking-wider text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]"
-                    style={{ color: idx === 3 ? "var(--color-cyber-cyan)" : card.color }}
+                    style={{ color: idx === 3 ? "var(--primary)" : card.color }}
                   >
                     {card.val}
                   </div>
@@ -264,7 +264,7 @@ export function OSMissionControlOverview() {
             </div>
 
             {/* GLOBAL ACTIVITIES LIVE FEED (From Image 4 right world map radar & chronological log) */}
-            <div className="bg-space flex flex-1 flex-col justify-between rounded-xl border-2 border-primary/50 p-6 shadow-[0_0_40px_rgba(0,200,255,0.18)]">
+            <div className="bg-background flex flex-1 flex-col justify-between rounded-xl border-2 border-primary/50 p-6 shadow-[0_0_40px_rgba(0,200,255,0.18)]">
               <div className="mb-4 flex items-center justify-between border-b border-cyan-500/40 pb-3.5 text-xs font-black uppercase">
                 <div className="flex items-center gap-2.5 tracking-wider text-primary">
                   <Radio className="h-4 w-4 animate-pulse text-emerald-400" />
@@ -277,7 +277,7 @@ export function OSMissionControlOverview() {
 
               <div className="my-auto grid grid-cols-1 items-center gap-5 sm:grid-cols-12">
                 {/* Cyan Dot-Matrix World Map Illustration */}
-                <div className="bg-space relative flex h-44 w-full items-center justify-center overflow-hidden rounded-lg border border-primary/30 shadow-[inset_0_0_30px_rgba(0,240,255,0.2)] sm:col-span-6">
+                <div className="bg-background relative flex h-44 w-full items-center justify-center overflow-hidden rounded-lg border border-primary/30 shadow-[inset_0_0_30px_rgba(0,240,255,0.2)] sm:col-span-6">
                   <div className="theme-grid-bg absolute inset-0 opacity-50" />
                   <Globe className="h-28 w-28 animate-pulse text-primary/40" />
                   {/* Live observation pins */}

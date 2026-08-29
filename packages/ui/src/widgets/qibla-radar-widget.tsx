@@ -171,7 +171,7 @@ export function QiblaRadarWidget() {
   if (!mounted) return null
 
   return (
-    <div className="panel-box bg-space/90 space-y-4 border border-primary/40 p-4 font-mono shadow-[0_0_20px_rgba(0,240,255,0.15)] sm:p-5">
+    <div className="panel-box bg-background/90 space-y-4 border border-primary/40 p-4 font-mono shadow-[0_0_20px_rgba(0,240,255,0.15)] sm:p-5">
       <div className="flex items-center justify-between border-b border-primary/20 pb-2.5">
         <div className="flex items-center gap-2">
           {isSyncing ? (
@@ -182,17 +182,17 @@ export function QiblaRadarWidget() {
               style={{ animationDuration: "12s" }}
             />
           )}
-          <span className="font-display text-xs font-black tracking-widest text-primary uppercase">
+          <span className="font-sans text-xs font-black tracking-widest text-primary uppercase">
             // QIBLA VECTOR & TEMPORAL COUNTDOWN
           </span>
         </div>
         <span
-          className={`clip-tag border px-2 py-0.5 font-mono text-[8px] font-bold ${
+          className={`rounded-md border px-2 py-0.5 font-mono text-[8px] font-bold ${
             isSyncing
-              ? "border-cyber-yellow/40 bg-cyber-yellow/10 text-cyber-yellow animate-pulse"
+              ? "border-amber-500/40 bg-amber-500/10 text-amber-500 animate-pulse"
               : errorMsg
-                ? "border-cyber-pink/40 bg-cyber-pink/10 text-cyber-pink"
-                : "border-cyber-green/40 bg-cyber-green/10 text-cyber-green"
+                ? "border-rose-500/40 bg-rose-500/10 text-rose-500"
+                : "border-emerald-500/40 bg-emerald-500/10 text-emerald-500"
           }`}
         >
           {isSyncing
@@ -288,7 +288,7 @@ export function QiblaRadarWidget() {
                 KAABA ({locationName})
               </span>
             </div>
-            <div className="text-success font-display text-sm font-black tracking-wider">
+            <div className="text-success font-sans text-sm font-black tracking-wider">
               {isSyncing ? "---.--°" : `${radarDegrees.toFixed(2)}° N`}
             </div>
             <p className="text-[9px] text-primary italic">
@@ -304,13 +304,13 @@ export function QiblaRadarWidget() {
               <Clock className="h-3 w-3 text-accent" />
               NEXT CYCLE: <span className="text-accent">{nextPrayerName}</span>
             </span>
-            <span className="clip-tag border border-cyber-yellow/40 bg-cyber-yellow/10 text-cyber-yellow px-1.5 py-0 font-mono text-[8px]">
+            <span className="rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-500 px-1.5 py-0 font-mono text-[8px]">
               COUNTDOWN
             </span>
           </div>
 
           <div
-            className="font-display bg-space rounded border border-accent/30 py-1 text-center text-xl font-black tracking-widest text-accent sm:text-2xl"
+            className="font-sans bg-background rounded border border-accent/30 py-1 text-center text-xl font-black tracking-widest text-accent sm:text-2xl"
             style={{ textShadow: "0 0 10px rgba(255,230,0,0.3)" }}
           >
             {isSyncing ? "--:--:--" : countdownText}

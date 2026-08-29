@@ -51,12 +51,12 @@ function getLunarIcon(phase: number): string {
 function CountdownBlock({ label, value }: { label: string; value: number }) {
   return (
     <div className="flex flex-col items-center gap-1">
-      <div className="clip-card relative flex h-16 w-16 items-center justify-center border border-yellow-400/30 bg-black/60 shadow-[0_0_20px_rgba(255,230,0,0.15)] sm:h-20 sm:w-20">
+      <div className="rounded-xl relative flex h-16 w-16 items-center justify-center border border-yellow-400/30 bg-black/60 shadow-[0_0_20px_rgba(255,230,0,0.15)] sm:h-20 sm:w-20">
         <span className="font-mono text-2xl font-black text-yellow-300 sm:text-3xl">
           {pad(value)}
         </span>
         <div
-          className="clip-card absolute inset-0"
+          className="rounded-xl absolute inset-0"
           style={{
             background:
               "linear-gradient(135deg, rgba(255,230,0,0.04) 0%, transparent 60%)",
@@ -87,7 +87,7 @@ function QuadrantCard({
 }) {
   return (
     <div
-      className={`clip-card relative flex flex-col gap-2 border p-4 ${color} bg-black/50 transition-all duration-300 hover:translate-y-[-2px] hover:shadow-[0_0_20px_rgba(0,240,255,0.1)]`}
+      className={`rounded-xl relative flex flex-col gap-2 border p-4 ${color} bg-black/50 transition-all duration-300 hover:translate-y-[-2px] hover:shadow-[0_0_20px_rgba(0,240,255,0.1)]`}
     >
       <div className="flex items-center justify-between">
         <span className="font-mono text-[9px] tracking-widest text-white/40 uppercase">
@@ -166,10 +166,10 @@ export function HomeAEQ4Section() {
           </div>
           <div className="flex flex-col items-end gap-1">
             <span
-              className={`clip-tag px-2 py-1 font-mono text-[9px] font-bold tracking-widest uppercase ${
+              className={`rounded-md px-2 py-1 font-mono text-[9px] font-bold tracking-widest uppercase ${
                 isPreEra
                   ? "border border-yellow-400/40 text-yellow-400 shadow-[0_0_10px_rgba(255,230,0,0.2)]"
-                  : "border-cyber-green/40 text-cyber-green border shadow-[0_0_10px_rgba(0,255,102,0.2)]"
+                  : "border-emerald-500/40 text-emerald-500 border shadow-[0_0_10px_rgba(0,255,102,0.2)]"
               } `}
             >
               {isPreEra ? "● PRE-ERA" : "● ERA 1 ACTIVE"}
@@ -196,10 +196,10 @@ export function HomeAEQ4Section() {
         {/* ── TRI-CLOCK: UTC · HIJRI · AEQ4 ── */}
         <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
           {/* UTC */}
-          <div className="clip-card border-cyber-cyan/25 border bg-black/50 p-4">
+          <div className="rounded-xl border-primary/25 border bg-black/50 p-4">
             <div className="mb-2 flex items-center gap-2">
-              <Globe className="text-cyber-cyan/60 h-3.5 w-3.5" />
-              <span className="text-cyber-cyan/60 font-mono text-[9px] tracking-widest uppercase">
+              <Globe className="text-primary/60 h-3.5 w-3.5" />
+              <span className="text-primary/60 font-mono text-[9px] tracking-widest uppercase">
                 L1 · UTC
               </span>
             </div>
@@ -216,10 +216,10 @@ export function HomeAEQ4Section() {
           </div>
 
           {/* HIJRI */}
-          <div className="clip-card border-cyber-green/25 border bg-black/50 p-4">
+          <div className="rounded-xl border-emerald-500/25 border bg-black/50 p-4">
             <div className="mb-2 flex items-center gap-2">
-              <Moon className="text-cyber-green/60 h-3.5 w-3.5" />
-              <span className="text-cyber-green/60 font-mono text-[9px] tracking-widest uppercase">
+              <Moon className="text-emerald-500/60 h-3.5 w-3.5" />
+              <span className="text-emerald-500/60 font-mono text-[9px] tracking-widest uppercase">
                 L2 · HIJRI
               </span>
             </div>
@@ -236,10 +236,10 @@ export function HomeAEQ4Section() {
 
           {/* AEQ4 */}
           <div
-            className={`clip-card p-4 ${
+            className={`rounded-xl p-4 ${
               isPreEra
                 ? "border border-yellow-400/30 bg-black/60 shadow-[0_0_20px_rgba(255,230,0,0.08)]"
-                : "border-cyber-purple/30 border bg-black/60 shadow-[0_0_20px_rgba(161,0,255,0.1)]"
+                : "border-purple-500/30 border bg-black/60 shadow-[0_0_20px_rgba(161,0,255,0.1)]"
             } `}
           >
             <div className="mb-2 flex items-center gap-2">
@@ -342,7 +342,7 @@ export function HomeAEQ4Section() {
               label="CYCLE"
               kitab="TORAH"
               value={aeq.cycle}
-              color="border-cyber-cyan/25"
+              color="border-primary/25"
               desc="Perjalanan — putaran lunar yang telah kita lewati"
             />
             <QuadrantCard
@@ -350,7 +350,7 @@ export function HomeAEQ4Section() {
               label="POSITION"
               kitab="ZABUR"
               value={aeq.position}
-              color="border-cyber-green/25"
+              color="border-emerald-500/25"
               desc="Posisi — hari ke-N dalam cycle ini"
             />
             <QuadrantCard
@@ -358,7 +358,7 @@ export function HomeAEQ4Section() {
               label="MOMENT"
               kitab="GOSPEL"
               value={aeq.moment}
-              color="border-cyber-purple/25"
+              color="border-purple-500/25"
               desc="Kehadiran — detik ini, napas ini"
             />
           </div>
@@ -367,7 +367,7 @@ export function HomeAEQ4Section() {
         {/* ── LUNAR TELEMETRY ── */}
         <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {/* Moon phase */}
-          <div className="clip-card border border-white/10 bg-black/40 p-4">
+          <div className="rounded-xl border border-white/10 bg-black/40 p-4">
             <div className="mb-3 flex items-center gap-2">
               <Moon className="h-4 w-4 text-white/40" />
               <span className="font-mono text-[9px] tracking-widest text-white/40 uppercase">
@@ -398,7 +398,7 @@ export function HomeAEQ4Section() {
           </div>
 
           {/* Decentralization declaration */}
-          <div className="clip-card border border-white/10 bg-black/40 p-4">
+          <div className="rounded-xl border border-white/10 bg-black/40 p-4">
             <div className="mb-3 flex items-center gap-2">
               <RefreshCw className="h-4 w-4 text-white/40" />
               <span className="font-mono text-[9px] tracking-widest text-white/40 uppercase">
@@ -431,7 +431,7 @@ export function HomeAEQ4Section() {
                   </span>
                   <span
                     className={`font-mono text-[9px] font-bold ${
-                      row.ok ? "text-cyber-green" : "text-cyber-pink"
+                      row.ok ? "text-emerald-500" : "text-rose-500"
                     }`}
                   >
                     {row.value}

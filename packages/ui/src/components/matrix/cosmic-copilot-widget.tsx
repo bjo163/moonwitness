@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Sparkles, X, Send, Bot, ShieldCheck, Zap } from "lucide-react"
+import { Sparkles, X, Send, Bot } from "lucide-react"
 import type { ModelSchema } from "@workspace/types"
 
 export interface CosmicCopilotWidgetProps {
@@ -15,7 +15,7 @@ export function CosmicCopilotWidget({ schema, records }: CosmicCopilotWidgetProp
   const [messages, setMessages] = useState<Array<{ role: "ai" | "user"; text: string }>>([
     {
       role: "ai",
-      text: `AI Copilot online for [${schema.name}]. ${records.length} records loaded. How may I assist your analysis?`,
+      text: `AI Assistant ready for [${schema.name}]. ${records.length} records loaded. How may I assist your analysis?`,
     },
   ])
   const [thinking, setThinking] = useState(false)
@@ -33,14 +33,14 @@ export function CosmicCopilotWidget({ schema, records }: CosmicCopilotWidgetProp
       const qLower = q.toLowerCase()
 
       if (qLower.includes("summary") || qLower.includes("ringkas") || qLower.includes("analyze")) {
-        response = `Audit Summary for ${schema.name}: Total ${records.length} records tracked. Highest density in standard workflow stages. Zero unhandled fatal anomalies detected.`
+        response = `Summary for ${schema.name}: Total ${records.length} records tracked across active workflow stages. No critical anomalies found.`
       } else if (qLower.includes("priority") || qLower.includes("urgent") || qLower.includes("critical")) {
         const criticals = records.filter(
           (r) => r.priority === "critical" || r.priority === "urgent" || r.priority === 1
         )
-        response = `Discovered ${criticals.length} high-priority units requiring immediate operator attention in ${schema.name}.`
+        response = `Found ${criticals.length} high-priority records requiring attention in ${schema.name}.`
       } else {
-        response = `Khidra Intelligence Engine evaluated query against ${schema.name} schema. System invariants and ethical constraints remain balanced.`
+        response = `Query evaluated against ${schema.name} schema. System invariants and business rules remain balanced.`
       }
 
       setMessages((prev) => [...prev, { role: "ai", text: response }])
@@ -53,50 +53,50 @@ export function CosmicCopilotWidget({ schema, records }: CosmicCopilotWidgetProp
       {/* Floating Copilot Trigger Button */}
       <button
         onClick={() => setIsOpen((v) => !v)}
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-2.5 bg-cyber-purple/20 border border-cyber-purple/60 rounded-full text-xs font-mono text-cyber-purple hover:bg-cyber-purple/30 uppercase tracking-wider backdrop-blur-md shadow-[0_0_20px_rgba(161,0,255,0.3)] transition-all hover:scale-105"
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground rounded-full text-xs font-semibold hover:bg-primary/90 shadow-lg transition-all hover:scale-105"
       >
-        <Sparkles className="w-4 h-4 animate-spin-slow text-white" />
-        <span className="font-bold text-white">KHIDRA AI COPILOT</span>
+        <Sparkles className="w-4 h-4" />
+        <span>AI Copilot</span>
       </button>
 
       {/* Floating Copilot Dialog */}
       {isOpen && (
-        <div className="fixed bottom-20 right-6 z-50 w-96 max-h-[500px] bg-cyber-dark/95 border border-cyber-purple/50 rounded-xl shadow-[0_0_40px_rgba(161,0,255,0.25)] flex flex-col overflow-hidden corner-box backdrop-blur-xl font-mono animate-in slide-in-from-bottom-5">
+        <div className="fixed bottom-20 right-6 z-50 w-96 max-h-[500px] bg-card border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden backdrop-blur-xl font-sans animate-in slide-in-from-bottom-5">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-cyber-purple/30 bg-cyber-panel/90">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-border/40 bg-muted/30">
             <div className="flex items-center gap-2">
-              <Bot className="w-4 h-4 text-cyber-purple" />
-              <span className="text-xs font-bold text-white uppercase tracking-wider">
-                KHIDRA // {schema.name}
+              <Bot className="w-4 h-4 text-primary" />
+              <span className="text-xs font-bold text-foreground">
+                Copilot • {schema.name}
               </span>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1 text-steel-gray hover:text-white transition-colors"
+              className="p-1 text-muted-foreground hover:text-foreground transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Quick Prompts */}
-          <div className="flex gap-1.5 p-2.5 bg-black/40 border-b border-cyber-purple/20 overflow-x-auto text-[10px]">
+          <div className="flex gap-1.5 p-2.5 bg-muted/20 border-b border-border/40 overflow-x-auto text-[11px]">
             <button
               onClick={() => handleAsk("Summarize active records")}
-              className="px-2 py-1 bg-cyber-purple/10 border border-cyber-purple/30 rounded text-cyber-purple hover:bg-cyber-purple/20 flex-shrink-0"
+              className="px-2.5 py-1 bg-secondary border border-border rounded-md text-foreground hover:bg-accent flex-shrink-0 font-medium"
             >
-              ⚡ SUMMARIZE
+              Summarize
             </button>
             <button
               onClick={() => handleAsk("Check critical priority items")}
-              className="px-2 py-1 bg-cyber-pink/10 border border-cyber-pink/30 rounded text-cyber-pink hover:bg-cyber-pink/20 flex-shrink-0"
+              className="px-2.5 py-1 bg-destructive/10 border border-destructive/20 rounded-md text-destructive hover:bg-destructive/20 flex-shrink-0 font-medium"
             >
-              ⚠️ CRITICAL
+              Urgent Items
             </button>
             <button
               onClick={() => handleAsk("Analyze workflow bottlenecks")}
-              className="px-2 py-1 bg-cyber-cyan/10 border border-cyber-cyan/30 rounded text-cyber-cyan hover:bg-cyber-cyan/20 flex-shrink-0"
+              className="px-2.5 py-1 bg-primary/10 border border-primary/20 rounded-md text-primary hover:bg-primary/20 flex-shrink-0 font-medium"
             >
-              🔍 AUDIT
+              Audit Flow
             </button>
           </div>
 
@@ -105,18 +105,18 @@ export function CosmicCopilotWidget({ schema, records }: CosmicCopilotWidgetProp
             {messages.map((m, idx) => (
               <div
                 key={idx}
-                className={`p-2.5 rounded-lg text-xs leading-relaxed ${
+                className={`p-2.5 rounded-xl text-xs leading-relaxed ${
                   m.role === "user"
-                    ? "bg-cyber-cyan/10 border border-cyber-cyan/30 text-white ml-6 text-right"
-                    : "bg-cyber-purple/10 border border-cyber-purple/30 text-steel-gray mr-4"
+                    ? "bg-primary text-primary-foreground ml-6 text-right"
+                    : "bg-muted text-foreground mr-4 border border-border/40"
                 }`}
               >
                 {m.text}
               </div>
             ))}
             {thinking && (
-              <div className="p-2 text-xs text-cyber-purple animate-pulse">
-                KHIDRA SYNAPSE PROCESSING...
+              <div className="p-2 text-xs text-muted-foreground animate-pulse font-medium">
+                Thinking...
               </div>
             )}
           </div>
@@ -127,20 +127,20 @@ export function CosmicCopilotWidget({ schema, records }: CosmicCopilotWidgetProp
               e.preventDefault()
               handleAsk()
             }}
-            className="flex items-center gap-2 p-2.5 border-t border-cyber-purple/20 bg-cyber-panel/60"
+            className="flex items-center gap-2 p-2.5 border-t border-border/40 bg-muted/20"
           >
             <input
               type="text"
-              placeholder={`Ask AI about ${schema.name}...`}
+              placeholder={`Ask about ${schema.name}...`}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="flex-1 bg-black/60 border border-cyber-purple/30 rounded px-3 py-1.5 text-xs text-white placeholder-steel-gray/40 focus:border-cyber-purple/60 focus:outline-none"
+              className="flex-1 bg-background border border-border rounded-lg px-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
             />
             <button
               type="submit"
-              className="p-1.5 bg-cyber-purple/20 border border-cyber-purple/50 rounded text-cyber-purple hover:bg-cyber-purple/40 transition-colors"
+              className="p-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
             >
-              <Send className="w-4 h-4" />
+              <Send className="w-3.5 h-3.5" />
             </button>
           </form>
         </div>

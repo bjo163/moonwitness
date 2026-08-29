@@ -3,7 +3,7 @@ import { Moon, ArrowRight } from "lucide-react"
 
 export function RecommendationEngineWidget() {
   return (
-    <div className="bg-space flex flex-col justify-between rounded-xl border border-primary/30 p-4 shadow-lg lg:col-span-4 xl:col-span-3">
+    <div className="bg-background flex flex-col justify-between rounded-xl border border-primary/30 p-4 shadow-lg lg:col-span-4 xl:col-span-3">
       <div>
         <div className="text-[9px] font-black tracking-widest text-primary uppercase">
           RECOMMENDATION ENGINE

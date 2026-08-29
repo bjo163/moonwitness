@@ -5,7 +5,7 @@ export function ObservatoryLeftColumn({ obs }: { obs: any }) {
   return (
     <div className="flex flex-col justify-between space-y-6 lg:col-span-3">
       {/* Moon Status Box */}
-      <div className="bg-space/40 hover:bg-space/60 space-y-4 rounded-xl border border-cyan-500/30 p-5 shadow-[0_0_30px_rgba(0,240,255,0.05)] backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/50">
+      <div className="bg-background/40 hover:bg-background/60 space-y-4 rounded-xl border border-cyan-500/30 p-5 shadow-[0_0_30px_rgba(0,240,255,0.05)] backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/50">
         <div className="flex items-center justify-between border-b border-white/10 pb-2.5 text-xs font-black tracking-wider text-primary uppercase">
           <span>| MOON STATUS</span>
           <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-400">
@@ -15,7 +15,7 @@ export function ObservatoryLeftColumn({ obs }: { obs: any }) {
 
         {/* Moon phase graphic preview */}
         <div className="flex items-center gap-4 py-2">
-          <div className="bg-space/60 flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full border border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.1)] backdrop-blur-md">
+          <div className="bg-background/60 flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full border border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.1)] backdrop-blur-md">
             <img
               src="/assets/cam_moon.png"
               alt="Moon Phase"
@@ -67,7 +67,7 @@ export function ObservatoryLeftColumn({ obs }: { obs: any }) {
       </div>
 
       {/* Hijri Calendar Terminal Box */}
-      <div className="bg-space/40 hover:bg-space/60 flex flex-col justify-between rounded-xl border border-cyan-500/30 p-5 shadow-[0_0_30px_rgba(0,200,255,0.05)] backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/50">
+      <div className="bg-background/40 hover:bg-background/60 flex flex-col justify-between rounded-xl border border-cyan-500/30 p-5 shadow-[0_0_30px_rgba(0,200,255,0.05)] backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/50">
         <div className="mb-3 flex items-center gap-2 border-b border-white/10 pb-2.5 text-xs font-black tracking-wider text-primary uppercase">
           <Calendar className="h-4 w-4 text-primary" />
           <span>HIJRI CALENDAR</span>

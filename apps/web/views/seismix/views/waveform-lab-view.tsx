@@ -354,7 +354,7 @@ export function WaveformLabView() {
               <button
                 key={preset.id}
                 onClick={() => applyPreset(preset)}
-                className="panel-box w-full border p-3 text-left transition-all duration-300 hover:-translate-y-0.5"
+                className="rounded-xl border border-border/40 bg-card/90 w-full border p-3 text-left transition-all duration-300 hover:-translate-y-0.5"
                 style={{
                   borderColor: isActive
                     ? `${preset.color}50`
@@ -425,7 +425,7 @@ export function WaveformLabView() {
           <div className="mt-4 flex items-center gap-3">
             <button
               onClick={() => setIsPlaying(!isPlaying)}
-              className="flex items-center gap-2 border px-4 py-2 font-mono text-[10px] font-bold tracking-widest transition-all btn-clip"
+              className="flex items-center gap-2 border px-4 py-2 font-mono text-[10px] font-bold tracking-widest transition-all "
               style={{
                 borderColor: isPlaying
                   ? "rgba(0, 255, 102, 0.4)"
@@ -448,7 +448,7 @@ export function WaveformLabView() {
             </button>
             <button
               onClick={resetParams}
-              className="flex items-center gap-2 border border-primary/20 px-3 py-2 font-mono text-[10px] font-bold tracking-widest text-primary transition-all btn-clip hover:border-primary/40"
+              className="flex items-center gap-2 border border-primary/20 px-3 py-2 font-mono text-[10px] font-bold tracking-widest text-primary transition-all  hover:border-primary/40"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               RESET

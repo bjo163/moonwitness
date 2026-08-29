@@ -65,7 +65,7 @@ export function OSObservatorySystems() {
           </div>
 
           {/* Atomic Clock & Date Terminal Badge */}
-          <div className="bg-space/40 flex shrink-0 items-center gap-4 rounded-xl border border-cyan-500/30 p-4 shadow-[0_0_35px_rgba(0,240,255,0.1)] backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/50">
+          <div className="bg-background/40 flex shrink-0 items-center gap-4 rounded-xl border border-cyan-500/30 p-4 shadow-[0_0_35px_rgba(0,240,255,0.1)] backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/50">
             <Clock className="h-10 w-10 shrink-0 animate-pulse text-primary drop-shadow-[0_0_8px_#00F0FF]" />
             <div className="text-left">
               <div className="font-mono text-2xl font-black tracking-widest text-white drop-shadow-[0_0_10px_#FFF]">

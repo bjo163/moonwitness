@@ -18,7 +18,6 @@ export interface CosmicFieldWidgetProps {
   value: any
   onChange?: (val: any) => void
   disabled?: boolean
-  accentColor?: "cyan" | "green" | "yellow" | "purple" | "pink"
 }
 
 export function CosmicFieldWidget({
@@ -26,7 +25,6 @@ export function CosmicFieldWidget({
   value,
   onChange,
   disabled = false,
-  accentColor = "cyan",
 }: CosmicFieldWidgetProps) {
   const [comodelOptions, setComodelOptions] = useState<{ id: number; name: string }[]>([])
   const [comodelLoading, setComodelLoading] = useState(false)
@@ -78,7 +76,7 @@ export function CosmicFieldWidget({
         onChange?.(created.id)
       }
     } catch (e: any) {
-      alert(`Failed to quick-create: ${e?.message || e}`)
+      alert(`Failed to create option: ${e?.message || e}`)
     } finally {
       setQuickCreating(false)
     }
@@ -95,11 +93,11 @@ export function CosmicFieldWidget({
           onChange={(e) => onChange?.(e.target.checked)}
           className="sr-only peer"
         />
-        <div className="w-10 h-5 bg-black/60 border border-cyber-cyan/30 peer-checked:bg-cyber-cyan/20 peer-checked:border-cyber-cyan rounded-full transition-all relative">
-          <div className={`w-3.5 h-3.5 rounded-full absolute top-0.5 left-0.5 transition-transform ${value ? "translate-x-5 bg-cyber-cyan shadow-[0_0_8px_var(--cyber-cyan)]" : "bg-steel-gray/60"}`} />
+        <div className="w-10 h-5 bg-muted border border-border peer-checked:bg-primary/20 peer-checked:border-primary rounded-full transition-all relative">
+          <div className={`w-3.5 h-3.5 rounded-full absolute top-0.5 left-0.5 transition-transform ${value ? "translate-x-5 bg-primary" : "bg-muted-foreground"}`} />
         </div>
-        <span className="text-xs text-steel-gray uppercase font-mono tracking-wider">
-          {value ? "ENABLED" : "DISABLED"}
+        <span className="text-xs text-foreground font-medium">
+          {value ? "Enabled" : "Disabled"}
         </span>
       </label>
     )
@@ -114,7 +112,7 @@ export function CosmicFieldWidget({
         placeholder={`Enter ${field.label.toLowerCase()}...`}
         onChange={(e) => onChange?.(e.target.value)}
         rows={4}
-        className="w-full bg-cyber-dark/80 border border-cyber-cyan/20 rounded px-3 py-2 text-xs font-mono text-white placeholder-steel-gray/40 focus:border-cyber-cyan/60 focus:outline-none transition-colors resize-y"
+        className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none transition-colors resize-y font-sans"
       />
     )
   }
@@ -126,11 +124,11 @@ export function CosmicFieldWidget({
         value={value ?? ""}
         disabled={disabled || field.readonly}
         onChange={(e) => onChange?.(e.target.value)}
-        className="w-full bg-cyber-dark/80 border border-cyber-cyan/20 rounded px-3 py-2 text-xs font-mono text-white focus:border-cyber-cyan/60 focus:outline-none transition-colors"
+        className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground focus:border-primary focus:outline-none transition-colors font-sans"
       >
         <option value="" disabled>-- Select {field.label} --</option>
         {field.selection.map(([val, lbl]) => (
-          <option key={val} value={val} className="bg-cyber-panel text-white">
+          <option key={val} value={val} className="bg-card text-foreground">
             {lbl}
           </option>
         ))}
@@ -150,11 +148,11 @@ export function CosmicFieldWidget({
             const num = Number(e.target.value)
             onChange?.(isNaN(num) || !e.target.value ? null : num)
           }}
-          className="flex-1 bg-cyber-dark/80 border border-cyber-cyan/20 rounded px-3 py-2 text-xs font-mono text-white focus:border-cyber-cyan/60 focus:outline-none transition-colors"
+          className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground focus:border-primary focus:outline-none transition-colors font-sans"
         >
-          <option value="">{comodelLoading ? "SYNCING OPTIONS..." : `-- Select ${field.label} (${field.comodel}) --`}</option>
+          <option value="">{comodelLoading ? "Loading options..." : `-- Select ${field.label} (${field.comodel}) --`}</option>
           {comodelOptions.map((opt) => (
-            <option key={opt.id} value={opt.id} className="bg-cyber-panel text-white">
+            <option key={opt.id} value={opt.id} className="bg-card text-foreground">
               {opt.name}
             </option>
           ))}
@@ -165,7 +163,7 @@ export function CosmicFieldWidget({
             disabled={quickCreating}
             onClick={handleQuickCreate}
             title={`Create new ${field.label}`}
-            className="px-2.5 py-2 bg-cyber-cyan/10 border border-cyber-cyan/30 rounded text-cyber-cyan hover:bg-cyber-cyan/20 transition-all text-xs"
+            className="px-2.5 py-2 bg-secondary border border-border rounded-lg text-foreground hover:bg-accent transition-all text-xs"
           >
             <Plus className="w-3.5 h-3.5" />
           </button>
@@ -183,7 +181,7 @@ export function CosmicFieldWidget({
         value={dateVal}
         disabled={disabled || field.readonly}
         onChange={(e) => onChange?.(e.target.value || null)}
-        className="w-full bg-cyber-dark/80 border border-cyber-cyan/20 rounded px-3 py-2 text-xs font-mono text-white focus:border-cyber-cyan/60 focus:outline-none transition-colors"
+        className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground focus:border-primary focus:outline-none transition-colors font-sans"
       />
     )
   }
@@ -198,7 +196,7 @@ export function CosmicFieldWidget({
         disabled={disabled || field.readonly}
         placeholder={`0`}
         onChange={(e) => onChange?.(e.target.value === "" ? null : Number(e.target.value))}
-        className="w-full bg-cyber-dark/80 border border-cyber-cyan/20 rounded px-3 py-2 text-xs font-mono text-white focus:border-cyber-cyan/60 focus:outline-none transition-colors"
+        className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground focus:border-primary focus:outline-none transition-colors font-sans"
       />
     )
   }
@@ -212,7 +210,7 @@ export function CosmicFieldWidget({
       disabled={disabled || field.readonly}
       placeholder={`Enter ${field.label.toLowerCase()}...`}
       onChange={(e) => onChange?.(e.target.value)}
-      className="w-full bg-cyber-dark/80 border border-cyber-cyan/20 rounded px-3 py-2 text-xs font-mono text-white placeholder-steel-gray/40 focus:border-cyber-cyan/60 focus:outline-none transition-colors"
+      className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none transition-colors font-sans"
     />
   )
 }

@@ -3,7 +3,7 @@ import "@workspace/ui/globals.css"
 import { MoonProvider } from "@workspace/state"
 import { CommandCenterShell } from "@/components/shell"
 
-const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" })
+const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-sans" })
 const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",

@@ -4,27 +4,26 @@ export const THEME_TOKENS = {
   // ── ENTERPRISE SEMANTIC COLOR ALIASES (DESIGN BIBLE V9.0) ──────────────────
   colors: {
     // Core Semantic Cyber Palette
-    primary: "#00F0FF", // Brand Primary (System Cyan)
-    secondary: "#0A1224", // Deep Navy Surface
-    success: "#00FF66", // Mission Green (Positive, verified, online)
-    warning: "#FFE600", // Celestial Yellow (Observatory, alerts)
-    danger: "#FF0055", // Critical Error (Faults, alerts)
-    info: "#00F0FF", // Telemetry Cyan
-    muted: "#8B9BB0", // Technical Steel Gray
-    accent: "#A100FF", // Knowledge / AI Purple
+    primary: "var(--primary)",
+    secondary: "var(--secondary)",
+    success: "var(--chart-2)",
+    warning: "var(--chart-3)",
+    danger: "var(--destructive)",
+    info: "var(--chart-1)",
+    muted: "var(--muted-foreground)",
+    accent: "var(--chart-4)",
 
-    // Semantic Family Mapping
-    system: "#00F0FF", // Scripture & System Core
-    mission: "#00FF66", // Divine Unity Command
-    celestial: "#FFE600", // Observatory Telemetry
-    knowledge: "#A100FF", // Intelligence & Analytics
-    knowledgeLight: "#d477ff", // Light purple hover accent
-    critical: "#FF0055", // Faults & Danger
-    textPrimary: "#F5F5F5", // Crisp light text
-    textMuted: "#8B9BB0", // Muted steel text
-    background: "#05070A", // Deep space dark void
-    panelBg: "#0A0F17", // Command panel dark background
-    panelBorder: "rgba(0, 240, 255, 0.25)",
+    system: "var(--primary)",
+    mission: "var(--chart-2)",
+    celestial: "var(--chart-3)",
+    knowledge: "var(--chart-4)",
+    knowledgeLight: "var(--chart-4)",
+    critical: "var(--destructive)",
+    textPrimary: "var(--foreground)",
+    textMuted: "var(--muted-foreground)",
+    background: "var(--background)",
+    panelBg: "var(--card)",
+    panelBorder: "var(--border)",
   },
 
   // ── TYPOGRAPHY SCALE ──────────────────────────────────────────────────────

@@ -3,7 +3,7 @@ import { Target, ArrowRight } from "lucide-react"
 
 export function ActionCenterWidget() {
   return (
-    <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-4 xl:col-span-3">
+    <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-4 xl:col-span-3">
       <div className="mb-4 flex items-center justify-between">
         <div className="text-[9px] font-black tracking-widest text-primary uppercase">
           ACTION CENTER

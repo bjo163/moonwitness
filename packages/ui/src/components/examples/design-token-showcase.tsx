@@ -75,7 +75,7 @@ export function GlowingButton() {
 
   return (
     <button
-      className={`${btnClip.className} bg-cyber-cyan text-cyber-dark px-6 py-3 font-mono tracking-widest uppercase transition-all hover:scale-105`}
+      className={`${btnClip.className} bg-primary text-primary-foreground px-6 py-3 font-mono tracking-widest uppercase transition-all hover:scale-105`}
       style={glowStyle}
     >
       Execute Command
@@ -94,14 +94,14 @@ export function CornerBracketExample() {
 
   return (
     <div className="grid grid-cols-3 gap-4">
-      <div className={`corner-box ${activeCorner} p-4 border border-cyber-cyan/25`}>
-        <p className="text-cyber-cyan text-sm font-mono">ACTIVE</p>
+      <div className={` ${activeCorner} p-4 border border-primary/25`}>
+        <p className="text-primary text-sm font-mono">ACTIVE</p>
       </div>
-      <div className={`corner-box ${successCorner} p-4 border border-cyber-green/25`}>
-        <p className="text-cyber-green text-sm font-mono">SUCCESS</p>
+      <div className={` ${successCorner} p-4 border border-emerald-500/25`}>
+        <p className="text-emerald-500 text-sm font-mono">SUCCESS</p>
       </div>
-      <div className={`corner-box ${criticalCorner} p-4 border border-cyber-pink/25`}>
-        <p className="text-cyber-pink text-sm font-mono">CRITICAL</p>
+      <div className={` ${criticalCorner} p-4 border border-rose-500/25`}>
+        <p className="text-rose-500 text-sm font-mono">CRITICAL</p>
       </div>
     </div>
   );
@@ -143,15 +143,15 @@ export function LaserConduitExample() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-cyber-cyan text-sm font-mono mb-2">SECTION ALPHA</p>
+        <p className="text-primary text-sm font-mono mb-2">SECTION ALPHA</p>
         <div className={cyanConduit} />
       </div>
       <div>
-        <p className="text-cyber-green text-sm font-mono mb-2">SECTION BETA</p>
+        <p className="text-emerald-500 text-sm font-mono mb-2">SECTION BETA</p>
         <div className={greenConduit} />
       </div>
       <div>
-        <p className="text-cyber-yellow text-sm font-mono mb-2">SECTION GAMMA</p>
+        <p className="text-amber-500 text-sm font-mono mb-2">SECTION GAMMA</p>
         <div className={yellowConduit} />
       </div>
     </div>
@@ -167,14 +167,14 @@ export function SemanticTokenCard({ intent = 'primary' }: { intent?: 'primary' |
   const btnClip = useClipPath({ variant: 'button', className: true });
 
   return (
-    <div className={`corner-box ${tokens.cornerClass} clip-card panel-glass p-6 border`} style={{ borderColor: tokens.color + '40' }}>
+    <div className={` ${tokens.cornerClass} clip-card panel-glass p-6 border`} style={{ borderColor: tokens.color + '40' }}>
       <h3 className="font-mono tracking-widest mb-3" style={{ color: tokens.color }}>
         {intent.toUpperCase()} INTENT
       </h3>
       <div className={tokens.conduitClass + ' mb-4'} />
       <button
         className={`${btnClip.className} ${tokens.glowClass} px-4 py-2 font-mono text-sm tracking-widest uppercase`}
-        style={{ backgroundColor: tokens.color, color: 'var(--cyber-dark)' }}
+        style={{ backgroundColor: tokens.color, color: 'var(--background)' }}
       >
         {intent} Action
       </button>
@@ -213,7 +213,7 @@ export function AlertBanner({
     >
       <div 
         className={`${tagClip.className} px-2 py-1 text-xs font-mono tracking-widest`}
-        style={{ backgroundColor: tokens.color, color: 'var(--cyber-dark)' }}
+        style={{ backgroundColor: tokens.color, color: 'var(--background)' }}
       >
         {type.toUpperCase()}
       </div>
@@ -270,7 +270,7 @@ export function DashboardPanel() {
 
 export function DesignTokenShowcase() {
   return (
-    <div className="bg-cyber-dark min-h-screen">
+    <div className="bg-background min-h-screen">
       <DashboardPanel />
     </div>
   );

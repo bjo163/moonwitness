@@ -103,21 +103,21 @@ export function SejarahSirahView() {
 
         {/* Selected Event Telemetry Panel */}
         {selectedEvent && (
-          <div className="panel-box bg-space/95 space-y-4 border border-primary/50 p-6 shadow-[0_0_30px_rgba(0,240,255,0.2)]">
+          <div className="rounded-xl border border-border/40 bg-card/90 bg-background/95 space-y-4 border border-primary/50 p-6 shadow-[0_0_30px_rgba(0,240,255,0.2)]">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-primary/20 pb-3">
-              <div className="font-display flex items-center gap-2">
+              <div className="font-sans flex items-center gap-2">
                 <MapPin className="text-success h-5 w-5" />
                 <h3 className="text-base font-black text-primary">
                   {selectedEvent.title}
                 </h3>
               </div>
-              <span className="clip-tag border border-cyber-green/40 bg-cyber-green/10 text-cyber-green px-3 py-1 font-mono text-xs font-bold">
+              <span className="rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-500 px-3 py-1 font-mono text-xs font-bold">
                 {selectedEvent.yearStr}
               </span>
             </div>
 
             <div className="grid grid-cols-1 gap-3 text-xs sm:grid-cols-2">
-              <div className="bg-space tag-clip border border-primary/20 p-3">
+              <div className="bg-background tag-clip border border-primary/20 p-3">
                 <span className="block text-[9px] text-primary">
                   {/* LOKASI GEOGRAFIS */}
                 </span>
@@ -129,7 +129,7 @@ export function SejarahSirahView() {
                 </span>
               </div>
 
-              <div className="bg-space tag-clip border border-primary/20 p-3">
+              <div className="bg-background tag-clip border border-primary/20 p-3">
                 <span className="block text-[9px] text-primary">
                   {/* RUJUKAN AYAT & MANUSKRIP */}
                 </span>
@@ -139,7 +139,7 @@ export function SejarahSirahView() {
               </div>
             </div>
 
-            <p className="bg-space border border-primary/15 p-3 font-mono text-xs leading-relaxed text-primary">
+            <p className="bg-background border border-primary/15 p-3 font-mono text-xs leading-relaxed text-primary">
               &gt; {selectedEvent.description}
             </p>
           </div>
@@ -164,7 +164,7 @@ export function SejarahSirahView() {
                   className={`tag-clip flex w-full items-center justify-between border p-4 text-left transition-all ${
                     isSelected
                       ? "border-primary bg-primary/20 text-white shadow-[0_0_15px_rgba(0,240,255,0.3)]"
-                      : "bg-space border-primary/20 text-primary hover:border-primary/60 hover:text-white"
+                      : "bg-background border-primary/20 text-primary hover:border-primary/60 hover:text-white"
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -172,7 +172,7 @@ export function SejarahSirahView() {
                       #{idx + 1}
                     </div>
                     <div>
-                      <h4 className="font-display text-xs font-bold text-foreground">
+                      <h4 className="font-sans text-xs font-bold text-foreground">
                         {ev.title}
                       </h4>
                       <p className="text-[10px] text-primary">

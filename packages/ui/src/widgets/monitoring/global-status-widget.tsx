@@ -13,7 +13,7 @@ import {
 
 export function GlobalStatusWidget() {
   return (
-    <div className="bg-space flex flex-1 flex-col justify-between rounded-xl border border-primary/30 p-4">
+    <div className="bg-background flex flex-1 flex-col justify-between rounded-xl border border-primary/30 p-4">
       <div className="mb-4 flex items-center justify-between">
         <div className="text-[9px] font-black tracking-widest text-primary uppercase">
           LIVE GLOBAL STATUS
@@ -85,7 +85,7 @@ export function GlobalStatusWidget() {
         ].map((st, i) => (
           <div
             key={i}
-            className="bg-space flex cursor-pointer flex-col justify-between rounded border border-white/5 p-2 transition-colors hover:bg-white/5"
+            className="bg-background flex cursor-pointer flex-col justify-between rounded border border-white/5 p-2 transition-colors hover:bg-white/5"
           >
             <div className="text-[7px] font-bold text-primary uppercase">
               {st.l}

@@ -97,7 +97,7 @@ export function HadithsView() {
         <div className="space-y-1">
           <span className="font-extrabold text-foreground">{h.book}</span>
           <div className="flex items-center gap-1.5">
-            <Badge variant="secondary" className="bg-cyber-purple text-[9px] text-white">
+            <Badge variant="secondary" className="bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/30 text-[9px] font-semibold">
               No. {h.number}
             </Badge>
             <Badge variant="outline" className="text-[9px]">
@@ -154,9 +154,9 @@ export function HadithsView() {
           headerActions={
             <Button
               onClick={() => addModal.open()}
-              className="flex items-center gap-2 rounded-none border border-cyber-purple/40 bg-cyber-purple/20 px-4 py-1.5 font-mono text-xs font-bold text-cyber-purple uppercase transition-all hover:bg-cyber-purple/30"
+              className="flex items-center gap-2 rounded-lg border border-purple-500/40 bg-purple-500/10 px-4 py-1.5 text-xs font-semibold text-purple-600 dark:text-purple-400 hover:bg-purple-500/20"
             >
-              <span>➕ [ TAMBAH HADITS ]</span>
+              <span>+ Tambah Hadits</span>
             </Button>
           }
         />

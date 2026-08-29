@@ -106,7 +106,7 @@ export function SertifikatPiagamView() {
 
         {/* Form Card */}
         {!isPledged ? (
-          <div className="panel-box border-success/40 bg-space space-y-4 border p-6 font-mono">
+          <div className="rounded-xl border border-border/40 bg-card/90 border-success/40 bg-background space-y-4 border p-6 font-mono">
             <div className="text-success text-xs font-bold">
               {/* FORM PENANDATANGANAN DUTA KEDAMAIAN: */}
             </div>
@@ -140,7 +140,7 @@ export function SertifikatPiagamView() {
 
               <button
                 onClick={handleGenerateCertificate}
-                className="btn-primary btn-primary-green flex w-full items-center justify-center gap-2 py-3 text-xs font-bold btn-clip"
+                className="btn-primary btn-primary-green flex w-full items-center justify-center gap-2 py-3 text-xs font-bold "
               >
                 <Award className="text-success h-4 w-4" />
                 <span>[ TANDATANGANI KOMITMEN & GENERATE SERTIFIKAT ]</span>
@@ -148,13 +148,13 @@ export function SertifikatPiagamView() {
             </div>
           </div>
         ) : (
-          <div className="panel-box border-success/60 bg-space space-y-5 border-2 p-8 text-center shadow-[0_0_40px_rgba(0,255,102,0.25)]">
+          <div className="rounded-xl border border-border/40 bg-card/90 border-success/60 bg-background space-y-5 border-2 p-8 text-center shadow-[0_0_40px_rgba(0,255,102,0.25)]">
             <div className="bg-success/15 border-success/40 text-success inline-flex items-center gap-2 rounded-full border px-4 py-1 text-xs font-bold uppercase">
               <CheckCircle2 className="text-success h-4 w-4" />
               <span>SERTIFIKAT BERHASIL DITERBITKAN</span>
             </div>
 
-            <div className="bg-space border-success/30 tag-clip space-y-3 border p-6 text-left">
+            <div className="bg-background border-success/30 tag-clip space-y-3 border p-6 text-left">
               <span className="block text-[9px] text-primary">
                 {/* PREVIEW SERTIFIKAT: */}
               </span>
@@ -174,7 +174,7 @@ export function SertifikatPiagamView() {
             <div className="flex flex-wrap items-center justify-center gap-3">
               <button
                 onClick={handleDownloadPNG}
-                className="btn-primary btn-primary-green flex items-center gap-2 px-6 py-3 text-xs font-bold btn-clip"
+                className="btn-primary btn-primary-green flex items-center gap-2 px-6 py-3 text-xs font-bold "
               >
                 <Download className="text-success h-4 w-4" />
                 <span>[ 📥 DOWNLOAD SERTIFIKAT PNG HD ]</span>
@@ -182,7 +182,7 @@ export function SertifikatPiagamView() {
 
               <button
                 onClick={() => setIsPledged(false)}
-                className="btn-primary btn-primary-ghost px-4 py-3 text-xs font-bold btn-clip"
+                className="btn-primary btn-primary-ghost px-4 py-3 text-xs font-bold "
               >
                 <span>EDIT DATA</span>
               </button>

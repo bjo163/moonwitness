@@ -256,16 +256,16 @@ export function Sidebar({
   }
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-cyan-500/20 bg-black/80 backdrop-blur-xl">
+    <aside className="fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-border bg-card/95 backdrop-blur-xl">
       {/* Brand Header */}
-      <div className="flex h-20 items-center justify-between border-b border-cyber-purple/20 px-6">
+      <div className="flex h-20 items-center justify-between border-b border-border px-6">
         <div className="flex items-center gap-3">
-          <ShieldCheck className="h-8 w-8 text-cyber-purple drop-shadow-[0_0_10px_rgba(161,0,255,0.5)]" />
+          <ShieldCheck className="h-8 w-8 text-primary" />
           <div className="flex flex-col">
-            <span className="font-sans text-sm font-black tracking-widest text-cyber-purple">
+            <span className="font-sans text-sm font-bold tracking-wider text-foreground">
               {brandTitle}
             </span>
-            <span className="font-mono text-[9px] text-primary/60">
+            <span className="font-mono text-[9px] text-muted-foreground">
               {brandSubtitle}
             </span>
           </div>
@@ -274,9 +274,9 @@ export function Sidebar({
           <a
             href={deckUrl}
             title="Return to Public Deck"
-            className="rounded border border-primary/20 bg-primary/10 px-1.5 py-0.5 font-mono text-[9px] text-primary hover:bg-primary/20"
+            className="rounded-md border border-border bg-secondary px-2 py-0.5 font-mono text-[10px] text-foreground hover:bg-accent"
           >
-            DECK ↗
+            PORTAL ↗
           </a>
         )}
       </div>
@@ -284,7 +284,7 @@ export function Sidebar({
       {/* Navigation list */}
       <nav className="scrollbar-hide flex-1 overflow-y-auto">
         <div className="px-4 py-4">
-          <p className="mb-2 px-2 font-sans text-[10px] font-bold tracking-widest text-cyber-purple/70 uppercase">
+          <p className="mb-2 px-2 font-sans text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
             Modules
           </p>
           <ul className="space-y-0.5">
@@ -301,8 +301,8 @@ export function Sidebar({
                         onClick={() => toggleModule(mod.label)}
                         className={`flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 font-sans text-xs transition-colors ${
                           isModActive
-                            ? "bg-cyan-500/10 text-cyan-400"
-                            : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+                            ? "bg-primary/10 text-primary font-semibold"
+                            : "text-muted-foreground hover:bg-accent hover:text-foreground"
                         }`}
                       >
                         <span className="flex items-center gap-2">
@@ -318,7 +318,7 @@ export function Sidebar({
                         )}
                       </button>
                       {isExpanded && (
-                        <ul className="mt-0.5 ml-4 space-y-0.5 border-l border-cyan-500/10 pl-3">
+                        <ul className="mt-0.5 ml-4 space-y-0.5 border-l border-border pl-3">
                           {mod.subLinks?.map((sub) => {
                             const isActive =
                               pathname === sub.href ||
@@ -329,8 +329,8 @@ export function Sidebar({
                                   href={sub.href}
                                   className={`flex items-center gap-2 rounded-md px-2 py-1.5 font-sans text-xs transition-colors ${
                                     isActive
-                                      ? "bg-cyan-500/10 text-cyan-400"
-                                      : "text-slate-500 hover:bg-white/5 hover:text-slate-300"
+                                      ? "bg-primary/10 text-primary font-semibold"
+                                      : "text-muted-foreground hover:bg-accent hover:text-foreground"
                                   }`}
                                 >
                                   {getIcon(sub.icon)}
@@ -347,8 +347,8 @@ export function Sidebar({
                       href={mod.href}
                       className={`flex items-center gap-2 rounded-lg px-3 py-2 font-sans text-xs transition-colors ${
                         pathname === mod.href || pathname?.startsWith(mod.href)
-                          ? "bg-cyan-500/10 text-cyan-400"
-                          : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+                          ? "bg-primary/10 text-primary font-semibold"
+                          : "text-muted-foreground hover:bg-accent hover:text-foreground"
                       }`}
                     >
                       {getIcon(mod.icon)}
@@ -363,7 +363,7 @@ export function Sidebar({
 
         {/* Account section */}
         <div className="px-4 py-2">
-          <p className="mb-2 px-2 font-sans text-[10px] font-bold tracking-widest text-cyber-purple/70 uppercase">
+          <p className="mb-2 px-2 font-sans text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
             Account
           </p>
           <ul className="space-y-1">
@@ -382,8 +382,8 @@ export function Sidebar({
                     href={item.href}
                     className={`flex items-center gap-3 rounded-lg px-3 py-2 font-sans text-xs transition-colors ${
                       isActive
-                        ? "border border-cyber-purple/30 bg-cyber-purple/10 text-cyber-purple shadow-[0_0_15px_rgba(161,0,255,0.1)]"
-                        : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+                        ? "border border-border bg-accent text-foreground font-semibold"
+                        : "text-muted-foreground hover:bg-accent hover:text-foreground"
                     }`}
                   >
                     {getIcon(item.icon)}
@@ -397,37 +397,32 @@ export function Sidebar({
       </nav>
 
       {/* System Status Footer */}
-      <div className="mt-auto border-t border-cyan-500/20 bg-black/40 p-4">
-        <p className="mb-2 font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
+      <div className="mt-auto border-t border-border bg-muted/20 p-4">
+        <p className="mb-2 font-sans text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
           System Status
         </p>
         <div className="flex items-center gap-3">
-          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-cyan-500/30 bg-cyan-500/10">
-            <Target className="h-5 w-5 text-cyan-400 opacity-50" />
-            <div className="absolute inset-0 animate-[spin_4s_linear_infinite] rounded-full border border-cyan-400 border-t-transparent" />
-            <div className="absolute inset-1 animate-[spin_3s_linear_infinite_reverse] rounded-full border border-cyan-500/50 border-b-transparent" />
+          <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-background">
+            <Target className="h-4 w-4 text-emerald-500" />
           </div>
           <div className="flex flex-col">
-            <span className="font-sans text-xs font-semibold text-emerald-400">
+            <span className="font-sans text-xs font-semibold text-emerald-500">
               All Systems Operational
             </span>
-            <span className="font-mono text-[9px] text-slate-500">
-              Uptime: 134d 21h 43m
+            <span className="font-mono text-[9px] text-muted-foreground">
+              Uptime: 99.98%
             </span>
           </div>
         </div>
-        <button className="mt-3 flex w-full items-center justify-center gap-2 rounded-md border border-cyan-500/30 px-3 py-1.5 font-sans text-[10px] text-cyan-400 transition-colors hover:bg-cyan-500/10">
-          View System Health &rarr;
-        </button>
       </div>
 
-      <div className="border-t border-cyan-500/20 p-4">
+      <div className="border-t border-border p-4">
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 font-sans text-xs text-red-400 transition-colors hover:bg-red-500/10 hover:text-red-300"
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 font-sans text-xs text-destructive transition-colors hover:bg-destructive/10"
         >
           <LogOut className="h-4 w-4" />
-          Disconnect
+          Sign Out
         </button>
       </div>
     </aside>

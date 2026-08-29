@@ -284,9 +284,9 @@ const TIER_CONFIG: Record<
   HUMAN: {
     label: "HUMAN",
     icon: <User className="h-3 w-3" />,
-    color: "text-cyber-cyan",
-    border: "border-cyber-cyan/30",
-    bg: "bg-cyber-cyan/5",
+    color: "text-primary",
+    border: "border-primary/30",
+    bg: "bg-primary/5",
     align: "items-start",
   },
 }
@@ -357,7 +357,7 @@ function WhisperBubble({
 
       {/* Bubble */}
       <div
-        className={`clip-card relative max-w-[85%] border px-3 py-2 ${cfg.border} ${cfg.bg} `}
+        className={`rounded-xl relative max-w-[85%] border px-3 py-2 ${cfg.border} ${cfg.bg} `}
       >
         <p className={`font-mono text-xs ${cfg.color} leading-relaxed`}>
           {whisper.content}
@@ -458,7 +458,7 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
           <MessageCircle className="h-3.5 w-3.5" />
           WHISPER CHANNEL
           {activeCount > 0 && (
-            <span className="clip-tag border border-yellow-400/30 px-1.5 py-0.5 text-[8px] text-yellow-400">
+            <span className="rounded-md border border-yellow-400/30 px-1.5 py-0.5 text-[8px] text-yellow-400">
               {activeCount}
             </span>
           )}

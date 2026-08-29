@@ -161,7 +161,7 @@ export function ScripturesView() {
       width: "180px",
       render: (v) => (
         <div className="space-y-1">
-          <Badge variant="secondary" className="border border-cyber-cyan/40 bg-cyber-cyan/20 text-xs font-bold text-cyber-cyan">
+          <Badge variant="secondary" className="border border-primary/40 bg-primary/10 text-xs font-semibold text-primary">
             Q.S {v.surahName} ({v.surahNumber}:{v.ayahNumber})
           </Badge>
           <span className="block text-[10px] text-muted-foreground">Diperbarui: {v.updatedAt}</span>
@@ -209,9 +209,9 @@ export function ScripturesView() {
           <Button
             onClick={handleSyncFromApi}
             disabled={syncingApi}
-            className="flex shrink-0 items-center gap-2 rounded-none border border-cyber-green/40 bg-cyber-green/20 px-4 py-2 font-mono text-xs font-bold text-cyber-green uppercase transition-all hover:bg-cyber-green/30"
+            className="flex shrink-0 items-center gap-2 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20"
           >
-            <span>{syncingApi ? "⏳ Memproses Sync..." : "🔄 [ SYNC DARI API KEMENAG ]"}</span>
+            <span>{syncingApi ? "Memproses Sync..." : "Sync Dari API Kemenag"}</span>
           </Button>
         </div>
 

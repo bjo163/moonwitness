@@ -12,7 +12,7 @@ import {
 export function MissionCommandWidget() {
   return (
     <div className="flex flex-col gap-4 lg:col-span-4">
-      <div className="bg-space flex flex-1 flex-col rounded-xl border-2 border-primary/30 p-4 shadow-[0_0_20px_rgba(0,240,255,0.1)]">
+      <div className="bg-background flex flex-1 flex-col rounded-xl border-2 border-primary/30 p-4 shadow-[0_0_20px_rgba(0,240,255,0.1)]">
         <div className="mb-4 flex items-center justify-between">
           <div>
             <div className="text-[10px] font-black tracking-widest text-primary uppercase">
@@ -62,7 +62,7 @@ export function MissionCommandWidget() {
           ].map((m, i) => (
             <div
               key={i}
-              className="bg-space group flex h-full cursor-pointer flex-col items-center justify-center rounded border border-white/5 p-2 text-center transition-colors hover:bg-white/10"
+              className="bg-background group flex h-full cursor-pointer flex-col items-center justify-center rounded border border-white/5 p-2 text-center transition-colors hover:bg-white/10"
             >
               <m.icon className="mb-2 h-5 w-5" style={{ color: m.c }} />
               <div className="mb-1 text-[8px] leading-tight font-bold text-white">
@@ -76,7 +76,7 @@ export function MissionCommandWidget() {
         </div>
       </div>
 
-      <div className="bg-space flex items-center justify-between rounded-xl border border-white/10 p-3">
+      <div className="bg-background flex items-center justify-between rounded-xl border border-white/10 p-3">
         <div className="w-24 text-[9px] font-black tracking-widest text-primary uppercase">
           EXECUTIVE BRIEFING
         </div>

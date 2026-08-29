@@ -124,7 +124,7 @@ export function DailyTransmissionView() {
             {history.map((item) => (
               <div
                 key={`${item.sequenceNumber}-${item.dateStr}-${item.period.code}`}
-                className="bg-space/80 space-y-6 rounded-2xl border border-white/5 p-6 shadow-[0_10px_40px_rgba(0,0,0,0.5)] backdrop-blur-2xl transition-all hover:border-cyan-500/20 sm:p-8"
+                className="bg-background/80 space-y-6 rounded-2xl border border-white/5 p-6 shadow-[0_10px_40px_rgba(0,0,0,0.5)] backdrop-blur-2xl transition-all hover:border-cyan-500/20 sm:p-8"
               >
                 {/* Item Header */}
                 <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/5 pb-4">

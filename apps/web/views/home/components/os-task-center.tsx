@@ -50,7 +50,7 @@ export function OSTaskCenter() {
   return (
     <section
       id="tasks"
-      className="bg-space relative z-10 overflow-hidden border-b border-primary/30 py-20 font-mono text-foreground"
+      className="bg-background relative z-10 overflow-hidden border-b border-primary/30 py-20 font-mono text-foreground"
     >
       {/* ═══ LAYER 1: DEEP SPACE BACKGROUND ══════════════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
@@ -62,7 +62,7 @@ export function OSTaskCenter() {
         {/* ═══ TOP HEADER (Blueprint 16) ══════════════════════════════════════ */}
         <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-4 xl:flex-row xl:items-center">
           <div className="flex items-center gap-4">
-            <div className="bg-space inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)]">
               <span className="rounded-xs bg-cyan-500 px-1.5 py-0.5 font-black text-black">
                 16
               </span>
@@ -85,7 +85,7 @@ export function OSTaskCenter() {
           {/* LEFT COLUMN: Sidebar (Col 1-2) */}
           <div className="flex flex-col gap-4 xl:col-span-2">
             {/* Nav Menu */}
-            <div className="bg-space space-y-1 rounded-xl border border-white/10 p-2 text-[9px] font-bold tracking-widest text-primary uppercase">
+            <div className="bg-background space-y-1 rounded-xl border border-white/10 p-2 text-[9px] font-bold tracking-widest text-primary uppercase">
               <div className="flex cursor-pointer items-center justify-between rounded-r border-l-2 border-primary bg-primary/10 px-3 py-2.5 text-primary">
                 <span className="flex items-center gap-2">
                   <LayoutDashboard className="h-3.5 w-3.5" /> Overview
@@ -129,7 +129,7 @@ export function OSTaskCenter() {
             </div>
 
             {/* Quick Create */}
-            <div className="bg-space rounded-xl border border-white/10 p-3">
+            <div className="bg-background rounded-xl border border-white/10 p-3">
               <div className="mb-3 text-[9px] font-black tracking-widest text-primary uppercase">
                 QUICK CREATE
               </div>
@@ -137,20 +137,20 @@ export function OSTaskCenter() {
                 <button className="flex items-center justify-center gap-1.5 rounded border border-primary/30 bg-primary/10 p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-primary/20">
                   <Plus className="h-3 w-3" /> New Task
                 </button>
-                <button className="bg-space flex items-center justify-center gap-1.5 rounded border border-white/10 p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-white/10 hover:text-white">
+                <button className="bg-background flex items-center justify-center gap-1.5 rounded border border-white/10 p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-white/10 hover:text-white">
                   <Upload className="h-3 w-3" /> Import Tasks
                 </button>
-                <button className="bg-space flex items-center justify-center gap-1.5 rounded border border-white/10 p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-white/10 hover:text-white">
+                <button className="bg-background flex items-center justify-center gap-1.5 rounded border border-white/10 p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-white/10 hover:text-white">
                   <Repeat className="h-3 w-3" /> Recurring Task
                 </button>
-                <button className="bg-space flex items-center justify-center gap-1.5 rounded border border-white/10 p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-white/10 hover:text-white">
+                <button className="bg-background flex items-center justify-center gap-1.5 rounded border border-white/10 p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-white/10 hover:text-white">
                   <FileCode2 className="h-3 w-3" /> Task Template
                 </button>
               </div>
             </div>
 
             {/* AI Task Assistant */}
-            <div className="bg-space group relative overflow-hidden rounded-xl border-2 border-primary/30 p-4 shadow-[0_0_20px_rgba(0,240,255,0.1)]">
+            <div className="bg-background group relative overflow-hidden rounded-xl border-2 border-primary/30 p-4 shadow-[0_0_20px_rgba(0,240,255,0.1)]">
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/20 to-transparent opacity-50 transition-opacity group-hover:opacity-100" />
 
               <div className="relative z-10 mb-3 flex items-center justify-between">
@@ -163,7 +163,7 @@ export function OSTaskCenter() {
               </div>
 
               <div className="relative z-10 flex gap-3">
-                <div className="bg-space h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-primary/50">
+                <div className="bg-background h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-primary/50">
                   <img
                     alt="Media"
                     src="/assets/mod_khidra.png"
@@ -186,7 +186,7 @@ export function OSTaskCenter() {
             </div>
 
             {/* Task Insights */}
-            <div className="bg-space rounded-xl border border-white/10 p-4">
+            <div className="bg-background rounded-xl border border-white/10 p-4">
               <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                 TASK INSIGHTS
               </div>
@@ -194,7 +194,7 @@ export function OSTaskCenter() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="bg-space rounded border border-white/10 p-1.5">
+                    <div className="bg-background rounded border border-white/10 p-1.5">
                       <Target className="h-3.5 w-3.5 text-blue-400" />
                     </div>
                     <div>
@@ -216,7 +216,7 @@ export function OSTaskCenter() {
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="bg-space rounded border border-white/10 p-1.5">
+                    <div className="bg-background rounded border border-white/10 p-1.5">
                       <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
                     </div>
                     <div>
@@ -266,22 +266,22 @@ export function OSTaskCenter() {
           {/* CENTER COLUMN: Main Workspace (Col 3-9) */}
           <div className="flex flex-col gap-4 xl:col-span-7">
             {/* Task Overview Stats */}
-            <div className="bg-space rounded-xl border border-white/10 p-4">
+            <div className="bg-background rounded-xl border border-white/10 p-4">
               <div className="mb-4 flex items-center justify-between">
                 <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-primary uppercase">
                   <CheckSquare className="h-4 w-4" /> TASK OVERVIEW
                 </div>
                 <div className="flex gap-2">
-                  <button className="bg-space flex items-center gap-1 rounded border border-white/10 px-2 py-1 text-[8px] text-primary transition-colors hover:bg-white/5">
+                  <button className="bg-background flex items-center gap-1 rounded border border-white/10 px-2 py-1 text-[8px] text-primary transition-colors hover:bg-white/5">
                     <Filter className="h-3 w-3" /> Filters ∨
                   </button>
-                  <button className="bg-space flex items-center gap-1 rounded border border-white/10 px-2 py-1 text-[8px] text-primary transition-colors hover:bg-white/5">
+                  <button className="bg-background flex items-center gap-1 rounded border border-white/10 px-2 py-1 text-[8px] text-primary transition-colors hover:bg-white/5">
                     Group by: <span className="text-primary">Status</span> ∨
                   </button>
-                  <button className="bg-space flex items-center gap-1 rounded border border-white/10 px-2 py-1 text-[8px] text-primary transition-colors hover:bg-white/5">
+                  <button className="bg-background flex items-center gap-1 rounded border border-white/10 px-2 py-1 text-[8px] text-primary transition-colors hover:bg-white/5">
                     Sort by: <span className="text-primary">Priority</span> ∨
                   </button>
-                  <div className="bg-space ml-2 flex overflow-hidden rounded border border-white/10">
+                  <div className="bg-background ml-2 flex overflow-hidden rounded border border-white/10">
                     <button className="bg-white/10 px-2 py-1 text-white">
                       <List className="h-3 w-3" />
                     </button>
@@ -293,7 +293,7 @@ export function OSTaskCenter() {
               </div>
 
               <div className="grid grid-cols-2 gap-3 lg:grid-cols-6">
-                <div className="bg-space col-span-2 flex flex-col items-center justify-center rounded border-b-2 border-cyan-500 p-3 text-center">
+                <div className="bg-background col-span-2 flex flex-col items-center justify-center rounded border-b-2 border-cyan-500 p-3 text-center">
                   <div className="mb-1 text-[8px] font-bold tracking-widest text-primary uppercase">
                     TOTAL TASKS
                   </div>
@@ -330,7 +330,7 @@ export function OSTaskCenter() {
                 ].map((st, i) => (
                   <div
                     key={i}
-                    className="bg-space flex flex-col items-center justify-center rounded border-b-2 p-3 text-center"
+                    className="bg-background flex flex-col items-center justify-center rounded border-b-2 p-3 text-center"
                     style={{ borderColor: st.c }}
                   >
                     <div
@@ -360,7 +360,7 @@ export function OSTaskCenter() {
             </div>
 
             {/* Task List Table */}
-            <div className="bg-space flex flex-1 flex-col rounded-xl border border-white/10 p-4">
+            <div className="bg-background flex flex-1 flex-col rounded-xl border border-white/10 p-4">
               {/* Tabs */}
               <div className="mb-4 flex gap-4 border-b border-white/10 px-2 text-[9px] font-bold tracking-widest text-primary uppercase">
                 <button className="border-b-2 border-primary py-2 text-primary">
@@ -541,7 +541,7 @@ export function OSTaskCenter() {
                       {row.date}
                     </div>
                     <div className="col-span-1 flex items-center gap-2">
-                      <div className="bg-space h-1 flex-1 overflow-hidden rounded-full">
+                      <div className="bg-background h-1 flex-1 overflow-hidden rounded-full">
                         <div
                           className="h-full rounded-full"
                           style={{
@@ -585,7 +585,7 @@ export function OSTaskCenter() {
                 </div>
                 <div className="flex items-center gap-2">
                   <span>Rows per page:</span>
-                  <button className="bg-space flex items-center gap-1 rounded border border-white/10 px-2 py-1 text-white">
+                  <button className="bg-background flex items-center gap-1 rounded border border-white/10 px-2 py-1 text-white">
                     10 <ChevronDown className="h-3 w-3" />
                   </button>
                 </div>
@@ -595,7 +595,7 @@ export function OSTaskCenter() {
             {/* Bottom Analytics Row */}
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
               {/* Task Priority Distribution */}
-              <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4">
+              <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4">
                 <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                   TASK PRIORITY DISTRIBUTION
                 </div>
@@ -655,7 +655,7 @@ export function OSTaskCenter() {
               </div>
 
               {/* Task Progress Trend */}
-              <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4">
+              <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4">
                 <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                   TASK PROGRESS TREND
                 </div>
@@ -746,7 +746,7 @@ export function OSTaskCenter() {
               </div>
 
               {/* Tasks by Project */}
-              <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4">
+              <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4">
                 <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                   TASKS BY PROJECT
                 </div>
@@ -763,7 +763,7 @@ export function OSTaskCenter() {
                       <div className="w-20 truncate text-white/80">
                         {proj.n}
                       </div>
-                      <div className="bg-space h-1 flex-1 overflow-hidden rounded-full">
+                      <div className="bg-background h-1 flex-1 overflow-hidden rounded-full">
                         <div
                           className="h-full rounded-full"
                           style={{ width: proj.p, backgroundColor: proj.c }}
@@ -786,7 +786,7 @@ export function OSTaskCenter() {
           {/* RIGHT COLUMN: Summary & Deadlines (Col 10-12) */}
           <div className="flex flex-col gap-4 xl:col-span-3">
             {/* My Tasks Summary */}
-            <div className="bg-space rounded-xl border border-white/10 p-4">
+            <div className="bg-background rounded-xl border border-white/10 p-4">
               <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                 MY TASKS SUMMARY
               </div>
@@ -851,7 +851,7 @@ export function OSTaskCenter() {
             </div>
 
             {/* Upcoming Deadlines */}
-            <div className="bg-space rounded-xl border border-white/10 p-4">
+            <div className="bg-background rounded-xl border border-white/10 p-4">
               <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                 UPCOMING DEADLINES
               </div>
@@ -883,7 +883,7 @@ export function OSTaskCenter() {
                   },
                 ].map((dl, i) => (
                   <div key={i} className="flex gap-3">
-                    <div className="bg-space flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10">
+                    <div className="bg-background flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10">
                       <dl.i className="h-3.5 w-3.5 text-primary" />
                     </div>
                     <div className="flex-1 border-b border-white/5 pb-2">
@@ -907,7 +907,7 @@ export function OSTaskCenter() {
             </div>
 
             {/* Team Workload */}
-            <div className="bg-space rounded-xl border border-white/10 p-4">
+            <div className="bg-background rounded-xl border border-white/10 p-4">
               <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                 TEAM WORKLOAD
               </div>
@@ -954,7 +954,7 @@ export function OSTaskCenter() {
                       <User className="h-3 w-3 text-primary" />
                     </div>
                     <div className="w-24 truncate text-white/80">{tm.n}</div>
-                    <div className="bg-space h-1 flex-1 overflow-hidden rounded-full">
+                    <div className="bg-background h-1 flex-1 overflow-hidden rounded-full">
                       <div
                         className="h-full rounded-full"
                         style={{ width: tm.w, backgroundColor: tm.c }}
@@ -978,7 +978,7 @@ export function OSTaskCenter() {
             </div>
 
             {/* AI Suggested Actions */}
-            <div className="bg-space relative flex flex-1 flex-col overflow-hidden rounded-xl border border-primary/20 p-4">
+            <div className="bg-background relative flex flex-1 flex-col overflow-hidden rounded-xl border border-primary/20 p-4">
               <div className="mb-3 text-[9px] font-black tracking-widest text-primary uppercase">
                 AI SUGGESTED ACTIONS
               </div>
@@ -1016,7 +1016,7 @@ export function OSTaskCenter() {
         </div>
 
         {/* ═══ LAYER 3: FOOTER GRAPHIC ════════════════════════════════════════ */}
-        <div className="bg-space relative mt-4 flex min-h-[150px] flex-1 flex-col items-center justify-center overflow-hidden rounded-xl border border-white/10 text-center">
+        <div className="bg-background relative mt-4 flex min-h-[150px] flex-1 flex-col items-center justify-center overflow-hidden rounded-xl border border-white/10 text-center">
           <div className="absolute inset-0 bg-[url('/assets/landscape-temp.jpg')] bg-cover bg-center opacity-20 mix-blend-screen" />
           <div className="from-space via-space/50 absolute inset-0 z-10 bg-gradient-to-t to-transparent" />
 

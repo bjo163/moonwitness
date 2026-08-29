@@ -115,7 +115,7 @@ export function LeafletMap({
               icon={issIcon}
               zIndexOffset={1000}
             >
-              <Popup className="bg-space border border-white/10 text-white">
+              <Popup className="bg-background border border-white/10 text-white">
                 <div className="text-xs">
                   <div className="font-bold tracking-widest text-primary">
                     INTERNATIONAL SPACE STATION
@@ -136,7 +136,7 @@ export function LeafletMap({
             position={[flight.latitude, flight.longitude]}
             icon={flightIcon(flight.true_track || 0)}
           >
-            <Popup className="bg-space border-warning font-mono text-foreground">
+            <Popup className="bg-background border-warning font-mono text-foreground">
               <div className="p-2">
                 <div className="text-warning border-warning/30 mb-1 border-b pb-1 font-bold">
                   CALLSIGN: {flight.callsign}
@@ -168,7 +168,7 @@ export function LeafletMap({
             />
             {/* Target marker */}
             <Marker position={attack.target} icon={cyberIcon}>
-              <Popup className="bg-space border-red-500 font-mono text-foreground">
+              <Popup className="bg-background border-red-500 font-mono text-foreground">
                 <div className="p-2">
                   <div className="mb-1 border-b border-red-500/30 pb-1 font-bold text-red-500">
                     THREAT: {attack.type}
@@ -193,7 +193,7 @@ export function LeafletMap({
             position={[ship.lat, ship.lng]}
             icon={shipIcon(ship.heading)}
           >
-            <Popup className="bg-space border-blue-500 font-mono text-foreground">
+            <Popup className="bg-background border-blue-500 font-mono text-foreground">
               <div className="p-2">
                 <div className="mb-1 border-b border-blue-500/30 pb-1 font-bold text-blue-400">
                   VESSEL: {ship.name}
@@ -217,7 +217,7 @@ export function LeafletMap({
           const [lng, lat] = eq.geometry.coordinates
           return (
             <Marker key={eq.id} position={[lat, lng]} icon={earthquakeIcon}>
-              <Popup className="bg-space border border-white/10 text-white">
+              <Popup className="bg-background border border-white/10 text-white">
                 <div className="text-xs">
                   <div className="font-bold text-red-400">
                     M {eq.properties.mag.toFixed(1)}

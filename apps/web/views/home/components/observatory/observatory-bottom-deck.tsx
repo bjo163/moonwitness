@@ -4,7 +4,7 @@ import { Moon, Clock, Compass, Sparkles, Radio, MapPin } from "lucide-react"
 
 export function ObservatoryBottomDeck() {
   return (
-    <div className="bg-space/40 grid grid-cols-1 items-center gap-6 rounded-xl border border-cyan-500/30 p-6 shadow-[0_0_40px_rgba(0,200,255,0.08)] backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/50 lg:grid-cols-12">
+    <div className="bg-background/40 grid grid-cols-1 items-center gap-6 rounded-xl border border-cyan-500/30 p-6 shadow-[0_0_40px_rgba(0,200,255,0.08)] backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/50 lg:grid-cols-12">
       {/* LEFT: QUICK ACCESS OBSERVATORY TOOLKIT (Col 1-5) */}
       <div className="space-y-3 lg:col-span-5">
         <div className="flex items-center gap-2 text-xs font-black tracking-wider text-white uppercase">
@@ -38,7 +38,7 @@ export function ObservatoryBottomDeck() {
             <Link
               key={i}
               href={btn.href}
-              className="bg-space/60 group hover:bg-space/80 flex cursor-pointer flex-col items-center justify-center gap-1.5 rounded border border-white/10 p-2.5 text-center transition-all hover:border-cyan-400/50"
+              className="bg-background/60 group hover:bg-background/80 flex cursor-pointer flex-col items-center justify-center gap-1.5 rounded border border-white/10 p-2.5 text-center transition-all hover:border-cyan-400/50"
             >
               <btn.icon className="h-4 w-4 text-primary transition-transform group-hover:scale-110" />
               <span className="text-[9px] font-bold text-white/90 group-hover:text-cyan-400">

@@ -27,9 +27,9 @@ export function MoonwitnessKnowledgeFramework() {
 
       <div className="relative z-10">
         {/* OUTER SCI-FI DIAGNOSTIC FRAME (From Image 3 perimeter casing) */}
-        <Panel className="bg-space/90 relative p-6 shadow-[0_0_50px_rgba(0,200,255,0.18)] backdrop-blur-xl transition-all duration-700 ease-out">
+        <Panel className="bg-background/90 relative p-6 shadow-[0_0_50px_rgba(0,200,255,0.18)] backdrop-blur-xl transition-all duration-700 ease-out">
           {/* Top Frame Telemetry Label */}
-          <div className="bg-space absolute -top-3 left-1/2 z-50 -translate-x-1/2 border border-primary/50 px-6 py-0.5 text-[10px] font-black tracking-[0.3em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.4)] btn-clip">
+          <div className="bg-background absolute -top-3 left-1/2 z-50 -translate-x-1/2 border border-primary/50 px-6 py-0.5 text-[10px] font-black tracking-[0.3em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.4)] ">
             ─── KNOWLEDGE CORE ───
           </div>
 
@@ -91,7 +91,7 @@ export function MoonwitnessKnowledgeFramework() {
             {/* 1. RED // HAQIQAH */}
             <Panel
               accentColor="danger"
-              className="group bg-space/80 flex min-h-[380px] flex-col justify-between p-7 backdrop-blur-xl"
+              className="group bg-background/80 flex min-h-[380px] flex-col justify-between p-7 backdrop-blur-xl"
             >
               <div>
                 <div className="border-danger/30 mb-4 flex items-center justify-between border-b pb-3.5">
@@ -134,7 +134,7 @@ export function MoonwitnessKnowledgeFramework() {
             {/* 2. GREEN // FALĀḤ */}
             <Panel
               accentColor="success"
-              className="group bg-space/80 flex min-h-[380px] flex-col justify-between p-7 backdrop-blur-xl"
+              className="group bg-background/80 flex min-h-[380px] flex-col justify-between p-7 backdrop-blur-xl"
             >
               <div>
                 <div className="mb-4 flex items-center justify-between border-b border-emerald-400/30 pb-3.5">
@@ -177,7 +177,7 @@ export function MoonwitnessKnowledgeFramework() {
             {/* 3. BLUE // ḤIKMAH */}
             <Panel
               accentColor="primary"
-              className="group bg-space/80 flex min-h-[380px] flex-col justify-between p-7 backdrop-blur-xl"
+              className="group bg-background/80 flex min-h-[380px] flex-col justify-between p-7 backdrop-blur-xl"
             >
               <div>
                 <div className="mb-4 flex items-center justify-between border-b border-primary/30 pb-3.5">
@@ -271,7 +271,7 @@ export function MoonwitnessKnowledgeFramework() {
           </div>
 
           {/* ═══ LAYER 3 & LAYER 4: THE INTEGRATION PATH DECK (From Image 3) ════ */}
-          <div className="bg-space mt-12 rounded-lg border border-cyan-500/40 p-7 font-mono text-xs shadow-inner">
+          <div className="bg-background mt-12 rounded-lg border border-cyan-500/40 p-7 font-mono text-xs shadow-inner">
             <div className="mb-6 flex items-center gap-3 border-b border-primary/30 pb-4">
               <Cpu className="h-5 w-5 animate-pulse text-primary" />
               <span className="text-sm font-black tracking-widest text-white uppercase drop-shadow-[0_0_10px_#00F0FF]">
@@ -284,7 +284,7 @@ export function MoonwitnessKnowledgeFramework() {
 
             {/* 4 Sequential Stage Flow (Image 3) */}
             <div className="grid grid-cols-1 items-center gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              <div className="bg-space border-danger/60 hover:border-danger flex items-center justify-between rounded-md border p-4 shadow-inner transition-all">
+              <div className="bg-background border-danger/60 hover:border-danger flex items-center justify-between rounded-md border p-4 shadow-inner transition-all">
                 <div className="flex items-center gap-3.5">
                   <div className="bg-danger/20 border-danger text-danger shrink-0 rounded-full border p-2.5 shadow-[0_0_10px_#FF3355]">
                     <BookOpen className="h-5 w-5" />
@@ -303,7 +303,7 @@ export function MoonwitnessKnowledgeFramework() {
                 </span>
               </div>
 
-              <div className="bg-space flex items-center justify-between rounded-md border border-emerald-400/60 p-4 shadow-inner transition-all hover:border-emerald-400">
+              <div className="bg-background flex items-center justify-between rounded-md border border-emerald-400/60 p-4 shadow-inner transition-all hover:border-emerald-400">
                 <div className="flex items-center gap-3.5">
                   <div className="shrink-0 rounded-full border border-emerald-400 bg-emerald-500/20 p-2.5 text-emerald-400 shadow-[0_0_10px_#10B981]">
                     <Orbit className="h-5 w-5" />
@@ -322,7 +322,7 @@ export function MoonwitnessKnowledgeFramework() {
                 </span>
               </div>
 
-              <div className="bg-space flex items-center justify-between rounded-md border border-primary/60 p-4 shadow-inner transition-all hover:border-primary">
+              <div className="bg-background flex items-center justify-between rounded-md border border-primary/60 p-4 shadow-inner transition-all hover:border-primary">
                 <div className="flex items-center gap-3.5">
                   <div className="shrink-0 rounded-full border border-primary bg-cyan-500/20 p-2.5 text-primary shadow-[0_0_10px_#00F0FF]">
                     <Brain className="h-5 w-5" />

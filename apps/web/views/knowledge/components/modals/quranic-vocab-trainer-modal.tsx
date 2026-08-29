@@ -90,7 +90,7 @@ export function QuranicVocabTrainerModal() {
           {/* Flashcard Component */}
           <div
             onClick={() => setIsFlipped(!isFlipped)}
-            className="bg-space tag-clip flex min-h-48 w-full cursor-pointer flex-col items-center justify-center space-y-3 border-2 border-primary/50 p-8 transition-all hover:border-primary"
+            className="bg-background tag-clip flex min-h-48 w-full cursor-pointer flex-col items-center justify-center space-y-3 border-2 border-primary/50 p-8 transition-all hover:border-primary"
           >
             {!isFlipped ? (
               <>
@@ -103,7 +103,7 @@ export function QuranicVocabTrainerModal() {
               </>
             ) : (
               <>
-                <span className="font-display text-xl font-bold text-accent">
+                <span className="font-sans text-xl font-bold text-accent">
                   {currentCard.transliteration}
                 </span>
                 <p className="text-sm font-bold text-foreground">
@@ -118,7 +118,7 @@ export function QuranicVocabTrainerModal() {
 
           <button
             onClick={nextCard}
-            className="btn-primary flex items-center gap-2 border-primary px-6 py-2.5 text-xs font-bold text-primary btn-clip hover:bg-primary/10"
+            className="btn-primary flex items-center gap-2 border-primary px-6 py-2.5 text-xs font-bold text-primary  hover:bg-primary/10"
           >
             <RefreshCw className="h-4 w-4 text-primary" />
             <span>[ KARTU BERIKUTNYA ]</span>

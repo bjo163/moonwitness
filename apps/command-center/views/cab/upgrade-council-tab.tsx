@@ -15,7 +15,7 @@ export function StatusBadge({ status }: { status: UpgradeStatus }) {
   const cfg = STATUS_CONFIG[status]
   return (
     <span
-      className={`clip-tag border px-2 py-0.5 font-mono text-[9px] font-bold tracking-widest uppercase ${cfg.color}`}
+      className={`rounded-md border px-2 py-0.5 font-mono text-[9px] font-bold tracking-widest uppercase ${cfg.color}`}
     >
       {cfg.label}
     </span>
@@ -37,7 +37,7 @@ export function ScriptureTagBadge({ tag }: { tag: ScriptureTag }) {
   }
   return (
     <span
-      className={`clip-tag border px-1.5 py-0.5 font-mono text-[8px] font-black tracking-widest ${colors[tag]}`}
+      className={`rounded-md border px-1.5 py-0.5 font-mono text-[8px] font-black tracking-widest ${colors[tag]}`}
     >
       [{labels[tag]}]
     </span>
@@ -49,7 +49,7 @@ export function UpgradeCouncilTab() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="clip-card border border-yellow-400/20 bg-black/40 p-4">
+      <div className="rounded-xl border border-yellow-400/20 bg-black/40 p-4">
         <p className="font-mono text-[10px] tracking-widest text-yellow-400/60 uppercase">
           ◈ Upgrade Universe Operation
         </p>
@@ -69,7 +69,7 @@ export function UpgradeCouncilTab() {
         return (
           <div
             key={req.id}
-            className={`clip-card border bg-black/50 transition-all duration-300 ${
+            className={`rounded-xl border bg-black/50 transition-all duration-300 ${
               isOpen
                 ? "border-yellow-400/40 shadow-[0_0_20px_rgba(255,230,0,0.08)]"
                 : "border-white/10"
@@ -146,7 +146,7 @@ export function UpgradeCouncilTab() {
                         {req.endGoalAlignment}
                       </p>
                     </div>
-                    <div className="clip-card border border-yellow-400/20 bg-yellow-400/5 p-3">
+                    <div className="rounded-xl border border-yellow-400/20 bg-yellow-400/5 p-3">
                       <p className="mb-1 font-mono text-[9px] tracking-widest text-yellow-400/60 uppercase">
                         ◈ Bridge Decision
                       </p>
@@ -168,7 +168,7 @@ export function UpgradeCouncilTab() {
                         className="flex flex-col items-center gap-1"
                       >
                         <div
-                          className={`clip-tag flex h-7 w-7 shrink-0 items-center justify-center rounded-none border ${
+                          className={`rounded-md flex h-7 w-7 shrink-0 items-center justify-center rounded-none border ${
                             inRange ? lvl.border : "border-white/5"
                           }`}
                         >

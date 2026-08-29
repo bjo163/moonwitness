@@ -127,10 +127,10 @@ export function CosmicKanbanBoard({
     const isCritical = priorityVal === "critical" || priorityVal === "urgent" || priorityVal === "high"
     return (
       <span
-        className={`px-1.5 py-0.5 text-[9px] font-mono uppercase rounded border ${
+        className={`px-1.5 py-0.5 text-[9px] font-medium uppercase rounded border ${
           isCritical
-            ? "bg-cyber-pink/10 text-cyber-pink border-cyber-pink/40"
-            : "bg-cyber-cyan/10 text-cyber-cyan border-cyber-cyan/30"
+            ? "bg-destructive/10 text-destructive border-destructive/30"
+            : "bg-primary/10 text-primary border-primary/30"
         }`}
       >
         {priorityVal}
@@ -140,8 +140,8 @@ export function CosmicKanbanBoard({
 
   if (loading) {
     return (
-      <div className="py-16 text-center text-steel-gray font-mono text-xs">
-        INITIALIZING COSMIC PIPELINE GRID...
+      <div className="py-16 text-center text-muted-foreground font-sans text-xs">
+        Loading pipeline stages...
       </div>
     )
   }
@@ -158,26 +158,26 @@ export function CosmicKanbanBoard({
             onDragOver={(e) => handleDragOver(e, col.key)}
             onDragLeave={(e) => handleDragLeave(e, col.key)}
             onDrop={(e) => handleDrop(e, col.key)}
-            className={`w-80 flex-shrink-0 bg-cyber-dark/80 border rounded-lg flex flex-col max-h-[75vh] corner-box transition-all ${
+            className={`w-80 flex-shrink-0 bg-card/90 border rounded-xl flex flex-col max-h-[75vh] shadow-sm transition-all ${
               isTarget
-                ? "border-cyber-cyan bg-cyber-cyan/10 shadow-[0_0_20px_rgba(0,240,255,0.25)]"
-                : "border-cyber-cyan/20"
+                ? "border-primary bg-primary/5 shadow-md"
+                : "border-border/50"
             }`}
           >
             {/* Column Header */}
-            <div className="flex items-center justify-between px-3.5 py-3 border-b border-cyber-cyan/20 bg-cyber-panel/80">
+            <div className="flex items-center justify-between px-3.5 py-3 border-b border-border/40 bg-muted/30">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold font-mono text-white tracking-wider uppercase">
+                <span className="text-xs font-bold text-foreground tracking-wide uppercase">
                   {col.label}
                 </span>
-                <span className="px-1.5 py-0.2 text-[10px] font-mono text-cyber-cyan bg-cyber-cyan/10 border border-cyber-cyan/20 rounded-full">
+                <span className="px-2 py-0.5 text-[10px] font-semibold text-primary bg-primary/10 border border-primary/20 rounded-full">
                   {items.length}
                 </span>
               </div>
               {onCreateInColumn && (
                 <button
                   onClick={() => onCreateInColumn(col.key)}
-                  className="p-1 text-steel-gray hover:text-cyber-cyan transition-colors"
+                  className="p-1 text-muted-foreground hover:text-foreground transition-colors"
                   title="Add Card"
                 >
                   <Plus className="w-3.5 h-3.5" />
@@ -188,8 +188,8 @@ export function CosmicKanbanBoard({
             {/* Column Cards List */}
             <div className="flex-1 overflow-y-auto p-3 space-y-2.5 min-h-[120px]">
               {items.length === 0 ? (
-                <div className="py-6 text-center text-[11px] text-steel-gray/40 font-mono">
-                  {isTarget ? "DROP CARD TO COMMUTE" : "STAGE VOID"}
+                <div className="py-6 text-center text-[11px] text-muted-foreground/60 font-sans">
+                  {isTarget ? "Drop record here" : "No records in stage"}
                 </div>
               ) : (
                 items.map((card) => {
@@ -205,37 +205,37 @@ export function CosmicKanbanBoard({
                       draggable={true}
                       onDragStart={(e) => handleDragStart(e, card)}
                       onClick={() => onCardClick?.(card)}
-                      className={`p-3 bg-cyber-panel/60 border rounded cursor-grab active:cursor-grabbing transition-all group relative select-none ${
+                      className={`p-3 bg-background/90 border rounded-lg cursor-grab active:cursor-grabbing transition-all group relative select-none shadow-sm ${
                         isDragging
-                          ? "opacity-40 border-dashed border-cyber-cyan"
-                          : "border-cyber-cyan/20 hover:border-cyber-cyan/60 hover:shadow-[0_0_12px_rgba(0,240,255,0.15)]"
+                          ? "opacity-40 border-dashed border-primary"
+                          : "border-border/50 hover:border-primary/60 hover:shadow-md"
                       }`}
                     >
                       <div className="flex items-center justify-between text-[10px] mb-1.5">
                         {priority && renderPriorityBadge(String(priority))}
                         {date && (
-                          <span className="flex items-center gap-1 text-steel-gray font-mono">
-                            <Clock className="w-3 h-3 text-cyber-cyan/70" />
+                          <span className="flex items-center gap-1 text-muted-foreground font-mono">
+                            <Clock className="w-3 h-3 text-primary/70" />
                             {String(date).slice(0, 10)}
                           </span>
                         )}
                       </div>
 
-                      <h4 className="text-xs font-semibold text-white font-mono group-hover:text-cyber-cyan transition-colors line-clamp-2">
+                      <h4 className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
                         {String(title)}
                       </h4>
 
                       {subtitle && (
-                        <p className="text-[10px] text-steel-gray font-mono truncate mt-0.5">
+                        <p className="text-[10px] text-muted-foreground truncate mt-0.5">
                           {typeof subtitle === "object" ? subtitle.name || subtitle.title : String(subtitle)}
                         </p>
                       )}
 
-                      <div className="flex items-center justify-between mt-2 pt-2 border-t border-cyber-cyan/10 text-[10px] text-steel-gray font-mono">
-                        <span className="text-cyber-cyan/60">#{card.id}</span>
+                      <div className="flex items-center justify-between mt-2 pt-2 border-t border-border/30 text-[10px] text-muted-foreground font-mono">
+                        <span className="text-primary/70">#{card.id}</span>
                         {card.assigneeId && (
                           <span className="flex items-center gap-1">
-                            <User className="w-3 h-3 text-cyber-cyan" />
+                            <User className="w-3 h-3 text-primary" />
                             {typeof card.assigneeId === "object" ? card.assigneeId.name : card.assigneeId}
                           </span>
                         )}

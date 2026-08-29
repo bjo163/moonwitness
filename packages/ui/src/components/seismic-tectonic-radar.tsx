@@ -162,7 +162,7 @@ export function SeismicTectonicRadar({
             className={`p-3 rounded-xl border text-left transition-all ${
               activeEvent.id === ev.id
                 ? "border-cyan-400 bg-cyan-950/30 text-white shadow-[0_0_20px_rgba(0,240,255,0.2)]"
-                : "border-white/10 bg-cyber-panel/80 text-zinc-400 hover:border-cyan-500/40"
+                : "border-white/10 bg-card/80 text-zinc-400 hover:border-cyan-500/40"
             }`}
           >
             <div className="flex items-center justify-between">

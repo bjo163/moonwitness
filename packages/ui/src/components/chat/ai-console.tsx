@@ -15,7 +15,7 @@ export function AIStreamTerminal({
 }) {
   const colorHex = THEME_TOKENS.colors[accentColor]
   return (
-    <div className="panel-box bg-space border border-primary/20 p-4 font-mono text-[10px] sm:text-xs">
+    <div className="panel-box bg-background border border-primary/20 p-4 font-mono text-[10px] sm:text-xs">
       <div className="mb-2 flex items-center justify-between border-b border-primary/20 pb-2">
         <div className="flex items-center gap-2 text-primary">
           <Terminal className="h-3 w-3" />

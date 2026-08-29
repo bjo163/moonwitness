@@ -1,61 +1,39 @@
 /**
  * ◈ MoonWitness OS — Design Token React Hooks
  * 
- * Type-safe React hooks for accessing design tokens in components.
- * Provides runtime validation and semantic token resolution.
+ * Standard React hooks for accessing design tokens in components.
  * 
  * @module @workspace/ui/hooks/use-design-tokens
  */
 
 import { useMemo } from 'react';
 import {
-  CyberColors,
-  CyberColorKey,
+  ThemeColors,
   SemanticColors,
   ClipPathClasses,
-  GlowClasses,
-  CornerClasses,
-  SemanticCorners,
-  LaserConduitClasses,
-  GridClasses,
   getSemanticColor,
-  getGlowShadow,
-  getChamferPath,
-  type GlowDepth,
   type ChamferSize,
 } from '../tokens/design-tokens';
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * useCyberColor — Get cyber color by key or semantic name
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+export type ColorType = 'theme' | 'semantic';
 
-export type ColorType = 'cyber' | 'semantic';
-
-export interface UseCyberColorOptions {
+export interface UseThemeColorOptions {
   type?: ColorType;
-  name: CyberColorKey | keyof typeof SemanticColors;
+  name: keyof typeof ThemeColors | keyof typeof SemanticColors;
 }
 
-/**
- * Hook to get a cyber color value
- * @example
- * const primaryColor = useCyberColor({ type: 'semantic', name: 'primary' });
- * const cyanColor = useCyberColor({ type: 'cyber', name: 'cyan' });
- */
-export function useCyberColor(options: UseCyberColorOptions): string {
-  const { type = 'cyber', name } = options;
+export function useThemeColor(options: UseThemeColorOptions): string {
+  const { type = 'semantic', name } = options;
 
   return useMemo(() => {
     if (type === 'semantic') {
       return getSemanticColor(name as keyof typeof SemanticColors);
     }
-    return CyberColors[name as CyberColorKey];
+    return ThemeColors[name as keyof typeof ThemeColors] || ThemeColors.primary;
   }, [type, name]);
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * useClipPath — Get clip-path CSS value for chamfered geometry
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+export const useCyberColor = useThemeColor;
 
 export interface UseClipPathOptions {
   variant: ChamferSize | 'rune';
@@ -67,99 +45,16 @@ export interface ClipPathResult {
   className?: string;
 }
 
-/**
- * Hook to get clip-path styles or className for chamfered corners
- * @example
- * const cardClip = useClipPath({ variant: 'card' });
- * const btnClipClass = useClipPath({ variant: 'button', className: true });
- */
 export function useClipPath(options: UseClipPathOptions): ClipPathResult {
   const { variant, className = false } = options;
 
   return useMemo(() => {
     if (className) {
-      return { className: ClipPathClasses[variant] };
+      return { className: ClipPathClasses[variant] || 'rounded-xl' };
     }
-    
-    const clipPathMap = {
-      card: getChamferPath(16),
-      hero: getChamferPath(28),
-      button: getChamferPath(10),
-      tag: getChamferPath(6),
-      rune: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)',
-    };
-    
-    return { clipPath: clipPathMap[variant] };
+    return { className: ClipPathClasses[variant] || 'rounded-xl' };
   }, [variant, className]);
 }
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * useGlow — Get glow box-shadow styles
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-export interface UseGlowOptions {
-  color: CyberColorKey;
-  depth?: GlowDepth;
-  className?: boolean;
-}
-
-export interface GlowResult {
-  boxShadow?: string;
-  className?: string;
-}
-
-/**
- * Hook to get glow box-shadow styles or className
- * @example
- * const cyanGlow = useGlow({ color: 'cyan', depth: 'active' });
- * const glowClass = useGlow({ color: 'cyan', className: true });
- */
-export function useGlow(options: UseGlowOptions): GlowResult {
-  const { color, depth = 'active', className = false } = options;
-
-  return useMemo(() => {
-    if (className) {
-      const classMap: Record<CyberColorKey, string | undefined> = {
-        cyan: GlowClasses.cyan,
-        green: GlowClasses.emerald,
-        yellow: GlowClasses.amber,
-        purple: GlowClasses.purple,
-        pink: GlowClasses.pink,
-        dark: undefined,
-        panel: undefined,
-      };
-      return { className: classMap[color] };
-    }
-    
-    return { boxShadow: getGlowShadow(color, depth) };
-  }, [color, depth, className]);
-}
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * useCornerAccents — Get corner accent indicator className
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-export interface UseCornerBracketsOptions {
-  variant: 'active' | 'success' | 'warning' | 'premium' | 'critical';
-}
-
-export type UseCornerAccentsOptions = UseCornerBracketsOptions;
-
-/**
- * Hook to get semantic corner accent className
- * @example
- * const activeCorner = useCornerAccents({ variant: 'active' }); // returns 'corner-cyan'
- */
-export function useCornerAccents(options: UseCornerAccentsOptions): string {
-  const { variant } = options;
-  return useMemo(() => SemanticCorners[variant], [variant]);
-}
-
-export const useCornerBrackets = useCornerAccents;
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * usePanelGlass — Get glassmorphism panel styles
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 export interface PanelGlassStyles {
   backgroundColor: string;
@@ -168,12 +63,6 @@ export interface PanelGlassStyles {
   boxShadow: string;
 }
 
-/**
- * Hook to get glassmorphism panel inline styles
- * @example
- * const glassStyles = usePanelGlass();
- * <div style={glassStyles}>...</div>
- */
 export function usePanelGlass(): PanelGlassStyles {
   return useMemo(
     () => ({
@@ -186,96 +75,13 @@ export function usePanelGlass(): PanelGlassStyles {
   );
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * useCosmicGrid — Get cosmic grid background className
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-export interface UseCosmicGridOptions {
-  variant: 'cosmic' | 'dense';
+export function useCornerAccents(): string {
+  return 'rounded-xl border border-border/40';
 }
-
-/**
- * Hook to get cosmic grid background className
- * @example
- * const gridClass = useCosmicGrid({ variant: 'cosmic' }); // returns 'bg-cosmic-grid'
- */
-export function useCosmicGrid(options: UseCosmicGridOptions): string {
-  const { variant } = options;
-  return useMemo(() => GridClasses[variant], [variant]);
+export const useCornerBrackets = useCornerAccents;
+export function useLaserConduit(): string {
+  return 'h-px w-full bg-border';
 }
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * useLaserConduit — Get laser conduit divider className
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-export interface UseLaserConduitOptions {
-  color: keyof typeof LaserConduitClasses;
-}
-
-/**
- * Hook to get laser conduit divider className
- * @example
- * const conduit = useLaserConduit({ color: 'cyan' }); // returns 'laser-conduit-cyan'
- */
-export function useLaserConduit(options: UseLaserConduitOptions): string {
-  const { color } = options;
-  return useMemo(() => LaserConduitClasses[color], [color]);
-}
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * useSemanticTokens — Comprehensive semantic token access
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-export type SemanticIntent = 'primary' | 'success' | 'warning' | 'premium' | 'danger';
-
-export interface SemanticTokens {
-  color: string;
-  glowClass: string;
-  cornerClass: string;
-  conduitClass: string;
-}
-
-/**
- * Comprehensive hook to get all semantic tokens for a given intent
- * @example
- * const primary = useSemanticTokens('primary');
- * // { color: '#00F0FF', glowClass: 'glow-cyan', cornerClass: 'corner-cyan', ... }
- */
-export function useSemanticTokens(intent: SemanticIntent): SemanticTokens {
-  return useMemo(() => {
-    const tokenMap: Record<SemanticIntent, SemanticTokens> = {
-      primary: {
-        color: CyberColors.cyan,
-        glowClass: GlowClasses.cyan,
-        cornerClass: CornerClasses.cyan,
-        conduitClass: LaserConduitClasses.cyan,
-      },
-      success: {
-        color: CyberColors.green,
-        glowClass: GlowClasses.emerald,
-        cornerClass: CornerClasses.green,
-        conduitClass: LaserConduitClasses.green,
-      },
-      warning: {
-        color: CyberColors.yellow,
-        glowClass: GlowClasses.amber,
-        cornerClass: CornerClasses.yellow,
-        conduitClass: LaserConduitClasses.yellow,
-      },
-      premium: {
-        color: CyberColors.purple,
-        glowClass: GlowClasses.purple,
-        cornerClass: CornerClasses.purple,
-        conduitClass: LaserConduitClasses.purple,
-      },
-      danger: {
-        color: CyberColors.pink,
-        glowClass: GlowClasses.pink,
-        cornerClass: CornerClasses.pink,
-        conduitClass: LaserConduitClasses.cyan, // fallback to cyan
-      },
-    };
-
-    return tokenMap[intent];
-  }, [intent]);
+export function useCosmicGrid(): string {
+  return '';
 }

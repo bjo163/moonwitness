@@ -58,7 +58,7 @@ export function IntelBriefingWidget() {
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
-          <div className="bg-space relative flex h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border-2 border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.15)]">
+          <div className="bg-background relative flex h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border-2 border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.15)]">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-white/10 bg-black/50 p-4">
               <div className="flex items-center gap-3">

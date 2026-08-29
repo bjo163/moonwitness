@@ -119,7 +119,7 @@ export function GlobalMonitoringView() {
   return (
     <section
       id="monitoring"
-      className="bg-space border-success/30 relative z-10 overflow-hidden border-b py-20 font-mono text-foreground"
+      className="bg-background border-success/30 relative z-10 overflow-hidden border-b py-20 font-mono text-foreground"
     >
       {/* ═══ LAYER 1: DEEP SPACE BACKGROUND ══════════════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
@@ -131,7 +131,7 @@ export function GlobalMonitoringView() {
         {/* ═══ TOP HEADER ═════════════════════════════════════════════════════ */}
         <div className="flex flex-col items-center justify-between gap-4 border-b border-white/10 pb-4 xl:flex-row">
           <div className="flex items-center gap-4">
-            <div className="bg-space inline-flex items-center gap-3 rounded-sm border-2 border-primary/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-primary/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)]">
               <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-black">
                 12
               </span>
@@ -197,7 +197,7 @@ export function GlobalMonitoringView() {
               className={`flex items-center gap-2 rounded-sm border px-4 py-2 text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${
                 activeCategory === cat.id
                   ? "border-primary bg-primary/20 text-primary shadow-[0_0_15px_rgba(0,240,255,0.2)]"
-                  : "bg-space border-white/10 text-white/50 hover:bg-white/5 hover:text-white"
+                  : "bg-background border-white/10 text-white/50 hover:bg-white/5 hover:text-white"
               }`}
             >
               <cat.icon
@@ -354,7 +354,7 @@ export function GlobalMonitoringView() {
                 DATA INTEGRITY <span className="text-success">100%</span>
               </span>
               {/* Progress bar */}
-              <div className="bg-space ml-2 flex h-1.5 w-20 gap-0.5">
+              <div className="bg-background ml-2 flex h-1.5 w-20 gap-0.5">
                 {[...Array(PROGRESS_SEGMENTS)].map((_, i) => (
                   <div key={i} className="bg-success h-full flex-1" />
                 ))}

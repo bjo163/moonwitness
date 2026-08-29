@@ -71,7 +71,7 @@ export function LiveWorldMapWidget({
   ships?: MaritimeShip[]
 }) {
   return (
-    <div className="bg-space relative flex flex-col overflow-hidden rounded-xl border-2 border-primary/20 p-4 lg:col-span-6 xl:col-span-5">
+    <div className="bg-background relative flex flex-col overflow-hidden rounded-xl border-2 border-primary/20 p-4 lg:col-span-6 xl:col-span-5">
       <div className="relative z-20 flex items-center justify-between">
         <div>
           <div className="mb-0.5 flex items-center gap-2 text-[10px] font-black tracking-widest text-white uppercase">

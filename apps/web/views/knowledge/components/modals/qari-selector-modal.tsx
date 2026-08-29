@@ -108,7 +108,7 @@ export function QariSelectorModal() {
                 className={`tag-clip flex w-full items-center justify-between border p-3.5 text-left transition-all ${
                   isSelected
                     ? "bg-success/15 border-success text-white shadow-[0_0_15px_rgba(0,255,102,0.2)]"
-                    : "bg-space hover:border-success/50 border-primary/20 text-muted hover:text-foreground"
+                    : "bg-background hover:border-success/50 border-primary/20 text-muted hover:text-foreground"
                 }`}
               >
                 <div className="space-y-1">

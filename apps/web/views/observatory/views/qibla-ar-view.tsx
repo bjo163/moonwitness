@@ -167,7 +167,7 @@ export function QiblaArView() {
         accentColor="success"
       />
 
-      <div className="panel-box bg-space relative space-y-6 overflow-hidden border-2 border-primary/50 p-8 text-center shadow-[0_0_50px_rgba(0,240,255,0.25)]">
+      <div className="rounded-xl border border-border/40 bg-card/90 bg-background relative space-y-6 overflow-hidden border-2 border-primary/50 p-8 text-center shadow-[0_0_50px_rgba(0,240,255,0.25)]">
         {/* Header Bar */}
         <div className="flex items-center justify-between border-b border-primary/20 pb-3 text-xs">
           <div className="flex items-center gap-2 font-bold text-primary">

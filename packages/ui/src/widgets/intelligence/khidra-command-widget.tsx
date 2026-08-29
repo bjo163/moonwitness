@@ -82,9 +82,9 @@ export function KhidraCommandWidget() {
   }
 
   return (
-    <div className="bg-space border-success/30 flex h-[300px] flex-col gap-4 rounded-xl border-2 p-4 shadow-[0_0_20px_rgba(0,255,102,0.1)] md:flex-row lg:col-span-5">
+    <div className="bg-background border-success/30 flex h-[300px] flex-col gap-4 rounded-xl border-2 p-4 shadow-[0_0_20px_rgba(0,255,102,0.1)] md:flex-row lg:col-span-5">
       <div className="flex w-24 shrink-0 flex-col items-center justify-center">
-        <div className="bg-space border-success/50 relative h-24 w-24 overflow-hidden rounded-lg border">
+        <div className="bg-background border-success/50 relative h-24 w-24 overflow-hidden rounded-lg border">
           <img
             alt="Khidra AI"
             src="/assets/mod_khidra.png"

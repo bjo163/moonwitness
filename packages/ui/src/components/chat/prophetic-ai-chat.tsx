@@ -154,8 +154,8 @@ export function PropheticAIChatTerminal({
     <div
       className={
         fullWorkspace
-          ? "bg-space flex h-full w-full flex-col overflow-hidden font-mono text-foreground"
-          : `panel-box bg-space/95 border-success/40 flex flex-col overflow-hidden border ${maxHeight}`
+          ? "bg-background flex h-full w-full flex-col overflow-hidden font-mono text-foreground"
+          : `panel-box bg-background/95 border-success/40 flex flex-col overflow-hidden border ${maxHeight}`
       }
     >
       {/* Header Compact */}
@@ -303,7 +303,7 @@ export function PropheticAIChatTerminal({
       </div>
 
       {/* Input Area */}
-      <div className="border-success/30 bg-space shrink-0 border-t p-2 sm:p-3">
+      <div className="border-success/30 bg-background shrink-0 border-t p-2 sm:p-3">
         <div className={fullWorkspace ? "mx-auto w-full max-w-4xl" : "w-full"}>
           <form onSubmit={handleSubmit} className="relative flex items-center">
             <input
@@ -315,7 +315,7 @@ export function PropheticAIChatTerminal({
                   ? "🎙️ Listening... Speak your inquiry now..."
                   : "Enter theological inquiry or Quranic topic..."
               }
-              className={`bg-space w-full rounded-sm py-2.5 pr-20 pl-3.5 font-mono text-xs text-foreground transition-all outline-none sm:py-3 sm:pr-24 sm:pl-4 sm:text-sm ${
+              className={`bg-background w-full rounded-sm py-2.5 pr-20 pl-3.5 font-mono text-xs text-foreground transition-all outline-none sm:py-3 sm:pr-24 sm:pl-4 sm:text-sm ${
                 isListening
                   ? "border-success placeholder:text-success border-2 font-bold shadow-[0_0_20px_rgba(0,255,102,0.4)]"
                   : "border-success/40 focus:border-success border placeholder:text-primary/50"

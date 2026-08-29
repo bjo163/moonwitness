@@ -130,7 +130,7 @@ export function AdhkarCommandView() {
       {/* Dzikir Counter Modal (Active State) */}
       {activeDzikir && (
         <div className="fixed inset-0 z-[100] flex animate-in items-center justify-center bg-black/80 p-2 backdrop-blur-md duration-300 fade-in zoom-in sm:p-4">
-          <div className="hide-scrollbar bg-space/95 relative max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-cyan-500/30 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)] sm:p-8">
+          <div className="hide-scrollbar bg-background/95 relative max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-cyan-500/30 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)] sm:p-8">
             <button
               onClick={() => {
                 setActiveDzikir(null)

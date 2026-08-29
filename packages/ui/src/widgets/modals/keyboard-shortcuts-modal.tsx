@@ -87,7 +87,7 @@ export function KeyboardShortcutsModal() {
         glowColor="rgba(0,240,255,0.3)"
       >
         <div className="space-y-3 p-6 text-xs">
-          <div className="bg-space tag-clip border border-primary/30 p-2.5 text-[10px] text-muted">
+          <div className="bg-background tag-clip border border-primary/30 p-2.5 text-[10px] text-muted">
             // SYSTEM HOTKEYS: PINDAH & KONTROL SISTEM SECARA CEPAT
           </div>
 
@@ -95,7 +95,7 @@ export function KeyboardShortcutsModal() {
             {SHORTCUTS_LIST.map((sc, idx) => (
               <div
                 key={idx}
-                className="panel-box bg-space tag-clip flex items-center justify-between gap-2 border border-primary/20 p-3"
+                className="panel-box bg-background tag-clip flex items-center justify-between gap-2 border border-primary/20 p-3"
               >
                 <div>
                   <span className="block text-[8px] font-bold text-muted">

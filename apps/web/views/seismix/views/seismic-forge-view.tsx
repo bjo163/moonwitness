@@ -286,7 +286,7 @@ function EventCard({ event }: { event: SeismicEvent }) {
 
   return (
     <div
-      className="panel-box bg-space/80 group border p-4 transition-all duration-300 hover:-translate-y-0.5"
+      className="rounded-xl border border-border/40 bg-card/90 bg-background/80 group border p-4 transition-all duration-300 hover:-translate-y-0.5"
       style={{
         borderColor: `${color}25`,
       }}
@@ -365,7 +365,7 @@ function PulseRing() {
           boxShadow: "0 0 30px rgba(255, 230, 0, 0.25)",
         }}
       >
-        <Activity className="h-6 w-6 text-cyber-yellow" />
+        <Activity className="h-6 w-6 text-amber-500" />
       </div>
     </div>
   )
@@ -511,7 +511,7 @@ export function SeismicForgeView() {
           />
           <button
             onClick={() => setIsMonitoring(!isMonitoring)}
-            className="flex items-center gap-2 border px-3 py-1.5 font-mono text-[10px] font-bold tracking-widest transition-all btn-clip"
+            className="flex items-center gap-2 border px-3 py-1.5 font-mono text-[10px] font-bold tracking-widest transition-all "
             style={{
               borderColor: isMonitoring
                 ? "rgba(0, 255, 102, 0.4)"
@@ -584,7 +584,7 @@ export function SeismicForgeView() {
           ].map((w) => (
             <div
               key={w.key}
-              className="panel-box border p-3 transition-all duration-300 hover:-translate-y-0.5"
+              className="rounded-xl border border-border/40 bg-card/90 border p-3 transition-all duration-300 hover:-translate-y-0.5"
               style={{
                 borderColor:
                   activeWave === w.key ? `${w.color}50` : "rgba(0,240,255,0.1)",

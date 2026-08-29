@@ -16,7 +16,7 @@ export function QuestWidget() {
   if (!mounted) return null
 
   return (
-    <div className="bg-space/60 rounded-2xl border border-amber-500/20 p-5 backdrop-blur-xl">
+    <div className="bg-background/60 rounded-2xl border border-amber-500/20 p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="font-sans text-xs font-bold tracking-wider text-amber-400 uppercase">
           Daily Quests

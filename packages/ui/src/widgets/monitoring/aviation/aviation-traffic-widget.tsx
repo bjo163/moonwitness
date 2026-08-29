@@ -13,7 +13,7 @@ export function AviationTrafficWidget({
     .slice(0, 10)
 
   return (
-    <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3 xl:col-span-2">
+    <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3 xl:col-span-2">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2 text-[9px] font-black tracking-widest text-primary uppercase">
           AVIATION NETWORK
@@ -40,7 +40,7 @@ export function AviationTrafficWidget({
               <div className="mt-0.5 w-6 font-mono text-[8px] text-primary">
                 {f.callsign}
               </div>
-              <div className="bg-space flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-white/10">
+              <div className="bg-background flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-white/10">
                 <Plane className="h-3 w-3 text-secondary group-hover:text-white" />
               </div>
               <div className="flex-1">

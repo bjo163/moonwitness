@@ -36,7 +36,7 @@ export function PanelHeader({
               <Icon className="h-3.5 w-3.5" style={{ color: colorHex }} />
             </div>
           ) : (
-            <span className="text-xs font-bold text-cyber-green">◉</span>
+            <span className="text-xs font-bold text-emerald-500">◉</span>
           )}
           <h3
             className="text-sm font-bold tracking-wide text-foreground uppercase sm:text-base"

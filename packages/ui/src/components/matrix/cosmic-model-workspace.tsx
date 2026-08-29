@@ -40,9 +40,9 @@ export function CosmicModelWorkspace({ model }: CosmicModelWorkspaceProps) {
   if (schemaLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-3">
-        <RefreshCw className="w-6 h-6 text-cyber-cyan animate-spin" />
-        <span className="text-xs font-mono text-steel-gray uppercase tracking-widest">
-          INTROSPECTING MODEL MATRIX [{model}]...
+        <RefreshCw className="w-6 h-6 text-primary animate-spin" />
+        <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider">
+          Loading model schema [{model}]...
         </span>
       </div>
     )
@@ -51,18 +51,18 @@ export function CosmicModelWorkspace({ model }: CosmicModelWorkspaceProps) {
   if (schemaError || !schema) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4 text-center">
-        <AlertCircle className="w-10 h-10 text-cyber-pink" />
+        <AlertCircle className="w-10 h-10 text-destructive" />
         <div className="space-y-1">
-          <h3 className="text-base font-bold text-white font-orbitron uppercase">MODEL MATRIX FAULT</h3>
-          <p className="text-xs font-mono text-steel-gray max-w-md">
+          <h3 className="text-base font-bold text-foreground uppercase">Model Schema Error</h3>
+          <p className="text-xs font-sans text-muted-foreground max-w-md">
             {schemaError?.message || `Model '${model}' failed to reflect schema from PostgreSQL ORM.`}
           </p>
         </div>
         <button
           onClick={() => refetchSchema()}
-          className="px-4 py-2 bg-cyber-cyan/20 border border-cyber-cyan rounded text-xs font-mono text-cyber-cyan hover:bg-cyber-cyan/30 uppercase"
+          className="px-4 py-2 bg-secondary text-secondary-foreground border border-border rounded-lg text-xs font-medium hover:bg-accent"
         >
-          RETRY INTROSPECTION
+          Retry
         </button>
       </div>
     )
@@ -87,7 +87,7 @@ export function CosmicModelWorkspace({ model }: CosmicModelWorkspaceProps) {
   }
 
   const handleDelete = async (rec: any) => {
-    if (confirm(`Authorize purge of unit #${rec.id} from ${schema.name}?`)) {
+    if (confirm(`Delete record #${rec.id} from ${schema.name}?`)) {
       await deleteRecord(rec.id)
     }
   }
@@ -97,75 +97,75 @@ export function CosmicModelWorkspace({ model }: CosmicModelWorkspaceProps) {
   return (
     <div className="space-y-6">
       {/* Workspace Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 bg-cyber-dark/80 border border-cyber-cyan/20 rounded-lg corner-box backdrop-blur-md">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 bg-card/90 border border-border/40 rounded-xl backdrop-blur-md shadow-sm">
         <div>
-          <div className="flex items-center gap-2 text-[10px] font-mono text-cyber-cyan tracking-widest uppercase">
-            <span>VERTEX MODEL</span>
-            <span>//</span>
+          <div className="flex items-center gap-2 text-[10px] font-mono text-primary tracking-wider uppercase">
+            <span>MODEL</span>
+            <span>•</span>
             <span>{schema.name}</span>
-            <span>//</span>
-            <span className="text-steel-gray">{records.length} UNITS</span>
+            <span>•</span>
+            <span className="text-muted-foreground">{records.length} records</span>
           </div>
-          <h1 className="text-2xl font-black text-white tracking-wide uppercase font-orbitron mt-0.5">
+          <h1 className="text-2xl font-bold text-foreground tracking-tight mt-0.5">
             {schema.views?.form?.title || schema.description || schema.name}
           </h1>
           {schema.description && (
-            <p className="text-xs font-mono text-steel-gray mt-0.5">{schema.description}</p>
+            <p className="text-xs text-muted-foreground mt-0.5">{schema.description}</p>
           )}
         </div>
 
         {/* View Switcher & Action */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center bg-black/60 border border-cyber-cyan/20 rounded p-0.5">
+          <div className="flex items-center bg-muted/40 border border-border/40 rounded-lg p-0.5">
             <button
               onClick={() => setActiveView("table")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono uppercase transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                 activeView === "table"
-                  ? "bg-cyber-cyan/20 text-cyber-cyan border border-cyber-cyan/40"
-                  : "text-steel-gray hover:text-white"
+                  ? "bg-card text-foreground shadow-sm font-semibold"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Table className="w-3.5 h-3.5" /> TABLE
+              <Table className="w-3.5 h-3.5" /> Table
             </button>
             {hasKanban && (
               <button
                 onClick={() => setActiveView("kanban")}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono uppercase transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                   activeView === "kanban"
-                    ? "bg-cyber-cyan/20 text-cyber-cyan border border-cyber-cyan/40"
-                    : "text-steel-gray hover:text-white"
+                    ? "bg-card text-foreground shadow-sm font-semibold"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <LayoutGrid className="w-3.5 h-3.5" /> KANBAN
+                <LayoutGrid className="w-3.5 h-3.5" /> Kanban
               </button>
             )}
             <button
               onClick={() => setActiveView("pivot" as any)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono uppercase transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                 activeView === ("pivot" as any)
-                  ? "bg-cyber-cyan/20 text-cyber-cyan border border-cyber-cyan/40"
-                  : "text-steel-gray hover:text-white"
+                  ? "bg-card text-foreground shadow-sm font-semibold"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Grid3X3 className="w-3.5 h-3.5" /> PIVOT
+              <Grid3X3 className="w-3.5 h-3.5" /> Pivot
             </button>
             <button
               onClick={() => setActiveView("timeline" as any)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono uppercase transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                 activeView === ("timeline" as any)
-                  ? "bg-cyber-cyan/20 text-cyber-cyan border border-cyber-cyan/40"
-                  : "text-steel-gray hover:text-white"
+                  ? "bg-card text-foreground shadow-sm font-semibold"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Calendar className="w-3.5 h-3.5" /> TIMELINE
+              <Calendar className="w-3.5 h-3.5" /> Timeline
             </button>
           </div>
 
           <button
             onClick={handleOpenCreate}
-            className="flex items-center gap-1.5 px-4 py-2 bg-cyber-cyan/20 border border-cyber-cyan rounded text-xs font-mono text-cyber-cyan hover:bg-cyber-cyan/30 uppercase tracking-wider transition-all shadow-[0_0_12px_rgba(0,240,255,0.2)]"
+            className="flex items-center gap-1.5 px-4 py-2 bg-primary text-primary-foreground font-semibold rounded-lg text-xs hover:bg-primary/90 transition-all shadow-sm"
           >
-            <Plus className="w-3.5 h-3.5" /> NEW ENTRY
+            <Plus className="w-3.5 h-3.5" /> New Record
           </button>
         </div>
       </div>

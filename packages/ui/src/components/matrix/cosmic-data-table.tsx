@@ -3,7 +3,6 @@
 import React, { useState, useMemo } from "react"
 import { Search, ChevronLeft, ChevronRight, Edit2, Trash2, Plus, Download, Printer, Upload } from "lucide-react"
 import type { ModelSchema } from "@workspace/types"
-import { printRecordBriefing } from "../../lib/report-printer"
 import { CosmicImportModal } from "./cosmic-import-modal"
 
 export interface CosmicDataTableProps {
@@ -80,7 +79,7 @@ export function CosmicDataTable({
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
-    a.download = `mw_${schema.name.replace(/\./g, "_")}_${new Date().toISOString().slice(0, 10)}.csv`
+    a.download = `${schema.name.replace(/\./g, "_")}_${new Date().toISOString().slice(0, 10)}.csv`
     a.click()
     URL.revokeObjectURL(url)
     setShowExportMenu(false)
@@ -92,7 +91,7 @@ export function CosmicDataTable({
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
-    a.download = `mw_${schema.name.replace(/\./g, "_")}_${new Date().toISOString().slice(0, 10)}.json`
+    a.download = `${schema.name.replace(/\./g, "_")}_${new Date().toISOString().slice(0, 10)}.json`
     a.click()
     URL.revokeObjectURL(url)
     setShowExportMenu(false)
@@ -101,13 +100,13 @@ export function CosmicDataTable({
   const renderCellValue = (record: any, key: string) => {
     const val = record[key]
     const def = schema.fields[key]
-    if (val === undefined || val === null) return <span className="text-steel-gray/40 font-mono">-</span>
+    if (val === undefined || val === null) return <span className="text-muted-foreground/40 font-mono">-</span>
 
     if (def?.type === "selection") {
       const match = def.selection?.find(([k]) => k === val)
       const label = match ? match[1] : String(val)
       return (
-        <span className="inline-block px-2 py-0.5 text-[10px] font-mono uppercase bg-cyber-cyan/10 text-cyber-cyan border border-cyber-cyan/30 rounded">
+        <span className="inline-block px-2 py-0.5 text-[10px] uppercase bg-primary/10 text-primary border border-primary/20 rounded-md font-semibold">
           {label}
         </span>
       )
@@ -115,41 +114,41 @@ export function CosmicDataTable({
 
     if (def?.type === "many2one") {
       if (typeof val === "object" && val !== null) {
-        return <span className="text-white font-mono">{val.name || val.title || `#${val.id}`}</span>
+        return <span className="text-foreground">{val.name || val.title || `#${val.id}`}</span>
       }
-      return <span className="text-steel-gray font-mono">#{val}</span>
+      return <span className="text-muted-foreground font-mono">#{val}</span>
     }
 
     if (def?.type === "boolean") {
       return val ? (
-        <span className="text-cyber-green text-xs font-mono">YES</span>
+        <span className="text-emerald-500 text-xs font-semibold">Yes</span>
       ) : (
-        <span className="text-steel-gray/60 text-xs font-mono">NO</span>
+        <span className="text-muted-foreground/60 text-xs">No</span>
       )
     }
 
     if (def?.type === "date" || def?.type === "datetime") {
-      return <span className="text-steel-gray text-[11px] font-mono">{String(val).slice(0, 10)}</span>
+      return <span className="text-muted-foreground text-[11px] font-mono">{String(val).slice(0, 10)}</span>
     }
 
-    return <span className="text-white text-xs font-mono truncate max-w-xs">{String(val)}</span>
+    return <span className="text-foreground text-xs truncate max-w-xs">{String(val)}</span>
   }
 
   return (
     <div className="space-y-4">
       {/* Top Bar: Search, Export & Action */}
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-2.5 w-4 h-4 text-steel-gray/60" />
+          <Search className="absolute left-3 top-2.5 w-4 h-4 text-muted-foreground" />
           <input
             type="text"
-            placeholder={`Filter ${schema.description || schema.name}...`}
+            placeholder={`Search ${schema.description || schema.name}...`}
             value={search}
             onChange={(e) => {
               setSearch(e.target.value)
               setPage(1)
             }}
-            className="w-full bg-cyber-dark/80 border border-cyber-cyan/20 rounded pl-9 pr-4 py-2 text-xs font-mono text-white placeholder-steel-gray/40 focus:border-cyber-cyan/60 focus:outline-none"
+            className="w-full bg-background border border-border rounded-lg pl-9 pr-4 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
           />
         </div>
         
@@ -158,32 +157,32 @@ export function CosmicDataTable({
           <div className="relative">
             <button
               onClick={() => setShowExportMenu((v) => !v)}
-              className="flex items-center gap-1.5 px-3 py-2 bg-black/60 border border-cyber-cyan/20 rounded text-xs font-mono text-steel-gray hover:text-white hover:border-cyber-cyan/40 uppercase transition-all"
+              className="flex items-center gap-1.5 px-3 py-2 bg-secondary border border-border rounded-lg text-xs font-medium text-secondary-foreground hover:bg-accent transition-all"
             >
-              <Download className="w-3.5 h-3.5" /> EXPORT
+              <Download className="w-3.5 h-3.5" /> Export
             </button>
             {showExportMenu && (
-              <div className="absolute right-0 mt-1 w-36 bg-cyber-panel border border-cyber-cyan/30 rounded shadow-xl z-20 overflow-hidden font-mono text-xs">
+              <div className="absolute right-0 mt-1 w-36 bg-card border border-border rounded-lg shadow-xl z-20 overflow-hidden font-sans text-xs">
                 <button
                   onClick={handleExportCsv}
-                  className="w-full px-3 py-2 text-left text-white hover:bg-cyber-cyan/10 hover:text-cyber-cyan uppercase transition-colors"
+                  className="w-full px-3 py-2 text-left text-foreground hover:bg-accent transition-colors"
                 >
-                  EXPORT CSV
+                  Export CSV
                 </button>
                 <button
                   onClick={handleExportJson}
-                  className="w-full px-3 py-2 text-left text-white hover:bg-cyber-cyan/10 hover:text-cyber-cyan uppercase transition-colors"
+                  className="w-full px-3 py-2 text-left text-foreground hover:bg-accent transition-colors"
                 >
-                  EXPORT JSON
+                  Export JSON
                 </button>
                 <button
                   onClick={() => {
                     setShowExportMenu(false)
                     window.print()
                   }}
-                  className="w-full px-3 py-2 text-left text-white hover:bg-cyber-cyan/10 hover:text-cyber-cyan uppercase transition-colors border-t border-cyber-cyan/10"
+                  className="w-full px-3 py-2 text-left text-foreground hover:bg-accent transition-colors border-t border-border"
                 >
-                  PRINT REPORT
+                  Print Report
                 </button>
               </div>
             )}
@@ -191,47 +190,47 @@ export function CosmicDataTable({
 
           <button
             onClick={() => setShowImportModal(true)}
-            className="flex items-center gap-1.5 px-3 py-2 bg-black/60 border border-cyber-cyan/20 rounded text-xs font-mono text-steel-gray hover:text-white hover:border-cyber-cyan/40 uppercase transition-all"
+            className="flex items-center gap-1.5 px-3 py-2 bg-secondary border border-border rounded-lg text-xs font-medium text-secondary-foreground hover:bg-accent transition-all"
           >
-            <Upload className="w-3.5 h-3.5" /> IMPORT CSV
+            <Upload className="w-3.5 h-3.5" /> Import CSV
           </button>
 
           {onCreateClick && (
             <button
               onClick={onCreateClick}
-              className="flex items-center gap-2 px-4 py-2 bg-cyber-cyan/20 border border-cyber-cyan rounded text-xs font-mono text-cyber-cyan hover:bg-cyber-cyan/30 uppercase tracking-wider transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground font-semibold rounded-lg text-xs hover:bg-primary/90 transition-all shadow-sm"
             >
-              <Plus className="w-3.5 h-3.5" /> NEW ENTRY
+              <Plus className="w-3.5 h-3.5" /> New Record
             </button>
           )}
         </div>
       </div>
 
       {/* Table Container */}
-      <div className="w-full overflow-x-auto border border-cyber-cyan/20 rounded-lg bg-cyber-dark/90 corner-box">
+      <div className="w-full overflow-x-auto border border-border/40 rounded-xl bg-card/90 shadow-sm">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-cyber-cyan/20 bg-cyber-panel/80 text-[10px] font-mono text-steel-gray uppercase tracking-widest">
+            <tr className="border-b border-border/40 bg-muted/40 text-[10px] font-sans font-semibold text-muted-foreground uppercase tracking-wider">
               <th className="py-3 px-4 w-12 text-center">ID</th>
               {columnKeys.map((k) => (
                 <th key={k} className="py-3 px-4">
                   {schema.fields[k]?.label || k}
                 </th>
               ))}
-              <th className="py-3 px-4 text-right w-24">ACTIONS</th>
+              <th className="py-3 px-4 text-right w-24">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-cyber-cyan/10">
+          <tbody className="divide-y divide-border/30 font-sans">
             {loading ? (
               <tr>
-                <td colSpan={columnKeys.length + 2} className="py-8 text-center text-steel-gray font-mono text-xs">
-                  SYNCHRONIZING ORM MATRIX...
+                <td colSpan={columnKeys.length + 2} className="py-8 text-center text-muted-foreground font-sans text-xs">
+                  Loading records...
                 </td>
               </tr>
             ) : paginatedRecords.length === 0 ? (
               <tr>
-                <td colSpan={columnKeys.length + 2} className="py-8 text-center text-steel-gray font-mono text-xs">
-                  NO RECORDS FOUND IN MATRIX
+                <td colSpan={columnKeys.length + 2} className="py-8 text-center text-muted-foreground font-sans text-xs">
+                  No records found
                 </td>
               </tr>
             ) : (
@@ -239,9 +238,9 @@ export function CosmicDataTable({
                 <tr
                   key={record.id}
                   onClick={() => onRowClick?.(record)}
-                  className="hover:bg-cyber-cyan/5 transition-colors cursor-pointer"
+                  className="hover:bg-muted/30 transition-colors cursor-pointer"
                 >
-                  <td className="py-2.5 px-4 text-center font-mono text-xs text-cyber-cyan/70">
+                  <td className="py-2.5 px-4 text-center font-mono text-xs text-primary/80">
                     #{record.id}
                   </td>
                   {columnKeys.map((k) => (
@@ -254,7 +253,7 @@ export function CosmicDataTable({
                       {onEdit && (
                         <button
                           onClick={() => onEdit(record)}
-                          className="p-1 text-steel-gray hover:text-cyber-cyan transition-colors"
+                          className="p-1 text-muted-foreground hover:text-foreground transition-colors"
                           title="Edit"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
@@ -263,7 +262,7 @@ export function CosmicDataTable({
                       {onDelete && (
                         <button
                           onClick={() => onDelete(record)}
-                          className="p-1 text-steel-gray hover:text-cyber-pink transition-colors"
+                          className="p-1 text-muted-foreground hover:text-destructive transition-colors"
                           title="Delete"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -279,25 +278,25 @@ export function CosmicDataTable({
       </div>
 
       {/* Pagination Footer */}
-      <div className="flex items-center justify-between text-xs font-mono text-steel-gray px-2">
+      <div className="flex items-center justify-between text-xs text-muted-foreground px-2">
         <span>
-          SHOWING {paginatedRecords.length} OF {filteredRecords.length} UNITS
+          Showing {paginatedRecords.length} of {filteredRecords.length} records
         </span>
         <div className="flex items-center gap-2">
           <button
             disabled={page <= 1}
             onClick={() => setPage((p) => p - 1)}
-            className="p-1.5 border border-cyber-cyan/20 rounded disabled:opacity-30 hover:bg-cyber-cyan/10 text-white"
+            className="p-1.5 border border-border rounded-lg disabled:opacity-30 hover:bg-accent text-foreground"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <span>
+          <span className="font-mono">
             {page} / {totalPages}
           </span>
           <button
             disabled={page >= totalPages}
             onClick={() => setPage((p) => p + 1)}
-            className="p-1.5 border border-cyber-cyan/20 rounded disabled:opacity-30 hover:bg-cyber-cyan/10 text-white"
+            className="p-1.5 border border-border rounded-lg disabled:opacity-30 hover:bg-accent text-foreground"
           >
             <ChevronRight className="w-4 h-4" />
           </button>

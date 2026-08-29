@@ -36,7 +36,7 @@ export function GraphAnalyticsWidget() {
   return (
     <div className="grid grid-cols-1 items-stretch gap-4 pt-2 md:grid-cols-2 lg:grid-cols-5">
       {/* Graph Statistics */}
-      <div className="bg-space flex flex-col justify-between rounded-xl border border-white/10 p-4">
+      <div className="bg-background flex flex-col justify-between rounded-xl border border-white/10 p-4">
         <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
           GRAPH STATISTICS
         </div>
@@ -85,7 +85,7 @@ export function GraphAnalyticsWidget() {
       </div>
 
       {/* Connection Strength */}
-      <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4">
+      <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4">
         <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
           CONNECTION STRENGTH
         </div>
@@ -150,7 +150,7 @@ export function GraphAnalyticsWidget() {
       </div>
 
       {/* Top Connected Entities */}
-      <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4">
+      <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4">
         <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
           TOP CONNECTED ENTITIES
         </div>
@@ -187,7 +187,7 @@ export function GraphAnalyticsWidget() {
       </div>
 
       {/* Connections Over Time */}
-      <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4">
+      <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4">
         <div className="mb-2 flex items-center justify-between">
           <div className="text-[9px] font-black tracking-widest text-primary uppercase">
             CONNECTIONS OVER TIME
@@ -259,7 +259,7 @@ export function GraphAnalyticsWidget() {
 
       {/* Discovery Insights & Knowledge Explorer */}
       <div className="flex flex-col gap-4">
-        <div className="bg-space flex flex-1 flex-col rounded-xl border border-white/10 p-3">
+        <div className="bg-background flex flex-1 flex-col rounded-xl border border-white/10 p-3">
           <div className="mb-2 text-[9px] font-black tracking-widest text-primary uppercase">
             DISCOVERY INSIGHTS
           </div>
@@ -291,7 +291,7 @@ export function GraphAnalyticsWidget() {
           </button>
         </div>
 
-        <div className="bg-space rounded-xl border border-primary/20 p-3">
+        <div className="bg-background rounded-xl border border-primary/20 p-3">
           <div className="mb-2 text-[9px] font-black tracking-widest text-primary uppercase">
             KNOWLEDGE EXPLORER
           </div>
@@ -300,7 +300,7 @@ export function GraphAnalyticsWidget() {
             <input
               type="text"
               placeholder="Search in graph..."
-              className="bg-space w-full rounded border border-white/10 py-1 pr-6 pl-6 text-[8px] text-white focus:outline-none"
+              className="bg-background w-full rounded border border-white/10 py-1 pr-6 pl-6 text-[8px] text-white focus:outline-none"
             />
             <div className="absolute top-1/2 right-1 -translate-y-1/2 px-1 text-[6px] text-primary">
               ⌘ K

@@ -161,7 +161,7 @@ export function CommandPalette({
   return (
     <div className="fixed inset-0 z-[99999] flex items-start justify-center bg-black/80 p-4 pt-20 backdrop-blur-md animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-cyan-500/40 bg-cyber-panel/95 font-mono shadow-[0_0_50px_rgba(0,240,255,0.25)]"
+        className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-cyan-500/40 bg-card/95 font-mono shadow-[0_0_50px_rgba(0,240,255,0.25)]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Header Bar */}

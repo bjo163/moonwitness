@@ -65,7 +65,7 @@ const getBriefingIcon = (iconName: string, colorClass: string) => {
 // Subcomponents
 function MissionCard({ missions }: { missions: Mission[] }) {
   return (
-    <div className="bg-space/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
+    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
           Today&apos;s Mission
@@ -104,7 +104,7 @@ function MissionCard({ missions }: { missions: Mission[] }) {
 
 function PrayerCard({ prayers }: { prayers: Prayer[] }) {
   return (
-    <div className="bg-space/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
+    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
           Today&apos;s Prayer
@@ -173,7 +173,7 @@ function AIBriefingCard({ briefings }: { briefings: Briefing[] }) {
   }
 
   return (
-    <div className="bg-space/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
+    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
       <div className="mb-4">
         <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
           AI Briefing
@@ -208,7 +208,7 @@ function AIBriefingCard({ briefings }: { briefings: Briefing[] }) {
 
 function MoonObservatoryCard({ moon }: { moon: MoonData }) {
   return (
-    <div className="bg-space/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
+    <div className="bg-background/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
           Moon Observatory

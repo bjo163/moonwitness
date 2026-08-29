@@ -63,7 +63,7 @@ export function ObservatoryTelemetry({ obs }: { obs: any }) {
         ].map((t, idx) => (
           <div
             key={idx}
-            className="bg-space/40 hover:bg-space/60 flex flex-col justify-between rounded-lg border border-cyan-500/20 p-3 text-center shadow-inner backdrop-blur-md transition-colors hover:border-cyan-400/50"
+            className="bg-background/40 hover:bg-background/60 flex flex-col justify-between rounded-lg border border-cyan-500/20 p-3 text-center shadow-inner backdrop-blur-md transition-colors hover:border-cyan-400/50"
           >
             <div className="text-[9px] font-black tracking-wider text-primary uppercase">
               {t.label}

@@ -51,39 +51,39 @@ export interface ResourceTableProps<T> {
 
 const COLOR_MAP = {
   cyan: {
-    border: "border-cyber-cyan/30 hover:border-cyber-cyan/60",
-    headerGlow: "via-cyber-cyan",
-    badge: "bg-cyber-cyan/10 text-cyber-cyan border-cyber-cyan/30",
-    searchRing: "focus:border-cyber-cyan/60 focus:ring-cyber-cyan/20",
-    btnEdit: "border-cyber-cyan/40 bg-cyber-cyan/10 text-cyber-cyan hover:bg-cyber-cyan/20",
+    border: "border-sky-500/30 hover:border-sky-500/60",
+    headerGlow: "via-sky-500",
+    badge: "bg-sky-500/10 text-sky-500 border-sky-500/30",
+    searchRing: "focus:border-sky-500/60 focus:ring-sky-500/20",
+    btnEdit: "border-sky-500/40 bg-sky-500/10 text-sky-500 hover:bg-sky-500/20",
   },
   green: {
-    border: "border-cyber-green/30 hover:border-cyber-green/60",
-    headerGlow: "via-cyber-green",
-    badge: "bg-cyber-green/10 text-cyber-green border-cyber-green/30",
-    searchRing: "focus:border-cyber-green/60 focus:ring-cyber-green/20",
-    btnEdit: "border-cyber-green/40 bg-cyber-green/10 text-cyber-green hover:bg-cyber-green/20",
+    border: "border-emerald-500/30 hover:border-emerald-500/60",
+    headerGlow: "via-emerald-500",
+    badge: "bg-emerald-500/10 text-emerald-500 border-emerald-500/30",
+    searchRing: "focus:border-emerald-500/60 focus:ring-emerald-500/20",
+    btnEdit: "border-emerald-500/40 bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20",
   },
   yellow: {
-    border: "border-cyber-yellow/30 hover:border-cyber-yellow/60",
-    headerGlow: "via-cyber-yellow",
-    badge: "bg-cyber-yellow/10 text-cyber-yellow border-cyber-yellow/30",
-    searchRing: "focus:border-cyber-yellow/60 focus:ring-cyber-yellow/20",
-    btnEdit: "border-cyber-yellow/40 bg-cyber-yellow/10 text-cyber-yellow hover:bg-cyber-yellow/20",
+    border: "border-amber-500/30 hover:border-amber-500/60",
+    headerGlow: "via-amber-500",
+    badge: "bg-amber-500/10 text-amber-500 border-amber-500/30",
+    searchRing: "focus:border-amber-500/60 focus:ring-amber-500/20",
+    btnEdit: "border-amber-500/40 bg-amber-500/10 text-amber-500 hover:bg-amber-500/20",
   },
   purple: {
-    border: "border-cyber-purple/30 hover:border-cyber-purple/60",
-    headerGlow: "via-cyber-purple",
-    badge: "bg-cyber-purple/10 text-cyber-purple border-cyber-purple/30",
-    searchRing: "focus:border-cyber-purple/60 focus:ring-cyber-purple/20",
-    btnEdit: "border-cyber-purple/40 bg-cyber-purple/10 text-cyber-purple hover:bg-cyber-purple/20",
+    border: "border-purple-500/30 hover:border-purple-500/60",
+    headerGlow: "via-purple-500",
+    badge: "bg-purple-500/10 text-purple-500 border-purple-500/30",
+    searchRing: "focus:border-purple-500/60 focus:ring-purple-500/20",
+    btnEdit: "border-purple-500/40 bg-purple-500/10 text-purple-500 hover:bg-purple-500/20",
   },
   pink: {
-    border: "border-cyber-pink/30 hover:border-cyber-pink/60",
-    headerGlow: "via-cyber-pink",
-    badge: "bg-cyber-pink/10 text-cyber-pink border-cyber-pink/30",
-    searchRing: "focus:border-cyber-pink/60 focus:ring-cyber-pink/20",
-    btnEdit: "border-cyber-pink/40 bg-cyber-pink/10 text-cyber-pink hover:bg-cyber-pink/20",
+    border: "border-rose-500/30 hover:border-rose-500/60",
+    headerGlow: "via-rose-500",
+    badge: "bg-rose-500/10 text-rose-500 border-rose-500/30",
+    searchRing: "focus:border-rose-500/60 focus:ring-rose-500/20",
+    btnEdit: "border-rose-500/40 bg-rose-500/10 text-rose-500 hover:bg-rose-500/20",
   },
 }
 
@@ -172,7 +172,7 @@ export function ResourceTable<T = any>({
                     setSearchQuery(e.target.value)
                     setCurrentPage(1)
                   }}
-                  className={`w-full rounded-lg border border-border/50 bg-background/60 py-1.5 pr-3 pl-8 text-xs text-foreground placeholder:text-muted-foreground transition-all focus:border-cyber-cyan focus:outline-none focus:ring-1 focus:ring-cyber-cyan`}
+                  className={`w-full rounded-lg border border-border/50 bg-background/60 py-1.5 pr-3 pl-8 text-xs text-foreground placeholder:text-muted-foreground transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20`}
                 />
               </div>
             )}

@@ -267,7 +267,7 @@ export function ConsoleView() {
   }
 
   return (
-    <div className="bg-space relative min-h-screen p-6 text-foreground selection:bg-primary/30 selection:text-foreground md:p-10">
+    <div className="bg-background relative min-h-screen p-6 text-foreground selection:bg-primary/30 selection:text-foreground md:p-10">
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-20">
         <div className="theme-grid-bg absolute inset-0" />
       </div>

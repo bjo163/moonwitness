@@ -157,7 +157,7 @@ export function TasbihView() {
                 className={`tag-clip border p-3 text-center transition-all ${
                   isSelected
                     ? "bg-success/20 border-success text-white shadow-[0_0_15px_rgba(0,255,102,0.3)]"
-                    : "bg-space border-primary/20 text-primary hover:text-white"
+                    : "bg-background border-primary/20 text-primary hover:text-white"
                 }`}
               >
                 <div className="text-success arabic-text text-sm font-bold">
@@ -170,7 +170,7 @@ export function TasbihView() {
         </div>
 
         {/* Main Interactive Counter HUD Console */}
-        <div className="panel-box border-success/50 bg-space/95 space-y-6 border p-8 text-center shadow-[0_0_40px_rgba(0,255,102,0.2)]">
+        <div className="rounded-xl border border-border/40 bg-card/90 border-success/50 bg-background/95 space-y-6 border p-8 text-center shadow-[0_0_40px_rgba(0,255,102,0.2)]">
           {/* Target Selector */}
           <div className="border-success/20 flex items-center justify-between border-b pb-4 text-xs font-bold">
             <div className="flex items-center gap-2 text-primary">
@@ -189,7 +189,7 @@ export function TasbihView() {
                   className={`tag-clip px-3 py-1 text-xs font-bold transition-all ${
                     targetCount === tVal
                       ? "bg-success font-black text-black"
-                      : "bg-space border-success/30 border text-primary"
+                      : "bg-background border-success/30 border text-primary"
                   }`}
                 >
                   {tVal}x
@@ -216,7 +216,7 @@ export function TasbihView() {
             onClick={handleIncrement}
             className="bg-success/10 border-success hover:bg-success/25 mx-auto flex h-48 w-48 cursor-pointer flex-col items-center justify-center space-y-1 rounded-full border-4 shadow-[0_0_30px_rgba(0,255,102,0.4)] transition-all select-none active:scale-95"
           >
-            <span className="text-success font-display text-5xl font-black">
+            <span className="text-success font-sans text-5xl font-black">
               {count}
             </span>
             <span className="text-[10px] font-bold tracking-widest text-primary uppercase">
@@ -233,7 +233,7 @@ export function TasbihView() {
 
             <button
               onClick={handleReset}
-              className="btn-primary btn-primary-ghost text-danger border-danger/30 hover:border-danger flex items-center gap-1.5 px-3 py-1.5 text-xs btn-clip"
+              className="btn-primary btn-primary-ghost text-danger border-danger/30 hover:border-danger flex items-center gap-1.5 px-3 py-1.5 text-xs "
             >
               <RotateCcw className="h-3.5 w-3.5" />
               <span>RESET COUNTER</span>

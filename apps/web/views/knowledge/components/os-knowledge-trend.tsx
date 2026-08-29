@@ -42,7 +42,7 @@ export function OSKnowledgeTrend() {
   return (
     <section
       id="trends"
-      className="bg-space relative z-10 overflow-hidden border-b border-blue-500/30 py-20 font-mono text-foreground"
+      className="bg-background relative z-10 overflow-hidden border-b border-blue-500/30 py-20 font-mono text-foreground"
     >
       {/* ═══ LAYER 1: DEEP SPACE BACKGROUND ══════════════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
@@ -54,7 +54,7 @@ export function OSKnowledgeTrend() {
         {/* ═══ TOP HEADER (Blueprint 13) ══════════════════════════════════════ */}
         <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-4 xl:flex-row xl:items-center">
           <div className="flex items-center gap-4">
-            <div className="bg-space inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)]">
               <span className="rounded-xs bg-cyan-500 px-1.5 py-0.5 font-black text-black">
                 13
               </span>
@@ -86,7 +86,7 @@ export function OSKnowledgeTrend() {
               <div className="mb-1 text-[8px] tracking-widest text-primary uppercase">
                 TREND TIME RANGE
               </div>
-              <div className="bg-space flex overflow-hidden rounded border border-white/10">
+              <div className="bg-background flex overflow-hidden rounded border border-white/10">
                 <button className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-white/5">
                   24H
                 </button>
@@ -159,7 +159,7 @@ export function OSKnowledgeTrend() {
               ].map((tr, i) => (
                 <div
                   key={i}
-                  className="bg-space group flex flex-col justify-between rounded-xl border border-white/10 p-3 shadow-[0_0_15px_rgba(0,0,0,0.5)] transition-colors hover:border-white/30"
+                  className="bg-background group flex flex-col justify-between rounded-xl border border-white/10 p-3 shadow-[0_0_15px_rgba(0,0,0,0.5)] transition-colors hover:border-white/30"
                 >
                   <div className="mb-2 flex items-center gap-2">
                     <tr.i className="h-3.5 w-3.5" style={{ color: tr.c }} />
@@ -194,7 +194,7 @@ export function OSKnowledgeTrend() {
             </div>
           </div>
 
-          <div className="bg-space flex flex-col justify-between rounded-xl border border-primary/30 p-3 lg:col-span-2">
+          <div className="bg-background flex flex-col justify-between rounded-xl border border-primary/30 p-3 lg:col-span-2">
             <div className="mb-2 text-[9px] font-black tracking-widest text-primary uppercase">
               OVERALL TREND SCORE
             </div>
@@ -250,7 +250,7 @@ export function OSKnowledgeTrend() {
         {/* ═══ LAYER 3: HEATMAP + TIMELINE + VERSES (Row 2) ═══════════════════ */}
         <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-12">
           {/* Knowledge Heatmap (Col 1-4) */}
-          <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-4">
+          <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-4">
             <div className="mb-4 flex items-center justify-between">
               <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                 KNOWLEDGE HEATMAP
@@ -260,7 +260,7 @@ export function OSKnowledgeTrend() {
               </div>
             </div>
 
-            <div className="bg-space relative mb-3 min-h-[150px] flex-1 overflow-hidden rounded-lg border border-white/5">
+            <div className="bg-background relative mb-3 min-h-[150px] flex-1 overflow-hidden rounded-lg border border-white/5">
               {/* Heatmap Graphic Simulation */}
               <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjMDAwIiBmaWxsLW9wYWNpdHk9IjAuMCIvPgo8Y2lyY2xlIGN4PSI0IiBjeT0iNCIgcj0iMC41IiBmaWxsPSIjMzBENDc0Ii8+Cjwvc3ZnPg==')] [mask-image:radial-gradient(ellipse_at_center,white,transparent_80%)] opacity-30" />
               {/* Glowing regions */}
@@ -274,7 +274,7 @@ export function OSKnowledgeTrend() {
               {/* North America */}
               <div className="absolute top-[30%] left-[45%] h-10 w-10 rounded-full bg-blue-500/20 blur-xl" />{" "}
               {/* Europe */}
-              <div className="bg-space/80 absolute bottom-2 left-2 rounded border border-white/10 p-1.5 backdrop-blur">
+              <div className="bg-background/80 absolute bottom-2 left-2 rounded border border-white/10 p-1.5 backdrop-blur">
                 <div className="mb-1 text-[6px] text-white uppercase">
                   INTENSITY
                 </div>
@@ -312,7 +312,7 @@ export function OSKnowledgeTrend() {
           </div>
 
           {/* Trending Timeline (Col 5-9) */}
-          <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-5">
+          <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-5">
             <div className="mb-2 flex items-center justify-between">
               <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                 TRENDING TIMELINE
@@ -437,7 +437,7 @@ export function OSKnowledgeTrend() {
           </div>
 
           {/* Popular Verses (Col 10-12) */}
-          <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3">
+          <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3">
             <div className="mb-4 flex items-center justify-between">
               <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                 POPULAR VERSES
@@ -482,7 +482,7 @@ export function OSKnowledgeTrend() {
               ].map((vrs, i) => (
                 <div key={i} className="flex items-center gap-3">
                   <div
-                    className="bg-space flex h-5 w-5 shrink-0 items-center justify-center rounded border text-[9px] font-black"
+                    className="bg-background flex h-5 w-5 shrink-0 items-center justify-center rounded border text-[9px] font-black"
                     style={{ borderColor: `${vrs.c}50`, color: vrs.c }}
                   >
                     {i + 1}
@@ -508,7 +508,7 @@ export function OSKnowledgeTrend() {
         {/* ═══ LAYER 4: MULTI-PANEL 5 COLUMNS (Row 3) ═════════════════════════ */}
         <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-3 lg:grid-cols-5">
           {/* Popular Questions */}
-          <div className="bg-space rounded-xl border border-white/10 p-4">
+          <div className="bg-background rounded-xl border border-white/10 p-4">
             <div className="mb-4 flex items-center justify-between">
               <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                 POPULAR QUESTIONS
@@ -544,7 +544,7 @@ export function OSKnowledgeTrend() {
           </div>
 
           {/* Popular Research */}
-          <div className="bg-space rounded-xl border border-white/10 p-4">
+          <div className="bg-background rounded-xl border border-white/10 p-4">
             <div className="mb-4 flex items-center justify-between">
               <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                 POPULAR RESEARCH
@@ -578,7 +578,7 @@ export function OSKnowledgeTrend() {
           </div>
 
           {/* Popular Astronomy Events */}
-          <div className="bg-space rounded-xl border border-white/10 p-4">
+          <div className="bg-background rounded-xl border border-white/10 p-4">
             <div className="mb-4 flex items-center justify-between">
               <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                 POPULAR ASTRONOMY EVENTS
@@ -623,7 +623,7 @@ export function OSKnowledgeTrend() {
                   className="group flex cursor-pointer items-center justify-between rounded p-1 text-[9px] transition-colors hover:bg-white/5"
                 >
                   <div className="flex items-center gap-2">
-                    <div className="bg-space flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/10">
+                    <div className="bg-background flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/10">
                       <ev.icon
                         className="h-3.5 w-3.5"
                         style={{ color: ev.clr }}
@@ -645,12 +645,12 @@ export function OSKnowledgeTrend() {
           </div>
 
           {/* Trending Topics Cloud */}
-          <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4">
+          <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4">
             <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
               TRENDING TOPICS CLOUD
             </div>
 
-            <div className="bg-space flex flex-1 flex-wrap items-center justify-center gap-2 rounded-lg border border-white/5 p-2">
+            <div className="bg-background flex flex-1 flex-wrap items-center justify-center gap-2 rounded-lg border border-white/5 p-2">
               <span className="text-3xl font-black text-primary">Moon</span>
               <span className="text-xl font-bold text-secondary">AI</span>
               <span className="text-success text-2xl font-black">
@@ -669,7 +669,7 @@ export function OSKnowledgeTrend() {
           </div>
 
           {/* Weekly Insights */}
-          <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4">
+          <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4">
             <div className="mb-4 flex items-center justify-between">
               <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                 WEEKLY INSIGHTS
@@ -707,7 +707,7 @@ export function OSKnowledgeTrend() {
         {/* ═══ LAYER 5: BOTTOM ROW ════════════════════════════════════════════ */}
         <div className="grid grid-cols-1 items-stretch gap-4 pt-2 md:grid-cols-2 lg:grid-cols-4">
           {/* Trend Prediction */}
-          <div className="bg-space relative flex flex-col justify-between overflow-hidden rounded-xl border border-white/10 p-4">
+          <div className="bg-background relative flex flex-col justify-between overflow-hidden rounded-xl border border-white/10 p-4">
             <div className="relative z-10 mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
               TREND PREDICTION
             </div>
@@ -741,8 +741,8 @@ export function OSKnowledgeTrend() {
           </div>
 
           {/* AI Insight by Khidra */}
-          <div className="bg-space flex items-center gap-4 rounded-xl border-2 border-emerald-500/30 p-4 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
-            <div className="bg-space relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-emerald-500/50">
+          <div className="bg-background flex items-center gap-4 rounded-xl border-2 border-emerald-500/30 p-4 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+            <div className="bg-background relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-emerald-500/50">
               <img
                 alt="Media"
                 src="/assets/mod_khidra.png"
@@ -765,7 +765,7 @@ export function OSKnowledgeTrend() {
           </div>
 
           {/* Trend Comparison */}
-          <div className="bg-space rounded-xl border border-white/10 p-4">
+          <div className="bg-background rounded-xl border border-white/10 p-4">
             <div className="mb-4 flex items-center justify-between">
               <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                 TREND COMPARISON
@@ -783,7 +783,7 @@ export function OSKnowledgeTrend() {
               ].map((cmp, i) => (
                 <div key={i} className="flex items-center gap-2 text-[8px]">
                   <div className="w-20 truncate text-white/80">{cmp.n}</div>
-                  <div className="bg-space h-1.5 flex-1 overflow-hidden rounded-full">
+                  <div className="bg-background h-1.5 flex-1 overflow-hidden rounded-full">
                     <div
                       className="h-full rounded-full"
                       style={{ width: `${cmp.p}%`, backgroundColor: cmp.c }}
@@ -801,7 +801,7 @@ export function OSKnowledgeTrend() {
           </div>
 
           {/* Export Data */}
-          <div className="bg-space flex flex-col justify-between rounded-xl border border-white/10 p-4">
+          <div className="bg-background flex flex-col justify-between rounded-xl border border-white/10 p-4">
             <div>
               <div className="mb-2 text-[9px] font-black tracking-widest text-primary uppercase">
                 EXPORT DATA
@@ -811,13 +811,13 @@ export function OSKnowledgeTrend() {
               </div>
             </div>
             <div className="space-y-2">
-              <button className="bg-space flex w-full items-center gap-2 rounded border border-white/5 px-3 py-1.5 text-left text-[9px] text-white transition-colors hover:bg-white/5">
+              <button className="bg-background flex w-full items-center gap-2 rounded border border-white/5 px-3 py-1.5 text-left text-[9px] text-white transition-colors hover:bg-white/5">
                 <Download className="h-3 w-3 text-primary" /> Export as PDF
               </button>
-              <button className="bg-space flex w-full items-center gap-2 rounded border border-white/5 px-3 py-1.5 text-left text-[9px] text-white transition-colors hover:bg-white/5">
+              <button className="bg-background flex w-full items-center gap-2 rounded border border-white/5 px-3 py-1.5 text-left text-[9px] text-white transition-colors hover:bg-white/5">
                 <Database className="h-3 w-3 text-emerald-400" /> Export as CSV
               </button>
-              <button className="bg-space flex w-full items-center gap-2 rounded border border-white/5 px-3 py-1.5 text-left text-[9px] text-white transition-colors hover:bg-white/5">
+              <button className="bg-background flex w-full items-center gap-2 rounded border border-white/5 px-3 py-1.5 text-left text-[9px] text-white transition-colors hover:bg-white/5">
                 <Share2 className="text-knowledge h-3 w-3" /> Share Insights
               </button>
             </div>

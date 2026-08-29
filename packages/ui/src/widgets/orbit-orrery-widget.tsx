@@ -51,25 +51,25 @@ export function OrbitOrreryWidget() {
   if (!mounted) return null
 
   return (
-    <div className="panel-box bg-space/90 space-y-4 border border-primary/40 p-4 font-mono shadow-[0_0_20px_rgba(0,240,255,0.15)] sm:p-5">
+    <div className="panel-box bg-background/90 space-y-4 border border-primary/40 p-4 font-mono shadow-[0_0_20px_rgba(0,240,255,0.15)] sm:p-5">
       <div className="flex items-center justify-between border-b border-primary/20 pb-2.5">
         <div className="flex items-center gap-2">
           <Orbit
             className="h-4 w-4 animate-spin text-primary"
             style={{ animationDuration: "20s" }}
           />
-          <span className="font-display text-xs font-black tracking-widest text-primary uppercase">
+          <span className="font-sans text-xs font-black tracking-widest text-primary uppercase">
             // 3D ORBITAL ORRERY & CELESTIAL ALIGNMENT
           </span>
         </div>
-        <span className="clip-tag border border-cyber-green/40 bg-cyber-green/10 text-cyber-green px-2 py-0.5 font-mono text-[8px] font-bold">
+        <span className="rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-500 px-2 py-0.5 font-mono text-[8px] font-bold">
           ORBITAL MODEL
         </span>
       </div>
 
       <div className="grid grid-cols-1 items-center gap-4 md:grid-cols-2">
         {/* Visual Orrery Canvas View */}
-        <div className="bg-space tag-clip relative flex h-44 w-full items-center justify-center overflow-hidden border border-primary/20">
+        <div className="bg-background tag-clip relative flex h-44 w-full items-center justify-center overflow-hidden border border-primary/20">
           {/* Orbital Concentric Rings */}
           <div className="absolute h-36 w-36 rounded-full border border-dashed border-primary/20" />
           <div className="absolute h-24 w-24 rounded-full border border-accent/20" />

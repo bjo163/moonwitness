@@ -70,10 +70,10 @@ export function Topbar({
   }
 
   return (
-    <header className="sticky top-0 z-40 flex h-20 w-full items-center justify-between border-b border-cyan-500/20 bg-black/80 px-6 shadow-sm backdrop-blur-md">
+    <header className="sticky top-0 z-40 flex h-20 w-full items-center justify-between border-b border-border bg-card/85 px-6 shadow-sm backdrop-blur-md">
       {/* Page Title */}
       <div className="flex items-center gap-4">
-        <h2 className="font-sans text-lg font-bold tracking-wider text-white uppercase">
+        <h2 className="font-sans text-lg font-bold tracking-wider text-foreground uppercase">
           {pageTitle}
         </h2>
       </div>
@@ -85,7 +85,7 @@ export function Topbar({
           onClick={handleSeedDemoData}
           disabled={seeding}
           title="Seed all 16 addon demo datasets"
-          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-cyber-yellow/10 border border-cyber-yellow/40 rounded text-xs font-mono text-cyber-yellow hover:bg-cyber-yellow/20 uppercase transition-all shadow-[0_0_10px_rgba(255,230,0,0.15)] disabled:opacity-50"
+          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-lg text-xs font-mono text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 uppercase transition-all disabled:opacity-50"
         >
           <Database className="w-3.5 h-3.5" />
           {seeding ? "SEEDING..." : "SEED DEMO"}
@@ -95,28 +95,28 @@ export function Topbar({
         <div className="relative">
           <button
             onClick={() => setShowNotifications((v) => !v)}
-            className="p-2 text-steel-gray hover:text-cyber-cyan border border-transparent hover:border-cyber-cyan/30 rounded-full transition-all relative"
+            className="p-2 text-muted-foreground hover:text-foreground border border-transparent hover:border-border rounded-full transition-all relative"
           >
             <Bell className="w-4 h-4" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-cyber-cyan rounded-full animate-pulse shadow-[0_0_8px_var(--cyber-cyan)]" />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full animate-pulse" />
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-80 bg-cyber-panel border border-cyber-cyan/30 rounded-lg shadow-2xl p-3 z-50 corner-box font-mono">
-              <div className="flex items-center justify-between border-b border-cyber-cyan/10 pb-2 mb-2">
-                <span className="text-xs font-bold text-white uppercase tracking-wider">SYSTEM TELEMETRY</span>
-                <button onClick={() => setShowNotifications(false)} className="text-steel-gray hover:text-white">
+            <div className="absolute right-0 mt-2 w-80 bg-card border border-border rounded-xl shadow-2xl p-3 z-50 font-sans">
+              <div className="flex items-center justify-between border-b border-border pb-2 mb-2">
+                <span className="text-xs font-bold text-foreground uppercase tracking-wider">System Notifications</span>
+                <button onClick={() => setShowNotifications(false)} className="text-muted-foreground hover:text-foreground">
                   <X className="w-3.5 h-3.5" />
                 </button>
               </div>
               <div className="space-y-2 max-h-60 overflow-y-auto">
                 {notifications.map((n) => (
-                  <div key={n.id} className="p-2 bg-black/40 border border-cyber-cyan/10 rounded text-xs">
-                    <div className="flex items-center justify-between text-[10px] text-cyber-cyan">
+                  <div key={n.id} className="p-2 bg-muted/40 border border-border/40 rounded-lg text-xs">
+                    <div className="flex items-center justify-between text-[10px] text-primary font-medium">
                       <span>{n.title}</span>
-                      <span className="text-steel-gray">{n.time}</span>
+                      <span className="text-muted-foreground">{n.time}</span>
                     </div>
-                    <p className="text-steel-gray text-[11px] mt-0.5">{n.text}</p>
+                    <p className="text-muted-foreground text-[11px] mt-0.5">{n.text}</p>
                   </div>
                 ))}
               </div>
@@ -156,8 +156,8 @@ export function Topbar({
       </div>
 
       {seedResult && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 bg-cyber-dark/95 border border-cyber-cyan rounded-lg shadow-2xl font-mono text-xs text-white flex items-center gap-3 corner-box">
-          <CheckCircle2 className="w-5 h-5 text-cyber-green" />
+        <div className="fixed bottom-6 right-6 z-50 p-4 bg-card/95 border border-border rounded-xl shadow-2xl font-sans text-xs text-foreground flex items-center gap-3">
+          <CheckCircle2 className="w-5 h-5 text-emerald-500" />
           <span>{seedResult}</span>
         </div>
       )}

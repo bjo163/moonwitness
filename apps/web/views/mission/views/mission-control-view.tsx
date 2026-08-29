@@ -177,7 +177,7 @@ export function MissionControlView() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
         {/* Radar Map (3 columns wide) */}
-        <div className="panel-box bg-space flex flex-col border-2 border-primary/50 p-1 shadow-[0_0_50px_rgba(255,51,102,0.15)] lg:col-span-3">
+        <div className="rounded-xl border border-border/40 bg-card/90 bg-background flex flex-col border-2 border-primary/50 p-1 shadow-[0_0_50px_rgba(255,51,102,0.15)] lg:col-span-3">
           <div className="flex items-center justify-between border-b border-primary/20 bg-card p-3">
             <div className="flex items-center gap-2 text-xs font-bold text-primary">
               <Target className="h-4 w-4 animate-pulse text-destructive" />
@@ -238,7 +238,7 @@ export function MissionControlView() {
 
         {/* Intelligence Sidebar */}
         <div className="space-y-6">
-          <div className="panel-box bg-panel border-2 border-primary/30 p-6 shadow-lg">
+          <div className="rounded-xl border border-border/40 bg-card/90 bg-panel border-2 border-primary/30 p-6 shadow-lg">
             <h3 className="mb-4 flex items-center gap-2 border-b border-primary/20 pb-2 text-xs font-bold tracking-widest text-primary">
               <Globe className="h-4 w-4" />
               TARGET INTELLIGENCE
@@ -302,7 +302,7 @@ export function MissionControlView() {
           </div>
 
           {/* Mission Stats */}
-          <div className="panel-box bg-panel border border-primary/30 p-4">
+          <div className="rounded-xl border border-border/40 bg-card/90 bg-panel border border-primary/30 p-4">
             <div className="mb-3 text-[10px] font-bold tracking-widest text-primary/50">
               GLOBAL SUMMARY
             </div>

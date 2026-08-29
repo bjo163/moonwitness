@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react"
 
 export function TaskCenterWidget() {
   return (
-    <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-12 xl:col-span-3">
+    <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-12 xl:col-span-3">
       <div className="mb-2 flex items-center justify-between">
         <div className="text-[9px] font-black tracking-widest text-primary uppercase">
           TASK CENTER

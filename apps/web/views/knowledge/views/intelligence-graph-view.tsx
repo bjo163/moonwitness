@@ -418,7 +418,7 @@ export function IntelligenceGraphView() {
         accentColor="primary"
       />
 
-      <div className="panel-box bg-space relative flex h-[700px] flex-col overflow-hidden border-2 border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.15)]">
+      <div className="rounded-xl border border-border/40 bg-card/90 bg-background relative flex h-[700px] flex-col overflow-hidden border-2 border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.15)]">
         {/* Top Bar HUD */}
         <div className="pointer-events-none absolute top-0 left-0 z-10 flex w-full items-center justify-between p-4">
           <div className="flex items-center gap-3">
@@ -436,19 +436,19 @@ export function IntelligenceGraphView() {
 
           <div className="flex items-center gap-4 border border-primary/30 bg-black/50 p-2 text-[10px] font-bold backdrop-blur-sm">
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-cyber-cyan" /> TOKOH
+              <span className="h-2 w-2 rounded-full bg-primary" /> TOKOH
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-cyber-green" /> LOKASI
+              <span className="h-2 w-2 rounded-full bg-emerald-500" /> LOKASI
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-cyber-pink" /> PERISTIWA
+              <span className="h-2 w-2 rounded-full bg-rose-500" /> PERISTIWA
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-cyber-yellow" /> KONSEP
+              <span className="h-2 w-2 rounded-full bg-amber-500" /> KONSEP
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-cyber-purple" />{" "}
+              <span className="h-2 w-2 rounded-full bg-purple-500" />{" "}
               KITAB/SUMBER
             </span>
           </div>

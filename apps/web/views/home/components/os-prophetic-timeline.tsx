@@ -51,7 +51,7 @@ export function OSPropheticTimeline() {
   return (
     <section
       id="timeline"
-      className="bg-space relative z-10 overflow-hidden border-b border-orange-500/30 py-20 font-mono text-foreground"
+      className="bg-background relative z-10 overflow-hidden border-b border-orange-500/30 py-20 font-mono text-foreground"
     >
       {/* ═══ LAYER 1: DEEP SPACE BACKGROUND ══════════════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
@@ -63,7 +63,7 @@ export function OSPropheticTimeline() {
         {/* ═══ TOP HEADER (Blueprint 15) ══════════════════════════════════════ */}
         <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-4 xl:flex-row xl:items-center">
           <div className="flex items-center gap-4">
-            <div className="bg-space inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)]">
               <span className="rounded-xs bg-cyan-500 px-1.5 py-0.5 font-black text-black">
                 15
               </span>
@@ -102,7 +102,7 @@ export function OSPropheticTimeline() {
               <div className="mb-1.5 text-[8px] tracking-widest text-primary uppercase">
                 TIMELINE VIEW
               </div>
-              <div className="bg-space flex overflow-hidden rounded border border-white/10">
+              <div className="bg-background flex overflow-hidden rounded border border-white/10">
                 <button className="border-b-2 border-primary bg-primary/20 px-3 py-1.5 text-[9px] font-bold text-primary">
                   Linear
                 </button>
@@ -122,7 +122,7 @@ export function OSPropheticTimeline() {
               <div className="mb-1.5 text-[8px] tracking-widest text-primary uppercase">
                 TIME SCALE
               </div>
-              <div className="bg-space flex overflow-hidden rounded border border-white/10">
+              <div className="bg-background flex overflow-hidden rounded border border-white/10">
                 <button className="border-b-2 border-primary bg-primary/20 px-3 py-1.5 text-[9px] font-bold text-primary">
                   All Time
                 </button>
@@ -144,7 +144,7 @@ export function OSPropheticTimeline() {
         </div>
 
         {/* ═══ LAYER 2: HORIZONTAL ERA TIMELINE ═══════════════════════════════ */}
-        <div className="bg-space relative flex flex-col items-center overflow-hidden rounded-xl border border-primary/20 p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)]">
+        <div className="bg-background relative flex flex-col items-center overflow-hidden rounded-xl border border-primary/20 p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)]">
           {/* Era Nodes */}
           <div className="relative z-10 flex w-full max-w-[1500px] items-start justify-between pt-4 pb-12">
             {/* The Line */}
@@ -229,7 +229,7 @@ export function OSPropheticTimeline() {
                   {/* The dot on the line */}
                   <div
                     className={`border-panel absolute -bottom-[22px] z-20 h-4 w-4 rounded-full border-4 ${era.isDashed ? "border-dashed" : ""}`}
-                    style={{ backgroundColor: era.c, borderColor: "var(--color-cyber-dark)" }}
+                    style={{ backgroundColor: era.c, borderColor: "var(--background)" }}
                   />
                   {era.isNow && (
                     <div className="absolute -bottom-[42px] flex flex-col items-center">
@@ -260,7 +260,7 @@ export function OSPropheticTimeline() {
             ))}
           </div>
 
-          <button className="bg-space flex items-center gap-2 rounded-full border border-white/10 px-6 py-2 text-[9px] font-bold tracking-widest text-primary uppercase transition-colors hover:bg-white/5 hover:text-white">
+          <button className="bg-background flex items-center gap-2 rounded-full border border-white/10 px-6 py-2 text-[9px] font-bold tracking-widest text-primary uppercase transition-colors hover:bg-white/5 hover:text-white">
             VIEW FULL TIMELINE <ArrowRight className="h-3 w-3" />
           </button>
         </div>
@@ -268,7 +268,7 @@ export function OSPropheticTimeline() {
         {/* ═══ LAYER 3: MIDDLE ROW (Highlights, Map, Future Events) ═══════════ */}
         <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-12">
           {/* Timeline Highlights (Col 1-3) */}
-          <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3">
+          <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3">
             <div className="mb-4 flex items-center justify-between">
               <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                 TIMELINE HIGHLIGHTS
@@ -360,7 +360,7 @@ export function OSPropheticTimeline() {
           </div>
 
           {/* Timeline Map View (Col 4-9) */}
-          <div className="bg-space relative flex flex-col overflow-hidden rounded-xl border border-white/10 p-4 lg:col-span-6">
+          <div className="bg-background relative flex flex-col overflow-hidden rounded-xl border border-white/10 p-4 lg:col-span-6">
             <div className="relative z-20 mb-4 flex items-center justify-between">
               <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                 TIMELINE MAP VIEW
@@ -370,7 +370,7 @@ export function OSPropheticTimeline() {
               </div>
             </div>
 
-            <div className="bg-space relative min-h-[300px] flex-1 overflow-hidden rounded-lg border border-white/5">
+            <div className="bg-background relative min-h-[300px] flex-1 overflow-hidden rounded-lg border border-white/5">
               {/* Massive Map Graphic Simulation */}
               <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjMDAwIiBmaWxsLW9wYWNpdHk9IjAuMCIvPgo8Y2lyY2xlIGN4PSI0IiBjeT0iNCIgcj0iMC41IiBmaWxsPSIjMzBENDc0Ii8+Cjwvc3ZnPg==')] [mask-image:radial-gradient(ellipse_at_center,white,transparent_90%)] opacity-30" />
 
@@ -437,7 +437,7 @@ export function OSPropheticTimeline() {
               </svg>
 
               {/* Zoom Controls */}
-              <div className="bg-space absolute top-1/2 right-3 flex -translate-y-1/2 flex-col rounded border border-white/10 text-primary">
+              <div className="bg-background absolute top-1/2 right-3 flex -translate-y-1/2 flex-col rounded border border-white/10 text-primary">
                 <button className="border-b border-white/10 p-2 hover:bg-white/5 hover:text-white">
                   <Plus className="h-3 w-3" />
                 </button>
@@ -475,7 +475,7 @@ export function OSPropheticTimeline() {
           </div>
 
           {/* Upcoming Future Events (Col 10-12) */}
-          <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3">
+          <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3">
             <div className="mb-4 flex items-center justify-between">
               <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                 UPCOMING FUTURE EVENTS
@@ -525,7 +525,7 @@ export function OSPropheticTimeline() {
               ].map((ev, i) => (
                 <div key={i} className="group flex cursor-pointer gap-3">
                   <div
-                    className="bg-space flex h-8 w-8 shrink-0 items-center justify-center rounded-full border"
+                    className="bg-background flex h-8 w-8 shrink-0 items-center justify-center rounded-full border"
                     style={{ borderColor: `${ev.c}50` }}
                   >
                     <ev.icon className="h-4 w-4" style={{ color: ev.c }} />
@@ -556,7 +556,7 @@ export function OSPropheticTimeline() {
         {/* ═══ LAYER 4: BOTTOM ROW (Filters, Stats, Insights) ═════════════════ */}
         <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-12">
           {/* Timeline Filters (Col 1-3) */}
-          <div className="bg-space flex flex-col justify-between rounded-xl border border-white/10 p-4 lg:col-span-3">
+          <div className="bg-background flex flex-col justify-between rounded-xl border border-white/10 p-4 lg:col-span-3">
             <div>
               <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                 TIMELINE FILTERS
@@ -672,7 +672,7 @@ export function OSPropheticTimeline() {
           {/* Key Statistics & Footer Graphic (Col 4-9) */}
           <div className="flex flex-col gap-4 lg:col-span-6">
             {/* Stats */}
-            <div className="bg-space rounded-xl border border-white/10 p-4">
+            <div className="bg-background rounded-xl border border-white/10 p-4">
               <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                 KEY STATISTICS
               </div>
@@ -724,7 +724,7 @@ export function OSPropheticTimeline() {
                 ].map((st, i) => (
                   <div
                     key={i}
-                    className="bg-space flex flex-col items-center justify-center rounded-lg border border-white/5 p-2 text-center"
+                    className="bg-background flex flex-col items-center justify-center rounded-lg border border-white/5 p-2 text-center"
                   >
                     <st.icon className="mb-2 h-5 w-5" style={{ color: st.c }} />
                     <div className="mb-1 font-mono text-lg leading-none font-black text-white">
@@ -742,7 +742,7 @@ export function OSPropheticTimeline() {
             </div>
 
             {/* Footer Graphic (Camels in Desert) */}
-            <div className="bg-space relative flex min-h-[120px] flex-1 flex-col items-center justify-center overflow-hidden rounded-xl border border-white/10 text-center">
+            <div className="bg-background relative flex min-h-[120px] flex-1 flex-col items-center justify-center overflow-hidden rounded-xl border border-white/10 text-center">
               <div className="from-space absolute inset-0 z-10 bg-gradient-to-t via-transparent to-transparent" />
               {/* Silhouette abstract simulation */}
               <svg
@@ -778,7 +778,7 @@ export function OSPropheticTimeline() {
           </div>
 
           {/* Timeline Insights (Col 10-12) */}
-          <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3">
+          <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3">
             <div className="mb-4 flex items-center justify-between">
               <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                 TIMELINE INSIGHTS
@@ -820,7 +820,7 @@ export function OSPropheticTimeline() {
                   className="flex items-start gap-3 border-b border-white/5 pb-3"
                 >
                   <div
-                    className="bg-space flex h-8 w-8 shrink-0 items-center justify-center rounded-full border"
+                    className="bg-background flex h-8 w-8 shrink-0 items-center justify-center rounded-full border"
                     style={{ borderColor: `${ins.c}50` }}
                   >
                     <ins.icon className="h-4 w-4" style={{ color: ins.c }} />
@@ -844,7 +844,7 @@ export function OSPropheticTimeline() {
         </div>
 
         {/* ═══ LAYER 5: PLAYBACK BAR (Bottom Scrubber) ════════════════════════ */}
-        <div className="bg-space sticky bottom-0 z-50 flex flex-col items-center gap-6 border-t border-primary/30 p-4 md:flex-row">
+        <div className="bg-background sticky bottom-0 z-50 flex flex-col items-center gap-6 border-t border-primary/30 p-4 md:flex-row">
           {/* Scrubber Line */}
           <div className="relative flex w-full flex-1 items-center pt-2">
             <div className="absolute right-0 left-0 h-1 overflow-hidden rounded-full bg-primary">

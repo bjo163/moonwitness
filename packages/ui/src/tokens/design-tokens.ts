@@ -1,5 +1,5 @@
 /**
- * ◈ MoonWitness OS Design Token System
+ * ◈ MoonWitness OS — Standard Enterprise Design Tokens (shadcn/ui & Tailwind v4)
  * 
  * Single Source of Truth for all design tokens used across the monorepo.
  * This file provides type-safe access to CSS custom properties and design decisions.
@@ -9,9 +9,57 @@
  */
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * SEMANTIC COLOR PALETTE (CYBER TOKENS)
+ * SEMANTIC COLOR TOKENS (SHADCN STANDARDS)
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
+export const ThemeColors = {
+  primary: '#0284c7',
+  secondary: '#f4f4f5',
+  muted: '#71717a',
+  accent: '#0284c7',
+  destructive: '#ef4444',
+  success: '#10b981',
+  warning: '#f59e0b',
+  background: '#ffffff',
+  surface: '#ffffff',
+} as const;
+
+export type ThemeColorKey = keyof typeof ThemeColors;
+
+/** CSS variable references for use in styles */
+export const ThemeColorVars = {
+  primary: 'var(--primary)',
+  secondary: 'var(--secondary)',
+  muted: 'var(--muted)',
+  mutedForeground: 'var(--muted-foreground)',
+  accent: 'var(--accent)',
+  destructive: 'var(--destructive)',
+  background: 'var(--background)',
+  foreground: 'var(--foreground)',
+  card: 'var(--card)',
+  cardForeground: 'var(--card-foreground)',
+  border: 'var(--border)',
+  input: 'var(--input)',
+  ring: 'var(--ring)',
+  chart1: 'var(--chart-1)',
+  chart2: 'var(--chart-2)',
+  chart3: 'var(--chart-3)',
+  chart4: 'var(--chart-4)',
+  chart5: 'var(--chart-5)',
+} as const;
+
+/** Semantic color mapping by UI intent */
+export const SemanticColors = {
+  primary: ThemeColorVars.primary,
+  success: ThemeColorVars.chart2,
+  warning: ThemeColorVars.chart3,
+  premium: ThemeColorVars.chart4,
+  danger: ThemeColorVars.destructive,
+  background: ThemeColorVars.background,
+  surface: ThemeColorVars.card,
+} as const;
+
+// Backward-compatibility aliases
 export const CyberColors = {
   cyan: '#00F0FF',
   green: '#00FF66',
@@ -21,40 +69,26 @@ export const CyberColors = {
   dark: '#05070A',
   panel: '#0A0F17',
 } as const;
-
-export type CyberColorKey = keyof typeof CyberColors;
-
-/** CSS variable references for use in inline styles */
 export const CyberColorVars = {
-  cyan: 'var(--cyber-cyan)',
-  green: 'var(--cyber-green)',
-  yellow: 'var(--cyber-yellow)',
-  purple: 'var(--cyber-purple)',
-  pink: 'var(--cyber-pink)',
-  dark: 'var(--cyber-dark)',
-  panel: 'var(--cyber-panel)',
+  cyan: 'var(--primary)',
+  green: 'var(--chart-2)',
+  yellow: 'var(--chart-3)',
+  purple: 'var(--chart-4)',
+  pink: 'var(--destructive)',
+  dark: 'var(--background)',
+  panel: 'var(--card)',
 } as const;
-
-/** Semantic color mapping by UI intent */
-export const SemanticColors = {
-  primary: CyberColorVars.cyan,
-  success: CyberColorVars.green,
-  warning: CyberColorVars.yellow,
-  premium: CyberColorVars.purple,
-  danger: CyberColorVars.pink,
-  background: CyberColorVars.dark,
-  surface: CyberColorVars.panel,
-} as const;
+export type CyberColorKey = keyof typeof CyberColors;
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * GEOMETRIC CONTAINER & RADIUS SYSTEM (SHADCN STANDARDS)
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 export const ContainerRadii = {
-  card: 12,    // 0.75rem / rounded-xl
-  hero: 16,    // 1rem / rounded-2xl
-  button: 8,   // 0.5rem / rounded-lg
-  tag: 6,      // 0.375rem / rounded-md
+  card: 12,    // rounded-xl
+  hero: 16,    // rounded-2xl
+  button: 8,   // rounded-lg
+  tag: 6,      // rounded-md
   rune: 9999,  // rounded-full
 } as const;
 
@@ -63,11 +97,11 @@ export type ChamferSize = keyof typeof ChamferSizes;
 
 /** Standard utility class names for rounded containers */
 export const ClipPathClasses = {
-  card: 'clip-card',
-  hero: 'clip-hero',
-  button: 'clip-btn',
-  tag: 'clip-tag',
-  rune: 'clip-rune',
+  card: 'rounded-xl',
+  hero: 'rounded-2xl',
+  button: 'rounded-lg',
+  tag: 'rounded-md',
+  rune: 'rounded-full',
 } as const;
 
 export const ClipPaths = {
@@ -79,29 +113,7 @@ export const ClipPaths = {
 } as const;
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * OPTICAL GLOW & DEPTH SYSTEM
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-export const GlowDepths = {
-  critical: { blur: 60, glow: 30 },
-  active: { blur: 30, glow: 20 },
-  passive: { blur: 15, glow: 10 },
-} as const;
-
-export type GlowDepth = keyof typeof GlowDepths;
-
-/** Tailwind utility classes for semantic glows */
-export const GlowClasses = {
-  cyan: 'glow-cyan',
-  emerald: 'glow-emerald',
-  amber: 'glow-amber',
-  purple: 'glow-purple',
-  pink: 'glow-pink',
-  holo: 'holo-glow',
-} as const;
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * GLASSMORPHISM & BACKDROP SYSTEM
+ * GLASSMORPHISM & SURFACE SYSTEM
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 export const BackdropBlurs = {
@@ -111,12 +123,11 @@ export const BackdropBlurs = {
   xl: '32px',
 } as const;
 
-/** Panel glass component configuration */
 export const PanelGlass = {
-  backgroundColor: 'rgba(5, 7, 10, 0.85)',
+  backgroundColor: 'var(--card)',
   backdropFilter: 'blur(16px)',
-  border: '1px solid rgba(0, 240, 255, 0.25)',
-  boxShadow: '0 0 20px rgba(0, 240, 255, 0.1)',
+  border: '1px solid var(--border)',
+  boxShadow: '0 4px 20px -1px rgba(0, 0, 0, 0.08)',
 } as const;
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -126,99 +137,20 @@ export const PanelGlass = {
 export const FontFamilies = {
   sans: 'var(--font-sans)',
   mono: 'var(--font-mono)',
-  orbitron: 'var(--font-orbitron)',
   arabic: 'var(--font-arabic)',
 } as const;
 
 export type FontFamily = keyof typeof FontFamilies;
 
-/** Typography usage guidelines */
 export const TypographyUsage = {
   body: FontFamilies.sans,
   telemetry: FontFamilies.mono,
-  hero: FontFamilies.orbitron,
+  hero: FontFamilies.sans,
   arabic: FontFamilies.arabic,
 } as const;
 
-/** Letter spacing values for telemetry text */
-export const LetterSpacing = {
-  telemetry: '0.15em', // tracking-widest
-  normal: 'normal',
-  tight: '-0.025em',
-} as const;
-
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * GRID & BACKGROUND PATTERNS
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-export const GridSizes = {
-  cosmic: 32,
-  dense: 16,
-} as const;
-
-export const GridClasses = {
-  cosmic: 'bg-cosmic-grid',
-  dense: 'bg-dense-grid',
-} as const;
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * CORNER BRACKET SYSTEM
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-export const CornerClasses = {
-  cyan: 'corner-cyan',
-  green: 'corner-green',
-  yellow: 'corner-yellow',
-  purple: 'corner-purple',
-  pink: 'corner-pink',
-} as const;
-
-/** Semantic corner bracket mapping */
-export const SemanticCorners = {
-  active: CornerClasses.cyan,
-  success: CornerClasses.green,
-  warning: CornerClasses.yellow,
-  premium: CornerClasses.purple,
-  critical: CornerClasses.pink,
-} as const;
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * LASER CONDUIT DIVIDERS
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-export const LaserConduitClasses = {
-  cyan: 'laser-conduit-cyan',
-  green: 'laser-conduit-green',
-  yellow: 'laser-conduit-yellow',
-  purple: 'laser-conduit-purple',
-} as const;
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * ANIMATION SYSTEM
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-export const AnimationNames = {
-  heroShake: 'heroShake',
-  textGlow: 'textGlow',
-  holoScan: 'holoScan',
-  starTwinkle: 'starTwinkle',
-  cosmicDrift: 'cosmicDrift',
-  breathingCyan: 'breathingCyan',
-  radarPulse: 'radarPulse',
-} as const;
-
-export type AnimationName = keyof typeof AnimationNames;
-
-/** Animation duration presets (in milliseconds) */
-export const AnimationDurations = {
-  fast: 150,
-  normal: 300,
-  slow: 500,
-  verySlow: 1000,
-} as const;
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * SPACING & LAYOUT
+ * RADIUS SIZES
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 export const RadiusSizes = {
@@ -231,52 +163,18 @@ export const RadiusSizes = {
   '4xl': 'calc(var(--radius) * 2.6)',
 } as const;
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * UTILITY HELPERS
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
 /**
- * Get a cyber color by semantic name
- * @example getSemanticColor('success') // returns '#00FF66'
+ * Get a semantic color by name
  */
 export function getSemanticColor(semantic: keyof typeof SemanticColors): string {
   const colorMap: Record<keyof typeof SemanticColors, string> = {
-    primary: CyberColors.cyan,
-    success: CyberColors.green,
-    warning: CyberColors.yellow,
-    premium: CyberColors.purple,
-    danger: CyberColors.pink,
-    background: CyberColors.dark,
-    surface: CyberColors.panel,
+    primary: ThemeColors.primary,
+    success: ThemeColors.success,
+    warning: ThemeColors.warning,
+    premium: '#8b5cf6',
+    danger: ThemeColors.destructive,
+    background: ThemeColors.background,
+    surface: ThemeColors.surface,
   };
   return colorMap[semantic];
-}
-
-/**
- * Generate a glow box-shadow with specified color and depth
- * @example getGlowShadow('cyan', 'active') // returns '0 0 20px rgba(0, 240, 255, 0.3)'
- */
-export function getGlowShadow(color: CyberColorKey, depth: GlowDepth = 'active'): string {
-  const rgbaMap: Record<CyberColorKey, string> = {
-    cyan: '0, 240, 255',
-    green: '0, 255, 102',
-    yellow: '255, 230, 0',
-    purple: '161, 0, 255',
-    pink: '255, 0, 85',
-    dark: '5, 7, 10',
-    panel: '10, 15, 23',
-  };
-  
-  const glowSize = GlowDepths[depth].glow;
-  const opacity = depth === 'critical' ? 0.4 : depth === 'active' ? 0.3 : 0.2;
-  
-  return `0 0 ${glowSize}px rgba(${rgbaMap[color]}, ${opacity})`;
-}
-
-/**
- * Generate clip-path polygon for chamfered corners
- * @example getChamferPath(16) // returns polygon string for 16px chamfer
- */
-export function getChamferPath(size: number): string {
-  return `polygon(${size}px 0, 100% 0, 100% calc(100% - ${size}px), calc(100% - ${size}px) 100%, 0 100%, 0 ${size}px)`;
 }

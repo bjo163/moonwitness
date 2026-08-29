@@ -14,7 +14,7 @@ export function HeroBanner({
   name?: string
 }) {
   return (
-    <div className="bg-space relative mb-6 overflow-hidden rounded-2xl border border-cyan-500/20 p-6 shadow-[0_10px_30px_rgba(0,240,255,0.05)] md:p-8">
+    <div className="bg-background relative mb-6 overflow-hidden rounded-2xl border border-cyan-500/20 p-6 shadow-[0_10px_30px_rgba(0,240,255,0.05)] md:p-8">
       {/* Background Earth image with dark gradient overlays */}
       <div className="pointer-events-none absolute inset-0 z-0">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-screen" />

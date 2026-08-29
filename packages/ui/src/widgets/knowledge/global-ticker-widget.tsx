@@ -49,7 +49,7 @@ export function GlobalTickerWidget() {
   if (messages.length === 0) return null
 
   return (
-    <div className="bg-space/95 w-full overflow-hidden border-b border-cyan-500/30 shadow-[0_4px_20px_rgba(0,240,255,0.1)]">
+    <div className="bg-background/95 w-full overflow-hidden border-b border-cyan-500/30 shadow-[0_4px_20px_rgba(0,240,255,0.1)]">
       <div className="flex h-10 items-center">
         <div className="relative z-10 flex h-full shrink-0 items-center gap-2 border-r border-cyan-500/50 bg-cyan-950 px-4 shadow-[4px_0_15px_rgba(0,240,255,0.2)]">
           <Globe2 className="h-4 w-4 animate-pulse text-cyan-400" />

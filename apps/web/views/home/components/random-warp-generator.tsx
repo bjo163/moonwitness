@@ -190,7 +190,7 @@ export function RandomWarpGenerator() {
       {/* Warp Trigger Button (Task 6) */}
       <button
         onClick={triggerWarp}
-        className="btn-primary btn-primary-purple group flex items-center justify-center gap-2 px-3.5 py-1.5 text-[10px] shadow-[0_0_20px_rgba(161,0,255,0.5)] transition-all btn-clip hover:border-primary"
+        className="btn-primary btn-primary-purple group flex items-center justify-center gap-2 px-3.5 py-1.5 text-[10px] shadow-[0_0_20px_rgba(161,0,255,0.5)] transition-all  hover:border-primary"
         suppressHydrationWarning
       >
         <span
@@ -214,14 +214,14 @@ export function RandomWarpGenerator() {
         mounted &&
         typeof document !== "undefined" &&
         createPortal(
-          <div className="bg-space/95 fixed inset-0 z-[99999] flex items-center justify-center p-4 font-mono backdrop-blur-2xl">
+          <div className="bg-background/95 fixed inset-0 z-[99999] flex items-center justify-center p-4 font-mono backdrop-blur-2xl">
             <div
-              className="corner-box bg-cyber-panel relative my-auto flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden border border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.35)] card-clip"
+              className=" bg-card relative my-auto flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden border border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.35)] card-clip"
             >
               <div className="holo-scan-bar" />
 
               {/* Modal Header */}
-              <div className="bg-space/80 flex shrink-0 items-center justify-between border-b border-primary/20 px-6 py-4">
+              <div className="bg-background/80 flex shrink-0 items-center justify-between border-b border-primary/20 px-6 py-4">
                 <div className="flex items-center gap-2">
                   <span className="bg-success h-2 w-2 animate-pulse rounded-full" />
                   <span className="text-xs font-black tracking-widest text-primary uppercase">
@@ -234,7 +234,7 @@ export function RandomWarpGenerator() {
                     playClickSound()
                     setIsOpen(false)
                   }}
-                  className="bg-space flex items-center gap-1 rounded border border-primary/20 px-2.5 py-1 text-xs font-bold text-primary transition-all hover:border-primary/60 hover:text-white"
+                  className="bg-background flex items-center gap-1 rounded border border-primary/20 px-2.5 py-1 text-xs font-bold text-primary transition-all hover:border-primary/60 hover:text-white"
                 >
                   <span>[✕ CLOSE]</span>
                 </button>
@@ -258,11 +258,11 @@ export function RandomWarpGenerator() {
                   warpData && (
                     <div className="animate-in space-y-4 fade-in">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className="clip-tag border border-cyber-green/40 bg-cyber-green/10 text-cyber-green px-2 py-0.5 font-mono text-[10px]">
+                        <span className="rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-500 px-2 py-0.5 font-mono text-[10px]">
                           📖 Q.S {warpData.surahName} ({warpData.surahNumber}:
                           {warpData.ayahNumber})
                         </span>
-                        <span className="clip-tag border border-cyber-yellow/40 bg-cyber-yellow/10 text-cyber-yellow px-2 py-0.5 font-mono text-[9px]">
+                        <span className="rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-500 px-2 py-0.5 font-mono text-[9px]">
                           ✨ {warpData.asmaulName}
                         </span>
                       </div>
@@ -276,7 +276,7 @@ export function RandomWarpGenerator() {
                         &ldquo;{warpData.textLatin}&rdquo;
                       </p>
 
-                      <div className="bg-space tag-clip border border-primary/20 p-3 text-xs text-foreground/90">
+                      <div className="bg-background tag-clip border border-primary/20 p-3 text-xs text-foreground/90">
                         &ldquo;{warpData.translationId}&rdquo;
                       </div>
 
@@ -293,7 +293,7 @@ export function RandomWarpGenerator() {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={triggerWarp}
-                            className="btn-primary px-3.5 py-2 text-[10px] btn-clip"
+                            className="btn-primary px-3.5 py-2 text-[10px] "
                           >
                             🔄 WARP AGAIN
                           </button>
@@ -347,7 +347,7 @@ export function RandomWarpGenerator() {
                               stopAudio()
                               setIsOpen(false)
                             }}
-                            className="btn-primary px-3.5 py-2 text-[10px] btn-clip"
+                            className="btn-primary px-3.5 py-2 text-[10px] "
                           >
                             READ SURAH →
                           </Link>

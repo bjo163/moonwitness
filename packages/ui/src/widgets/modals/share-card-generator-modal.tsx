@@ -63,11 +63,11 @@ export function ShareCardGeneratorModal({
         maxWidth="max-w-lg"
       >
         <div className="space-y-4 p-6">
-          <div className="panel-box bg-space relative space-y-4 overflow-hidden border-2 border-primary/50 p-6 shadow-2xl">
+          <div className="panel-box bg-background relative space-y-4 overflow-hidden border-2 border-primary/50 p-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-primary/20 pb-3">
               <div className="flex items-center gap-2">
                 <Moon className="h-5 w-5 text-primary" />
-                <span className="font-display text-sm font-black tracking-widest text-foreground">
+                <span className="font-sans text-sm font-black tracking-widest text-foreground">
                   MOON<span className="text-primary">WITNESS</span>
                 </span>
               </div>
@@ -99,7 +99,7 @@ export function ShareCardGeneratorModal({
           <div className="flex items-center gap-3">
             <button
               onClick={handleCopyCardText}
-              className="btn-primary flex w-full items-center justify-center gap-2 py-2.5 text-xs font-bold btn-clip"
+              className="btn-primary flex w-full items-center justify-center gap-2 py-2.5 text-xs font-bold "
             >
               {copied ? (
                 <Check className="text-success h-4 w-4" />
@@ -156,7 +156,7 @@ export function ShareCardGeneratorModal({
                   link.click()
                 }
               }}
-              className="btn-primary btn-primary-purple flex w-full items-center justify-center gap-2 py-2.5 text-xs font-bold btn-clip"
+              className="btn-primary btn-primary-purple flex w-full items-center justify-center gap-2 py-2.5 text-xs font-bold "
             >
               <Download className="h-4 w-4 text-secondary" />
               <span>[ 📥 DOWNLOAD IMAGE PNG ]</span>

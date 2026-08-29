@@ -156,7 +156,7 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
       />
 
       {/* FULL SHORT SHARE CARD */}
-      <div className="corner-box relative space-y-6 overflow-hidden panel-glass p-6 card-clip sm:p-10">
+      <div className=" relative space-y-6 overflow-hidden panel-glass p-6 card-clip sm:p-10">
         <div className="holo-scan-bar" />
 
         {/* Header Branding */}
@@ -176,7 +176,7 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="clip-tag border border-cyber-green/40 bg-cyber-green/10 text-cyber-green px-2 py-0.5 font-mono text-xs">
+            <span className="rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-500 px-2 py-0.5 font-mono text-xs">
               📖 Q.S {surahName} ({surahNum}:{ayahNum})
             </span>
           </div>
@@ -188,7 +188,7 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
           arabicText={ayahData.textArabic}
           translation={ayahData.textId || ayahData.textEn}
         >
-          <div className="bg-space/90 space-y-4 panel-glass p-6 card-clip">
+          <div className="bg-background/90 space-y-4 panel-glass p-6 card-clip">
             <div
               className="arabic-text py-2 text-right text-2xl leading-[2.3] font-bold text-foreground sm:text-4xl"
               style={{ textShadow: "0 0 10px rgba(0,240,255,0.15)" }}
@@ -227,7 +227,7 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
         {/* Asmaul Husna Pairs */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {asmaulSurah && (
-            <div className="corner-box flex items-center justify-between panel-glass p-4 card-clip">
+            <div className=" flex items-center justify-between panel-glass p-4 card-clip">
               <div>
                 <span className="block text-[9px] font-black text-primary uppercase">
                   ✨ SURAH PAIR RUNIC #{surahNum}
@@ -246,7 +246,7 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
           )}
 
           {asmaulAyah && (
-            <div className="corner-box flex items-center justify-between panel-glass p-4 card-clip">
+            <div className=" flex items-center justify-between panel-glass p-4 card-clip">
               <div>
                 <span className="block text-[9px] font-black text-primary uppercase">
                   ✨ AYAH PAIR RUNIC #{ayahNum}
@@ -267,7 +267,7 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
 
         {/* Hadith Block */}
         {hadithData && (
-          <div className="corner-box space-y-3 panel-glass p-5 card-clip">
+          <div className=" space-y-3 panel-glass p-5 card-clip">
             <div className="flex items-center gap-2 text-[10px] font-bold text-destructive">
               <span>⚔️</span>
               <span className="uppercase">
@@ -286,7 +286,7 @@ async function ShortUrlInspirationShareContent({ params }: PageProps) {
         )}
 
         {/* Universal Wisdom Block */}
-        <div className="corner-box space-y-3 panel-glass p-5 card-clip">
+        <div className=" space-y-3 panel-glass p-5 card-clip">
           <div className="flex items-center gap-2 text-[10px] font-bold text-secondary">
             <span>📜</span>
             <span className="uppercase">

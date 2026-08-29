@@ -149,7 +149,7 @@ export function OSKnowledgeDock() {
           </div>
 
           {/* Right Statistics Box from Blueprint 04 */}
-          <div className="bg-space flex min-w-[280px] shrink-0 flex-col justify-between space-y-3 rounded-xl border-2 border-primary/50 p-4 shadow-[0_0_30px_rgba(0,200,255,0.15)]">
+          <div className="bg-background flex min-w-[280px] shrink-0 flex-col justify-between space-y-3 rounded-xl border-2 border-primary/50 p-4 shadow-[0_0_30px_rgba(0,200,255,0.15)]">
             <div className="flex items-center justify-between border-b border-white/10 pb-2">
               <span className="text-xs font-bold tracking-wider text-primary uppercase">
                 TOTAL MODULES
@@ -185,7 +185,7 @@ export function OSKnowledgeDock() {
             <Link
               key={idx}
               href={m.href}
-              className={`group bg-space/90 relative rounded-xl border-2 p-4 ${m.bgBorder}/60 hover:${m.bgBorder} flex min-h-[360px] cursor-pointer flex-col justify-between overflow-hidden shadow-[0_0_25px_rgba(0,0,0,0.8)] transition-all duration-300 hover:scale-105`}
+              className={`group bg-background/90 relative rounded-xl border-2 p-4 ${m.bgBorder}/60 hover:${m.bgBorder} flex min-h-[360px] cursor-pointer flex-col justify-between overflow-hidden shadow-[0_0_25px_rgba(0,0,0,0.8)] transition-all duration-300 hover:scale-105`}
               style={{ boxShadow: `0 0 30px ${m.color}15` }}
             >
               {/* Top accent glow line */}
@@ -264,7 +264,7 @@ export function OSKnowledgeDock() {
         {/* ═══ LAYER 3 & 4: 3-COLUMN DECK (FEATURED MODULE | QUICK ACCESS | LEARNING SUMMARY) ═ */}
         <div className="grid grid-cols-1 items-stretch gap-6 pt-2 lg:grid-cols-12">
           {/* LEFT: FEATURED MODULE QUR'AN EXPLORER (Col 1-4) */}
-          <div className="bg-space group relative flex flex-col justify-between overflow-hidden rounded-xl border-2 border-emerald-500/50 p-6 shadow-[0_0_35px_rgba(16,185,129,0.18)] lg:col-span-4">
+          <div className="bg-background group relative flex flex-col justify-between overflow-hidden rounded-xl border-2 border-emerald-500/50 p-6 shadow-[0_0_35px_rgba(16,185,129,0.18)] lg:col-span-4">
             <div className="relative z-10 space-y-4">
               <div className="flex items-center justify-between text-[11px] font-black tracking-widest text-primary uppercase">
                 <span>--- FEATURED MODULE ---</span>
@@ -286,16 +286,16 @@ export function OSKnowledgeDock() {
 
               {/* 4 Feature Tags */}
               <div className="grid grid-cols-2 gap-2 pt-2 font-mono text-[10px] font-bold text-white/90 uppercase">
-                <span className="bg-space flex items-center gap-1.5 rounded border border-emerald-500/30 px-2.5 py-1.5">
+                <span className="bg-background flex items-center gap-1.5 rounded border border-emerald-500/30 px-2.5 py-1.5">
                   <BookOpen className="h-3 w-3 text-emerald-400" /> TAFSIR
                 </span>
-                <span className="bg-space flex items-center gap-1.5 rounded border border-emerald-500/30 px-2.5 py-1.5">
+                <span className="bg-background flex items-center gap-1.5 rounded border border-emerald-500/30 px-2.5 py-1.5">
                   <Layers className="h-3 w-3 text-primary" /> THEMES
                 </span>
-                <span className="bg-space flex items-center gap-1.5 rounded border border-emerald-500/30 px-2.5 py-1.5">
+                <span className="bg-background flex items-center gap-1.5 rounded border border-emerald-500/30 px-2.5 py-1.5">
                   <Sparkles className="h-3 w-3 text-amber-400" /> CROSS LINKS
                 </span>
-                <span className="bg-space flex items-center gap-1.5 rounded border border-emerald-500/30 px-2.5 py-1.5">
+                <span className="bg-background flex items-center gap-1.5 rounded border border-emerald-500/30 px-2.5 py-1.5">
                   <Search className="text-knowledge h-3 w-3" /> SEARCH
                 </span>
               </div>
@@ -314,7 +314,7 @@ export function OSKnowledgeDock() {
           </div>
 
           {/* CENTER: QUICK ACCESS COMMAND GRID (Col 5-8) */}
-          <div className="bg-space flex flex-col justify-between space-y-4 rounded-xl border-2 border-primary/50 p-6 shadow-[0_0_35px_rgba(0,200,255,0.18)] lg:col-span-4">
+          <div className="bg-background flex flex-col justify-between space-y-4 rounded-xl border-2 border-primary/50 p-6 shadow-[0_0_35px_rgba(0,200,255,0.18)] lg:col-span-4">
             <div className="text-[11px] font-black tracking-widest text-primary uppercase">
               --- QUICK ACCESS ---
             </div>
@@ -368,7 +368,7 @@ export function OSKnowledgeDock() {
                 <Link
                   key={idx}
                   href={q.href}
-                  className="bg-space group flex cursor-pointer flex-col justify-between rounded-lg border border-white/15 p-3 transition-all hover:border-primary hover:bg-white/5"
+                  className="bg-background group flex cursor-pointer flex-col justify-between rounded-lg border border-white/15 p-3 transition-all hover:border-primary hover:bg-white/5"
                 >
                   <div className="flex items-center justify-between">
                     <q.icon className="h-4 w-4" style={{ color: q.color }} />
@@ -388,7 +388,7 @@ export function OSKnowledgeDock() {
           </div>
 
           {/* RIGHT: LEARNING SUMMARY & PROGRESS RING (Col 9-12) */}
-          <div className="bg-space flex flex-col justify-between space-y-5 rounded-xl border-2 border-primary/50 p-6 shadow-[0_0_35px_rgba(0,200,255,0.18)] lg:col-span-4">
+          <div className="bg-background flex flex-col justify-between space-y-5 rounded-xl border-2 border-primary/50 p-6 shadow-[0_0_35px_rgba(0,200,255,0.18)] lg:col-span-4">
             <div className="text-[11px] font-black tracking-widest text-primary uppercase">
               --- LEARNING SUMMARY ---
             </div>
@@ -470,7 +470,7 @@ export function OSKnowledgeDock() {
         </div>
 
         {/* ═══ BOTTOM SEARCH BAR & SCRIPTURE BANNER (Blueprint 04 Footer) ════ */}
-        <div className="bg-space flex flex-col items-center justify-between gap-6 rounded-xl border-2 border-cyan-500/40 p-5 shadow-[0_0_30px_rgba(0,0,0,0.8)] md:flex-row">
+        <div className="bg-background flex flex-col items-center justify-between gap-6 rounded-xl border-2 border-cyan-500/40 p-5 shadow-[0_0_30px_rgba(0,0,0,0.8)] md:flex-row">
           {/* Left Quote */}
           <div className="flex max-w-xl items-center gap-3 font-serif text-xs text-primary italic md:text-sm">
             <span className="shrink-0 font-serif text-3xl text-primary not-italic opacity-50">
@@ -496,7 +496,7 @@ export function OSKnowledgeDock() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search across all modules..."
-                className="bg-space w-full rounded-lg border border-white/20 py-2 pr-16 pl-9 font-mono text-xs text-white shadow-inner focus:border-primary focus:outline-none"
+                className="bg-background w-full rounded-lg border border-white/20 py-2 pr-16 pl-9 font-mono text-xs text-white shadow-inner focus:border-primary focus:outline-none"
               />
               <div className="absolute top-1/2 right-2.5 flex -translate-y-1/2 items-center gap-1 rounded border border-white/15 px-1.5 py-0.5 font-mono text-[9px] text-primary">
                 <span>CTRL</span>

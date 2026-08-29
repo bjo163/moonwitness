@@ -175,7 +175,7 @@ function PlateCard({
   return (
     <button
       onClick={onSelect}
-      className="panel-box bg-space/80 w-full border p-4 text-left transition-all duration-300 hover:-translate-y-0.5"
+      className="rounded-xl border border-border/40 bg-card/90 bg-background/80 w-full border p-4 text-left transition-all duration-300 hover:-translate-y-0.5"
       style={{
         borderColor: isSelected ? `${plate.color}50` : "rgba(0,240,255,0.1)",
         boxShadow: isSelected ? `0 0 20px ${plate.color}20` : "none",
@@ -258,7 +258,7 @@ function PlateDetail({ plate }: { plate: TectonicPlate }) {
         ].map((item) => (
           <div
             key={item.label}
-            className="panel-box border border-primary/10 p-3"
+            className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-3"
           >
             <span className="mb-1 block font-mono text-[8px] font-bold tracking-widest text-primary">
               {item.label}
@@ -388,7 +388,7 @@ export function TectonicMapView() {
             return (
               <div
                 key={key}
-                className="panel-box border p-4 transition-all hover:-translate-y-0.5"
+                className="rounded-xl border border-border/40 bg-card/90 border p-4 transition-all hover:-translate-y-0.5"
                 style={{
                   borderColor: `${info.color}25`,
                 }}

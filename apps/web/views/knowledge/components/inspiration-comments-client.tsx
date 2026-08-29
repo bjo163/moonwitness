@@ -174,7 +174,7 @@ export function InspirationCommentsClient({
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
-            className="btn-primary btn-primary-ghost flex items-center gap-1 px-3 py-1 text-[10px] btn-clip"
+            className="btn-primary btn-primary-ghost flex items-center gap-1 px-3 py-1 text-[10px] "
           >
             <span className="text-primary">⎔</span>
             <span>{t("SETUP USER ID", "PROFILKAN NAMA")}</span>
@@ -212,7 +212,7 @@ export function InspirationCommentsClient({
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              className="btn-primary mt-1 px-5 py-2 text-xs btn-clip"
+              className="btn-primary mt-1 px-5 py-2 text-xs "
             >
               <span>
                 ⎔{" "}
@@ -231,10 +231,10 @@ export function InspirationCommentsClient({
                   {userProfile.avatar} {userProfile.name}
                 </span>
                 <span
-                  className={`clip-tag border px-2 py-0.5 font-mono text-[9px] font-black uppercase ${
+                  className={`rounded-md border px-2 py-0.5 font-mono text-[9px] font-black uppercase ${
                     userProfile.role === "admin"
-                      ? "border-cyber-purple/40 bg-cyber-purple/10 text-cyber-purple"
-                      : "border-cyber-green/40 bg-cyber-green/10 text-cyber-green"
+                      ? "border-purple-500/40 bg-purple-500/10 text-purple-500"
+                      : "border-emerald-500/40 bg-emerald-500/10 text-emerald-500"
                   }`}
                 >
                   {userProfile.role === "admin"
@@ -253,7 +253,7 @@ export function InspirationCommentsClient({
               onChange={(e) => setCommentText(e.target.value)}
               required
               rows={2}
-              className="tag-clip bg-space w-full border border-primary/30 p-3 text-xs text-foreground placeholder:text-primary focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
+              className="tag-clip bg-background w-full border border-primary/30 p-3 text-xs text-foreground placeholder:text-primary focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
             />
 
             <div className="flex items-center justify-between pt-1">
@@ -273,7 +273,7 @@ export function InspirationCommentsClient({
               <button
                 type="submit"
                 disabled={submitting || !commentText.trim()}
-                className="btn-primary px-4 py-2 text-[10px] btn-clip disabled:opacity-50"
+                className="btn-primary px-4 py-2 text-[10px]  disabled:opacity-50"
               >
                 <span>
                   {submitting
@@ -342,7 +342,7 @@ export function InspirationCommentsClient({
                       </span>
 
                       {isAdmin && (
-                        <span className="clip-tag border border-cyber-purple/40 bg-cyber-purple/10 text-cyber-purple px-1.5 py-0 font-mono text-[8px]">
+                        <span className="rounded-md border border-purple-500/40 bg-purple-500/10 text-purple-500 px-1.5 py-0 font-mono text-[8px]">
                           👑 ADMIN
                         </span>
                       )}

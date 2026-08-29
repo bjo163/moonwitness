@@ -7,10 +7,10 @@ import { Users, Shield, Clock, MonitorPlay, Download } from "lucide-react"
 
 function MetricWidget({ label, value, sub, color, icon }: { label: string; value: string; sub?: string; color: "cyan" | "emerald" | "purple" | "amber"; icon: React.ReactNode }) {
   const colorMap = {
-    cyan: { text: "text-cyber-cyan", border: "border-cyber-cyan/30", sub: "text-cyber-cyan/80" },
-    emerald: { text: "text-cyber-green", border: "border-cyber-green/30", sub: "text-cyber-green/80" },
-    purple: { text: "text-cyber-purple", border: "border-cyber-purple/30", sub: "text-cyber-purple/80" },
-    amber: { text: "text-cyber-yellow", border: "border-cyber-yellow/30", sub: "text-cyber-yellow/80" },
+    cyan: { text: "text-primary", border: "border-primary/30", sub: "text-primary/80" },
+    emerald: { text: "text-emerald-500", border: "border-emerald-500/30", sub: "text-emerald-500/80" },
+    purple: { text: "text-purple-500", border: "border-purple-500/30", sub: "text-purple-500/80" },
+    amber: { text: "text-amber-500", border: "border-amber-500/30", sub: "text-amber-500/80" },
   }
   const c = colorMap[color]
   return (
@@ -163,11 +163,11 @@ export function UsersView() {
           </div>
           <div className="flex items-center justify-between">
             <span>Active</span>
-            <span className="font-semibold text-cyber-green">{activeUsers}</span>
+            <span className="font-semibold text-emerald-500">{activeUsers}</span>
           </div>
           <div className="flex items-center justify-between">
             <span>2FA Enabled</span>
-            <span className="font-semibold text-cyber-purple">{twoFactorUsers}</span>
+            <span className="font-semibold text-purple-500">{twoFactorUsers}</span>
           </div>
         </div>
       </div>

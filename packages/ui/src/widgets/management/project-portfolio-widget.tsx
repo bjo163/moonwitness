@@ -3,7 +3,7 @@ import { FolderGit2, ArrowRight } from "lucide-react"
 
 export function ProjectPortfolioWidget() {
   return (
-    <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-4 xl:col-span-3">
+    <div className="bg-background flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-4 xl:col-span-3">
       <div className="mb-4 flex items-center justify-between">
         <div className="text-[9px] font-black tracking-widest text-primary uppercase">
           PROJECT PORTFOLIO
@@ -67,7 +67,7 @@ export function ProjectPortfolioWidget() {
               <span className="truncate text-white">{proj.n}</span>
             </div>
             <div className="flex w-24 items-center gap-2">
-              <div className="bg-space h-1 flex-1 overflow-hidden rounded-full">
+              <div className="bg-background h-1 flex-1 overflow-hidden rounded-full">
                 <div
                   className="h-full rounded-full"
                   style={{ width: `${proj.p}%`, backgroundColor: proj.c }}

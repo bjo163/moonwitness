@@ -82,7 +82,7 @@ export function Modal({
       {/* Backdrop */}
       <div
         ref={overlayRef}
-        className="bg-space/80 absolute inset-0 backdrop-blur-md"
+        className="bg-background/80 absolute inset-0 backdrop-blur-md"
         onClick={(e) => {
           if (e.target === overlayRef.current) onClose()
         }}

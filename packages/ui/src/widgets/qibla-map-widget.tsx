@@ -34,15 +34,15 @@ export function QiblaMapWidget() {
   if (!mounted) return null
 
   return (
-    <div className="panel-box border-success/40 bg-space/90 space-y-4 border p-4 font-mono shadow-[0_0_20px_rgba(0,255,102,0.15)] sm:p-5">
+    <div className="panel-box border-success/40 bg-background/90 space-y-4 border p-4 font-mono shadow-[0_0_20px_rgba(0,255,102,0.15)] sm:p-5">
       <div className="border-success/20 flex items-center justify-between border-b pb-2.5">
         <div className="flex items-center gap-2">
           <Globe className="text-success h-4 w-4 animate-pulse" />
-          <span className="font-display text-success text-xs font-black tracking-widest uppercase">
+          <span className="font-sans text-success text-xs font-black tracking-widest uppercase">
             // GPS GEODESIC QIBLA MAP TELEMETRY
           </span>
         </div>
-        <span className="clip-tag border border-cyber-green/40 bg-cyber-green/10 text-cyber-green px-2 py-0.5 font-mono text-[8px] font-bold">
+        <span className="rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-500 px-2 py-0.5 font-mono text-[8px] font-bold">
           GPS SYNC 100%
         </span>
       </div>
@@ -62,7 +62,7 @@ export function QiblaMapWidget() {
           <span className="block text-[8px] text-primary uppercase">
             {/* SUDUT AZIMUTH KIBLAT */}
           </span>
-          <div className="text-success font-display font-bold">
+          <div className="text-success font-sans font-bold">
             295.14° NNE (JAKARTA)
           </div>
         </div>
@@ -71,7 +71,7 @@ export function QiblaMapWidget() {
           <span className="block text-[8px] text-primary uppercase">
             {/* JARAK LINTASAN KA&apos;BAH */}
           </span>
-          <div className="font-display font-bold text-accent">
+          <div className="font-sans font-bold text-accent">
             {distanceKm.toLocaleString("en-US")} KM
           </div>
         </div>

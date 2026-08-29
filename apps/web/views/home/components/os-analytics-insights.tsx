@@ -40,7 +40,7 @@ export function OSAnalyticsInsights() {
   return (
     <section
       id="analytics"
-      className="bg-space relative z-10 overflow-hidden border-b border-purple-500/30 py-20 font-mono text-foreground"
+      className="bg-background relative z-10 overflow-hidden border-b border-purple-500/30 py-20 font-mono text-foreground"
     >
       {/* ═══ LAYER 1: DEEP SPACE MATRIX BACKGROUND ═══════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
@@ -53,7 +53,7 @@ export function OSAnalyticsInsights() {
         {/* ═══ TOP HEADER (Blueprint 09) ══════════════════════════════════════ */}
         <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-6 lg:flex-row lg:items-end">
           <div className="max-w-xl space-y-4">
-            <div className="bg-space inline-flex items-center gap-3 rounded-sm border-2 border-purple-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-purple-300 uppercase shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-purple-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-purple-300 uppercase shadow-[0_0_15px_rgba(168,85,247,0.3)]">
               <span className="rounded-xs bg-purple-500 px-1.5 py-0.5 font-black text-black">
                 09
               </span>
@@ -103,7 +103,7 @@ export function OSAnalyticsInsights() {
                   ACTIVE
                 </div>
               </div>
-              <div className="bg-space relative flex h-10 w-10 items-center justify-center rounded-full border border-emerald-500/40">
+              <div className="bg-background relative flex h-10 w-10 items-center justify-center rounded-full border border-emerald-500/40">
                 <Target className="h-5 w-5 animate-pulse text-emerald-500" />
                 <div className="animate-spin-slow absolute inset-0 rounded-full border-t border-emerald-400" />
               </div>
@@ -119,7 +119,7 @@ export function OSAnalyticsInsights() {
               TODAY'S SNAPSHOT
             </div>
 
-            <div className="bg-space flex items-start gap-3 rounded-lg border border-primary/30 p-3 shadow-[0_0_15px_rgba(0,240,255,0.1)]">
+            <div className="bg-background flex items-start gap-3 rounded-lg border border-primary/30 p-3 shadow-[0_0_15px_rgba(0,240,255,0.1)]">
               <div className="shrink-0 rounded border border-primary/30 bg-primary/20 p-2 text-primary">
                 <BookOpen className="h-4 w-4" />
               </div>
@@ -137,7 +137,7 @@ export function OSAnalyticsInsights() {
               </div>
             </div>
 
-            <div className="bg-space flex items-start gap-3 rounded-lg border border-amber-500/30 p-3 shadow-[0_0_15px_rgba(245,158,11,0.1)]">
+            <div className="bg-background flex items-start gap-3 rounded-lg border border-amber-500/30 p-3 shadow-[0_0_15px_rgba(245,158,11,0.1)]">
               <div className="shrink-0 rounded border border-amber-500/30 bg-amber-950/50 p-2 text-amber-400">
                 <Scroll className="h-4 w-4" />
               </div>
@@ -155,7 +155,7 @@ export function OSAnalyticsInsights() {
               </div>
             </div>
 
-            <div className="bg-space flex items-center gap-3 rounded-lg border border-blue-500/30 p-3">
+            <div className="bg-background flex items-center gap-3 rounded-lg border border-blue-500/30 p-3">
               <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full">
                 <Image
                   unoptimized
@@ -180,7 +180,7 @@ export function OSAnalyticsInsights() {
               </div>
             </div>
 
-            <div className="bg-space group flex cursor-pointer items-center justify-between rounded-lg border border-emerald-500/30 p-3 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+            <div className="bg-background group flex cursor-pointer items-center justify-between rounded-lg border border-emerald-500/30 p-3 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
               <div className="flex items-center gap-3">
                 <div className="shrink-0 rounded border border-emerald-500/30 bg-emerald-950/50 p-2 text-emerald-400">
                   <Clock className="h-4 w-4 animate-pulse" />
@@ -207,7 +207,7 @@ export function OSAnalyticsInsights() {
           </div>
 
           {/* CENTER: KNOWLEDGE PROGRESS (Col 4-8) */}
-          <div className="bg-space flex flex-col justify-between rounded-xl border-2 border-primary/30 p-6 shadow-[0_0_40px_rgba(0,240,255,0.1)] lg:col-span-5">
+          <div className="bg-background flex flex-col justify-between rounded-xl border-2 border-primary/30 p-6 shadow-[0_0_40px_rgba(0,240,255,0.1)] lg:col-span-5">
             <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
               KNOWLEDGE PROGRESS
             </div>
@@ -264,7 +264,7 @@ export function OSAnalyticsInsights() {
                     <div className="w-20 text-[9px] font-black text-white">
                       {item.n}
                     </div>
-                    <div className="bg-space h-1 flex-1 overflow-hidden rounded-full">
+                    <div className="bg-background h-1 flex-1 overflow-hidden rounded-full">
                       <div
                         className="h-full rounded-full"
                         style={{
@@ -298,7 +298,7 @@ export function OSAnalyticsInsights() {
           {/* RIGHT: ACTIVITY OVERVIEW & RECENT (Col 9-12) */}
           <div className="flex flex-col gap-6 lg:col-span-4">
             {/* Activity Chart */}
-            <div className="bg-space flex flex-1 flex-col justify-between rounded-xl border border-white/10 p-5 shadow-lg">
+            <div className="bg-background flex flex-1 flex-col justify-between rounded-xl border border-white/10 p-5 shadow-lg">
               <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
                 ACTIVITY OVERVIEW
               </div>
@@ -403,7 +403,7 @@ export function OSAnalyticsInsights() {
             </div>
 
             {/* Recent Discoveries */}
-            <div className="bg-space flex flex-1 flex-col justify-between rounded-xl border border-white/10 p-5">
+            <div className="bg-background flex flex-1 flex-col justify-between rounded-xl border border-white/10 p-5">
               <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
                 RECENT DISCOVERIES
               </div>
@@ -469,7 +469,7 @@ export function OSAnalyticsInsights() {
         {/* ═══ LAYER 3: BOTTOM PANELS ROW (Blueprint 09) ══════════════════════ */}
         <div className="grid grid-cols-1 gap-6 pt-2 md:grid-cols-2 lg:grid-cols-4">
           {/* Panel 1: Learning Streak */}
-          <div className="bg-space flex flex-col justify-between rounded-xl border border-white/10 p-5">
+          <div className="bg-background flex flex-col justify-between rounded-xl border border-white/10 p-5">
             <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
               LEARNING STREAK
             </div>
@@ -505,7 +505,7 @@ export function OSAnalyticsInsights() {
           </div>
 
           {/* Panel 2: Time Investment */}
-          <div className="bg-space flex flex-col justify-between rounded-xl border border-white/10 p-5">
+          <div className="bg-background flex flex-col justify-between rounded-xl border border-white/10 p-5">
             <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
               TIME INVESTMENT
             </div>
@@ -571,7 +571,7 @@ export function OSAnalyticsInsights() {
           </div>
 
           {/* Panel 3: Weekly Goal */}
-          <div className="bg-space flex flex-col justify-between rounded-xl border border-emerald-500/30 p-5 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+          <div className="bg-background flex flex-col justify-between rounded-xl border border-emerald-500/30 p-5 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
             <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
               WEEKLY GOAL
             </div>
@@ -615,7 +615,7 @@ export function OSAnalyticsInsights() {
           </div>
 
           {/* Panel 4: Knowledge Impact */}
-          <div className="bg-space flex flex-col justify-between rounded-xl border border-white/10 p-5">
+          <div className="bg-background flex flex-col justify-between rounded-xl border border-white/10 p-5">
             <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
               KNOWLEDGE IMPACT
             </div>

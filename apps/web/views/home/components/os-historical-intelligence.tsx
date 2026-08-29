@@ -135,7 +135,7 @@ export function OSHistoricalIntelligence() {
   return (
     <section
       id="historical-intelligence"
-      className="bg-space relative z-10 overflow-hidden border-b border-primary/30 py-20 font-mono text-foreground"
+      className="bg-background relative z-10 overflow-hidden border-b border-primary/30 py-20 font-mono text-foreground"
     >
       {/* ═══ LAYER 1: DEEP SPACE SCI-FI GRADIENT ═════════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
@@ -148,7 +148,7 @@ export function OSHistoricalIntelligence() {
         {/* ═══ SECTION HEADER: MATCHING BLUEPRINT 06 ═════════════════════════ */}
         <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-6 xl:flex-row xl:items-end">
           <div className="max-w-3xl space-y-4">
-            <div className="bg-space inline-flex items-center gap-3 rounded-sm border-2 border-teal-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-teal-300 uppercase shadow-[0_0_15px_rgba(20,184,166,0.3)]">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-teal-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-teal-300 uppercase shadow-[0_0_15px_rgba(20,184,166,0.3)]">
               <span className="rounded-xs bg-teal-500 px-1.5 py-0.5 font-black text-black">
                 06
               </span>
@@ -183,7 +183,7 @@ export function OSHistoricalIntelligence() {
               <input
                 type="text"
                 placeholder="Search timeline..."
-                className="bg-space w-full rounded-md border border-white/20 py-1.5 pr-4 pl-9 font-mono text-xs text-white focus:border-teal-400 focus:outline-none"
+                className="bg-background w-full rounded-md border border-white/20 py-1.5 pr-4 pl-9 font-mono text-xs text-white focus:border-teal-400 focus:outline-none"
               />
             </div>
           </div>
@@ -196,7 +196,7 @@ export function OSHistoricalIntelligence() {
             {/* Timeline Overview & Hologram */}
             <Panel
               accentColor="secondary"
-              className="bg-space/80 group flex cursor-pointer flex-col p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/50 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+              className="bg-background/80 group flex cursor-pointer flex-col p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/50 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]"
             >
               <div className="mb-4 text-xs font-black tracking-wider text-teal-400 uppercase">
                 TIMELINE OVERVIEW
@@ -240,7 +240,7 @@ export function OSHistoricalIntelligence() {
             {/* Time Range Slider */}
             <Panel
               accentColor="secondary"
-              className="bg-space/80 p-5 backdrop-blur-xl"
+              className="bg-background/80 p-5 backdrop-blur-xl"
             >
               <div className="mb-4 text-xs font-black tracking-wider text-white uppercase">
                 TIME RANGE
@@ -267,7 +267,7 @@ export function OSHistoricalIntelligence() {
             {/* Scripture References List */}
             <Panel
               accentColor="secondary"
-              className="bg-space/80 flex flex-1 flex-col p-5 backdrop-blur-xl"
+              className="bg-background/80 flex flex-1 flex-col p-5 backdrop-blur-xl"
             >
               <div className="mb-4 text-xs font-black tracking-wider text-white uppercase">
                 SCRIPTURE REFERENCES
@@ -301,7 +301,7 @@ export function OSHistoricalIntelligence() {
           {/* RIGHT MAIN CAROUSELS (Col 4-12) */}
           <div className="space-y-6 lg:col-span-9">
             {/* TOP CAROUSEL: THE JOURNEY OF GUIDANCE */}
-            <div className="bg-space relative rounded-xl border-2 border-white/10 p-6 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+            <div className="bg-background relative rounded-xl border-2 border-white/10 p-6 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
               <div className="mb-4 flex items-center justify-between text-xs font-black tracking-widest text-primary uppercase">
                 <span>--- THE JOURNEY OF GUIDANCE ---</span>
               </div>
@@ -312,7 +312,7 @@ export function OSHistoricalIntelligence() {
                     key={i}
                     className="min-w-[180px] flex-shrink-0 snap-start sm:min-w-[220px]"
                   >
-                    <div className="bg-space group relative flex h-64 flex-col justify-between overflow-hidden rounded-xl border border-white/15 shadow-lg">
+                    <div className="bg-background group relative flex h-64 flex-col justify-between overflow-hidden rounded-xl border border-white/15 shadow-lg">
                       {/* Gradient Fallback Art Background */}
                       <div className="absolute inset-0 z-10 bg-gradient-to-br from-black/80 via-black/40 to-transparent" />
                       <div
@@ -359,7 +359,7 @@ export function OSHistoricalIntelligence() {
                 {prophets.map((p, i) => (
                   <div
                     key={i}
-                    className="bg-space relative h-3 w-3 -translate-y-[5px] rounded-full border-2"
+                    className="bg-background relative h-3 w-3 -translate-y-[5px] rounded-full border-2"
                     style={{
                       borderColor: p.color,
                       boxShadow: `0 0 10px ${p.color}`,
@@ -377,7 +377,7 @@ export function OSHistoricalIntelligence() {
             </div>
 
             {/* MIDDLE CAROUSEL: MAJOR CIVILIZATIONS */}
-            <div className="bg-space relative rounded-xl border-2 border-white/10 p-6 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+            <div className="bg-background relative rounded-xl border-2 border-white/10 p-6 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
               <div className="mb-4 text-xs font-black tracking-widest text-primary uppercase">
                 --- MAJOR CIVILIZATIONS & KINGDOMS ---
               </div>
@@ -388,7 +388,7 @@ export function OSHistoricalIntelligence() {
                     key={i}
                     className="min-w-[150px] flex-shrink-0 snap-start sm:min-w-[180px]"
                   >
-                    <div className="bg-space group relative flex h-44 flex-col justify-between overflow-hidden rounded-lg border border-white/15 shadow-lg">
+                    <div className="bg-background group relative flex h-44 flex-col justify-between overflow-hidden rounded-lg border border-white/15 shadow-lg">
                       {/* Gradient Fallback Art */}
                       <div className="from-space to-space absolute inset-0 z-10 bg-gradient-to-b via-transparent opacity-80" />
                       <div className="absolute inset-0 bg-[url('/assets/hero_bg.png')] bg-cover bg-center opacity-40 mix-blend-color-dodge sepia transition-transform duration-700 group-hover:scale-110" />
@@ -425,7 +425,7 @@ export function OSHistoricalIntelligence() {
         {/* ═══ BOTTOM LAYER: EVENTS LIST & INSIGHTS (Blueprint 06) ═══════════ */}
         <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
           {/* LEFT: GLOBAL MAP DOTS */}
-          <div className="bg-space flex flex-col items-center justify-between rounded-xl border border-white/10 p-5 opacity-80 lg:col-span-3">
+          <div className="bg-background flex flex-col items-center justify-between rounded-xl border border-white/10 p-5 opacity-80 lg:col-span-3">
             <div className="mb-4 w-full text-xs font-black tracking-widest text-primary uppercase">
               --- GLOBAL MAP ---
             </div>
@@ -442,7 +442,7 @@ export function OSHistoricalIntelligence() {
           {/* CENTER: KEY HISTORICAL EVENTS */}
           <Panel
             accentColor="primary"
-            className="bg-space/90 border border-primary/30 p-8 shadow-[0_0_50px_rgba(0,200,255,0.15)] backdrop-blur-xl"
+            className="bg-background/90 border border-primary/30 p-8 shadow-[0_0_50px_rgba(0,200,255,0.15)] backdrop-blur-xl"
           >
             <div className="mb-4 text-xs font-black tracking-widest text-primary uppercase">
               --- KEY HISTORICAL EVENTS ---
@@ -477,7 +477,7 @@ export function OSHistoricalIntelligence() {
           {/* RIGHT: HISTORICAL INSIGHTS & QUR'AN HOLOGRAM */}
           <Panel
             accentColor="primary"
-            className="bg-space/80 group relative col-span-1 flex h-full flex-col justify-between overflow-hidden p-6 backdrop-blur-xl lg:col-span-3"
+            className="bg-background/80 group relative col-span-1 flex h-full flex-col justify-between overflow-hidden p-6 backdrop-blur-xl lg:col-span-3"
           >
             <div className="absolute right-0 bottom-0 translate-x-1/4 translate-y-1/4">
               <BookOpen className="h-48 w-48 -rotate-12 transform text-teal-900/40 transition-all duration-1000 group-hover:scale-110 group-hover:text-teal-800/60" />
@@ -489,7 +489,7 @@ export function OSHistoricalIntelligence() {
               </div>
 
               <div className="relative border-l-2 border-teal-400 py-1 pl-4 font-serif text-sm leading-relaxed text-white/90 italic md:text-base">
-                <span className="bg-space absolute -top-2 -left-[11px] flex h-4 items-center text-3xl leading-none text-teal-500">
+                <span className="bg-background absolute -top-2 -left-[11px] flex h-4 items-center text-3xl leading-none text-teal-500">
                   "
                 </span>
                 Indeed in the stories of the past there is a lesson for those of

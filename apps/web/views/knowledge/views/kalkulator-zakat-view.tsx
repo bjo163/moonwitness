@@ -43,7 +43,7 @@ export function KalkulatorZakatView() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Input Panel */}
-        <div className="panel-box bg-space border-2 border-primary/50 p-6 shadow-[0_0_30px_rgba(0,240,255,0.1)] lg:col-span-2">
+        <div className="rounded-xl border border-border/40 bg-card/90 bg-background border-2 border-primary/50 p-6 shadow-[0_0_30px_rgba(0,240,255,0.1)] lg:col-span-2">
           <div className="mb-6 flex items-center gap-3 border-b border-primary/20 pb-4">
             <Calculator className="h-5 w-5 text-primary" />
             <h2 className="text-sm font-bold tracking-widest text-primary">
@@ -111,7 +111,7 @@ export function KalkulatorZakatView() {
         {/* Output/Telemetry Panel */}
         <div className="space-y-6">
           {/* Global Market Data */}
-          <div className="panel-box bg-panel border border-primary/30 p-6">
+          <div className="rounded-xl border border-border/40 bg-card/90 bg-panel border border-primary/30 p-6">
             <div className="mb-4 flex items-center gap-2 text-xs font-bold text-primary/70">
               <TrendingUp className="text-warning h-4 w-4" />
               GLOBAL GOLD INDEX
@@ -138,7 +138,7 @@ export function KalkulatorZakatView() {
 
           {/* Calculation Result */}
           <div
-            className={`panel-box border-2 p-6 transition-all duration-500 ${isEligible ? "bg-success/10 border-success shadow-[0_0_30px_rgba(0,255,102,0.2)]" : "border-primary/30 bg-black/50"}`}
+            className={`rounded-xl border border-border/40 bg-card/90 border-2 p-6 transition-all duration-500 ${isEligible ? "bg-success/10 border-success shadow-[0_0_30px_rgba(0,255,102,0.2)]" : "border-primary/30 bg-black/50"}`}
           >
             <div className="mb-6 text-center">
               <div className="mb-2 text-[10px] font-bold tracking-widest text-primary/50">

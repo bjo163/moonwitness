@@ -6,7 +6,7 @@ export function ObservatoryRightColumn({ obs }: { obs: any }) {
   return (
     <div className="flex flex-col justify-between space-y-5 lg:col-span-3">
       {/* Upcoming Events List */}
-      <div className="bg-space/40 hover:bg-space/60 space-y-3.5 rounded-xl border border-cyan-500/30 p-5 shadow-[0_0_30px_rgba(0,200,255,0.05)] backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/50">
+      <div className="bg-background/40 hover:bg-background/60 space-y-3.5 rounded-xl border border-cyan-500/30 p-5 shadow-[0_0_30px_rgba(0,200,255,0.05)] backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/50">
         <div className="flex items-center justify-between border-b border-white/10 pb-2 text-xs font-black tracking-wider text-primary uppercase">
           <span>| UPCOMING EVENTS</span>
           <Sparkles className="h-3.5 w-3.5 animate-pulse text-amber-400" />
@@ -52,7 +52,7 @@ export function ObservatoryRightColumn({ obs }: { obs: any }) {
       </div>
 
       {/* Sun Position Strip */}
-      <div className="bg-space/40 flex items-center justify-between rounded-xl border border-amber-500/30 p-4 shadow-[0_0_25px_rgba(245,158,11,0.05)] backdrop-blur-xl transition-all duration-500 hover:border-amber-400/50">
+      <div className="bg-background/40 flex items-center justify-between rounded-xl border border-amber-500/30 p-4 shadow-[0_0_25px_rgba(245,158,11,0.05)] backdrop-blur-xl transition-all duration-500 hover:border-amber-400/50">
         <div className="flex items-center gap-3">
           <Sun className="animate-spin-slow h-8 w-8 shrink-0 text-amber-400 drop-shadow-[0_0_8px_#F59E0B] filter" />
           <div>
@@ -72,7 +72,7 @@ export function ObservatoryRightColumn({ obs }: { obs: any }) {
       </div>
 
       {/* Qibla Direction Compass Dial */}
-      <div className="bg-space/40 flex items-center justify-between gap-3 rounded-xl border border-emerald-500/30 p-5 shadow-[0_0_30px_rgba(16,185,129,0.05)] backdrop-blur-xl transition-all duration-500 hover:border-emerald-400/50">
+      <div className="bg-background/40 flex items-center justify-between gap-3 rounded-xl border border-emerald-500/30 p-5 shadow-[0_0_30px_rgba(16,185,129,0.05)] backdrop-blur-xl transition-all duration-500 hover:border-emerald-400/50">
         <div>
           <div className="mb-1 text-xs font-black tracking-wider text-emerald-400 uppercase">
             | QIBLA DIRECTION
@@ -90,7 +90,7 @@ export function ObservatoryRightColumn({ obs }: { obs: any }) {
         </div>
 
         {/* Compass Gauge visual */}
-        <div className="bg-space/60 relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full border border-emerald-400/40 shadow-[inset_0_0_15px_rgba(16,185,129,0.15)] backdrop-blur-md">
+        <div className="bg-background/60 relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full border border-emerald-400/40 shadow-[inset_0_0_15px_rgba(16,185,129,0.15)] backdrop-blur-md">
           <Compass className="h-10 w-10 animate-pulse text-emerald-400 drop-shadow-[0_0_8px_#10B981]" />
           <span className="absolute top-1 text-[8px] font-black text-white">
             N

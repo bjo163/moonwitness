@@ -84,7 +84,7 @@ export function SanadKeilmuanView() {
             <div key={idx} className="relative pl-10">
               <div className="bg-success border-panel absolute top-3 left-2 h-4 w-4 animate-pulse rounded-full border-2" />
 
-              <div className="panel-box border-success/40 bg-space tag-clip space-y-2 border p-5">
+              <div className="rounded-xl border border-border/40 bg-card/90 border-success/40 bg-background tag-clip space-y-2 border p-5">
                 <div className="flex items-center justify-between text-[10px] font-bold text-primary">
                   <span className="text-success">
                     {/* {node.generation} */}
@@ -92,10 +92,10 @@ export function SanadKeilmuanView() {
                   <span>{node.era}</span>
                 </div>
 
-                <h3 className="font-display text-base font-black text-foreground">
+                <h3 className="font-sans text-base font-black text-foreground">
                   {node.name}
                 </h3>
-                <span className="clip-tag border border-cyber-yellow/40 bg-cyber-yellow/10 text-cyber-yellow px-2 py-0.5 font-mono text-[9px] font-bold">
+                <span className="rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-500 px-2 py-0.5 font-mono text-[9px] font-bold">
                   {node.title}
                 </span>
 

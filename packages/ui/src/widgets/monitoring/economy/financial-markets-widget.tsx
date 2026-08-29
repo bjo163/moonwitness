@@ -60,7 +60,7 @@ export function FinancialMarketsWidget() {
   }, [])
 
   return (
-    <div className="bg-space flex h-full flex-col rounded-xl border border-yellow-500/30 p-4 lg:col-span-12 xl:col-span-4">
+    <div className="bg-background flex h-full flex-col rounded-xl border border-yellow-500/30 p-4 lg:col-span-12 xl:col-span-4">
       <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-2">
         <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-yellow-400 uppercase">
           <DollarSign className="h-4 w-4" />

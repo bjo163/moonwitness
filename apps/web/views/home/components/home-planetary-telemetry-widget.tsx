@@ -85,7 +85,7 @@ export function HomePlanetaryTelemetryWidget() {
   ]
 
   return (
-    <div className="bg-space/10 flex flex-col justify-between rounded-xl border border-white/[0.08] p-5 shadow-[0_8px_32px_rgba(0,0,0,0.4)] backdrop-blur-2xl lg:col-span-3">
+    <div className="bg-background/10 flex flex-col justify-between rounded-xl border border-white/[0.08] p-5 shadow-[0_8px_32px_rgba(0,0,0,0.4)] backdrop-blur-2xl lg:col-span-3">
       <div>
         <div className="mb-3 flex items-center justify-between border-b border-white/10 pb-2.5 text-xs font-bold tracking-wider text-primary uppercase">
           <span>PLANETARY TELEMETRY</span>

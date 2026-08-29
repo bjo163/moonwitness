@@ -230,7 +230,7 @@ export function GlobalSearchModal() {
         <span className="hidden sm:inline">
           {/* SEARCH SCRIPTURES & HADITH */}
         </span>
-        <kbd className="bg-space hidden rounded border border-primary/30 px-1.5 py-0.5 text-[8px] text-muted md:inline">
+        <kbd className="bg-background hidden rounded border border-primary/30 px-1.5 py-0.5 text-[8px] text-muted md:inline">
           CTRL + K
         </kbd>
       </button>
@@ -256,7 +256,7 @@ export function GlobalSearchModal() {
         </div>
 
         {/* Input Bar (CLI Style) */}
-        <div className="border-success/20 bg-space/90 flex shrink-0 items-center gap-2 border-b px-5 py-4">
+        <div className="border-success/20 bg-background/90 flex shrink-0 items-center gap-2 border-b px-5 py-4">
           <div className="text-success text-sm font-bold tracking-wider whitespace-nowrap">
             root@moonwitness:~#
           </div>

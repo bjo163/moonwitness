@@ -13,7 +13,7 @@ import { GraphSvgSecondaryNodes } from "./graph-svg-secondary-nodes"
 
 export function GraphCanvasWidget() {
   return (
-    <div className="bg-space relative flex flex-1 flex-col overflow-hidden rounded-xl border border-white/10">
+    <div className="bg-background relative flex flex-1 flex-col overflow-hidden rounded-xl border border-white/10">
       <div
         className="absolute inset-0 opacity-20"
         style={{
@@ -34,7 +34,7 @@ export function GraphCanvasWidget() {
       </div>
 
       {/* Bottom Toolbar */}
-      <div className="bg-space/90 absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-4 rounded-lg border border-white/10 px-4 py-2 text-[10px] font-bold text-primary backdrop-blur">
+      <div className="bg-background/90 absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-4 rounded-lg border border-white/10 px-4 py-2 text-[10px] font-bold text-primary backdrop-blur">
         <div className="flex gap-2">
           <button className="rounded p-1.5 transition-colors hover:bg-white/10 hover:text-white">
             <Search className="h-4 w-4" />

@@ -49,28 +49,28 @@ export function MizanAssessmentView() {
 
   const accentColors = {
     cyan: {
-      text: "text-cyber-cyan",
-      border: "border-cyber-cyan",
-      bg: "bg-cyber-cyan",
-      shadow: "shadow-cyber-cyan",
+      text: "text-primary",
+      border: "border-primary",
+      bg: "bg-primary",
+      shadow: "shadow-primary/30",
     },
     purple: {
-      text: "text-cyber-purple",
-      border: "border-cyber-purple",
-      bg: "bg-cyber-purple",
-      shadow: "shadow-cyber-purple",
+      text: "text-purple-500",
+      border: "border-purple-500",
+      bg: "bg-purple-500",
+      shadow: "shadow-purple-500/30",
     },
     amber: {
-      text: "text-cyber-yellow",
-      border: "border-cyber-yellow",
-      bg: "bg-cyber-yellow",
-      shadow: "shadow-cyber-yellow",
+      text: "text-amber-500",
+      border: "border-amber-500",
+      bg: "bg-amber-500",
+      shadow: "shadow-amber-500/30",
     },
     emerald: {
-      text: "text-cyber-green",
-      border: "border-cyber-green",
-      bg: "bg-cyber-green",
-      shadow: "shadow-cyber-green",
+      text: "text-emerald-500",
+      border: "border-emerald-500",
+      bg: "bg-emerald-500",
+      shadow: "shadow-emerald-500/30",
     },
   }
 
@@ -79,10 +79,10 @@ export function MizanAssessmentView() {
   return (
     <div className="mx-auto max-w-4xl space-y-6 px-4 pb-20 md:px-0">
       {/* HUD Context Block */}
-      <div className="clip-card border border-cyber-purple/30 bg-cyber-panel/80 p-6 shadow-cyber-purple backdrop-blur-md">
+      <div className="rounded-xl border border-purple-500/30 bg-card/80 p-6 shadow-purple-500/30 backdrop-blur-md">
         <div className="mb-4 flex items-start justify-between">
           <div>
-            <h1 className="font-orbitron text-3xl font-black tracking-wider text-white uppercase">
+            <h1 className="font-sans text-3xl font-black tracking-wider text-white uppercase">
               MIZAN ASSESSMENT ENGINE
             </h1>
             <p className="mt-1 text-sm text-slate-400">
@@ -94,7 +94,7 @@ export function MizanAssessmentView() {
             <div className="font-mono text-[10px] tracking-widest text-slate-400">
               OPERATION
             </div>
-            <div className="font-mono text-xs font-bold text-cyber-purple">
+            <div className="font-mono text-xs font-bold text-purple-500">
               SIMULATION-MODE
             </div>
           </div>
@@ -103,9 +103,9 @@ export function MizanAssessmentView() {
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {/* INPUT PANEL */}
-        <div className="clip-card relative flex flex-col gap-6 overflow-hidden border border-cyber-cyan/30 bg-cyber-panel/80 p-6 backdrop-blur-md transition-all duration-300">
-          <div className="flex items-center gap-3 border-b border-cyber-cyan/20 pb-4">
-            <Activity className="h-5 w-5 text-cyber-cyan" />
+        <div className="rounded-xl relative flex flex-col gap-6 overflow-hidden border border-primary/30 bg-card/80 p-6 backdrop-blur-md transition-all duration-300">
+          <div className="flex items-center gap-3 border-b border-primary/20 pb-4">
+            <Activity className="h-5 w-5 text-primary" />
             <h3 className="text-sm font-black tracking-wider text-white uppercase">
               Assessment Parameters
             </h3>
@@ -120,18 +120,18 @@ export function MizanAssessmentView() {
             <button
               onClick={() => setGeneralSufficient(!generalSufficient)}
               aria-pressed={generalSufficient}
-              className={`clip-card flex items-center gap-4 border p-4 transition-all duration-300 ${generalSufficient ? "-translate-y-0.5 border-cyber-cyan/50 bg-cyber-cyan/10 shadow-cyber-cyan" : "border-slate-800/50 bg-black/40 hover:border-cyber-cyan/50"}`}
+              className={`rounded-xl flex items-center gap-4 border p-4 transition-all duration-300 ${generalSufficient ? "-translate-y-0.5 border-primary/50 bg-primary/10 shadow-primary/30" : "border-slate-800/50 bg-black/40 hover:border-primary/50"}`}
             >
               <div
-                className={`flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors ${generalSufficient ? "border-cyber-cyan bg-cyber-cyan/20" : "border-slate-700"}`}
+                className={`flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors ${generalSufficient ? "border-primary bg-primary/20" : "border-slate-700"}`}
               >
                 {generalSufficient && (
-                  <div className="h-2.5 w-2.5 rounded-full bg-cyber-cyan" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-primary" />
                 )}
               </div>
               <div className="flex flex-col items-start text-left">
                 <span
-                  className={`text-sm font-bold ${generalSufficient ? "text-cyber-cyan" : "text-white"}`}
+                  className={`text-sm font-bold ${generalSufficient ? "text-primary" : "text-white"}`}
                 >
                   General Sufficient
                 </span>
@@ -144,18 +144,18 @@ export function MizanAssessmentView() {
             <button
               onClick={() => setBalanceSatisfied(!balanceSatisfied)}
               aria-pressed={balanceSatisfied}
-              className={`clip-card flex items-center gap-4 border p-4 transition-all duration-300 ${balanceSatisfied ? "-translate-y-0.5 border-cyber-purple/50 bg-cyber-purple/10 shadow-cyber-purple" : "border-slate-800/50 bg-black/40 hover:border-cyber-purple/50"}`}
+              className={`rounded-xl flex items-center gap-4 border p-4 transition-all duration-300 ${balanceSatisfied ? "-translate-y-0.5 border-purple-500/50 bg-purple-500/10 shadow-purple-500/30" : "border-slate-800/50 bg-black/40 hover:border-purple-500/50"}`}
             >
               <div
-                className={`flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors ${balanceSatisfied ? "border-cyber-purple bg-cyber-purple/20" : "border-slate-700"}`}
+                className={`flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors ${balanceSatisfied ? "border-purple-500 bg-purple-500/20" : "border-slate-700"}`}
               >
                 {balanceSatisfied && (
-                  <div className="h-2.5 w-2.5 rounded-full bg-cyber-purple" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-purple-500" />
                 )}
               </div>
               <div className="flex flex-col items-start text-left">
                 <span
-                  className={`text-sm font-bold ${balanceSatisfied ? "text-cyber-purple" : "text-white"}`}
+                  className={`text-sm font-bold ${balanceSatisfied ? "text-purple-500" : "text-white"}`}
                 >
                   Balance Satisfied
                 </span>
@@ -170,18 +170,18 @@ export function MizanAssessmentView() {
                 setInternalReferenceVerified(!internalReferenceVerified)
               }
               aria-pressed={internalReferenceVerified}
-              className={`clip-card flex items-center gap-4 border p-4 transition-all duration-300 ${internalReferenceVerified ? "-translate-y-0.5 border-cyber-green/50 bg-cyber-green/10 shadow-cyber-green" : "border-slate-800/50 bg-black/40 hover:border-cyber-green/50"}`}
+              className={`rounded-xl flex items-center gap-4 border p-4 transition-all duration-300 ${internalReferenceVerified ? "-translate-y-0.5 border-emerald-500/50 bg-emerald-500/10 shadow-emerald-500/30" : "border-slate-800/50 bg-black/40 hover:border-emerald-500/50"}`}
             >
               <div
-                className={`flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors ${internalReferenceVerified ? "border-cyber-green bg-cyber-green/20" : "border-slate-700"}`}
+                className={`flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors ${internalReferenceVerified ? "border-emerald-500 bg-emerald-500/20" : "border-slate-700"}`}
               >
                 {internalReferenceVerified && (
-                  <div className="h-2.5 w-2.5 rounded-full bg-cyber-green" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
                 )}
               </div>
               <div className="flex flex-col items-start text-left">
                 <span
-                  className={`text-sm font-bold ${internalReferenceVerified ? "text-cyber-green" : "text-white"}`}
+                  className={`text-sm font-bold ${internalReferenceVerified ? "text-emerald-500" : "text-white"}`}
                 >
                   Internal Reference Verified
                 </span>
@@ -195,7 +195,7 @@ export function MizanAssessmentView() {
 
         {/* OUTPUT PANEL */}
         <div
-          className={`clip-card border ${currentAccent.border}/40 relative flex flex-col overflow-hidden bg-cyber-panel/90 p-6 backdrop-blur-md transition-all duration-500 ${currentAccent.shadow}`}
+          className={`rounded-xl border ${currentAccent.border}/40 relative flex flex-col overflow-hidden bg-card/90 p-6 backdrop-blur-md transition-all duration-500 ${currentAccent.shadow}`}
         >
           <div className="absolute top-0 right-0 p-8 opacity-[0.03]">
             <Cpu className={`h-40 w-40 ${currentAccent.text}`} />
@@ -224,7 +224,7 @@ export function MizanAssessmentView() {
               Selected Method
             </h4>
             <div
-              className={`text-3xl font-black tracking-wider uppercase ${currentAccent.text} mb-4 text-center font-orbitron transition-colors duration-300`}
+              className={`text-3xl font-black tracking-wider uppercase ${currentAccent.text} mb-4 text-center font-sans transition-colors duration-300`}
             >
               {isResolving
                 ? "resolving"
@@ -233,7 +233,7 @@ export function MizanAssessmentView() {
 
             {limitation ? (
               <div
-                className={`clip-card mt-4 flex max-w-sm items-start gap-3 border border-cyber-yellow/30 bg-cyber-yellow/10 p-3 text-xs text-cyber-yellow`}
+                className={`rounded-xl mt-4 flex max-w-sm items-start gap-3 border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-500`}
               >
                 <ShieldAlert className="mt-0.5 h-4 w-4 flex-shrink-0" />
                 <span>
@@ -246,8 +246,8 @@ export function MizanAssessmentView() {
                 Resolving through Mizan engine
               </div>
             ) : (
-              <div className="mt-4 flex items-center gap-2 rounded-full border border-cyber-green/30 bg-cyber-green/10 px-6 py-2 font-mono text-xs tracking-widest text-cyber-green uppercase">
-                <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyber-green shadow-cyber-green" />
+              <div className="mt-4 flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-6 py-2 font-mono text-xs tracking-widest text-emerald-500 uppercase">
+                <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500 shadow-emerald-500/30" />
                 Optimal Path
               </div>
             )}

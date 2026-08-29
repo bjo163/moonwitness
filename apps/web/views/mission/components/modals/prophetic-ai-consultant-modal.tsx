@@ -49,9 +49,9 @@ export function PropheticAIConsultantModal() {
       {isOpen &&
         mounted &&
         createPortal(
-          <div className="bg-space fixed inset-0 z-[999999] flex animate-in flex-col overflow-hidden font-mono text-foreground duration-150 zoom-in-95 fade-in">
+          <div className="bg-background fixed inset-0 z-[999999] flex animate-in flex-col overflow-hidden font-mono text-foreground duration-150 zoom-in-95 fade-in">
             {/* Header Overlay */}
-            <div className="bg-space border-success/40 z-10 flex h-10 shrink-0 items-center justify-between border-b px-3 sm:h-11 sm:px-6">
+            <div className="bg-background border-success/40 z-10 flex h-10 shrink-0 items-center justify-between border-b px-3 sm:h-11 sm:px-6">
               <div className="flex items-center gap-2 sm:gap-3">
                 <div className="text-success flex items-center gap-1.5 text-xs font-bold tracking-wider uppercase">
                   <Radio className="text-success h-3.5 w-3.5 shrink-0 animate-pulse" />
