@@ -29,6 +29,10 @@ The following are intentional exceptions, reported as `domainExceptions` rather 
 
 All exceptions remain visible with file, line, rule, kind, and reason. Documentation examples are scanned and classified but do not become source violations. Supported authored color formats are hex, `rgb(a)`, `hsl(a)`, and token references; `oklch`, `oklab`, `hwb`, `lab`, `lch`, `color()`, `color-mix()`, and `device-cmyk()` require design review.
 
+### Auditor boundary
+
+The design-token registry (`packages/ui/src/tokens/**`) and shared theme stylesheet (`packages/ui/src/styles/globals.css`, including `.dark`) are canonical infrastructure. Their `cyber-*` declarations are allowed and remain separately auditable. The auditor itself and governance documentation are classified as tooling/documentation. Every other active source file under `apps/` or `packages/` must use semantic theme tokens and must not reference `bg-cyber-*`, `text-cyber-*`, `border-cyber-*`, or `cyber-*` aliases.
+
 ---
 
 ## 🏛️ PILLAR II: THEME PARITY & ACCESSIBILITY

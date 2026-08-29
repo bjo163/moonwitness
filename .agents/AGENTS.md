@@ -11,6 +11,15 @@
 
 > **Constitutional Design Authority**: Every component, layout, token, and view in MoonWitness must conform strictly to standard shadcn/ui semantic tokens, Vercel enterprise ergonomics, and Tailwind CSS v4 conventions.
 
+## 00 — AUDITOR ENFORCEMENT BOUNDARY
+
+The constitutional auditor scans authored source extensions throughout the repository, including application packages, scripts, and governance files. Generated/dependency directories are excluded explicitly; active application source is never silently skipped.
+
+- `bg-cyber-*`, `text-cyber-*`, `border-cyber-*`, and `cyber-*` aliases are forbidden in active application source.
+- `packages/ui/src/tokens/**` is the canonical token registry, and `packages/ui/src/styles/globals.css` is the shared theme definition; their token declarations and `.dark` selector are audited as theme infrastructure, not application violations.
+- `scripts/audit-rules.mjs`, `AGENTS.md`, `.agents/**`, and other governance documentation are classified as tooling/documentation. Examples and registry references remain visible to the scanner but do not count as application findings.
+- `apps/web/app/layout.tsx` must not force dark mode, and its root body must contain both `bg-background` and `text-foreground`.
+
 ---
 
 ## 01 — IDENTITY & DESIGN PHILOSOPHY
