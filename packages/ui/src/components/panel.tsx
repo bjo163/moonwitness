@@ -22,6 +22,7 @@ export function PanelHeader({
   subtitle?: string
 }) {
   const accentClasses: Record<ThemeAccentColor, string> = {
+    destructive: "text-destructive",
     primary: "text-primary",
     secondary: "text-secondary-foreground",
     success: "text-success",
@@ -103,6 +104,7 @@ export function Panel({
   const levelConfig =
     THEME_TOKENS.panelLevels[level] || THEME_TOKENS.panelLevels.level2
   const accentClasses: Record<ThemeAccentColor, string> = {
+    destructive: "border-destructive/30",
     primary: "border-primary/30",
     secondary: "border-secondary/40",
     success: "border-success/30",

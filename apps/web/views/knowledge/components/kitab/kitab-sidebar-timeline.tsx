@@ -31,7 +31,7 @@ export function KitabLeftSidebar({ activeCollection, onCollectionChange }: Kitab
               key={i}
               type="button"
               onClick={() => onCollectionChange(collection as "all" | "canonical" | "additional")}
-              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-xs font-bold transition-all ${isActive ? "border border-cyber-cyan/30 bg-cyber-cyan/10 text-cyber-cyan" : "text-white/60 hover:bg-white/5 hover:text-white"}`}
+              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-xs font-bold transition-all ${isActive ? "border border-primary/30 bg-primary/10 text-primary" : "text-muted-foreground hover:bg-accent hover:text-foreground"}`}
             >
               <BookOpen
                 className={`h-3.5 w-3.5 ${i === 0 ? "text-blue-400" : "text-white/30"}`}

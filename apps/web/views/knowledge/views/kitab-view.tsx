@@ -177,9 +177,9 @@ export function KitabPortalView() {
               <KitabAdditionalGrid scriptures={visibleAdditionalScriptures} totalProphets={totalProphets} />
             )}
             {visibleCanonicalCards.length === 0 && visibleAdditionalScriptures.length === 0 && (
-              <div className="clip-card border border-cyber-cyan/20 bg-cyber-panel p-10 text-center">
-                <p className="font-mono text-sm text-white/60">No scripture resources match this search.</p>
-                <p className="mt-2 text-xs text-white/35">Try a title, tradition, or collection filter.</p>
+              <div className="rounded-xl border border-border bg-card p-10 text-center">
+                <p className="font-mono text-sm text-muted-foreground">No scripture resources match this search.</p>
+                <p className="mt-2 text-xs text-muted-foreground/70">Try a title, tradition, or collection filter.</p>
               </div>
             )}
           </div>

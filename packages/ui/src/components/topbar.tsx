@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation"
 import { Button } from "./button"
 import { apiPost } from "@moon/client"
 import { APP_PORTS } from "@workspace/types"
-import { cosmicAudio, soundEngine } from "./audio-synthesizer"
+import { soundEngine } from "./audio-synthesizer"
 
 const getApiBase = () => {
   if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_API_URL) {
@@ -55,13 +55,13 @@ export function Topbar({
     setSeedResult(null)
     try {
       const res = await apiPost<any>(`${getApiBase()}/api/system/demo-seed`, {})
-      cosmicAudio.playHarmonic528()
+      soundEngine.playHarmonic528()
       setSeedResult(res?.message || "Demo matrix seeded successfully!")
       setTimeout(() => {
         window.location.reload()
       }, 1500)
     } catch (e: any) {
-      cosmicAudio.playAlertTone()
+      soundEngine.playAlertTone()
       setSeedResult(`Failed: ${e?.message || e}`)
     } finally {
       setSeeding(false)

@@ -137,19 +137,19 @@ export function HadithsView() {
         />
 
         {notification && (
-          <div className="flex animate-in items-center gap-2 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-xs font-bold text-emerald-600 fade-in dark:text-emerald-400">
+          <div className="flex animate-in items-center gap-2 rounded-2xl border border-success/30 bg-success/10 p-4 text-xs font-bold text-success fade-in">
             <span>{notification}</span>
           </div>
         )}
 
         {error && (
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-cyber-pink/30 bg-cyber-pink/10 p-4 text-xs text-cyber-pink">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-xs text-destructive">
             <span>Gagal menyegarkan katalog hadits. Data tersimpan lokal tetap tersedia.</span>
             <Button
               variant="outline"
               size="sm"
               onClick={() => void refetch()}
-              className="border-cyber-pink/40 text-cyber-pink hover:bg-cyber-pink/10"
+              className="border-destructive/40 text-destructive hover:bg-destructive/10"
             >
               COBA LAGI
             </Button>

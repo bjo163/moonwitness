@@ -212,13 +212,13 @@ export function ScripturesView() {
         )}
 
         {error && (
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-cyber-pink/30 bg-cyber-pink/10 p-4 text-xs text-cyber-pink">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-xs text-destructive">
             <span>Gagal memuat data ayat terbaru. Data tersimpan lokal tetap tersedia.</span>
             <Button
               variant="outline"
               size="sm"
               onClick={() => void refetch()}
-              className="border-cyber-pink/40 text-cyber-pink hover:bg-cyber-pink/10"
+              className="border-destructive/40 text-destructive hover:bg-destructive/10"
             >
               COBA LAGI
             </Button>
@@ -255,7 +255,7 @@ export function ScripturesView() {
             <Button
               onClick={handleSyncFromApi}
               disabled={syncingApi}
-              className="flex shrink-0 items-center gap-2 rounded-none border border-cyber-green/40 bg-cyber-green/20 px-4 py-1.5 font-mono text-xs font-bold text-cyber-green uppercase transition-all hover:bg-cyber-green/30"
+              className="flex shrink-0 items-center gap-2 rounded-lg border border-success/40 bg-success/20 px-4 py-1.5 font-mono text-xs font-bold text-success uppercase transition-all hover:bg-success/30"
             >
               <span>{syncingApi ? "⏳ MEMPROSES..." : "🔄 [ SYNC API ]"}</span>
             </Button>
