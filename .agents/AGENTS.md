@@ -25,7 +25,7 @@ MoonWitness is a **Deep Space Sci-Fi Divine Observation Terminal** — an advanc
 VISUAL DNA & 5-LAYER ASSET ARCHITECTURE:
 ├── Layer 1: Deep Space Atmosphere ─ indigo/navy nebula glows, star grids, optical scanlines
 ├── Layer 2: 3D Celestial Sim ────── photorealistic moon spheres, earth horizons, solar coronas
-├── Layer 3: Chamfered Glass Panel ─ tactical translucent glass (bg-black/80 backdrop-blur-md) with cut corners
+├── Layer 3: Glassmorphism Card ──── translucent glass panel (bg-card/85 backdrop-blur-md) with smooth rounded corners
 ├── Layer 4: Quantum Pipelines ───── optical laser data links (──►), sequential integration decks
 └── Layer 5: Apple-Grade Typography ─ pristine monospace telemetry, high-contrast command badges
 ```
@@ -206,7 +206,7 @@ MoonWitness OS operates as a high-performance Turborepo monorepo with isolated d
 | 1 | **Modal** | `modal.tsx` | Dialog overlay | `isOpen`, `onClose`, `title`, `icon`, `maxWidth`, `borderColor` |
 | 2 | **Panel** | `panel.tsx` | Container box (5 levels) | `level`, `accentColor`, `children` |
 | 3 | **PanelHeader** | `panel.tsx` | Panel header bar | `title`, `icon`, `status`, `accentColor`, `subtitle` |
-| 4 | **Button** | `button.tsx` | Tactical CTA button | `variant`, `href`, `accentColor`, `onClick` |
+| 4 | **Button** | `button.tsx` | Interactive CTA button | `variant`, `href`, `accentColor`, `onClick` |
 | 5 | **ContextBlock** | `context-block.tsx` | Page H1 header | `title`, `subtitle`, `operation`, `status`, `accentColor` |
 | 6 | **Breadcrumb** | `breadcrumb.tsx` | Navigation trail | `paths[]` |
 | 7 | **ResourceTable** | `resource-table.tsx` | Generic data grid | `data`, `columns`, `searchKeys`, `accentColor`, `onEdit`, `onDelete` |
@@ -215,7 +215,7 @@ MoonWitness OS operates as a high-performance Turborepo monorepo with isolated d
 | 10 | **Tabs** | `tabs.tsx` | Section navigation | `activeTab`, `onChange`, `tabs[]`, `accentColor` |
 | 11 | **Progress** | `progress.tsx` | Sync progress bar | `value`, `max`, `label`, `status`, `accentColor` |
 | 12 | **Tooltip** | `tooltip.tsx` | Hover info | `text`, `position`, `children` |
-| 13 | **Sidebar** | `sidebar.tsx` | Tactical sidebar nav | `items[]`, `activeId`, `onSelect` |
+| 13 | **Sidebar** | `sidebar.tsx` | Sidebar navigation | `items[]`, `activeId`, `onSelect` |
 | 14 | **AIPanel** | `chat/ai-console.tsx` | AI interaction panel | `agentName`, `isTyping`, `message` (JSX) |
 | 15 | **LoadingState** | `states.tsx` | Pulse sync loader | `message`, `accentColor` |
 | 16 | **ErrorState** | `states.tsx` | Fault-tolerance alert | `title`, `message`, `onRetry` |
@@ -265,7 +265,7 @@ MoonWitness OS operates as a high-performance Turborepo monorepo with isolated d
 
 ### Procedural Web Audio Engine
 
-- **`cosmicAudio`**: Web Audio API oscillator synthesis generating tactical clicks, confirm pings, alert tones, and 528Hz Solfeggio resonant harmonics.
+- **`cosmicAudio`**: Web Audio API oscillator synthesis generating subtle click feedbacks, confirm pings, alert tones, and 528Hz Solfeggio resonant harmonics.
 - **Zero MP3 / WAV file dependencies**: 0ms latency, 0 network bandwidth.
 
 ---

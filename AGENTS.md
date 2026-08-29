@@ -10,7 +10,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 ## 1. Dual-Portal Monorepo System
 This project operates on an isolated dual-portal and backend engine architecture:
 - `apps/web/`: Public Cosmic Portal (Next.js 16, Port 3000) — Observatorium, Kitab Suci, Hadits, Seismix, Kalender Hijriyah, & Refleksi Global.
-- `apps/command-center/`: Tactical Governance Terminal (Next.js 16, Port 3001) — Manajemen Hadits, Kitab, Pengguna, CAB RFC, BullMQ Worker Queue, Automations, & System Operations.
+- `apps/command-center/`: Operations & Governance Console (Next.js 16, Port 3001) — Manajemen Hadits, Kitab, Pengguna, CAB RFC, BullMQ Worker Queue, Automations, & System Operations.
 - `apps/api/`: Backend Service (Port 4000) — REST, RPC, Server-Sent Events (SSE), dan Background Cron/Queue Runner.
 
 ## 2. Master Workspace Packages (37 Projects Matrix & 16 Sovereign Addons)
@@ -308,17 +308,17 @@ Theme: "Deep Space Cosmic Operating System powered by Standard shadcn/ui Design 
 </button>
 ```
 
-#### Data Card with Tactical Corners
+#### Data Card with Semantic Status Accents
 ```tsx
-<div className="military-box corner-cyan clip-card bg-cyber-panel border border-cyber-cyan/25 p-4 space-y-3">
-  <div className="text-xs font-mono uppercase tracking-widest text-cyber-cyan/70">
+<div className="corner-cyan clip-card bg-card/90 border border-border/40 p-4 space-y-3 backdrop-blur-md shadow-sm">
+  <div className="text-xs text-muted-foreground uppercase tracking-wider">
     System Status
   </div>
-  <div className="text-3xl font-mono text-cyber-cyan">
+  <div className="text-3xl font-mono text-cyber-cyan font-bold">
     98.7%
   </div>
   <div className="laser-conduit-cyan" />
-  <div className="text-sm text-gray-400">
+  <div className="text-sm text-muted-foreground">
     All systems operational
   </div>
 </div>
