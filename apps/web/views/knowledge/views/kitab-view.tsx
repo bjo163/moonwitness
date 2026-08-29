@@ -18,6 +18,8 @@ import { KitabLeftSidebar, KitabRightTimeline } from "../components/kitab/kitab-
 export function KitabPortalView() {
   const [scriptures, setScriptures] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [activeCollection, setActiveCollection] = useState<"all" | "canonical" | "additional">("all")
 
   useEffect(() => {
     fetch("/api/scriptures")
@@ -81,6 +83,18 @@ export function KitabPortalView() {
     image: s.cover_image_url || "/cover_eastern.png",
   }))
 
+  const normalizedQuery = searchQuery.trim().toLowerCase()
+  const matchesQuery = (value: string) =>
+    !normalizedQuery || value.toLowerCase().includes(normalizedQuery)
+  const visibleCanonicalCards = canonicalCards.filter((card) =>
+    activeCollection !== "additional" &&
+    matchesQuery(`${card.name} ${card.original_name} ${card.religion} ${card.subtitle}`)
+  )
+  const visibleAdditionalScriptures = otherScriptures.filter((scripture) =>
+    activeCollection !== "canonical" &&
+    matchesQuery(`${scripture.name} ${scripture.religion} ${scripture.texts}`)
+  )
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-card pb-10 font-sans text-white selection:bg-blue-500/30">
       {/* Background Ambience */}
@@ -112,6 +126,8 @@ export function KitabPortalView() {
             <Search className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-white/30" />
             <input
               type="text"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
               placeholder="Search verses, keywords, topic across all scriptures..."
               className="w-full rounded-full border border-white/10 bg-card py-2.5 pr-16 pl-11 text-xs text-white shadow-inner transition-all outline-none focus:border-blue-500/50"
             />
@@ -135,12 +151,37 @@ export function KitabPortalView() {
         {/* 3. Main 3-Column Content Layout */}
         <div className="flex flex-col items-start gap-5 lg:flex-row">
           {/* LEFT SIDEBAR: MENU & FILTERS */}
-          <KitabLeftSidebar />
+          <KitabLeftSidebar
+            activeCollection={activeCollection}
+            onCollectionChange={setActiveCollection}
+          />
 
           {/* CENTER CONTENT: CARDS & ADDITIONAL SCRIPTURES */}
           <div className="flex min-w-0 flex-1 flex-col space-y-6">
-            <KitabCanonicalGrid cards={canonicalCards} />
-            <KitabAdditionalGrid scriptures={otherScriptures} totalProphets={totalProphets} />
+            <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-3">
+              <p className="font-mono text-[10px] tracking-widest text-white/40 uppercase">
+                {visibleCanonicalCards.length + visibleAdditionalScriptures.length} resources in view
+              </p>
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="text-[10px] font-bold tracking-widest text-cyan-400 uppercase hover:text-white"
+                >
+                  Clear search
+                </button>
+              )}
+            </div>
+            {visibleCanonicalCards.length > 0 && <KitabCanonicalGrid cards={visibleCanonicalCards} />}
+            {visibleAdditionalScriptures.length > 0 && (
+              <KitabAdditionalGrid scriptures={visibleAdditionalScriptures} totalProphets={totalProphets} />
+            )}
+            {visibleCanonicalCards.length === 0 && visibleAdditionalScriptures.length === 0 && (
+              <div className="clip-card border border-cyber-cyan/20 bg-cyber-panel p-10 text-center">
+                <p className="font-mono text-sm text-white/60">No scripture resources match this search.</p>
+                <p className="mt-2 text-xs text-white/35">Try a title, tradition, or collection filter.</p>
+              </div>
+            )}
           </div>
 
           {/* RIGHT SIDEBAR: TIMELINE & CALLOUTS */}

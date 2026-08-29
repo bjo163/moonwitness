@@ -64,7 +64,7 @@ export function ReaderVersesGrid({
   return (
     <div className="flex flex-col gap-6 md:col-span-6 lg:col-span-7">
       {/* Tabs */}
-      <div className="custom-scrollbar flex items-center gap-1 overflow-x-auto border-b border-white/10 pb-px">
+      <div role="tablist" aria-label="Reader sections" className="custom-scrollbar flex items-center gap-1 overflow-x-auto border-b border-white/10 pb-px">
         {[
           "OVERVIEW",
           "READ & EXPLORE",
@@ -74,6 +74,9 @@ export function ReaderVersesGrid({
         ].map((tab, i) => (
           <button
             key={tab}
+            type="button"
+            role="tab"
+            aria-selected={i === 1}
             className={`border-b-2 px-4 py-3 text-[10px] font-black tracking-widest whitespace-nowrap uppercase transition-colors ${
               i === 1
                 ? "border-blue-500 text-blue-400"
@@ -85,7 +88,7 @@ export function ReaderVersesGrid({
         ))}
       </div>
 
-      <div className="relative overflow-hidden rounded-xl border border-white/5 bg-card p-5 md:p-6">
+      <article aria-label={`${book.name}, chapter ${currentChapter}`} className="relative overflow-hidden rounded-xl border border-white/5 bg-[#0A1224] p-5 md:p-6">
         {/* Header Content */}
         <div className="mb-6 flex flex-col items-start justify-between gap-3 border-b border-white/10 pb-4 md:flex-row md:items-center">
           <div>
@@ -186,7 +189,8 @@ export function ReaderVersesGrid({
                   verse.text_tajweed &&
                   verse.text_tajweed !== verse.text_original ? (
                     <div
-                      className="tajweed-container font-serif text-2xl leading-[2.5] text-amber-400/90"
+                      lang="ar"
+                      className="tajweed-container font-arabic text-2xl leading-[2.5] text-amber-400/90"
                       dir={isRtl ? "rtl" : "ltr"}
                       dangerouslySetInnerHTML={{
                         __html: sanitizeHtml(verse.text_tajweed),
@@ -194,7 +198,8 @@ export function ReaderVersesGrid({
                     />
                   ) : (
                     <p
-                      className="font-serif text-2xl leading-[2.5] text-amber-400/90"
+                      lang="ar"
+                      className="font-arabic text-2xl leading-[2.5] text-amber-400/90"
                       dir={isRtl ? "rtl" : "ltr"}
                     >
                       {verse.text_original}
@@ -260,7 +265,7 @@ export function ReaderVersesGrid({
             </div>
           )}
         </div>
-      </div>
+      </article>
     </div>
   )
 }

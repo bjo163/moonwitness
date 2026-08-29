@@ -36,18 +36,23 @@ export function HaditsItemCard({ hadith, isActive, onClick }: HaditsItemCardProp
   }
 
   return (
-    <div
+    <article
       onClick={onClick}
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") onClick()
+      }}
+      aria-label={`Hadith ${hadith.id}, ${hadith.grade}`}
       className={`group relative cursor-pointer rounded-xl border p-5 transition-all duration-300 ${
         isActive
-          ? "border-border bg-card shadow-sm"
-          : "border-white/5 bg-card hover:border-white/20 hover:bg-card"
+          ? "border-cyan-500/50 bg-[#0B1528] shadow-[0_0_20px_rgba(0,240,255,0.15)]"
+          : "border-white/5 bg-[#080E1C] hover:border-white/20 hover:bg-[#0A1224]"
       }`}
     >
       {/* Top Metadata Strip */}
       <div className="mb-4 flex items-center justify-between gap-2 border-b border-white/5 pb-3">
         <div className="flex items-center gap-2 font-mono text-[10px]">
-          <span className="flex h-5 items-center justify-center rounded bg-white/5 px-2 font-black text-primary">
+          <span className="flex h-5 items-center justify-center rounded bg-white/5 px-2 font-black text-cyan-400">
             #{hadith.id}
           </span>
           <span className="text-white/60">{hadith.ref}</span>
@@ -68,7 +73,7 @@ export function HaditsItemCard({ hadith, isActive, onClick }: HaditsItemCardProp
       </div>
 
       {/* Arabic Matan */}
-      <div className="font-arabic mb-4 text-right text-lg leading-relaxed text-white/95 drop-shadow-sm sm:text-xl">
+      <div lang="ar" dir="rtl" className="font-arabic mb-4 text-right text-lg leading-relaxed text-white/95 drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] sm:text-xl">
         {hadith.arabic}
       </div>
 
@@ -79,21 +84,21 @@ export function HaditsItemCard({ hadith, isActive, onClick }: HaditsItemCardProp
 
       {/* Card Action Footnotes */}
       <div className="flex items-center justify-between border-t border-white/5 pt-3 text-[10px] text-white/40">
-        <div className="flex items-center gap-1 font-mono text-primary/80">
+        <div className="flex items-center gap-1 font-mono text-cyan-400/80">
           <Quote className="h-3 w-3" />
           <span>Universal Wisdom Corpus</span>
         </div>
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-1 font-mono hover:text-primary">
+          <button className="flex items-center gap-1 font-mono hover:text-cyan-400">
             <BookOpen className="h-3 w-3" />
             <span>Takhrij</span>
           </button>
-          <button className="flex items-center gap-1 font-mono hover:text-primary">
+          <button className="flex items-center gap-1 font-mono hover:text-cyan-400">
             <LinkIcon className="h-3 w-3" />
             <span>Sanad Graph</span>
           </button>
         </div>
       </div>
-    </div>
+    </article>
   )
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useResource } from "@workspace/hooks"
 import { fetchHadithList } from "@moon/client"
 import { HaditsCompendiumsBar } from "../components/hadits/hadits-compendiums-bar"
@@ -12,6 +12,7 @@ export function HaditsPortalView() {
   const [activeId, setActiveId] = useState("0")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedGrade, setSelectedGrade] = useState("ALL")
+  const [selectedCompendium, setSelectedCompendium] = useState("bukhari")
   const [currentPage, setCurrentPage] = useState(1)
   const PAGE_LIMIT = 20
 
@@ -20,7 +21,7 @@ export function HaditsPortalView() {
     total: number
   }>(
     async () => {
-      const res = await fetchHadithList("bukhari", currentPage, PAGE_LIMIT)
+      const res = await fetchHadithList(selectedCompendium, currentPage, PAGE_LIMIT)
       const rawList = res.items || []
 
       const formatted: FormattedHadithItem[] = rawList.map((item: any) => {
@@ -50,10 +51,15 @@ export function HaditsPortalView() {
       }
     },
     {
-      deps: [currentPage],
+      deps: [currentPage, selectedCompendium],
       initialData: { data: [], total: 187642 },
     }
   )
+
+  useEffect(() => {
+    setCurrentPage(1)
+    setActiveId("0")
+  }, [searchQuery, selectedGrade, selectedCompendium])
 
   const hadithData = hadithResponse?.data || []
   const totalHadiths = hadithResponse?.total || 187642
@@ -73,7 +79,11 @@ export function HaditsPortalView() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-card pb-12 font-sans text-white selection:bg-primary/10">
       {/* 1. Top Compendiums Stats Bar */}
-      <HaditsCompendiumsBar totalHadiths={totalHadiths} />
+      <HaditsCompendiumsBar
+        totalHadiths={totalHadiths}
+        selectedSlug={selectedCompendium}
+        onSelect={setSelectedCompendium}
+      />
 
       <div className="mx-auto max-w-[1800px] space-y-6 px-4 pt-6 lg:px-6">
         {/* 2. Header Title */}
@@ -81,7 +91,7 @@ export function HaditsPortalView() {
           <div>
             <div className="mb-1 flex items-center gap-3">
               <h1 className="font-mono text-2xl font-black tracking-widest text-white uppercase drop-shadow-md sm:text-3xl">
-                HADITH TRANSMISSION COMPENDIUM
+                {selectedCompendium === "bukhari" ? "HADITH TRANSMISSION COMPENDIUM" : "HADITH COLLECTION READER"}
               </h1>
               <span className="rounded border border-border bg-primary/10 px-2 py-0.5 font-mono text-[9px] font-bold text-primary">
                 KUTUBUT TIS&apos;AH
