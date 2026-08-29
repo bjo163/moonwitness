@@ -32,16 +32,17 @@ export function GlobalLiveAudioTranslator() {
     <div className="relative font-sans">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="clip-tag flex cursor-pointer items-center gap-1 border border-cyber-cyan/40 px-2 py-1 text-xs font-medium text-cyber-cyan transition-colors hover:border-cyber-cyan hover:bg-cyber-cyan/10"
+        className="flex cursor-pointer items-center gap-1 rounded-md border border-primary/40 px-2 py-1 text-xs font-medium text-primary transition-colors hover:border-primary hover:bg-primary/10"
         title="Choose audio translation language"
       >
         <Languages className="h-3.5 w-3.5" />
-        <span>Audio · {selectedLang.code.toUpperCase()} {selectedLang.flag}</span>
+        <span>
+          Audio · {selectedLang.code.toUpperCase()} {selectedLang.flag}
+        </span>
       </button>
 
       {isOpen && (
-        <div className="clip-card theme-scrollbar absolute bottom-full left-0 z-50 mb-2 max-h-56 w-52 space-y-1 overflow-y-auto border border-cyber-cyan/40 bg-cyber-panel p-2 text-sm">
-
+        <div className="theme-scrollbar absolute bottom-full left-0 z-50 mb-2 max-h-56 w-52 space-y-1 overflow-y-auto rounded-lg border border-primary/40 bg-card p-2 text-sm">
           {GLOBAL_LANGUAGES.map((lang) => (
             <button
               key={lang.code}
@@ -51,7 +52,7 @@ export function GlobalLiveAudioTranslator() {
               }}
               className={`flex w-full items-center justify-between rounded px-2 py-1.5 text-left transition-colors ${
                 selectedLang.code === lang.code
-                  ? "bg-cyber-cyan/10 font-medium text-cyber-cyan"
+                  ? "bg-primary/10 font-medium text-primary"
                   : "text-foreground hover:bg-accent"
               }`}
             >

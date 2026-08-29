@@ -45,7 +45,7 @@ export function SubNavigation({ links }: SubNavigationProps) {
   const pathname = usePathname()
 
   return (
-    <div className="sticky top-16 z-40 w-full border-b border-border bg-cyber-panel">
+    <div className="sticky top-16 z-40 w-full border-b border-border bg-card">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <nav className="scrollbar-hide flex snap-x snap-mandatory items-center gap-2 overflow-x-auto py-3">
           {links.map((link) => {
@@ -60,14 +60,14 @@ export function SubNavigation({ links }: SubNavigationProps) {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`group clip-btn flex shrink-0 snap-start items-center gap-2.5 border px-4 py-2 transition-colors duration-200 ${
+                className={`group flex shrink-0 snap-start items-center gap-2.5 border px-4 py-2 transition-colors duration-200 clip-btn ${
                   isActive
-                    ? "border-cyber-cyan/50 bg-cyber-cyan/10 text-cyber-cyan"
+                    ? "border-primary/50 bg-primary/10 text-primary"
                     : "border-transparent text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground"
                 }`}
               >
                 <Icon
-                  className={`h-3.5 w-3.5 transition-colors ${isActive ? "text-cyber-cyan" : "text-muted-foreground group-hover:text-foreground"}`}
+                  className={`h-3.5 w-3.5 transition-colors ${isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"}`}
                 />
                 <span className="text-sm font-medium tracking-wide">
                   {link.label}

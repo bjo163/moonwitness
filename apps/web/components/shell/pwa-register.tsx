@@ -75,14 +75,16 @@ export function PwaRegister() {
   return (
     <>
       {isOffline && (
-        <div className="fixed right-4 bottom-16 z-50 flex items-center gap-2 clip-tag border border-cyber-yellow/50 bg-cyber-panel px-4 py-2 text-sm text-cyber-yellow">
+        <div className="border-warning/50 text-warning fixed right-4 bottom-16 z-50 flex items-center gap-2 rounded-md border bg-card px-4 py-2 text-sm">
           <span>Offline mode</span>
-          <span className="text-xs text-muted-foreground">Cached data available</span>
+          <span className="text-xs text-muted-foreground">
+            Cached data available
+          </span>
         </div>
       )}
 
       {showInstallBanner && !isOffline && (
-        <div className="fixed bottom-16 left-1/2 z-50 flex -translate-x-1/2 items-center gap-4 clip-card border border-cyber-cyan/40 bg-cyber-panel p-4">
+        <div className="fixed bottom-16 left-1/2 z-50 flex -translate-x-1/2 items-center gap-4 rounded-lg border border-primary/40 bg-card p-4">
           <div className="flex flex-col">
             <span className="font-sans text-sm font-semibold text-foreground">
               Install MoonWitness OS
@@ -94,13 +96,13 @@ export function PwaRegister() {
           <div className="flex gap-2">
             <button
               onClick={() => setShowInstallBanner(false)}
-              className="clip-btn border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              className="border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors clip-btn hover:bg-accent hover:text-foreground"
             >
               Dismiss
             </button>
             <button
               onClick={handleInstallClick}
-              className="clip-btn bg-cyber-cyan px-3 py-1.5 text-xs font-semibold text-cyber-dark transition-colors hover:bg-cyber-cyan/90"
+              className="rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
               Install
             </button>

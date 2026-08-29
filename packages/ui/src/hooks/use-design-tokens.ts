@@ -172,10 +172,10 @@ export interface PanelGlassStyles {
  */
 export function usePanelGlass(): PanelGlassStyles {
   return useMemo(() => ({
-    backgroundColor: 'color-mix(in srgb, var(--cyber-dark) 85%, transparent)',
+    backgroundColor: 'color-mix(in srgb, var(--background) 85%, transparent)',
     backdropFilter: 'blur(16px)',
-    border: '1px solid color-mix(in srgb, var(--cyber-cyan) 25%, transparent)',
-    boxShadow: '0 0 20px color-mix(in srgb, var(--cyber-cyan) 10%, transparent)',
+    border: '1px solid color-mix(in srgb, var(--primary) 25%, transparent)',
+    boxShadow: '0 0 20px color-mix(in srgb, var(--primary) 10%, transparent)',
   }), []);
 }
 

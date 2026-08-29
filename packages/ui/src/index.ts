@@ -27,7 +27,6 @@ export * from "./components/topbar"
 export * from "./components/sidebar-nav"
 export * from "./components/panel"
 export * from "./components/context-block"
-export * from "./components/background"
 export * from "./components/theme-toggle"
 
 // Data Display & Matrix Engine

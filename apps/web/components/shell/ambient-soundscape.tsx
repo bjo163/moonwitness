@@ -122,23 +122,19 @@ export function AmbientSoundscape() {
     <div className="flex items-center gap-1.5 font-sans">
       <button
         onClick={togglePlay}
-        className={`clip-tag flex cursor-pointer items-center gap-1 border px-2 py-1 text-xs font-medium transition-colors ${
+        className={`flex cursor-pointer items-center gap-1 border px-2 py-1 text-xs font-medium transition-colors clip-tag ${
           isPlaying
-            ? "border-cyber-green/60 bg-cyber-green/10 text-cyber-green"
-            : "border-border text-muted-foreground hover:border-cyber-cyan hover:text-cyber-cyan"
+            ? "border-success/60 bg-success/10 text-success"
+            : "border-border text-muted-foreground hover:border-primary hover:text-primary"
         }`}
         title="Toggle Ambient Audio Soundscape"
       >
         {isPlaying ? (
-          <Volume2 className="h-3.5 w-3.5 text-cyber-green" />
+          <Volume2 className="text-success h-3.5 w-3.5" />
         ) : (
           <VolumeX className="h-3.5 w-3.5" />
         )}
-        <span>
-          {isPlaying
-            ? selectedTrack.name
-            : "Ambient sound"}
-        </span>
+        <span>{isPlaying ? selectedTrack.name : "Ambient sound"}</span>
       </button>
     </div>
   )

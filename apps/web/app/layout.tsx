@@ -59,7 +59,6 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className="min-h-screen bg-background pb-[44px] font-sans text-foreground">
-
         {/* Accessible Skip Navigation */}
         <a
           href="#main-content"
