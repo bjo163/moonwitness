@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation"
 import { Button } from "./button"
 import { apiPost } from "@moon/client"
 import { APP_PORTS } from "@workspace/types"
-import { cosmicAudio } from "./cosmic-sound-synthesizer"
+import { cosmicAudio, soundEngine } from "./audio-synthesizer"
 
 const getApiBase = () => {
   if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_API_URL) {

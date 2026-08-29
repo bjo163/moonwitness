@@ -199,6 +199,7 @@ class SystemAudioEngine {
 }
 
 export const soundEngine = new SystemAudioEngine()
+export const cosmicAudio = soundEngine
 
 /**
  * Enterprise Audio Toggle Control
@@ -248,3 +249,6 @@ export function AudioToggle({ className = "" }: { className?: string }) {
     </button>
   )
 }
+
+export const CosmicAudioToggle = AudioToggle
+
