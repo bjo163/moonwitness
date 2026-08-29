@@ -208,7 +208,7 @@ export function CosmicDataTable({
       </div>
 
       {/* Table Container */}
-      <div className="w-full overflow-x-auto border border-cyber-cyan/20 rounded-lg bg-cyber-dark/90 military-box">
+      <div className="w-full overflow-x-auto border border-cyber-cyan/20 rounded-lg bg-cyber-dark/90 corner-box">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b border-cyber-cyan/20 bg-cyber-panel/80 text-[10px] font-mono text-steel-gray uppercase tracking-widest">

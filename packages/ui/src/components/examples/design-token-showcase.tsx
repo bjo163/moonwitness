@@ -84,7 +84,7 @@ export function GlowingButton() {
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * EXAMPLE 4: Military Corner Brackets
+ * EXAMPLE 4: Corner Accents
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 export function CornerBracketExample() {
@@ -94,13 +94,13 @@ export function CornerBracketExample() {
 
   return (
     <div className="grid grid-cols-3 gap-4">
-      <div className={`military-box ${activeCorner} p-4 border border-cyber-cyan/25`}>
+      <div className={`corner-box ${activeCorner} p-4 border border-cyber-cyan/25`}>
         <p className="text-cyber-cyan text-sm font-mono">ACTIVE</p>
       </div>
-      <div className={`military-box ${successCorner} p-4 border border-cyber-green/25`}>
+      <div className={`corner-box ${successCorner} p-4 border border-cyber-green/25`}>
         <p className="text-cyber-green text-sm font-mono">SUCCESS</p>
       </div>
-      <div className={`military-box ${criticalCorner} p-4 border border-cyber-pink/25`}>
+      <div className={`corner-box ${criticalCorner} p-4 border border-cyber-pink/25`}>
         <p className="text-cyber-pink text-sm font-mono">CRITICAL</p>
       </div>
     </div>
@@ -167,7 +167,7 @@ export function SemanticTokenCard({ intent = 'primary' }: { intent?: 'primary' |
   const btnClip = useClipPath({ variant: 'button', className: true });
 
   return (
-    <div className={`military-box ${tokens.cornerClass} clip-card panel-glass p-6 border`} style={{ borderColor: tokens.color + '40' }}>
+    <div className={`corner-box ${tokens.cornerClass} clip-card panel-glass p-6 border`} style={{ borderColor: tokens.color + '40' }}>
       <h3 className="font-mono tracking-widest mb-3" style={{ color: tokens.color }}>
         {intent.toUpperCase()} INTENT
       </h3>

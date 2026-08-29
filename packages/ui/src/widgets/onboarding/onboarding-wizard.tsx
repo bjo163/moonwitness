@@ -16,11 +16,11 @@ const STEPS = [
     title: "INITIATING SEQUENCE",
     subtitle: "Welcome to MoonWitness OS",
     description:
-      "You have accessed the Global Divine Observatory. This tactical interface connects you to the Quran, Hadith, and global spiritual telemetry in real-time.",
+      "You have accessed the Global Divine Observatory. This cosmic platform connects you to the Quran, Hadith, and global spiritual telemetry in real-time.",
     icon: Orbit,
   },
   {
-    title: "TACTICAL HUD",
+    title: "OBSERVATION DASHBOARD",
     subtitle: "Command & Control",
     description:
       "Navigate through the Command Center dashboard to view live Qibla radar, prayer times, and global monitoring systems. Everything is designed for precision and focus.",
@@ -30,14 +30,14 @@ const STEPS = [
     title: "DIVINE SCRIPTURES",
     subtitle: "Uncorrupted Truth",
     description:
-      "Access 114 Surahs, authentic Hadith collections, and the beautiful names of Allah (Asmaul Husna) directly from your terminal.",
+      "Access 114 Surahs, authentic Hadith collections, and the beautiful names of Allah (Asmaul Husna) directly from your platform.",
     icon: BookOpen,
   },
   {
     title: "SYSTEM READY",
-    subtitle: "Clearance Granted",
+    subtitle: "Setup Complete",
     description:
-      "Your session is now active. May peace and guidance be upon you.",
+      "Your platform is now active. May peace and guidance be upon you.",
     icon: Shield,
   },
 ]

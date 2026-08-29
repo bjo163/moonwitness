@@ -187,7 +187,7 @@ export function CosmicFormModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-      <div className="relative w-full max-w-3xl max-h-[90vh] bg-cyber-dark/95 border border-cyber-cyan/40 rounded-lg shadow-[0_0_30px_rgba(0,240,255,0.15)] flex flex-col overflow-hidden military-box">
+      <div className="relative w-full max-w-3xl max-h-[90vh] bg-cyber-dark/95 border border-cyber-cyan/40 rounded-lg shadow-[0_0_30px_rgba(0,240,255,0.15)] flex flex-col overflow-hidden corner-box">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-cyber-cyan/20 bg-cyber-panel/60">
           <div>
@@ -203,11 +203,11 @@ export function CosmicFormModal({
               <button
                 type="button"
                 onClick={() => printRecordBriefing(schema, formData)}
-                title="Print Tactical Briefing Memorandum"
+                title="Print Record Report"
                 className="flex items-center gap-1.5 px-3 py-1.5 bg-black/60 border border-cyber-cyan/30 rounded text-xs font-mono text-cyber-cyan hover:bg-cyber-cyan/10 uppercase transition-all"
               >
                 <Printer className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">PRINT BRIEFING</span>
+                <span className="hidden sm:inline">PRINT REPORT</span>
               </button>
             )}
             <button

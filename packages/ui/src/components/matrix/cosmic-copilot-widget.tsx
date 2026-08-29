@@ -15,7 +15,7 @@ export function CosmicCopilotWidget({ schema, records }: CosmicCopilotWidgetProp
   const [messages, setMessages] = useState<Array<{ role: "ai" | "user"; text: string }>>([
     {
       role: "ai",
-      text: `Tactical Copilot online for [${schema.name}]. ${records.length} records in active telemetry. How may I assist your analysis?`,
+      text: `AI Copilot online for [${schema.name}]. ${records.length} records loaded. How may I assist your analysis?`,
     },
   ])
   const [thinking, setThinking] = useState(false)
@@ -61,7 +61,7 @@ export function CosmicCopilotWidget({ schema, records }: CosmicCopilotWidgetProp
 
       {/* Floating Copilot Dialog */}
       {isOpen && (
-        <div className="fixed bottom-20 right-6 z-50 w-96 max-h-[500px] bg-cyber-dark/95 border border-cyber-purple/50 rounded-xl shadow-[0_0_40px_rgba(161,0,255,0.25)] flex flex-col overflow-hidden military-box backdrop-blur-xl font-mono animate-in slide-in-from-bottom-5">
+        <div className="fixed bottom-20 right-6 z-50 w-96 max-h-[500px] bg-cyber-dark/95 border border-cyber-purple/50 rounded-xl shadow-[0_0_40px_rgba(161,0,255,0.25)] flex flex-col overflow-hidden corner-box backdrop-blur-xl font-mono animate-in slide-in-from-bottom-5">
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-cyber-purple/30 bg-cyber-panel/90">
             <div className="flex items-center gap-2">

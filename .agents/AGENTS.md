@@ -282,7 +282,7 @@ MoonWitness OS operates as a high-performance Turborepo monorepo with isolated d
 
 Corner accent indicators match the semantic state family:
 ```css
-.military-box    → rounded-xl container
+.corner-box      → rounded-xl container
 .corner-cyan     → cyan accent border
 .corner-green    → green accent border
 .corner-yellow   → yellow accent border

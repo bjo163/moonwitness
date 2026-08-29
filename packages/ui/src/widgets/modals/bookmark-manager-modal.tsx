@@ -48,7 +48,7 @@ export function BookmarkManagerModal() {
       <Modal
         isOpen={isOpen && mounted}
         onClose={() => setIsOpen(false)}
-        title={`// VAULT BOOKMARK TACTICAL (${bookmarks.length})`}
+        title={`Saved Bookmarks (${bookmarks.length})`}
         icon={Bookmark}
         maxWidth="max-w-xl"
         borderColor="border-accent/50"

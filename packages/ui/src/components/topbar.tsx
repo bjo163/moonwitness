@@ -101,7 +101,7 @@ export function Topbar({
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-80 bg-cyber-panel border border-cyber-cyan/30 rounded-lg shadow-2xl p-3 z-50 military-box font-mono">
+            <div className="absolute right-0 mt-2 w-80 bg-cyber-panel border border-cyber-cyan/30 rounded-lg shadow-2xl p-3 z-50 corner-box font-mono">
               <div className="flex items-center justify-between border-b border-cyber-cyan/10 pb-2 mb-2">
                 <span className="text-xs font-bold text-white uppercase tracking-wider">SYSTEM TELEMETRY</span>
                 <button onClick={() => setShowNotifications(false)} className="text-steel-gray hover:text-white">
@@ -152,7 +152,7 @@ export function Topbar({
       </div>
 
       {seedResult && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 bg-cyber-dark/95 border border-cyber-cyan rounded-lg shadow-2xl font-mono text-xs text-white flex items-center gap-3 military-box">
+        <div className="fixed bottom-6 right-6 z-50 p-4 bg-cyber-dark/95 border border-cyber-cyan rounded-lg shadow-2xl font-mono text-xs text-white flex items-center gap-3 corner-box">
           <CheckCircle2 className="w-5 h-5 text-cyber-green" />
           <span>{seedResult}</span>
         </div>

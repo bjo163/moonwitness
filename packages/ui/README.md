@@ -15,9 +15,9 @@
 
 ---
 
-## 🎨 Design Philosophy: Deep Space Sci-Fi Divine Operating System
+## 🎨 Design Philosophy: Deep Space Cosmic Operating System (Standard shadcn/ui)
 
-`@workspace/ui` enforces the **Design Bible V9.0** with tactical smoked glass (`backdrop-blur`), chamfered military clip-paths (`.clip-card`), semantic laser conduits, Orbitron/JetBrains Mono typography, and high-performance Canvas shaders.
+`@workspace/ui` enforces the **Design Bible V9.5** with standard shadcn/ui ergonomics, glassmorphism (`backdrop-blur-md bg-card/85`), smooth rounded containers (`.clip-card`, `rounded-xl`, `rounded-2xl`), semantic laser conduits, and crisp Geist/JetBrains Mono typography.
 
 ---
 
@@ -33,12 +33,12 @@
 ### 2. 🎛️ Cosmic Layouts & Data Primitives
 - **`<ResourceTable<T> />`**: Generic type-safe data grid with client-side multi-key search, pagination, and row actions.
 - **`<ContextBlock />`**: Canonical single-H1 page identity banner with real-time operation badges.
-- **`<Sidebar />` & `<Topbar />`**: Tactical navigation frames with clearance badges.
+- **`<Sidebar />` & `<Topbar />`**: Standard navigation frames with role badges.
 - **`<Navbar />`**: Primary portal header with dynamic command groups.
 - **`<CommandPalette />`**: Universal `Cmd+K` / `Ctrl+K` modal indexing navigation mesh, Quran Surahs, and Hadith books.
-- **`<Panel />` & `<PanelHeader />`**: 5-level chamfered glass container boxes.
-- **`<Modal />` & `<Dialog />`**: High-contrast OS window dialogs.
-- **`<Button />`**: Tactical action buttons with glowing hover states.
+- **`<Panel />` & `<PanelHeader />`**: 5-level smooth glass container boxes with rounded-xl corners.
+- **`<Modal />` & `<Dialog />`**: High-contrast dialogs with smooth backdrops.
+- **`<Button />`**: Standard shadcn action buttons with smooth hover states.
 - **`<ErrorBoundary />`**: React crash isolation component with telemetry reporting.
 
 ### 3. 🎵 Procedural Web Audio Synthesizer

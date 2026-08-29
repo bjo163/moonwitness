@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('Scenario 3: Bulk CSV Import & Print Briefing Memorandum', () => {
+test.describe('Scenario 3: Bulk CSV Import & Print Report', () => {
   const COMMAND_CENTER_URL = process.env.PLAYWRIGHT_CC_URL || 'http://localhost:3001'
 
   test('should open Bulk CSV Ingestion Wizard modal on table view', async ({ page }) => {
@@ -15,7 +15,7 @@ test.describe('Scenario 3: Bulk CSV Import & Print Briefing Memorandum', () => {
     await expect(modalTitle).toBeVisible()
   })
 
-  test('should open record modal and provide Print Tactical Briefing action', async ({ page }) => {
+  test('should open record modal and provide Print Report action', async ({ page }) => {
     await page.goto(`${COMMAND_CENTER_URL}/matrix/pj.task`)
 
     // Click first row
@@ -23,8 +23,8 @@ test.describe('Scenario 3: Bulk CSV Import & Print Briefing Memorandum', () => {
     if (await firstRow.isVisible()) {
       await firstRow.click()
 
-      // Expect Print Briefing button in modal header
-      const printBtn = page.locator('button:has-text("PRINT BRIEFING")')
+      // Expect Print Report button in modal header
+      const printBtn = page.locator('button:has-text("PRINT REPORT")')
       await expect(printBtn).toBeVisible()
     }
   })

@@ -528,17 +528,17 @@ if (VIOLATIONS.hardcodedHexStyles.length === 0) {
 }
 
 if (VIOLATIONS.invalidChamferTokens.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 02] Sacred Geometric Chamfers (.clip-card, .clip-hero, .clip-btn, .clip-tag, .clip-rune): CLEAN${RESET}`)
+  console.log(`  ${GREEN}✓ [LAW 02] Smooth Geometric Containers (.clip-card, .clip-hero, .clip-btn, .clip-tag, .clip-rune): CLEAN${RESET}`)
 } else {
-  console.log(`  ${RED}❌ [LAW 02] Non-Canonical Chamfer Tokens: ${VIOLATIONS.invalidChamferTokens.length} instances${RESET}`)
+  console.log(`  ${RED}❌ [LAW 02] Non-Canonical Geometric Tokens: ${VIOLATIONS.invalidChamferTokens.length} instances${RESET}`)
   VIOLATIONS.invalidChamferTokens.forEach((c) => console.log(`     • ${c.file}:${c.line} -> ${c.token}`))
 }
 
 if (VIOLATIONS.invalidTacticalCorners.length === 0 && VIOLATIONS.invalidLaserConduits.length === 0 && VIOLATIONS.invalidGlowTokens.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 04] Tactical Corner Brackets, Optical Glows & Laser Conduits: CLEAN${RESET}`)
+  console.log(`  ${GREEN}✓ [LAW 04] Corner Accents, Optical Glows & Laser Conduits: CLEAN${RESET}`)
 } else {
   const count = VIOLATIONS.invalidTacticalCorners.length + VIOLATIONS.invalidLaserConduits.length + VIOLATIONS.invalidGlowTokens.length
-  console.log(`  ${RED}❌ [LAW 04] Optical/Tactical Token Violations: ${count} instances${RESET}`)
+  console.log(`  ${RED}❌ [LAW 04] Optical/Corner Token Violations: ${count} instances${RESET}`)
   VIOLATIONS.invalidTacticalCorners.forEach((c) => console.log(`     • corner: ${c.file}:${c.line} -> ${c.token}`))
   VIOLATIONS.invalidLaserConduits.forEach((l) => console.log(`     • laser: ${l.file}:${l.line} -> ${l.token}`))
   VIOLATIONS.invalidGlowTokens.forEach((g) => console.log(`     • glow: ${g.file}:${g.line} -> ${g.token}`))

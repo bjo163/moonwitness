@@ -91,7 +91,7 @@ export function CosmicPivotGrid({ schema, records, onRecordClick }: CosmicPivotG
   return (
     <div className="space-y-6">
       {/* Pivot Controls Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-cyber-dark/80 border border-cyber-cyan/20 rounded-lg military-box">
+      <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-cyber-dark/80 border border-cyber-cyan/20 rounded-lg corner-box">
         <div className="flex items-center gap-3">
           <Grid3X3 className="w-5 h-5 text-cyber-cyan" />
           <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
@@ -135,7 +135,7 @@ export function CosmicPivotGrid({ schema, records, onRecordClick }: CosmicPivotG
       </div>
 
       {/* Pivot Matrix Table */}
-      <div className="overflow-x-auto border border-cyber-cyan/20 rounded-lg bg-cyber-dark/90 military-box">
+      <div className="overflow-x-auto border border-cyber-cyan/20 rounded-lg bg-cyber-dark/90 corner-box">
         <table className="w-full text-left border-collapse font-mono text-xs">
           <thead>
             <tr className="border-b border-cyber-cyan/20 bg-cyber-panel/80 text-[10px] text-steel-gray uppercase tracking-widest">
@@ -211,7 +211,7 @@ export function CosmicPivotGrid({ schema, records, onRecordClick }: CosmicPivotG
       {/* Selected Cell Records Inspection Modal */}
       {selectedCell && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="w-full max-w-2xl bg-cyber-dark/95 border border-cyber-cyan/40 rounded-lg shadow-2xl overflow-hidden military-box font-mono">
+          <div className="w-full max-w-2xl bg-cyber-dark/95 border border-cyber-cyan/40 rounded-lg shadow-2xl overflow-hidden corner-box font-mono">
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-cyber-cyan/20 bg-cyber-panel/80">
               <div>
                 <span className="text-[10px] text-cyber-cyan uppercase tracking-wider">

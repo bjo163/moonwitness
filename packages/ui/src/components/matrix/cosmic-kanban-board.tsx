@@ -158,7 +158,7 @@ export function CosmicKanbanBoard({
             onDragOver={(e) => handleDragOver(e, col.key)}
             onDragLeave={(e) => handleDragLeave(e, col.key)}
             onDrop={(e) => handleDrop(e, col.key)}
-            className={`w-80 flex-shrink-0 bg-cyber-dark/80 border rounded-lg flex flex-col max-h-[75vh] military-box transition-all ${
+            className={`w-80 flex-shrink-0 bg-cyber-dark/80 border rounded-lg flex flex-col max-h-[75vh] corner-box transition-all ${
               isTarget
                 ? "border-cyber-cyan bg-cyber-cyan/10 shadow-[0_0_20px_rgba(0,240,255,0.25)]"
                 : "border-cyber-cyan/20"

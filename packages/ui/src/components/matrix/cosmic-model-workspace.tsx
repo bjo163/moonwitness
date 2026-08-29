@@ -97,7 +97,7 @@ export function CosmicModelWorkspace({ model }: CosmicModelWorkspaceProps) {
   return (
     <div className="space-y-6">
       {/* Workspace Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 bg-cyber-dark/80 border border-cyber-cyan/20 rounded-lg military-box backdrop-blur-md">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 bg-cyber-dark/80 border border-cyber-cyan/20 rounded-lg corner-box backdrop-blur-md">
         <div>
           <div className="flex items-center gap-2 text-[10px] font-mono text-cyber-cyan tracking-widest uppercase">
             <span>VERTEX MODEL</span>

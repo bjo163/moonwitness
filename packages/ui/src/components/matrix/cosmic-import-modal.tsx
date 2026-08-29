@@ -148,7 +148,7 @@ export function CosmicImportModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-      <div className="relative w-full max-w-3xl max-h-[90vh] bg-cyber-dark/95 border border-cyber-cyan/40 rounded-lg shadow-[0_0_30px_rgba(0,240,255,0.15)] flex flex-col overflow-hidden military-box font-mono">
+      <div className="relative w-full max-w-3xl max-h-[90vh] bg-cyber-dark/95 border border-cyber-cyan/40 rounded-lg shadow-[0_0_30px_rgba(0,240,255,0.15)] flex flex-col overflow-hidden corner-box font-mono">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-cyber-cyan/20 bg-cyber-panel/60">
           <div>
