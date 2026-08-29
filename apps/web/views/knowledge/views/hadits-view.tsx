@@ -90,15 +90,15 @@ export function HaditsPortalView() {
         <div className="flex flex-col items-start justify-between gap-4 border-b border-border pb-4 md:flex-row md:items-center">
           <div>
             <div className="mb-1 flex items-center gap-3">
-              <h1 className="font-mono text-2xl font-black tracking-widest text-foreground uppercase drop-shadow-md sm:text-3xl">
-                {selectedCompendium === "bukhari" ? "HADITH TRANSMISSION COMPENDIUM" : "HADITH COLLECTION READER"}
+              <h1 className="font-sans text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+                {selectedCompendium === "bukhari" ? "Sahih al-Bukhari Collection" : "Hadith Collection Reader"}
               </h1>
-              <span className="rounded border border-border bg-primary/10 px-2 py-0.5 font-mono text-[9px] font-bold text-primary">
-                KUTUBUT TIS&apos;AH
+              <span className="rounded-md border border-border bg-primary/10 px-2 py-0.5 font-sans text-xs font-semibold text-primary">
+                Kutubut Tis&apos;ah
               </span>
             </div>
-            <p className="font-mono text-xs text-foreground/50">
-              Universal Prophetic Sunnah & Chains of Transmission (Sanad) Telemetry
+            <p className="text-xs text-muted-foreground">
+              Prophetic traditions, verified narrations, and chains of transmission (Sanad).
             </p>
           </div>
 

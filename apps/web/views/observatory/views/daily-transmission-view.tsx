@@ -78,27 +78,27 @@ export function DailyTransmissionView() {
         className="animate-in space-y-4 duration-700 fill-mode-both fade-in slide-in-from-top-8"
         style={{ animationDelay: "200ms" }}
       >
-        <h2 className="flex items-center gap-3 text-xs font-medium tracking-[0.3em] text-primary uppercase">
-          <span className="h-px w-8 bg-primary/10" />
-          Active Transmission
+        <h2 className="flex items-center gap-3 text-xs font-semibold tracking-wider text-primary uppercase">
+          <span className="h-px w-8 bg-primary/20" />
+          Today&apos;s Inspiration
         </h2>
         <DailyInspirationClient />
       </div>
 
-      {/* Transmission Log (History) */}
+      {/* Reflection History Log */}
       <div
         className="animate-in space-y-6 pt-12 duration-700 fill-mode-both fade-in slide-in-from-top-8"
         style={{ animationDelay: "400ms" }}
       >
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
-          <h2 className="flex items-center gap-3 text-xs font-medium tracking-[0.3em] text-primary uppercase">
-            <span className="h-px w-8 bg-emerald-500/50" />
-            Transmission Log
+          <h2 className="flex items-center gap-3 text-xs font-semibold tracking-wider text-primary uppercase">
+            <span className="h-px w-8 bg-primary/20" />
+            Previous Reflections
           </h2>
 
-          <div className="flex items-center gap-4 rounded-xl border border-border bg-card px-4 py-2 text-[10px] font-medium tracking-widest uppercase backdrop-blur-md">
-            <span className="text-primary">Unlocked Verses</span>
-            <span className="text-xl font-light text-primary drop-shadow-sm">
+          <div className="flex items-center gap-4 rounded-xl border border-border bg-card px-4 py-2 text-xs font-medium tracking-wide backdrop-blur-md">
+            <span className="text-muted-foreground">Verses Studied</span>
+            <span className="font-mono text-sm font-semibold text-primary">
               {totalCount} / 6.236
             </span>
           </div>

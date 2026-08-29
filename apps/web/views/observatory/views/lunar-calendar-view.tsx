@@ -68,8 +68,8 @@ export function LunarCalendarView() {
 
   if (isLoading || days.length === 0 || !days[0]) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-card font-mono text-xs tracking-widest text-warning">
-        INITIALIZING LUNAR EPHEMERIS TELEMETRY...
+      <div className="flex min-h-screen items-center justify-center bg-card font-sans text-xs text-muted-foreground">
+        Loading lunar calendar data...
       </div>
     )
   }
