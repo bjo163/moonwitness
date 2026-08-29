@@ -10,7 +10,6 @@ import {
   GlobalTickerWidget,
   CommandPalette,
   AudioToggle,
-  ObservatoryBackground,
 } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
 
@@ -28,7 +27,6 @@ const amiri = Amiri({
 })
 
 export const viewport = {
-  themeColor: "#05070A",
   width: "device-width",
   initialScale: 1,
 }
@@ -48,8 +46,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={cn(
-        "dark antialiased",
+        "antialiased",
         jetBrainsMono.variable,
         "font-sans",
         geist.variable,
@@ -58,10 +57,8 @@ export default function RootLayout({
     >
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#05070A" />
       </head>
-      <body className="min-h-screen bg-cyber-dark pb-[44px] font-sans text-foreground">
-        <ObservatoryBackground />
+      <body className="min-h-screen bg-background pb-[44px] font-sans text-foreground">
 
         {/* Accessible Skip Navigation */}
         <a
