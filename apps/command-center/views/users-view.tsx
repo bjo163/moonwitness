@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
+import React from "react"
 import { useMoonModel } from "@moon/client"
 import { ContextBlock, MoonDataTable, type CrudColumn } from "@workspace/ui"
 import { Users, Shield, Clock, MonitorPlay, Download } from "lucide-react"
@@ -117,7 +117,10 @@ export function UsersView() {
         if (!groups || !Array.isArray(groups) || groups.length === 0) {
           return <span className="text-xs text-slate-500">No roles assigned</span>
         }
-        const roleNames = groups.map((g: any) => g.name || g).filter(Boolean)
+        const roleNames = groups
+          .map((g: any) => g.name || g)
+          .filter(Boolean)
+          .map((role: string | number) => String(role))
         return (
           <div className="flex flex-wrap gap-1">
             {roleNames.slice(0, 3).map((role: string, i: number) => (

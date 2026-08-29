@@ -23,6 +23,10 @@ export const viewport = {
   initialScale: 1,
 }
 
+// The command center depends on operator session state and client-only runtime data.
+// Keep the protected terminal out of build-time static page generation.
+export const dynamic = "force-dynamic"
+
 export default function RootLayout({
   children,
 }: {
