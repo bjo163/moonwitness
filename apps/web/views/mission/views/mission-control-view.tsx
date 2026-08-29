@@ -169,8 +169,8 @@ export function MissionControlView() {
     <>
       <ContextBlock
         title="GLOBAL MISSION COMMAND"
-        subtitle="Pusat kendali taktis untuk melacak zona krisis kemanusiaan dan konflik global. Digunakan untuk merumuskan strategi bantuan, diplomasi, dan resolusi perdamaian."
-        operation="TACTICAL-MAPPING"
+        subtitle="Pusat monitoring kemanusiaan global untuk melacak zona krisis dan merumuskan strategi bantuan, diplomasi, dan resolusi perdamaian."
+        operation="SATELLITE-MAPPING"
         status="ONLINE"
         accentColor="danger"
       />
@@ -178,20 +178,20 @@ export function MissionControlView() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
         {/* Radar Map (3 columns wide) */}
         <div className="panel-box bg-space flex flex-col border-2 border-primary/50 p-1 shadow-[0_0_50px_rgba(255,51,102,0.15)] lg:col-span-3">
-          <div className="flex items-center justify-between border-b border-primary/20 bg-black p-3">
+          <div className="flex items-center justify-between border-b border-primary/20 bg-card p-3">
             <div className="flex items-center gap-2 text-xs font-bold text-primary">
               <Target className="h-4 w-4 animate-pulse text-destructive" />
-              SATELLITE TACTICAL LINK
+              SATELLITE TELEMETRY LINK
             </div>
             <div className="bg-destructive/20 px-2 py-1 font-mono text-[10px] font-bold text-destructive uppercase">
-              CLASSIFIED INTELLIGENCE
+              LIVE MONITORING
             </div>
           </div>
 
           <div className="relative z-0 h-[600px] w-full">
             {!mounted ? (
-              <div className="flex h-full w-full animate-pulse items-center justify-center bg-black font-mono text-sm text-primary">
-                INITIALIZING TACTICAL MAP...
+              <div className="flex h-full w-full animate-pulse items-center justify-center bg-card font-mono text-sm text-primary">
+                INITIALIZING SATELLITE MAP...
               </div>
             ) : (
               <Map

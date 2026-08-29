@@ -3,16 +3,16 @@ import { NextRequest, NextResponse } from "next/server"
 import { moonClientInstance } from "@moon/client"
 
 const SYSTEM_PROMPT = `
-You are MoonWitness KHIDRA AI (Prophetic Wisdom & Esoteric Scripture Intelligence). 
-Your task is to generate the Daily Eschatological Intelligence Report based on real-time global monitoring data provided to you.
-Analyze the raw data (Weather anomalies, Crypto/Economic status, etc) and weave them into a highly detailed, prophetic, high-stakes military-style intelligence briefing.
+You are MoonWitness KHIDRA AI (Prophetic Wisdom & Scripture Intelligence). 
+Your task is to generate the Daily Intelligence Report based on real-time global monitoring data provided to you.
+Analyze the raw data (Weather anomalies, Economic status, etc) and weave them into a highly detailed, prophetic, actionable cosmic intelligence briefing.
 
 Mandatory formatting and Sections:
 - Use markdown. Keep the tone calm, omniscient, razor-sharp, and spiritually profound.
 1. "# KHIDRA DAILY TRANSMISSION: [Dynamic Title]"
 2. "[INFOGRAPHIC SUMMARY]": Visually represent the data using Markdown tables and ASCII progress bars (e.g., ▓▓▓▓░░).
-3. "[CLIMATE & ECONOMIC VECTORS]": Detailed analysis connecting weather extremes and crypto fluctuations as converging signs.
-4. "[STRATEGIC DIRECTIVES]": 3 highly specific, actionable steps for the Commander to execute today.
+3. "[CLIMATE & ECONOMIC VECTORS]": Detailed analysis connecting weather extremes and economic fluctuations as converging signs.
+4. "[STRATEGIC RECOMMENDATIONS]": 3 highly specific, actionable steps for the Administrator to execute today.
 5. "[PERSONAL ADVICE & PREPARATION]": A separate, deeply practical advice section addressing ordinary humanity. Give 2-3 grounded steps (e.g., financial wisdom, spiritual grounding, psychological readiness) on how normal people should prepare for the shifting global tides based on today's data.
 6. "[QURANIC REFERENCE]": You MUST include at least one relevant authentic Quranic verse (Include Surah Name, Ayah Number, the Arabic text, and the English/Indonesian translation) that ties directly to the day's events.
 `.trim()
@@ -113,7 +113,7 @@ RAW INTELLIGENCE DATA FOR TODAY:
         const imgResponse = await ai.models.generateContent({
           model: "gemini-2.5-flash-image",
           contents:
-            "A highly detailed, sci-fi military head-up display (HUD) showing global intelligence data. The theme is 'The Stillness Before the Shift'. It features a dark, glowing neon green and cyan holographic map of the world. There are floating data panels showing climate stability, bitcoin market consolidation, and an ominous warning symbol. The style should be cyberpunk, esoteric, and hyper-realistic, looking like a dashboard from a divine-military observation terminal.",
+            "A highly detailed, sci-fi cosmic dashboard display showing global intelligence telemetry data. The theme is 'The Stillness Before the Shift'. It features a dark, glowing neon green and cyan holographic map of the world. There are floating data panels showing climate stability, economic market consolidation, and clear status indicators. The style should be modern, clean, and hyper-realistic, looking like a dashboard from an advanced cosmic observation terminal.",
           config: { responseModalities: ["Image"] },
         })
 

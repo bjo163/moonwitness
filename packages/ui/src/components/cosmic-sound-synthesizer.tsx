@@ -43,7 +43,7 @@ class CosmicAudioEngine {
     return this.isMuted
   }
 
-  public playTacticalClick() {
+  public playClick() {
     if (this.isMuted) return
     this.initContext()
     if (!this.ctx) return
@@ -61,6 +61,10 @@ class CosmicAudioEngine {
     gain.connect(this.ctx.destination)
     osc.start()
     osc.stop(this.ctx.currentTime + 0.03)
+  }
+
+  public playTacticalClick() {
+    this.playClick()
   }
 
   public playAlignmentChime() {

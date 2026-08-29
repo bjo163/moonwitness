@@ -7,14 +7,14 @@ import { Bookmark, Trash2, ArrowRight, BookOpen } from "lucide-react"
 import {
   getBookmarks,
   toggleBookmark,
-  TacticalBookmarkItem,
+  BookmarkItem,
 } from "@workspace/state"
 import { Modal, ModalTrigger } from "../../components/modal"
 
 export function BookmarkManagerModal() {
   const mounted = useMounted()
   const [isOpen, setIsOpen] = useState(false)
-  const [bookmarks, setBookmarks] = useState<TacticalBookmarkItem[]>([])
+  const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([])
 
   const loadBookmarks = () => {
     setBookmarks(getBookmarks())
@@ -30,7 +30,7 @@ export function BookmarkManagerModal() {
       window.removeEventListener("mw_bookmarks_updated", handleUpdate)
   }, [])
 
-  function removeBookmark(item: TacticalBookmarkItem) {
+  function removeBookmark(item: BookmarkItem) {
     toggleBookmark(item)
     loadBookmarks()
   }

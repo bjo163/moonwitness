@@ -50,7 +50,7 @@ export function CosmicCopilotWidget({ schema, records }: CosmicCopilotWidgetProp
 
   return (
     <>
-      {/* Floating Tactical Trigger Button */}
+      {/* Floating Copilot Trigger Button */}
       <button
         onClick={() => setIsOpen((v) => !v)}
         className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-2.5 bg-cyber-purple/20 border border-cyber-purple/60 rounded-full text-xs font-mono text-cyber-purple hover:bg-cyber-purple/30 uppercase tracking-wider backdrop-blur-md shadow-[0_0_20px_rgba(161,0,255,0.3)] transition-all hover:scale-105"

@@ -20,7 +20,7 @@
 | Export | Type | Description |
 |---|---|---|
 | `HIJRI_MONTH_NAMES` | `readonly string[]` | Array of the 12 canonical Hijri months |
-| `formatCosmicTimestamp(date)` | `(date?: Date) => string` | Formats ISO dates into NASA-grade military telemetry timestamp |
+| `formatCosmicTimestamp(date)` | `(date?: Date) => string` | Formats ISO dates into NASA-grade celestial telemetry timestamp |
 | `calculateTimeRemaining(target)` | `(target: Date) => Duration` | Computes hours, minutes, seconds countdown interval |
 | `isSacredMonth(monthIndex)` | `(m: number) => boolean` | Identifies the 4 sacred Islamic months (Ashhurul Hurum) |
 

@@ -220,7 +220,7 @@ export function CosmicModelWorkspace({ model }: CosmicModelWorkspaceProps) {
         onSave={handleSave}
       />
 
-      {/* Floating Tactical AI Copilot */}
+      {/* Floating AI Copilot */}
       <CosmicCopilotWidget schema={schema} records={records} />
     </div>
   )

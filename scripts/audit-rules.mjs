@@ -54,7 +54,7 @@ const VIOLATIONS = {
   legacyCoreImports: [],
   hardcodedHexStyles: [],
   invalidChamferTokens: [],
-  invalidTacticalCorners: [],
+  invalidCornerAccents: [],
   invalidLaserConduits: [],
   invalidGlowTokens: [],
   hardcodedLocalhost: [],
@@ -370,13 +370,13 @@ function auditFile(filePath) {
       }
     }
 
-    // Law 04: Tactical Corner Bracket & Laser Conduit Validation
+    // Law 04: Corner Accents, Optical Glows & Laser Conduit Validation
     const cornerMatches = line.match(/\bcorner-[a-z0-9-]+\b/g)
     if (cornerMatches && !filePath.includes("globals.css")) {
       const allowedCorners = new Set(["corner-cyan", "corner-green", "corner-yellow", "corner-purple", "corner-pink", "corner-box"])
       for (const token of cornerMatches) {
         if (!allowedCorners.has(token)) {
-          VIOLATIONS.invalidTacticalCorners.push({
+          VIOLATIONS.invalidCornerAccents.push({
             file: relativePath,
             line: lineNo,
             token,
@@ -534,12 +534,12 @@ if (VIOLATIONS.invalidChamferTokens.length === 0) {
   VIOLATIONS.invalidChamferTokens.forEach((c) => console.log(`     • ${c.file}:${c.line} -> ${c.token}`))
 }
 
-if (VIOLATIONS.invalidTacticalCorners.length === 0 && VIOLATIONS.invalidLaserConduits.length === 0 && VIOLATIONS.invalidGlowTokens.length === 0) {
+if (VIOLATIONS.invalidCornerAccents.length === 0 && VIOLATIONS.invalidLaserConduits.length === 0 && VIOLATIONS.invalidGlowTokens.length === 0) {
   console.log(`  ${GREEN}✓ [LAW 04] Corner Accents, Optical Glows & Laser Conduits: CLEAN${RESET}`)
 } else {
-  const count = VIOLATIONS.invalidTacticalCorners.length + VIOLATIONS.invalidLaserConduits.length + VIOLATIONS.invalidGlowTokens.length
+  const count = VIOLATIONS.invalidCornerAccents.length + VIOLATIONS.invalidLaserConduits.length + VIOLATIONS.invalidGlowTokens.length
   console.log(`  ${RED}❌ [LAW 04] Optical/Corner Token Violations: ${count} instances${RESET}`)
-  VIOLATIONS.invalidTacticalCorners.forEach((c) => console.log(`     • corner: ${c.file}:${c.line} -> ${c.token}`))
+  VIOLATIONS.invalidCornerAccents.forEach((c) => console.log(`     • corner: ${c.file}:${c.line} -> ${c.token}`))
   VIOLATIONS.invalidLaserConduits.forEach((l) => console.log(`     • laser: ${l.file}:${l.line} -> ${l.token}`))
   VIOLATIONS.invalidGlowTokens.forEach((g) => console.log(`     • glow: ${g.file}:${g.line} -> ${g.token}`))
 }
@@ -642,7 +642,7 @@ const criticalViolations =
   VIOLATIONS.legacyCoreImports.length +
   VIOLATIONS.hardcodedHexStyles.length +
   VIOLATIONS.invalidChamferTokens.length +
-  VIOLATIONS.invalidTacticalCorners.length +
+  VIOLATIONS.invalidCornerAccents.length +
   VIOLATIONS.invalidLaserConduits.length +
   VIOLATIONS.invalidGlowTokens.length +
   VIOLATIONS.hardcodedLocalhost.length +

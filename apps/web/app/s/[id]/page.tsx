@@ -62,7 +62,7 @@ export async function generateMetadata({
   } catch {}
 
   return {
-    title: `Inspiration Q.S ${surahName} (${surahNum}:${ayahNum}) | MoonWitness Tactical Share`,
+    title: `Inspiration Q.S ${surahName} (${surahNum}:${ayahNum}) | MoonWitness Cosmic Inspiration`,
     description: `MoonWitness Short Link — Q.S ${surahName} Ayah ${ayahNum}, Prophetic Hadiths & Cosmic Lore Transmission.`,
     openGraph: {
       title: `Inspiration Q.S ${surahName} (${surahNum}:${ayahNum})`,

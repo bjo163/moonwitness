@@ -55,10 +55,10 @@ export function ChamferedCard() {
 
   return (
     <div className={`${cardClip.className} p-6`} style={glassStyles}>
-      <h3 className="text-cyber-cyan text-xl font-mono tracking-widest mb-4">
-        TACTICAL PANEL ALPHA
+      <h3 className="text-primary text-xl font-mono tracking-widest mb-4">
+        CONTROL PANEL ALPHA
       </h3>
-      <p className="text-[#8B9BB0]">
+      <p className="text-muted-foreground">
         This card demonstrates proper usage of chamfered corners with glassmorphism effects.
       </p>
     </div>

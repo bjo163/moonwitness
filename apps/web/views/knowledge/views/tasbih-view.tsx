@@ -135,8 +135,8 @@ export function TasbihView() {
     >
       <div className="mx-auto max-w-4xl space-y-6 px-4 sm:px-6">
         <ContextBlock
-          title="TACTICAL HUD TASBIH COUNTER"
-          subtitle="Counter Zikir & Tasbih digital taktis dengan target preset."
+          title="DIGITAL TASBIH COUNTER"
+          subtitle="Counter Zikir & Tasbih digital interaktif dengan target preset dan audio feedback."
           operation="TASBIH-COUNTER-SYNC"
           status="ONLINE"
           accentColor="success"

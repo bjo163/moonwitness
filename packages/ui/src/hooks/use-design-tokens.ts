@@ -136,22 +136,26 @@ export function useGlow(options: UseGlowOptions): GlowResult {
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * useCornerBrackets — Get military corner bracket className
+ * useCornerAccents — Get corner accent indicator className
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 export interface UseCornerBracketsOptions {
   variant: 'active' | 'success' | 'warning' | 'premium' | 'critical';
 }
 
+export type UseCornerAccentsOptions = UseCornerBracketsOptions;
+
 /**
- * Hook to get semantic corner bracket className
+ * Hook to get semantic corner accent className
  * @example
- * const activeCorner = useCornerBrackets({ variant: 'active' }); // returns 'corner-cyan'
+ * const activeCorner = useCornerAccents({ variant: 'active' }); // returns 'corner-cyan'
  */
-export function useCornerBrackets(options: UseCornerBracketsOptions): string {
+export function useCornerAccents(options: UseCornerAccentsOptions): string {
   const { variant } = options;
   return useMemo(() => SemanticCorners[variant], [variant]);
 }
+
+export const useCornerBrackets = useCornerAccents;
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * usePanelGlass — Get glassmorphism panel styles
@@ -173,10 +177,10 @@ export interface PanelGlassStyles {
 export function usePanelGlass(): PanelGlassStyles {
   return useMemo(
     () => ({
-      backgroundColor: 'rgba(5, 7, 10, 0.85)',
+      backgroundColor: 'var(--card)',
       backdropFilter: 'blur(16px)',
-      border: '1px solid rgba(0, 240, 255, 0.25)',
-      boxShadow: '0 0 20px rgba(0, 240, 255, 0.1)',
+      border: '1px solid var(--border)',
+      boxShadow: '0 4px 20px -1px rgba(0, 0, 0, 0.08)',
     }),
     []
   );

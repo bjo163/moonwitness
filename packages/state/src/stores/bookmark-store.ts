@@ -1,4 +1,4 @@
-export type TacticalBookmarkItem = {
+export type BookmarkItem = {
   id: string
   type: "ayah" | "hadith" | "scripture"
   title: string
@@ -9,12 +9,15 @@ export type TacticalBookmarkItem = {
   timestamp: number
 }
 
-const STORAGE_KEY = "mw_tactical_bookmarks"
+export type TacticalBookmarkItem = BookmarkItem
 
-export function getBookmarks(): TacticalBookmarkItem[] {
+const STORAGE_KEY = "mw_bookmarks"
+const LEGACY_STORAGE_KEY = "mw_tactical_bookmarks"
+
+export function getBookmarks(): BookmarkItem[] {
   if (typeof window === "undefined") return []
   try {
-    const saved = localStorage.getItem(STORAGE_KEY)
+    const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY)
     return saved ? JSON.parse(saved) : []
   } catch {
     return []
@@ -26,12 +29,12 @@ export function isBookmarked(id: string): boolean {
   return list.some((b) => b.id === id)
 }
 
-export function toggleBookmark(item: TacticalBookmarkItem): boolean {
+export function toggleBookmark(item: BookmarkItem): boolean {
   if (typeof window === "undefined") return false
   const list = getBookmarks()
   const exists = list.some((b) => b.id === item.id)
 
-  let updated: TacticalBookmarkItem[]
+  let updated: BookmarkItem[]
   if (exists) {
     updated = list.filter((b) => b.id !== item.id)
   } else {

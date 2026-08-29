@@ -7,7 +7,7 @@ export const STORAGE_KEYS = {
   VERSES: "mw_erp_quran_verses_data",
   HADITHS: "mw_erp_hadiths_data",
   ASMAUL_HUSNA: "mw_asmaul_husna_data",
-  SETTINGS: "mw_tactical_settings",
+  SETTINGS: "mw_settings",
   RAMADAN_MODE: "mw_ramadan_mode_active",
 } as const
 
