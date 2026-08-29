@@ -7,20 +7,20 @@ import { Users, Shield, Clock, MonitorPlay, Download } from "lucide-react"
 
 function MetricWidget({ label, value, sub, color, icon }: { label: string; value: string; sub?: string; color: "cyan" | "emerald" | "purple" | "amber"; icon: React.ReactNode }) {
   const colorMap = {
-    cyan: { text: "text-cyan-500", border: "border-cyan-900/30", sub: "text-cyan-400" },
-    emerald: { text: "text-emerald-500", border: "border-emerald-900/30", sub: "text-emerald-400" },
-    purple: { text: "text-purple-500", border: "border-purple-900/30", sub: "text-purple-400" },
-    amber: { text: "text-amber-500", border: "border-amber-900/30", sub: "text-amber-400" },
+    cyan: { text: "text-cyber-cyan", border: "border-cyber-cyan/30", sub: "text-cyber-cyan/80" },
+    emerald: { text: "text-cyber-green", border: "border-cyber-green/30", sub: "text-cyber-green/80" },
+    purple: { text: "text-cyber-purple", border: "border-cyber-purple/30", sub: "text-cyber-purple/80" },
+    amber: { text: "text-cyber-yellow", border: "border-cyber-yellow/30", sub: "text-cyber-yellow/80" },
   }
   const c = colorMap[color]
   return (
-    <div className={`relative flex flex-col gap-2 overflow-hidden rounded-xl border ${c.border} bg-black/40 p-4 backdrop-blur-md`}>
+    <div className={`relative flex flex-col gap-2 overflow-hidden rounded-xl border ${c.border} bg-card/90 p-4 shadow-sm backdrop-blur-md`}>
       <div className="absolute top-0 right-0 p-4 opacity-10">{icon}</div>
       <div className={`flex items-center gap-2 ${c.text}`}>
         {icon}
         <span className="text-xs font-bold tracking-wider uppercase">{label}</span>
       </div>
-      <div className="text-2xl font-bold text-white">{value}</div>
+      <div className="text-2xl font-bold text-foreground">{value}</div>
       {sub && <div className={`text-[10px] ${c.sub}`}>{sub}</div>}
     </div>
   )
@@ -152,22 +152,22 @@ export function UsersView() {
 
   const sideWidgets = (
     <>
-      <div className="flex flex-col gap-4 rounded-xl border border-cyan-900/30 bg-black/40 p-4 backdrop-blur-md">
-        <h3 className="flex items-center gap-2 text-xs font-bold tracking-wider text-cyan-500 uppercase">
+      <div className="flex flex-col gap-4 rounded-xl border border-border/40 bg-card/90 p-4 shadow-sm backdrop-blur-md">
+        <h3 className="flex items-center gap-2 text-xs font-bold tracking-wider text-primary uppercase">
           <MonitorPlay className="h-4 w-4" /> User Status
         </h3>
-        <div className="flex flex-col gap-2 text-xs text-slate-400">
+        <div className="flex flex-col gap-2 text-xs text-muted-foreground">
           <div className="flex items-center justify-between">
             <span>Total</span>
-            <span className="text-white">{totalUsers}</span>
+            <span className="font-semibold text-foreground">{totalUsers}</span>
           </div>
           <div className="flex items-center justify-between">
             <span>Active</span>
-            <span className="text-emerald-400">{activeUsers}</span>
+            <span className="font-semibold text-cyber-green">{activeUsers}</span>
           </div>
           <div className="flex items-center justify-between">
             <span>2FA Enabled</span>
-            <span className="text-purple-400">{twoFactorUsers}</span>
+            <span className="font-semibold text-cyber-purple">{twoFactorUsers}</span>
           </div>
         </div>
       </div>
@@ -179,7 +179,7 @@ export function UsersView() {
   ]
 
   const customActions = (
-    <button className="flex h-8 items-center gap-1.5 rounded border border-cyan-900/50 bg-black/40 px-3 text-[10px] font-semibold tracking-wider text-slate-400 uppercase transition-colors hover:bg-cyan-900/30 hover:text-slate-200">
+    <button className="flex h-8 items-center gap-1.5 rounded-lg border border-border/50 bg-secondary/50 px-3 text-[10px] font-semibold tracking-wider text-foreground uppercase transition-colors hover:bg-secondary">
       <Download className="h-3.5 w-3.5" /> Export
     </button>
   )

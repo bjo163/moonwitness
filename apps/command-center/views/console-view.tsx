@@ -62,15 +62,15 @@ function ConsoleHeader() {
         </div>
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-black tracking-[0.25em] text-white uppercase drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] md:text-2xl">
+            <h1 className="text-xl font-bold tracking-[0.15em] text-foreground uppercase md:text-2xl">
               DEV COMMAND SHELL
             </h1>
             <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 font-mono text-[9px] tracking-widest text-emerald-400 uppercase shadow-[0_0_10px_rgba(16,185,129,0.2)]">
               LIVE DIAGNOSTIC
             </span>
           </div>
-          <p className="mt-1 font-mono text-[11px] tracking-widest text-cyan-300/70 uppercase">
-            MOONWITNESS OS ADVANCED SYSTEM INTERRUPT & AI DIRECTIVES
+          <p className="mt-1 font-mono text-[11px] tracking-widest text-muted-foreground uppercase">
+            MOONWITNESS OS SYSTEM SHELL & AI DIRECTIVES
           </p>
         </div>
       </div>
@@ -78,16 +78,16 @@ function ConsoleHeader() {
       <div className="flex items-center gap-3">
         <div className="hidden items-center gap-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 font-mono text-xs text-purple-300 lg:flex">
           <Sparkles className="h-4 w-4 text-purple-400" />
-          <span>KHIDRA ENGINE v9.4 (ONLINE)</span>
+          <span>KHIDRA ENGINE v9.5 (ONLINE)</span>
         </div>
         <Button
           variant="secondary"
-          className="border border-white/20 font-mono text-xs hover:bg-white/10"
+          className="border border-border/50 font-mono text-xs hover:bg-secondary"
           onClick={() => {
             window.location.href = "/home"
           }}
         >
-          &larr; PUBLIC BRIDGE
+          &larr; Public Portal
         </Button>
       </div>
     </header>
@@ -267,7 +267,7 @@ export function ConsoleView() {
   }
 
   return (
-    <div className="bg-space relative min-h-screen p-6 text-white selection:bg-cyan-500/30 selection:text-cyan-200 md:p-10">
+    <div className="bg-space relative min-h-screen p-6 text-foreground selection:bg-primary/30 selection:text-foreground md:p-10">
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-20">
         <div className="theme-grid-bg absolute inset-0" />
       </div>
@@ -276,17 +276,17 @@ export function ConsoleView() {
         <ConsoleHeader />
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          <div className="flex flex-col overflow-hidden rounded-xl border border-cyan-500/30 bg-black/70 shadow-[0_0_35px_rgba(0,0,0,0.8)] backdrop-blur-xl lg:col-span-2">
+          <div className="flex flex-col overflow-hidden rounded-xl border border-primary/30 bg-card/90 shadow-md backdrop-blur-xl lg:col-span-2">
             <TerminalWindowHeader />
             <ConsoleQuickCommands onSelect={handleQuickSelect} />
             <TerminalLogViewer logs={logs} />
 
             <form
               onSubmit={handleSubmit}
-              className="flex items-center border-t border-cyan-500/30 bg-black px-4 py-3.5 shadow-inner"
+              className="flex items-center border-t border-primary/20 bg-card/60 px-4 py-3.5 shadow-inner"
             >
-              <span className="mr-3 flex items-center font-mono font-black text-cyan-400">
-                <Terminal className="mr-2 h-4 w-4 animate-pulse text-cyan-400" />
+              <span className="mr-3 flex items-center font-mono font-bold text-primary">
+                <Terminal className="mr-2 h-4 w-4 animate-pulse text-primary" />
                 {":~#"}
               </span>
               <input
@@ -294,14 +294,14 @@ export function ConsoleView() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Enter AI protocol or operational command..."
-                className="flex-1 bg-transparent font-mono text-xs text-white placeholder-cyan-500/30 outline-none"
+                className="flex-1 bg-transparent font-mono text-xs text-foreground placeholder:text-muted-foreground outline-none"
                 autoFocus
               />
               <button
                 type="submit"
-                className="ml-3 rounded border border-cyan-500/40 bg-cyan-500/20 px-3 py-1 font-mono text-[10px] font-bold text-cyan-300 transition-colors hover:bg-cyan-500 hover:text-black"
+                className="ml-3 rounded-lg border border-primary/40 bg-primary/20 px-3 py-1 font-mono text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
               >
-                EXEC
+                Submit
               </button>
             </form>
           </div>

@@ -185,7 +185,7 @@ export function ResourceTable<T = any>({
       {/* Table Container */}
       <div className="overflow-x-auto">
         <table className="w-full text-left font-mono text-xs">
-          <thead className="border-b border-white/10 bg-white/5 text-[9px] tracking-widest text-[#8B9BB0] uppercase">
+          <thead className="border-b border-border/50 bg-muted/50 text-[9px] tracking-widest text-muted-foreground uppercase">
             <tr>
               {columns.map((col, idx) => (
                 <th
@@ -208,17 +208,17 @@ export function ResourceTable<T = any>({
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-white/5">
+          <tbody className="divide-y divide-border/30">
             {loading ? (
               <tr>
                 <td
                   colSpan={columns.length + (hasActions ? 1 : 0)}
-                  className="py-16 text-center text-[#8B9BB0]"
+                  className="py-16 text-center text-muted-foreground"
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <Loader2 className="h-6 w-6 animate-spin text-cyber-cyan" />
-                    <span className="font-mono text-xs tracking-widest text-cyber-cyan uppercase">
-                      SYNCHRONIZING RECORDS...
+                    <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                    <span className="font-mono text-xs tracking-widest text-primary uppercase">
+                      Loading records...
                     </span>
                   </div>
                 </td>
@@ -227,7 +227,7 @@ export function ResourceTable<T = any>({
               <tr>
                 <td
                   colSpan={columns.length + (hasActions ? 1 : 0)}
-                  className="py-12 text-center font-mono text-xs text-[#8B9BB0]"
+                  className="py-12 text-center font-mono text-xs text-muted-foreground"
                 >
                   {emptyMessage}
                 </td>
@@ -240,14 +240,14 @@ export function ResourceTable<T = any>({
                   <tr
                     key={key}
                     onClick={() => onRowClick?.(item)}
-                    className={`transition-colors hover:bg-white/5 ${
+                    className={`transition-colors hover:bg-muted/40 ${
                       onRowClick ? "cursor-pointer" : ""
                     }`}
                   >
                     {columns.map((col, cIdx) => (
                       <td
                         key={col.key || cIdx}
-                        className={`px-4 py-3 text-slate-200 ${
+                        className={`px-4 py-3 text-foreground ${
                           col.align === "right"
                             ? "text-right"
                             : col.align === "center"
@@ -271,7 +271,7 @@ export function ResourceTable<T = any>({
                                 e.stopPropagation()
                                 onEdit(item)
                               }}
-                              className="rounded-md border border-cyber-cyan/40 bg-cyber-cyan/10 px-2.5 py-1 text-xs font-semibold text-cyber-cyan transition-colors hover:bg-cyber-cyan/20"
+                              className="rounded-md border border-primary/40 bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
                             >
                               Edit
                             </button>
@@ -284,7 +284,7 @@ export function ResourceTable<T = any>({
                                 e.stopPropagation()
                                 onDelete(item)
                               }}
-                              className="rounded-md border border-cyber-pink/40 bg-cyber-pink/10 px-2.5 py-1 text-xs font-semibold text-cyber-pink transition-colors hover:bg-cyber-pink/20"
+                              className="rounded-md border border-destructive/40 bg-destructive/10 px-2.5 py-1 text-xs font-semibold text-destructive transition-colors hover:bg-destructive/20"
                             >
                               Delete
                             </button>
@@ -302,29 +302,29 @@ export function ResourceTable<T = any>({
 
       {/* Pagination Footer */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between border-t border-white/10 px-5 py-3 font-mono text-xs text-[#8B9BB0]">
+        <div className="flex items-center justify-between border-t border-border/40 px-5 py-3 font-mono text-xs text-muted-foreground">
           <span>
-            RECORD {filteredData.length > 0 ? (currentPage - 1) * pageSize + 1 : 0} -{" "}
-            {Math.min(currentPage * pageSize, filteredData.length)} OF {filteredData.length}
+            Showing {filteredData.length > 0 ? (currentPage - 1) * pageSize + 1 : 0} -{" "}
+            {Math.min(currentPage * pageSize, filteredData.length)} of {filteredData.length}
           </span>
 
           <div className="flex items-center gap-2">
             <button
               disabled={currentPage <= 1}
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              className="border border-white/10 bg-black/40 px-2.5 py-1 text-[10px] font-bold uppercase transition-all hover:bg-white/10 disabled:opacity-30"
+              className="rounded-md border border-border/50 bg-secondary/50 px-2.5 py-1 text-xs font-medium text-foreground transition-all hover:bg-secondary disabled:opacity-30"
             >
-              [ PREV ]
+              Previous
             </button>
-            <span className="px-2 text-[10px] font-bold text-white">
+            <span className="px-2 text-xs font-bold text-foreground">
               {currentPage} / {totalPages}
             </span>
             <button
               disabled={currentPage >= totalPages}
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              className="border border-white/10 bg-black/40 px-2.5 py-1 text-[10px] font-bold uppercase transition-all hover:bg-white/10 disabled:opacity-30"
+              className="rounded-md border border-border/50 bg-secondary/50 px-2.5 py-1 text-xs font-medium text-foreground transition-all hover:bg-secondary disabled:opacity-30"
             >
-              [ NEXT ]
+              Next
             </button>
           </div>
         </div>

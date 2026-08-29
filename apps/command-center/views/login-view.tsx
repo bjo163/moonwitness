@@ -39,11 +39,11 @@ export function LoginView() {
   const handleQuickPreset = (presetEmail: string, presetPass: string) => {
     setEmail(presetEmail)
     setPassword(presetPass)
-    cosmicAudio.playTacticalClick()
+    cosmicAudio.playClick()
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-cyber-dark font-sans text-white selection:bg-cyber-cyan/30 selection:text-white">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background font-sans text-foreground selection:bg-primary/30 selection:text-foreground">
       {/* Background Atmosphere */}
       <div className="pointer-events-none absolute inset-0 z-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,240,255,0.08),rgba(255,255,255,0))]" />
@@ -54,10 +54,10 @@ export function LoginView() {
       <main className="relative z-10 w-full max-w-md p-6">
         {/* Terminal Header */}
         <div className="mb-6 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-card/80 text-cyber-cyan shadow-sm backdrop-blur-md">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-border/40 bg-card/80 text-primary shadow-sm backdrop-blur-md">
             <ShieldCheck className="h-7 w-7" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white uppercase sm:text-3xl">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground uppercase sm:text-3xl">
             MOONWITNESS OS
           </h1>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -66,7 +66,7 @@ export function LoginView() {
         </div>
 
         {/* Glass Form Card */}
-        <div className="relative rounded-2xl border border-white/10 bg-card/85 p-8 shadow-xl backdrop-blur-xl">
+        <div className="relative rounded-2xl border border-border/40 bg-card/85 p-8 shadow-xl backdrop-blur-xl">
           {errorMsg && (
             <div className="mb-5 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-center text-xs font-medium text-destructive">
               {errorMsg}
@@ -77,7 +77,7 @@ export function LoginView() {
             {/* Email Field */}
             <div className="space-y-1.5">
               <label className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-                <Mail className="h-3.5 w-3.5 text-cyber-cyan" />
+                <Mail className="h-3.5 w-3.5 text-primary" />
                 Email Address
               </label>
               <input
@@ -85,15 +85,15 @@ export function LoginView() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="commander@moonwitness.os"
-                className="w-full rounded-lg border border-white/10 bg-background/60 px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-cyber-cyan focus:bg-background/90 focus:outline-none focus:ring-1 focus:ring-cyber-cyan"
+                placeholder="admin@moonwitness.os"
+                className="w-full rounded-lg border border-border/50 bg-background/60 px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:bg-background/90 focus:outline-none focus:ring-1 focus:ring-primary"
               />
             </div>
 
             {/* Password Field */}
             <div className="space-y-1.5">
               <label className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-                <Lock className="h-3.5 w-3.5 text-cyber-cyan" />
+                <Lock className="h-3.5 w-3.5 text-primary" />
                 Password
               </label>
               <input
@@ -102,7 +102,7 @@ export function LoginView() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full rounded-lg border border-white/10 bg-background/60 px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-cyber-cyan focus:bg-background/90 focus:outline-none focus:ring-1 focus:ring-cyber-cyan"
+                className="w-full rounded-lg border border-border/50 bg-background/60 px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:bg-background/90 focus:outline-none focus:ring-1 focus:ring-primary"
               />
             </div>
 
@@ -115,7 +115,7 @@ export function LoginView() {
                 <button
                   type="button"
                   onClick={() => handleQuickPreset("commander@moonwitness.os", "password123")}
-                  className="flex items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-cyber-purple/50 hover:bg-cyber-purple/10"
+                  className="flex items-center justify-center gap-1.5 rounded-lg border border-border/40 bg-secondary/50 px-2.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-cyber-purple/50 hover:bg-cyber-purple/10"
                 >
                   <KeyRound className="h-3.5 w-3.5 text-cyber-purple" />
                   Commander
@@ -123,9 +123,9 @@ export function LoginView() {
                 <button
                   type="button"
                   onClick={() => handleQuickPreset("admin@moonwitness.org", "admin123")}
-                  className="flex items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-cyber-cyan/50 hover:bg-cyber-cyan/10"
+                  className="flex items-center justify-center gap-1.5 rounded-lg border border-border/40 bg-secondary/50 px-2.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-primary/10"
                 >
-                  <Sparkles className="h-3.5 w-3.5 text-cyber-cyan" />
+                  <Sparkles className="h-3.5 w-3.5 text-primary" />
                   Administrator
                 </button>
               </div>

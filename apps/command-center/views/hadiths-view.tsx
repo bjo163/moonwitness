@@ -112,13 +112,13 @@ export function HadithsView() {
       label: "MATAN ARAB",
       width: "260px",
       align: "right",
-      className: "font-arabic text-sm font-bold text-white",
+      className: "font-arabic text-sm font-bold text-foreground",
     },
     {
       key: "translation",
       label: "TERJEMAHAN INDONESIA",
       render: (h) => (
-        <p className="font-mono text-xs text-[#8B9BB0]">
+        <p className="font-mono text-xs text-muted-foreground">
           &quot;{h.translation}&quot;
         </p>
       ),
