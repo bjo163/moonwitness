@@ -118,7 +118,7 @@ export function OSMissionControlOverview() {
             <div className="absolute inset-0">
               <img
                 src="/assets/galaxy_milkyway_bg.png"
-                alt=""
+                alt="Milky Way space background"
                 className="h-full w-full object-cover opacity-40"
               />
               <div className="from-space to-space/50 absolute inset-0 bg-gradient-to-t via-transparent" />

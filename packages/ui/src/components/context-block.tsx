@@ -21,7 +21,7 @@ export function ContextBlock({
 
   return (
     <div
-      className="panel-box mb-6 border border-border bg-card p-4 shadow-sm sm:p-5"
+      className="rounded-xl mb-6 border border-border bg-card p-4 shadow-sm sm:p-5"
       style={{
         borderColor: `color-mix(in srgb, ${colorToken} 40%, transparent)`,
       }}
@@ -29,7 +29,7 @@ export function ContextBlock({
       <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <div
-            className="tag-clip flex h-6 w-6 items-center justify-center border border-border bg-muted/40 text-xs font-bold"
+            className="rounded flex h-6 w-6 items-center justify-center border border-border bg-muted/40 text-xs font-bold"
             style={{
               color: colorToken,
             }}
@@ -48,7 +48,7 @@ export function ContextBlock({
             </span>
           )}
           <span
-            className="tag-clip border px-2 py-0.5 font-bold"
+            className="rounded border px-2 py-0.5 font-bold"
             style={{
               color: colorToken,
               borderColor: `color-mix(in srgb, ${colorToken} 50%, transparent)`,

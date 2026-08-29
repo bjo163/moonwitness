@@ -327,7 +327,7 @@ export function OSPropheticTimeline() {
                       width={120}
                       height={120}
                       src="/assets/landscape-temp.jpg"
-                      alt=""
+                      alt="Timeline era portrait"
                       className="h-full w-full object-cover opacity-50 transition-opacity group-hover:opacity-100"
                     />
                   </div>

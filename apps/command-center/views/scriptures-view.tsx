@@ -180,8 +180,8 @@ export function ScripturesView() {
       label: "TERJEMAHAN & TAFSIR",
       render: (v) => (
         <div className="space-y-1">
-          <p className="font-mono text-xs font-semibold text-white/90">{v.translation}</p>
-          <p className="font-mono text-[11px] text-[#8B9BB0] italic">&quot;{v.tafsirNote}&quot;</p>
+          <p className="font-mono text-xs font-semibold text-foreground">{v.translation}</p>
+          <p className="font-mono text-[11px] text-muted-foreground italic">&quot;{v.tafsirNote}&quot;</p>
         </div>
       ),
     },

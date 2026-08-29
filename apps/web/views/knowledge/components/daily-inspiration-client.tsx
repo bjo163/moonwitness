@@ -1180,7 +1180,7 @@ ${transmissionText}`
               <div className="pointer-events-none absolute top-1/2 left-1/2 z-0 flex h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 items-center justify-center opacity-[0.03] mix-blend-screen">
                 <img
                   src={`/assets/surah-emblems/surah-${data.ayah.surahNumber}.svg`}
-                  alt=""
+                  alt="Surah emblem watermark"
                   className="h-full w-full animate-[spin_180s_linear_infinite] object-contain"
                 />
               </div>

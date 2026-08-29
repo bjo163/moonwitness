@@ -50,7 +50,7 @@ export function OSKhidraAiDashboard() {
       <div className="pointer-events-none absolute inset-0">
         <img
           src="/assets/galaxy_milkyway_bg.png"
-          alt=""
+          alt="Galaxy background"
           className="absolute inset-0 h-full w-full object-cover opacity-20"
         />
         <div className="from-space/80 to-space/80 absolute inset-0 bg-gradient-to-b via-transparent" />

@@ -279,14 +279,14 @@ export function Sidebar({
       )}
       <aside className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-border bg-background/95 shadow-xl backdrop-blur-xl transition-transform duration-200 md:translate-x-0 ${mobileOpen ? "translate-x-0" : "-translate-x-full"}`}>
       {/* Brand Header */}
-      <div className="flex h-20 items-center justify-between border-b border-cyber-purple/20 px-6">
+      <div className="flex h-20 items-center justify-between border-b border-border px-6">
         <div className="flex items-center gap-3">
-          <ShieldCheck className="h-8 w-8 text-cyber-purple drop-shadow-[0_0_10px_rgba(161,0,255,0.5)]" />
+          <ShieldCheck className="h-8 w-8 text-primary shadow-sm" />
           <div className="flex flex-col">
-            <span className="font-sans text-sm font-black tracking-widest text-cyber-purple">
+            <span className="font-sans text-sm font-black tracking-widest text-foreground">
               {brandTitle}
             </span>
-            <span className="font-mono text-[9px] text-primary/60">
+            <span className="font-mono text-[9px] text-muted-foreground">
               {brandSubtitle}
             </span>
           </div>
@@ -305,7 +305,7 @@ export function Sidebar({
       {/* Navigation list */}
       <nav className="scrollbar-hide flex-1 overflow-y-auto" aria-label="Command center navigation">
         <div className="px-4 py-4">
-          <p className="mb-2 px-2 font-sans text-[10px] font-bold tracking-widest text-cyber-purple/70 uppercase">
+          <p className="mb-2 px-2 font-sans text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
             Modules
           </p>
           <ul className="space-y-0.5">
@@ -389,7 +389,7 @@ export function Sidebar({
 
         {/* Account section */}
         <div className="px-4 py-2">
-          <p className="mb-2 px-2 font-sans text-[10px] font-bold tracking-widest text-cyber-purple/70 uppercase">
+          <p className="mb-2 px-2 font-sans text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
             Account
           </p>
           <ul className="space-y-1">
@@ -409,8 +409,8 @@ export function Sidebar({
                     onClick={() => setMobileOpen(false)}
                     className={`flex items-center gap-3 rounded-lg px-3 py-2 font-sans text-xs transition-colors ${
                       isActive
-                        ? "border border-cyber-purple/30 bg-cyber-purple/10 text-cyber-purple shadow-[0_0_15px_rgba(161,0,255,0.1)]"
-                        : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+                        ? "border border-primary/30 bg-primary/10 text-primary shadow-sm"
+                        : "text-muted-foreground hover:bg-accent hover:text-foreground"
                     }`}
                   >
                     {getIcon(item.icon)}

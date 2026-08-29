@@ -45,8 +45,8 @@ export function HaditsItemCard({ hadith, isActive, onClick }: HaditsItemCardProp
       aria-label={`Hadith ${hadith.id}, ${hadith.grade}`}
       className={`group relative cursor-pointer rounded-xl border p-5 transition-all duration-300 ${
         isActive
-          ? "border-cyan-500/50 bg-[#0B1528] shadow-[0_0_20px_rgba(0,240,255,0.15)]"
-          : "border-white/5 bg-[#080E1C] hover:border-white/20 hover:bg-[#0A1224]"
+          ? "border-primary/50 bg-primary/10 shadow-sm"
+          : "border-border bg-card hover:border-border/80 hover:bg-accent/40"
       }`}
     >
       {/* Top Metadata Strip */}

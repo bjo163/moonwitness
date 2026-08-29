@@ -133,7 +133,7 @@ export function ConsoleView() {
   }
 
   return (
-    <div className="bg-space min-h-screen p-4 text-foreground sm:p-6 lg:p-8">
+    <div className="bg-background min-h-screen p-4 text-foreground sm:p-6 lg:p-8">
       <main className="mx-auto max-w-7xl space-y-6">
         <ConsoleHeader />
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
