@@ -96,7 +96,7 @@ export function PwaRegister() {
           <div className="flex gap-2">
             <button
               onClick={() => setShowInstallBanner(false)}
-              className="border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors clip-btn hover:bg-accent hover:text-foreground"
+              className="rounded-md border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             >
               Dismiss
             </button>
