@@ -90,6 +90,8 @@ const CANONICAL_SEMANTIC_TOKENS = [
 ]
 
 const RAW_UI_COLOR_RE = /(?:^|[\s"'`])(?:bg|text|border|ring|outline|fill|stroke|decoration|divide|from|via|to|shadow)-\[#(?:[0-9a-fA-F]{3,8})\]/i
+const RAW_PALETTE_RE = /\b(?:bg|text|border|ring|divide|from|via|to|shadow)-(?:white|black|slate-\d+|gray-\d+|zinc-\d+|neutral-\d+)\b/i
+const LEGACY_COMPONENT_RE = /\b(?:CosmicDataTable|CosmicFormModal|CosmicPivotGrid|CosmicKanbanBoard|HUDPanel|HUDResourceTable|HUDTaskbar)\b/
 
 const DECORATIVE_UTILITY_RE = /(?:^|[\s"'`])(?:clip-(?:card|hero|btn|tag|rune)|card-clip|hero-clip|btn-clip|tag-clip|rune-clip|hud-clip-(?:card|hero|btn|tag|rune)|panel-glass|military-box|corner-(?:cyan|green|yellow|purple|pink)|glow-(?:cyan|emerald|amber|purple|pink)|holo-glow|laser-conduit-(?:cyan|green|yellow|purple)|bg-(?:cosmic-grid|dense-grid|space))/i
 
@@ -106,6 +108,10 @@ function isDocumentation(filePath) {
 
 function isDomainData(filePath) {
   return /(?:[\\/](?:domain|data|locales|fixtures|seed|schemas?|protocol)(?:[\\/]|$)|(?:\.test|\.spec)\.)/i.test(filePath)
+}
+
+function isDomainVisualization(filePath) {
+  return /(?:celestial|shader|audio-visualizer|tajweed|spectrogram|eclipse|moon-sphere|qibla|chart|graph-canvas|seismix)/i.test(filePath)
 }
 
 function isActiveImplementation(filePath) {
@@ -562,8 +568,13 @@ function auditFile(filePath) {
         VIOLATIONS.bannedTerminology.push({ file: relativePath, line: lineNo, token: line.match(BANNED_TERMINOLOGY_RE)[0], snippet: trimmed })
       }
 
-      if (RAW_UI_COLOR_RE.test(line)) {
-        VIOLATIONS.rawUiColors.push({ file: relativePath, line: lineNo, snippet: trimmed })
+      if (!isDomainVisualization(relativePath)) {
+        if (RAW_UI_COLOR_RE.test(line)) {
+          VIOLATIONS.rawUiColors.push({ file: relativePath, line: lineNo, snippet: trimmed, fix: "Use canonical semantic tokens (e.g. bg-card, text-foreground, border-border)" })
+        }
+        if (RAW_PALETTE_RE.test(line) && !line.match(/(?:import|from|require)/)) {
+          VIOLATIONS.rawUiColors.push({ file: relativePath, line: lineNo, snippet: trimmed, fix: "Replace raw palette with semantic tokens" })
+        }
       }
 
       if (DECORATIVE_UTILITY_RE.test(line)) {
@@ -579,9 +590,9 @@ function auditFile(filePath) {
       }
     }
 
-    // Law 07: Legacy HUD Naming
+    // Law 07: Legacy HUD / Cosmic Naming
     if (!filePath.includes("eslint-config")) {
-      const hudMatch = line.match(/\b(HUDResourceTable|HUDErrorBoundary|useHUDModal|HUD_TOKENS|HudAccentColor|HudPanelLevel|HUDPanel|HUDBreadcrumb)\b/)
+      const hudMatch = line.match(/\b(HUDResourceTable|HUDErrorBoundary|useHUDModal|HUD_TOKENS|HudAccentColor|HudPanelLevel|HUDPanel|HUDBreadcrumb|CosmicDataTable|CosmicFormModal|CosmicPivotGrid|CosmicKanbanBoard|HUDTaskbar)\b/)
       if (hudMatch) {
         VIOLATIONS.legacyHudNaming.push({
           file: relativePath,
@@ -591,12 +602,12 @@ function auditFile(filePath) {
         })
       }
 
-      const hudImportMatch = line.match(/from\s+["'].*\/hud-[^"']+["']/)
+      const hudImportMatch = line.match(/from\s+["'].*\/(?:hud|cosmic)-[^"']+["']/)
       if (hudImportMatch) {
         VIOLATIONS.legacyHudNaming.push({
           file: relativePath,
           line: lineNo,
-          token: "legacy /hud-* import path",
+          token: "legacy import path",
           snippet: trimmed,
         })
       }
@@ -737,7 +748,8 @@ for (const [label, issues] of governanceChecks) {
     issues.slice(0, 15).forEach((item) => {
       const loc = item.file ? `${item.file}${item.line ? `:${item.line}` : ""}` : (item.pkg || "")
       const desc = item.token || item.issue || item.snippet || ""
-      console.log(`     • ${loc} ➔ ${desc}`)
+      const fix = item.fix ? ` (Recommendation: ${item.fix})` : ""
+      console.log(`     • [${label}] ${loc} ➔ ${desc}${fix}`)
     })
     if (issues.length > 15) console.log(`     ... and ${issues.length - 15} more`)
   }
