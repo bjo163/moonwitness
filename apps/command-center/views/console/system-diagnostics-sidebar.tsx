@@ -1,71 +1,33 @@
 "use client"
 
 import React from "react"
-import { Cpu, Database, Network, Activity, ShieldCheck } from "lucide-react"
+import { Activity, Cpu, Database, Network } from "lucide-react"
 
-const TELEMETRY_METRIC_COUNT = 4
+const METRICS = [
+  { label: "CPU load", value: "38.2%", icon: Cpu },
+  { label: "Memory", value: "1.4 / 4.0 GB", icon: Database },
+  { label: "Network latency", value: "14.2 ms", icon: Network },
+  { label: "Process activity", value: "Normal", icon: Activity },
+]
 
 export function SystemDiagnosticsSidebar() {
-  const metrics = [
-    {
-      label: "CORE CPU LOAD",
-      val: "38.2%",
-      icon: Cpu,
-      color: "text-primary",
-      bg: "bg-primary/10",
-      border: "border-border",
-    },
-    {
-      label: "MEMORY BUFFER",
-      val: "1.4 / 4.0 GB",
-      icon: Database,
-      color: "text-primary",
-      bg: "bg-muted",
-      border: "border-border",
-    },
-    {
-      label: "NET LATENCY",
-      val: "14.2 ms",
-      icon: Network,
-      color: "text-emerald-400",
-      bg: "bg-emerald-500/10",
-      border: "border-emerald-500/30",
-    },
-    {
-      label: "ENTROPY FLICKER",
-      val: "0.0034 eV",
-      icon: Activity,
-      color: "text-amber-400",
-      bg: "bg-amber-500/10",
-      border: "border-amber-500/30",
-    },
-  ]
-
   return (
-    <div className="flex flex-col gap-4">
-      <div className="rounded-xl border border-border bg-black/60 p-5 shadow-sm backdrop-blur-md">
-        <h3 className="mb-4 flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-white uppercase">
-          <ShieldCheck className="h-4 w-4 text-primary" />
-          Hardware Telemetry ({TELEMETRY_METRIC_COUNT} Nodes)
-        </h3>
-
-        <div className="grid grid-cols-2 gap-3">
-          {metrics.map((m) => (
-            <div
-              key={m.label}
-              className={`rounded-lg border ${m.border} ${m.bg} p-3 transition-colors hover:border-white/20`}
-            >
-              <div className="flex items-center gap-2">
-                <m.icon className={`h-4 w-4 ${m.color}`} />
-                <span className="font-mono text-[9px] tracking-wider text-muted-foreground">
-                  {m.label}
-                </span>
-              </div>
-              <p className="mt-2 font-mono text-sm font-bold text-foreground">{m.val}</p>
-            </div>
-          ))}
-        </div>
+    <aside className="h-fit rounded-lg border border-border bg-background/80 p-4 shadow-sm">
+      <div className="flex items-center justify-between border-b border-border pb-3">
+        <h2 className="text-sm font-semibold text-foreground">System diagnostics</h2>
+        <span className="text-xs text-success">Online</span>
       </div>
-    </div>
+      <div className="mt-3 space-y-2">
+        {METRICS.map(({ label, value, icon: Icon }) => (
+          <div key={label} className="flex items-center justify-between gap-3 rounded-md border border-border/70 bg-muted/20 p-3">
+            <div className="flex min-w-0 items-center gap-2">
+              <Icon className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+              <span className="truncate text-xs text-muted-foreground">{label}</span>
+            </div>
+            <span className="shrink-0 font-mono text-xs text-foreground">{value}</span>
+          </div>
+        ))}
+      </div>
+    </aside>
   )
 }

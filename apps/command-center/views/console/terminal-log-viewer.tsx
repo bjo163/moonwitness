@@ -9,59 +9,26 @@ export type LogItem = {
   message: string
 }
 
-function getLogSenderStyle(sender: LogItem["sender"]) {
-  switch (sender) {
-    case "SYSTEM":
-      return "text-primary font-bold border border-border bg-primary/10 px-1.5 py-0.5 rounded text-[10px]"
-    case "KHIDRA_AI":
-      return "text-primary font-bold border border-border bg-muted px-1.5 py-0.5 rounded text-[10px]"
-    case "SUCCESS":
-      return "text-emerald-400 font-bold border border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0.5 rounded text-[10px]"
-    case "WARN":
-      return "text-amber-400 font-bold border border-amber-500/30 bg-amber-500/10 px-1.5 py-0.5 rounded text-[10px]"
-    case "CRITICAL":
-      return "text-rose-500 font-bold border border-rose-500/30 bg-rose-500/10 px-1.5 py-0.5 rounded text-[10px]"
-    case "USER":
-      return "text-white font-bold px-1.5 py-0.5 rounded text-[10px] bg-black/60 border border-white/20"
-  }
+const SENDER_CLASSES: Record<LogItem["sender"], string> = {
+  SYSTEM: "text-muted-foreground",
+  KHIDRA_AI: "text-primary",
+  USER: "text-foreground",
+  SUCCESS: "text-success",
+  WARN: "text-warning",
+  CRITICAL: "text-danger",
 }
 
 export function TerminalLogViewer({ logs }: { logs: LogItem[] }) {
   const scrollRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    }
-  }, [logs.length])
+  useEffect(() => { scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight }) }, [logs.length])
 
   return (
-    <div
-      ref={scrollRef}
-      className="scrollbar-thin scrollbar-thumb-cyan-500/30 scrollbar-track-transparent max-h-[560px] min-h-[400px] flex-1 space-y-3 overflow-y-auto p-5 font-mono text-xs"
-    >
-      {logs.map((item) => (
-        <div
-          key={item.id}
-          className="group flex flex-col gap-1.5 rounded-lg border border-transparent p-2 transition-colors hover:border-white/10 hover:bg-black/30 sm:flex-row sm:items-start sm:gap-3"
-        >
-          <div className="flex shrink-0 items-center gap-2">
-            <span className="font-mono text-[10px] text-white/50">
-              [{item.timestamp}]
-            </span>
-            <span className={getLogSenderStyle(item.sender)}>
-              {item.sender}
-            </span>
-          </div>
-          <p
-            className={`font-mono leading-relaxed break-words ${
-              item.sender === "USER"
-                ? "font-semibold text-primary"
-                : "text-gray-300"
-            }`}
-          >
-            {item.message}
-          </p>
+    <div ref={scrollRef} className="min-h-[400px] flex-1 overflow-y-auto p-4 font-mono text-xs">
+      {logs.length === 0 ? <p className="text-muted-foreground">Output cleared.</p> : logs.map((item) => (
+        <div key={item.id} className="grid gap-1 border-b border-border/50 py-2 sm:grid-cols-[72px_72px_minmax(0,1fr)] sm:gap-3">
+          <span className="text-muted-foreground">{item.timestamp}</span>
+          <span className={SENDER_CLASSES[item.sender]}>{item.sender}</span>
+          <p className="break-words leading-relaxed text-foreground/90">{item.message}</p>
         </div>
       ))}
     </div>
