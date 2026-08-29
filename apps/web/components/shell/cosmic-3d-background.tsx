@@ -25,7 +25,11 @@ type Meteor = {
   color: string
 }
 
-export function ObservatoryBackground() {
+function getToken(name: string) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+}
+
+export function Cosmic3DBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const mouseRef = useRef<{
     x: number
@@ -45,6 +49,10 @@ export function ObservatoryBackground() {
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
+    const foregroundColor = getToken("--foreground")
+    const accentColor = getToken("--primary") || foregroundColor
+    const secondaryColor = getToken("--accent-foreground") || accentColor
+
     let animationFrameId: number
     canvas.width = window.innerWidth * window.devicePixelRatio
     canvas.height = window.innerHeight * window.devicePixelRatio
@@ -57,7 +65,7 @@ export function ObservatoryBackground() {
       1200
     )
 
-    // Initialize multi-layered parallax starfield
+    // Initialize multi-layered parallax starfield.
     for (let i = 0; i < starCount; i++) {
       const layer = (Math.random() < 0.6 ? 1 : Math.random() < 0.85 ? 2 : 3) as
         | 1
@@ -81,7 +89,7 @@ export function ObservatoryBackground() {
       })
     }
 
-    // Handle Responsive Resize
+    // Handle responsive resize.
     const handleResize = () => {
       if (!canvas) return
       canvas.width = window.innerWidth * window.devicePixelRatio
@@ -90,14 +98,14 @@ export function ObservatoryBackground() {
     }
     window.addEventListener("resize", handleResize)
 
-    // Handle Mouse Move for Gravitational Reaction
+    // Handle cursor movement for parallax interaction.
     const handleMouseMove = (e: MouseEvent) => {
       mouseRef.current.targetX = e.clientX
       mouseRef.current.targetY = e.clientY
     }
     window.addEventListener("mousemove", handleMouseMove)
 
-    // Spawn Kinetic Meteors periodically
+    // Spawn meteors periodically.
     const spawnMeteor = () => {
       if (meteors.length < 3 && Math.random() < 0.35) {
         meteors.push({
@@ -107,18 +115,18 @@ export function ObservatoryBackground() {
           speed: Math.random() * 8 + 12,
           angle: Math.PI / 4 + (Math.random() - 0.5) * 0.1, // around 45 degrees diagonal downward
           opacity: 1,
-          color: Math.random() > 0.4 ? "0, 240, 255" : "139, 92, 246", // accent Cyan (#00F0FF) or Violet (#8B5CF6)
+          color: Math.random() > 0.4 ? accentColor : secondaryColor,
         })
       }
     }
     const meteorInterval = setInterval(spawnMeteor, 2200)
 
-    // High-Precision Render Loop
+    // Render loop.
     let time = 0
     const render = () => {
       time += 0.016
 
-      // Smooth cursor lerping
+      // Smooth cursor interpolation.
       mouseRef.current.x +=
         (mouseRef.current.targetX - mouseRef.current.x) * 0.08
       mouseRef.current.y +=
@@ -126,7 +134,7 @@ export function ObservatoryBackground() {
 
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
 
-      // Draw Cursor Gravitational Radiant Field
+      // Draw a subtle cursor-responsive field.
       if (mouseRef.current.x > -500) {
         const gradient = ctx.createRadialGradient(
           mouseRef.current.x,
@@ -136,30 +144,32 @@ export function ObservatoryBackground() {
           mouseRef.current.y,
           260
         )
-        gradient.addColorStop(0, "rgba(0, 240, 255, 0.07)")
-        gradient.addColorStop(0.5, "rgba(139, 92, 246, 0.02)")
-        gradient.addColorStop(1, "rgba(0, 0, 0, 0)")
+        gradient.addColorStop(0, accentColor)
+        gradient.addColorStop(0.5, secondaryColor)
+        gradient.addColorStop(1, "transparent")
+        ctx.globalAlpha = 0.07
         ctx.fillStyle = gradient
         ctx.fillRect(0, 0, window.innerWidth, window.innerHeight)
+        ctx.globalAlpha = 1
       }
 
-      // Draw & animate stars
+      // Draw and animate stars.
       for (let i = 0; i < stars.length; i++) {
         const star = stars[i]
         if (!star) continue
 
-        // Twinkle sinusoidal animation
+        // Twinkle animation.
         star.alpha =
           star.baseAlpha + Math.sin(time * (star.twinkleSpeed * 50)) * 0.25
         star.alpha = Math.max(0.15, Math.min(1, star.alpha))
 
-        // Parallax drift upward/rightward
+        // Parallax drift upward and rightward.
         star.y -= star.speed * 0.5
         star.x += star.speed * 0.2
         if (star.y < 0) star.y = window.innerHeight
         if (star.x > window.innerWidth) star.x = 0
 
-        // Gravitational distortion around cursor
+        // Distort positions around the cursor.
         let drawX = star.x
         let drawY = star.y
         if (mouseRef.current.x > -500) {
@@ -175,19 +185,23 @@ export function ObservatoryBackground() {
 
         ctx.beginPath()
         ctx.arc(drawX, drawY, star.size / 2, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha.toFixed(2)})`
+        ctx.globalAlpha = star.alpha
+        ctx.fillStyle = foregroundColor
         ctx.fill()
+        ctx.globalAlpha = 1
 
-        // Celestial Bloom ambient for Layer 3 (Foreground) Stars
+        // Add a soft accent to foreground stars.
         if (star.layer === 3 && star.alpha > 0.6) {
           ctx.beginPath()
           ctx.arc(drawX, drawY, star.size * 2.2, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(0, 240, 255, ${(star.alpha * 0.18).toFixed(2)})`
+          ctx.globalAlpha = star.alpha * 0.18
+          ctx.fillStyle = accentColor
           ctx.fill()
+          ctx.globalAlpha = 1
         }
       }
 
-      // Draw & animate shooting meteors
+      // Draw and animate shooting meteors.
       for (let i = meteors.length - 1; i >= 0; i--) {
         const meteor = meteors[i]
         if (!meteor) continue
@@ -208,19 +222,18 @@ export function ObservatoryBackground() {
         const tailY = meteor.y - Math.sin(meteor.angle) * meteor.length
 
         const grad = ctx.createLinearGradient(meteor.x, meteor.y, tailX, tailY)
-        grad.addColorStop(0, `rgba(${meteor.color}, ${meteor.opacity})`)
-        grad.addColorStop(
-          0.35,
-          `rgba(${meteor.color}, ${meteor.opacity * 0.5})`
-        )
-        grad.addColorStop(1, "rgba(0, 0, 0, 0)")
+        grad.addColorStop(0, meteor.color)
+        grad.addColorStop(0.35, meteor.color)
+        grad.addColorStop(1, "transparent")
 
         ctx.beginPath()
         ctx.moveTo(meteor.x, meteor.y)
         ctx.lineTo(tailX, tailY)
+        ctx.globalAlpha = meteor.opacity
         ctx.strokeStyle = grad
         ctx.lineWidth = 1.8
         ctx.stroke()
+        ctx.globalAlpha = 1
       }
 
       animationFrameId = requestAnimationFrame(render)
@@ -237,21 +250,42 @@ export function ObservatoryBackground() {
   }, [])
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[-1] overflow-hidden bg-slate-950">
-      {/* Deep Celestial Aurora Mesh (GPU Hardware Accelerated) */}
-      <div className="absolute -top-[25%] -left-[15%] h-[75vw] w-[75vw] animate-[pulse_14s_ease-in-out_infinite] rounded-full bg-gradient-to-tr from-primary/10 via-transparent to-transparent blur-[160px] will-change-transform" />
-      <div className="absolute -right-[15%] -bottom-[25%] h-[80vw] w-[80vw] animate-[pulse_18s_ease-in-out_infinite_2s] rounded-full bg-gradient-to-br from-primary/10 via-indigo-500/10 to-transparent blur-[170px] will-change-transform" />
-      <div className="absolute top-[25%] left-[30%] h-[55vw] w-[55vw] animate-[pulse_22s_ease-in-out_infinite_5s] rounded-full bg-gradient-to-r from-primary/10 via-blue-500/10 to-transparent blur-[180px] will-change-transform" />
+    <div className="pointer-events-none fixed inset-0 z-[-1] overflow-hidden bg-background">
+      <div
+        className="absolute -top-[25%] -left-[15%] h-[75vw] w-[75vw] animate-[pulse_14s_ease-in-out_infinite] rounded-full blur-[160px] will-change-transform"
+        style={{
+          background:
+            "radial-gradient(circle, color-mix(in srgb, var(--primary) 15%, transparent), transparent 70%)",
+        }}
+      />
+      <div
+        className="absolute -right-[15%] -bottom-[25%] h-[80vw] w-[80vw] animate-[pulse_18s_ease-in-out_infinite_2s] rounded-full blur-[170px] will-change-transform"
+        style={{
+          background:
+            "radial-gradient(circle, color-mix(in srgb, var(--accent-foreground) 15%, transparent), transparent 70%)",
+        }}
+      />
+      <div
+        className="absolute top-[25%] left-[30%] h-[55vw] w-[55vw] animate-[pulse_22s_ease-in-out_infinite_5s] rounded-full blur-[180px] will-change-transform"
+        style={{
+          background:
+            "radial-gradient(circle, color-mix(in srgb, var(--primary) 5%, transparent), transparent 70%)",
+        }}
+      />
 
-      {/* Zero-Dependency Quantum Starfield & Kinetic Comets Canvas */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 block h-full w-full opacity-90"
         aria-hidden="true"
       />
 
-      {/* Deep Abyss Vignette Gradient for High Contrast Typography */}
-      <div className="absolute inset-0 bg-gradient-to-b from-card/30 via-transparent to-background/85" />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to bottom, color-mix(in srgb, var(--background) 30%, transparent), transparent 45%, color-mix(in srgb, var(--background) 85%, transparent))",
+        }}
+      />
     </div>
   )
 }
