@@ -11,7 +11,7 @@ export function PanelHeader({
   title,
   status = "ACTIVE",
   icon: Icon,
-  accentColor = "primary",
+  accentColor = "system",
   subtitle,
 }: {
   title: string
@@ -20,35 +20,42 @@ export function PanelHeader({
   accentColor?: ThemeAccentColor
   subtitle?: string
 }) {
-  const colorHex = THEME_TOKENS.colors[accentColor] || THEME_TOKENS.colors.primary
+  const colorToken =
+    THEME_TOKENS.colors[accentColor] || THEME_TOKENS.colors.system
 
   return (
-    <div className="mb-4 border-b pb-3 border-border">
+    <div
+      className="mb-4 border-b border-border pb-3"
+    >
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2.5">
           {Icon ? (
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-muted/40">
-              <Icon className="h-3.5 w-3.5" style={{ color: colorHex }} />
+            <div
+              className="tag-clip flex h-7 w-7 items-center justify-center border border-border bg-muted/40"
+            >
+              <Icon className="h-3.5 w-3.5" style={{ color: colorToken }} />
             </div>
           ) : (
-            <span className="text-xs font-bold text-primary">◉</span>
+            <span className="text-success text-xs font-bold">◉</span>
           )}
-          <h3 className="text-sm font-bold tracking-wide text-foreground uppercase sm:text-base">
+          <h3
+            className="text-sm font-black tracking-widest text-foreground uppercase sm:text-base"
+          >
             {title}
           </h3>
         </div>
 
-        <div className="flex items-center gap-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+        <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold">
           <span
             className="h-1.5 w-1.5 animate-pulse rounded-full"
-            style={{ background: colorHex }}
+            style={{ background: colorToken }}
           />
-          <span style={{ color: colorHex }}>{status}</span>
+          <span style={{ color: colorToken }}>STATUS {status}</span>
         </div>
       </div>
 
       {subtitle && (
-        <p className="mt-1 text-xs text-muted-foreground">
+        <p className="mt-1 font-mono text-[10px] leading-normal text-muted-foreground">
           {subtitle}
         </p>
       )}
@@ -59,7 +66,7 @@ export function PanelHeader({
 export function Panel({
   children,
   level = "level2",
-  accentColor = "primary",
+  accentColor = "system",
   className = "",
   style = {},
 }: {
@@ -71,14 +78,25 @@ export function Panel({
 }) {
   const levelConfig =
     THEME_TOKENS.panelLevels[level] || THEME_TOKENS.panelLevels.level2
-
+  const colorToken =
+    THEME_TOKENS.colors[accentColor] || THEME_TOKENS.colors.system
   return (
     <div
-      className={`rounded-xl border border-border bg-card ${levelConfig.padding} relative shadow-sm transition-colors ${className}`}
+      className={`panel-box ${levelConfig.padding} relative border border-border bg-card transition-colors ${className}`}
       style={{
+        borderWidth: levelConfig.borderWidth,
+        borderColor: `color-mix(in srgb, ${colorToken} 35%, transparent)`,
+        boxShadow: levelConfig.glow,
         ...style,
       }}
     >
+      {/* Corner metadata tag  */}
+      <span
+        className="pointer-events-none absolute top-1 right-2 font-mono text-[10px] font-bold tracking-widest select-none"
+        style={{ color: `${colorHex}50` }}
+      >
+        {levelConfig.name.toUpperCase()} • SYS.MOD
+      </span>
       {children}
     </div>
   )
