@@ -1,4 +1,5 @@
 import React from "react"
+import { cn } from "@workspace/ui/lib/utils"
 
 export interface SectionProps extends React.HTMLAttributes<HTMLElement> {
   id?: string
@@ -9,7 +10,7 @@ export interface SectionProps extends React.HTMLAttributes<HTMLElement> {
 
 export function Section({
   id,
-  borderColor = "cyan",
+  borderColor,
   className = "",
   children,
   ...props
@@ -17,7 +18,10 @@ export function Section({
   return (
     <section
       id={id}
-      className={`relative rounded-2xl border border-primary/20 bg-slate-950/40 p-6 backdrop-blur-md ${className}`}
+      className={cn(
+        "relative rounded-2xl border border-border bg-card p-6 shadow-sm text-card-foreground",
+        className
+      )}
       {...props}
     >
       {children}
@@ -34,9 +38,12 @@ export interface SectionBadgeProps {
 export function SectionBadge({ number, label, className = "" }: SectionBadgeProps) {
   return (
     <div
-      className={`inline-flex items-center gap-2 rounded border border-primary/30 bg-primary/10 px-3 py-1 font-mono text-[10px] tracking-widest text-primary uppercase ${className}`}
+      className={cn(
+        "inline-flex items-center gap-2 rounded-md border border-primary/30 bg-primary/10 px-3 py-1 font-mono text-[10px] tracking-wider text-primary uppercase",
+        className
+      )}
     >
-      {number && <span className="font-bold text-white">[{number}]</span>}
+      {number && <span className="font-bold text-foreground">[{number}]</span>}
       <span>{label}</span>
     </div>
   )

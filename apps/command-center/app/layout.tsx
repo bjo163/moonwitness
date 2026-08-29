@@ -24,7 +24,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body
-        className="bg-slate-50 font-sans text-slate-900 antialiased"
+        className="bg-background font-sans text-foreground antialiased"
         suppressHydrationWarning
       >
         <MoonProvider>

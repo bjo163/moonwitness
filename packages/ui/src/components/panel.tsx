@@ -2,80 +2,96 @@
 
 import React from "react"
 import { cn } from "@workspace/ui/lib/utils"
-import {
-  THEME_TOKENS,
-  type ThemeAccentColor,
-  type ThemePanelLevel,
-} from "../tokens/theme-tokens"
+
+export type PanelVariant =
+  | "default"
+  | "primary"
+  | "secondary"
+  | "success"
+  | "warning"
+  | "destructive"
+  | "muted"
+
+export type PanelPadding = "none" | "sm" | "md" | "lg" | "xl"
+
+const VARIANT_BORDER_CLASSES: Record<PanelVariant, string> = {
+  default: "border-border",
+  primary: "border-primary/40",
+  secondary: "border-secondary",
+  success: "border-success/40",
+  warning: "border-warning/40",
+  destructive: "border-destructive/40",
+  muted: "border-muted",
+}
+
+const VARIANT_TEXT_CLASSES: Record<PanelVariant, string> = {
+  default: "text-foreground",
+  primary: "text-primary",
+  secondary: "text-secondary-foreground",
+  success: "text-success",
+  warning: "text-warning",
+  destructive: "text-destructive",
+  muted: "text-muted-foreground",
+}
+
+const PADDING_CLASSES: Record<PanelPadding, string> = {
+  none: "p-0",
+  sm: "p-3 sm:p-4",
+  md: "p-4 sm:p-5",
+  lg: "p-6 sm:p-8",
+  xl: "p-8 sm:p-10",
+}
+
+function resolveVariant(variant?: PanelVariant, accentColor?: string): PanelVariant {
+  if (variant && variant !== "default") return variant
+  if (!accentColor) return "default"
+  if (accentColor === "danger" || accentColor === "destructive" || accentColor === "critical") return "destructive"
+  if (accentColor === "warning" || accentColor === "celestial") return "warning"
+  if (accentColor === "success" || accentColor === "mission") return "success"
+  if (accentColor === "secondary") return "secondary"
+  if (accentColor === "muted") return "muted"
+  return "primary"
+}
 
 export function PanelHeader({
   title,
   status = "ACTIVE",
   icon: Icon,
-  accentColor = "system",
+  variant = "default",
+  accentColor,
   subtitle,
+  className,
 }: {
   title: string
   status?: string
   icon?: React.ElementType
-  accentColor?: ThemeAccentColor
+  variant?: PanelVariant
+  accentColor?: string
   subtitle?: string
+  className?: string
 }) {
-  const accentClasses: Record<ThemeAccentColor, string> = {
-    destructive: "text-destructive",
-    primary: "text-primary",
-    secondary: "text-secondary-foreground",
-    success: "text-success",
-    warning: "text-warning",
-    danger: "text-destructive",
-    info: "text-primary",
-    muted: "text-muted-foreground",
-    accent: "text-accent-foreground",
-    system: "text-primary",
-    mission: "text-success",
-    celestial: "text-warning",
-    knowledge: "text-accent-foreground",
-    knowledgeLight: "text-accent-foreground",
-    critical: "text-destructive",
-    textPrimary: "text-foreground",
-    textMuted: "text-muted-foreground",
-    background: "text-foreground",
-    panelBg: "text-foreground",
-    panelBorder: "text-primary",
-  }
-  const accentClass = accentClasses[accentColor] || accentClasses.system
+  const effectiveVariant = resolveVariant(variant, accentColor)
+  const textClass = VARIANT_TEXT_CLASSES[effectiveVariant] || VARIANT_TEXT_CLASSES.default
 
   return (
-    <div
-      className="mb-4 border-b pb-3"
-    >
+    <div className={cn("mb-4 border-b border-border pb-3", className)}>
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2.5">
           {Icon ? (
-            <div
-              className={cn(
-                "flex h-7 w-7 items-center justify-center rounded-md border bg-muted",
-                accentClass
-              )}
-            >
+            <div className={cn("flex h-7 w-7 items-center justify-center rounded-md border border-border bg-muted", textClass)}>
               <Icon className="h-3.5 w-3.5" aria-hidden="true" />
             </div>
           ) : (
-            <span className="text-success text-xs font-bold">◉</span>
+            <span className="text-xs font-bold text-success">●</span>
           )}
-          <h3
-            className={cn(
-              "text-sm font-semibold tracking-tight text-foreground uppercase sm:text-base",
-              accentClass
-            )}
-          >
+          <h3 className={cn("text-sm font-semibold tracking-tight text-foreground sm:text-base", textClass)}>
             {title}
           </h3>
         </div>
 
-        <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold">
-          <span className={cn("h-1.5 w-1.5 rounded-full bg-current", accentClass)} />
-          <span className={accentClass}>STATUS {status}</span>
+        <div className="flex items-center gap-1.5 font-mono text-[10px] font-medium">
+          <span className={cn("h-1.5 w-1.5 rounded-full bg-current", textClass)} />
+          <span className={textClass}>{status}</span>
         </div>
       </div>
 
@@ -90,51 +106,32 @@ export function PanelHeader({
 
 export function Panel({
   children,
-  level = "level2",
-  accentColor = "system",
+  variant = "default",
+  accentColor,
+  level,
+  padding = "md",
   className = "",
   style = {},
-}: {
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & {
   children: React.ReactNode
-  level?: ThemePanelLevel
-  accentColor?: ThemeAccentColor
-  className?: string
-  style?: React.CSSProperties
+  variant?: PanelVariant
+  accentColor?: string
+  level?: string
+  padding?: PanelPadding
 }) {
-  const levelConfig =
-    THEME_TOKENS.panelLevels[level] || THEME_TOKENS.panelLevels.level2
-  const accentClasses: Record<ThemeAccentColor, string> = {
-    destructive: "border-destructive/30",
-    primary: "border-primary/30",
-    secondary: "border-secondary/40",
-    success: "border-success/30",
-    warning: "border-warning/30",
-    danger: "border-destructive/30",
-    info: "border-primary/30",
-    muted: "border-border",
-    accent: "border-accent/40",
-    system: "border-primary/30",
-    mission: "border-success/30",
-    celestial: "border-warning/30",
-    knowledge: "border-accent/40",
-    knowledgeLight: "border-accent/40",
-    critical: "border-destructive/30",
-    textPrimary: "border-border",
-    textMuted: "border-border",
-    background: "border-border",
-    panelBg: "border-border",
-    panelBorder: "border-primary/30",
-  }
+  const effectiveVariant = resolveVariant(variant, accentColor)
 
   return (
     <div
       className={cn(
         "relative rounded-xl border bg-card text-card-foreground shadow-sm transition-colors",
-        levelConfig.padding,
-        accentClasses[accentColor] || accentClasses.system,
+        PADDING_CLASSES[padding],
+        VARIANT_BORDER_CLASSES[effectiveVariant],
         className
       )}
       style={style}
+      {...props}
     >
       {children}
     </div>

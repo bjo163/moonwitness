@@ -62,7 +62,7 @@ export function ShootgunPublicView() {
               {operation.targetImage ? (
                 <img
                   src={operation.targetImage}
-                  alt={operation.targetName || "Operation target image"}
+                  alt={operation.name || "Operation target image"}
                   className="h-44 w-full object-cover"
                 />
               ) : (

@@ -1,11 +1,32 @@
 import React from "react"
+import { cn } from "@workspace/ui/lib/utils"
+
+export type StatVariant = "default" | "primary" | "success" | "warning" | "destructive"
+
+const VARIANT_BORDER_CLASSES: Record<StatVariant, string> = {
+  default: "border-border",
+  primary: "border-primary/40 text-primary",
+  success: "border-success/40 text-success",
+  warning: "border-warning/40 text-warning",
+  destructive: "border-destructive/40 text-destructive",
+}
+
+function resolveStatVariant(variant?: StatVariant, accentColor?: string): StatVariant {
+  if (variant && variant !== "default") return variant
+  if (!accentColor) return "default"
+  if (accentColor === "danger" || accentColor === "destructive" || accentColor === "accent") return "destructive"
+  if (accentColor === "warning" || accentColor === "knowledge") return "warning"
+  if (accentColor === "success" || accentColor === "mission") return "success"
+  return "primary"
+}
 
 export interface StatProps {
   label: string
   value: string | number
   trend?: string
   icon?: React.ElementType
-  accentColor?: "accent" | "system" | "warning" | "danger" | "knowledge" | string
+  variant?: StatVariant
+  accentColor?: string
   className?: string
 }
 
@@ -14,30 +35,32 @@ export function Stat({
   value,
   trend,
   icon: Icon,
-  accentColor="primary",
+  variant = "default",
+  accentColor,
   className = "",
 }: StatProps) {
-  let accentClass = "text-primary border-border"
-  if (accentColor === "warning") accentClass = "text-amber-400 border-amber-500/30"
-  if (accentColor === "accent" || accentColor === "danger") accentClass = "text-red-400 border-red-500/30"
-  if (accentColor === "knowledge") accentClass = "text-fuchsia-400 border-fuchsia-500/30"
+  const effectiveVariant = resolveStatVariant(variant, accentColor)
 
   return (
     <div
-      className={`relative overflow-hidden rounded-xl border bg-black/40 p-3.5 backdrop-blur-md transition-all hover:bg-white/5 ${accentClass} ${className}`}
+      className={cn(
+        "relative overflow-hidden rounded-xl border bg-card p-3.5 shadow-sm transition-colors text-card-foreground",
+        VARIANT_BORDER_CLASSES[effectiveVariant],
+        className
+      )}
     >
       <div className="flex items-center justify-between">
-        <span className="font-mono text-[9px] font-bold tracking-widest text-slate-400 uppercase">
+        <span className="font-sans text-xs font-medium text-muted-foreground uppercase tracking-wider">
           {label}
         </span>
-        {Icon && <Icon className="h-3.5 w-3.5 opacity-80" />}
+        {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}
       </div>
       <div className="mt-2 flex items-baseline justify-between">
-        <span className="font-mono text-base font-bold text-white sm:text-lg">
+        <span className="font-mono text-xl font-bold text-foreground">
           {value}
         </span>
         {trend && (
-          <span className="font-mono text-[9px] font-semibold text-emerald-400">
+          <span className="font-mono text-xs font-semibold text-success">
             {trend}
           </span>
         )}

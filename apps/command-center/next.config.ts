@@ -10,13 +10,7 @@ if (!process.env.NODE_OPTIONS?.includes("--no-deprecation")) {
 const nextConfig: NextConfig = {
   transpilePackages: [
     "@workspace/ui",
-    "@workspace/state",
-    "@workspace/hooks",
-    "@workspace/error",
-    "@workspace/types",
-    "@moon/client",
     "@moon/compute",
-    "@moon/witness",
     "@moon/time",
     "@moon/protocol",
   ],

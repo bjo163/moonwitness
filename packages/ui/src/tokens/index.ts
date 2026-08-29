@@ -1,7 +1,7 @@
 /**
- * ◈ MoonWitness OS Design Token System — Public API
+ * ◈ MoonWitness Design Tokens — Canonical Semantic API
  * 
  * @module @workspace/ui/tokens
  */
 
-export * from './design-tokens';
+export * from "./theme-tokens";

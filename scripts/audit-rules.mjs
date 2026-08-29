@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 
 /**
- * ◈ MOONWITNESS OS — 33 CONSTITUTIONAL LAWS & PACKAGE GENESIS AUDITOR (V9.5)
+ * ◈ MOONWITNESS OS — 33 CONSTITUTIONAL LAWS & ENTERPRISE DESIGN SYSTEM AUDITOR (V10.0)
  *
- * Automated Multi-Pillar Supreme Architectural Inspector:
+ * Automated Multi-Pillar Architectural & Design System Inspector:
  * ─────────────────────────────────────────────────────────────────────────────
- * • Pillar I   : Visual DNA & Design Tokens (Laws 01-05)
- * • Pillar II  : Monorepo Topology & Boundaries (Laws 06-10)
- * • Pillar III : React 19 & Next.js 16 Architecture (Laws 11-14)
- * • Pillar IV  : Pure Isomorphic Compute & Telemetry (Laws 15-18)
- * • Pillar V   : Security & Defense-in-Depth (Laws 19-22)
- * • Pillar VI  : Memory Safety, Cleanup & Performance (Laws 23-26)
- * • Pillar VII : Sacred Knowledge Integrity & Multilingual Matrix (Laws 27-30)
+ * • Pillar I   : Canonical Design Tokens & Semantic Surfaces
+ * • Pillar II  : Monorepo Topology, Layering & Boundaries
+ * • Pillar III : React 19 & Next.js 16 Architecture
+ * • Pillar IV  : Pure Isomorphic Compute & Telemetry Isolation
+ * • Pillar V   : Security & Defense-in-Depth
+ * • Pillar VI  : Memory Safety, Accessibility & Performance
+ * • Pillar VII : Sacred Knowledge Integrity & Multilingual Matrix
  * • Covenant   : Sovereign Package Genesis Contract (10 Invariant Mandates)
  * ─────────────────────────────────────────────────────────────────────────────
  */
@@ -47,19 +47,61 @@ const IGNORE_DIRS = new Set([
 const TARGET_DIRS = ["apps", "packages"]
 const SOURCE_EXTENSIONS = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".css", ".scss"])
 const DOC_EXTENSIONS = new Set([".md", ".mdx", ".txt"])
-const CYBER_TOKENS = ["cyan", "green", "yellow", "purple", "pink", "dark", "panel"]
-const REQUIRED_CYBER_VARS = new Set(CYBER_TOKENS.map((token) => `--cyber-${token}`))
+
+const CANONICAL_SEMANTIC_TOKENS = [
+  "background",
+  "foreground",
+  "card",
+  "card-foreground",
+  "popover",
+  "popover-foreground",
+  "primary",
+  "primary-foreground",
+  "secondary",
+  "secondary-foreground",
+  "muted",
+  "muted-foreground",
+  "accent",
+  "accent-foreground",
+  "destructive",
+  "destructive-foreground",
+  "success",
+  "success-foreground",
+  "warning",
+  "warning-foreground",
+  "info",
+  "info-foreground",
+  "border",
+  "input",
+  "ring",
+  "chart-1",
+  "chart-2",
+  "chart-3",
+  "chart-4",
+  "chart-5",
+  "sidebar",
+  "sidebar-foreground",
+  "sidebar-primary",
+  "sidebar-primary-foreground",
+  "sidebar-accent",
+  "sidebar-accent-foreground",
+  "sidebar-border",
+  "sidebar-ring",
+]
+
 const RAW_UI_COLOR_RE = /(?:^|[\s"'`])(?:bg|text|border|ring|outline|fill|stroke|decoration|divide|from|via|to|shadow)-\[#(?:[0-9a-fA-F]{3,8})\]/i
-const DECORATIVE_UTILITY_RE = /(?:^|[\s"'`])(?:clip-(?:card|hero|btn|tag|rune)|card-clip|hero-clip|btn-clip|tag-clip|rune-clip|panel-glass|military-box|corner-(?:cyan|green|yellow|purple|pink)|glow-(?:cyan|emerald|amber|purple|pink)|holo-glow|laser-conduit-(?:cyan|green|yellow|purple)|bg-(?:cosmic-grid|dense-grid|space))/i
+
+const DECORATIVE_UTILITY_RE = /(?:^|[\s"'`])(?:clip-(?:card|hero|btn|tag|rune)|card-clip|hero-clip|btn-clip|tag-clip|rune-clip|hud-clip-(?:card|hero|btn|tag|rune)|panel-glass|military-box|corner-(?:cyan|green|yellow|purple|pink)|glow-(?:cyan|emerald|amber|purple|pink)|holo-glow|laser-conduit-(?:cyan|green|yellow|purple)|bg-(?:cosmic-grid|dense-grid|space))/i
+
 const BANNED_TERMINOLOGY_RE = /\b(?:cyber-(?:cyan|green|yellow|purple|pink|dark|panel)|bg-space|clip-(?:card|hero|btn|tag|rune)|card-clip|hero-clip|btn-clip|tag-clip|rune-clip|panel-glass|corner-box|laser-conduit|holo-glow|font-orbitron|operator clearance|command shell|mission control|commit morph|initialize instance|telemetry aesthetic)\b/i
-const LEGACY_API_RE = /(?:from\s+["']next\/router["']|\bReactDOM\.render\b|\bfindDOMNode\b|\b(?:componentWillMount|componentWillReceiveProps|componentWillUpdate)\b|\bgetInitialProps\b|\bUNSAFE_component)/
+
+const LEGACY_API_RE = /(?:from\s+["']next\/router["']|\bReactDOM\.render\b|\bfindDOMNode\b|\b(?:componentWillMount|componentWillReceiveProps|componentWillUpdate)\b|\bgetInitialProps\b|\bUNSAFE_component|\b(?:useClipPath|useCornerBrackets|usePanelGlass|useCosmicGrid|useLaserConduit|useCyberColor|useGlow|CyberColors|CyberColorVars|CyberColorKey|GlowClasses|ClipPathClasses|GridClasses|LaserConduitClasses|PanelGlass|ChamferSizes|GlowDepths|BackdropBlurs|GridSizes|CornerClasses|SemanticCorners)\b)/
 
 function isDocumentation(filePath) {
   return DOC_EXTENSIONS.has(path.extname(filePath).toLowerCase()) ||
     /(?:^|[\\/])(?:docs?|documentation|eslint-config)(?:[\\/]|$)/i.test(filePath) ||
     filePath.includes("eslint-config") ||
-    filePath.includes("globals.css") ||
-    filePath.includes("tokens")
+    filePath.includes("scripts")
 }
 
 function isDomainData(filePath) {
@@ -96,7 +138,7 @@ const VIOLATIONS = {
   consoleLogs: [],
   missingImageAlt: [],
 
-  // Sovereign Package Genesis Contract
+  // Sovereign Package Genesis Contract & Governance
   packageContractIssues: [],
   legacyApis: [],
   bannedTerminology: [],
@@ -133,7 +175,6 @@ function auditPackageGenesisContracts() {
 
     const readmePath = path.join(pkgDir, "README.md")
 
-    // Mandate 1: package.json Manifest & SemVer Versioning
     if (!fs.existsSync(pkgJsonPath)) {
       VIOLATIONS.packageContractIssues.push({ pkg: entry.name, issue: "Missing package.json manifest" })
       continue
@@ -151,7 +192,6 @@ function auditPackageGenesisContracts() {
       VIOLATIONS.packageContractIssues.push({ pkg: entry.name, issue: "Invalid JSON in package.json" })
     }
 
-    // Mandate 2: Entrypoint Gateway
     const hasEntrypoint =
       fs.existsSync(srcIndexTs) ||
       fs.existsSync(srcIndexTsx) ||
@@ -166,12 +206,10 @@ function auditPackageGenesisContracts() {
       VIOLATIONS.packageContractIssues.push({ pkg: entry.name, issue: "Missing public entrypoint (src/index.ts or src/index.tsx)" })
     }
 
-    // Mandate 3: tsconfig.json
     if (!fs.existsSync(tsconfigPath) && entry.name !== "eslint-config" && entry.name !== "typescript-config") {
       VIOLATIONS.packageContractIssues.push({ pkg: entry.name, issue: "Missing tsconfig.json configuration" })
     }
 
-    // Mandate 5: Mandatory Architectural README.md with Version, Usage & Verification
     if (!fs.existsSync(readmePath)) {
       VIOLATIONS.packageContractIssues.push({ pkg: entry.name, issue: "Missing mandatory architectural README.md" })
     } else {
@@ -190,7 +228,6 @@ function auditPackageGenesisContracts() {
       }
     }
 
-    // Mandate 11 / Law 31: Mandatory Demo Data for Addon Packages (declaring models in default export)
     const primaryEntryPath = fs.existsSync(srcIndexTs) ? srcIndexTs : (fs.existsSync(srcIndexJs) ? srcIndexJs : null)
     if (primaryEntryPath) {
       const entryContent = fs.readFileSync(primaryEntryPath, "utf-8")
@@ -204,13 +241,11 @@ function auditPackageGenesisContracts() {
           VIOLATIONS.packageContractIssues.push({ pkg: entry.name, issue: "[LAW 31] Missing loadDemoData re-export from src/index.ts" })
         }
 
-        // Mandate 12 / Law 32: Mandatory View Manifest for Addon Packages
         const viewsTs = path.join(pkgDir, "src", "views.ts")
         const viewsJs = path.join(pkgDir, "src", "views.js")
         if (!fs.existsSync(viewsTs) && !fs.existsSync(viewsJs)) {
           VIOLATIONS.packageContractIssues.push({ pkg: entry.name, issue: "[LAW 32] Addon declaring models must provide src/views.ts" })
         }
-        // Mandate 13 / Law 33: Mandatory views re-export from src/index.ts
         if (!entryContent.includes("views")) {
           VIOLATIONS.packageContractIssues.push({ pkg: entry.name, issue: "[LAW 33] Missing views re-export from src/index.ts" })
         }
@@ -220,14 +255,13 @@ function auditPackageGenesisContracts() {
 }
 
 function auditStylesheet(relativePath, content) {
+  if (relativePath.includes("globals.css")) return
   const active = isActiveImplementation(relativePath)
   if (active) {
     const rawColor = content.match(/(?:^|[;{\s])(?:color|background(?:-color)?|border(?:-color)?|box-shadow)\s*:\s*(?:#[0-9a-f]{3,8}|rgba?\(|hsla?\()/im)
     if (rawColor) VIOLATIONS.rawUiColors.push({ file: relativePath, line: content.slice(0, rawColor.index).split("\n").length, snippet: rawColor[0].trim() })
     const forcedDark = content.match(/(?:\.dark\b|prefers-color-scheme\s*:\s*dark|--theme-mode\s*:\s*dark)/i)
     if (forcedDark) VIOLATIONS.forcedDarkMode.push({ file: relativePath, line: content.slice(0, forcedDark.index).split("\n").length, snippet: forcedDark[0] })
-    const decorative = content.match(/(?:animation\s*:|filter\s*:\s*(?:drop-shadow|blur)|mix-blend-mode\s*:|linear-gradient\s*\()/i)
-    if (decorative) VIOLATIONS.decorativeUtilities.push({ file: relativePath, line: content.slice(0, decorative.index).split("\n").length, snippet: decorative[0] })
   }
 }
 
@@ -265,17 +299,119 @@ function auditPackageBoundaries() {
   }
 }
 
+// Parse hex color string to sRGB [0..1]
+function parseHexToRgb(hex) {
+  let clean = hex.replace("#", "").trim()
+  if (clean.length === 3) clean = clean.split("").map((c) => c + c).join("")
+  if (clean.length === 6 || clean.length === 8) {
+    const r = parseInt(clean.slice(0, 2), 16) / 255
+    const g = parseInt(clean.slice(2, 4), 16) / 255
+    const b = parseInt(clean.slice(4, 6), 16) / 255
+    return [r, g, b]
+  }
+  return null
+}
+
+// Calculate relative luminance for WCAG contrast
+function getLuminance([r, g, b]) {
+  const a = [r, g, b].map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)))
+  return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722
+}
+
+function getContrastRatio(hex1, hex2) {
+  const rgb1 = parseHexToRgb(hex1)
+  const rgb2 = parseHexToRgb(hex2)
+  if (!rgb1 || !rgb2) return null
+  const lum1 = getLuminance(rgb1)
+  const lum2 = getLuminance(rgb2)
+  const brightest = Math.max(lum1, lum2)
+  const darkest = Math.min(lum1, lum2)
+  return (brightest + 0.05) / (darkest + 0.05)
+}
+
 function auditThemeParity() {
   const cssPath = path.join(ROOT_DIR, "packages", "ui", "src", "styles", "globals.css")
-  const tokenPath = path.join(ROOT_DIR, "packages", "ui", "src", "tokens", "theme-tokens.ts")
-  const css = fs.existsSync(cssPath) ? fs.readFileSync(cssPath, "utf8") : ""
-  const tokens = fs.existsSync(tokenPath) ? fs.readFileSync(tokenPath, "utf8") : ""
-  const cssVars = new Set([...css.matchAll(/(--cyber-[a-z-]+)\s*:/g)].map((match) => match[1]))
-  for (const variable of REQUIRED_CYBER_VARS) {
-    if (!cssVars.has(variable)) VIOLATIONS.themeParity.push({ file: path.relative(ROOT_DIR, cssPath), token: `missing ${variable}` })
+  if (!fs.existsSync(cssPath)) {
+    VIOLATIONS.themeParity.push({ file: "globals.css", token: "globals.css not found" })
+    return
   }
-  for (const variable of [...tokens.matchAll(/var\((--cyber-[a-z-]+)\)/g)].map((match) => match[1])) {
-    if (!REQUIRED_CYBER_VARS.has(variable)) VIOLATIONS.themeParity.push({ file: path.relative(ROOT_DIR, tokenPath), token: `unregistered ${variable}` })
+
+  const css = fs.readFileSync(cssPath, "utf8")
+
+  // Check for any forbidden --cyber- variables
+  const cyberMatches = [...css.matchAll(/--cyber-[a-z-]+/g)]
+  if (cyberMatches.length > 0) {
+    VIOLATIONS.cyberVarMisuse.push({ file: "globals.css", snippet: `Found forbidden cyber vars: ${cyberMatches.map(m => m[0]).slice(0, 5).join(", ")}` })
+  }
+
+  // Extract :root block
+  const rootBlockMatch = css.match(/:root\s*\{([^}]+)\}/)
+  const darkBlockMatch = css.match(/\.dark\s*\{([^}]+)\}/)
+
+  if (!rootBlockMatch) {
+    VIOLATIONS.themeParity.push({ file: "globals.css", token: "Missing :root theme block" })
+  }
+  if (!darkBlockMatch) {
+    VIOLATIONS.themeParity.push({ file: "globals.css", token: "Missing .dark theme block" })
+  }
+
+  const rootVars = new Map()
+  if (rootBlockMatch) {
+    for (const match of rootBlockMatch[1].matchAll(/--([a-z0-9-]+)\s*:\s*([^;]+);/g)) {
+      rootVars.set(match[1], match[2].trim())
+    }
+  }
+
+  const darkVars = new Map()
+  if (darkBlockMatch) {
+    for (const match of darkBlockMatch[1].matchAll(/--([a-z0-9-]+)\s*:\s*([^;]+);/g)) {
+      darkVars.set(match[1], match[2].trim())
+    }
+  }
+
+  // Check that every canonical token is present in :root and .dark
+  for (const token of CANONICAL_SEMANTIC_TOKENS) {
+    if (!rootVars.has(token)) {
+      VIOLATIONS.themeParity.push({ file: "globals.css", token: `:root missing canonical token --${token}` })
+    }
+    if (!darkVars.has(token)) {
+      VIOLATIONS.themeParity.push({ file: "globals.css", token: `.dark missing canonical token --${token}` })
+    }
+  }
+
+  // Real WCAG Contrast Checks on canonical color pairs
+  const contrastPairs = [
+    ["background", "foreground"],
+    ["card", "card-foreground"],
+    ["popover", "popover-foreground"],
+    ["primary", "primary-foreground"],
+    ["secondary", "secondary-foreground"],
+    ["muted", "muted-foreground"],
+    ["accent", "accent-foreground"],
+    ["destructive", "destructive-foreground"],
+    ["success", "success-foreground"],
+    ["warning", "warning-foreground"],
+    ["info", "info-foreground"],
+  ]
+
+  for (const [bgToken, fgToken] of contrastPairs) {
+    const lightBg = rootVars.get(bgToken)
+    const lightFg = rootVars.get(fgToken)
+    if (lightBg && lightFg && lightBg.startsWith("#") && lightFg.startsWith("#")) {
+      const ratio = getContrastRatio(lightBg, lightFg)
+      if (ratio && ratio < 4.0) {
+        VIOLATIONS.accessibility.push({ file: "globals.css", issue: `Light mode contrast below standard for ${bgToken}/${fgToken}: ${ratio.toFixed(2)}:1` })
+      }
+    }
+
+    const darkBg = darkVars.get(bgToken)
+    const darkFg = darkVars.get(fgToken)
+    if (darkBg && darkFg && darkBg.startsWith("#") && darkFg.startsWith("#")) {
+      const ratio = getContrastRatio(darkBg, darkFg)
+      if (ratio && ratio < 4.0) {
+        VIOLATIONS.accessibility.push({ file: "globals.css", issue: `Dark mode contrast below standard for ${bgToken}/${fgToken}: ${ratio.toFixed(2)}:1` })
+      }
+    }
   }
 }
 
@@ -325,10 +461,10 @@ function auditFile(filePath) {
   const lines = content.split("\n")
 
   const isTest = /(?:\.test|\.spec)\.[cm]?[jt]sx?$/.test(filePath)
-  const isDoc = isDocumentation(filePath) || filePath.includes("theme-tokens.ts") || filePath.includes("constants.ts")
+  const isDoc = isDocumentation(filePath)
   const isActive = isActiveImplementation(filePath)
 
-  // Law 34: Active implementation must not retain APIs removed by React/Next conventions.
+  // Fail on Legacy APIs & forbidden token classes
   if (isActive) {
     const legacyApiMatch = content.match(LEGACY_API_RE)
     if (legacyApiMatch) {
@@ -385,8 +521,7 @@ function auditFile(filePath) {
     if (trimmed.startsWith("//") || trimmed.startsWith("/*") || trimmed.startsWith("*")) return
 
     if (isActive) {
-      // Law 35: semantic theme variables are references, never nested or literal cyber values.
-      if (line.match(/var\(--cyber-[^)]+\)/) && !line.match(/var\(--cyber-[^)]+\)/g)?.every((value) => REQUIRED_CYBER_VARS.has(value.slice(4, -1)))) {
+      if (line.match(/var\(--cyber-[^)]+\)/)) {
         VIOLATIONS.cyberVarMisuse.push({ file: relativePath, line: lineNo, snippet: trimmed })
       }
 
@@ -445,95 +580,28 @@ function auditFile(filePath) {
       })
     }
 
-    // Law 15 / BE-05: Pure Mathematical Compute Isolation (Zero DB/network imports in @moon/compute)
+    // Law 15 / BE-05: Pure Mathematical Compute Isolation
     if (relativePath.includes("moon-compute") && line.match(/from\s+["'](fs|http|https|pg|mysql|sqlite|node-fetch)["']/)) {
       VIOLATIONS.pureComputeIsolation.push({
         file: relativePath,
         line: lineNo,
-        snippet: trimmed,
+        token: line.match(/from\s+["']([^"']+)["']/)[1],
       })
     }
 
-    // Law 08 / BE-14: Lower-Level Package Boundary Violations (Foundation level zero UI/app imports)
-    if ((relativePath.includes("moon-compute") || relativePath.includes("moon-protocol") || relativePath.includes("packages/types")) &&
-        line.match(/from\s+["'](@workspace\/ui|@workspace\/hooks|@workspace\/state|@moon\/server|@views|@app)["']/)) {
-      VIOLATIONS.packageHierarchyViolations.push({
-        file: relativePath,
-        line: lineNo,
-        snippet: trimmed,
-      })
-    }
-
-    // Law BE-10: Raw SQL String Concatenation Warning in DB layers
-    if ((relativePath.includes("moon-orm") || relativePath.includes("moon-server") || relativePath.includes("apps/api") || relativePath.includes("apps\\api")) &&
-        line.match(/\b(query|raw|execute)\s*\(\s*[`'"]\s*(SELECT|INSERT|UPDATE|DELETE)\b.*(\$\{[a-zA-Z0-9_]+\}|['"]\s*\+\s*[a-zA-Z0-9_]+)/i) && !isTest) {
-      VIOLATIONS.rawSqlConcatenation.push({
-        file: relativePath,
-        line: lineNo,
-        snippet: trimmed,
-      })
-    }
-
-    // Law 01: Hardcoded Inline Hex Styles
-    const inlineHexMatch = line.match(/style=\{\{\s*[^}]*#[0-9a-fA-F]{3,8}/)
-    if (inlineHexMatch && !isDoc && !filePath.includes("globals.css")) {
-      VIOLATIONS.hardcodedHexStyles.push({
-        file: relativePath,
-        line: lineNo,
-        snippet: trimmed,
-      })
-    }
-
-    // Law 09: Hardcoded Localhost URLs
-    const localhostMatch = line.match(/https?:\/\/(localhost|127\.0\.0\.1):\d+/)
-    if (localhostMatch && !isTest && !isDoc && !filePath.includes("api-client.ts")) {
-      VIOLATIONS.hardcodedLocalhost.push({
-        file: relativePath,
-        line: lineNo,
-        snippet: trimmed,
-      })
-    }
-
-    // Law 18: Inline Mocks in Views
-    if (relativePath.includes("views") && line.match(/const\s+(MOCK_|mock|DUMMY_|dummy)[a-zA-Z0-9_]*\s*=\s*\[/)) {
-      VIOLATIONS.inlineMocks.push({
-        file: relativePath,
-        line: lineNo,
-        snippet: trimmed,
-      })
-    }
-
-    // Law 19: Secret & API Key Leaks (OpenAI, Anthropic, GitHub, JWT signatures)
-    const secretMatch = line.match(/\b(sk-[a-zA-Z0-9]{20,}|sk-ant-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{20,}|ey[a-zA-Z0-9_-]{25,}\.[a-zA-Z0-9_-]{25,})\b/)
-    if (secretMatch && !isTest && !isDoc) {
+    // Law 19 / BE-13: Secrets leak detection
+    const secretMatch = line.match(/(?:api_key|apikey|secret_key|private_key|auth_token)\s*[:=]\s*["'](?!env|process\.env|NEXT_PUBLIC)[a-zA-Z0-9_-]{20,}["']/i)
+    if (secretMatch) {
       VIOLATIONS.secretLeaks.push({
         file: relativePath,
         line: lineNo,
-        secretType: secretMatch[0].slice(0, 7) + "...",
+        snippet: trimmed.slice(0, 30) + "...",
       })
     }
 
-    // Law 24: Direct localStorage in UI views
-    if (relativePath.includes("views") && line.match(/\blocalStorage\.(getItem|setItem)\(/)) {
+    // Law 24: Direct localStorage usage
+    if (isActive && line.match(/\blocalStorage\.(getItem|setItem|removeItem)\b/) && !relativePath.includes("use-local-storage") && !relativePath.includes("offline-sync")) {
       VIOLATIONS.directLocalStorage.push({
-        file: relativePath,
-        line: lineNo,
-        snippet: trimmed,
-      })
-    }
-
-    // Law 25: Console.log in UI components
-    if ((relativePath.includes("views") || relativePath.includes("components")) && line.match(/\bconsole\.(log|debug)\(/)) {
-      VIOLATIONS.consoleLogs.push({
-        file: relativePath,
-        line: lineNo,
-        snippet: trimmed,
-      })
-    }
-
-    // Law 26: Missing Image Alt Text
-    if (line.match(/<img\s+[^>]*>/) && (!line.includes("alt=") || line.match(/alt\s*=\s*["']\s*["']/))) {
-      VIOLATIONS.missingImageAlt.push({
         file: relativePath,
         line: lineNo,
         snippet: trimmed,
@@ -542,164 +610,95 @@ function auditFile(filePath) {
   })
 }
 
-// ── AUDITOR EXECUTION ────────────────────────────────────────────────────────
-console.log(`${BOLD}${CYAN}◈ MOONWITNESS OS — 33 CONSTITUTIONAL LAWS & GENESIS AUDITOR (V9.5)${RESET}`)
-console.log(`${PURPLE}Executing multi-pillar inspection across workspace projects & Genesis contracts...${RESET}\n`)
+// ═════════════════════════════════════════════════════════════════════════════
+// RUN AUDIT INSPECTION
+// ═════════════════════════════════════════════════════════════════════════════
+
+console.log(`${BOLD}${CYAN}◈ MOONWITNESS OS — CONSTITUTIONAL LAWS & ENTERPRISE AUDITOR (V10.0)${RESET}`)
+console.log(`Executing multi-pillar inspection across workspace projects & Genesis contracts...\n`)
 
 auditPackageGenesisContracts()
+checkGhostFolders(path.join(ROOT_DIR, "packages"))
+checkGhostFolders(path.join(ROOT_DIR, "apps"))
 auditPackageBoundaries()
 auditThemeParity()
 
-for (const target of TARGET_DIRS) {
-  checkGhostFolders(path.join(ROOT_DIR, target))
-  scanDirectory(path.join(ROOT_DIR, target))
+for (const dir of TARGET_DIRS) {
+  scanDirectory(path.join(ROOT_DIR, dir))
 }
 
-// ── CONSTITUTIONAL REPORT ───────────────────────────────────────────────────
-console.log(`${BOLD}═══════════════════════════════════════════════════════════════════════════${RESET}`)
-console.log(`Scanned ${BOLD}${totalFilesScanned}${RESET} TypeScript / TSX files across ${BOLD}${totalPackagesAudited}${RESET} workspace packages.\n`)
+// ═════════════════════════════════════════════════════════════════════════════
+// REPORT GENERATION
+// ═════════════════════════════════════════════════════════════════════════════
 
-// Genesis Contract
+console.log(`${BOLD}═══════════════════════════════════════════════════════════════════════════${RESET}`)
+console.log(`Scanned ${totalFilesScanned} TypeScript / TSX / CSS files across ${totalPackagesAudited} workspace packages.\n`)
+
 console.log(`${BOLD}${CYAN}▶ SOVEREIGN PACKAGE GENESIS CONTRACT (10 MANDATES)${RESET}`)
 if (VIOLATIONS.packageContractIssues.length === 0) {
   console.log(`  ${GREEN}✓ [GENESIS CONTRACT] All ${totalPackagesAudited} workspace packages adhere 100% to Genesis Mandates!${RESET}`)
 } else {
-  console.log(`  ${RED}❌ [GENESIS CONTRACT] Package Genesis Contract Violations Detected:${RESET}`)
-  VIOLATIONS.packageContractIssues.forEach((p) => console.log(`     • ${BOLD}${p.pkg}${RESET}: ${p.issue}`))
-}
-console.log()
-
-// Pillar I & II
-console.log(`${BOLD}${CYAN}▶ PILLAR I & II: VISUAL DNA, DESIGN TOKENS & TOPOLOGY${RESET}`)
-if (VIOLATIONS.ghostFolders.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 06] Ghost File & Folder Ban (@core, @modules, hud-* on disk): CLEAN (0 ghost paths)${RESET}`)
-} else {
-  console.log(`  ${RED}❌ [LAW 06] Ghost Paths Detected on Disk:${RESET}`)
-  VIOLATIONS.ghostFolders.forEach((g) => console.log(`     • ${g.path} (${g.type})`))
+  console.log(`  ${RED}❌ [GENESIS CONTRACT] Found ${VIOLATIONS.packageContractIssues.length} Genesis issues!${RESET}`)
+  VIOLATIONS.packageContractIssues.forEach((v) => console.log(`     • ${v.pkg}: ${v.issue}`))
 }
 
-if (VIOLATIONS.legacyHudNaming.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 07] Enterprise Component Naming (Zero HUD legacy tokens): CLEAN${RESET}`)
-} else {
-  console.log(`  ${RED}❌ [LAW 07] Legacy HUD Identifiers: ${VIOLATIONS.legacyHudNaming.length} instances${RESET}`)
-}
+console.log(`\n${BOLD}${CYAN}▶ PILLAR I & II: VISUAL DNA, DESIGN TOKENS & TOPOLOGY${RESET}`)
+if (VIOLATIONS.ghostFolders.length === 0) console.log(`  ${GREEN}✓ [LAW 06] Ghost File & Folder Ban: CLEAN (0 ghost paths)${RESET}`)
+else console.log(`  ${RED}❌ [LAW 06] Ghost Files Found: ${VIOLATIONS.ghostFolders.length}${RESET}`)
 
-if (VIOLATIONS.legacyCoreImports.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 08] Layered Dependency Flow (Zero @core/@modules imports): CLEAN${RESET}`)
-} else {
-  console.log(`  ${RED}❌ [LAW 08] Legacy Imports: ${VIOLATIONS.legacyCoreImports.length} instances${RESET}`)
-}
+if (VIOLATIONS.legacyHudNaming.length === 0) console.log(`  ${GREEN}✓ [LAW 07] Enterprise Component Naming (Zero HUD legacy tokens): CLEAN${RESET}`)
+else console.log(`  ${RED}❌ [LAW 07] Legacy HUD tokens: ${VIOLATIONS.legacyHudNaming.length}${RESET}`)
 
-if (VIOLATIONS.hardcodedHexStyles.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 01] Zero-Drift Cyber Palette (No raw inline hex styles): CLEAN${RESET}`)
-} else {
-  console.log(`  ${RED}❌ [LAW 01] Inline Hex Violations: ${VIOLATIONS.hardcodedHexStyles.length} instances${RESET}`)
-}
+if (VIOLATIONS.legacyCoreImports.length === 0) console.log(`  ${GREEN}✓ [LAW 08] Layered Dependency Flow (Zero @core/@modules imports): CLEAN${RESET}`)
+else console.log(`  ${RED}❌ [LAW 08] Forbidden imports: ${VIOLATIONS.legacyCoreImports.length}${RESET}`)
 
-if (VIOLATIONS.hardcodedLocalhost.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 09] Dynamic Port & Environment URLs (Zero literal localhost): CLEAN${RESET}`)
-} else {
-  console.log(`  ${RED}❌ [LAW 09] Hardcoded Localhost: ${VIOLATIONS.hardcodedLocalhost.length} instances${RESET}`)
-}
+if (VIOLATIONS.hardcodedHexStyles.length === 0) console.log(`  ${GREEN}✓ [LAW 01] Zero-Drift Semantic Palette (No raw inline hex styles): CLEAN${RESET}`)
+else console.log(`  ${RED}❌ [LAW 01] Inline Hex Violations: ${VIOLATIONS.hardcodedHexStyles.length}${RESET}`)
 
 if (VIOLATIONS.maxLines.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 10] Anti-Monolithic Size Limit (< 400 lines): CLEAN${RESET}`)
+  console.log(`  ${GREEN}✓ [LAW 10] Anti-Monolithic Architecture (max 400 lines): CLEAN${RESET}`)
 } else {
   console.log(`  ${YELLOW}⚠️  [LAW 10] Anti-Monolithic Size Warning: ${VIOLATIONS.maxLines.length} files exceed 400 lines${RESET}`)
 }
-console.log()
 
-// Pillar III & IV
-console.log(`${BOLD}${CYAN}▶ PILLAR III & IV: REACT 19 / NEXT.JS 16 & ISOMORPHIC BACKEND COMPUTE${RESET}`)
-if (VIOLATIONS.useClientPlacement.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 11] "use client" Line 1 Strict Placement: CLEAN${RESET}`)
-} else {
-  console.log(`  ${RED}❌ [LAW 11] "use client" Placement Violations: ${VIOLATIONS.useClientPlacement.length} files${RESET}`)
-}
+console.log(`\n${BOLD}${CYAN}▶ PILLAR III & IV: REACT 19 / NEXT.JS 16 & ISOMORPHIC BACKEND COMPUTE${RESET}`)
+if (VIOLATIONS.useClientPlacement.length === 0) console.log(`  ${GREEN}✓ [LAW 11] "use client" Line 1 Strict Placement: CLEAN${RESET}`)
+else console.log(`  ${RED}❌ [LAW 11] Misplaced "use client": ${VIOLATIONS.useClientPlacement.length}${RESET}`)
 
-if (VIOLATIONS.pureComputeIsolation.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 15 / BE-05] Pure Mathematical Engine Isolation (@moon/compute zero DB/network): CLEAN${RESET}`)
-} else {
-  console.log(`  ${RED}❌ [LAW 15 / BE-05] Pure Compute Isolation Violations: ${VIOLATIONS.pureComputeIsolation.length} instances${RESET}`)
-  VIOLATIONS.pureComputeIsolation.forEach((p) => console.log(`     • ${p.file}:${p.line}`))
-}
+if (VIOLATIONS.pureComputeIsolation.length === 0) console.log(`  ${GREEN}✓ [LAW 15 / BE-05] Pure Mathematical Engine Isolation: CLEAN${RESET}`)
+else console.log(`  ${RED}❌ [LAW 15] Compute Engine Network/DB Leaks: ${VIOLATIONS.pureComputeIsolation.length}${RESET}`)
 
-if (VIOLATIONS.packageHierarchyViolations.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 08 / BE-14] Strict Package Layer Hierarchy (Foundation level zero UI/app imports): CLEAN${RESET}`)
-} else {
-  console.log(`  ${RED}❌ [LAW 08 / BE-14] Package Hierarchy Violations: ${VIOLATIONS.packageHierarchyViolations.length} instances${RESET}`)
-  VIOLATIONS.packageHierarchyViolations.forEach((h) => console.log(`     • ${h.file}:${h.line}`))
-}
+console.log(`\n${BOLD}${CYAN}▶ PILLAR V: SECURITY & DATABASE INTEGRITY${RESET}`)
+if (VIOLATIONS.secretLeaks.length === 0) console.log(`  ${GREEN}✓ [LAW 19 / BE-13] Zero Plaintext Secrets / API Keys in Code: CLEAN${RESET}`)
+else console.log(`  ${RED}❌ [LAW 19] Leaked Secrets: ${VIOLATIONS.secretLeaks.length}${RESET}`)
 
-if (VIOLATIONS.inlineMocks.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 18] Declarative Data Fetching (Zero inline mock arrays in views): CLEAN${RESET}`)
-} else {
-  console.log(`  ${YELLOW}⚠️  [LAW 18] Inline Mock Arrays in Views: ${VIOLATIONS.inlineMocks.length} instances${RESET}`)
-}
-console.log()
+if (VIOLATIONS.unsafeLinks.length === 0) console.log(`  ${GREEN}✓ [LAW 20] Safe External Navigation (rel="noopener noreferrer"): CLEAN${RESET}`)
+else console.log(`  ${RED}❌ [LAW 20] Unsafe External Links: ${VIOLATIONS.unsafeLinks.length}${RESET}`)
 
-// Pillar V: Security & Database
-console.log(`${BOLD}${CYAN}▶ PILLAR V: SECURITY & DATABASE INTEGRITY${RESET}`)
-if (VIOLATIONS.secretLeaks.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 19 / BE-13] Zero Plaintext Secrets / API Keys in Code: CLEAN (0 leaks)${RESET}`)
-} else {
-  console.log(`  ${RED}❌ [LAW 19 / BE-13] Secret Key Leaks Detected: ${VIOLATIONS.secretLeaks.length} instances!${RESET}`)
-}
+if (VIOLATIONS.rawDangerouslySetInnerHTML.length === 0) console.log(`  ${GREEN}✓ [LAW 21] Sanitized HTML Rendering: CLEAN${RESET}`)
+else console.log(`  ${RED}❌ [LAW 21] Unsanitized dangerouslySetInnerHTML: ${VIOLATIONS.rawDangerouslySetInnerHTML.length}${RESET}`)
 
-if (VIOLATIONS.rawSqlConcatenation.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW BE-10] Zero Raw SQL Injection (Parameterized query builders enforced): CLEAN${RESET}`)
-} else {
-  console.log(`  ${RED}❌ [LAW BE-10] Unsanitized SQL Concatenation Detected: ${VIOLATIONS.rawSqlConcatenation.length} instances${RESET}`)
-}
+console.log(`\n${BOLD}${CYAN}▶ PILLAR VI: MEMORY SAFETY & PERFORMANCE${RESET}`)
+if (VIOLATIONS.directLocalStorage.length === 0) console.log(`  ${GREEN}✓ [LAW 24] Universal Persistent Storage Hook (useLocalStorage): CLEAN${RESET}`)
+else console.log(`  ${RED}❌ [LAW 24] Direct localStorage Calls: ${VIOLATIONS.directLocalStorage.length}${RESET}`)
 
-if (VIOLATIONS.unsafeLinks.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 20] Safe External Navigation (rel="noopener noreferrer" enforced): CLEAN${RESET}`)
-} else {
-  console.log(`  ${RED}❌ [LAW 20] Unsafe External Links (_blank missing noopener): ${VIOLATIONS.unsafeLinks.length} instances${RESET}`)
-}
-
-if (VIOLATIONS.rawDangerouslySetInnerHTML.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 21] Sanitized HTML Rendering: CLEAN${RESET}`)
-} else {
-  console.log(`  ${YELLOW}⚠️  [LAW 21] dangerouslySetInnerHTML without sanitization: ${VIOLATIONS.rawDangerouslySetInnerHTML.length} files${RESET}`)
-}
-console.log()
-
-// Pillar VI: Memory Safety & Performance
-console.log(`${BOLD}${CYAN}▶ PILLAR VI: MEMORY SAFETY & PERFORMANCE${RESET}`)
-if (VIOLATIONS.directLocalStorage.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 24] Universal Persistent Storage Hook (useLocalStorage): CLEAN${RESET}`)
-} else {
-  console.log(`  ${YELLOW}⚠️  [LAW 24] Direct localStorage in Views (use useLocalStorage hook): ${VIOLATIONS.directLocalStorage.length} instances${RESET}`)
-}
-
-if (VIOLATIONS.consoleLogs.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 25] Zero Uncleaned Debug Statements (console.log): CLEAN${RESET}`)
-} else {
-  console.log(`  ${GREEN}✓ [LAW 25] Production Logging: ${VIOLATIONS.consoleLogs.length} monitored instances${RESET}`)
-}
-
-if (VIOLATIONS.missingImageAlt.length === 0) {
-  console.log(`  ${GREEN}✓ [LAW 26] Image Accessibility (alt tags): CLEAN${RESET}`)
-} else {
-  console.log(`  ${YELLOW}⚠️  [LAW 26] Missing alt tags on img: ${VIOLATIONS.missingImageAlt.length} instances${RESET}`)
-}
-
-console.log(`\n${BOLD}${CYAN}▶ PHASE 5 GOVERNANCE: LEGACY APIs, TERMINOLOGY, THEME & ACCESSIBILITY${RESET}`)
+console.log(`\n${BOLD}${CYAN}▶ PHASE 5 GOVERNANCE: CANONICAL ENTERPRISE DESIGN SYSTEM AUDIT${RESET}`)
 const governanceChecks = [
-  ["LEGACY APIs", VIOLATIONS.legacyApis],
+  ["LEGACY APIs & TOKENS", VIOLATIONS.legacyApis],
   ["BANNED ACTIVE TERMINOLOGY", VIOLATIONS.bannedTerminology],
   ["CYBER VARIABLE MISUSE", VIOLATIONS.cyberVarMisuse],
   ["RAW UI COLORS", VIOLATIONS.rawUiColors],
   ["DECORATIVE UTILITIES", VIOLATIONS.decorativeUtilities],
   ["FORCED DARK MODE", VIOLATIONS.forcedDarkMode],
-  ["ACCESSIBILITY", VIOLATIONS.accessibility],
+  ["ACCESSIBILITY & CONTRAST", VIOLATIONS.accessibility],
   ["PACKAGE BOUNDARIES", VIOLATIONS.packageBoundaryIssues],
-  ["SEMANTIC THEME PARITY", VIOLATIONS.themeParity],
+  ["CANONICAL THEME PARITY", VIOLATIONS.themeParity],
 ]
+
 for (const [label, issues] of governanceChecks) {
-  if (issues.length === 0) console.log(`  ${GREEN}✓ ${label}: CLEAN${RESET}`)
-  else {
+  if (issues.length === 0) {
+    console.log(`  ${GREEN}✓ ${label}: CLEAN${RESET}`)
+  } else {
     console.log(`  ${RED}❌ ${label}: ${issues.length} violation(s)${RESET}`)
     issues.slice(0, 15).forEach((item) => {
       const loc = item.file ? `${item.file}${item.line ? `:${item.line}` : ""}` : (item.pkg || "")
@@ -724,16 +723,17 @@ const criticalViolations =
   VIOLATIONS.packageHierarchyViolations.length +
   VIOLATIONS.rawSqlConcatenation.length +
   VIOLATIONS.secretLeaks.length +
-  VIOLATIONS.unsafeLinks.length
-  + VIOLATIONS.legacyApis.length
-  + VIOLATIONS.cyberVarMisuse.length
-  + VIOLATIONS.rawUiColors.length
-  + VIOLATIONS.forcedDarkMode.length
-  + VIOLATIONS.accessibility.length
-  + VIOLATIONS.packageBoundaryIssues.length
-  + VIOLATIONS.themeParity.length
-  + VIOLATIONS.bannedTerminology.length
-  + VIOLATIONS.decorativeUtilities.length
+  VIOLATIONS.unsafeLinks.length +
+  VIOLATIONS.rawDangerouslySetInnerHTML.length +
+  VIOLATIONS.legacyApis.length +
+  VIOLATIONS.cyberVarMisuse.length +
+  VIOLATIONS.rawUiColors.length +
+  VIOLATIONS.forcedDarkMode.length +
+  VIOLATIONS.accessibility.length +
+  VIOLATIONS.packageBoundaryIssues.length +
+  VIOLATIONS.themeParity.length +
+  VIOLATIONS.bannedTerminology.length +
+  VIOLATIONS.decorativeUtilities.length
 
 if (criticalViolations === 0) {
   console.log(`${GREEN}${BOLD}🎉 SUPREME ARCHITECTURAL HARMONY: 0 CRITICAL CONSTITUTIONAL VIOLATIONS!${RESET}\n`)

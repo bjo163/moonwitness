@@ -69,7 +69,7 @@ export function Topbar({
   }
 
   return (
-    <header className="sticky top-0 z-40 flex h-20 w-full items-center justify-between border-b border-cyan-500/20 bg-black/80 px-6 shadow-sm backdrop-blur-md">
+    <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-border bg-background/95 px-6 shadow-sm backdrop-blur-md">
       {/* Page Title */}
       <div className="flex items-center gap-4">
         <h2 className="font-sans text-lg font-bold tracking-wider text-foreground uppercase">
