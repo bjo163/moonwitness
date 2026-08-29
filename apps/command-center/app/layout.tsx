@@ -1,31 +1,14 @@
-import { JetBrains_Mono, Geist } from "next/font/google"
+import { Geist } from "next/font/google"
 import "@workspace/ui/globals.css"
 import { MoonProvider } from "@workspace/state"
 import { CommandCenterShell } from "@/components/shell"
 
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-})
-
-const jetBrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-})
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
 export const metadata = {
-  title: "MoonWitness — Command Center",
-  description: "Governance and Administrative Operations Console",
+  title: "MoonWitness OS — Command Center",
+  description: "Tactical Governance and Administrative Operations Terminal",
 }
-
-export const viewport = {
-  width: "device-width",
-  initialScale: 1,
-}
-
-// The command center depends on operator session state and client-only runtime data.
-// Keep the protected terminal out of build-time static page generation.
-export const dynamic = "force-dynamic"
 
 export default function RootLayout({
   children,
@@ -35,11 +18,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geist.variable} ${jetBrainsMono.variable} font-sans antialiased`}
+      className={`${geist.variable}`}
       suppressHydrationWarning
     >
       <body
-        className="bg-background font-sans text-foreground antialiased selection:bg-primary/30 selection:text-foreground"
+        className="bg-slate-50 font-sans text-slate-900 antialiased"
         suppressHydrationWarning
       >
         <MoonProvider>
