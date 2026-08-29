@@ -384,6 +384,7 @@ function auditFile(filePath) {
   // Law 11: "use client" Line 1 Strict Placement
   if (
     !isDocumentation &&
+    !isAuditor &&
     (content.includes('"use client"') || content.includes("'use client'"))
   ) {
     const firstLine = lines[0].trim()
