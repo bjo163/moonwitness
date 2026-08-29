@@ -19,6 +19,7 @@
     "typecheck": "turbo typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
+    "corpus:sync": "pnpm --filter=@moon/witness exec tsx scripts/sync-corpus.ts",
     "audit:rules": "node scripts/audit-rules.mjs",
     "audit:packages": "node scripts/audit-rules.mjs",
     "audit:ci": "node scripts/audit-rules.mjs && turbo typecheck && vitest run"

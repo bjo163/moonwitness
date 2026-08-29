@@ -262,6 +262,17 @@ export {
 } from './services/validation.js'
 
 export { FixtureAdapter, fixtureAdapter } from './adapters/fixture-adapter.js'
+export {
+  MoonwitnessCorpusAdapter,
+  moonwitnessCorpusAdapter,
+  type CorpusReleaseMetadata,
+  type CorpusEntryRecord,
+  type CorpusReleasePayload
+} from './adapters/moonwitness-corpus-adapter.js'
+export {
+  importCanonicalCorpus,
+  type DomainImportStats
+} from './services/canonical-corpus-importer.js'
 
 // Models export
 export {
