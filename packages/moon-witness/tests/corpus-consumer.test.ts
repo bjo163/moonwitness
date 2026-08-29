@@ -35,6 +35,11 @@ import WxTextEdition from '../src/models/wx-text-edition.js'
 import WxPassage from '../src/models/wx-passage.js'
 import WxContent from '../src/models/wx-content.js'
 import WxEntity from '../src/models/wx-entity.js'
+import WxTraditionCorpus from '../src/models/wx-tradition-corpus.js'
+import WxTraditionUnit from '../src/models/wx-tradition-unit.js'
+import WxTraditionReference from '../src/models/wx-tradition-reference.js'
+import WxRoot from '../src/models/wx-root.js'
+import WxLexeme from '../src/models/wx-lexeme.js'
 
 const TEST_DIR = join(process.cwd(), 'scratch_test_corpus')
 
@@ -160,6 +165,11 @@ registerModel(WxTextEdition)
 registerModel(WxPassage)
 registerModel(WxContent)
 registerModel(WxEntity)
+registerModel(WxTraditionCorpus)
+registerModel(WxTraditionUnit)
+registerModel(WxTraditionReference)
+registerModel(WxRoot)
+registerModel(WxLexeme)
 
 describe('Phase 10B — @moon/witness Canonical Corpus Consumer', () => {
   beforeEach(() => {
@@ -467,6 +477,208 @@ describe('Phase 10B — @moon/witness Canonical Corpus Consumer', () => {
       expect(rerunResult.recordsSkipped).toBe(2)
       expect(mockDb['wx_source'].length).toBe(1)
       expect(mockDb['wx_source_snapshot'].length).toBe(1)
+    })
+
+    it('successfully imports Hadith tradition corpus into canonical wx.tradition.* graph', async () => {
+      const mockKnex = createMockKnex()
+      const modelMap: Record<string, any> = {
+        'wx.source.policy': WxSourcePolicy,
+        'wx.source.manifest': WxSourceManifest,
+        'wx.source.artifact': WxSourceArtifact,
+        'wx.source.snapshot': WxSourceSnapshot,
+        'wx.source': WxSource,
+        'wx.provenance': WxProvenance,
+        'wx.text.edition': WxTextEdition,
+        'wx.passage': WxPassage,
+        'wx.content': WxContent,
+        'wx.entity': WxEntity,
+        'wx.tradition.corpus': WxTraditionCorpus,
+        'wx.tradition.unit': WxTraditionUnit,
+        'wx.tradition.reference': WxTraditionReference
+      }
+
+      const env = createCtx(SUPERUSER_ID, {}, (name) => modelMap[name] || null)
+
+      const policy = await WxSourcePolicy.spawn(WxSourcePolicy, env, {
+        code: 'HADITH_TRADITION',
+        name: 'Hadith Tradition Policy',
+        authorityClass: 'TRADITION',
+        allowedEngineUse: 'COMPLEMENTARY_REFERENCE',
+        version: '1.0'
+      })
+
+      const hadithPayload: CorpusReleasePayload = {
+        release: {
+          corpus: 'moonwitness-corpus',
+          version: '1.0.0',
+          schemaVersion: '1.0',
+          source: {
+            code: 'hadith-bukhari',
+            name: 'Sahih al-Bukhari',
+            language: 'ar'
+          }
+        },
+        records: [
+          {
+            id: 'bukhari:1',
+            hierarchy: ['hadith', 'bukhari', '1'],
+            text: 'إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ',
+            fields: {
+              compendium: 'bukhari',
+              compendiumName: 'Sahih al-Bukhari',
+              hadithNumber: 1
+            }
+          },
+          {
+            id: 'bukhari:2',
+            hierarchy: ['hadith', 'bukhari', '2'],
+            text: 'كَيْفَ كَانَ يَبْدَأُ الْوَحْيُ',
+            fields: {
+              compendium: 'bukhari',
+              compendiumName: 'Sahih al-Bukhari',
+              hadithNumber: 2
+            }
+          }
+        ]
+      }
+
+      const artifactFileName = 'bukhari-release-1.0.0.json'
+      const artifactPath = join(TEST_DIR, artifactFileName)
+      const artifactJson = JSON.stringify(hadithPayload)
+      writeFileSync(artifactPath, artifactJson, 'utf8')
+      const rawSha = sha256String(artifactJson)
+
+      await WxSourceManifest.spawn(WxSourceManifest, env, {
+        code: 'hadith-bukhari-manifest',
+        sourceKind: 'tradition',
+        policyId: policy.id,
+        authority: 'Imam al-Bukhari / Classical Compendium',
+        licenseStatus: 'approved',
+        sourceLanguage: 'ar',
+        revision: '1.0.0',
+        parserAdapterCode: 'moonwitness-corpus',
+        parserVersion: '1.0.0',
+        normalizationSchemaVersion: '1.0',
+        rawArtifactSha256: rawSha,
+        expectedCardinality: 2
+      })
+
+      const result = await executeImport(
+        'hadith-bukhari-manifest',
+        artifactFileName,
+        env,
+        TEST_DIR,
+        importCanonicalCorpus
+      )
+
+      expect(result.status).toBe('completed')
+      expect(result.recordsProcessed).toBe(2)
+      expect(result.validation.valid).toBe(true)
+
+      expect(mockDb['wx_tradition_corpus'].length).toBe(1)
+      expect(mockDb['wx_tradition_unit'].length).toBe(2)
+      expect(mockDb['wx_tradition_reference'].length).toBe(2)
+    })
+
+    it('successfully imports Lexical domain corpus into canonical wx.root and wx.lexeme graph', async () => {
+      const mockKnex = createMockKnex()
+      const modelMap: Record<string, any> = {
+        'wx.source.policy': WxSourcePolicy,
+        'wx.source.manifest': WxSourceManifest,
+        'wx.source.artifact': WxSourceArtifact,
+        'wx.source.snapshot': WxSourceSnapshot,
+        'wx.source': WxSource,
+        'wx.provenance': WxProvenance,
+        'wx.text.edition': WxTextEdition,
+        'wx.passage': WxPassage,
+        'wx.content': WxContent,
+        'wx.entity': WxEntity,
+        'wx.root': WxRoot,
+        'wx.lexeme': WxLexeme
+      }
+
+      const env = createCtx(SUPERUSER_ID, {}, (name) => modelMap[name] || null)
+
+      const policy = await WxSourcePolicy.spawn(WxSourcePolicy, env, {
+        code: 'LEXICAL_POLICY',
+        name: 'Lexical Corpus Policy',
+        authorityClass: 'RESEARCH',
+        allowedEngineUse: 'RESEARCH_ONLY',
+        version: '1.0'
+      })
+
+      const lexicalPayload: CorpusReleasePayload = {
+        release: {
+          corpus: 'moonwitness-corpus',
+          version: '1.0.0',
+          schemaVersion: '1.0',
+          source: {
+            code: 'quran-lexicon',
+            name: 'Quranic Arabic Roots & Lexicon',
+            language: 'ar'
+          }
+        },
+        records: [
+          {
+            id: 'root:ar:ktb',
+            hierarchy: ['lexicon', 'ar', 'ktb'],
+            text: 'ك-ت-ب',
+            fields: {
+              lemmas: [
+                { lemma: 'كَتَبَ', pos: 'verb' },
+                { lemma: 'كِتَاب', pos: 'noun' }
+              ]
+            }
+          },
+          {
+            id: 'root:ar:rhm',
+            hierarchy: ['lexicon', 'ar', 'rhm'],
+            text: 'ر-ح-م',
+            fields: {
+              lemmas: [
+                { lemma: 'رَحِمَ', pos: 'verb' },
+                { lemma: 'رَحْمَة', pos: 'noun' }
+              ]
+            }
+          }
+        ]
+      }
+
+      const artifactFileName = 'lexicon-release-1.0.0.json'
+      const artifactPath = join(TEST_DIR, artifactFileName)
+      const artifactJson = JSON.stringify(lexicalPayload)
+      writeFileSync(artifactPath, artifactJson, 'utf8')
+      const rawSha = sha256String(artifactJson)
+
+      await WxSourceManifest.spawn(WxSourceManifest, env, {
+        code: 'quran-lexicon-manifest',
+        sourceKind: 'lexical',
+        policyId: policy.id,
+        authority: 'Classical Lexicography',
+        licenseStatus: 'approved',
+        sourceLanguage: 'ar',
+        revision: '1.0.0',
+        parserAdapterCode: 'moonwitness-corpus',
+        parserVersion: '1.0.0',
+        normalizationSchemaVersion: '1.0',
+        rawArtifactSha256: rawSha,
+        expectedCardinality: 2
+      })
+
+      const result = await executeImport(
+        'quran-lexicon-manifest',
+        artifactFileName,
+        env,
+        TEST_DIR,
+        importCanonicalCorpus
+      )
+
+      expect(result.status).toBe('completed')
+      expect(result.recordsProcessed).toBe(2)
+      expect(result.validation.valid).toBe(true)
+
+      expect(mockDb['wx_root'].length).toBe(2)
+      expect(mockDb['wx_lexeme'].length).toBe(4)
     })
   })
 })
