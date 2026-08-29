@@ -271,7 +271,7 @@ function auditFile(filePath) {
   })
 
   // Law 21: Dangerous Inner HTML without check
-  if (content.includes("dangerouslySetInnerHTML") && !content.includes("DOMPurify") && !content.includes("sanitize")) {
+  if (content.includes("dangerouslySetInnerHTML") && !content.toLowerCase().includes("dompurify") && !content.toLowerCase().includes("sanitize")) {
     VIOLATIONS.rawDangerouslySetInnerHTML.push({
       file: relativePath,
     })

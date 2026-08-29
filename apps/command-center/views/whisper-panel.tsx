@@ -17,7 +17,8 @@
  *   40 hari  → "Masa perenungan dan perubahan"
  */
 
-import React, { useState, useEffect, useRef, useCallback } from "react"
+import React, { useState, useEffect, useRef } from "react"
+import { useLocalStorage } from "@workspace/hooks"
 import {
   MessageCircle,
   Send,
@@ -287,37 +288,6 @@ const TIER_CONFIG: Record<
   },
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// STORAGE — localStorage (pure, no server needed)
-// Decentralized: setiap device menyimpan whisper-nya sendiri
-// ─────────────────────────────────────────────────────────────────────────────
-
-function storageKey(requestId: string) {
-  return `mw_whisper_${requestId}`
-}
-
-function loadWhispers(requestId: string): Whisper[] {
-  if (typeof window === "undefined") return []
-  try {
-    const raw = localStorage.getItem(storageKey(requestId))
-    if (!raw) return []
-    const all: Whisper[] = JSON.parse(raw)
-    const now = Date.now()
-    // Auto-expire: buang yang sudah habis masanya
-    return all.filter((w) => w.expiresAt > now)
-  } catch {
-    return []
-  }
-}
-
-function saveWhispers(requestId: string, whispers: Whisper[]) {
-  if (typeof window === "undefined") return
-  const now = Date.now()
-  // Hanya simpan yang belum expired
-  const active = whispers.filter((w) => w.expiresAt > now)
-  localStorage.setItem(storageKey(requestId), JSON.stringify(active))
-}
-
 function generateId() {
   return `wsp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
 }
@@ -424,63 +394,50 @@ interface WhisperPanelProps {
 
 export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [whispers, setWhispers] = useState<Whisper[]>([])
+  const [storedWhispers, setStoredWhispers] = useLocalStorage<Whisper[]>(
+    `mw_whisper_${requestId}`,
+    []
+  )
   const [inputValue, setInputValue] = useState("")
   const [selectedTier, setSelectedTier] = useState<WhisperTier>("SHADOW")
   const [selectedExpiry, setSelectedExpiry] = useState<WhisperExpiry>(7)
   const [showExpiryPicker, setShowExpiryPicker] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
 
-  // Load on mount & when opened
-  useEffect(() => {
-    if (isOpen) {
-      setWhispers(loadWhispers(requestId))
-    }
-  }, [isOpen, requestId])
+  const now = Date.now()
+  const whispers = storedWhispers.filter((w) => w.expiresAt > now)
 
   // Scroll to bottom on new message
   useEffect(() => {
     if (isOpen) {
       bottomRef.current?.scrollIntoView({ behavior: "smooth" })
     }
-  }, [whispers, isOpen])
-
-  // Tick every minute to refresh expiry display
-  useEffect(() => {
-    if (!isOpen) return
-    const id = setInterval(() => {
-      setWhispers(loadWhispers(requestId))
-    }, 60_000)
-    return () => clearInterval(id)
-  }, [isOpen, requestId])
+  }, [whispers.length, isOpen])
 
   const handleSend = () => {
     if (!inputValue.trim()) return
 
-    const now = Date.now()
+    const sendTime = Date.now()
     const newWhisper: Whisper = {
       id: generateId(),
       requestId,
       tier: selectedTier,
       content: inputValue.trim(),
-      createdAt: now,
-      expiresAt: now + selectedExpiry * 86_400_000,
+      createdAt: sendTime,
+      expiresAt: sendTime + selectedExpiry * 86_400_000,
       isRead: false,
     }
 
-    const updated = [...whispers, newWhisper]
-    setWhispers(updated)
-    saveWhispers(requestId, updated)
+    const active = storedWhispers.filter((w) => w.expiresAt > sendTime)
+    setStoredWhispers([...active, newWhisper])
     setInputValue("")
   }
 
   const handleDelete = (id: string) => {
-    const updated = whispers.filter((w) => w.id !== id)
-    setWhispers(updated)
-    saveWhispers(requestId, updated)
+    setStoredWhispers(storedWhispers.filter((w) => w.id !== id))
   }
 
-  const activeCount = whispers.filter((w) => w.expiresAt > Date.now()).length
+  const activeCount = whispers.length
   const selectedExpiryConfig = EXPIRY_OPTIONS.find(
     (e) => e.days === selectedExpiry
   )!

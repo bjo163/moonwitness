@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useLanguage } from "@workspace/state"
 import { useGlobalAudio } from "@workspace/state"
+import { useLocalStorage } from "@workspace/hooks"
 import { AsbabunNuzulModal } from "./modals/asbabun-nuzul-modal"
 import { WordByWordModal } from "./modals/word-by-word-modal"
 import { AudioWaveformVisualizer } from "@workspace/ui"
@@ -305,6 +306,8 @@ type DailyData = {
 export function DailyInspirationClient() {
   const { t, lang } = useLanguage()
   const { isPlaying, play, togglePlay: globalTogglePlay } = useGlobalAudio()
+  const [erpSaved] = useLocalStorage<any[]>("mw_erp_scripture_items", [])
+  const [notesSaved] = useLocalStorage<any[]>("mw_erp_scriptures_notes", [])
   const [data, setData] = useState<DailyData | null>(null)
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)
@@ -548,34 +551,26 @@ export function DailyInspirationClient() {
       )
 
     try {
-      const erpSaved = localStorage.getItem("mw_erp_scripture_items")
-      if (erpSaved) {
-        const parsed = JSON.parse(erpSaved)
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          const match = parsed.find(
-            (item: any) =>
-              item.surah_number === data.ayah.surahNumber &&
-              item.ayah_number === data.ayah.ayahNumber
-          )
-          if (match && match.notes) {
-            return match.notes
-          }
+      if (Array.isArray(erpSaved) && erpSaved.length > 0) {
+        const match = erpSaved.find(
+          (item: any) =>
+            item.surah_number === data.ayah.surahNumber &&
+            item.ayah_number === data.ayah.ayahNumber
+        )
+        if (match && match.notes) {
+          return match.notes
         }
       }
 
-      const notesSaved = localStorage.getItem("mw_erp_scriptures_notes")
-      if (notesSaved) {
-        const parsed = JSON.parse(notesSaved)
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          const match = parsed.find((n: any) =>
-            n.surah?.toLowerCase().includes(data.ayah.surahName?.toLowerCase())
+      if (Array.isArray(notesSaved) && notesSaved.length > 0) {
+        const match = notesSaved.find((n: any) =>
+          n.surah?.toLowerCase().includes(data.ayah.surahName?.toLowerCase())
+        )
+        if (match?.noteText) {
+          return match.noteText.replace(
+            /^Rotasi\s+Periode\s+Shalat\s+[^-]+-\s*/i,
+            ""
           )
-          if (match?.noteText) {
-            return match.noteText.replace(
-              /^Rotasi\s+Periode\s+Shalat\s+[^-]+-\s*/i,
-              ""
-            )
-          }
         }
       }
     } catch (e) {

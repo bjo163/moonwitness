@@ -1,5 +1,5 @@
 "use client"
-import { useMounted } from "@workspace/hooks"
+import { useMounted, useGeolocation } from "@workspace/hooks"
 
 import { useState, useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
@@ -36,50 +36,15 @@ export function Taskbar() {
   } = useGlobalAudio()
   const activeConnections = 48
   const mounted = useMounted()
+  const geo = useGeolocation()
+  const userCoords =
+    geo.lat !== null && geo.lng !== null
+      ? { lat: geo.lat, lng: geo.lng }
+      : { lat: -6.2088, lng: 106.8456 }
   const [timeStr, setTimeStr] = useState("")
   const [lunarInfo, setLunarInfo] = useState<LunarPhaseInfo | null>(null)
   const [sunInfo, setSunInfo] = useState<SunInfo | null>(null)
-  const [userCoords, setUserCoords] = useState<{
-    lat: number
-    lng: number
-  } | null>(null)
   const prevDuhaStatus = useRef<string | null>(null)
-
-  // Get geolocation once
-  useEffect(() => {
-    // Try cache first
-    const cached = localStorage.getItem("mw_last_location")
-    if (cached) {
-      try {
-        const { lat, lng, timestamp } = JSON.parse(cached)
-        if (Date.now() - timestamp < 86400000) {
-          setUserCoords({ lat, lng })
-        }
-      } catch {}
-    }
-
-    if (typeof navigator !== "undefined" && "geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const lat = pos.coords.latitude
-          const lng = pos.coords.longitude
-          localStorage.setItem(
-            "mw_last_location",
-            JSON.stringify({ lat, lng, timestamp: Date.now() })
-          )
-          setUserCoords({ lat, lng })
-        },
-        () => {
-          // Fallback to Jakarta if denied
-          if (!userCoords) setUserCoords({ lat: -6.2088, lng: 106.8456 })
-        },
-        { timeout: 5000, enableHighAccuracy: false, maximumAge: 3600000 }
-      )
-    } else if (!userCoords) {
-      setUserCoords({ lat: -6.2088, lng: 106.8456 })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   useEffect(() => {
     setTimeout(() => {
