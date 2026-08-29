@@ -270,23 +270,24 @@ MoonWitness OS operates as a high-performance Turborepo monorepo with isolated d
 
 ---
 
-## 09 — CLIP PATHS & GEOMETRY
+## 09 — SMOOTH SHADCN/UI GEOMETRY & CONTAINERS
 
 ```css
-.clip-card  → 16px chamfer
-.clip-hero  → 28px chamfer
-.clip-btn   → 10px chamfer
-.clip-tag   → 6px chamfer
-.clip-rune  → octagonal
+.clip-card  → 12px smooth rounded corners (rounded-xl)
+.clip-hero  → 16px smooth rounded corners (rounded-2xl)
+.clip-btn   → 8px smooth rounded corners (rounded-lg)
+.clip-tag   → 6px smooth rounded corners (rounded-md)
+.clip-rune  → circular geometry (rounded-full)
 ```
 
-Corner brackets match the accent color of the component family:
+Corner accent indicators match the semantic state family:
 ```css
-.military-box    → cyan corners (default)
-.corner-green    → green
-.corner-yellow   → yellow
-.corner-pink     → pink
-.corner-purple   → purple
+.military-box    → rounded-xl container
+.corner-cyan     → cyan accent border
+.corner-green    → green accent border
+.corner-yellow   → yellow accent border
+.corner-pink     → pink accent border
+.corner-purple   → purple accent border
 ```
 
 ---

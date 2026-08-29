@@ -34,7 +34,7 @@ This project operates on an isolated dual-portal and backend engine architecture
 ## 4. Enhanced Design Token System & Deep Space Sci-Fi Aesthetic
 
 ### 4.1 Design Philosophy
-Theme: "Deep Space Sci-Fi Divine Operating System" — a fusion of modern, futuristic aesthetics with divine symbolism, utilizing glassmorphism (`backdrop-blur`), optical glow effects (`--cyber-*` tokens), and chamfered military-grade geometric patterns.
+Theme: "Deep Space Cosmic Operating System powered by Standard shadcn/ui Design Architecture" — a fusion of futuristic aesthetics with clean, smooth, standard shadcn/ui ergonomics, utilizing glassmorphism (`backdrop-blur-md bg-card/85`), subtle ambient glows (`--cyber-*` tokens), and smooth rounded containers (`rounded-2xl`, `rounded-xl`, `rounded-lg`, `rounded-md`).
 
 ### 4.2 Semantic Color Tokens (Primary Palette)
 **Core Cyber Palette** — `packages/ui/src/styles/globals.css`:
@@ -52,63 +52,49 @@ Theme: "Deep Space Sci-Fi Divine Operating System" — a fusion of modern, futur
 - `bg-cyber-yellow/10` → Warning backgrounds with opacity
 - `shadow-cyber-purple` → Premium glow effects
 
-### 4.3 Sacred Geometric Chamfer System
-**Canonical Clip Path Utilities** — Apply via Tailwind classes:
-- `clip-card` / `card-clip`: 16px chamfer for standard cards, panels, containers
-- `clip-hero` / `hero-clip`: 28px chamfer for hero sections, large feature blocks
-- `clip-btn` / `btn-clip`: 10px chamfer for buttons, chips, interactive elements
-- `clip-tag` / `tag-clip`: 6px chamfer for tags, badges, small labels
-- `clip-rune` / `rune-clip`: Octagonal sacred geometry for icons, avatars
+### 4.3 Smooth shadcn/ui Geometric Container System
+**Canonical Rounded Utilities** — Apply via Tailwind classes:
+- `clip-card` / `card-clip`: 12px smooth rounded corners (`rounded-xl`) for standard cards, panels, containers
+- `clip-hero` / `hero-clip`: 16px smooth rounded corners (`rounded-2xl`) for hero sections, large feature blocks
+- `clip-btn` / `btn-clip`: 8px smooth rounded corners (`rounded-lg`) for buttons, chips, interactive elements
+- `clip-tag` / `tag-clip`: 6px smooth rounded corners (`rounded-md`) for tags, badges, small labels
+- `clip-rune` / `rune-clip`: Circular geometry (`rounded-full`) for icons, avatars
 
 **Usage Example**:
 ```tsx
-<div className="clip-card bg-cyber-panel border border-cyber-cyan/25 p-6">
+<div className="clip-card bg-card/90 border border-border/40 p-6 backdrop-blur-md shadow-sm">
   {/* Card content */}
 </div>
 ```
 
-### 4.4 Military Tactical Corner Brackets
-**Dynamic Corner Indicators** — Apply semantic state visualization:
+### 4.4 Subtle State Accent Indicators
+**Dynamic Semantic Indicators**:
 - `corner-cyan`: Active/Selected state
 - `corner-green`: Success/Confirmed state
 - `corner-yellow`: Warning/Pending state
 - `corner-purple`: Premium/Special state
 - `corner-pink`: Critical/Error state
 
-**Usage Example**:
-```tsx
-<div className="military-box corner-cyan p-4">
-  {/* Tactical panel with cyan corner brackets */}
-</div>
-```
-
-### 4.5 Optical Glow & Depth System
-**Semantic Glow Utilities**:
-- `glow-cyan`: 20px cyan glow (primary active)
-- `glow-emerald`: 20px green glow (success)
-- `glow-amber`: 20px yellow glow (warning)
-- `glow-purple`: 20px purple glow (premium)
-- `glow-pink`: 20px pink glow (critical)
+### 4.5 Optical Elevation & Ambient Depth
+**Semantic Ambient Utilities**:
+- `glow-cyan`: 16px ambient cyan halo (primary active)
+- `glow-emerald`: 16px ambient green halo (success)
+- `glow-amber`: 16px ambient yellow halo (warning)
+- `glow-purple`: 16px ambient purple halo (premium)
+- `glow-pink`: 16px ambient pink halo (critical)
 - `holo-glow`: Text shadow with cyan holographic effect
-
-**Depth Layers** (for multi-layered glassmorphism):
-- Critical UI: 60px blur + 30px glow
-- Active Elements: 30px blur + 20px glow
-- Passive Elements: 15px blur + 10px glow
 
 ### 4.6 Glassmorphism & Panel System
 **Primary Glass Panel** — `panel-glass` utility:
-- Background: `rgba(5, 7, 10, 0.85)` (85% dark with transparency)
-- Backdrop: 16px blur
-- Border: `rgba(0, 240, 255, 0.25)` (subtle cyan)
-- Shadow: 20px cyan glow at 10% opacity
+- Background: `rgba(10, 15, 23, 0.85)` (85% dark with transparency)
+- Backdrop: 16px blur (`backdrop-blur-md`)
+- Border: `rgba(255, 255, 255, 0.08)` (clean subtle border)
+- Shadow: `0 4px 20px -1px rgba(0, 0, 0, 0.5)`
 
 **Usage Pattern**:
 ```tsx
-<section className="panel-glass clip-card">
-  <div className="backdrop-blur-md border border-cyber-cyan/20">
-    {/* Multi-layered glass effect */}
-  </div>
+<section className="panel-glass p-6 space-y-4 shadow-sm">
+  {/* Multi-layered smooth glass effect */}
 </section>
 ```
 

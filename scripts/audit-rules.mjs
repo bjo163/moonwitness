@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 /**
- * ◈ MOONWITNESS OS — 30 CONSTITUTIONAL LAWS & PACKAGE GENESIS AUDITOR (V9.0)
+ * ◈ MOONWITNESS OS — 30 CONSTITUTIONAL LAWS & SHADCN/UI DESIGN SYSTEM AUDITOR (V9.5)
  *
  * Automated Multi-Pillar Supreme Architectural Inspector:
  * ─────────────────────────────────────────────────────────────────────────────
- * • Pillar I   : Visual DNA & Design Tokens (Laws 01-05)
+ * • Pillar I   : Visual DNA & shadcn/ui Design Tokens (Laws 01-05)
  * • Pillar II  : Monorepo Topology & Boundaries (Laws 06-10)
  * • Pillar III : React 19 & Next.js 16 Architecture (Laws 11-14)
  * • Pillar IV  : Pure Isomorphic Compute & Telemetry (Laws 15-18)
@@ -475,7 +475,7 @@ function auditFile(filePath) {
 }
 
 // ── AUDITOR EXECUTION ────────────────────────────────────────────────────────
-console.log(`${BOLD}${CYAN}◈ MOONWITNESS OS — 30 CONSTITUTIONAL LAWS & GENESIS AUDITOR (V9.0)${RESET}`)
+console.log(`${BOLD}${CYAN}◈ MOONWITNESS OS — 30 CONSTITUTIONAL LAWS & SHADCN/UI DESIGN SYSTEM AUDITOR (V9.5)${RESET}`)
 console.log(`${PURPLE}Executing multi-pillar inspection across workspace projects & Genesis contracts...${RESET}\n`)
 
 auditPackageGenesisContracts()

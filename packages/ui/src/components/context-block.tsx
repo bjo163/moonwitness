@@ -21,41 +21,33 @@ export function ContextBlock({
 
   return (
     <div
-      className="panel-box bg-space mb-6 border p-4 sm:p-5"
-      style={{
-        borderColor: `${colorHex}40`,
-        boxShadow: `0 0 20px ${colorHex}15`,
-      }}
+      className="mb-6 rounded-xl border border-border/40 bg-card/90 p-4 sm:p-5 backdrop-blur-md shadow-sm"
     >
-      <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
           <div
-            className="tag-clip flex h-6 w-6 items-center justify-center border text-xs font-bold"
+            className="flex h-7 w-7 items-center justify-center rounded-lg border border-border/50 bg-background/50 text-xs font-bold"
             style={{
-              borderColor: `${colorHex}60`,
-              background: `${colorHex}15`,
               color: colorHex,
             }}
           >
             ◉
           </div>
-          <h1 className="text-base font-black tracking-widest text-foreground uppercase sm:text-xl">
+          <h1 className="text-base font-bold tracking-tight text-foreground uppercase sm:text-xl">
             {title}
           </h1>
         </div>
 
         <div className="flex items-center gap-2 font-mono text-[10px]">
           {operation && (
-            <span className="text-primary">
-              OP: <span className="font-bold text-foreground">{operation}</span>
+            <span className="text-muted-foreground">
+              OP: <span className="font-semibold text-foreground">{operation}</span>
             </span>
           )}
           <span
-            className="tag-clip border px-2 py-0.5 font-bold"
+            className="inline-flex items-center rounded-md border border-border/50 bg-background/60 px-2 py-0.5 font-bold"
             style={{
               color: colorHex,
-              borderColor: `${colorHex}50`,
-              background: `${colorHex}12`,
             }}
           >
             ● {status}
@@ -64,8 +56,8 @@ export function ContextBlock({
       </div>
 
       {subtitle && (
-        <p className="max-w-3xl font-mono text-xs leading-relaxed text-primary">
-          &gt; {subtitle}
+        <p className="mt-2 max-w-3xl text-xs leading-relaxed text-muted-foreground">
+          {subtitle}
         </p>
       )}
     </div>

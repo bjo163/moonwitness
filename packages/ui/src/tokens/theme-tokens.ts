@@ -57,41 +57,41 @@ export const THEME_TOKENS = {
     },
   },
 
-  // ── SHADOWS / GLOWS ───────────────────────────────────────────────────────
+  // ── SHADOWS / ELEVATION ───────────────────────────────────────────────────
   shadows: {
-    soft: "shadow-[0_4px_14px_rgba(0,23,25,0.5)]",
-    glow: "shadow-[0_0_20px_rgba(0,240,255,0.5)]",
-    neon: "shadow-[0_0_30px_rgba(0,255,102,0.6)]",
-    terminal: "shadow-[0_0_1px_rgba(0,240,255,0.3)]",
+    soft: "shadow-[0_4px_20px_-2px_rgba(0,0,0,0.5)]",
+    glow: "shadow-[0_0_16px_-2px_rgba(0,240,255,0.25)]",
+    neon: "shadow-[0_0_16px_-2px_rgba(0,255,102,0.25)]",
+    terminal: "shadow-sm",
   },
 
-  // ── PANEL IMPORTANCE LEVELS  ──────────────────────────────────────
+  // ── PANEL IMPORTANCE LEVELS (SHADCN CARD STANDARDS) ────────────────────────
   panelLevels: {
     level1: {
       name: "Mission",
-      borderWidth: "2px",
-      glow: "0 0 30px rgba(0, 240, 255, 0.35)",
+      borderWidth: "1px",
+      glow: "0 10px 30px -5px rgba(0, 0, 0, 0.6)",
       titleSize: "text-lg sm:text-xl",
       padding: "p-6 sm:p-8",
     },
     level2: {
       name: "Primary",
-      borderWidth: "1.5px",
-      glow: "0 0 20px rgba(0, 240, 255, 0.20)",
+      borderWidth: "1px",
+      glow: "0 4px 20px -2px rgba(0, 0, 0, 0.4)",
       titleSize: "text-base sm:text-lg",
       padding: "p-5 sm:p-6",
     },
     level3: {
       name: "Information",
       borderWidth: "1px",
-      glow: "0 0 15px rgba(0, 240, 255, 0.12)",
+      glow: "0 2px 10px rgba(0, 0, 0, 0.3)",
       titleSize: "text-sm sm:text-base",
       padding: "p-4 sm:p-5",
     },
     level4: {
       name: "Statistics",
       borderWidth: "1px",
-      glow: "0 0 10px rgba(0, 240, 255, 0.08)",
+      glow: "0 1px 4px rgba(0, 0, 0, 0.2)",
       titleSize: "text-xs sm:text-sm",
       padding: "p-3 sm:p-4",
     },

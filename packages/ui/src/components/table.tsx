@@ -143,9 +143,6 @@ export function SimpleTable({
   )
 }
 
-/** @deprecated Use SimpleTable */
-export const HUDTable = SimpleTable
-
 export {
   Table,
   TableHeader,

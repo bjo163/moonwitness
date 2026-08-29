@@ -141,21 +141,18 @@ export function ResourceTable<T = any>({
   const hasActions = onEdit || onDelete || actions
 
   return (
-    <div className={`relative overflow-hidden border bg-cyber-panel/90 backdrop-blur-md ${colors.border} ${className}`}>
-      {/* Top Accent Bar */}
-      <div className={`absolute top-0 right-0 left-0 h-[2px] bg-gradient-to-r from-transparent ${colors.headerGlow} to-transparent opacity-80`} />
-
+    <div className={`relative overflow-hidden rounded-xl border border-border/40 bg-card/90 backdrop-blur-md shadow-sm ${className}`}>
       {/* Header & Search Toolbar */}
       {(title || subtitle || searchKeys.length > 0 || headerActions) && (
-        <div className="flex flex-col justify-between gap-4 border-b border-white/10 p-5 sm:flex-row sm:items-center">
+        <div className="flex flex-col justify-between gap-4 border-b border-border/40 p-4 sm:p-5 sm:flex-row sm:items-center">
           <div>
             {title && (
-              <h3 className="font-orbitron text-sm font-black tracking-widest text-white uppercase">
-                ◈ {title}
+              <h3 className="text-sm font-bold tracking-tight text-foreground uppercase">
+                {title}
               </h3>
             )}
             {subtitle && (
-              <p className="mt-1 font-mono text-xs text-[#8B9BB0]">
+              <p className="mt-1 text-xs text-muted-foreground">
                 {subtitle}
               </p>
             )}
@@ -166,16 +163,16 @@ export function ResourceTable<T = any>({
 
             {searchKeys.length > 0 && (
               <div className="relative w-full sm:w-60">
-                <Search className="absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-white/40" />
+                <Search className="absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
                 <input
                   type="text"
-                  placeholder="FILTER DATABASE..."
+                  placeholder="Filter records..."
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value)
                     setCurrentPage(1)
                   }}
-                  className={`w-full border border-white/10 bg-black/60 py-1.5 pr-3 pl-8 font-mono text-xs text-white placeholder-white/30 transition-all focus:outline-none ${colors.searchRing}`}
+                  className={`w-full rounded-lg border border-border/50 bg-background/60 py-1.5 pr-3 pl-8 text-xs text-foreground placeholder:text-muted-foreground transition-all focus:border-cyber-cyan focus:outline-none focus:ring-1 focus:ring-cyber-cyan`}
                 />
               </div>
             )}
@@ -274,9 +271,9 @@ export function ResourceTable<T = any>({
                                 e.stopPropagation()
                                 onEdit(item)
                               }}
-                              className={`border px-2.5 py-1 font-mono text-[10px] font-bold tracking-wider uppercase transition-all ${colors.btnEdit}`}
+                              className="rounded-md border border-cyber-cyan/40 bg-cyber-cyan/10 px-2.5 py-1 text-xs font-semibold text-cyber-cyan transition-colors hover:bg-cyber-cyan/20"
                             >
-                              [ EDIT ]
+                              Edit
                             </button>
                           )}
 
@@ -287,9 +284,9 @@ export function ResourceTable<T = any>({
                                 e.stopPropagation()
                                 onDelete(item)
                               }}
-                              className="border border-cyber-pink/40 bg-cyber-pink/10 px-2.5 py-1 font-mono text-[10px] font-bold tracking-wider text-cyber-pink uppercase transition-all hover:bg-cyber-pink/20"
+                              className="rounded-md border border-cyber-pink/40 bg-cyber-pink/10 px-2.5 py-1 text-xs font-semibold text-cyber-pink transition-colors hover:bg-cyber-pink/20"
                             >
-                              [ DEL ]
+                              Delete
                             </button>
                           )}
                         </div>
