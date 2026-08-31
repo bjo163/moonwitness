@@ -36,6 +36,11 @@ export const metadata = {
   description:
     "MoonWitness is a source-aware platform for exploring scripture, traditions, references, and research with transparent provenance.",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 }
 
 export default function RootLayout({
