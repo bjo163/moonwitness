@@ -450,11 +450,11 @@ async function alterColumn(
   migrations: MigrationCommand[] = []
 ) {
   const db = getDb()
-  validateAutomaticAlteration(colType, table, colName)
   const sql = `ALTER TABLE ${sqlIdentifier(table)} ALTER COLUMN ${sqlIdentifier(colName)} TYPE ${colType}`
   if (dryRun) {
     migrations.push({ up: sql, down: `-- Manual intervention required to down-migrate column type alteration for ${table}.${colName}` })
   } else {
+    validateAutomaticAlteration(colType, table, colName)
     await db.raw(sql)
   }
 }

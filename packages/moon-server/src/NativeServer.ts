@@ -463,7 +463,8 @@ export class NativeServer {
         }, 60000)
       })
     } catch (err) {
-      logger.error('moon.core', 'Failed to start:', err)
+      const error = err instanceof Error ? err : new Error(String(err))
+      logger.error('moon.core', `Failed to start: ${error.message}`, error.stack)
       process.exit(1)
     }
   }
