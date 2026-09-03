@@ -41,11 +41,17 @@ const GenericModelRpcInputSchema = z.object({
   kwargs: z.record(z.unknown()).default({}),
 })
 
-type GenericModelRpcInput = z.infer<typeof GenericModelRpcInputSchema>
+type GenericModelRpcInput = {
+  model: string
+  args?: unknown[]
+  kwargs?: Record<string, unknown>
+}
 
 const callArgs = (input: GenericModelRpcInput) => {
-  if (Object.keys(input.kwargs).length === 0) return input.args
-  return [...input.args, input.kwargs]
+  const args = input.args ?? []
+  const kwargs = input.kwargs ?? {}
+  if (Object.keys(kwargs).length === 0) return args
+  return [...args, kwargs]
 }
 
 function registerBuiltinReadProcedures() {
