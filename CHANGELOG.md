@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.1 - Production Hardening & Canonical Fastify Transport
+
+- **Canonical Fastify 5 runtime**: `NativeServer` remains the public Moon contract while Fastify owns the production HTTP lifecycle internally; the handwritten production router and parameter matcher are retired.
+- **Moon compatibility bridge**: existing raw Node handlers, `server.use()` middleware, `defineRoute()`, proxy routes, SSE, and generic REST surfaces run through one Fastify instance.
+- **Explicit RPC registry**: `/rpc` no longer resolves caller-controlled class properties. Only registered procedures are callable, with per-procedure Zod input/output validation.
+- **Request correlation**: Fastify request IDs are returned as `x-request-id`, bridged to Moon handlers, and included in transport logs.
+- **Telemetry lifecycle**: OpenTelemetry NodeSDK auto-instrumentation is initialized at the canonical transport boundary and shut down with the server.
+- **Fail-closed production CORS**: an unconfigured production origin is no longer reflected automatically.
+- **Release governance docs**: release policy, roadmap, transport, observability, and deployment documentation are synchronized to the 0.3.1 production path.
+- **Deployment certification preserved**: fresh PostgreSQL 18 install/verify, Witness graph certification, backup/restore smoke, API readiness, lint, typecheck, tests, and build remain release gates.
+
 ## 0.3.0 - Deep Space OS V3.0 & Dual-Portal Monorepo
 
 - **Dual-Portal App Architecture**: Split frontend into `apps/web` (Public Cosmic Portal on `:3000`) and `apps/command-center` (Tactical Governance & Admin Terminal on `:3001`).
