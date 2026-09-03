@@ -23,7 +23,7 @@ concurrency:
 jobs:
   certify-postgres:
     name: Production PostgreSQL 18 Certification
-    runs-on: self-hosted
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 45
     env:
       CI: "true"
@@ -58,7 +58,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          command -v docker >/dev/null || { echo "Docker is required on the self-hosted runner."; exit 1; }
+          command -v docker >/dev/null || { echo "Docker is required on the selected CI runner."; exit 1; }
           docker network inspect "$CERT_NETWORK" >/dev/null 2>&1 || docker network create "$CERT_NETWORK"
           docker run -d --rm \
             --name "$CERT_PG_CONTAINER" \
@@ -127,7 +127,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          docker run -d --rm \
+          docker rm -f "$CERT_APP_CONTAINER" >/dev/null 2>&1 || true
+          docker run -d \
             --name "$CERT_APP_CONTAINER" \
             --network "$CERT_NETWORK" \
             --network-alias api \
@@ -141,6 +142,13 @@ jobs:
             "$CERT_IMAGE"
 
           for attempt in $(seq 1 60); do
+            if [ "$(docker inspect -f '{{.State.Running}}' "$CERT_APP_CONTAINER" 2>/dev/null || echo false)" != "true" ]; then
+              echo "Production API container exited before readiness succeeded."
+              docker inspect "$CERT_APP_CONTAINER" --format='exit_code={{.State.ExitCode}} error={{.State.Error}} finished_at={{.State.FinishedAt}}' || true
+              docker logs "$CERT_APP_CONTAINER" || true
+              exit 1
+            fi
+
             if docker run --rm --network "$CERT_NETWORK" curlimages/curl:8.11.0 \
               --fail --silent --show-error http://api:4000/health/ready >/dev/null 2>&1; then
               echo "Production API readiness smoke passed."
@@ -148,6 +156,9 @@ jobs:
             fi
             sleep 1
           done
+
+          echo "Production API did not become ready within the certification window."
+          docker inspect "$CERT_APP_CONTAINER" --format='status={{.State.Status}} exit_code={{.State.ExitCode}} error={{.State.Error}}' || true
           docker logs "$CERT_APP_CONTAINER" || true
           exit 1
 
@@ -157,7 +168,7 @@ jobs:
           set -euo pipefail
           COMMON_ENV="-e CI=true -e NODE_ENV=production -e JWT_SECRET=$JWT_SECRET -e BOOTSTRAP_ADMIN_EMAIL=$BOOTSTRAP_ADMIN_EMAIL -e BOOTSTRAP_ADMIN_PASSWORD=$BOOTSTRAP_ADMIN_PASSWORD -e DATABASE_URL=postgres://postgres:postgres@postgres:5432/$CERT_DB -e TEST_DATABASE_URL=postgres://postgres:postgres@postgres:5432/$CERT_DB"
           docker run --rm $COMMON_ENV "$CERT_IMAGE" sh -lc \
-            'pnpm audit:rules && pnpm test && pnpm typecheck'
+            'pnpm audit:rules && NODE_ENV=test pnpm test && pnpm typecheck'
 
       - name: Capture sanitized diagnostics on failure
         if: failure()
@@ -165,7 +176,12 @@ jobs:
         run: |
           echo "candidate_sha=$GITHUB_SHA"
           echo "workflow_run=$GITHUB_RUN_ID"
-          docker logs "$CERT_APP_CONTAINER" 2>&1 | tail -n 200 || true
+          if docker inspect "$CERT_APP_CONTAINER" >/dev/null 2>&1; then
+            docker inspect "$CERT_APP_CONTAINER" --format='status={{.State.Status}} exit_code={{.State.ExitCode}} error={{.State.Error}} finished_at={{.State.FinishedAt}}' || true
+            docker logs "$CERT_APP_CONTAINER" 2>&1 | tail -n 200 || true
+          else
+            echo "API certification container is not present."
+          fi
           docker logs "$CERT_PG_CONTAINER" 2>&1 | tail -n 200 || true
 
       - name: Clean certification resources

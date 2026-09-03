@@ -1,10 +1,8 @@
 # MoonWitness Development Workflow
 
-Status: **Canonical** for branch and change flow.
+Status: **Canonical** for branch, validation, database, and promotion flow.
 
 ## Branch model
-
-MoonWitness uses three long-lived working branches:
 
 ```text
 feature
@@ -18,118 +16,96 @@ feature
 
 ### `main`
 
-Stable/release branch.
-
-Rules:
-
-- no normal development directly on `main`
-- receives changes only after they are integrated and verified on `dev`
-- should remain deployable
+Stable/release branch. Normal development does not happen directly on `main`; it receives changes only after integration and verification on `dev` and should remain deployable.
 
 ### `dev`
 
-Integration branch.
-
-Rules:
-
-- receives completed work from `feature`
-- integration, regression, migration, and cross-addon checks happen here
-- fixes found during integration should be made through the normal development flow instead of using `main` as a scratch branch
+Integration branch. Completed feature work lands here for integration, regression, migration, and cross-addon verification before promotion to `main`.
 
 ### `feature`
 
-Active development branch.
-
-Rules:
-
-- current refactors, new models, bug fixes, and experiments happen here
-- incomplete changes stay here
-- code moves to `dev` only after local/package tests and review are satisfactory
+Active development branch. New features, fixes, refactors, and experiments remain here until their applicable checks and review are complete.
 
 ## Promotion flow
 
 ```text
 feature
-  -> test + review + CI
+  -> test + review + Foundation CI
   -> dev
-  -> integration + regression + migration verification + CI
+  -> integration + regression + PostgreSQL certification when applicable
   -> main
+  -> tag
+  -> release
 ```
 
 Do not skip `dev` for ordinary work.
 
 ## Database workflow
 
-MoonWitness uses a single canonical database setup command:
+Canonical production-safe commands:
 
 ```text
 pnpm db:install
+pnpm --filter=api db:verify
 ```
 
-This command runs the complete setup pipeline:
-1. Apply all pending migrations
-2. Verify seed integrity
-3. Sync schema (development only; production rejects drift)
-4. Seed canonical base data (operators, observatories, reports)
-5. Seed witness graph core (scriptures, entities, relations, religions)
-6. Seed full demo data across all 15 addon packages
+`db:install` applies pending migrations, validates canonical seed artifacts, loads required base data, and seeds the Witness graph core. Demo/sample data is separate and is loaded only through the explicit demo paths or flags.
 
-After completion, a comprehensive summary is printed showing:
-- Duration and migration count
-- Schema sync status
-- Base seed counts (operators, observatories, reports)
-- Witness domain counts (scriptures, verses, figures, traditions, etc.)
-- Addon demo counts (projects, tasks, accounts, tickets, RFCs, etc.)
-- Total database tables
+`db:verify` checks migration integrity and canonical seed integrity without treating application startup as a schema-mutation mechanism.
 
-For integrity-only verification:
-```text
-pnpm db:verify
-```
+Production deployment must complete both install and verification before application services are promoted. The canonical deployment scripts enforce this for Docker Compose and PM2 paths.
 
 ## CI policy
 
-MoonWitness uses the repository owner's **self-hosted GitHub Actions runner** as the canonical CI execution environment.
-
-The foundation workflow lives at:
+The canonical workflow is:
 
 ```text
 .github/workflows/foundation-ci.yml
 ```
 
-Its required check name is `Lint, Typecheck, Test, Build`.
+Foundation CI runs on pushes, pull requests, and manual dispatch. Runner selection is portable:
 
-It runs for:
+```text
+CI_RUNNER repository variable set -> use that runner label
+CI_RUNNER unset                   -> use ubuntu-latest
+```
 
-- pull requests targeting `dev`
-- pull requests targeting `main`
-- pushes to `dev`
-- pushes to `main`
-- manual workflow dispatch
+Set `CI_RUNNER=self-hosted` only when the repository-owned runner is healthy and intentionally selected.
 
-The initial promotion gate runs:
+Every Foundation CI check is blocking:
 
 ```text
 pnpm install --frozen-lockfile
+node scripts/audit-rules.mjs
 pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
 ```
 
-Security rules for the self-hosted runner:
+The workflow checks out the exact pull-request head SHA for validation. A failed Audit, Lint, Typecheck, Test, or Build check blocks promotion.
 
-- workflow permissions are read-only unless a future job explicitly requires more
-- fork pull requests must not execute arbitrary code on the self-hosted runner
-- the workflow only accepts pull-request execution when the PR head repository is this same repository
-- repository secrets must not be added to generic validation jobs unless explicitly required and reviewed
+The Production PostgreSQL Certification workflow is:
 
-A failed required CI check blocks promotion to the next long-lived branch.
+```text
+.github/workflows/witness-postgres-certification.yml
+```
 
-PostgreSQL graph certification is intentionally not part of the fast pull-request gate. It is
-available through the `Witness PostgreSQL Certification` workflow via manual dispatch and must be
-run for release/database-validation work when a PostgreSQL-capable runner is available. Its
-result must not be treated as a substitute for Foundation CI.
+It validates a clean PostgreSQL lifecycle using the same `apps/api/Dockerfile` artifact used by production Compose:
+
+```text
+fresh PostgreSQL
+-> build exact candidate API image
+-> db:install
+-> db:verify
+-> Witness graph certification
+-> backup/restore smoke
+-> API boot
+-> /health/ready
+-> quality/security regressions
+```
+
+It runs for pull requests to `dev`/`main`, pushes to `dev`/`main`, weekly schedule, and manual dispatch. Database or deployment-sensitive promotion to `main` requires a green certification result for the exact candidate SHA.
 
 ## Change discipline
 
@@ -137,13 +113,13 @@ Before coding:
 
 1. Identify the owning addon/package.
 2. Confirm the change follows `ARCHITECTURE.md`.
-3. Prefer changing an existing canonical mechanism over adding a parallel abstraction.
+3. Prefer an existing canonical mechanism over a parallel abstraction.
 4. For data changes, identify transaction, security, and migration impact.
 5. Add or update tests with behavior changes.
 
 ## Commit guidance
 
-Prefer focused commits with conventional intent, for example:
+Prefer focused conventional commits, for example:
 
 ```text
 docs: define addon contract
@@ -153,24 +129,16 @@ refactor(server): keep REST handler transport-only
 feat(cab): add wisdom model
 ```
 
-Avoid mixing large unrelated UI, ORM, migration, and domain changes in one commit.
+Avoid mixing unrelated UI, ORM, migration, and domain work in one commit.
 
 ## Definition of done
 
-A change is ready to move from `feature` to `dev` when applicable checks pass:
+A feature is ready for `dev` when its applicable lint, typecheck, tests, build, architecture, security, transaction, and migration checks pass and Foundation CI is green.
 
-- lint
-- typecheck
-- unit/integration tests
-- build
-- database migration/schema review
-- security review for access-rule changes
-- transaction test for write-path changes
-- architecture check: no new duplicate persistence path
-- required self-hosted CI status is green
+A `dev` candidate is ready for `main` only when Foundation CI is green and, for database/deployment-sensitive changes, Production PostgreSQL Certification is green for the exact candidate SHA.
 
-A change is ready for `main` when `dev` is stable, required self-hosted CI is green, and the release/deployment path is verified.
+A release is deployable only when the production deployment path can build the intended artifacts, apply and verify migrations, pass readiness checks, and start the public portals reproducibly.
 
 ## Emergency fixes
 
-If an urgent production fix must begin from `main`, the resulting fix must also be reconciled back into `dev` and `feature` so the branch line does not diverge.
+If an urgent production fix must begin from `main`, reconcile the resulting fix back into `dev` and active feature work so branch history does not diverge.

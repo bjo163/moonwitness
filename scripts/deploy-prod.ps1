@@ -1,50 +1,85 @@
-# ◈ MOONWITNESS OS V9.5 — WINDOWS SERVER PRODUCTION DEPLOYMENT RUNNER
 $ErrorActionPreference = "Stop"
 
 Write-Host "=================================================================" -ForegroundColor Cyan
-Write-Host "◈ MOONWITNESS OS — INITIATING PRODUCTION DEPLOYMENT (WINDOWS)" -ForegroundColor Cyan
+Write-Host "◈ MOONWITNESS OS — PRODUCTION DEPLOYMENT (WINDOWS)" -ForegroundColor Cyan
 Write-Host "=================================================================" -ForegroundColor Cyan
 
-# 1. Pull latest production code
-Write-Host "▶ Step 1/5: Pulling latest commits from origin/main..." -ForegroundColor Yellow
+Write-Host "▶ Step 1/7: Pulling latest commits from origin/main..." -ForegroundColor Yellow
 git fetch origin main
 git checkout main
-git pull origin main
+git pull --ff-only origin main
 
-# 2. Install dependencies
-Write-Host "▶ Step 2/5: Installing frozen dependencies with pnpm..." -ForegroundColor Yellow
+Write-Host "▶ Step 2/7: Installing frozen dependencies..." -ForegroundColor Yellow
 pnpm install --frozen-lockfile
 
-# 3. Verify integrity & tests
-Write-Host "▶ Step 3/5: Running monorepo typecheck and test verification..." -ForegroundColor Yellow
+Write-Host "▶ Step 3/7: Running repository validation..." -ForegroundColor Yellow
 pnpm turbo typecheck
 pnpm test
 
-# 4. Build production bundles
-Write-Host "▶ Step 4/5: Compiling multi-app Next.js 16 and backend bundles..." -ForegroundColor Yellow
+Write-Host "▶ Step 4/7: Building production bundles..." -ForegroundColor Yellow
 pnpm turbo build
 
-# 5. Reload processes
-Write-Host "▶ Step 5/5: Executing cluster process reload..." -ForegroundColor Yellow
-if (Get-Command pm2 -ErrorAction SilentlyContinue) {
-    pm2 reload ecosystem.config.cjs --update-env
-    Write-Host "✓ PM2 cluster successfully reloaded." -ForegroundColor Green
-} elseif (Get-Command docker-compose -ErrorAction SilentlyContinue) {
-    if (-not (Test-Path -LiteralPath ".env.production" -PathType Leaf)) {
-        throw "Docker Compose deployment requires .env.production. Copy .env.production.example and set every required secret."
+$UseComposeV2 = $false
+$UseComposeV1 = $false
+if (Get-Command docker -ErrorAction SilentlyContinue) {
+    docker compose version *> $null
+    if ($LASTEXITCODE -eq 0) { $UseComposeV2 = $true }
+}
+if (-not $UseComposeV2 -and (Get-Command docker-compose -ErrorAction SilentlyContinue)) {
+    $UseComposeV1 = $true
+}
+
+function Invoke-Compose {
+    param([Parameter(ValueFromRemainingArguments = $true)][string[]]$ComposeArgs)
+    if ($UseComposeV2) {
+        & docker compose --env-file .env.production @ComposeArgs
+    } else {
+        & docker-compose --env-file .env.production @ComposeArgs
     }
-    docker-compose --env-file .env.production config --quiet
-    Write-Host "▶ Step 5b/5: Running production readiness check..." -ForegroundColor Yellow
-    node cli/mw.mjs prod-check | Out-Host
     if ($LASTEXITCODE -ne 0) {
-        throw "Production readiness check failed. Resolve the reported issues before deploying."
+        throw "Docker Compose command failed: $($ComposeArgs -join ' ')"
     }
-    docker-compose --env-file .env.production up -d --build
-    Write-Host "✓ Docker Compose containers successfully updated." -ForegroundColor Green
+}
+
+if ($UseComposeV2 -or $UseComposeV1) {
+    if (-not (Test-Path -LiteralPath ".env.production" -PathType Leaf)) {
+        throw "Docker Compose deployment requires .env.production. Copy .env.production.example and replace every placeholder first."
+    }
+
+    Write-Host "▶ Step 5/7: Validating production configuration..." -ForegroundColor Yellow
+    Invoke-Compose config --quiet
+    node cli/mw.mjs prod-check
+    if ($LASTEXITCODE -ne 0) { throw "Production readiness check failed." }
+
+    Write-Host "▶ Step 6/7: Building deployable artifacts and verifying database state..." -ForegroundColor Yellow
+    Invoke-Compose build api web command-center
+    Invoke-Compose up -d postgres redis
+    Invoke-Compose run --rm api pnpm --filter=api db:install
+    Invoke-Compose run --rm api pnpm --filter=api db:verify
+
+    Write-Host "▶ Step 7/7: Starting verified production services..." -ForegroundColor Yellow
+    Invoke-Compose up -d api command-center web
+    Invoke-Compose ps
+    Write-Host "✓ Docker Compose deployment completed with verified migrations." -ForegroundColor Green
+} elseif (Get-Command pm2 -ErrorAction SilentlyContinue) {
+    Write-Host "▶ Step 5/7: Validating PM2 production environment..." -ForegroundColor Yellow
+    if ([string]::IsNullOrWhiteSpace($env:DATABASE_URL)) { throw "DATABASE_URL must be exported before PM2 deployment." }
+    if ([string]::IsNullOrWhiteSpace($env:JWT_SECRET)) { throw "JWT_SECRET must be exported before PM2 deployment." }
+
+    Write-Host "▶ Step 6/7: Installing and verifying database state..." -ForegroundColor Yellow
+    pnpm --filter=api db:install
+    if ($LASTEXITCODE -ne 0) { throw "Database install failed." }
+    pnpm --filter=api db:verify
+    if ($LASTEXITCODE -ne 0) { throw "Database verification failed." }
+
+    Write-Host "▶ Step 7/7: Reloading PM2 processes..." -ForegroundColor Yellow
+    pm2 reload ecosystem.config.cjs --update-env
+    if ($LASTEXITCODE -ne 0) { throw "PM2 reload failed." }
+    Write-Host "✓ PM2 deployment completed with verified migrations." -ForegroundColor Green
 } else {
-    Write-Host "⚠️  Neither PM2 nor Docker Compose detected. Please restart services manually." -ForegroundColor Yellow
+    throw "Neither Docker Compose nor PM2 is available. Deployment aborted."
 }
 
 Write-Host "=================================================================" -ForegroundColor Green
-Write-Host "🎉 DEPLOYMENT COMPLETE — MOONWITNESS OS V9.5 IS NOW LIVE!" -ForegroundColor Green
+Write-Host "✓ DEPLOYMENT COMPLETE — VERIFIED ARTIFACTS ARE LIVE" -ForegroundColor Green
 Write-Host "=================================================================" -ForegroundColor Green

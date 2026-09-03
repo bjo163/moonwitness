@@ -15,6 +15,8 @@ import {
   WxRelation,
   WxRelationType,
   WxReligion,
+  WxScripture,
+  WxPassage,
   WxSource,
   WxSourcePolicy,
   WxFigure,
@@ -382,6 +384,27 @@ async function main() {
     /immutable/
   )
 
+  const scriptureEntity = await WxEntity.spawn(WxEntity, env, {
+    canonicalKey: "cert:scripture:quran",
+    kind: "SCRIPTURE_FAMILY",
+    label: "Qur’an Certification Scripture",
+    sourceClass: "REVELATION",
+    epistemicLane: "CORE",
+    authorityClass: "PRIMARY_SOURCE",
+    operationalStatus: "ESTABLISHED",
+    sourceRevision: "cert-r1",
+    active: true,
+  })
+  const scripture = await WxScripture.spawn(WxScripture, env, {
+    entityId: scriptureEntity.id,
+    canonicalCode: "QURAN",
+    name: "Qur’an Certification Scripture",
+    slug: "cert-quran",
+    sourceClass: "REVELATION",
+    authorityClass: "PRIMARY_SOURCE",
+    status: "APPROVED",
+    active: true,
+  })
   const passage = await WxEntity.spawn(WxEntity, env, {
     canonicalKey: "cert:passage:quran:2:255",
     kind: "PASSAGE",
@@ -391,6 +414,17 @@ async function main() {
     authorityClass: "PRIMARY_SOURCE",
     operationalStatus: "ESTABLISHED",
     sourceRevision: "cert-r1",
+    active: true,
+  })
+  await WxPassage.spawn(WxPassage, env, {
+    entityId: passage.id,
+    scriptureId: scripture.id,
+    passageType: "AYAH",
+    sequence: 255,
+    canonicalReference: "QURAN 2:255",
+    localNumber: 255,
+    sourceRevision: "cert-r1",
+    provenanceId: provenance.id,
     active: true,
   })
   const musa = await WxEntity.spawn(WxEntity, env, {
@@ -554,42 +588,74 @@ async function main() {
   // ── Figure & Tradition Analysis Engines Certification (#59) ──
   const figure = await WxFigure.spawn(WxFigure, env, {
     entityId: musa.id,
+    stableKey: "cert:figure:musa:profile",
     name: "Musa",
-    canonicalKey: "cert:figure:musa:profile",
+    provenanceId: provenance.id,
+    status: "VERIFIED",
     active: true,
   })
 
   await WxFigureName.spawn(WxFigureName, env, {
     figureId: figure.id,
     name: "Musa ibn Imran",
+    normalizedName: "musa ibn imran",
+    nameType: "CANONICAL",
+    sourceId: source.id,
     provenanceId: provenance.id,
-    sourceReference: "Qur’anic lineage tradition",
     active: true,
   })
 
   await WxFigureRole.spawn(WxFigureRole, env, {
     figureId: figure.id,
     roleCode: "PROPHET",
+    sourceId: source.id,
     provenanceId: provenance.id,
-    sourceReference: "Qur’an 19:51",
+    certainty: "ESTABLISHED",
+    status: "VERIFIED",
     active: true,
   })
 
+  const traditionCorpusEntity = await WxEntity.spawn(WxEntity, env, {
+    canonicalKey: "cert:tradition:corpus:bukhari",
+    kind: "COMMUNITY",
+    label: "Sahih Al-Bukhari Certification Fixture",
+    active: true,
+  })
   const traditionCorpus = await WxTraditionCorpus.spawn(WxTraditionCorpus, env, {
-    title: "Sahih Al-Bukhari Fixture",
+    entityId: traditionCorpusEntity.id,
+    stableKey: "cert:tradition:corpus:bukhari",
+    name: "Sahih Al-Bukhari Fixture",
     traditionType: "HADITH",
-    authoritySourceId: source.id,
+    sourceId: source.id,
+    provenanceId: provenance.id,
+    status: "VERIFIED",
     active: true,
   })
 
+  const traditionUnitEntity = await WxEntity.spawn(WxEntity, env, {
+    canonicalKey: "cert:tradition:unit:bukhari:1",
+    kind: "PASSAGE",
+    label: "Sahih Al-Bukhari Certification Unit 1",
+    active: true,
+  })
   const traditionUnit = await WxTraditionUnit.spawn(WxTraditionUnit, env, {
+    entityId: traditionUnitEntity.id,
     corpusId: traditionCorpus.id,
+    unitType: "REPORT",
     stableKey: "cert:hadith:unit:1",
+    sequence: 1,
+    sourceId: source.id,
+    provenanceId: provenance.id,
+    status: "VERIFIED",
     active: true,
   })
 
   await WxTraditionReference.spawn(WxTraditionReference, env, {
     unitId: traditionUnit.id,
+    corpusId: traditionCorpus.id,
+    sourceId: source.id,
+    localNumber: "1",
+    referenceScheme: "BUKHARI",
     stableKey: "bukhari:1:1",
     provenanceId: provenance.id,
     active: true,
@@ -599,30 +665,38 @@ async function main() {
     unitId: traditionUnit.id,
     figureId: figure.id,
     roleCode: "PRIMARY_TRANSMITTER",
+    sourceId: source.id,
     provenanceId: provenance.id,
+    status: "RESOLVED",
     active: true,
   })
 
   const traditionChain = await WxTransmissionChain.spawn(WxTransmissionChain, env, {
     traditionUnitId: traditionUnit.id,
     chainType: "ISNAD_CONTINUOUS",
+    sourceId: source.id,
     provenanceId: provenance.id,
+    status: "VERIFIED",
     active: true,
   })
 
   await WxTransmissionLink.spawn(WxTransmissionLink, env, {
     chainId: traditionChain.id,
     sequence: 1,
-    personEntityId: musa.id,
-    transmissionMode: "DIRECT_HEARING",
+    figureId: figure.id,
+    roleMode: "DIRECT_HEARING",
+    provenanceId: provenance.id,
     active: true,
   })
 
   await WxTraditionAssessment.spawn(WxTraditionAssessment, env, {
     traditionUnitId: traditionUnit.id,
     assessmentScheme: "HADITH_AUTHENTICITY",
+    authoritySourceId: source.id,
     rawValue: "SAHIH",
+    normalizedCategory: "AUTHENTIC",
     provenanceId: provenance.id,
+    status: "VERIFIED",
     active: true,
   })
 

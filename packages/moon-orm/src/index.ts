@@ -31,7 +31,7 @@ export { forge, getLastPending, validateAutomaticAlteration } from './schema-syn
 export type { SchemaSyncOptions } from './schema-sync.js'
 export { evaluateLegacyRows, reconcileLegacyData, preflightLegacyMigration } from './legacy-reconciliation.js'
 export type { LegacyReconciliationReport, LegacyReconciliationInput, ReconciliationIssue } from './legacy-reconciliation.js'
-export { diff, up, down, status, check, snapshot, bootstrap } from './migrator.js'
+export { diff, diffAdditive, up, down, status, check, snapshot, bootstrap } from './migrator.js'
 export type { MigrationStatus } from './migrator.js'
 export { setupOrm, getDb, teardownOrm, closeDb, checkDbConnection } from './config.js'
 export type { DbConfig, DbHealthStatus } from './config.js'

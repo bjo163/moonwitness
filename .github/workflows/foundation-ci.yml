@@ -17,263 +17,130 @@ concurrency:
   group: foundation-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+env:
+  CI: 'true'
+
 jobs:
   audit:
     name: Constitutional & UI Audit
-    runs-on: self-hosted
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
-    env:
-      CI: 'true'
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
-
-      - name: Enable pinned pnpm
-        shell: bash
-        run: |
-          corepack enable
-          corepack prepare pnpm@10.33.4 --activate
-          pnpm --version
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run Constitutional & Enterprise UI Audit
-        id: audit
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Constitutional & Enterprise UI Audit
         run: node scripts/audit-rules.mjs
-
-      - name: Audit Summary
-        if: always()
-        run: |
-          if [ "${{ steps.audit.outcome }}" == "success" ]; then
-            echo "audit=passed" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "audit=failed" >> $GITHUB_STEP_SUMMARY
-          fi
 
   lint:
     name: Lint
-    runs-on: self-hosted
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 15
-    continue-on-error: true
-    env:
-      CI: 'true'
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
-
-      - name: Enable pinned pnpm
-        shell: bash
-        run: |
-          corepack enable
-          corepack prepare pnpm@10.33.4 --activate
-          pnpm --version
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Lint
-        id: lint
-        run: pnpm lint
-
-      - name: Lint Summary
-        if: always()
-        run: |
-          if [ "${{ steps.lint.outcome }}" == "success" ]; then
-            echo "lint=passed" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "lint=failed" >> $GITHUB_STEP_SUMMARY
-          fi
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
 
   typecheck:
     name: Typecheck
-    runs-on: self-hosted
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 15
-    continue-on-error: true
-    env:
-      CI: 'true'
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
-
-      - name: Enable pinned pnpm
-        shell: bash
-        run: |
-          corepack enable
-          corepack prepare pnpm@10.33.4 --activate
-          pnpm --version
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
       - name: Build Moon packages for type resolution
         run: pnpm --filter "@moon/*" build
-
-      - name: Typecheck
-        id: typecheck
-        run: pnpm typecheck
-
-      - name: Typecheck Summary
-        if: always()
-        run: |
-          if [ "${{ steps.typecheck.outcome }}" == "success" ]; then
-            echo "typecheck=passed" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "typecheck=failed" >> $GITHUB_STEP_SUMMARY
-          fi
+      - run: pnpm typecheck
 
   test:
     name: Test
-    runs-on: self-hosted
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 20
-    env:
-      CI: 'true'
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
-
-      - name: Enable pinned pnpm
-        shell: bash
-        run: |
-          corepack enable
-          corepack prepare pnpm@10.33.4 --activate
-          pnpm --version
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
       - name: Build Moon packages for test resolution
         run: pnpm --filter "@moon/*" build
-
-      - name: Test
-        id: test
-        run: pnpm test
-
-      - name: Test Summary
-        if: always()
-        run: |
-          if [ "${{ steps.test.outcome }}" == "success" ]; then
-            echo "test=passed" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "test=failed" >> $GITHUB_STEP_SUMMARY
-          fi
+      - run: pnpm test
 
   build:
     name: Build
-    runs-on: self-hosted
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 30
-    env:
-      CI: 'true'
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
-
-      - name: Enable pinned pnpm
-        shell: bash
-        run: |
-          corepack enable
-          corepack prepare pnpm@10.33.4 --activate
-          pnpm --version
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build
-        id: build
-        run: pnpm build
-
-      - name: Build Summary
-        if: always()
-        run: |
-          if [ "${{ steps.build.outcome }}" == "success" ]; then
-            echo "build=passed" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "build=failed" >> $GITHUB_STEP_SUMMARY
-          fi
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
 
   report:
     name: Report
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: [audit, lint, typecheck, test, build]
     if: always() && github.event_name == 'pull_request'
-
     steps:
       - name: Post PR Comment
         uses: actions/github-script@v7
         with:
           script: |
-            const audit = '${{ needs.audit.result }}';
-            const lint = '${{ needs.lint.result }}';
-            const typecheck = '${{ needs.typecheck.result }}';
-            const test = '${{ needs.test.result }}';
-            const build = '${{ needs.build.result }}';
-
-            const status = (result) => {
-              if (result === 'success') return '✅ passed';
-              if (result === 'failure') return '⚠️ failed (non-blocking)';
-              if (result === 'cancelled') return '⛔ cancelled';
-              return result;
+            const checks = {
+              'Constitutional & UI Audit': '${{ needs.audit.result }}',
+              'Lint': '${{ needs.lint.result }}',
+              'Typecheck': '${{ needs.typecheck.result }}',
+              'Test': '${{ needs.test.result }}',
+              'Build': '${{ needs.build.result }}',
             };
-
-            const isBlocking = (result) => result === 'failure' && result !== lint && result !== typecheck;
-
-            const allPassed = audit === 'success' && test === 'success' && build === 'success';
-            const header = allPassed
-              ? '## ✅ CI Passed — All Critical Checks Green'
-              : '## ❌ CI Report — Action Required';
-
-            const body = `${header}
-
-            | Check | Status |
-            |-------|--------|
-            | Constitutional & UI Audit | ${audit === 'success' ? '✅ passed' : '❌ failed'} |
-            | Lint | ${status(lint)} |
-            | Typecheck | ${status(typecheck)} |
-            | Test | ${test === 'success' ? '✅ passed' : '❌ failed'} |
-            | Build | ${build === 'success' ? '✅ passed' : '❌ failed'} |
-
-            ${allPassed ? '> **Critical checks (Audit, Test, Build) passed.** Lint and Typecheck are non-blocking.' : '> **Critical checks failed.** Please resolve Audit, Test, or Build failures before merging.'}
-
-            — *MoonWitness Foundation CI · Run #${{ github.run_id }}*`;
-
+            const icon = (result) => result === 'success' ? '✅ passed' : result === 'cancelled' ? '⛔ cancelled' : '❌ failed';
+            const allPassed = Object.values(checks).every((result) => result === 'success');
+            const rows = Object.entries(checks).map(([name, result]) => `| ${name} | ${icon(result)} |`).join('\n');
+            const body = `${allPassed ? '## ✅ Foundation CI Passed' : '## ❌ Foundation CI — Action Required'}\n\n| Check | Status |\n|---|---|\n${rows}\n\n${allPassed ? '> All release checks passed.' : '> Every Foundation CI check is blocking. Resolve failures before promotion.'}\n\n— *MoonWitness Foundation CI · Run #${{ github.run_id }}*`;
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: body,
+              body,
             });
