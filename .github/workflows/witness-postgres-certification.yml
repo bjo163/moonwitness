@@ -168,7 +168,7 @@ jobs:
           set -euo pipefail
           COMMON_ENV="-e CI=true -e NODE_ENV=production -e JWT_SECRET=$JWT_SECRET -e BOOTSTRAP_ADMIN_EMAIL=$BOOTSTRAP_ADMIN_EMAIL -e BOOTSTRAP_ADMIN_PASSWORD=$BOOTSTRAP_ADMIN_PASSWORD -e DATABASE_URL=postgres://postgres:postgres@postgres:5432/$CERT_DB -e TEST_DATABASE_URL=postgres://postgres:postgres@postgres:5432/$CERT_DB"
           docker run --rm $COMMON_ENV "$CERT_IMAGE" sh -lc \
-            'pnpm audit:rules && pnpm test && pnpm typecheck'
+            'pnpm audit:rules && NODE_ENV=test pnpm test && pnpm typecheck'
 
       - name: Capture sanitized diagnostics on failure
         if: failure()
