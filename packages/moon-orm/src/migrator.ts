@@ -186,6 +186,10 @@ function detectNonReversible(migrations: MigrationCommand[]): boolean {
   return migrations.some((migration) => migration.down.includes('Manual intervention required'))
 }
 
+function isReversible(migration: MigrationCommand): boolean {
+  return !migration.down.includes('Manual intervention required')
+}
+
 export async function diff(migrationsDir: string = path.join(process.cwd(), 'migrations')) {
   console.log('Detecting schema changes...')
   const { migrations } = await forge({ dryRun: true })
@@ -199,6 +203,35 @@ export async function diff(migrationsDir: string = path.join(process.cwd(), 'mig
 
   const filepath = writeAutoMigration(migrationsDir, 'auto', migrations)
   console.log(`Migration generated: ${filepath}`)
+  return filepath
+}
+
+/**
+ * Generate an additive, rollback-capable migration while leaving destructive or
+ * type-changing drift for an explicit reviewed migration. This is intended for
+ * completing historical schemas that are missing registry-owned tables,
+ * columns, foreign keys, indexes, or M2M junctions without weakening the normal
+ * `diff()` fail-closed behavior.
+ */
+export async function diffAdditive(migrationsDir: string = path.join(process.cwd(), 'migrations')) {
+  console.log('Detecting additive schema changes...')
+  const { migrations } = await forge({ dryRun: true })
+  if (migrations.length === 0) {
+    console.log('No schema changes detected. Everything is up to date.')
+    return
+  }
+
+  const reversible = migrations.filter(isReversible)
+  const deferred = migrations.length - reversible.length
+  if (reversible.length === 0) {
+    throw new Error(`No reversible schema changes can be generated automatically; ${deferred} change(s) require explicit review.`)
+  }
+
+  const filepath = writeAutoMigration(migrationsDir, 'additive', reversible)
+  console.log(`Additive migration generated: ${filepath}`)
+  if (deferred > 0) {
+    console.warn(`[moon.schema] Deferred ${deferred} non-reversible change(s) for explicit migration review.`)
+  }
   return filepath
 }
 
