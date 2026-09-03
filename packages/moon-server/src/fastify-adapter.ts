@@ -304,14 +304,13 @@ export class FastifyAdapter {
   public async handleRequest(req: IncomingMessage, res: ServerResponse): Promise<void> {
     const app = this.ensureApp()
     const body = (req as any).__moonBody ?? (req as any).body
-    const response = await app.inject({
-      method: (req.method || 'GET') as HTTPMethods,
+    const response: any = await (app.inject as any)({
+      method: req.method || 'GET',
       url: req.url || '/',
-      headers: req.headers as Record<string, string>,
+      headers: req.headers,
       payload: body === undefined ? undefined : body,
     })
-    const headers = response.headers as Record<string, string | string[] | undefined>
-    for (const [name, value] of Object.entries(headers)) {
+    for (const [name, value] of Object.entries(response.headers as Record<string, unknown>)) {
       if (value !== undefined && res.setHeader) res.setHeader(name, value as any)
     }
     res.writeHead(response.statusCode)
