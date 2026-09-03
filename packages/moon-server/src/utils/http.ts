@@ -65,15 +65,23 @@ export interface ParseBodyOptions {
   maxBytes?: number
 }
 
-const DEFAULT_MAX_BODY_BYTES = 1024 * 1024 // 1MB
+const DEFAULT_MAX_BODY_BYTES = 1024 * 1024
 
 /**
- * Parse JSON body from incoming HTTP request with size bounding
+ * Parse JSON body from incoming HTTP request with size bounding.
+ * Fastify owns stream parsing in the canonical transport; its adapter places
+ * the already parsed value on `__moonBody` so legacy Moon handlers never read
+ * an already-consumed raw stream.
  */
 export async function parseBody(
   req: IncomingMessage,
   options: ParseBodyOptions = {}
 ): Promise<any> {
+  const bridgedReq = req as IncomingMessage & { __moonBody?: unknown; __moonBodyPresent?: boolean }
+  if (bridgedReq.__moonBodyPresent) {
+    return bridgedReq.__moonBody ?? {}
+  }
+
   const maxBytes = options.maxBytes ?? DEFAULT_MAX_BODY_BYTES
 
   return new Promise((resolve, reject) => {
@@ -108,29 +116,31 @@ export async function parseBody(
   })
 }
 
-/**
- * Resolve allowed origin based on whitelist
- */
+/** Resolve allowed origin based on the configured whitelist. */
 export function resolveCorsOrigin(origin: string | undefined, config?: CorsConfig): string | null {
   if (!origin) return null
-  if (!config || !config.allowedOrigins || config.allowedOrigins.length === 0) {
-    return origin
+  const effective = config ?? _corsConfig
+
+  if (!effective.allowedOrigins) {
+    return process.env.NODE_ENV === 'production' ? null : origin
   }
 
-  if (typeof config.allowedOrigins === 'function') {
-    return config.allowedOrigins(origin) ? origin : null
+  if (typeof effective.allowedOrigins === 'function') {
+    return effective.allowedOrigins(origin) ? origin : null
   }
 
-  if (config.allowedOrigins.includes('*')) {
-    return '*'
+  if (effective.allowedOrigins.length === 0) {
+    return null
   }
 
-  return config.allowedOrigins.includes(origin) ? origin : null
+  if (effective.allowedOrigins.includes('*')) {
+    return effective.allowCredentials === false ? '*' : null
+  }
+
+  return effective.allowedOrigins.includes(origin) ? origin : null
 }
 
-/**
- * Send JSON response with secure CORS and HTTP security headers
- */
+/** Send JSON response with secure CORS and HTTP security headers. */
 export function sendJson(
   res: ServerResponse,
   statusCode: number,
@@ -152,7 +162,7 @@ export function sendJson(
     headers['Access-Control-Allow-Origin'] = allowedOrigin
     if (allowedOrigin !== '*') {
       headers['Vary'] = 'Origin'
-      if (corsConfig?.allowCredentials !== false) {
+      if ((corsConfig ?? _corsConfig).allowCredentials !== false) {
         headers['Access-Control-Allow-Credentials'] = 'true'
       }
     }
@@ -166,9 +176,6 @@ export function sendJson(
   res.end(JSON.stringify(data))
 }
 
-/**
- * Handle CORS preflight OPTIONS request
- */
 export function handleCorsPreflight(
   req: IncomingMessage,
   res: ServerResponse,
@@ -177,14 +184,19 @@ export function handleCorsPreflight(
   if (req.method === 'OPTIONS') {
     const reqOrigin = req.headers.origin as string | undefined
     const allowedOrigin = resolveCorsOrigin(reqOrigin, corsConfig)
-
     const headers: Record<string, string> = getSecurityHeaders()
+
+    if (reqOrigin && !allowedOrigin) {
+      res.writeHead(403, headers)
+      res.end()
+      return true
+    }
 
     if (allowedOrigin) {
       headers['Access-Control-Allow-Origin'] = allowedOrigin
       if (allowedOrigin !== '*') {
         headers['Vary'] = 'Origin'
-        if (corsConfig?.allowCredentials !== false) {
+        if ((corsConfig ?? _corsConfig).allowCredentials !== false) {
           headers['Access-Control-Allow-Credentials'] = 'true'
         }
       }
@@ -202,9 +214,6 @@ export function handleCorsPreflight(
   return false
 }
 
-/**
- * Parse URL and query parameters
- */
 export function parseUrl(req: IncomingMessage): { pathname: string; searchParams: URLSearchParams } {
   const url = new URL(req.url || '', `http://${req.headers.host || 'localhost'}`)
   return {
