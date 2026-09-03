@@ -26,15 +26,15 @@ export const views: Record<string, ViewManifest> = {
     accentColor: 'cyan',
     icon: 'Building2',
     table: {
-      columns: ['name', 'email', 'phone', 'type', 'parentId'],
+      columns: ['name', 'email', 'phone', 'isCompany', 'parentId'],
       searchKeys: ['name', 'email'],
     },
     form: {
       title: 'ENTITY NODE',
       sections: [
-        { title: 'Identity', columns: 2, fields: ['name', 'type', 'parentId'] },
-        { title: 'Contact', columns: 2, fields: ['email', 'phone', 'website'] },
-        { title: 'Address', columns: 2, fields: ['street', 'city', 'zip', 'countryCode'] },
+        { title: 'Identity', columns: 2, fields: ['name', 'isCompany', 'parentId'] },
+        { title: 'Contact', columns: 2, fields: ['email', 'phone', 'mobile'] },
+        { title: 'Address', columns: 2, fields: ['street', 'city', 'zip', 'countryId'] },
       ],
     },
   },
@@ -43,24 +43,11 @@ export const views: Record<string, ViewManifest> = {
     defaultView: 'table',
     accentColor: 'cyan',
     icon: 'Shield',
-    table: { columns: ['name', 'description'], searchKeys: ['name'] },
+    table: { columns: ['name', 'users'], searchKeys: ['name'] },
     form: {
       title: 'SECURITY ROLE',
       sections: [
-        { title: 'Role', columns: 2, fields: ['name', 'description'] },
-      ],
-    },
-  },
-
-  'vx.group': {
-    defaultView: 'table',
-    accentColor: 'cyan',
-    icon: 'Users',
-    table: { columns: ['name', 'description', 'parentId'], searchKeys: ['name'] },
-    form: {
-      title: 'ACCESS GROUP',
-      sections: [
-        { title: 'Group', columns: 2, fields: ['name', 'description', 'parentId'] },
+        { title: 'Role', columns: 2, fields: ['name', 'users'] },
       ],
     },
   },

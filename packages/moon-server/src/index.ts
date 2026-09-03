@@ -86,6 +86,9 @@ export {
   type SSEOptions
 } from './handlers/sse.js'
 
+// Router
+export { globalRoutes, type Route, type ProxyRoute, type HttpHandler } from './router.js'
+
 // Views
 export { renderDashboard, renderSwaggerUI } from './views/dashboard.js'
 

@@ -32,28 +32,28 @@ export function Feed({ feed }: KnowledgeFeedProps) {
     activeTab === "All" ? feed : feed.filter((f) => f.category === activeTab)
 
   return (
-    <div className="bg-space/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
-      <div className="mb-4 flex items-center justify-between border-b border-cyan-500/10 pb-4">
+    <div className="flex h-full flex-col rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm">
+      <div className="mb-4 flex items-center justify-between border-b border-border pb-3">
         <div>
-          <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
+          <h3 className="font-sans text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Knowledge Feed
           </h3>
-          <p className="font-sans text-[10px] text-primary/60">
-            Latest Updates from Across the Universe
+          <p className="font-sans text-[11px] text-muted-foreground">
+            Recent updates across categories
           </p>
         </div>
-        <Search className="h-4 w-4 text-primary/50" />
+        <Search className="h-4 w-4 text-muted-foreground" />
       </div>
 
-      <div className="scrollbar-hide mb-4 flex gap-2 overflow-x-auto">
+      <div className="scrollbar-hide mb-4 flex gap-1.5 overflow-x-auto pb-1">
         {TABS.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`rounded-md border px-3 py-1 font-mono text-[10px] whitespace-nowrap transition-colors ${
+            className={`rounded-md border px-2.5 py-1 font-sans text-xs font-medium whitespace-nowrap transition-colors ${
               activeTab === tab
-                ? "border-cyan-400 bg-cyan-500/10 text-cyan-400"
-                : "border-cyan-500/10 text-primary/60 hover:border-cyan-500/30 hover:text-white"
+                ? "border-border bg-accent text-accent-foreground font-semibold shadow-sm"
+                : "border-border text-muted-foreground hover:bg-accent hover:text-foreground"
             }`}
           >
             {tab}
@@ -61,30 +61,30 @@ export function Feed({ feed }: KnowledgeFeedProps) {
         ))}
       </div>
 
-      <div className="flex-1 space-y-3">
+      <div className="flex-1 space-y-2.5">
         {filteredFeed.map((item) => (
           <div
             key={item.id}
-            className="flex gap-4 rounded-xl border border-cyan-500/5 bg-black/20 p-3 transition-colors hover:border-cyan-500/20 hover:bg-black/40"
+            className="flex gap-3.5 rounded-lg border border-border bg-muted/20 p-3 transition-colors hover:bg-accent/40"
           >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-cyan-500/20 bg-cyan-500/5 text-cyan-400">
-              <BookOpen className="h-5 w-5" />
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-primary shadow-sm">
+              <BookOpen className="h-4 w-4" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="mb-1 truncate font-sans text-sm font-medium text-white">
+              <p className="mb-0.5 truncate font-sans text-xs font-semibold text-foreground">
                 {item.title}
               </p>
               <div className="flex items-center justify-between">
-                <span className="truncate font-sans text-xs text-primary/60">
+                <span className="truncate font-sans text-[11px] text-muted-foreground">
                   {item.subtitle}
                 </span>
-                <span className="shrink-0 rounded bg-cyan-500/10 px-2 py-0.5 font-mono text-[9px] text-cyan-400">
+                <span className="shrink-0 rounded border border-border bg-muted px-1.5 py-0.5 font-sans text-[10px] text-foreground">
                   {item.category}
                 </span>
               </div>
             </div>
             <div className="flex shrink-0 items-end">
-              <span className="font-mono text-[9px] text-primary/40">
+              <span className="font-mono text-[10px] text-muted-foreground">
                 {item.time}
               </span>
             </div>
@@ -92,12 +92,11 @@ export function Feed({ feed }: KnowledgeFeedProps) {
         ))}
       </div>
 
-      <button className="mt-4 flex items-center justify-center gap-2 border-t border-cyan-500/10 pt-4 font-mono text-[10px] font-medium text-cyan-400 uppercase hover:text-cyan-300">
-        View All Feed <ArrowRight className="h-3 w-3" />
+      <button className="mt-4 flex items-center justify-center gap-1.5 border-t border-border pt-3 font-sans text-xs font-medium text-primary hover:underline">
+        View All Updates <ArrowRight className="h-3 w-3" />
       </button>
     </div>
   )
 }
 
 export { Feed as ErpKnowledgeFeed }
-

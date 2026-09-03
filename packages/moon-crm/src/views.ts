@@ -44,10 +44,10 @@ export const views: Record<string, ViewManifest> = {
     defaultView: 'table',
     accentColor: 'green',
     icon: 'Users',
-    table: { columns: ['name', 'leaderId'], searchKeys: ['name'] },
+    table: { columns: ['name', 'userId'], searchKeys: ['name'] },
     form: {
       title: 'OUTREACH TEAM',
-      sections: [{ title: 'Team', columns: 2, fields: ['name', 'leaderId'] }],
+      sections: [{ title: 'Team', columns: 2, fields: ['name', 'userId'] }],
     },
   },
 }

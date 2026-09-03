@@ -8,8 +8,8 @@ export function EightLevelsTab() {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="hud-clip-card border border-white/10 bg-black/40 p-3">
-        <p className="font-mono text-[10px] text-white/30">
+      <div className="rounded-xl border border-border bg-card p-3">
+        <p className="font-mono text-[10px] text-foreground/30">
           8 Level Pengembangan Kesadaran Manusia · Q4Q Standard (700,000 CE) —
           Empat Kitab sebagai fondasi setiap level
         </p>
@@ -23,15 +23,15 @@ export function EightLevelsTab() {
           <button
             key={lvl.level}
             onClick={() => setSelected(isSelected ? null : lvl.level)}
-            className={`hud-clip-card w-full border text-left transition-all duration-200 hover:translate-y-[-1px] ${
+            className={`rounded-xl w-full border text-left transition-all duration-200 hover:translate-y-[-1px] ${
               isSelected
-                ? `${lvl.border} bg-black/70 shadow-[0_0_20px_rgba(0,0,0,0.5)]`
-                : "border-white/5 bg-black/30 hover:border-white/15"
+                ? `${lvl.border} bg-card shadow-sm`
+                : "border-border bg-muted/40 hover:border-border"
             }`}
           >
             <div className="flex items-center gap-3 p-3">
               <div
-                className={`hud-clip-tag flex h-8 w-8 shrink-0 items-center justify-center border ${lvl.border}`}
+                className={`rounded-md flex h-8 w-8 shrink-0 items-center justify-center border ${lvl.border}`}
               >
                 <LvlIcon className={`h-4 w-4 ${lvl.color}`} />
               </div>
@@ -42,26 +42,26 @@ export function EightLevelsTab() {
                   >
                     L{lvl.level} · {lvl.code}
                   </span>
-                  <span className="font-mono text-[9px] text-white/30">·</span>
-                  <span className="font-mono text-[9px] text-white/40">
+                  <span className="font-mono text-[9px] text-foreground/30">·</span>
+                  <span className="font-mono text-[9px] text-foreground/40">
                     {lvl.arabicTerm}
                   </span>
                 </div>
-                <span className="font-sans text-sm font-bold text-white">
+                <span className="font-sans text-sm font-bold text-foreground">
                   {lvl.name}
                 </span>
               </div>
               <span
-                className={`font-mono text-[8px] text-white/20 ${isSelected ? "opacity-100" : ""}`}
+                className={`font-mono text-[8px] text-foreground/20 ${isSelected ? "opacity-100" : ""}`}
               >
                 {isSelected ? "▲" : "▼"}
               </span>
             </div>
 
             {isSelected && (
-              <div className="border-t border-white/5 p-4">
+              <div className="border-t border-border p-4">
                 <div className="mb-3">
-                  <p className="mb-1 font-mono text-[9px] tracking-widest text-white/30 uppercase">
+                  <p className="mb-1 font-mono text-[9px] tracking-widest text-foreground/30 uppercase">
                     Core Question
                   </p>
                   <p
@@ -70,7 +70,7 @@ export function EightLevelsTab() {
                     &quot;{lvl.coreQuestion}&quot;
                   </p>
                 </div>
-                <p className="mb-4 font-mono text-xs text-white/50">
+                <p className="mb-4 font-mono text-xs text-foreground/50">
                   {lvl.desc}
                 </p>
 
@@ -80,7 +80,7 @@ export function EightLevelsTab() {
                       tag: "Q" as ScriptureTag,
                       label: "QUR'AN (Primary)",
                       ref: lvl.quranRef,
-                      color: "text-yellow-400",
+                      color: "text-warning",
                       border: "border-yellow-400/20",
                     },
                     {
@@ -94,27 +94,27 @@ export function EightLevelsTab() {
                       tag: "Z" as ScriptureTag,
                       label: "ZABUR (Ref)",
                       ref: lvl.zaburRef,
-                      color: "text-emerald-400",
-                      border: "border-emerald-400/20",
+                      color: "text-success",
+                      border: "border-success/20",
                     },
                     {
                       tag: "G" as ScriptureTag,
                       label: "GOSPEL (Ref)",
                       ref: lvl.gospelRef,
-                      color: "text-red-400",
-                      border: "border-red-400/20",
+                      color: "text-destructive",
+                      border: "border-destructive/20",
                     },
                   ].map((s) => (
                     <div
                       key={s.tag}
-                      className={`hud-clip-card border ${s.border} bg-black/40 p-2`}
+                      className={`rounded-xl border ${s.border} bg-card p-2`}
                     >
                       <p
                         className={`mb-1 font-mono text-[8px] font-bold ${s.color}`}
                       >
                         [{s.tag}] {s.label}
                       </p>
-                      <p className="font-mono text-[9px] text-white/50">
+                      <p className="font-mono text-[9px] text-foreground/50">
                         {s.ref}
                       </p>
                     </div>

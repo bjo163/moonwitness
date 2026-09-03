@@ -7,14 +7,14 @@ import { Bookmark, Trash2, ArrowRight, BookOpen } from "lucide-react"
 import {
   getBookmarks,
   toggleBookmark,
-  TacticalBookmarkItem,
+  BookmarkItem,
 } from "@workspace/state"
 import { Modal, ModalTrigger } from "../../components/modal"
 
 export function BookmarkManagerModal() {
   const mounted = useMounted()
   const [isOpen, setIsOpen] = useState(false)
-  const [bookmarks, setBookmarks] = useState<TacticalBookmarkItem[]>([])
+  const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([])
 
   const loadBookmarks = () => {
     setBookmarks(getBookmarks())
@@ -30,7 +30,7 @@ export function BookmarkManagerModal() {
       window.removeEventListener("mw_bookmarks_updated", handleUpdate)
   }, [])
 
-  function removeBookmark(item: TacticalBookmarkItem) {
+  function removeBookmark(item: BookmarkItem) {
     toggleBookmark(item)
     loadBookmarks()
   }
@@ -48,7 +48,7 @@ export function BookmarkManagerModal() {
       <Modal
         isOpen={isOpen && mounted}
         onClose={() => setIsOpen(false)}
-        title={`// VAULT BOOKMARK TACTICAL (${bookmarks.length})`}
+        title={`Saved Bookmarks (${bookmarks.length})`}
         icon={Bookmark}
         maxWidth="max-w-xl"
         borderColor="border-accent/50"
@@ -70,7 +70,7 @@ export function BookmarkManagerModal() {
             bookmarks.map((item) => (
               <div
                 key={item.id}
-                className="bg-space tag-clip flex flex-col justify-between space-y-2 border border-accent/20 p-3.5"
+                className="bg-background rounded-md flex flex-col justify-between space-y-2 border border-accent/20 p-3.5"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-accent">
@@ -105,7 +105,7 @@ export function BookmarkManagerModal() {
                   <Link
                     href={item.href}
                     onClick={() => setIsOpen(false)}
-                    className="btn-primary flex items-center gap-1 border-accent px-3 py-1 text-[9px] text-accent btn-clip hover:bg-accent/10"
+                    className="btn-primary flex items-center gap-1 border-accent px-3 py-1 text-[9px] text-accent  hover:bg-accent/10"
                   >
                     <span>BUKA AYAT</span>
                     <ArrowRight className="h-3 w-3" />

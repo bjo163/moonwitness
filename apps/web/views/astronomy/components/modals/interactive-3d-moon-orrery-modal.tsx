@@ -84,7 +84,7 @@ export function Interactive3DMoonOrreryModal() {
             ref={canvasRef}
             width={300}
             height={250}
-            className="tag-clip bg-space border border-accent/30"
+            className="rounded-md bg-background border border-accent/30"
           />
 
           <div className="grid w-full grid-cols-2 gap-3 text-xs">

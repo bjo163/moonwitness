@@ -3,7 +3,7 @@ import { Globe2, Moon, Users, Target, Clock, ArrowRight } from "lucide-react"
 
 export function RootCauseWidget() {
   return (
-    <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3 xl:col-span-3">
+    <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-3 xl:col-span-3">
       <div className="mb-1 text-[9px] font-black tracking-widest text-primary uppercase">
         ROOT CAUSE ANALYSIS
       </div>
@@ -11,9 +11,9 @@ export function RootCauseWidget() {
 
       <div className="flex flex-1 items-center gap-4">
         {/* Donut Chart */}
-        <div className="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-full border-4 border-primary shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+        <div className="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-full border-4 border-primary shadow-sm">
           <div
-            className="absolute inset-0 rounded-full border-[5px] border-primary border-r-transparent border-b-transparent shadow-[0_0_10px_#00F0FF]"
+            className="absolute inset-0 rounded-full border-[5px] border-primary border-r-transparent border-b-transparent shadow-sm"
             style={{ transform: "rotate(-20deg)" }}
           />
           <div
@@ -33,7 +33,7 @@ export function RootCauseWidget() {
             <div className="mb-0.5 text-[7px] font-bold text-primary uppercase">
               ISSUE
             </div>
-            <div className="text-[9px] leading-tight font-black text-white">
+            <div className="text-[9px] leading-tight font-black text-foreground">
               Moon
               <br />
               Observation
@@ -59,11 +59,11 @@ export function RootCauseWidget() {
               key={i}
               className="group flex cursor-pointer items-center justify-between text-[9px]"
             >
-              <span className="flex items-center gap-1.5 text-white/80 transition-colors group-hover:text-white">
+              <span className="flex items-center gap-1.5 text-foreground transition-colors group-hover:text-foreground">
                 <rc.icon className="h-3 w-3" style={{ color: rc.c }} />
                 <span className="max-w-[85px] truncate">{rc.n}</span>
               </span>
-              <span className="font-mono text-white transition-colors group-hover:text-primary">
+              <span className="font-mono text-foreground transition-colors group-hover:text-primary">
                 {rc.v}
               </span>
             </div>
@@ -71,7 +71,7 @@ export function RootCauseWidget() {
         </div>
       </div>
 
-      <button className="mt-3 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-white">
+      <button className="mt-3 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
         VIEW FULL ANALYSIS <ArrowRight className="h-2.5 w-2.5" />
       </button>
     </div>

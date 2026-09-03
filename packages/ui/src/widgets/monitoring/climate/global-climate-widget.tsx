@@ -76,8 +76,8 @@ export function GlobalClimateWidget() {
   }, [])
 
   return (
-    <div className="bg-space flex h-full flex-col rounded-xl border border-sky-500/30 p-4 lg:col-span-12 xl:col-span-4">
-      <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-2">
+    <div className="bg-background flex h-full flex-col rounded-xl border border-sky-500/30 p-4 lg:col-span-12 xl:col-span-4">
+      <div className="mb-4 flex items-center justify-between border-b border-border pb-2">
         <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-sky-400 uppercase">
           <CloudLightning className="h-4 w-4" />
           GLOBAL CLIMATE
@@ -88,7 +88,7 @@ export function GlobalClimateWidget() {
       </div>
 
       <div className="flex-1 overflow-hidden">
-        <div className="mb-2 grid grid-cols-12 gap-4 border-b border-white/5 pb-2 text-[8px] font-bold tracking-widest text-white/50">
+        <div className="mb-2 grid grid-cols-12 gap-4 border-b border-border pb-2 text-[8px] font-bold tracking-widest text-foreground/50">
           <div className="col-span-4">METROPOLIS</div>
           <div className="col-span-4 text-center">TEMP</div>
           <div className="col-span-4 text-right">WIND</div>
@@ -104,19 +104,19 @@ export function GlobalClimateWidget() {
             weatherData.map((w, idx) => (
               <div
                 key={idx}
-                className="group grid grid-cols-12 items-center gap-4 rounded border border-transparent bg-white/5 px-2 py-2 text-[9px] transition-colors hover:border-sky-500/30 hover:bg-white/10"
+                className="group grid grid-cols-12 items-center gap-4 rounded border border-transparent bg-muted/30 px-2 py-2 text-[9px] transition-colors hover:border-sky-500/30 hover:bg-muted/30"
               >
-                <div className="col-span-4 font-bold text-white transition-colors group-hover:text-sky-400">
+                <div className="col-span-4 font-bold text-foreground transition-colors group-hover:text-sky-400">
                   {w.name}
                 </div>
                 <div className="col-span-4 text-center font-mono">
                   <span
-                    className={`rounded-sm px-2 py-0.5 font-black ${w.temp > 30 ? "text-red-400" : w.temp < 15 ? "text-blue-400" : "text-green-400"}`}
+                    className={`rounded-sm px-2 py-0.5 font-black ${w.temp > 30 ? "text-destructive" : w.temp < 15 ? "text-blue-400" : "text-success"}`}
                   >
                     {w.temp}°C
                   </span>
                 </div>
-                <div className="col-span-4 flex items-center justify-end gap-1 text-right font-mono text-white/70">
+                <div className="col-span-4 flex items-center justify-end gap-1 text-right font-mono text-foreground">
                   <Wind className="h-3 w-3" />
                   {w.windSpeed} km/h
                 </div>

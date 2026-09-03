@@ -147,7 +147,7 @@ The Fastify + OpenTelemetry migration follows the standard promotion path:
 ### PostgreSQL Certification (`witness-postgres-certification.yml`)
 
 - **Triggers**: Push to `dev`/`main` (DB paths), weekly schedule, manual
-- **Purpose**: Validates migrations, seed, and Witness graph against PostgreSQL 16
+- **Purpose**: Validates migrations, seed, and Witness graph against PostgreSQL 18
 
 ---
 

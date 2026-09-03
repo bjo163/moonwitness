@@ -45,7 +45,7 @@ export function SubNavigation({ links }: SubNavigationProps) {
   const pathname = usePathname()
 
   return (
-    <div className="bg-space/80 sticky top-16 z-40 w-full border-b border-white/5 backdrop-blur-md">
+    <div className="sticky top-16 z-40 w-full border-b border-border bg-card">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <nav className="scrollbar-hide flex snap-x snap-mandatory items-center gap-2 overflow-x-auto py-3">
           {links.map((link) => {
@@ -60,21 +60,16 @@ export function SubNavigation({ links }: SubNavigationProps) {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`group flex shrink-0 snap-start items-center gap-2.5 rounded px-4 py-2 transition-all duration-300 ${
+                className={`group flex shrink-0 snap-start items-center gap-2.5 rounded-lg border px-4 py-2 transition-colors duration-200 ${
                   isActive
-                    ? "border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 shadow-[0_0_15px_rgba(0,240,255,0.15)]"
-                    : "border border-transparent text-primary hover:bg-white/5 hover:text-primary"
-                } `}
+                    ? "border-primary/50 bg-primary/10 text-primary"
+                    : "border-transparent text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground"
+                }`}
               >
-                <div className="relative">
-                  {isActive && (
-                    <span className="absolute inset-0 animate-ping rounded-full bg-cyan-400 opacity-40" />
-                  )}
-                  <Icon
-                    className={`relative z-10 h-3.5 w-3.5 ${isActive ? "text-cyan-400" : "text-primary transition-colors group-hover:text-cyan-400"}`}
-                  />
-                </div>
-                <span className="font-mono text-[10px] font-bold tracking-[0.2em] uppercase">
+                <Icon
+                  className={`h-3.5 w-3.5 transition-colors ${isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"}`}
+                />
+                <span className="text-sm font-medium tracking-wide">
                   {link.label}
                 </span>
               </Link>

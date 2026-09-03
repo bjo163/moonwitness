@@ -4,17 +4,17 @@ export default function Loading() {
       {/* Hero skeleton */}
       <div className="relative py-20 sm:py-28">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="glass-card glow-pulse mb-6 h-6 w-48 rounded-full" />
-          <div className="glass-card glow-pulse mb-4 h-14 w-80 rounded-xl" />
-          <div className="glass-card glow-pulse h-8 w-96 max-w-full rounded-xl opacity-60" />
+          <div className="rounded-xl border border-border/40 bg-card/90 animate-pulse mb-6 h-6 w-48 rounded-full" />
+          <div className="rounded-xl border border-border/40 bg-card/90 animate-pulse mb-4 h-14 w-80 rounded-xl" />
+          <div className="rounded-xl border border-border/40 bg-card/90 animate-pulse h-8 w-96 max-w-full rounded-xl opacity-60" />
         </div>
       </div>
       {/* Content skeleton */}
       <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-        <div className="glass-card glow-pulse mb-6 h-12 w-full rounded-xl" />
+        <div className="rounded-xl border border-border/40 bg-card/90 animate-pulse mb-6 h-12 w-full rounded-xl" />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 9 }).map((_, i) => (
-            <div key={i} className="glass-card glow-pulse h-28 rounded-2xl" />
+            <div key={i} className="rounded-xl border border-border/40 bg-card/90 animate-pulse h-28 rounded-2xl" />
           ))}
         </div>
       </div>

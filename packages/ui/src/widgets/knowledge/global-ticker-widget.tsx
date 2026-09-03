@@ -49,15 +49,15 @@ export function GlobalTickerWidget() {
   if (messages.length === 0) return null
 
   return (
-    <div className="bg-space/95 w-full overflow-hidden border-b border-cyan-500/30 shadow-[0_4px_20px_rgba(0,240,255,0.1)]">
+    <div className="bg-background/95 w-full overflow-hidden border-b border-border shadow-sm">
       <div className="flex h-10 items-center">
-        <div className="relative z-10 flex h-full shrink-0 items-center gap-2 border-r border-cyan-500/50 bg-cyan-950 px-4 shadow-[4px_0_15px_rgba(0,240,255,0.2)]">
-          <Globe2 className="h-4 w-4 animate-pulse text-cyan-400" />
-          <span className="hidden font-sans text-[10px] font-black tracking-widest text-cyan-400 uppercase md:inline-block">
+        <div className="relative z-10 flex h-full shrink-0 items-center gap-2 border-r border-border bg-muted px-4 shadow-sm">
+          <Globe2 className="h-4 w-4 animate-pulse text-primary" />
+          <span className="hidden font-sans text-[10px] font-black tracking-widest text-primary uppercase md:inline-block">
             Global Reflections
           </span>
           {/* Gradient fade edge */}
-          <div className="pointer-events-none absolute top-0 right-[-20px] bottom-0 w-5 bg-gradient-to-r from-cyan-950 to-transparent" />
+          <div className="pointer-events-none absolute top-0 right-[-20px] bottom-0 w-5 bg-gradient-to-r from-primary/10 to-transparent" />
         </div>
 
         <div className="group relative h-full flex-1 overflow-hidden">
@@ -68,11 +68,11 @@ export function GlobalTickerWidget() {
                 key={`${m.id}-${idx}`}
                 className="mx-8 flex items-center gap-2 font-mono text-xs"
               >
-                <span className="flex items-center gap-1 font-bold text-cyan-400">
+                <span className="flex items-center gap-1 font-bold text-primary">
                   <Quote className="inline h-3 w-3" />
                   {m.user_avatar} {m.user_name}:
                 </span>
-                <span className="text-white/80 italic">"{m.comment_text}"</span>
+                <span className="text-foreground italic">"{m.comment_text}"</span>
               </div>
             ))}
           </div>

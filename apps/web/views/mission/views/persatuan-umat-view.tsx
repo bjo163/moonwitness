@@ -94,13 +94,13 @@ export function PersatuanUmatView() {
         />
 
         {/* Core Quranic Manifesto Banner */}
-        <div className="panel-box bg-space/95 space-y-3 border border-accent/50 p-6">
+        <div className="rounded-xl border border-border/40 bg-card/90 bg-background/95 space-y-3 border border-accent/50 p-6">
           <div className="flex items-center justify-between text-xs font-bold text-accent">
             <span className="flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-accent" />
               <span>LANDASAN WAHYU SUPREMA: Q.S AL-ANBIYA&apos; (21:107)</span>
             </span>
-            <span className="tag-clip tag-clip-yellow tag-clip text-[9px]">
+            <span className="rounded-md border border-amber-500/40 bg-warning/10 text-warning px-2 py-0.5 font-mono text-[9px]">
               RAHMATAN LIL &apos;ALAMIN
             </span>
           </div>
@@ -128,18 +128,18 @@ export function PersatuanUmatView() {
             {MEDINA_COVENANT_PILLARS.map((pillar) => (
               <div
                 key={pillar.number}
-                className="panel-box border-success/30 bg-space tag-clip space-y-3 border p-6"
+                className="rounded-xl border border-border/40 bg-card/90 border-success/30 bg-background rounded-md space-y-3 border p-6"
               >
                 <div className="border-success/20 flex flex-wrap items-center justify-between gap-2 border-b pb-3">
                   <div className="flex items-center gap-3">
-                    <span className="tag-clip bg-panel border-success/50 text-success border px-3 py-1 text-sm font-black">
+                    <span className="rounded-md bg-panel border-success/50 text-success border px-3 py-1 text-sm font-black">
                       #{pillar.number}
                     </span>
-                    <h3 className="font-display text-sm font-black text-foreground">
+                    <h3 className="font-sans text-sm font-black text-foreground">
                       {pillar.title}
                     </h3>
                   </div>
-                  <span className="tag-clip tag-clip-yellow tag-clip text-[9px] font-bold">
+                  <span className="rounded-md border border-amber-500/40 bg-warning/10 text-warning px-2 py-0.5 font-mono text-[9px] font-bold">
                     {pillar.quranRef}
                   </span>
                 </div>
@@ -165,13 +165,13 @@ export function PersatuanUmatView() {
         <GlobalPrayerWallWidget />
 
         {/* Global Covenant Digital Pledge Section */}
-        <div className="panel-box bg-space space-y-5 border-2 border-primary/50 p-8 text-center shadow-[0_0_40px_rgba(0,240,255,0.2)]">
+        <div className="rounded-xl border border-border/40 bg-card/90 bg-background space-y-5 border-2 border-primary/50 p-8 text-center shadow-sm">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/15 px-4 py-1 text-xs font-bold text-primary uppercase">
             <Heart className="h-4 w-4 text-primary" />
             <span>IKRAR GLOBAL PERSAUDARAAN KEMANUSIAAN</span>
           </div>
 
-          <h2 className="font-display text-xl font-black tracking-widest text-foreground uppercase sm:text-3xl">
+          <h2 className="font-sans text-xl font-black tracking-widest text-foreground uppercase sm:text-3xl">
             FIRMA IKRAR PERSATUAN UMAT KOSMIK
           </h2>
 
@@ -185,7 +185,7 @@ export function PersatuanUmatView() {
             <button
               onClick={handlePledge}
               disabled={pledged}
-              className={`btn-primary mx-auto flex items-center gap-3 px-8 py-3.5 text-xs font-black transition-all btn-clip sm:text-sm ${
+              className={`btn-primary mx-auto flex items-center gap-3 px-8 py-3.5 text-xs font-black transition-all  sm:text-sm ${
                 pledged
                   ? "bg-success/20 text-success border-success"
                   : "border-primary bg-primary/20 text-primary hover:bg-primary/40"

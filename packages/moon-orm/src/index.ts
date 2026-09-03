@@ -4,6 +4,13 @@ export type { ModelFields, ModelRecord } from './base.js'
 export { fields, isFieldDef } from './fields.js'
 export { onchange } from './hooks.js'
 export type { FieldDef, InferFieldType, WidgetHint } from './fields.js'
+export {
+  validateDecimalSpec, decimalUnits, decimalFromUnits, normalizeDecimal,
+  addDecimal, subtractDecimal, compareDecimal,
+} from './decimal.js'
+export type { DecimalSpec, RoundingMode } from './decimal.js'
+export { validateViewContracts, assertViewContracts } from './view-contract.js'
+export type { ViewContractIssue } from './view-contract.js'
 export { 
   type Ctx, 
   createCtx, 
@@ -21,10 +28,15 @@ export {
 } from './security.js'
 export { registry, getModel, loadModels, registerModel } from './registry.js'
 export { forge, getLastPending, validateAutomaticAlteration } from './schema-sync.js'
+export type { SchemaSyncOptions } from './schema-sync.js'
+export { evaluateLegacyRows, reconcileLegacyData, preflightLegacyMigration } from './legacy-reconciliation.js'
+export type { LegacyReconciliationReport, LegacyReconciliationInput, ReconciliationIssue } from './legacy-reconciliation.js'
 export { diff, up, down, status, check, snapshot, bootstrap } from './migrator.js'
 export type { MigrationStatus } from './migrator.js'
 export { setupOrm, getDb, teardownOrm, closeDb, checkDbConnection } from './config.js'
 export type { DbConfig, DbHealthStatus } from './config.js'
+export { createPostgresConnectionConfig } from './connection-profile.js'
+export type { PostgresConnectionProfile } from './connection-profile.js'
 export type {
   ViewManifest,
   MatrixViewMode,
@@ -51,4 +63,3 @@ export {
   shouldSampleQuery,
   resetQuerySampler,
 } from './telemetry.js'
-

@@ -51,8 +51,9 @@ export function HadithAddDialog({
 
         <form onSubmit={handleAddHadith} className="space-y-4">
           <div>
-            <Label className="mb-1 block">Nama Kitab Hadits *</Label>
+            <Label htmlFor="hadith-book" className="mb-1 block">Nama Kitab Hadits *</Label>
             <Input
+              id="hadith-book"
               type="text"
               placeholder="contoh: Shahih Bukhari"
               value={addBook}
@@ -62,8 +63,9 @@ export function HadithAddDialog({
           </div>
 
           <div>
-            <Label className="mb-1 block">Nomor Hadits *</Label>
+            <Label htmlFor="hadith-number" className="mb-1 block">Nomor Hadits *</Label>
             <Input
+              id="hadith-number"
               type="number"
               value={addNumber}
               onChange={(e) => setAddNumber(Number(e.target.value))}
@@ -72,8 +74,9 @@ export function HadithAddDialog({
           </div>
 
           <div>
-            <Label className="mb-1 block">Matan Arab (Opsional)</Label>
+            <Label htmlFor="hadith-arabic" className="mb-1 block">Matan Arab (Opsional)</Label>
             <Input
+              id="hadith-arabic"
               type="text"
               placeholder="Tuliskan matan Arab"
               value={addArabic}
@@ -82,8 +85,9 @@ export function HadithAddDialog({
           </div>
 
           <div>
-            <Label className="mb-1 block">Terjemahan Hadits *</Label>
+            <Label htmlFor="hadith-translation" className="mb-1 block">Terjemahan Hadits *</Label>
             <Input
+              id="hadith-translation"
               type="text"
               placeholder="Tuliskan terjemahan Indonesia..."
               value={addTranslation}
@@ -96,7 +100,7 @@ export function HadithAddDialog({
             <Button variant="outline" type="button" onClick={onClose}>
               Batal
             </Button>
-            <Button type="submit" className="bg-purple-600 font-bold text-white hover:bg-purple-700">
+            <Button type="submit" className="bg-primary font-bold text-foreground hover:bg-primary">
               Simpan Hadits
             </Button>
           </div>

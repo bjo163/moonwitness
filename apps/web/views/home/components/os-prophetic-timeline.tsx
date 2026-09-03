@@ -51,7 +51,7 @@ export function OSPropheticTimeline() {
   return (
     <section
       id="timeline"
-      className="bg-space relative z-10 overflow-hidden border-b border-orange-500/30 py-20 font-mono text-foreground"
+      className="bg-background relative z-10 overflow-hidden border-b border-orange-500/30 py-20 font-mono text-foreground"
     >
       {/* ═══ LAYER 1: DEEP SPACE BACKGROUND ══════════════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
@@ -61,10 +61,10 @@ export function OSPropheticTimeline() {
 
       <div className="relative z-10 mx-auto max-w-[1700px] space-y-4 px-4">
         {/* ═══ TOP HEADER (Blueprint 15) ══════════════════════════════════════ */}
-        <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-4 xl:flex-row xl:items-center">
+        <div className="flex flex-col justify-between gap-4 border-b border-border pb-4 xl:flex-row xl:items-center">
           <div className="flex items-center gap-4">
-            <div className="bg-space inline-flex items-center gap-3 rounded-sm border-2 border-cyan-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)]">
-              <span className="rounded-xs bg-cyan-500 px-1.5 py-0.5 font-black text-black">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-border px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
+              <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-foreground">
                 15
               </span>
               <span>MOONWITNESS TIMELINE</span>
@@ -102,17 +102,17 @@ export function OSPropheticTimeline() {
               <div className="mb-1.5 text-[8px] tracking-widest text-primary uppercase">
                 TIMELINE VIEW
               </div>
-              <div className="bg-space flex overflow-hidden rounded border border-white/10">
+              <div className="bg-background flex overflow-hidden rounded border border-border">
                 <button className="border-b-2 border-primary bg-primary/20 px-3 py-1.5 text-[9px] font-bold text-primary">
                   Linear
                 </button>
-                <button className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-white/5">
+                <button className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
                   Galaxy
                 </button>
-                <button className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-white/5">
+                <button className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
                   Map
                 </button>
-                <button className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-white/5">
+                <button className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
                   Tree
                 </button>
               </div>
@@ -122,20 +122,20 @@ export function OSPropheticTimeline() {
               <div className="mb-1.5 text-[8px] tracking-widest text-primary uppercase">
                 TIME SCALE
               </div>
-              <div className="bg-space flex overflow-hidden rounded border border-white/10">
+              <div className="bg-background flex overflow-hidden rounded border border-border">
                 <button className="border-b-2 border-primary bg-primary/20 px-3 py-1.5 text-[9px] font-bold text-primary">
                   All Time
                 </button>
-                <button className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-white/5">
+                <button className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
                   Century
                 </button>
-                <button className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-white/5">
+                <button className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
                   Decade
                 </button>
-                <button className="border-r border-white/10 px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-white/5">
+                <button className="border-r border-border px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
                   Year
                 </button>
-                <button className="px-3 py-1.5 text-primary transition-colors hover:bg-white/5">
+                <button className="px-3 py-1.5 text-primary transition-colors hover:bg-muted/30">
                   <Calendar className="h-3.5 w-3.5" />
                 </button>
               </div>
@@ -144,12 +144,12 @@ export function OSPropheticTimeline() {
         </div>
 
         {/* ═══ LAYER 2: HORIZONTAL ERA TIMELINE ═══════════════════════════════ */}
-        <div className="bg-space relative flex flex-col items-center overflow-hidden rounded-xl border border-primary/20 p-6 shadow-[0_0_20px_rgba(0,240,255,0.05)]">
+        <div className="bg-background relative flex flex-col items-center overflow-hidden rounded-xl border border-primary/20 p-6 shadow-sm">
           {/* Era Nodes */}
           <div className="relative z-10 flex w-full max-w-[1500px] items-start justify-between pt-4 pb-12">
             {/* The Line */}
-            <div className="absolute top-12 right-12 left-12 h-1 rounded-full bg-gradient-to-r from-cyan-500 via-amber-500 to-purple-500 opacity-50" />
-            <div className="absolute top-12 right-0 h-1 w-24 border-t border-b border-dashed border-purple-500/50 bg-gradient-to-r from-purple-500/50 to-transparent" />
+            <div className="absolute top-12 right-12 left-12 h-1 rounded-full bg-gradient-to-r from-primary/10 via-amber-500 to-transparent opacity-50" />
+            <div className="absolute top-12 right-0 h-1 w-24 border-t border-b border-dashed border-border bg-gradient-to-r from-primary/10 to-transparent" />
 
             {[
               {
@@ -217,24 +217,24 @@ export function OSPropheticTimeline() {
               >
                 {/* Node Icon Graphic */}
                 <div className="relative mb-4 flex h-16 w-16 items-center justify-center rounded-full transition-transform group-hover:scale-110">
-                  <div className="absolute inset-0 rounded-full border border-white/20 bg-gradient-to-b from-white/10 to-transparent opacity-50" />
+                  <div className="absolute inset-0 rounded-full border border-border bg-gradient-to-b from-primary/20 to-transparent opacity-50" />
                   <div
                     className="animate-spin-slow absolute inset-2 rounded-full border border-dashed opacity-70"
                     style={{ borderColor: era.c }}
                   />
                   <era.icon
-                    className="h-6 w-6 drop-shadow-[0_0_8px_currentColor]"
+                    className="h-6 w-6 drop-shadow-sm"
                     style={{ color: era.c }}
                   />
                   {/* The dot on the line */}
                   <div
                     className={`border-panel absolute -bottom-[22px] z-20 h-4 w-4 rounded-full border-4 ${era.isDashed ? "border-dashed" : ""}`}
-                    style={{ backgroundColor: era.c, borderColor: "var(--color-cyber-dark)" }}
+                    style={{ backgroundColor: era.c, borderColor: "var(--background)" }}
                   />
                   {era.isNow && (
                     <div className="absolute -bottom-[42px] flex flex-col items-center">
                       <div className="h-4 w-px bg-emerald-500" />
-                      <div className="rounded border border-emerald-500/50 bg-emerald-950/50 px-2 py-0.5 text-[8px] font-bold whitespace-nowrap text-emerald-400">
+                      <div className="rounded border border-emerald-500/50 bg-emerald-950/50 px-2 py-0.5 text-[8px] font-bold whitespace-nowrap text-success">
                         You are here
                       </div>
                     </div>
@@ -249,7 +249,7 @@ export function OSPropheticTimeline() {
                   >
                     {era.n}
                   </div>
-                  <div className="mb-1 font-sans text-[9px] text-white/80">
+                  <div className="mb-1 font-sans text-[9px] text-foreground">
                     {era.s}
                   </div>
                   <div className="font-mono text-[8px] text-primary">
@@ -260,7 +260,7 @@ export function OSPropheticTimeline() {
             ))}
           </div>
 
-          <button className="bg-space flex items-center gap-2 rounded-full border border-white/10 px-6 py-2 text-[9px] font-bold tracking-widest text-primary uppercase transition-colors hover:bg-white/5 hover:text-white">
+          <button className="bg-background flex items-center gap-2 rounded-full border border-border px-6 py-2 text-[9px] font-bold tracking-widest text-primary uppercase transition-colors hover:bg-muted/30 hover:text-foreground">
             VIEW FULL TIMELINE <ArrowRight className="h-3 w-3" />
           </button>
         </div>
@@ -268,12 +268,12 @@ export function OSPropheticTimeline() {
         {/* ═══ LAYER 3: MIDDLE ROW (Highlights, Map, Future Events) ═══════════ */}
         <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-12">
           {/* Timeline Highlights (Col 1-3) */}
-          <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3">
+          <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-3">
             <div className="mb-4 flex items-center justify-between">
               <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                 TIMELINE HIGHLIGHTS
               </div>
-              <div className="cursor-pointer text-[8px] text-primary hover:text-white">
+              <div className="cursor-pointer text-[8px] text-primary hover:text-foreground">
                 View All
               </div>
             </div>
@@ -318,16 +318,16 @@ export function OSPropheticTimeline() {
               ].map((hl, i) => (
                 <div
                   key={i}
-                  className="group flex cursor-pointer gap-3 rounded p-1.5 transition-colors hover:bg-white/5"
+                  className="group flex cursor-pointer gap-3 rounded p-1.5 transition-colors hover:bg-muted/30"
                 >
-                  <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded border border-white/10 bg-primary">
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
+                  <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded border border-border bg-primary">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent" />
                     <Image
                       unoptimized
                       width={120}
                       height={120}
                       src="/assets/landscape-temp.jpg"
-                      alt=""
+                      alt="Timeline era portrait"
                       className="h-full w-full object-cover opacity-50 transition-opacity group-hover:opacity-100"
                     />
                   </div>
@@ -343,7 +343,7 @@ export function OSPropheticTimeline() {
                         {hl.y}
                       </div>
                     </div>
-                    <div className="mb-1 text-[10px] leading-tight font-bold text-white">
+                    <div className="mb-1 text-[10px] leading-tight font-bold text-foreground">
                       {hl.e}
                     </div>
                     <div className="line-clamp-2 font-sans text-[8px] text-primary">
@@ -360,17 +360,17 @@ export function OSPropheticTimeline() {
           </div>
 
           {/* Timeline Map View (Col 4-9) */}
-          <div className="bg-space relative flex flex-col overflow-hidden rounded-xl border border-white/10 p-4 lg:col-span-6">
+          <div className="bg-background relative flex flex-col overflow-hidden rounded-xl border border-border p-4 lg:col-span-6">
             <div className="relative z-20 mb-4 flex items-center justify-between">
               <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                 TIMELINE MAP VIEW
               </div>
-              <div className="cursor-pointer text-[8px] text-primary hover:text-white">
+              <div className="cursor-pointer text-[8px] text-primary hover:text-foreground">
                 View Full Map
               </div>
             </div>
 
-            <div className="bg-space relative min-h-[300px] flex-1 overflow-hidden rounded-lg border border-white/5">
+            <div className="bg-background relative min-h-[300px] flex-1 overflow-hidden rounded-lg border border-border">
               {/* Massive Map Graphic Simulation */}
               <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjMDAwIiBmaWxsLW9wYWNpdHk9IjAuMCIvPgo8Y2lyY2xlIGN4PSI0IiBjeT0iNCIgcj0iMC41IiBmaWxsPSIjMzBENDc0Ii8+Cjwvc3ZnPg==')] [mask-image:radial-gradient(ellipse_at_center,white,transparent_90%)] opacity-30" />
 
@@ -437,14 +437,14 @@ export function OSPropheticTimeline() {
               </svg>
 
               {/* Zoom Controls */}
-              <div className="bg-space absolute top-1/2 right-3 flex -translate-y-1/2 flex-col rounded border border-white/10 text-primary">
-                <button className="border-b border-white/10 p-2 hover:bg-white/5 hover:text-white">
+              <div className="bg-background absolute top-1/2 right-3 flex -translate-y-1/2 flex-col rounded border border-border text-primary">
+                <button className="border-b border-border p-2 hover:bg-muted/30 hover:text-foreground">
                   <Plus className="h-3 w-3" />
                 </button>
-                <button className="border-b border-white/10 p-2 hover:bg-white/5 hover:text-white">
+                <button className="border-b border-border p-2 hover:bg-muted/30 hover:text-foreground">
                   <Minus className="h-3 w-3" />
                 </button>
-                <button className="p-2 hover:bg-white/5 hover:text-white">
+                <button className="p-2 hover:bg-muted/30 hover:text-foreground">
                   <Target className="h-3 w-3" />
                 </button>
               </div>
@@ -465,7 +465,7 @@ export function OSPropheticTimeline() {
                   className="flex items-center gap-1.5 text-[8px] font-bold tracking-widest text-primary uppercase"
                 >
                   <span
-                    className="border-panel h-2 w-2 rounded-full border shadow-[0_0_5px_currentColor]"
+                    className="border-panel h-2 w-2 rounded-full border shadow-sm"
                     style={{ backgroundColor: lg.c, color: lg.c }}
                   />
                   {lg.n}
@@ -475,12 +475,12 @@ export function OSPropheticTimeline() {
           </div>
 
           {/* Upcoming Future Events (Col 10-12) */}
-          <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3">
+          <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-3">
             <div className="mb-4 flex items-center justify-between">
               <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                 UPCOMING FUTURE EVENTS
               </div>
-              <div className="cursor-pointer text-[8px] text-primary hover:text-white">
+              <div className="cursor-pointer text-[8px] text-primary hover:text-foreground">
                 View All
               </div>
             </div>
@@ -525,14 +525,14 @@ export function OSPropheticTimeline() {
               ].map((ev, i) => (
                 <div key={i} className="group flex cursor-pointer gap-3">
                   <div
-                    className="bg-space flex h-8 w-8 shrink-0 items-center justify-center rounded-full border"
+                    className="bg-background flex h-8 w-8 shrink-0 items-center justify-center rounded-full border"
                     style={{ borderColor: `${ev.c}50` }}
                   >
                     <ev.icon className="h-4 w-4" style={{ color: ev.c }} />
                   </div>
-                  <div className="flex-1 border-b border-white/5 pb-3">
+                  <div className="flex-1 border-b border-border pb-3">
                     <div className="mb-0.5 flex items-start justify-between">
-                      <div className="text-[10px] font-bold text-white transition-colors group-hover:text-primary">
+                      <div className="text-[10px] font-bold text-foreground transition-colors group-hover:text-primary">
                         {ev.n}
                       </div>
                       <div className="font-mono text-[8px] whitespace-nowrap text-primary">
@@ -547,7 +547,7 @@ export function OSPropheticTimeline() {
               ))}
             </div>
 
-            <button className="mt-2 flex w-full items-center justify-center gap-1 rounded border border-white/10 py-2 text-center text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:bg-white/5 hover:text-white">
+            <button className="mt-2 flex w-full items-center justify-center gap-1 rounded border border-border py-2 text-center text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:bg-muted/30 hover:text-foreground">
               VIEW ALL FUTURE EVENTS <ArrowRight className="h-2.5 w-2.5" />
             </button>
           </div>
@@ -556,7 +556,7 @@ export function OSPropheticTimeline() {
         {/* ═══ LAYER 4: BOTTOM ROW (Filters, Stats, Insights) ═════════════════ */}
         <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-12">
           {/* Timeline Filters (Col 1-3) */}
-          <div className="bg-space flex flex-col justify-between rounded-xl border border-white/10 p-4 lg:col-span-3">
+          <div className="bg-background flex flex-col justify-between rounded-xl border border-border p-4 lg:col-span-3">
             <div>
               <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                 TIMELINE FILTERS
@@ -569,28 +569,28 @@ export function OSPropheticTimeline() {
                     CATEGORY
                   </div>
                   <div className="space-y-1.5 text-[8px] text-primary">
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
-                      <div className="flex h-2.5 w-2.5 items-center justify-center rounded-full border border-primary bg-cyan-950">
-                        <div className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
+                      <div className="flex h-2.5 w-2.5 items-center justify-center rounded-full border border-primary bg-muted">
+                        <div className="h-1.5 w-1.5 rounded-full bg-primary" />
                       </div>{" "}
                       All Categories
                     </label>
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
                       <Users className="h-3 w-3" /> Prophets
                     </label>
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
                       <Globe2 className="h-3 w-3" /> Civilizations
                     </label>
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
                       <Swords className="h-3 w-3" /> Empires
                     </label>
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
                       <Telescope className="h-3 w-3" /> Astronomy
                     </label>
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
                       <AlertCircle className="h-3 w-3" /> Events
                     </label>
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
                       <Clock className="h-3 w-3" /> Future
                     </label>
                   </div>
@@ -602,30 +602,30 @@ export function OSPropheticTimeline() {
                     REGION
                   </div>
                   <div className="space-y-1.5 text-[8px] text-primary">
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
-                      <div className="flex h-2.5 w-2.5 items-center justify-center rounded-full border border-primary bg-cyan-950">
-                        <div className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
+                      <div className="flex h-2.5 w-2.5 items-center justify-center rounded-full border border-primary bg-muted">
+                        <div className="h-1.5 w-1.5 rounded-full bg-primary" />
                       </div>{" "}
                       All Regions
                     </label>
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
-                      <div className="h-2.5 w-2.5 rounded-full border border-white/30" />{" "}
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
+                      <div className="h-2.5 w-2.5 rounded-full border border-border" />{" "}
                       Middle East
                     </label>
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
-                      <div className="h-2.5 w-2.5 rounded-full border border-white/30" />{" "}
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
+                      <div className="h-2.5 w-2.5 rounded-full border border-border" />{" "}
                       Asia
                     </label>
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
-                      <div className="h-2.5 w-2.5 rounded-full border border-white/30" />{" "}
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
+                      <div className="h-2.5 w-2.5 rounded-full border border-border" />{" "}
                       Europe
                     </label>
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
-                      <div className="h-2.5 w-2.5 rounded-full border border-white/30" />{" "}
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
+                      <div className="h-2.5 w-2.5 rounded-full border border-border" />{" "}
                       Africa
                     </label>
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
-                      <div className="h-2.5 w-2.5 rounded-full border border-white/30" />{" "}
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
+                      <div className="h-2.5 w-2.5 rounded-full border border-border" />{" "}
                       Americas
                     </label>
                   </div>
@@ -637,26 +637,26 @@ export function OSPropheticTimeline() {
                     TIME PERIOD
                   </div>
                   <div className="space-y-1.5 text-[8px] text-primary">
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
-                      <div className="flex h-2.5 w-2.5 items-center justify-center rounded-full border border-primary bg-cyan-950">
-                        <div className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
+                      <div className="flex h-2.5 w-2.5 items-center justify-center rounded-full border border-primary bg-muted">
+                        <div className="h-1.5 w-1.5 rounded-full bg-primary" />
                       </div>{" "}
                       All Time
                     </label>
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
-                      <div className="h-2.5 w-2.5 rounded-full border border-white/30" />{" "}
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
+                      <div className="h-2.5 w-2.5 rounded-full border border-border" />{" "}
                       Before Common Era
                     </label>
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
-                      <div className="h-2.5 w-2.5 rounded-full border border-white/30" />{" "}
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
+                      <div className="h-2.5 w-2.5 rounded-full border border-border" />{" "}
                       Common Era
                     </label>
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
-                      <div className="h-2.5 w-2.5 rounded-full border border-white/30" />{" "}
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
+                      <div className="h-2.5 w-2.5 rounded-full border border-border" />{" "}
                       Modern Era
                     </label>
-                    <label className="flex cursor-pointer items-center gap-2 hover:text-white">
-                      <div className="h-2.5 w-2.5 rounded-full border border-white/30" />{" "}
+                    <label className="flex cursor-pointer items-center gap-2 hover:text-foreground">
+                      <div className="h-2.5 w-2.5 rounded-full border border-border" />{" "}
                       Future
                     </label>
                   </div>
@@ -672,7 +672,7 @@ export function OSPropheticTimeline() {
           {/* Key Statistics & Footer Graphic (Col 4-9) */}
           <div className="flex flex-col gap-4 lg:col-span-6">
             {/* Stats */}
-            <div className="bg-space rounded-xl border border-white/10 p-4">
+            <div className="bg-background rounded-xl border border-border p-4">
               <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
                 KEY STATISTICS
               </div>
@@ -724,10 +724,10 @@ export function OSPropheticTimeline() {
                 ].map((st, i) => (
                   <div
                     key={i}
-                    className="bg-space flex flex-col items-center justify-center rounded-lg border border-white/5 p-2 text-center"
+                    className="bg-background flex flex-col items-center justify-center rounded-lg border border-border p-2 text-center"
                   >
                     <st.icon className="mb-2 h-5 w-5" style={{ color: st.c }} />
-                    <div className="mb-1 font-mono text-lg leading-none font-black text-white">
+                    <div className="mb-1 font-mono text-lg leading-none font-black text-foreground">
                       {st.v}
                     </div>
                     <div className="mb-0.5 text-[7px] leading-tight text-primary">
@@ -742,8 +742,8 @@ export function OSPropheticTimeline() {
             </div>
 
             {/* Footer Graphic (Camels in Desert) */}
-            <div className="bg-space relative flex min-h-[120px] flex-1 flex-col items-center justify-center overflow-hidden rounded-xl border border-white/10 text-center">
-              <div className="from-space absolute inset-0 z-10 bg-gradient-to-t via-transparent to-transparent" />
+            <div className="bg-background relative flex min-h-[120px] flex-1 flex-col items-center justify-center overflow-hidden rounded-xl border border-border text-center">
+              <div className="from-background absolute inset-0 z-10 bg-gradient-to-t via-transparent to-transparent" />
               {/* Silhouette abstract simulation */}
               <svg
                 className="absolute bottom-0 z-0 h-20 w-full opacity-30"
@@ -762,12 +762,12 @@ export function OSPropheticTimeline() {
 
               <div className="relative z-20 px-8">
                 <div
-                  className="font-arabic mb-2 text-[16px] font-bold text-white"
+                  className="font-arabic mb-2 text-[16px] font-bold text-foreground"
                   dir="rtl"
                 >
                   إِنَّ فِي ذَٰلِكَ لَعِبْرَةً لِّأُولِي الْأَبْصَارِ
                 </div>
-                <div className="mb-2 font-sans text-[10px] text-white/70 italic">
+                <div className="mb-2 font-sans text-[10px] text-foreground italic">
                   "Indeed in that are signs for those of understanding."
                 </div>
                 <div className="font-mono text-[9px] font-bold text-primary uppercase">
@@ -778,12 +778,12 @@ export function OSPropheticTimeline() {
           </div>
 
           {/* Timeline Insights (Col 10-12) */}
-          <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3">
+          <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-3">
             <div className="mb-4 flex items-center justify-between">
               <div className="text-[9px] font-black tracking-widest text-primary uppercase">
                 TIMELINE INSIGHTS
               </div>
-              <div className="cursor-pointer text-[8px] text-primary hover:text-white">
+              <div className="cursor-pointer text-[8px] text-primary hover:text-foreground">
                 View All
               </div>
             </div>
@@ -817,16 +817,16 @@ export function OSPropheticTimeline() {
               ].map((ins, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-3 border-b border-white/5 pb-3"
+                  className="flex items-start gap-3 border-b border-border pb-3"
                 >
                   <div
-                    className="bg-space flex h-8 w-8 shrink-0 items-center justify-center rounded-full border"
+                    className="bg-background flex h-8 w-8 shrink-0 items-center justify-center rounded-full border"
                     style={{ borderColor: `${ins.c}50` }}
                   >
                     <ins.icon className="h-4 w-4" style={{ color: ins.c }} />
                   </div>
                   <div>
-                    <div className="mb-0.5 text-[10px] font-bold text-white">
+                    <div className="mb-0.5 text-[10px] font-bold text-foreground">
                       {ins.n}
                     </div>
                     <div className="font-sans text-[8px] leading-relaxed text-primary">
@@ -837,22 +837,22 @@ export function OSPropheticTimeline() {
               ))}
             </div>
 
-            <button className="mt-2 flex w-full items-center justify-center gap-1 rounded border border-white/10 py-2 text-center text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:bg-white/5 hover:text-white">
+            <button className="mt-2 flex w-full items-center justify-center gap-1 rounded border border-border py-2 text-center text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:bg-muted/30 hover:text-foreground">
               VIEW ALL INSIGHTS <ArrowRight className="h-2.5 w-2.5" />
             </button>
           </div>
         </div>
 
         {/* ═══ LAYER 5: PLAYBACK BAR (Bottom Scrubber) ════════════════════════ */}
-        <div className="bg-space sticky bottom-0 z-50 flex flex-col items-center gap-6 border-t border-primary/30 p-4 md:flex-row">
+        <div className="bg-background sticky bottom-0 z-50 flex flex-col items-center gap-6 border-t border-primary/30 p-4 md:flex-row">
           {/* Scrubber Line */}
           <div className="relative flex w-full flex-1 items-center pt-2">
             <div className="absolute right-0 left-0 h-1 overflow-hidden rounded-full bg-primary">
-              <div className="h-full w-[65%] bg-gradient-to-r from-cyan-500 via-emerald-500 to-transparent" />
+              <div className="h-full w-[65%] bg-gradient-to-r from-primary/10 via-emerald-500 to-transparent" />
             </div>
 
             {/* The handle */}
-            <div className="absolute left-[65%] h-4 w-4 -translate-x-1/2 cursor-pointer rounded-full border-4 border-emerald-500 bg-white shadow-[0_0_10px_#10B981] transition-transform hover:scale-125" />
+            <div className="absolute left-[65%] h-4 w-4 -translate-x-1/2 cursor-pointer rounded-full border-4 border-emerald-500 bg-card shadow-sm transition-transform hover:scale-125" />
 
             {/* Labels */}
             <div className="absolute top-4 flex w-full justify-between font-mono text-[7px] text-primary">
@@ -864,7 +864,7 @@ export function OSPropheticTimeline() {
               <span>1000 CE</span>
               <span>1500 CE</span>
               <span>2000 CE</span>
-              <span className="font-bold text-emerald-400">Now</span>
+              <span className="font-bold text-success">Now</span>
               <span>2500 CE</span>
               <span>3000 CE</span>
               <span>3500 CE</span>
@@ -875,11 +875,11 @@ export function OSPropheticTimeline() {
           {/* Controls */}
           <div className="flex shrink-0 items-center gap-4">
             <div className="flex items-center gap-2">
-              <button className="rounded p-2 text-primary transition-colors hover:bg-white/10 hover:text-white">
+              <button className="rounded p-2 text-primary transition-colors hover:bg-muted/30 hover:text-foreground">
                 <Rewind className="h-4 w-4" />
               </button>
               <button
-                className="rounded-full border border-primary/50 bg-primary/20 p-3 text-primary shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-colors hover:bg-cyan-900 hover:text-white"
+                className="rounded-full border border-primary/50 bg-primary/20 p-3 text-primary shadow-sm transition-colors hover:bg-muted hover:text-foreground"
                 onClick={() => setIsPlaying(!isPlaying)}
               >
                 {isPlaying ? (
@@ -888,16 +888,16 @@ export function OSPropheticTimeline() {
                   <Play className="ml-0.5 h-4 w-4 fill-current" />
                 )}
               </button>
-              <button className="rounded p-2 text-primary transition-colors hover:bg-white/10 hover:text-white">
+              <button className="rounded p-2 text-primary transition-colors hover:bg-muted/30 hover:text-foreground">
                 <FastForward className="h-4 w-4" />
               </button>
             </div>
 
-            <button className="rounded border border-emerald-500/30 px-4 py-2 text-[9px] font-bold tracking-widest text-emerald-400 uppercase transition-colors hover:bg-emerald-950/40">
+            <button className="rounded border border-success/30 px-4 py-2 text-[9px] font-bold tracking-widest text-success uppercase transition-colors hover:bg-emerald-950/40">
               AUTO PLAY
             </button>
 
-            <button className="rounded p-2 text-primary transition-colors hover:bg-white/10 hover:text-white">
+            <button className="rounded p-2 text-primary transition-colors hover:bg-muted/30 hover:text-foreground">
               <Settings className="h-4 w-4" />
             </button>
           </div>

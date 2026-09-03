@@ -18,7 +18,7 @@ export const views: Record<string, ViewManifest> = {
       title: 'REQUEST TELEMETRY',
       sections: [
         { title: 'Request', columns: 2, fields: ['method', 'path', 'statusCode', 'latencyMs'] },
-        { title: 'Timing', columns: 2, fields: ['timestamp', 'userId'] },
+        { title: 'Timing', columns: 2, fields: ['timestamp'] },
       ],
     },
   },
@@ -28,14 +28,14 @@ export const views: Record<string, ViewManifest> = {
     accentColor: 'purple',
     icon: 'Database',
     table: {
-      columns: ['query', 'durationMs', 'isSlow', 'timestamp'],
+      columns: ['queryHash', 'operation', 'executionMs', 'isSlow', 'timestamp'],
       defaultSort: { field: 'timestamp', direction: 'desc' },
-      searchKeys: ['query'],
+      searchKeys: ['queryHash', 'model'],
     },
     form: {
       title: 'QUERY BENCHMARK',
       sections: [
-        { title: 'Query', columns: 2, fields: ['query', 'durationMs', 'isSlow'] },
+        { title: 'Query', columns: 2, fields: ['queryHash', 'operation', 'executionMs', 'isSlow'] },
         { title: 'Context', columns: 2, fields: ['timestamp', 'model'] },
       ],
     },

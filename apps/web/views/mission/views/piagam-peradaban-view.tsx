@@ -89,7 +89,7 @@ export function PiagamPeradabanView() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Cari berdasarkan kota atau negara (Contoh: Jakarta, Kairo, Tokyo)..."
-            className="bg-panel border-success/30 tag-clip w-full border p-3 text-xs text-foreground placeholder-[#8B9BB0] focus:outline-none"
+            className="bg-card/90 border-border/40 rounded-md w-full border p-3 text-xs text-foreground placeholder:text-muted-foreground focus:border-emerald-500 focus:outline-none"
           />
         </div>
 
@@ -108,10 +108,10 @@ export function PiagamPeradabanView() {
             {filteredEntries.map((item) => (
               <div
                 key={item.id}
-                className="panel-box border-success/30 bg-space tag-clip flex flex-wrap items-center justify-between gap-3 border p-4 text-xs"
+                className="rounded-xl border border-border/40 bg-card/90 border-success/30 bg-background rounded-md flex flex-wrap items-center justify-between gap-3 border p-4 text-xs"
               >
                 <div>
-                  <h3 className="font-display text-sm font-bold text-foreground">
+                  <h3 className="font-sans text-sm font-bold text-foreground">
                     {item.city}, {item.country}
                   </h3>
                   <span className="block text-[9px] text-primary">
@@ -123,7 +123,7 @@ export function PiagamPeradabanView() {
                   <span className="text-[10px] text-primary">
                     TANGGAL: {item.signedDate}
                   </span>
-                  <span className="tag-clip tag-clip-green tag-clip text-[8px] font-bold">
+                  <span className="rounded-md border border-emerald-500/40 bg-success/10 text-success px-2 py-0.5 font-mono text-[8px] font-bold">
                     ● {item.status}
                   </span>
                 </div>

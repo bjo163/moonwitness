@@ -1,4 +1,5 @@
-import { getDb } from './config.js'
+import type { Knex } from 'knex'
+import { getSchemaDb as getDb, withSchemaDb } from './schema-connection.js'
 import type { Vertex } from './base.js'
 import type { FieldDef } from './fields.js'
 
@@ -9,6 +10,8 @@ interface ColumnInfo {
   is_nullable: string
   character_maximum_length: number | null
   vector_dimension: number | null
+  numeric_precision?: number | null
+  numeric_scale?: number | null
 }
 
 export interface PendingChange {
@@ -55,7 +58,17 @@ export interface SchemaSyncResult {
   }
 }
 
-export async function forge(options: { dryRun?: boolean; silent?: boolean } = {}): Promise<SchemaSyncResult> {
+export interface SchemaSyncOptions { dryRun?: boolean; silent?: boolean; db?: Knex }
+
+export async function forge(options: SchemaSyncOptions = {}): Promise<SchemaSyncResult> {
+  // Check before resolving the connection: production startup performs no DB work.
+  if (process.env.NODE_ENV === 'production' && !options.dryRun) {
+    return runForge(options)
+  }
+  return withSchemaDb(options.db ?? getDb(), () => runForge(options))
+}
+
+async function runForge(options: SchemaSyncOptions): Promise<SchemaSyncResult> {
   const { getRegistry } = await import('./registry.js')
   const registry = getRegistry()
   const applied: PendingChange[] = []
@@ -73,21 +86,24 @@ export async function forge(options: { dryRun?: boolean; silent?: boolean } = {}
     m2mTablesCreated: 0,
   }
 
-  // PRODUCTION SAFETY GUARD (bypassable with MOON_AUTO_SYNC=true)
-  if (process.env.NODE_ENV === 'production' && !options.dryRun && process.env.MOON_AUTO_SYNC !== 'true') {
+  // Production DDL is exclusively the explicit committed migration lifecycle.
+  if (process.env.NODE_ENV === 'production' && !options.dryRun) {
     if (!options.silent) {
-      console.warn("⚠️ [DANGER] Schema sync aborted! Auto-sync is disabled in production without MOON_AUTO_SYNC=true.")
+      console.warn('[moon.schema] Production runtime sync disabled; apply reviewed migration files.')
     }
     return { applied, pending: [], migrations, summary }
   }
 
-  // Initialize pgvector extension
-  try {
-    const db = getDb()
-    await db.raw('CREATE EXTENSION IF NOT EXISTS vector')
-  } catch (err: any) {
-    if (!options.silent) {
-      console.warn('[moon.schema] Note: pgvector extension not installed in database:', err.message)
+  const requiresVector = [...registry.values()].some((model) =>
+    !(model as any)._abstract && Object.values(model.getFieldDefs(model)).some((field) => field.type === 'vector'))
+  if (requiresVector) {
+    const extension = { up: 'CREATE EXTENSION IF NOT EXISTS vector', down: '-- Shared vector extension retained intentionally' }
+    if (options.dryRun) {
+      // Planning is read-only; provision extensions explicitly via generated SQL.
+      const result = await getDb().raw("SELECT 1 FROM pg_extension WHERE extname = 'vector'")
+      if ((result?.rows ?? result).length === 0) migrations.push(extension)
+    } else {
+      await getDb().raw(extension.up)
     }
   }
 
@@ -281,6 +297,10 @@ export async function forge(options: { dryRun?: boolean; silent?: boolean } = {}
     }
   }
 
+  if (options.dryRun) {
+    lastPending = applied
+    return { applied: [], pending: lastPending, migrations, summary }
+  }
   return { applied, pending: lastPending, migrations, summary }
 }
 
@@ -293,7 +313,8 @@ async function tableExists(table: string): Promise<boolean> {
   const rows = await db
     .select(db.raw('count(*) as cnt'))
     .from('information_schema.tables')
-    .where({ table_schema: 'public', table_name: table })
+    .where({ table_name: table })
+    .whereRaw('table_schema = current_schema()')
   return Number((rows[0] as { cnt: number | string } | undefined)?.cnt) > 0
 }
 
@@ -304,7 +325,10 @@ async function hasForeignKey(table: string, colName: string, refTable: string): 
     FROM information_schema.key_column_usage kcu
     JOIN information_schema.table_constraints tc
       ON kcu.constraint_name = tc.constraint_name
+      AND kcu.constraint_schema = tc.constraint_schema
+      AND kcu.table_name = tc.table_name
     WHERE tc.constraint_type = 'FOREIGN KEY'
+      AND kcu.table_schema = current_schema()
       AND kcu.table_name = ?
       AND kcu.column_name = ?
   `, [table, colName])
@@ -318,6 +342,7 @@ async function hasIndex(indexName: string): Promise<boolean> {
     .select(db.raw('1'))
     .from('pg_indexes')
     .where({ indexname: indexName })
+    .whereRaw('schemaname = current_schema()')
   return rows.length > 0
 }
 
@@ -344,12 +369,12 @@ async function getColumns(table: string): Promise<ColumnInfo[]> {
   const db = getDb()
   const rows = await db.raw(`
     SELECT c.column_name, c.data_type, c.udt_name, c.is_nullable,
-      c.character_maximum_length,
+      c.character_maximum_length, c.numeric_precision, c.numeric_scale,
       CASE WHEN c.udt_name = 'vector' THEN NULLIF(a.atttypmod - 4, -4) END AS vector_dimension
     FROM information_schema.columns c
     LEFT JOIN pg_catalog.pg_attribute a
-      ON a.attrelid = to_regclass('public.' || ?) AND a.attname = c.column_name AND a.attnum > 0
-    WHERE c.table_schema = 'public' AND c.table_name = ?
+      ON a.attrelid = to_regclass(format('%I.%I', current_schema(), ?::text)) AND a.attname = c.column_name AND a.attnum > 0
+    WHERE c.table_schema = current_schema() AND c.table_name = ?
   `, [table, table])
   const resultRows = (rows as any).rows || rows
   return resultRows as unknown as ColumnInfo[]
@@ -425,16 +450,19 @@ async function alterColumn(
   migrations: MigrationCommand[] = []
 ) {
   const db = getDb()
-  validateAutomaticAlteration(colType, table, colName)
   const sql = `ALTER TABLE ${sqlIdentifier(table)} ALTER COLUMN ${sqlIdentifier(colName)} TYPE ${colType}`
   if (dryRun) {
     migrations.push({ up: sql, down: `-- Manual intervention required to down-migrate column type alteration for ${table}.${colName}` })
   } else {
+    validateAutomaticAlteration(colType, table, colName)
     await db.raw(sql)
   }
 }
 
 export function validateAutomaticAlteration(colType: string, table = 'table', colName = 'column'): void {
+  if (colType.startsWith('numeric(')) {
+    throw new Error(`Decimal conversion for ${table}.${colName} requires an explicit reviewed migration; automatic alteration is refused.`)
+  }
   if (colType.startsWith('vector(')) {
     throw new Error(`Vector dimension change for ${table}.${colName} requires an explicit reviewed migration; automatic alteration is refused.`)
   }
@@ -498,6 +526,12 @@ function mapFieldType(field: FieldDef): string {
       return 'integer'
     case 'float':
       return 'double precision'
+    case 'decimal':
+      if (!Number.isInteger(field.precision) || !Number.isInteger(field.scale) ||
+          field.precision! < 1 || field.precision! > 38 || field.scale! < 0 || field.scale! > field.precision!) {
+        throw new Error('Decimal fields require precision 1..38 and scale 0..precision')
+      }
+      return `numeric(${field.precision},${field.scale})`
     case 'boolean':
       return 'boolean'
     case 'date':
@@ -524,6 +558,10 @@ function needsAlter(
 ): boolean {
   const expected = mapFieldType(field)
   let actual = existing.data_type
+  if (field.type === 'decimal') {
+    return actual !== 'numeric' || Number(existing.numeric_precision) !== field.precision ||
+      Number(existing.numeric_scale) !== field.scale
+  }
   if (actual === 'USER-DEFINED' && existing.udt_name === 'vector') {
     actual = 'vector'
     if (expected.startsWith('vector')) {

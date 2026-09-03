@@ -18,19 +18,19 @@ export function AtmosphericRadarView() {
           setRainTimestamp(data.radar.past[data.radar.past.length - 1].time)
         }
       })
-      .catch((err: any) => console.error("RainViewer API failed:", err))
+      .catch(() => {})
   }, [])
 
   if (!mounted) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#020813] font-mono text-sm tracking-widest text-cyan-400">
+      <div className="flex min-h-screen items-center justify-center bg-card font-mono text-sm tracking-widest text-primary">
         INITIALIZING ATMOSPHERIC RADAR...
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#040814] pb-12 font-sans text-white selection:bg-cyan-500/30">
+    <div className="min-h-screen overflow-x-hidden bg-card pb-12 font-sans text-foreground selection:bg-primary/10">
       <div className="mx-auto max-w-[1800px] space-y-6 px-4 pt-6 lg:px-6">
         {/* 1. Header Hero & Atmospheric Metrics */}
         <RadarHeroStats

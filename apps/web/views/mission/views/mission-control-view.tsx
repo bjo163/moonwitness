@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react"
 import { Target, AlertTriangle, Info, Globe, ShieldAlert } from "lucide-react"
 import { ContextBlock } from "@workspace/ui"
+import { useResource } from "@workspace/hooks"
+import { fetchEarthquakes } from "@moon/client"
 import dynamic from "next/dynamic"
 import "leaflet/dist/leaflet.css"
 
@@ -90,6 +92,33 @@ export function MissionControlView() {
   const [mounted, setMounted] = useState(false)
   const [activeTarget, setActiveTarget] = useState<CrisisMarker | null>(null)
 
+  const { data: quakeData } = useResource(fetchEarthquakes, {
+    storageKey: "mw_mission_quakes",
+  })
+
+  const liveQuakeMarkers: CrisisMarker[] = quakeData?.features
+    ? quakeData.features
+        .filter((f: any) => (f.properties?.mag || 0) >= 4.5)
+        .slice(0, 10)
+        .map((f: any, idx: number) => {
+          const mag = f.properties?.mag || 0
+          const place = f.properties?.place || "Earthquake Epicenter"
+          const lng = f.geometry?.coordinates?.[0] || 0
+          const lat = f.geometry?.coordinates?.[1] || 0
+          return {
+            id: f.id || `eq-${idx + 1}`,
+            lat,
+            lng,
+            title: `SEISMIC ANOMALY M${mag.toFixed(1)} — ${String(place).toUpperCase()}`,
+            severity: mag >= 6.0 ? ("CRITICAL" as const) : mag >= 5.0 ? ("HIGH" as const) : ("MEDIUM" as const),
+            type: "CONFLICT" as const,
+            description: `USGS real-time telemetry detected magnitude ${mag.toFixed(1)} event at depth ${Math.round(f.geometry?.coordinates?.[2] || 10)} km.`,
+          }
+        })
+    : []
+
+  const allTargets = [...MISSION_TARGETS, ...liveQuakeMarkers]
+
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -126,13 +155,13 @@ export function MissionControlView() {
   const getSeverityBg = (severity: string) => {
     switch (severity) {
       case "CRITICAL":
-        return "bg-destructive text-white"
+        return "bg-destructive text-foreground"
       case "HIGH":
-        return "bg-warning text-black"
+        return "bg-warning text-foreground"
       case "MEDIUM":
-        return "bg-accent text-black"
+        return "bg-accent text-foreground"
       default:
-        return "bg-primary text-black"
+        return "bg-primary text-foreground"
     }
   }
 
@@ -140,36 +169,36 @@ export function MissionControlView() {
     <>
       <ContextBlock
         title="GLOBAL MISSION COMMAND"
-        subtitle="Pusat kendali taktis untuk melacak zona krisis kemanusiaan dan konflik global. Digunakan untuk merumuskan strategi bantuan, diplomasi, dan resolusi perdamaian."
-        operation="TACTICAL-MAPPING"
+        subtitle="Pusat monitoring kemanusiaan global untuk melacak zona krisis dan merumuskan strategi bantuan, diplomasi, dan resolusi perdamaian."
+        operation="SATELLITE-MAPPING"
         status="ONLINE"
-        accentColor="danger"
+        accentColor="destructive"
       />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
         {/* Radar Map (3 columns wide) */}
-        <div className="panel-box bg-space flex flex-col border-2 border-primary/50 p-1 shadow-[0_0_50px_rgba(255,51,102,0.15)] lg:col-span-3">
-          <div className="flex items-center justify-between border-b border-primary/20 bg-black p-3">
+        <div className="rounded-xl border border-border/40 bg-card/90 bg-background flex flex-col border-2 border-primary/50 p-1 shadow-sm lg:col-span-3">
+          <div className="flex items-center justify-between border-b border-primary/20 bg-card p-3">
             <div className="flex items-center gap-2 text-xs font-bold text-primary">
               <Target className="h-4 w-4 animate-pulse text-destructive" />
-              SATELLITE TACTICAL LINK
+              SATELLITE TELEMETRY LINK
             </div>
             <div className="bg-destructive/20 px-2 py-1 font-mono text-[10px] font-bold text-destructive uppercase">
-              CLASSIFIED INTELLIGENCE
+              LIVE MONITORING
             </div>
           </div>
 
           <div className="relative z-0 h-[600px] w-full">
             {!mounted ? (
-              <div className="flex h-full w-full animate-pulse items-center justify-center bg-black font-mono text-sm text-primary">
-                INITIALIZING TACTICAL MAP...
+              <div className="flex h-full w-full animate-pulse items-center justify-center bg-card font-mono text-sm text-primary">
+                INITIALIZING SATELLITE MAP...
               </div>
             ) : (
               <Map
                 center={[25, 45]} // Centered on Middle East roughly
                 zoom={3}
                 scrollWheelZoom={true}
-                className="h-full w-full bg-[#0a0f18]"
+                className="h-full w-full bg-card"
                 zoomControl={false}
               >
                 <Tile
@@ -177,7 +206,7 @@ export function MissionControlView() {
                   attribution="&copy; CARTO"
                 />
 
-                {MISSION_TARGETS.map((target) => (
+                {allTargets.map((target) => (
                   <Marker
                     key={target.id}
                     position={[target.lat, target.lng]}
@@ -185,7 +214,7 @@ export function MissionControlView() {
                       click: () => setActiveTarget(target),
                     }}
                   >
-                    <Popup className="rounded-none border border-primary/30 bg-black text-white">
+                    <Popup className="rounded-none border border-primary/30 bg-card text-foreground">
                       <div className="max-w-[200px] p-1">
                         <div
                           className={`mb-2 inline-block px-1 py-0.5 text-[10px] font-bold ${getSeverityBg(target.severity)}`}
@@ -195,7 +224,7 @@ export function MissionControlView() {
                         <h4 className="mb-1 text-xs font-bold">
                           {target.title}
                         </h4>
-                        <p className="text-[10px] text-gray-400">
+                        <p className="text-[10px] text-muted-foreground">
                           {target.type}
                         </p>
                       </div>
@@ -209,7 +238,7 @@ export function MissionControlView() {
 
         {/* Intelligence Sidebar */}
         <div className="space-y-6">
-          <div className="panel-box bg-panel border-2 border-primary/30 p-6 shadow-lg">
+          <div className="rounded-xl border border-border/40 bg-card/90 bg-panel border-2 border-primary/30 p-6 shadow-lg">
             <h3 className="mb-4 flex items-center gap-2 border-b border-primary/20 pb-2 text-xs font-bold tracking-widest text-primary">
               <Globe className="h-4 w-4" />
               TARGET INTELLIGENCE
@@ -223,18 +252,18 @@ export function MissionControlView() {
                   {activeTarget.severity} PRIORITY
                 </div>
 
-                <h4 className="text-lg leading-tight font-black text-white">
+                <h4 className="text-lg leading-tight font-black text-foreground">
                   {activeTarget.title}
                 </h4>
 
                 <div className="grid grid-cols-2 gap-2 text-[10px]">
-                  <div className="border border-primary/20 bg-black/50 p-2">
+                  <div className="border border-primary/20 bg-card p-2">
                     <span className="mb-1 block text-primary/50">LATITUDE</span>
                     <span className="font-mono text-accent">
                       {activeTarget.lat}°
                     </span>
                   </div>
-                  <div className="border border-primary/20 bg-black/50 p-2">
+                  <div className="border border-primary/20 bg-card p-2">
                     <span className="mb-1 block text-primary/50">
                       LONGITUDE
                     </span>
@@ -273,21 +302,21 @@ export function MissionControlView() {
           </div>
 
           {/* Mission Stats */}
-          <div className="panel-box bg-panel border border-primary/30 p-4">
+          <div className="rounded-xl border border-border/40 bg-card/90 bg-panel border border-primary/30 p-4">
             <div className="mb-3 text-[10px] font-bold tracking-widest text-primary/50">
               GLOBAL SUMMARY
             </div>
             <div className="mb-2 flex items-center justify-between text-xs">
-              <span className="text-white">Active Zones</span>
+              <span className="text-foreground">Active Zones</span>
               <span className="font-mono font-bold text-accent">
-                {MISSION_TARGETS.length}
+                {allTargets.length}
               </span>
             </div>
             <div className="mb-2 flex items-center justify-between text-xs">
-              <span className="text-white">Critical Threats</span>
+              <span className="text-foreground">Critical Threats</span>
               <span className="font-mono font-bold text-destructive">
                 {
-                  MISSION_TARGETS.filter((t) => t.severity === "CRITICAL")
+                  allTargets.filter((t) => t.severity === "CRITICAL")
                     .length
                 }
               </span>

@@ -35,19 +35,19 @@ export function ReaderNavSidebar({
 
   return (
     <div className="space-y-6 md:col-span-3 lg:col-span-2">
-      <div className="rounded-xl border border-white/5 bg-[#0A1224] p-4">
-        <h3 className="mb-4 text-[10px] font-black tracking-widest text-white/40 uppercase">
+      <div className="rounded-xl border border-border bg-card p-4">
+        <h3 className="mb-4 text-[10px] font-black tracking-widest text-foreground/40 uppercase">
           {title}
         </h3>
 
         <div className="relative mb-4">
-          <Search className="absolute top-2.5 left-3 h-4 w-4 text-white/30" />
+          <Search className="absolute top-2.5 left-3 h-4 w-4 text-foreground/30" />
           <input
             type="text"
             placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-white/10 bg-black/40 py-2 pr-3 pl-9 text-xs focus:border-blue-500/50 focus:outline-none"
+            className="w-full rounded-lg border border-border bg-card py-2 pr-3 pl-9 text-xs focus:border-blue-500/50 focus:outline-none"
           />
         </div>
 
@@ -62,7 +62,7 @@ export function ReaderNavSidebar({
                 className={`flex w-full items-center justify-between rounded-lg border p-3 text-left transition-colors ${
                   isActive
                     ? "border-blue-500/30 bg-blue-500/10"
-                    : "border-transparent bg-transparent hover:border-white/10 hover:bg-white/5"
+                    : "border-transparent bg-transparent hover:border-border hover:bg-muted/30"
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -70,7 +70,7 @@ export function ReaderNavSidebar({
                     className={`flex h-6 w-6 items-center justify-center rounded-md text-[10px] font-bold ${
                       isActive
                         ? "bg-blue-500/20 text-blue-400"
-                        : "bg-white/5 text-white/40"
+                        : "bg-muted/30 text-foreground/40"
                     }`}
                   >
                     {item.book_number}
@@ -78,13 +78,13 @@ export function ReaderNavSidebar({
                   <div className="flex flex-col">
                     <span
                       className={`text-xs font-bold ${
-                        isActive ? "text-blue-400" : "text-white/80"
+                        isActive ? "text-blue-400" : "text-foreground"
                       }`}
                     >
                       {item.name}
                     </span>
                     {item.subname && (
-                      <span className="text-[9px] text-white/40">
+                      <span className="text-[9px] text-foreground/40">
                         {item.subname}
                       </span>
                     )}

@@ -53,30 +53,25 @@ const nextConfig: NextConfig = {
     "mariadb",
   ],
   webpack: (config) => {
-    config.externals.push(
-      "knex",
-      "@moon/orm",
-      "@moon/server",
-      "@moon/khidra",
-      "oracledb",
-      "mariadb/callback"
-    )
+    config.resolve = config.resolve || {}
+    config.resolve.extensionAlias = {
+      ...config.resolve.extensionAlias,
+      ".js": [".ts", ".tsx", ".js", ".jsx"],
+      ".mjs": [".mts", ".mjs"],
+      ".cjs": [".cts", ".cjs"],
+    }
 
-    config.plugins.push(
-      new webpack.NormalModuleReplacementPlugin(
-        /^(?:\.\/|\.\.\/).*\.js$/,
-        (resource: any) => {
-          const fs = require("fs")
-          const path = require("path")
-          const context = resource.context || path.dirname(resource.resource || "")
-          const tsPath = path.join(context, resource.request.slice(0, -3) + ".ts")
-          if (fs.existsSync(tsPath)) {
-            resource.request = resource.request.replace(/\.js$/, ".ts")
-          }
-        }
+    config.externals = config.externals || []
+    if (Array.isArray(config.externals)) {
+      config.externals.push(
+        "knex",
+        "@moon/orm",
+        "@moon/server",
+        "@moon/khidra",
+        "oracledb",
+        "mariadb/callback"
       )
-    )
-
+    }
     return config
   },
   turbopack: {

@@ -67,8 +67,14 @@ export function CommandPalette({
       }
     }
 
+    const handleOpen = () => setOpen(true)
+
     window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
+    window.addEventListener("moonwitness:command-palette:open", handleOpen)
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+      window.removeEventListener("moonwitness:command-palette:open", handleOpen)
+    }
   }, [isOpen, isControlled, controlledOnClose, handleClose])
 
   if (!isOpen) return null
@@ -159,23 +165,23 @@ export function CommandPalette({
   }
 
   return (
-    <div className="fixed inset-0 z-[99999] flex items-start justify-center bg-black/80 p-4 pt-20 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[99999] flex items-start justify-center bg-card p-4 pt-20 backdrop-blur-md animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-cyan-500/40 bg-[#0A0F17]/95 font-mono shadow-[0_0_50px_rgba(0,240,255,0.25)]"
+        className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-border bg-card/95 font-mono shadow-sm"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Header Bar */}
-        <div className="flex items-center gap-3 border-b border-cyan-500/20 px-4 py-3.5">
-          <Search className="h-5 w-5 text-cyan-400" />
+        <div className="flex items-center gap-3 border-b border-border px-4 py-3.5">
+          <Search className="h-5 w-5 text-primary" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search Ayahs, Hadiths, Observatories, or Commands... (Cmd+K)"
             autoFocus
-            className="flex-1 bg-transparent font-sans text-sm text-white placeholder-zinc-500 outline-none"
+            className="flex-1 bg-transparent font-sans text-sm text-foreground placeholder-zinc-500 outline-none"
           />
-          <kbd className="hidden items-center gap-1 rounded border border-cyan-500/30 bg-cyan-950/40 px-2 py-0.5 text-[10px] text-cyan-400 sm:inline-flex">
+          <kbd className="hidden items-center gap-1 rounded border border-border bg-muted px-2 py-0.5 text-[10px] text-primary sm:inline-flex">
             <Command className="h-3 w-3" /> K
           </kbd>
         </div>
@@ -183,7 +189,7 @@ export function CommandPalette({
         {/* Results List */}
         <div className="max-h-96 overflow-y-auto p-2">
           {filteredItems.length === 0 ? (
-            <div className="p-8 text-center text-xs text-zinc-400">
+            <div className="p-8 text-center text-xs text-muted-foreground">
               No divine coordinates or commands matching &quot;{query}&quot;
             </div>
           ) : (
@@ -192,33 +198,33 @@ export function CommandPalette({
                 <button
                   key={`${item.label}-${index}`}
                   onClick={() => handleSelect(item)}
-                  className="flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-left transition-all hover:bg-cyan-500/10 hover:text-cyan-300 group"
+                  className="flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-left transition-all hover:bg-primary/10 hover:text-primary group"
                 >
                   <div className="flex items-center gap-3">
                     {item.category.includes("Portal") || item.category.includes("HOME") ? (
-                      <Orbit className="h-4 w-4 text-cyan-400" />
+                      <Orbit className="h-4 w-4 text-primary" />
                     ) : item.category.includes("Scripture") ? (
-                      <BookOpen className="h-4 w-4 text-emerald-400" />
+                      <BookOpen className="h-4 w-4 text-success" />
                     ) : item.category.includes("Hadith") ? (
-                      <ScrollText className="h-4 w-4 text-amber-400" />
+                      <ScrollText className="h-4 w-4 text-warning" />
                     ) : item.category.includes("Command Center") ? (
                       <ShieldCheck className="h-4 w-4 text-fuchsia-400" />
                     ) : (
-                      <Sparkles className="h-4 w-4 text-cyan-400" />
+                      <Sparkles className="h-4 w-4 text-primary" />
                     )}
                     <div>
-                      <div className="text-xs font-semibold text-zinc-100 group-hover:text-cyan-300">
+                      <div className="text-xs font-semibold text-foreground group-hover:text-primary">
                         {item.label}
                       </div>
-                      <div className="text-[10px] text-zinc-500 uppercase tracking-wider">
+                      <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
                         {item.category}
                       </div>
                     </div>
                   </div>
                   {item.isExternal ? (
-                    <ExternalLink className="h-3.5 w-3.5 text-zinc-500 group-hover:text-fuchsia-400" />
+                    <ExternalLink className="h-3.5 w-3.5 text-muted-foreground group-hover:text-fuchsia-400" />
                   ) : (
-                    <span className="text-[10px] text-zinc-500 group-hover:text-cyan-400 tracking-widest uppercase">
+                    <span className="text-[10px] text-muted-foreground group-hover:text-primary tracking-widest uppercase">
                       GO ↵
                     </span>
                   )}
@@ -229,13 +235,13 @@ export function CommandPalette({
         </div>
 
         {/* Footer Hints */}
-        <div className="flex items-center justify-between border-t border-white/10 bg-black/40 px-4 py-2 text-[10px] text-zinc-400">
+        <div className="flex items-center justify-between border-t border-border bg-card px-4 py-2 text-[10px] text-muted-foreground">
           <div className="flex items-center gap-2">
-            <span>Navigate <kbd className="rounded border border-white/20 px-1 py-0.5 text-[8px]">↑↓</kbd></span>
-            <span>Select <kbd className="rounded border border-white/20 px-1 py-0.5 text-[8px]">↵</kbd></span>
-            <span>Close <kbd className="rounded border border-white/20 px-1 py-0.5 text-[8px]">ESC</kbd></span>
+            <span>Navigate <kbd className="rounded border border-border px-1 py-0.5 text-[8px]">↑↓</kbd></span>
+            <span>Select <kbd className="rounded border border-border px-1 py-0.5 text-[8px]">↵</kbd></span>
+            <span>Close <kbd className="rounded border border-border px-1 py-0.5 text-[8px]">ESC</kbd></span>
           </div>
-          <div className="text-cyan-400">MOONWITNESS OS TELEMETRY</div>
+          <div className="text-primary">MOONWITNESS OS TELEMETRY</div>
         </div>
       </div>
     </div>

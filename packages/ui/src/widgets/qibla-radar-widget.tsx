@@ -171,7 +171,7 @@ export function QiblaRadarWidget() {
   if (!mounted) return null
 
   return (
-    <div className="panel-box bg-space/90 space-y-4 border border-primary/40 p-4 font-mono shadow-[0_0_20px_rgba(0,240,255,0.15)] sm:p-5">
+    <div className="rounded-xl border border-border/40 bg-card bg-background/90 space-y-4 border border-primary/40 p-4 font-mono shadow-sm sm:p-5">
       <div className="flex items-center justify-between border-b border-primary/20 pb-2.5">
         <div className="flex items-center gap-2">
           {isSyncing ? (
@@ -182,12 +182,18 @@ export function QiblaRadarWidget() {
               style={{ animationDuration: "12s" }}
             />
           )}
-          <span className="font-display text-xs font-black tracking-widest text-primary uppercase">
+          <span className="font-sans text-xs font-black tracking-widest text-primary uppercase">
             // QIBLA VECTOR & TEMPORAL COUNTDOWN
           </span>
         </div>
         <span
-          className={`tag-clip tag-clip px-2 py-0.5 text-[8px] font-bold ${isSyncing ? "tag-clip-yellow animate-pulse" : errorMsg ? "tag-clip-pink" : "tag-clip-green"}`}
+          className={`rounded-md border px-2 py-0.5 font-mono text-[8px] font-bold ${
+            isSyncing
+              ? "border-amber-500/40 bg-amber-500/10 text-amber-500 animate-pulse"
+              : errorMsg
+                ? "border-rose-500/40 bg-rose-500/10 text-rose-500"
+                : "border-emerald-500/40 bg-emerald-500/10 text-emerald-500"
+          }`}
         >
           {isSyncing
             ? "SCANNING..."
@@ -199,7 +205,7 @@ export function QiblaRadarWidget() {
 
       <div className="grid grid-cols-1 items-center gap-4 md:grid-cols-2">
         {/* Left: Radar Visual Scanner */}
-        <div className="bg-panel tag-clip flex items-center gap-4 border border-primary/20 p-3">
+        <div className="bg-panel rounded-md flex items-center gap-4 border border-primary/20 p-3">
           {/* Animated SVG Radar Scope */}
           <div className="relative flex h-20 w-20 shrink-0 items-center justify-center">
             <svg
@@ -282,7 +288,7 @@ export function QiblaRadarWidget() {
                 KAABA ({locationName})
               </span>
             </div>
-            <div className="text-success font-display text-sm font-black tracking-wider">
+            <div className="text-success font-sans text-sm font-black tracking-wider">
               {isSyncing ? "---.--°" : `${radarDegrees.toFixed(2)}° N`}
             </div>
             <p className="text-[9px] text-primary italic">
@@ -292,19 +298,19 @@ export function QiblaRadarWidget() {
         </div>
 
         {/* Right: Next Prayer Countdown */}
-        <div className="bg-panel tag-clip space-y-1.5 border border-primary/20 p-3">
+        <div className="bg-panel rounded-md space-y-1.5 border border-primary/20 p-3">
           <div className="flex items-center justify-between">
             <span className="flex items-center gap-1 text-[9px] font-bold text-primary uppercase">
               <Clock className="h-3 w-3 text-accent" />
               NEXT CYCLE: <span className="text-accent">{nextPrayerName}</span>
             </span>
-            <span className="tag-clip tag-clip-yellow tag-clip px-1.5 py-0 text-[8px]">
+            <span className="rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-500 px-1.5 py-0 font-mono text-[8px]">
               COUNTDOWN
             </span>
           </div>
 
           <div
-            className="font-display bg-space rounded border border-accent/30 py-1 text-center text-xl font-black tracking-widest text-accent sm:text-2xl"
+            className="font-sans bg-background rounded border border-accent/30 py-1 text-center text-xl font-black tracking-widest text-accent sm:text-2xl"
             style={{ textShadow: "0 0 10px rgba(255,230,0,0.3)" }}
           >
             {isSyncing ? "--:--:--" : countdownText}

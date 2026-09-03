@@ -25,11 +25,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("mw_language") as Language
       if (["en", "id", "ar", "fr"].includes(saved)) {
-        setTimeout(() => {
-          setLangState(saved)
-          if (saved === "ar") document.documentElement.dir = "rtl"
-          else document.documentElement.dir = "ltr"
-        }, 0)
+        setLangState(saved)
+        if (saved === "ar") document.documentElement.dir = "rtl"
+        else document.documentElement.dir = "ltr"
       } else {
         localStorage.setItem("mw_language", "en")
       }

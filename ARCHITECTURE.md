@@ -1,92 +1,354 @@
-# ◈ MoonWitness Architecture Specification (V9.0 Enterprise Standard)
+# MoonWitness Architecture Specification (Enterprise Standard)
 
-Status: **Canonical Authority** for platform architecture across all 34 packages.
+Status: **Canonical**. This document defines the application architecture and ownership boundaries for the MoonWitness monorepo.
 
 ---
 
-## 1. Unified Mental Model
+## 1. System Model
 
 ```text
-CLIENT UI (apps/web, apps/command-center)
-   |
-   +---> HOOKS (@workspace/hooks: useResource, useModal)
-   |
-   +---> STATE (@workspace/state: Zustand MoonProvider)
-   |
-   v
-CLIENT SDK (@moon/client)
-   |
-   v
-PROTOCOL CONTRACTS (@moon/protocol: Zod Schemas & Envelopes)
-   |
-   v
-BACKEND TRANSPORT (@moon/server: defineRoute, Auth JWT, SSE)
-   |
-   v
-DOMAIN ENGINES & ORM (@moon/witness, @moon/compute, @moon/orm)
-   |
-   v
-POSTGRESQL 16+ INFRASTRUCTURE (pgvector 0.8+)
+PUBLIC / ADMIN UI
+apps/web + apps/command-center
+          |
+          v
+@moon/client
+          |
+          v
+@moon/protocol
+          |
+          v
+@moon/server
+          |
+          v
+DOMAIN + APPLICATION SERVICES
+@moon/witness + @moon/compute + @moon/orm
+          |
+          v
+PostgreSQL / application infrastructure
 ```
+
+The canonical corpus is maintained separately by:
+
+```text
+bjo163/moonwitness-corpus
+```
+
+The application consumes versioned corpus releases through `@moon/witness` ingestion and represents them in the canonical Witness domain graph.
 
 ---
 
-## 2. Core Architectural Laws
+## 2. Source and Ownership Boundaries
 
-### A. Model-First Principle
-New business capabilities start from a model. Do not begin by creating a repository, service layer, command bus, or database access path unless a concrete need proves it is necessary.
+### `moonwitness-corpus`
+Owns:
 
-Canonical write path:
+- canonical corpus authoring
+- upstream synchronization
+- source metadata
+- corpus schemas
+- canonical JSON/JSONL
+- corpus releases and artifacts
+- corpus-level provenance
+
+The corpus repository does not own the MoonWitness application database.
+
+### `@moon/witness`
+Owns:
+
+- source-aware ingestion
+- normalization and validation
+- application knowledge graph
+- source/artifact/snapshot records
+- passage and textual content models
+- provenance relationships
+- evidence and research-domain integration
+
+### MoonWitness database
+
+The database is the operational persistence and query projection of the application domain. It is not the editorial source of the corpus.
+
+### `apps/web`
+
+Public product presentation and source-aware knowledge browsing.
+
+### `apps/command-center`
+
+Authorized administration, operational monitoring, corpus/import controls, and application management.
+
+---
+
+## 3. Corpus Integration Flow
+
+```text
+moonwitness-corpus
+        |
+        | immutable release / pinned revision
+        v
+Corpus artifact + manifest
+        |
+        v
+@moon/witness ingestion
+        |
+        +--> source / artifact / snapshot
+        +--> provenance
+        +--> text edition
+        +--> passage
+        +--> content
+        +--> tradition / research graph where applicable
+        |
+        v
+MoonWitness API
+        |
+   +----+----+
+   |         |
+   v         v
+ Web   Command Center
+```
+
+The public Web and Command Center never read raw corpus files directly.
+
+---
+
+## 4. Canonical Write Path
+
+New business capabilities should start from an appropriate domain model or existing domain service.
+
+Canonical application write path:
+
 ```text
 HTTP / RPC / Worker
         |
         v
-     Model
+Application Service / Domain Operation
         |
         v
-    Moon ORM
+Canonical Model
         |
         v
-  PostgreSQL transaction
+Moon ORM
+        |
+        v
+Database transaction
 ```
 
-### B. Anti-Monolithic Law (`max-lines: 400`)
-Every file in the monorepo must remain strictly under 400 lines. If a view or component expands, extract dedicated subcomponents into component directories (e.g. `views/knowledge/components/reader/`).
-
-### C. Standard Enterprise Naming Law
-Components and hooks use clean standard enterprise descriptors (`ResourceTable`, `Panel`, `Modal`, `ErrorBoundary`, `useModal`, `useResource`). Legacy `HUD*` prefixes are deprecated and aliased.
+Corpus ingestion follows the same application boundary through `@moon/witness` rather than creating a parallel repository or persistence layer.
 
 ---
 
-## 3. Package Responsibilities
+## 5. Enterprise UI Architecture
 
-### `apps/*`
-- Composes user interfaces and runs Next.js 16 portals (`apps/web:3000`, `apps/command-center:3001`) and API runtime (`apps/api:4000`).
-- Views act as thin orchestrators (< 200 lines) delegating UI rendering to subcomponents.
+`@workspace/ui` is the shared design system for both applications.
 
-### `packages/moon-protocol`
-- Single Source of Truth for Zod schemas, API contracts, response envelopes, and SSE event payload definitions.
+Standards:
 
-### `packages/moon-compute`
-- Zero-dependency, zero-network pure mathematical computation engine (planetary motion, lunar phase, prayer calculations).
+- shadcn/ui primitives
+- Tailwind CSS v4
+- semantic theme tokens
+- Geist for product UI
+- JetBrains Mono for technical values where useful
+- Amiri for Arabic content
+- Light, Dark, and System themes
+- accessible focus states
+- restrained surfaces and standard Tailwind radius/shadow utilities
 
-### `packages/moon-server`
-- Transport runtime: HTTP routing, JWT session validation, SSE real-time broadcasting, declarative `defineRoute()` builder with runtime Zod validation.
-
-### `packages/moon-orm`
-- Canonical data & model runtime: Vertex base model, fields, relations, `Recordset`, `QueryBuilder`, transaction boundaries, and schema synchronization.
-
-### `packages/workspace/error`
-- React crash isolation: `<ErrorBoundary>`, `<ModuleGuard>`, and `CrashReporter` telemetry dispatcher.
-
-### `packages/workspace/hooks`
-- Logic-only universal React hooks: `useResource`, `useModal`, `useComputedCelestial`, `useDebounce`, `useLocalStorage`.
-
-### `packages/workspace/ui`
-- Master Cosmic Design System, 3D Celestial Shaders, `<ResourceTable>`, `<ContextBlock>`, `<Panel>`, `<Button>`, and Web Audio acoustic synthesizers.
+Application UI must not introduce a competing visual language.
 
 ---
 
-## 4. Directory Cleanliness Policy
-- All loose scripts in application directories belong in dedicated `scripts/` folders (`apps/web/scripts/`, `apps/api/scripts/`).
-- Root directory must contain only canonical repository configuration and high-level markdown specifications.
+## 6. Design Token Architecture
+
+The canonical semantic token layer lives in:
+
+```text
+packages/ui/src/styles/globals.css
+packages/ui/src/tokens/theme-tokens.ts
+```
+
+Primary semantic roles include:
+
+```text
+background
+foreground
+card
+card-foreground
+popover
+popover-foreground
+primary
+primary-foreground
+secondary
+secondary-foreground
+muted
+muted-foreground
+accent
+accent-foreground
+destructive
+destructive-foreground
+success
+success-foreground
+warning
+warning-foreground
+info
+info-foreground
+border
+input
+ring
+```
+
+Domain-specific visualization tokens may exist where they have a real domain meaning. They must not become substitutes for the global UI palette.
+
+---
+
+## 7. Theme Rules
+
+The root layouts of both applications must use semantic theme classes:
+
+```text
+bg-background
+text-foreground
+```
+
+Neither application may force a dark theme at the root.
+
+The theme is selected by the existing application state/provider and must support:
+
+```text
+Light
+Dark
+System
+```
+
+---
+
+## 8. Component Naming
+
+Use standard, descriptive names:
+
+```text
+ResourceTable
+DataTable
+Panel
+Modal
+ContextBlock
+BreadcrumbTrail
+ErrorBoundary
+```
+
+Avoid legacy or decorative naming conventions.
+
+---
+
+## 9. Backend Architecture
+
+`apps/api` is the application backend runtime.
+
+`@moon/server` provides transport and route infrastructure.
+
+`@moon/protocol` is the API contract source of truth.
+
+Routes should remain thin and delegate application behavior to services/domain models.
+
+---
+
+## 10. Witness Domain Architecture
+
+The canonical Witness graph includes, where applicable:
+
+```text
+wx.source
+wx.source.manifest
+wx.source.artifact
+wx.source.snapshot
+wx.provenance
+wx.text.edition
+wx.passage
+wx.content
+wx.tradition
+wx.tradition.corpus
+wx.tradition.unit
+wx.tradition.reference
+wx.assertion
+wx.evidence
+```
+
+Do not create duplicate models when an existing canonical model already represents the requirement.
+
+---
+
+## 11. Engine and Research Boundary
+
+Engine and research outputs are derived application data.
+
+```text
+source content
+    !=
+translation
+    !=
+evidence
+    !=
+assertion
+    !=
+research result
+    !=
+AI-generated synthesis
+```
+
+Derived results must remain traceable to the source/evidence and execution context that produced them where the domain supports this.
+
+---
+
+## 12. Search Architecture
+
+Search is a projection over canonical application data.
+
+```text
+Witness graph
+    |
+    v
+search projection
+    |
+    v
+retrieval service
+    |
+    v
+@moon/protocol
+    |
+    v
+Web / Command Center
+```
+
+Search must not become a second source of truth.
+
+---
+
+## 13. Repository Cleanliness
+
+- Keep application scripts in dedicated script locations.
+- Keep domain logic inside domain/service packages.
+- Keep UI rendering inside UI/application layers.
+- Do not commit local caches, credentials, temporary corpus downloads, or generated runtime state.
+
+---
+
+## 14. File Size and Maintainability
+
+Keep source files below the repository's configured file-size limits. When a component or service grows beyond the limit, split it into focused modules.
+
+Views should orchestrate rather than contain large blocks of business or presentation logic.
+
+---
+
+## 15. Operational Principle
+
+Every production behavior should have an identifiable owner:
+
+```text
+source data       -> moonwitness-corpus
+application graph -> @moon/witness
+transport         -> @moon/server
+API contract      -> @moon/protocol
+public UI         -> apps/web
+admin UI          -> apps/command-center
+shared UI         -> @workspace/ui
+```
+
+No parallel implementation should silently compete with these owners.

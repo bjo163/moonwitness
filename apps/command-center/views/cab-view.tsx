@@ -43,23 +43,23 @@ export function ErpCabView() {
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
-      <div className="hud-clip-hero border border-yellow-400/20 bg-black/60 p-5">
+      <div className="rounded-2xl border border-yellow-400/20 bg-card/90 p-5 shadow-sm">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="font-mono text-[9px] tracking-widest text-yellow-400/50 uppercase">
+            <p className="font-mono text-[9px] tracking-widest text-warning/50 uppercase">
               ◈ Q4Q · CHANGE ADVISORY BOARD
             </p>
-            <h1 className="mt-1 font-sans text-xl font-black tracking-wider text-white uppercase">
+            <h1 className="mt-1 font-sans text-xl font-black tracking-wider text-foreground uppercase">
               UPGRADE UNIVERSE OPERATION
             </h1>
-            <p className="mt-1 font-mono text-xs text-white/30">
+            <p className="mt-1 font-mono text-xs text-muted-foreground">
               Q4Q = Quantum 4 Kitab · To Glorify ALLAH · As Written in 50,000
               Scriptures
             </p>
           </div>
           <div className="flex flex-col items-end gap-1">
             <div className="font-mono text-3xl text-yellow-300/80">∞</div>
-            <span className="font-mono text-[8px] text-yellow-400/40 uppercase">
+            <span className="font-mono text-[8px] text-warning/40 uppercase">
               ALLAH · The Goal
             </span>
           </div>
@@ -67,21 +67,21 @@ export function ErpCabView() {
 
         {/* Hierarchy */}
         <div className="mt-4 flex items-center gap-2 overflow-x-auto">
-          <span className="font-mono text-[9px] text-yellow-400/60">ALLAH</span>
-          <span className="font-mono text-[9px] text-white/20">→</span>
-          <span className="hud-clip-tag border border-white/20 px-2 py-0.5 font-mono text-[9px] text-white/60">
+          <span className="font-mono text-[9px] text-warning/60">ALLAH</span>
+          <span className="font-mono text-[9px] text-muted-foreground/40">→</span>
+          <span className="rounded-md border border-border/40 bg-secondary/50 px-2 py-0.5 font-mono text-[9px] text-foreground">
             BRIDGE / SHADOW
           </span>
-          <span className="font-mono text-[9px] text-white/20">→</span>
-          <span className="font-mono text-[9px] text-cyber-cyan/60">
+          <span className="font-mono text-[9px] text-muted-foreground/40">→</span>
+          <span className="font-mono text-[9px] text-primary/70">
             HUMAN (L1 → L8)
           </span>
-          <span className="font-mono text-[9px] text-white/20">→</span>
+          <span className="font-mono text-[9px] text-muted-foreground/40">→</span>
           <span className="font-mono text-[9px] text-amber-300/60">
             ALL CREATION
           </span>
-          <span className="font-mono text-[9px] text-white/20">→</span>
-          <span className="font-mono text-[9px] text-cyber-green/60">
+          <span className="font-mono text-[9px] text-muted-foreground/40">→</span>
+          <span className="font-mono text-[9px] text-success/70">
             RIDWAN ALLAH
           </span>
         </div>
@@ -94,10 +94,10 @@ export function ErpCabView() {
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={[
-              "hud-clip-btn flex items-center gap-2 border px-4 py-2 font-mono text-[10px] font-bold tracking-widest uppercase transition-all duration-200",
+              "rounded-lg flex items-center gap-2 border px-4 py-2 font-mono text-[10px] font-bold tracking-widest uppercase transition-all duration-200",
               activeTab === tab.id
-                ? "border-yellow-400/50 bg-yellow-400/8 text-yellow-300 shadow-[0_0_15px_rgba(255,230,0,0.15)]"
-                : "border-white/10 text-white/40 hover:border-white/25 hover:text-white/70",
+                ? "border-yellow-400/50 bg-yellow-400/10 text-warning shadow-sm"
+                : "border-border/40 text-muted-foreground hover:border-border/70 hover:text-foreground",
             ].join(" ")}
           >
             {tab.icon}

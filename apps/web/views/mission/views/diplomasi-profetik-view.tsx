@@ -81,21 +81,21 @@ export function DiplomasiProfetikView() {
           subtitle="Pelajari cara diplomasi lembut (Soft Diplomacy), teknik negosiasi tingkat tinggi, dan penandatanganan perjanjian damai yang dilakukan oleh Rasulullah SAW (e.g. Piagam Madinah, Perjanjian Hudaibiyyah)."
           operation="PROPHETIC-DIPLOMACY-SIM"
           status="ONLINE"
-          accentColor="knowledge"
+          accentColor="primary"
         />
 
         {/* Scenario Card */}
-        <div className="panel-box bg-space space-y-4 border border-primary/40 p-6 font-mono">
+        <div className="rounded-xl border border-border/40 bg-card/90 bg-background space-y-4 border border-primary/40 p-6 font-mono">
           <div className="flex items-center justify-between border-b border-primary/20 pb-2">
             <span className="text-xs font-bold text-primary">
               {scenario.title}
             </span>
-            <span className="tag-clip tag-clip-purple tag-clip text-[9px]">
+            <span className="rounded-md border border-border bg-muted text-primary px-2 py-0.5 font-mono text-[9px]">
               SKENARIO {selectedScenarioIdx + 1} / {DIPLOMACY_SCENARIOS.length}
             </span>
           </div>
 
-          <p className="bg-panel tag-clip border border-primary/20 p-4 text-xs leading-relaxed text-foreground">
+          <p className="bg-panel rounded-md border border-primary/20 p-4 text-xs leading-relaxed text-foreground">
             &ldquo;{scenario.context}&rdquo;
           </p>
 
@@ -104,12 +104,12 @@ export function DiplomasiProfetikView() {
               <button
                 key={idx}
                 onClick={() => setChosenOption(idx)}
-                className={`tag-clip w-full cursor-pointer space-y-2 border p-4 text-left text-xs transition-all ${
+                className={`rounded-md w-full cursor-pointer space-y-2 border p-4 text-left text-xs transition-all ${
                   chosenOption === idx
                     ? opt.isPropheticChoice
                       ? "border-success bg-success/15 text-success"
                       : "border-danger bg-danger/15 text-danger"
-                    : "bg-space border-primary/30 hover:border-primary"
+                    : "bg-background border-primary/30 hover:border-primary"
                 }`}
               >
                 <div className="flex items-center gap-2 font-bold">
@@ -131,7 +131,7 @@ export function DiplomasiProfetikView() {
                 setSelectedScenarioIdx((prev) => prev + 1)
                 setChosenOption(null)
               }}
-              className="btn-primary mt-2 w-full py-2.5 text-xs font-bold btn-clip"
+              className="btn-primary mt-2 w-full py-2.5 text-xs font-bold "
             >
               <span>SKENARIO DIPLOMASI BERIKUTNYA →</span>
             </button>

@@ -30,42 +30,42 @@ type ProjectsTasksProps = {
 function ActiveProjects({ projects = [] }: { projects?: Project[] }) {
   const projectList = Array.isArray(projects) ? projects : []
   return (
-    <div className="bg-space/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
+    <div className="flex h-full flex-col rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
+        <h3 className="font-sans text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           Active Projects
         </h3>
-        <span className="font-mono text-[10px] text-primary/60">
-          {projectList.length} Active Projects
+        <span className="font-mono text-[10px] text-muted-foreground">
+          {projectList.length} Projects
         </span>
       </div>
 
-      <div className="flex-1 space-y-4">
+      <div className="flex-1 space-y-3">
         {projectList.map((p) => (
           <div
             key={p.id}
-            className="group cursor-pointer rounded-xl border border-cyan-500/10 bg-black/20 p-4 transition-all hover:border-cyan-500/30 hover:bg-black/40"
+            className="group rounded-lg border border-border bg-muted/20 p-3.5 transition-colors hover:bg-accent/40"
           >
-            <div className="mb-3 flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-cyan-500/20 bg-cyan-500/10 text-cyan-400 group-hover:bg-cyan-500/20">
-                <FolderKanban className="h-5 w-5" />
+            <div className="mb-2.5 flex items-center gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-primary shadow-sm">
+                <FolderKanban className="h-4 w-4" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="truncate font-sans text-sm font-medium text-white">
+                <p className="truncate font-sans text-xs font-semibold text-foreground">
                   {p.title}
                 </p>
-                <p className="truncate font-sans text-xs text-primary/60">
+                <p className="truncate font-sans text-[11px] text-muted-foreground">
                   {p.subtitle}
                 </p>
               </div>
-              <span className="font-mono text-xs font-bold text-cyan-400">
+              <span className="font-mono text-xs font-bold text-primary">
                 {p.progress}%
               </span>
             </div>
             {/* Progress Bar */}
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/60">
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
               <div
-                className="h-full bg-cyan-400 transition-all duration-1000 ease-out"
+                className="h-full bg-primary transition-all duration-500 ease-out"
                 style={{ width: `${p.progress}%` }}
               />
             </div>
@@ -73,7 +73,7 @@ function ActiveProjects({ projects = [] }: { projects?: Project[] }) {
         ))}
       </div>
 
-      <button className="mt-4 flex w-full items-center justify-center gap-2 font-mono text-[10px] font-medium text-cyan-400 uppercase hover:text-cyan-300">
+      <button className="mt-4 flex w-full items-center justify-center gap-1.5 font-sans text-xs font-medium text-primary hover:underline">
         View All Projects <ArrowRight className="h-3 w-3" />
       </button>
     </div>
@@ -102,83 +102,93 @@ function TasksOverview({
       ]
 
   return (
-    <div className="bg-space/60 flex h-full flex-col rounded-2xl border border-cyan-500/20 p-5 backdrop-blur-xl">
+    <div className="flex h-full flex-col rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="font-sans text-xs font-bold tracking-wider text-cyan-400 uppercase">
+        <h3 className="font-sans text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           Tasks Overview
         </h3>
-        <span className="font-mono text-[10px] text-primary/60">
-          {stats.total} Tasks
+        <span className="font-mono text-[10px] text-muted-foreground">
+          {stats.total} Total
         </span>
       </div>
 
       <div className="mb-6 flex items-center gap-6">
         {/* Doughnut Chart Mock */}
-        <div className="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-full border-4 border-cyan-400/20 border-t-cyan-400 border-r-cyan-400">
+        <div className="relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-4 border-muted border-t-primary border-r-primary">
           <div className="text-center">
-            <span className="block font-sans text-2xl font-bold text-white">
+            <span className="block font-mono text-xl font-bold text-foreground">
               {stats.total}
             </span>
-            <span className="block font-mono text-[9px] text-primary/60 uppercase">
-              Total Tasks
+            <span className="block font-sans text-[9px] uppercase tracking-wider text-muted-foreground">
+              Tasks
             </span>
           </div>
         </div>
 
         {/* Legends */}
-        <div className="flex-1 space-y-2 font-mono text-xs">
+        <div className="flex-1 space-y-1.5 font-mono text-xs">
           <div className="flex items-center justify-between">
-            <span className="flex items-center gap-2 text-primary/80">
-              <span className="h-2 w-2 rounded-full bg-cyan-400" />
+            <span className="flex items-center gap-2 text-muted-foreground">
+              <span className="h-2 w-2 rounded-full bg-primary" />
               Today
             </span>
-            <span className="text-white">{stats.today}</span>
+            <span className="font-semibold text-foreground">{stats.today}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="flex items-center gap-2 text-primary/80">
-              <span className="h-2 w-2 rounded-full bg-amber-400" />
+            <span className="flex items-center gap-2 text-muted-foreground">
+              <span className="h-2 w-2 rounded-full bg-warning" />
               Tomorrow
             </span>
-            <span className="text-white">{stats.tomorrow}</span>
+            <span className="font-semibold text-foreground">{stats.tomorrow}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="flex items-center gap-2 text-primary/80">
-              <span className="h-2 w-2 rounded-full bg-red-400" />
+            <span className="flex items-center gap-2 text-muted-foreground">
+              <span className="h-2 w-2 rounded-full bg-destructive" />
               Overdue
             </span>
-            <span className="text-white">{stats.overdue}</span>
+            <span className="font-semibold text-destructive">{stats.overdue}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="flex items-center gap-2 text-primary/80">
-              <span className="h-2 w-2 rounded-full bg-emerald-400" />
+            <span className="flex items-center gap-2 text-muted-foreground">
+              <span className="h-2 w-2 rounded-full bg-success" />
               Completed
             </span>
-            <span className="text-white">{stats.completed}</span>
+            <span className="font-semibold text-success">{stats.completed}</span>
           </div>
         </div>
       </div>
 
       {/* Task List */}
-      <div className="flex-1 space-y-2 border-t border-cyan-500/10 pt-4">
+      <div className="flex-1 space-y-1.5 border-t border-border pt-3">
         {list.map((t) => (
           <div
             key={t.id}
-            className="flex items-center justify-between rounded-lg p-2 transition-colors hover:bg-black/20"
+            className="flex items-center justify-between rounded-lg p-2 transition-colors hover:bg-muted/40"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               {t.status === "done" ? (
-                <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
               ) : (
-                <Clock className="h-4 w-4 text-primary/40" />
+                <Clock className="h-4 w-4 text-muted-foreground" />
               )}
               <span
-                className={`font-sans text-sm ${t.status === "done" ? "text-primary/60 line-through" : "text-white"}`}
+                className={`font-sans text-xs ${
+                  t.status === "done"
+                    ? "text-muted-foreground line-through"
+                    : "text-foreground font-medium"
+                }`}
               >
                 {t.title}
               </span>
             </div>
             <span
-              className={`font-mono text-[10px] ${t.due === "Today" ? "text-emerald-400" : t.due === "Tomorrow" ? "text-amber-400" : "text-primary/60"}`}
+              className={`font-mono text-[10px] ${
+                t.due === "Today"
+                  ? "text-success font-semibold"
+                  : t.due === "Tomorrow"
+                    ? "text-warning"
+                    : "text-muted-foreground"
+              }`}
             >
               {t.due}
             </span>
@@ -186,7 +196,7 @@ function TasksOverview({
         ))}
       </div>
 
-      <button className="mt-4 flex w-full items-center justify-center gap-2 border-t border-cyan-500/10 pt-4 font-mono text-[10px] font-medium text-cyan-400 uppercase hover:text-cyan-300">
+      <button className="mt-4 flex w-full items-center justify-center gap-1.5 border-t border-border pt-3 font-sans text-xs font-medium text-primary hover:underline">
         View All Tasks <ArrowRight className="h-3 w-3" />
       </button>
     </div>
@@ -195,7 +205,7 @@ function TasksOverview({
 
 export function ProjectsTasks({ projects, tasks }: ProjectsTasksProps) {
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 font-sans">
       <ActiveProjects projects={projects} />
       <TasksOverview tasks={tasks} />
     </div>
@@ -203,4 +213,3 @@ export function ProjectsTasks({ projects, tasks }: ProjectsTasksProps) {
 }
 
 export { ProjectsTasks as ErpProjectsTasks }
-

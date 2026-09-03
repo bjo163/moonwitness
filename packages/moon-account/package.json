@@ -4,6 +4,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "files": ["dist", "migrations"],
   "scripts": {
     "build": "tsc"
   },
@@ -12,6 +13,7 @@
     "@moon/base": "workspace:*"
   },
   "devDependencies": {
+    "@types/node": "^20.19.41",
     "typescript": "^5.5.4"
   }
 }

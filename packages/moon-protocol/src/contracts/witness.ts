@@ -11,6 +11,25 @@ import { z } from 'zod'
 import type { EndpointDef } from '../envelopes.js'
 
 // ═══════════════════════════════════════════
+// 🏷️ PROVENANCE & CANONICAL SOURCE SCHEMAS
+// ═══════════════════════════════════════════
+
+export const ProvenanceMetadataSchema = z.object({
+  sourceKey: z.string().optional(),
+  sourceName: z.string().optional(),
+  edition: z.string().nullable().optional(),
+  revision: z.string().nullable().optional(),
+  publisher: z.string().nullable().optional(),
+  language: z.string().nullable().optional(),
+  license: z.string().nullable().optional(),
+  retrievedAt: z.string().nullable().optional(),
+  checksum: z.string().nullable().optional(),
+  validationStatus: z
+    .enum(['ingested', 'normalized', 'validated', 'published', 'archived'])
+    .default('published'),
+})
+
+// ═══════════════════════════════════════════
 // 📖 SCRIPTURE & QURAN SCHEMAS
 // ═══════════════════════════════════════════
 
@@ -30,6 +49,7 @@ export const ScriptureSchema = z.object({
   description: z.string().nullable().optional(),
   coverImageUrl: z.string().nullable().optional(),
   themeColor: z.string().nullable().optional(),
+  provenance: ProvenanceMetadataSchema.optional(),
 })
 
 export const SurahSchema = z.object({
@@ -49,6 +69,7 @@ export const AyahSchema = z.object({
   audioUrl: z.string().nullable().optional(),
   juz: z.number().nullable().optional(),
   page: z.number().nullable().optional(),
+  provenance: ProvenanceMetadataSchema.optional(),
 })
 
 export const SurahDetailResponseSchema = z.object({
@@ -77,6 +98,41 @@ export const ScriptureListResponseSchema = z.object({
   scriptures: z.array(ScriptureSchema),
 })
 
+export const SearchResultItemSchema = z.object({
+  id: z.string(),
+  type: z.enum(['SCRIPTURE', 'HADITH', 'LEXICAL', 'RESEARCH', 'ENTITY']),
+  title: z.string(),
+  reference: z.string(),
+  link: z.string(),
+  snippet: z.string(),
+  language: z.string().optional(),
+  script: z.string().optional(),
+  source: z.string().optional(),
+  edition: z.string().optional(),
+  provenanceId: z.number().nullable().optional(),
+})
+
+export const SearchResponseSchema = z.object({
+  query: z.string(),
+  filter: z.string().default('ALL'),
+  total: z.number(),
+  page: z.number().default(1),
+  limit: z.number().default(20),
+  results: z.array(SearchResultItemSchema),
+})
+
+export const ReferenceLookupResponseSchema = z.object({
+  reference: z.string(),
+  resolved: z.boolean(),
+  type: z.string().optional(),
+  passage: z.record(z.unknown()).nullable().optional(),
+  content: z.array(z.record(z.unknown())).optional(),
+  translations: z.array(z.record(z.unknown())).optional(),
+  tradition: z.record(z.unknown()).nullable().optional(),
+  root: z.record(z.unknown()).nullable().optional(),
+  lexeme: z.record(z.unknown()).nullable().optional(),
+})
+
 export const QuranSearchResultSchema = z.object({
   query: z.string(),
   count: z.number(),
@@ -102,6 +158,7 @@ export const HadithItemSchema = z.object({
   textEn: z.string().nullable().optional(),
   grade: z.string().nullable().optional(),
   narratorChain: z.string().nullable().optional(),
+  provenance: ProvenanceMetadataSchema.optional(),
 })
 
 export const HadithListResponseSchema = z.object({
@@ -240,12 +297,18 @@ export const EngineRunResultSchema = z.object({
 // INFERRED TYPES (auto-generated from Zod)
 // ═══════════════════════════════════════════
 
+export const ProvenanceMetadata = ProvenanceMetadataSchema
+export type ProvenanceMetadata = z.infer<typeof ProvenanceMetadataSchema>
+
 export type Scripture = z.infer<typeof ScriptureSchema>
 export type Surah = z.infer<typeof SurahSchema>
 export type Ayah = z.infer<typeof AyahSchema>
 export type SurahDetailResponse = z.infer<typeof SurahDetailResponseSchema>
 export type SurahListResponse = z.infer<typeof SurahListResponseSchema>
 export type ScriptureListResponse = z.infer<typeof ScriptureListResponseSchema>
+export type SearchResultItem = z.infer<typeof SearchResultItemSchema>
+export type SearchResponse = z.infer<typeof SearchResponseSchema>
+export type ReferenceLookupResponse = z.infer<typeof ReferenceLookupResponseSchema>
 export type QuranSearchResult = z.infer<typeof QuranSearchResultSchema>
 
 export type HadithBook = z.infer<typeof HadithBookSchema>

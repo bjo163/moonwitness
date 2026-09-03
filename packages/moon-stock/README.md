@@ -11,7 +11,7 @@
 ```
 
 ## 🌌 Overview
-`@moon/stock` tracks humanitarian aid distributions, physical scripture book compendiums, and tactical equipment inventory across global observation nodes.
+`@moon/stock` tracks humanitarian aid distributions, physical scripture book compendiums, and observation equipment inventory across global observation nodes.
 
 ---
 

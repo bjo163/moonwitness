@@ -13,8 +13,8 @@ export function MaritimeTrafficWidget({
   const tankerCount = ships.filter((s) => s.type === "Tanker").length
 
   return (
-    <div className="bg-space flex h-full flex-col rounded-xl border border-primary/30 p-4 lg:col-span-12 xl:col-span-4">
-      <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-2">
+    <div className="bg-background flex h-full flex-col rounded-xl border border-primary/30 p-4 lg:col-span-12 xl:col-span-4">
+      <div className="mb-4 flex items-center justify-between border-b border-border pb-2">
         <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-primary uppercase">
           <Anchor className="h-4 w-4" />
           MARITIME TRAFFIC
@@ -25,16 +25,16 @@ export function MaritimeTrafficWidget({
       </div>
 
       <div className="mb-4 flex gap-4">
-        <div className="flex-1 rounded border border-white/10 bg-white/5 p-2 text-center">
-          <div className="mb-1 text-[10px] font-bold text-white/50">
+        <div className="flex-1 rounded border border-border bg-muted/30 p-2 text-center">
+          <div className="mb-1 text-[10px] font-bold text-foreground/50">
             TOTAL SHIPS
           </div>
           <div className="font-mono text-xl font-black text-primary">
             {ships.length}
           </div>
         </div>
-        <div className="flex-1 rounded border border-white/10 bg-white/5 p-2 text-center">
-          <div className="mb-1 text-[10px] font-bold text-white/50">
+        <div className="flex-1 rounded border border-border bg-muted/30 p-2 text-center">
+          <div className="mb-1 text-[10px] font-bold text-foreground/50">
             AVG SPEED
           </div>
           <div className="font-mono text-xl font-black text-primary">
@@ -49,7 +49,7 @@ export function MaritimeTrafficWidget({
       </div>
 
       <div className="flex-1 overflow-hidden">
-        <div className="mb-2 grid grid-cols-12 gap-4 border-b border-white/5 pb-2 text-[8px] font-bold tracking-widest text-white/50">
+        <div className="mb-2 grid grid-cols-12 gap-4 border-b border-border pb-2 text-[8px] font-bold tracking-widest text-foreground/50">
           <div className="col-span-3">VESSEL</div>
           <div className="col-span-3">TYPE</div>
           <div className="col-span-3">DESTINATION</div>
@@ -66,9 +66,9 @@ export function MaritimeTrafficWidget({
             ships.map((ship) => (
               <div
                 key={ship.id}
-                className="group grid grid-cols-12 items-center gap-4 rounded border border-transparent px-2 py-2 text-[9px] transition-colors hover:border-white/10 hover:bg-white/5"
+                className="group grid grid-cols-12 items-center gap-4 rounded border border-transparent px-2 py-2 text-[9px] transition-colors hover:border-border hover:bg-muted/30"
               >
-                <div className="col-span-3 flex items-center gap-2 font-bold text-white transition-colors group-hover:text-primary">
+                <div className="col-span-3 flex items-center gap-2 font-bold text-foreground transition-colors group-hover:text-primary">
                   <Navigation
                     className="h-3 w-3 opacity-50"
                     style={{ transform: `rotate(${ship.heading}deg)` }}
@@ -82,13 +82,13 @@ export function MaritimeTrafficWidget({
                         ? "border-blue-500/30 bg-blue-500/10 text-blue-400"
                         : ship.type === "Tanker"
                           ? "border-warning/30 text-warning bg-warning/10"
-                          : "border-white/30 bg-white/10 text-white"
+                          : "border-border bg-muted/30 text-foreground"
                     }`}
                   >
                     {ship.type}
                   </span>
                 </div>
-                <div className="col-span-3 truncate font-mono text-white/70">
+                <div className="col-span-3 truncate font-mono text-foreground">
                   {ship.destination}
                 </div>
                 <div className="col-span-3 text-right font-mono text-primary">

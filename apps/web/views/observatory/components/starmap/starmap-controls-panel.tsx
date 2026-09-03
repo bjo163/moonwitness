@@ -19,19 +19,19 @@ export function StarmapControlsPanel({
   return (
     <div className="space-y-4">
       {/* 1. Star Catalog Filters */}
-      <div className="rounded-xl border border-white/10 bg-[#080E1C] p-5 shadow-xl font-mono text-xs">
-        <div className="mb-3 flex items-center justify-between border-b border-white/5 pb-2">
+      <div className="rounded-xl border border-border bg-card p-5 shadow-xl font-mono text-xs">
+        <div className="mb-3 flex items-center justify-between border-b border-border pb-2">
           <div className="flex items-center gap-2">
             <Telescope className="h-4 w-4 text-indigo-400" />
-            <span className="font-bold text-white uppercase">Star Catalog</span>
+            <span className="font-bold text-foreground uppercase">Star Catalog</span>
           </div>
           <span className="text-[10px] text-indigo-400">HIPPARCOS / GAIA</span>
         </div>
 
         <div className="mb-4 space-y-2">
           <div className="flex justify-between text-[10px]">
-            <span className="text-white/40">Visual Magnitude Limit</span>
-            <span className="text-white">≤ Mag {starMag}</span>
+            <span className="text-foreground/40">Visual Magnitude Limit</span>
+            <span className="text-foreground">≤ Mag {starMag}</span>
           </div>
           <input
             type="range"
@@ -51,7 +51,7 @@ export function StarmapControlsPanel({
               className={`flex w-full items-center justify-between rounded p-2 text-left transition-all ${
                 activeTab === tab
                   ? "border border-indigo-500/40 bg-indigo-500/10 text-indigo-300"
-                  : "border border-transparent bg-white/[0.02] text-white/60 hover:text-white"
+                  : "border border-transparent bg-card/[0.02] text-foreground/60 hover:text-foreground"
               }`}
             >
               <span>{tab}</span>
@@ -62,17 +62,17 @@ export function StarmapControlsPanel({
       </div>
 
       {/* 2. Quranic Celestial Reflection */}
-      <div className="rounded-xl border border-indigo-500/20 bg-gradient-to-b from-[#101B42] to-[#080E1C] p-5 shadow-lg">
+      <div className="rounded-xl border border-indigo-500/20 bg-gradient-to-b from-card -background p-5 shadow-lg">
         <div className="mb-2 flex items-center gap-2 text-indigo-400">
           <BookOpen className="h-4 w-4" />
           <span className="font-mono text-xs font-black uppercase">An-Najm (The Star)</span>
         </div>
 
-        <p className="font-arabic my-2 text-right text-lg text-white/95">
+        <p className="font-arabic my-2 text-right text-lg text-foreground/95">
           وَالنَّجْمِ إِذَا هَوَىٰ
         </p>
 
-        <p className="text-[10px] leading-relaxed text-white/60 italic">
+        <p className="text-[10px] leading-relaxed text-foreground/60 italic">
           &ldquo;By the star when it descends, your companion has not strayed, nor has he erred.&rdquo;
         </p>
 

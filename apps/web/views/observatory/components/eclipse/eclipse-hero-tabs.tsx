@@ -69,12 +69,12 @@ export function EclipseHeroTabs({
           </p>
         </div>
 
-        <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-[#080E1C] p-1 font-mono text-xs">
+        <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-card p-1 font-mono text-xs">
           <button
             onClick={() => onTabChange("SOLAR")}
             className={`flex items-center gap-1.5 rounded-lg px-4 py-2 font-bold uppercase transition-all ${
               activeTab === "SOLAR"
-                ? "border border-amber-500/50 bg-amber-500/20 text-amber-300 shadow-[0_0_10px_rgba(255,230,0,0.2)]"
+                ? "border border-amber-500/50 bg-amber-500/20 text-amber-300 shadow-sm"
                 : "text-white/50 hover:text-white"
             }`}
           >
@@ -85,7 +85,7 @@ export function EclipseHeroTabs({
             onClick={() => onTabChange("LUNAR")}
             className={`flex items-center gap-1.5 rounded-lg px-4 py-2 font-bold uppercase transition-all ${
               activeTab === "LUNAR"
-                ? "border border-red-500/50 bg-red-500/20 text-red-300 shadow-[0_0_10px_rgba(255,0,85,0.2)]"
+                ? "border border-red-500/50 bg-red-500/20 text-red-300 shadow-sm"
                 : "text-white/50 hover:text-white"
             }`}
           >
@@ -96,7 +96,7 @@ export function EclipseHeroTabs({
       </div>
 
       {/* 2. Real-time Countdown Banner */}
-      <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-yellow-500/30 bg-gradient-to-r from-[#141C36] via-[#0A1224] to-[#141C36] p-4 shadow-lg md:flex-row">
+      <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-yellow-500/30 bg-gradient-to-r from-card -background to-background p-4 shadow-lg md:flex-row">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-yellow-500/30 bg-yellow-500/10 text-yellow-400">
             <Radio className="h-5 w-5 animate-pulse" />

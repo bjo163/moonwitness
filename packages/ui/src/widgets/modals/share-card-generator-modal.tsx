@@ -41,7 +41,7 @@ export function ShareCardGeneratorModal({
         <button
           onClick={() => setIsOpen(true)}
           title="Export Infographic Share Card"
-          className="flex h-6 w-6 items-center justify-center rounded bg-white/5 text-[10px] text-blue-400 transition-colors hover:bg-blue-500/20 hover:text-blue-300"
+          className="flex h-6 w-6 items-center justify-center rounded bg-muted/30 text-[10px] text-blue-400 transition-colors hover:bg-blue-500/20 hover:text-blue-300"
         >
           <Share2 className="h-3 w-3" />
         </button>
@@ -63,11 +63,11 @@ export function ShareCardGeneratorModal({
         maxWidth="max-w-lg"
       >
         <div className="space-y-4 p-6">
-          <div className="panel-box bg-space relative space-y-4 overflow-hidden border-2 border-primary/50 p-6 shadow-2xl">
+          <div className="rounded-xl border border-border/40 bg-card bg-background relative space-y-4 overflow-hidden border-2 border-primary/50 p-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-primary/20 pb-3">
               <div className="flex items-center gap-2">
                 <Moon className="h-5 w-5 text-primary" />
-                <span className="font-display text-sm font-black tracking-widest text-foreground">
+                <span className="font-sans text-sm font-black tracking-widest text-foreground">
                   MOON<span className="text-primary">WITNESS</span>
                 </span>
               </div>
@@ -99,7 +99,7 @@ export function ShareCardGeneratorModal({
           <div className="flex items-center gap-3">
             <button
               onClick={handleCopyCardText}
-              className="btn-primary flex w-full items-center justify-center gap-2 py-2.5 text-xs font-bold btn-clip"
+              className="btn-primary flex w-full items-center justify-center gap-2 py-2.5 text-xs font-bold "
             >
               {copied ? (
                 <Check className="text-success h-4 w-4" />
@@ -125,7 +125,7 @@ export function ShareCardGeneratorModal({
                   ctx.strokeRect(20, 20, 760, 460)
 
                   ctx.fillStyle = "#00F0FF"
-                  ctx.font = "bold 16px Orbitron, sans-serif"
+                  ctx.font = "bold 16px Geist, sans-serif"
                   ctx.fillText(
                     `MOONWITNESS TRANSMISSION // Q.S ${surahName} (${surahNumber}:${ayahNumber})`,
                     40,
@@ -156,7 +156,7 @@ export function ShareCardGeneratorModal({
                   link.click()
                 }
               }}
-              className="btn-primary btn-primary-purple flex w-full items-center justify-center gap-2 py-2.5 text-xs font-bold btn-clip"
+              className="btn-primary btn-primary-purple flex w-full items-center justify-center gap-2 py-2.5 text-xs font-bold "
             >
               <Download className="h-4 w-4 text-secondary" />
               <span>[ 📥 DOWNLOAD IMAGE PNG ]</span>

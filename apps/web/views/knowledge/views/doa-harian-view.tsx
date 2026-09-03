@@ -32,15 +32,14 @@ export function DoaHarianView() {
         }
         setIsLoading(false)
       })
-      .catch((err) => {
-        console.error(err)
+      .catch(() => {
         setIsLoading(false)
       })
   }, [])
 
   if (!mounted || isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#020813] font-mono text-sm tracking-widest text-emerald-400">
+      <div className="flex min-h-screen items-center justify-center bg-card font-mono text-sm tracking-widest text-success">
         SYNCHRONIZING DUA & ADHKAR TELEMETRY...
       </div>
     )
@@ -62,7 +61,7 @@ export function DoaHarianView() {
   })
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#040814] pb-12 font-sans text-white selection:bg-emerald-500/30">
+    <div className="min-h-screen overflow-x-hidden bg-card pb-12 font-sans text-foreground selection:bg-emerald-500/30">
       <div className="mx-auto max-w-[1800px] space-y-6 px-4 pt-6 lg:px-6">
         {/* 1. Header Hero & Stats */}
         <DoaHeroStats
@@ -76,7 +75,7 @@ export function DoaHarianView() {
         {/* 2. Dua Cards List Grid */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredData.length === 0 ? (
-            <div className="col-span-full flex h-64 items-center justify-center rounded-xl border border-white/5 bg-[#080E1C] font-mono text-xs text-white/40">
+            <div className="col-span-full flex h-64 items-center justify-center rounded-xl border border-border bg-card font-mono text-xs text-foreground/40">
               No supplications found for &ldquo;{searchQuery}&rdquo; in category &ldquo;{activeTab}&rdquo;.
             </div>
           ) : (

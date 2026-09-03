@@ -111,27 +111,46 @@ export async function logoutSession(): Promise<void> {
 /** Universal React hook backed by the server-owned HttpOnly session. */
 export function useAuthSession() {
   const [session, setSession] = useState<AuthSessionState>(anonymousSession)
+  const [isLoading, setIsLoading] = useState(true)
 
   const syncSession = useCallback(async () => {
-    setSession(await refreshSession())
+    const s = await refreshSession()
+    setSession(s)
   }, [])
 
   useEffect(() => {
-    void syncSession()
+    let isMounted = true
 
-    const onAuthChange = () => { void syncSession() }
-    const onInvalidated = () => setSession(anonymousSession())
+    const doSync = async () => {
+      const s = await refreshSession()
+      if (isMounted) {
+        setSession(s)
+        setIsLoading(false)
+      }
+    }
+
+    void doSync()
+
+    const onAuthChange = () => { void doSync() }
+    const onInvalidated = () => {
+      if (isMounted) {
+        setSession(anonymousSession())
+      }
+    }
+
     window.addEventListener(AUTH_CHANGE_EVENT, onAuthChange)
     window.addEventListener(AUTH_INVALIDATED_EVENT, onInvalidated)
 
     return () => {
+      isMounted = false
       window.removeEventListener(AUTH_CHANGE_EVENT, onAuthChange)
       window.removeEventListener(AUTH_INVALIDATED_EVENT, onInvalidated)
     }
-  }, [syncSession])
+  }, [])
 
   return {
     ...session,
+    isLoading,
     login: loginSession,
     logout: logoutSession,
     refresh: syncSession,

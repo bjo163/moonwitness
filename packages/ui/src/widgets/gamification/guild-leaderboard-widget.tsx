@@ -14,7 +14,7 @@ export function GuildLeaderboardWidget() {
   const sortedGuilds = [...guilds].sort((a, b) => b.xp - a.xp)
 
   return (
-    <div className="bg-space/60 rounded-2xl border border-fuchsia-500/20 p-5 backdrop-blur-xl">
+    <div className="bg-background/60 rounded-2xl border border-fuchsia-500/20 p-5 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="font-sans text-xs font-bold tracking-wider text-fuchsia-400 uppercase">
           Global Guild Rankings
@@ -30,12 +30,12 @@ export function GuildLeaderboardWidget() {
               key={g.id}
               className={`relative flex items-center justify-between overflow-hidden rounded-xl border p-3 transition-all ${
                 isMember
-                  ? "border-fuchsia-500/50 bg-fuchsia-500/10 shadow-[0_0_15px_rgba(217,70,239,0.15)]"
-                  : "border-transparent bg-black/40 hover:bg-black/60"
+                  ? "border-fuchsia-500/50 bg-fuchsia-500/10 shadow-sm"
+                  : "border-transparent bg-card hover:bg-card"
               }`}
             >
               {isMember && (
-                <div className="absolute top-0 bottom-0 left-0 w-1 bg-fuchsia-500 shadow-[0_0_10px_rgba(217,70,239,0.8)]" />
+                <div className="absolute top-0 bottom-0 left-0 w-1 bg-fuchsia-500 shadow-sm" />
               )}
               <div className="flex items-center gap-3">
                 <span className="font-mono text-xs font-bold text-fuchsia-400/50">
@@ -44,7 +44,7 @@ export function GuildLeaderboardWidget() {
                 <span className="text-lg">{g.icon}</span>
                 <div>
                   <div
-                    className={`font-sans text-xs font-bold tracking-wider uppercase ${isMember ? "text-fuchsia-300" : "text-white"}`}
+                    className={`font-sans text-xs font-bold tracking-wider uppercase ${isMember ? "text-fuchsia-300" : "text-foreground"}`}
                   >
                     {g.name}
                   </div>
@@ -61,7 +61,7 @@ export function GuildLeaderboardWidget() {
                 {isMember ? (
                   <button
                     onClick={leaveGuild}
-                    className="text-[8px] font-bold tracking-widest text-slate-500 uppercase hover:text-white"
+                    className="text-[8px] font-bold tracking-widest text-muted-foreground uppercase hover:text-foreground"
                   >
                     [ LEAVE ]
                   </button>

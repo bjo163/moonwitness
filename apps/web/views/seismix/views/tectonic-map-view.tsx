@@ -15,7 +15,7 @@ import {
 } from "lucide-react"
 import { ContextBlock } from "@workspace/ui"
 import { Panel, PanelHeader } from "@workspace/ui"
-import { HUDTabs } from "@workspace/ui"
+import { SimpleTabs } from "@workspace/ui"
 import { SeismicTectonicRadar } from "@workspace/ui"
 
 // ── PLATE DATA ───────────────────────────────────────────
@@ -175,7 +175,7 @@ function PlateCard({
   return (
     <button
       onClick={onSelect}
-      className="panel-box bg-space/80 w-full border p-4 text-left transition-all duration-300 hover:-translate-y-0.5"
+      className="rounded-xl border border-border/40 bg-card/90 bg-background/80 w-full border p-4 text-left transition-all duration-300 hover:-translate-y-0.5"
       style={{
         borderColor: isSelected ? `${plate.color}50` : "rgba(0,240,255,0.1)",
         boxShadow: isSelected ? `0 0 20px ${plate.color}20` : "none",
@@ -196,7 +196,7 @@ function PlateCard({
           </span>
         </div>
         <span
-          className="tag-clip border px-1.5 py-0.5 font-mono text-[7px] font-bold tracking-widest uppercase"
+          className="rounded-md border px-1.5 py-0.5 font-mono text-[7px] font-bold tracking-widest uppercase"
           style={{
             color: riskColor,
             borderColor: `${riskColor}40`,
@@ -258,7 +258,7 @@ function PlateDetail({ plate }: { plate: TectonicPlate }) {
         ].map((item) => (
           <div
             key={item.label}
-            className="panel-box border border-primary/10 p-3"
+            className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-3"
           >
             <span className="mb-1 block font-mono text-[8px] font-bold tracking-widest text-primary">
               {item.label}
@@ -304,7 +304,7 @@ function PlateDetail({ plate }: { plate: TectonicPlate }) {
           {plate.neighbors.map((n) => (
             <span
               key={n}
-              className="tag-clip border border-primary/20 bg-primary/5 px-2 py-1 font-mono text-[8px] font-bold tracking-widest text-foreground uppercase"
+              className="rounded-md border border-primary/20 bg-primary/5 px-2 py-1 font-mono text-[8px] font-bold tracking-widest text-foreground uppercase"
             >
               {n}
             </span>
@@ -338,7 +338,7 @@ export function TectonicMapView() {
         accentColor="accent"
       />
 
-      <HUDTabs
+      <SimpleTabs
         tabs={viewTabs}
         activeTab={viewMode}
         onChange={setViewMode}
@@ -374,12 +374,12 @@ export function TectonicMapView() {
       {currentPlate && <PlateDetail plate={currentPlate} />}
 
       {/* Boundary types legend */}
-      <Panel level="level3" accentColor="system">
+      <Panel level="level3" accentColor="primary">
         <PanelHeader
           title="PLATE BOUNDARY TYPES"
           icon={Compass}
           status="REFERENCE"
-          accentColor="system"
+          accentColor="primary"
         />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -388,7 +388,7 @@ export function TectonicMapView() {
             return (
               <div
                 key={key}
-                className="panel-box border p-4 transition-all hover:-translate-y-0.5"
+                className="rounded-xl border border-border/40 bg-card/90 border p-4 transition-all hover:-translate-y-0.5"
                 style={{
                   borderColor: `${info.color}25`,
                 }}

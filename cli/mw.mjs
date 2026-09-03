@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * ◈ MOONWITNESS OS V9.5 — TACTICAL HEADLESS CLI MANAGEMENT SUITE
+ * ◈ MOONWITNESS OS V9.5 — HEADLESS CLI MANAGEMENT SUITE
  */
 
 import http from 'node:http'
@@ -69,7 +69,7 @@ const args = process.argv.slice(2)
 const command = args[0] || 'help'
 
 console.log('\n╔══════════════════════════════════════════════════════════════════╗')
-console.log('║  ◈ MOONWITNESS OS V9.5 — TACTICAL HEADLESS CLI SUITE             ║')
+console.log('║  ◈ MOONWITNESS OS V9.5 — HEADLESS CLI MANAGEMENT SUITE           ║')
 console.log('╚══════════════════════════════════════════════════════════════════╝\n')
 
 switch (command) {
@@ -80,7 +80,7 @@ switch (command) {
     runProdCheck()
     break
   case 'totp':
-    runTotp(args[1] || 'operator@moonwitness.os')
+    runTotp(args[1] || 'admin@moonwitness.os')
     break
   case 'ports':
     printPorts()
@@ -98,7 +98,7 @@ function printHelp() {
   console.log('  prod-check     Run production pre-flight inspection (Docker, Nginx, PM2, Env)')
   console.log('  totp [email]   Generate a new RFC 6238 2FA/TOTP key and current 6-digit code')
   console.log('  ports          Display canonical port allocation matrix')
-  console.log('  help           Display this tactical command menu\n')
+  console.log('  help           Display this command menu\n')
 }
 
 function printPorts() {

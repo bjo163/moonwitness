@@ -6,14 +6,14 @@ export const views: Record<string, ViewManifest> = {
     accentColor: 'cyan',
     icon: 'BookOpen',
     table: {
-      columns: ['name', 'code', 'language', 'totalBooks', 'totalVerses'],
-      searchKeys: ['name', 'code'],
+      columns: ['name', 'canonicalCode', 'booksCount', 'versesCount'],
+      searchKeys: ['name', 'canonicalCode'],
     },
     form: {
       title: 'DIVINE SCRIPTURE',
       sections: [
-        { title: 'Scripture', columns: 2, fields: ['name', 'code', 'language'] },
-        { title: 'Statistics', columns: 2, fields: ['totalBooks', 'totalVerses'] },
+        { title: 'Scripture', columns: 2, fields: ['name', 'canonicalCode', 'sourceClass', 'type'] },
+        { title: 'Statistics', columns: 2, fields: ['booksCount', 'versesCount'] },
         { title: 'Description', columns: 1, fields: ['description'] },
       ],
     },
@@ -24,14 +24,14 @@ export const views: Record<string, ViewManifest> = {
     accentColor: 'cyan',
     icon: 'ScrollText',
     table: {
-      columns: ['name', 'compiler', 'totalHadiths', 'era'],
-      searchKeys: ['name', 'compiler'],
+      columns: ['name', 'author', 'totalItems', 'category'],
+      searchKeys: ['name', 'author'],
     },
     form: {
       title: 'HADITH COMPENDIUM',
       sections: [
-        { title: 'Compendium', columns: 2, fields: ['name', 'compiler', 'era'] },
-        { title: 'Statistics', columns: 2, fields: ['totalHadiths', 'totalChapters'] },
+        { title: 'Compendium', columns: 2, fields: ['name', 'slug', 'author', 'category'] },
+        { title: 'Statistics', columns: 2, fields: ['totalItems'] },
         { title: 'Description', columns: 1, fields: ['description'] },
       ],
     },
@@ -42,14 +42,14 @@ export const views: Record<string, ViewManifest> = {
     accentColor: 'cyan',
     icon: 'Sparkles',
     table: {
-      columns: ['number', 'name', 'arabic', 'transliteration', 'meaning'],
-      searchKeys: ['name', 'transliteration', 'meaning'],
+      columns: ['number', 'nameArabic', 'nameLatin', 'translationId', 'meaning'],
+      searchKeys: ['nameArabic', 'nameLatin', 'translationId', 'meaning'],
     },
     form: {
       title: 'ASMAUL HUSNA',
       sections: [
-        { title: 'Divine Name', columns: 2, fields: ['number', 'name', 'arabic', 'transliteration'] },
-        { title: 'Meaning', columns: 1, fields: ['meaning', 'description'] },
+        { title: 'Divine Name', columns: 2, fields: ['number', 'nameArabic', 'nameLatin'] },
+        { title: 'Meaning', columns: 1, fields: ['translationId', 'translationEn', 'meaning', 'quranReference'] },
       ],
     },
   },

@@ -3,9 +3,9 @@
 export function WordByWordModal(props: any) {
   if (!props.isOpen) return null
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-      <div className="relative w-full max-w-2xl rounded-2xl border border-blue-500/20 bg-black/90 p-8 shadow-2xl">
-        <h2 className="mb-4 text-xl font-bold text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-card p-4">
+      <div className="relative w-full max-w-2xl rounded-2xl border border-blue-500/20 bg-card/90 p-8 shadow-2xl">
+        <h2 className="mb-4 text-xl font-bold text-foreground">
           Word by Word Analysis
         </h2>
         <p className="mb-6 text-blue-200/70">

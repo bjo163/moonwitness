@@ -1,10 +1,10 @@
 import { z } from 'zod'
 
-/** Available view modes in the Cosmic Matrix Engine */
+/** Available view modes in the Matrix Engine */
 export type MatrixViewMode = 'table' | 'kanban' | 'metrics'
 
-/** Accent color tokens aligned with the Deep Space Sci-Fi Divine OS palette */
-export type MatrixAccentColor = 'cyan' | 'green' | 'yellow' | 'purple' | 'pink'
+/** Semantic accent color variants */
+export type MatrixAccentColor = 'primary' | 'secondary' | 'success' | 'warning' | 'info'
 
 /** Table view configuration */
 export interface MatrixTableConfig {
@@ -28,7 +28,7 @@ export interface MatrixKanbanConfig {
 export interface MatrixFormAction {
   label: string
   action: string
-  variant?: 'primary' | 'warning' | 'danger'
+  variant?: 'primary' | 'warning' | 'destructive'
   confirm?: string
 }
 

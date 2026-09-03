@@ -19,7 +19,7 @@ import {
 } from "lucide-react"
 import { ContextBlock } from "@workspace/ui"
 import { Panel, PanelHeader } from "@workspace/ui"
-import { HUDTabs } from "@workspace/ui"
+import { SimpleTabs } from "@workspace/ui"
 
 // ── ARCHIVE DATA ─────────────────────────────────────────
 type HistoricQuake = {
@@ -154,12 +154,12 @@ const HISTORIC_QUAKES: HistoricQuake[] = [
 // ── MAGNITUDE COLOR SYSTEM ───────────────────────────────
 function getMagnitudeStyle(mag: number) {
   if (mag >= 9.0)
-    return { color: "#FF0055", glow: "rgba(255,0,85,0.3)", label: "MEGA" }
+    return { color: "#FF0055", highlight: "rgba(255,0,85,0.3)", label: "MEGA" }
   if (mag >= 8.0)
-    return { color: "#FF3355", glow: "rgba(255,51,85,0.25)", label: "GREAT" }
+    return { color: "#FF3355", highlight: "rgba(255,51,85,0.25)", label: "GREAT" }
   if (mag >= 7.0)
-    return { color: "#FF9900", glow: "rgba(255,153,0,0.2)", label: "MAJOR" }
-  return { color: "#FFE600", glow: "rgba(255,230,0,0.2)", label: "STRONG" }
+    return { color: "#FF9900", highlight: "rgba(255,153,0,0.2)", label: "MAJOR" }
+  return { color: "#FFE600", highlight: "rgba(255,230,0,0.2)", label: "STRONG" }
 }
 
 const TYPE_COLORS = {
@@ -177,7 +177,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
 
   return (
     <div
-      className="panel-box bg-space/80 border transition-all duration-300"
+      className="rounded-xl border border-border/40 bg-card/90 bg-background/80 border transition-all duration-300"
       style={{
         borderColor: `${magStyle.color}20`,
       }}
@@ -191,19 +191,19 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
           <div className="mb-1 flex flex-wrap items-center gap-2">
             {/* Magnitude badge */}
             <span
-              className="tag-clip flex items-center gap-1 border px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest"
+              className="rounded-md flex items-center gap-1 border px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest"
               style={{
                 color: magStyle.color,
                 borderColor: `${magStyle.color}50`,
                 background: `${magStyle.color}12`,
-                boxShadow: `0 0 10px ${magStyle.glow}`,
+                boxShadow: `0 0 10px ${magStyle.color}`,
               }}
             >
               M {quake.magnitude.toFixed(1)}
             </span>
             {/* Type badge */}
             <span
-              className="tag-clip border px-1.5 py-0.5 font-mono text-[7px] font-bold tracking-widest uppercase"
+              className="rounded-md border px-1.5 py-0.5 font-mono text-[7px] font-bold tracking-widest uppercase"
               style={{
                 color: typeColor,
                 borderColor: `${typeColor}30`,
@@ -213,7 +213,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
               {quake.type.replace("-", " ")}
             </span>
             {quake.tsunamiGenerated && (
-              <span className="tag-clip border border-cyan-500/30 bg-cyan-500/8 px-1.5 py-0.5 font-mono text-[7px] font-bold tracking-widest text-cyan-400">
+              <span className="rounded-md border border-border bg-primary/10 px-1.5 py-0.5 font-mono text-[7px] font-bold tracking-widest text-primary">
                 TSUNAMI
               </span>
             )}
@@ -257,7 +257,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
           </p>
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div className="panel-box border border-primary/10 p-2">
+            <div className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-2">
               <span className="block font-mono text-[7px] font-bold tracking-widest text-primary">
                 CASUALTIES
               </span>
@@ -265,7 +265,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
                 {quake.casualties}
               </span>
             </div>
-            <div className="panel-box border border-primary/10 p-2">
+            <div className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-2">
               <span className="block font-mono text-[7px] font-bold tracking-widest text-primary">
                 MAGNITUDE
               </span>
@@ -276,7 +276,7 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
                 {quake.magnitude} {magStyle.label}
               </span>
             </div>
-            <div className="panel-box border border-primary/10 p-2">
+            <div className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-2">
               <span className="block font-mono text-[7px] font-bold tracking-widest text-primary">
                 COORDINATES
               </span>
@@ -285,13 +285,13 @@ function QuakeDetailCard({ quake }: { quake: HistoricQuake }) {
                 {quake.coordinates.lng.toFixed(1)}°
               </span>
             </div>
-            <div className="panel-box border border-primary/10 p-2">
+            <div className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-2">
               <span className="block font-mono text-[7px] font-bold tracking-widest text-primary">
                 TSUNAMI
               </span>
               <span
                 className={`font-mono text-xs font-bold ${
-                  quake.tsunamiGenerated ? "text-cyan-400" : "text-primary"
+                  quake.tsunamiGenerated ? "text-primary" : "text-primary"
                 }`}
               >
                 {quake.tsunamiGenerated ? "YES" : "NO"}
@@ -311,12 +311,12 @@ function MagnitudeTimeline({ quakes }: { quakes: HistoricQuake[] }) {
   )
 
   return (
-    <Panel level="level3" accentColor="system">
+    <Panel level="level3" accentColor="primary">
       <PanelHeader
         title="MAGNITUDE TIMELINE"
         icon={TrendingUp}
         status="HISTORICAL"
-        accentColor="system"
+        accentColor="primary"
       />
 
       <div className="space-y-2">
@@ -329,13 +329,13 @@ function MagnitudeTimeline({ quakes }: { quakes: HistoricQuake[] }) {
               <span className="w-16 shrink-0 font-mono text-[8px] text-primary">
                 {q.date.slice(0, 4)}
               </span>
-              <div className="relative h-3 flex-1 bg-white/3">
+              <div className="relative h-3 flex-1 bg-card/3">
                 <div
                   className="absolute inset-y-0 left-0 transition-all duration-500"
                   style={{
                     width: `${barWidth}%`,
                     background: `linear-gradient(90deg, ${magStyle.color}40, ${magStyle.color})`,
-                    boxShadow: `0 0 8px ${magStyle.glow}`,
+                    boxShadow: `0 0 8px ${magStyle.color}`,
                   }}
                 />
               </div>
@@ -426,7 +426,7 @@ export function QuakeArchiveView() {
             onClick={() =>
               setSortBy(sortBy === "magnitude" ? "date" : "magnitude")
             }
-            className="flex items-center gap-2 border border-primary/20 px-3 py-2 font-mono text-[9px] font-bold tracking-widest text-primary transition-all btn-clip hover:border-primary/40"
+            className="flex items-center gap-2 border border-primary/20 px-3 py-2 font-mono text-[9px] font-bold tracking-widest text-primary transition-all  hover:border-primary/40"
           >
             <ArrowUpDown className="h-3.5 w-3.5" />
             SORT: {sortBy === "magnitude" ? "MAGNITUDE" : "DATE"}
@@ -435,7 +435,7 @@ export function QuakeArchiveView() {
       </Panel>
 
       {/* Type filter tabs */}
-      <HUDTabs
+      <SimpleTabs
         tabs={tabs}
         activeTab={filterType}
         onChange={setFilterType}
@@ -444,7 +444,7 @@ export function QuakeArchiveView() {
 
       {/* Stats row */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <div className="panel-box border border-primary/10 p-3 text-center">
+        <div className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-3 text-center">
           <span className="block font-mono text-[8px] font-bold tracking-widest text-primary">
             TOTAL RECORDS
           </span>
@@ -452,7 +452,7 @@ export function QuakeArchiveView() {
             {filteredQuakes.length}
           </span>
         </div>
-        <div className="panel-box border border-primary/10 p-3 text-center">
+        <div className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-3 text-center">
           <span className="block font-mono text-[8px] font-bold tracking-widest text-primary">
             MAX MAGNITUDE
           </span>
@@ -462,7 +462,7 @@ export function QuakeArchiveView() {
               : "—"}
           </span>
         </div>
-        <div className="panel-box border border-primary/10 p-3 text-center">
+        <div className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-3 text-center">
           <span className="block font-mono text-[8px] font-bold tracking-widest text-primary">
             TSUNAMI EVENTS
           </span>
@@ -470,7 +470,7 @@ export function QuakeArchiveView() {
             {filteredQuakes.filter((q) => q.tsunamiGenerated).length}
           </span>
         </div>
-        <div className="panel-box border border-primary/10 p-3 text-center">
+        <div className="rounded-xl border border-border/40 bg-card/90 border border-primary/10 p-3 text-center">
           <span className="block font-mono text-[8px] font-bold tracking-widest text-primary">
             DATE RANGE
           </span>

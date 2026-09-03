@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   certify-postgres:
-    name: Production PostgreSQL 16 Certification
+    name: Production PostgreSQL 18 Certification
     runs-on: self-hosted
     timeout-minutes: 45
     env:
@@ -54,7 +54,7 @@ jobs:
             exit 1
           }
 
-      - name: Start isolated PostgreSQL 16
+      - name: Start isolated PostgreSQL 18
         shell: bash
         run: |
           set -euo pipefail
@@ -67,7 +67,7 @@ jobs:
             -e POSTGRES_USER=postgres \
             -e POSTGRES_PASSWORD=postgres \
             -e POSTGRES_DB="$CERT_DB" \
-            postgres:16-alpine
+            postgres:18-alpine
 
           for attempt in $(seq 1 60); do
             if docker exec "$CERT_PG_CONTAINER" pg_isready -U postgres -d "$CERT_DB" >/dev/null 2>&1; then

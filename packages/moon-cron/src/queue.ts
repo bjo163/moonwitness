@@ -21,7 +21,7 @@ export interface Job<T = any> {
 
 export type JobProcessor<T = any, R = any> = (job: Job<T>) => Promise<R>
 
-export class CosmicQueue<T = any> {
+export class TaskQueue<T = any> {
   public readonly queueName: string
 
   constructor(queueName = 'default') {
@@ -88,7 +88,7 @@ export class CosmicQueue<T = any> {
   }
 }
 
-export class CosmicWorker<T = any, R = any> {
+export class TaskWorker<T = any, R = any> {
   public readonly queueName: string
   private processor: JobProcessor<T, R>
   private concurrency: number
@@ -111,7 +111,7 @@ export class CosmicWorker<T = any, R = any> {
   start(): void {
     if (this.timer) return
     this.timer = setInterval(() => {
-      this.tick().catch((e) => console.error(`[CosmicWorker:${this.queueName}] Loop error:`, e))
+      this.tick().catch((e) => console.error(`[TaskWorker:${this.queueName}] Loop error:`, e))
     }, this.pollIntervalMs)
   }
 
@@ -149,7 +149,7 @@ export class CosmicWorker<T = any, R = any> {
         })
       }
     } catch (err) {
-      console.error(`[CosmicWorker:${this.queueName}] Tick error:`, err)
+      console.error(`[TaskWorker:${this.queueName}] Tick error:`, err)
     } finally {
       this.isProcessing = false
     }

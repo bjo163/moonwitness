@@ -16,7 +16,7 @@ export function PageLayout({
 }: PageLayoutProps) {
   return (
     <div
-      className="theme-grid-bg min-h-screen pb-10 font-mono text-foreground"
+      className="min-h-screen bg-background pb-10 font-sans text-foreground"
       suppressHydrationWarning
     >
       {/* Spacer for fixed Navbar (h-16 = 64px) */}

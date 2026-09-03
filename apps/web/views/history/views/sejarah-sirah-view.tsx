@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { MapPin } from "lucide-react"
 import { ContextBlock } from "@workspace/ui"
+import { useModelRecords } from "@workspace/hooks"
 
 type SirahEvent = {
   yearStr: string
@@ -14,7 +15,7 @@ type SirahEvent = {
   category: string
 }
 
-const SIRAH_EVENTS: SirahEvent[] = [
+const DEFAULT_SIRAH_EVENTS: SirahEvent[] = [
   {
     yearStr: "610 M (1 Sebelum Hijriyah)",
     title: "Turunnya Wahyu Pertama di Gua Hira",
@@ -58,18 +59,32 @@ const SIRAH_EVENTS: SirahEvent[] = [
   {
     yearStr: "630 M (20 Ramadan 8 H)",
     title: "Fathu Makkah (Pembebasan Kota Makkah)",
-    location: "Makkah Al-Mukarramah",
+    location: "Kota Makkah Al-Mukarramah",
     geoCoordinates: "21.4225° N, 39.8262° E",
     description:
-      "Pembebasan Makkah damai tanpa pertumpahan darah, penghancuran 360 berhala di sekeliling Ka'bah, dan pengampunan umum.",
-    scriptureRef: "Q.S An-Nasr (110:1-3) & Al-Fath (48:1)",
-    category: "KEMENANGAN",
+      "Pembebasan damai kota suci Makkah dan pembersihan Ka'bah dari 360 berhala tanpa pertumpahan darah besar.",
+    scriptureRef: "Q.S An-Nasr (110:1-3)",
+    category: "PEMBEBASAN",
   },
 ]
 
 export function SejarahSirahView() {
+  const { records: eventRecords } = useModelRecords("wx.figure", { limit: 10 })
+
+  const sirahEvents: SirahEvent[] = eventRecords.length > 0
+    ? eventRecords.map((e: any, idx: number) => ({
+        yearStr: e.lifeStart ? `${e.lifeStart} – ${e.lifeEnd || "M"}` : (DEFAULT_SIRAH_EVENTS[idx]?.yearStr || "Era Sirah"),
+        title: e.name || DEFAULT_SIRAH_EVENTS[idx]?.title || "Peristiwa Sejarah",
+        location: e.notes ? e.notes.split(",")[0] : (DEFAULT_SIRAH_EVENTS[idx]?.location || "Makkah / Madinah"),
+        geoCoordinates: DEFAULT_SIRAH_EVENTS[idx]?.geoCoordinates || "21.4225° N, 39.8262° E",
+        description: e.notes || (DEFAULT_SIRAH_EVENTS[idx]?.description || "Catatan peristiwa sejarah peradaban."),
+        scriptureRef: DEFAULT_SIRAH_EVENTS[idx]?.scriptureRef || "Q.S Al-Ahzab",
+        category: DEFAULT_SIRAH_EVENTS[idx]?.category || "SEJARAH",
+      }))
+    : DEFAULT_SIRAH_EVENTS
+
   const [selectedEvent, setSelectedEvent] = useState<SirahEvent>(
-    SIRAH_EVENTS[0]!
+    sirahEvents[0]!
   )
 
   return (
@@ -88,21 +103,21 @@ export function SejarahSirahView() {
 
         {/* Selected Event Telemetry Panel */}
         {selectedEvent && (
-          <div className="panel-box bg-space/95 space-y-4 border border-primary/50 p-6 shadow-[0_0_30px_rgba(0,240,255,0.2)]">
+          <div className="rounded-xl border border-border/40 bg-card/90 bg-background/95 space-y-4 border border-primary/50 p-6 shadow-sm">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-primary/20 pb-3">
-              <div className="font-display flex items-center gap-2">
+              <div className="font-sans flex items-center gap-2">
                 <MapPin className="text-success h-5 w-5" />
                 <h3 className="text-base font-black text-primary">
                   {selectedEvent.title}
                 </h3>
               </div>
-              <span className="tag-clip tag-clip-green tag-clip px-3 py-1 text-xs font-bold">
+              <span className="rounded-md border border-emerald-500/40 bg-success/10 text-success px-3 py-1 font-mono text-xs font-bold">
                 {selectedEvent.yearStr}
               </span>
             </div>
 
             <div className="grid grid-cols-1 gap-3 text-xs sm:grid-cols-2">
-              <div className="bg-space tag-clip border border-primary/20 p-3">
+              <div className="bg-background rounded-md border border-primary/20 p-3">
                 <span className="block text-[9px] text-primary">
                   {/* LOKASI GEOGRAFIS */}
                 </span>
@@ -114,7 +129,7 @@ export function SejarahSirahView() {
                 </span>
               </div>
 
-              <div className="bg-space tag-clip border border-primary/20 p-3">
+              <div className="bg-background rounded-md border border-primary/20 p-3">
                 <span className="block text-[9px] text-primary">
                   {/* RUJUKAN AYAT & MANUSKRIP */}
                 </span>
@@ -124,7 +139,7 @@ export function SejarahSirahView() {
               </div>
             </div>
 
-            <p className="bg-space border border-primary/15 p-3 font-mono text-xs leading-relaxed text-primary">
+            <p className="bg-background border border-primary/15 p-3 font-mono text-xs leading-relaxed text-primary">
               &gt; {selectedEvent.description}
             </p>
           </div>
@@ -140,24 +155,24 @@ export function SejarahSirahView() {
           </div>
 
           <div className="space-y-2.5">
-            {SIRAH_EVENTS.map((ev, idx) => {
-              const isSelected = selectedEvent.title === ev.title
+            {sirahEvents.map((ev, idx) => {
+              const isSelected = selectedEvent?.title === ev.title
               return (
                 <button
                   key={idx}
                   onClick={() => setSelectedEvent(ev)}
-                  className={`tag-clip flex w-full items-center justify-between border p-4 text-left transition-all ${
+                  className={`rounded-md flex w-full items-center justify-between border p-4 text-left transition-all ${
                     isSelected
-                      ? "border-primary bg-primary/20 text-white shadow-[0_0_15px_rgba(0,240,255,0.3)]"
-                      : "bg-space border-primary/20 text-primary hover:border-primary/60 hover:text-white"
+                      ? "border-primary bg-primary/20 text-foreground shadow-sm"
+                      : "bg-background border-primary/20 text-primary hover:border-primary/60 hover:text-foreground"
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="tag-clip bg-panel border border-primary/40 px-2.5 py-1 text-xs font-bold text-primary">
+                    <div className="rounded-md bg-panel border border-primary/40 px-2.5 py-1 text-xs font-bold text-primary">
                       #{idx + 1}
                     </div>
                     <div>
-                      <h4 className="font-display text-xs font-bold text-foreground">
+                      <h4 className="font-sans text-xs font-bold text-foreground">
                         {ev.title}
                       </h4>
                       <p className="text-[10px] text-primary">
@@ -166,7 +181,7 @@ export function SejarahSirahView() {
                     </div>
                   </div>
 
-                  <span className="tag-clip tag-clip px-2 py-0.5 text-[8px] font-bold">
+                  <span className="rounded-md rounded-md px-2 py-0.5 text-[8px] font-bold">
                     {ev.category}
                   </span>
                 </button>

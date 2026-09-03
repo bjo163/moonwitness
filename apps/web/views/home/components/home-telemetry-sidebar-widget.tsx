@@ -84,12 +84,12 @@ export function HomeTelemetrySidebarWidget() {
   }, [])
 
   return (
-    <div className="relative flex w-full max-w-[280px] flex-col rounded border border-white/[0.05] bg-black/40 p-6 shadow-[0_8px_32px_rgba(0,0,0,0.6)] backdrop-blur-xl">
-      <div className="space-y-0.5 border-b border-white/10 pb-4">
+    <div className="relative flex w-full max-w-[280px] flex-col rounded border border-border/[0.05] bg-card p-6 shadow-sm backdrop-blur-xl">
+      <div className="space-y-0.5 border-b border-border pb-4">
         <div className="flex items-center justify-between text-[9px] tracking-[0.2em] text-primary uppercase">
           <span>MOON PHASE</span>
           <div
-            className="h-2 w-2 rounded-full bg-white shadow-[0_0_8px_white]"
+            className="h-2 w-2 rounded-full bg-card shadow-sm"
             style={{ opacity: Number(moonData.illumination) / 100 }}
           />
         </div>
@@ -101,7 +101,7 @@ export function HomeTelemetrySidebarWidget() {
         </div>
       </div>
 
-      <div className="mt-3 flex items-end justify-between border-b border-white/10 pb-4">
+      <div className="mt-3 flex items-end justify-between border-b border-border pb-4">
         <div className="text-[9px] tracking-[0.2em] text-primary uppercase">
           DISTANCE
         </div>
@@ -110,30 +110,30 @@ export function HomeTelemetrySidebarWidget() {
         </div>
       </div>
 
-      <div className="mt-3.5 border-t border-white/10 pt-3.5 font-sans text-[10px] font-medium tracking-widest text-primary uppercase">
+      <div className="mt-3.5 border-t border-border pt-3.5 font-sans text-[10px] font-medium tracking-widest text-primary uppercase">
         <div>
           NEXT PRAYER <span className="mx-1.5 opacity-50">•</span>{" "}
           {prayerData?.nextPrayer || "ACQUIRING..."}
         </div>
-        <div className="mt-1 animate-pulse font-mono text-2xl font-black text-amber-400 drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]">
+        <div className="mt-1 animate-pulse font-mono text-2xl font-black text-warning drop-shadow-sm">
           {countdown}
         </div>
-        <div className="mt-0.5 flex justify-end gap-5 pr-1 text-[8px] text-white/50">
+        <div className="mt-0.5 flex justify-end gap-5 pr-1 text-[8px] text-foreground/50">
           <span>HR</span>
           <span>MIN</span>
           <span>SEC</span>
         </div>
       </div>
 
-      <div className="mt-3.5 border-t border-white/10 pt-3.5 font-sans text-[10px] font-medium tracking-widest text-primary uppercase">
+      <div className="mt-3.5 border-t border-border pt-3.5 font-sans text-[10px] font-medium tracking-widest text-primary uppercase">
         <div>SYSTEM TIME</div>
-        <div className="my-0.5 font-sans text-xl font-light tracking-wide text-primary drop-shadow-[0_0_8px_#00F0FF]">
+        <div className="my-0.5 font-sans text-xl font-light tracking-wide text-primary drop-shadow-sm">
           {mounted ? clockWIB : "06:50:16 WIB"}
         </div>
         <div className="mt-1 text-xs text-primary">
           DATE <span className="mx-1.5 opacity-50">•</span> {currentDate}
         </div>
-        <div className="mt-1 text-xs text-emerald-400">
+        <div className="mt-1 text-xs text-success">
           HIJRI <span className="mx-1.5 opacity-50">•</span> {hijriDate}
         </div>
       </div>

@@ -36,10 +36,10 @@ export function AdhanNotificationWidget() {
   return (
     <button
       onClick={toggleAdhan}
-      className={`tag-clip flex cursor-pointer items-center gap-1 border px-2.5 py-0.5 text-[9px] font-black transition-all ${
+      className={`rounded-md flex cursor-pointer items-center gap-1 border px-2.5 py-0.5 text-[9px] font-black transition-all ${
         adhanEnabled
           ? "bg-success/15 text-success border-success/40 hover:bg-success/25"
-          : "bg-space border-primary/20 text-primary hover:text-white"
+          : "bg-background border-primary/20 text-primary hover:text-foreground"
       }`}
       title="Sakelar Alarm Suara Azan Taktis Waktu Shalat"
     >

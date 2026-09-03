@@ -70,11 +70,11 @@ export function DashboardView() {
 
   if (loading || !data) {
     return (
-      <div className="bg-space flex min-h-screen items-center justify-center p-8">
-        <div className="flex flex-col items-center gap-4 text-cyan-400">
+      <div className="bg-background flex min-h-screen items-center justify-center p-8">
+        <div className="flex flex-col items-center gap-4 text-primary">
           <Loader2 className="h-8 w-8 animate-spin" />
-          <p className="font-mono text-xs tracking-widest uppercase">
-            Loading Telemetry...
+          <p className="font-sans text-xs text-muted-foreground">
+            Loading dashboard data...
           </p>
         </div>
       </div>

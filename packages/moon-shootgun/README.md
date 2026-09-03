@@ -19,7 +19,7 @@
 
 | Model / Function | Description |
 |---|---|
-| `ShootgunOperationRecord` | Tactical broadcast model with verse IDs and target URLs |
+| `ShootgunOperationRecord` | Rapid broadcast model with verse IDs and target URLs |
 | `dispatchShootgunOperation()` | Broadcasts payload across designated communication channels |
 | `listRecentOperations()` | Fetches public transmission history |
 

@@ -17,15 +17,15 @@ type HadithItem = { text: string; reference: string }
 export function GraphEntityPanelWidget() {
   const { data, loading } = useKnowledgeGraph()
   return (
-    <div className="bg-space flex w-full shrink-0 flex-col overflow-hidden rounded-xl border border-primary/30 shadow-[0_0_20px_rgba(0,240,255,0.05)] lg:w-80">
+    <div className="bg-background flex w-full shrink-0 flex-col overflow-hidden rounded-xl border border-primary/30 shadow-sm lg:w-80">
       {/* Header */}
-      <div className="flex items-start justify-between border-b border-white/10 p-4">
+      <div className="flex items-start justify-between border-b border-border p-4">
         <div>
           <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
             SELECTED ENTITY
           </div>
           {loading ? (
-            <div className="animate-pulse text-xs text-white/50">
+            <div className="animate-pulse text-xs text-foreground/50">
               Loading entity...
             </div>
           ) : (
@@ -34,7 +34,7 @@ export function GraphEntityPanelWidget() {
                 <Users className="h-5 w-5" />
               </div>
               <div>
-                <div className="text-lg leading-tight font-bold text-white">
+                <div className="text-lg leading-tight font-bold text-foreground">
                   {data?.selectedEntity?.name || "No Entity"}
                 </div>
                 <div className="text-[10px] font-bold text-primary uppercase">
@@ -44,7 +44,7 @@ export function GraphEntityPanelWidget() {
             </div>
           )}
         </div>
-        <button className="flex items-center gap-1 text-[8px] text-primary hover:text-white">
+        <button className="flex items-center gap-1 text-[8px] text-primary hover:text-foreground">
           <X className="h-3 w-3" /> Clear
         </button>
       </div>
@@ -56,20 +56,20 @@ export function GraphEntityPanelWidget() {
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-white/10 text-[9px] font-bold text-primary">
+      <div className="flex border-b border-border text-[9px] font-bold text-primary">
         <button className="flex-1 border-b-2 border-primary py-2.5 text-primary">
           OVERVIEW
         </button>
-        <button className="flex-1 py-2.5 transition-colors hover:text-white">
+        <button className="flex-1 py-2.5 transition-colors hover:text-foreground">
           CONNECTIONS{" "}
-          <span className="ml-1 rounded bg-white/10 px-1 py-0.5 text-[8px]">
+          <span className="ml-1 rounded bg-muted/30 px-1 py-0.5 text-[8px]">
             {loading ? "0" : data?.selectedEntity?.connections?.total || "0"}
           </span>
         </button>
-        <button className="flex-1 py-2.5 transition-colors hover:text-white">
+        <button className="flex-1 py-2.5 transition-colors hover:text-foreground">
           TIMELINE
         </button>
-        <button className="flex-1 py-2.5 transition-colors hover:text-white">
+        <button className="flex-1 py-2.5 transition-colors hover:text-foreground">
           INSIGHTS
         </button>
       </div>
@@ -80,9 +80,9 @@ export function GraphEntityPanelWidget() {
           <div className="mb-2 text-[9px] font-black tracking-widest text-primary uppercase">
             DESCRIPTION
           </div>
-          <div className="font-sans text-[10px] leading-relaxed text-white/80">
+          <div className="font-sans text-[10px] leading-relaxed text-foreground">
             {loading ? (
-              <div className="animate-pulse text-xs text-white/50">
+              <div className="animate-pulse text-xs text-foreground/50">
                 Loading description...
               </div>
             ) : (
@@ -98,7 +98,7 @@ export function GraphEntityPanelWidget() {
           </div>
           <div className="space-y-1.5 text-[9px]">
             {loading ? (
-              <div className="animate-pulse text-xs text-white/50">
+              <div className="animate-pulse text-xs text-foreground/50">
                 Loading connections...
               </div>
             ) : (
@@ -112,9 +112,9 @@ export function GraphEntityPanelWidget() {
                   return (
                     <div
                       key={i}
-                      className="group flex cursor-pointer items-center justify-between rounded p-1 hover:bg-white/5"
+                      className="group flex cursor-pointer items-center justify-between rounded p-1 hover:bg-muted/30"
                     >
-                      <span className="flex items-center gap-2 text-white/80">
+                      <span className="flex items-center gap-2 text-foreground">
                         <IconComponent className={`h-3.5 w-3.5 ${conn.col}`} />{" "}
                         {conn.n}
                       </span>
@@ -133,7 +133,7 @@ export function GraphEntityPanelWidget() {
             RELATED VERSES
           </div>
           {loading ? (
-            <div className="animate-pulse text-xs text-white/50">
+            <div className="animate-pulse text-xs text-foreground/50">
               Loading verses...
             </div>
           ) : (
@@ -153,7 +153,7 @@ export function GraphEntityPanelWidget() {
                 <div className="text-[8px] font-bold text-primary uppercase">
                   {verse.reference}
                 </div>
-                <div className="font-sans text-[9px] leading-relaxed text-white/70 italic">
+                <div className="font-sans text-[9px] leading-relaxed text-foreground italic">
                   {verse.translation}
                 </div>
               </div>
@@ -167,7 +167,7 @@ export function GraphEntityPanelWidget() {
             RELATED HADITH
           </div>
           {loading ? (
-            <div className="animate-pulse text-xs text-white/50">
+            <div className="animate-pulse text-xs text-foreground/50">
               Loading hadith...
             </div>
           ) : (
@@ -176,9 +176,9 @@ export function GraphEntityPanelWidget() {
             )?.hadiths?.map((hadith: HadithItem, i: number) => (
               <div
                 key={i}
-                className="bg-space mb-2 space-y-2 rounded-lg border border-white/5 p-3"
+                className="bg-background mb-2 space-y-2 rounded-lg border border-border p-3"
               >
-                <div className="font-sans text-[9px] leading-relaxed text-white/80 italic">
+                <div className="font-sans text-[9px] leading-relaxed text-foreground italic">
                   {hadith.text}
                 </div>
                 <div className="text-[8px] font-bold text-primary uppercase">

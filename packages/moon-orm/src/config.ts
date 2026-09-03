@@ -1,19 +1,16 @@
 import knex, { type Knex } from 'knex'
 import { SpanStatusCode } from '@opentelemetry/api'
+import { databaseOperation, sanitizedDatabaseError } from './connection-profile.js'
 import {
   isOtelEnabled,
   startDbSpan,
-  withDbSpan,
-  sanitizeSql,
   shouldSampleQuery,
-  resetQuerySampler,
-  trackAttribute,
 } from './telemetry.js'
 
 let dbInstance: Knex | null = null
 const pendingQuerySpans = new Map<string, any>()
 
-export type DbConfig = string | Knex | { client: string, connection: any }
+export type DbConfig = string | Knex | Knex.Config
 
 export function setupOrm(config: DbConfig) {
   if (typeof config === 'string') {
@@ -21,7 +18,7 @@ export function setupOrm(config: DbConfig) {
       client: 'pg',
       connection: config
     })
-  } else if ('client' in config && !('select' in config)) {
+  } else if (typeof config !== 'function' && !('select' in config)) {
     // Plain config object
     dbInstance = knex(config as any)
   } else {
@@ -32,16 +29,7 @@ export function setupOrm(config: DbConfig) {
   if (process.env.DEBUG === 'true') {
     dbInstance.on('query', (query) => {
        const timestamp = new Date().toISOString()
-       const sql = query.sql
-       const bindings = query.bindings ? `[${query.bindings.join(', ')}]` : ''
-       console.log(`\x1b[90m[${timestamp}]\x1b[0m \x1b[36mmoon.sql:\x1b[0m ${sql} \x1b[90m${bindings}\x1b[0m`)
-       
-       try {
-         const fs = require('node:fs')
-         const path = require('node:path')
-         const logFile = path.resolve(process.cwd(), 'moonwitness.log')
-         fs.appendFileSync(logFile, `[${timestamp}] [DEBUG] moon.sql: ${sql} ${bindings}\n`)
-       } catch(e) {}
+       console.log(`[${timestamp}] moon.sql: ${databaseOperation(query.sql)}`)
     })
   }
 
@@ -59,7 +47,7 @@ export function setupOrm(config: DbConfig) {
         const duration = performance.now() - startTime
         queryTimes.delete(query.__knexQueryUid)
         if (duration > 100) {
-          console.warn(`\x1b[33m[SLOW QUERY] ${duration.toFixed(2)}ms\x1b[0m: ${query.sql}`)
+          console.warn(`[SLOW QUERY] ${duration.toFixed(2)}ms: ${databaseOperation(query.sql)}`)
         }
       }
     }
@@ -72,20 +60,21 @@ export function setupOrm(config: DbConfig) {
 
   if (isOtelEnabled()) {
     const rawTransaction = dbInstance.transaction.bind(dbInstance)
-    dbInstance.transaction = function (callback: any) {
-      return withDbSpan('db.transaction', async (span) => {
+    dbInstance.transaction = async function (callback: any) {
+        const span = startDbSpan('db.transaction')
         span?.setAttribute('db.system', 'postgresql')
         try {
           const result = await rawTransaction(callback)
           span?.setStatus({ code: SpanStatusCode.OK })
           return result
         } catch (err: any) {
-          span?.setStatus({ code: SpanStatusCode.ERROR, message: err?.message || String(err) })
-          span?.recordException(err instanceof Error ? err : new Error(String(err)))
+          span?.setStatus({ code: SpanStatusCode.ERROR, message: sanitizedDatabaseError(err) })
+          span?.recordException(new Error(sanitizedDatabaseError(err)))
           throw err
+        } finally {
+          span?.end()
         }
-      })
-    }
+    } as Knex['transaction']
 
     dbInstance.on('query', (query) => {
       if (!shouldSampleQuery()) return
@@ -94,7 +83,7 @@ export function setupOrm(config: DbConfig) {
       const span = startDbSpan('db.query', {
         attributes: {
           'db.system': 'postgresql',
-          'db.query.text': sanitizeSql(query.sql),
+          'db.operation.name': databaseOperation(query.sql),
           'db.query.bindings_count': Array.isArray(query.bindings) ? query.bindings.length : 0,
         },
       })
@@ -118,8 +107,8 @@ export function setupOrm(config: DbConfig) {
       const span = pendingQuerySpans.get(uid)
       if (span) {
         pendingQuerySpans.delete(uid)
-        span.setStatus({ code: SpanStatusCode.ERROR, message: error?.message || String(error) })
-        span.recordException(error instanceof Error ? error : new Error(String(error)))
+        span.setStatus({ code: SpanStatusCode.ERROR, message: sanitizedDatabaseError(error) })
+        span.recordException(new Error(sanitizedDatabaseError(error)))
         span.end()
       }
     })
@@ -204,15 +193,14 @@ export async function checkDbConnection(): Promise<DbHealthStatus> {
   } catch (err: any) {
     const latencyMs = Number((performance.now() - start).toFixed(2))
     const dialect = (dbInstance.client as any)?.dialect || 'pg'
-    span?.setStatus({ code: SpanStatusCode.ERROR, message: err?.message || String(err) })
-    span?.recordException(err instanceof Error ? err : new Error(String(err)))
+    span?.setStatus({ code: SpanStatusCode.ERROR, message: sanitizedDatabaseError(err) })
+    span?.recordException(new Error(sanitizedDatabaseError(err)))
     span?.end()
     return {
       ok: false,
       dialect,
       latencyMs,
-      error: err?.message || String(err)
+      error: sanitizedDatabaseError(err)
     }
   }
 }
-

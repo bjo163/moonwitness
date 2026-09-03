@@ -20,7 +20,7 @@
 | Store / Hook | Description |
 |---|---|
 | `<MoonProvider />` | Master reactive context wrapper for Next.js app roots |
-| `useSettingsStore()` | OS preferences (audio volume, tactical HUD glow, active theme) |
+| `useSettingsStore()` | OS preferences (audio volume, optical glow effects, active theme) |
 | `useTelemetryStore()` | Live SSE stream metrics, active client count, and sensor health |
 | `useKnowledgeStore()` | Quran reading history, active surah index, and bookmarked hadiths |
 | `useLanguage()` | Reactive locale getter/setter (`id`, `en`, `ar`) |

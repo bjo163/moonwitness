@@ -18,7 +18,9 @@ import {
 import { ContextBlock } from "@workspace/ui"
 import { Panel, PanelHeader } from "@workspace/ui"
 import { Stat } from "@workspace/ui"
-import { HUDTabs } from "@workspace/ui"
+import { SimpleTabs } from "@workspace/ui"
+import { useResource } from "@workspace/hooks"
+import { fetchEarthquakes } from "@moon/client"
 
 // ── SEISMIC CONSTANTS ────────────────────────────────────
 const CANVAS_HEIGHT = 200
@@ -50,8 +52,8 @@ type WaveformPoint = {
   amplitude: number
 }
 
-// ── MOCK SEISMIC DATA ────────────────────────────────────
-const RECENT_EVENTS: SeismicEvent[] = [
+// ── CANONICAL FALLBACK SEISMIC DATA ──────────────────────
+const DEFAULT_RECENT_EVENTS: SeismicEvent[] = [
   {
     id: "SEQ-2026-08-001",
     location: "PACIFIC RING OF FIRE — TONGA TRENCH",
@@ -194,7 +196,7 @@ function SeismographCanvas({
     ctx.stroke()
     ctx.shadowBlur = 0
 
-    // Glow fill beneath
+    // ambient fill beneath
     ctx.globalAlpha = 0.05
     ctx.fillStyle = color
     ctx.lineTo(w, h)
@@ -238,28 +240,28 @@ function SeismographCanvas({
 function MagnitudeBadge({ magnitude }: { magnitude: number }) {
   const getLevel = () => {
     if (magnitude >= MAGNITUDE_THRESHOLD.strong)
-      return { label: "SEVERE", color: "#FF0055", glow: "rgba(255,0,85,0.4)" }
+      return { label: "SEVERE", color: "#FF0055", highlight: "rgba(255,0,85,0.4)" }
     if (magnitude >= MAGNITUDE_THRESHOLD.moderate)
-      return { label: "STRONG", color: "#FFE600", glow: "rgba(255,230,0,0.3)" }
+      return { label: "STRONG", color: "#FFE600", highlight: "rgba(255,230,0,0.3)" }
     if (magnitude >= MAGNITUDE_THRESHOLD.minor)
       return {
         label: "MODERATE",
         color: "#FF9900",
-        glow: "rgba(255,153,0,0.25)",
+        highlight: "rgba(255,153,0,0.25)",
       }
-    return { label: "MINOR", color: "#00FF66", glow: "rgba(0,255,102,0.2)" }
+    return { label: "MINOR", color: "#00FF66", highlight: "rgba(0,255,102,0.2)" }
   }
 
   const level = getLevel()
 
   return (
     <div
-      className="tag-clip flex items-center gap-1.5 border px-2 py-1 font-mono text-[9px] font-bold tracking-widest"
+      className="rounded-md flex items-center gap-1.5 border px-2 py-1 font-mono text-[9px] font-bold tracking-widest"
       style={{
         color: level.color,
         borderColor: `${level.color}50`,
         background: `${level.color}12`,
-        boxShadow: `0 0 15px ${level.glow}`,
+        boxShadow: `0 0 15px ${level.color}`,
       }}
     >
       <span
@@ -284,7 +286,7 @@ function EventCard({ event }: { event: SeismicEvent }) {
 
   return (
     <div
-      className="panel-box bg-space/80 group border p-4 transition-all duration-300 hover:-translate-y-0.5"
+      className="rounded-xl border border-border/40 bg-card/90 bg-background/80 group border p-4 transition-all duration-300 hover:-translate-y-0.5"
       style={{
         borderColor: `${color}25`,
       }}
@@ -292,7 +294,7 @@ function EventCard({ event }: { event: SeismicEvent }) {
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div
-            className="tag-clip flex h-6 w-6 items-center justify-center border"
+            className="rounded-md flex h-6 w-6 items-center justify-center border"
             style={{
               borderColor: `${color}50`,
               background: `${color}15`,
@@ -356,14 +358,14 @@ function PulseRing() {
         />
       ))}
       <div
-        className="tag-clip flex h-14 w-14 items-center justify-center border-2"
+        className="rounded-md flex h-14 w-14 items-center justify-center border-2"
         style={{
           borderColor: "rgba(255, 230, 0, 0.6)",
           background: "rgba(255, 230, 0, 0.1)",
           boxShadow: "0 0 30px rgba(255, 230, 0, 0.25)",
         }}
       >
-        <Activity className="h-6 w-6 text-cyber-yellow" />
+        <Activity className="h-6 w-6 text-warning" />
       </div>
     </div>
   )
@@ -380,6 +382,39 @@ function getTimeAgo(timestamp: string): string {
 
 // ── MAIN VIEW ────────────────────────────────────────────
 export function SeismicForgeView() {
+  const { data: earthquakeData } = useResource(fetchEarthquakes, { storageKey: "mw_seismic_forge" })
+
+  const liveEvents: SeismicEvent[] = earthquakeData?.features?.length
+    ? earthquakeData.features.slice(0, 6).map((f: any, idx: number) => {
+        const mag = f.properties?.mag || 0
+        const place = f.properties?.place || "Global Seismic Region"
+        const depth = f.geometry?.coordinates?.[2] || 10
+        const lng = f.geometry?.coordinates?.[0] || 0
+        const lat = f.geometry?.coordinates?.[1] || 0
+        return {
+          id: f.id || `SEQ-LIVE-${idx + 1}`,
+          location: String(place).toUpperCase(),
+          magnitude: Number(mag.toFixed(1)),
+          depth: Math.round(depth),
+          timestamp: new Date(f.properties?.time || Date.now()).toISOString(),
+          type: mag >= 5.0 ? ("tectonic" as const) : ("volcanic" as const),
+          coordinates: { lat, lng },
+        }
+      })
+    : DEFAULT_RECENT_EVENTS
+
+  const totalEvents24h = earthquakeData?.features?.length || TECTONIC_STATS.totalEvents24h
+  const avgMagnitude = earthquakeData?.features?.length
+    ? Number(
+        (
+          earthquakeData.features.reduce(
+            (acc: number, cur: any) => acc + (cur.properties?.mag || 0),
+            0
+          ) / earthquakeData.features.length
+        ).toFixed(1)
+      )
+    : TECTONIC_STATS.avgMagnitude
+
   const [activeWave, setActiveWave] = useState<"pWave" | "sWave" | "surface">(
     "pWave"
   )
@@ -417,14 +452,14 @@ export function SeismicForgeView() {
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
         <Stat
           label="EVENTS 24H"
-          value={TECTONIC_STATS.totalEvents24h}
+          value={totalEvents24h}
           trend="+12%"
           icon={Activity}
           accentColor="accent"
         />
         <Stat
           label="AVG MAGNITUDE"
-          value={TECTONIC_STATS.avgMagnitude}
+          value={avgMagnitude}
           icon={BarChart3}
           accentColor="accent"
         />
@@ -432,7 +467,7 @@ export function SeismicForgeView() {
           label="MAX DEPTH"
           value={`${TECTONIC_STATS.maxDepth} km`}
           icon={Layers}
-          accentColor="system"
+          accentColor="primary"
         />
         <Stat
           label="ACTIVE ZONES"
@@ -445,7 +480,7 @@ export function SeismicForgeView() {
           label="P-WAVE VEL"
           value={TECTONIC_STATS.pWaveVelocity}
           icon={Zap}
-          accentColor="system"
+          accentColor="primary"
         />
         <Stat
           label="S-WAVE VEL"
@@ -466,7 +501,7 @@ export function SeismicForgeView() {
         />
 
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <HUDTabs
+          <SimpleTabs
             tabs={waveTabs}
             activeTab={activeWave}
             onChange={(id: string) =>
@@ -476,7 +511,7 @@ export function SeismicForgeView() {
           />
           <button
             onClick={() => setIsMonitoring(!isMonitoring)}
-            className="flex items-center gap-2 border px-3 py-1.5 font-mono text-[10px] font-bold tracking-widest transition-all btn-clip"
+            className="flex items-center gap-2 border px-3 py-1.5 font-mono text-[10px] font-bold tracking-widest transition-all "
             style={{
               borderColor: isMonitoring
                 ? "rgba(0, 255, 102, 0.4)"
@@ -549,7 +584,7 @@ export function SeismicForgeView() {
           ].map((w) => (
             <div
               key={w.key}
-              className="panel-box border p-3 transition-all duration-300 hover:-translate-y-0.5"
+              className="rounded-xl border border-border/40 bg-card/90 border p-3 transition-all duration-300 hover:-translate-y-0.5"
               style={{
                 borderColor:
                   activeWave === w.key ? `${w.color}50` : "rgba(0,240,255,0.1)",
@@ -596,7 +631,7 @@ export function SeismicForgeView() {
         />
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          {RECENT_EVENTS.map((event) => (
+          {liveEvents.map((event) => (
             <EventCard key={event.id} event={event} />
           ))}
         </div>
@@ -623,12 +658,12 @@ export function SeismicForgeView() {
           </div>
         </Panel>
 
-        <Panel level="level3" accentColor="system" className="lg:col-span-2">
+        <Panel level="level3" accentColor="primary" className="lg:col-span-2">
           <PanelHeader
             title="CRUSTAL DYNAMICS MONITOR"
             icon={TrendingUp}
             status="ANALYZING"
-            accentColor="system"
+            accentColor="primary"
           />
 
           {/* Simplified magnitude distribution bars */}
@@ -648,7 +683,7 @@ export function SeismicForgeView() {
                     {row.count} EVENTS ({row.pct}%)
                   </span>
                 </div>
-                <div className="h-2 w-full overflow-hidden bg-white/5">
+                <div className="h-2 w-full overflow-hidden bg-muted/30">
                   <div
                     className="h-full transition-all duration-1000"
                     style={{

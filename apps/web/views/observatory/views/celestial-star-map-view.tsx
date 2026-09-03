@@ -36,7 +36,7 @@ export function CelestialStarMapView() {
 
   if (!mounted) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#020813] font-mono text-sm tracking-widest text-indigo-500">
+      <div className="flex min-h-screen items-center justify-center bg-card font-mono text-sm tracking-widest text-indigo-500">
         INITIALIZING CELESTIAL ENGINE...
       </div>
     )
@@ -55,7 +55,7 @@ export function CelestialStarMapView() {
   const decFormatted = "+06° 12′ 00″"
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#040814] pb-12 font-sans text-white selection:bg-indigo-500/30">
+    <div className="min-h-screen overflow-x-hidden bg-card pb-12 font-sans text-white selection:bg-indigo-500/30">
       <div className="mx-auto max-w-[1800px] space-y-6 px-4 pt-6 lg:px-6">
         {/* 1. Header & Live Equatorial Coordinates */}
         <StarmapHeader

@@ -61,6 +61,10 @@ export { ToolkitRasulullahView } from "./mission/views/toolkit-rasulullah-view"
 // Auth Views
 export { LoginView } from "./auth/views/login-view"
 export { ProfileView } from "./auth/views/profile-view"
+export { AccountView } from "./auth/views/account-view"
+export { SettingsView } from "./auth/views/settings-view"
+export { PreferencesView } from "./auth/views/preferences-view"
+export { NotificationsView } from "./auth/views/notifications-view"
 
 // Seismix & Shootgun Views
 export { QuakeArchiveView } from "./seismix/views/quake-archive-view"

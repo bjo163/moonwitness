@@ -66,10 +66,10 @@ export const views: Record<string, ViewManifest> = {
     defaultView: 'table',
     accentColor: 'yellow',
     icon: 'Clock',
-    table: { columns: ['name', 'teamId', 'priority', 'targetHours'], searchKeys: ['name'] },
+    table: { columns: ['name', 'teamId', 'priority', 'responseHours', 'resolutionHours'], searchKeys: ['name'] },
     form: {
       title: 'SLA POLICY',
-      sections: [{ title: 'Policy', columns: 2, fields: ['name', 'teamId', 'priority', 'targetHours'] }],
+      sections: [{ title: 'Policy', columns: 2, fields: ['name', 'teamId', 'priority', 'responseHours', 'resolutionHours'] }],
     },
   },
 }

@@ -33,7 +33,7 @@ L.Icon.Default.mergeOptions({
 // Custom red icon for earthquakes
 const earthquakeIcon = new L.DivIcon({
   className: "bg-transparent",
-  html: `<div class="h-3 w-3 animate-ping rounded-full bg-red-500 opacity-75 shadow-[0_0_15px_#FF0055]"></div><div class="h-3 w-3 rounded-full bg-red-600 absolute top-0 left-0"></div>`,
+  html: `<div class="h-3 w-3 animate-ping rounded-full bg-red-500 opacity-75 shadow-sm"></div><div class="h-3 w-3 rounded-full bg-red-600 absolute top-0 left-0"></div>`,
   iconSize: [12, 12],
   iconAnchor: [6, 6],
 })
@@ -43,7 +43,7 @@ const issIcon = new L.DivIcon({
   className: "bg-transparent",
   html: `<div class="relative flex items-center justify-center h-8 w-8">
            <div class="absolute h-full w-full animate-spin-slow rounded-full border border-dashed border-primary/50"></div>
-           <div class="h-4 w-4 bg-primary rounded shadow-[0_0_20px_#00F0FF] animate-pulse"></div>
+           <div class="h-4 w-4 bg-primary rounded shadow-sm animate-pulse"></div>
          </div>`,
   iconSize: [32, 32],
   iconAnchor: [16, 16],
@@ -58,10 +58,10 @@ const flightIcon = (track: number) =>
     iconAnchor: [8, 8],
   })
 
-// Custom icon for Cyber Attacks
+// Custom icon for digital Attacks
 const cyberIcon = new L.DivIcon({
   className: "bg-transparent",
-  html: `<div class="h-4 w-4 bg-purple-500 rounded-sm rotate-45 animate-pulse shadow-[0_0_10px_#A855F7]"></div>`,
+  html: `<div class="h-4 w-4 bg-primary rounded-sm rotate-45 animate-pulse shadow-sm"></div>`,
   iconSize: [16, 16],
   iconAnchor: [8, 8],
 })
@@ -94,11 +94,11 @@ export function LeafletMap({
   if (!mounted) return null
 
   return (
-    <div className="h-full w-full overflow-hidden rounded-md border border-white/10">
+    <div className="h-full w-full overflow-hidden rounded-md border border-border">
       <MapContainer
         key={mapKey}
         center={[20, 0]}
-        className="h-full w-full bg-[#0a0f18]"
+        className="h-full w-full bg-card"
         style={{ height: "100%", width: "100%" }}
         zoomControl={false}
       >
@@ -115,12 +115,12 @@ export function LeafletMap({
               icon={issIcon}
               zIndexOffset={1000}
             >
-              <Popup className="bg-space border border-white/10 text-white">
+              <Popup className="bg-background border border-border text-foreground">
                 <div className="text-xs">
                   <div className="font-bold tracking-widest text-primary">
                     INTERNATIONAL SPACE STATION
                   </div>
-                  <div className="mt-1 text-[10px] text-white/70">
+                  <div className="mt-1 text-[10px] text-foreground">
                     Alt: {issPosition.altitude?.toFixed(2) ?? "N/A"} km <br />
                     Vel: {issPosition.velocity?.toFixed(2) ?? "N/A"} km/h
                   </div>
@@ -136,7 +136,7 @@ export function LeafletMap({
             position={[flight.latitude, flight.longitude]}
             icon={flightIcon(flight.true_track || 0)}
           >
-            <Popup className="bg-space border-warning font-mono text-foreground">
+            <Popup className="bg-background border-warning font-mono text-foreground">
               <div className="p-2">
                 <div className="text-warning border-warning/30 mb-1 border-b pb-1 font-bold">
                   CALLSIGN: {flight.callsign}
@@ -154,7 +154,7 @@ export function LeafletMap({
           </Marker>
         ))}
 
-        {/* Render Cyber Attacks */}
+        {/* Render digital Attacks */}
         {cyberAttacks.map((attack) => (
           <React.Fragment key={attack.id}>
             {/* Draw attack trajectory line */}
@@ -168,9 +168,9 @@ export function LeafletMap({
             />
             {/* Target marker */}
             <Marker position={attack.target} icon={cyberIcon}>
-              <Popup className="bg-space border-red-500 font-mono text-foreground">
+              <Popup className="bg-background border-red-500 font-mono text-foreground">
                 <div className="p-2">
-                  <div className="mb-1 border-b border-red-500/30 pb-1 font-bold text-red-500">
+                  <div className="mb-1 border-b border-destructive/30 pb-1 font-bold text-destructive">
                     THREAT: {attack.type}
                   </div>
                   <div className="text-xs">
@@ -193,7 +193,7 @@ export function LeafletMap({
             position={[ship.lat, ship.lng]}
             icon={shipIcon(ship.heading)}
           >
-            <Popup className="bg-space border-blue-500 font-mono text-foreground">
+            <Popup className="bg-background border-blue-500 font-mono text-foreground">
               <div className="p-2">
                 <div className="mb-1 border-b border-blue-500/30 pb-1 font-bold text-blue-400">
                   VESSEL: {ship.name}
@@ -217,13 +217,13 @@ export function LeafletMap({
           const [lng, lat] = eq.geometry.coordinates
           return (
             <Marker key={eq.id} position={[lat, lng]} icon={earthquakeIcon}>
-              <Popup className="bg-space border border-white/10 text-white">
+              <Popup className="bg-background border border-border text-foreground">
                 <div className="text-xs">
-                  <div className="font-bold text-red-400">
+                  <div className="font-bold text-destructive">
                     M {eq.properties.mag.toFixed(1)}
                   </div>
                   <div>{eq.properties.place}</div>
-                  <div className="text-[9px] text-white/50">
+                  <div className="text-[9px] text-foreground/50">
                     {new Date(eq.properties.time).toLocaleString()}
                   </div>
                 </div>

@@ -109,6 +109,8 @@ describe('Evidence-based prod-check (#99)', () => {
     expect(result.status).toBe(0)
     expect(result.stdout).toContain('PASSED')
 
-    rmSync(tempDir, { recursive: true })
+    try {
+      rmSync(tempDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })
+    } catch {}
   })
 })

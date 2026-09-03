@@ -332,7 +332,7 @@ export class NativeServer {
       return handleMetaModels(req, res)
     }
 
-    // Cosmic Matrix Engine: Rich single-model schema introspection
+    // celestial Matrix Engine: Rich single-model schema introspection
     const metaModelMatch = req.url?.match(/^\/api\/meta\/model\/([a-z0-9.-]+)(?:\?.*)?$/)
     if (req.method === 'GET' && metaModelMatch) {
       return handleMetaModel(req, res, metaModelMatch[1]!)
@@ -463,7 +463,8 @@ export class NativeServer {
         }, 60000)
       })
     } catch (err) {
-      logger.error('moon.core', 'Failed to start:', err)
+      const error = err instanceof Error ? err : new Error(String(err))
+      logger.error('moon.core', `Failed to start: ${error.message}`, error.stack)
       process.exit(1)
     }
   }

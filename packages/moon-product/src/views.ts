@@ -6,15 +6,15 @@ export const views: Record<string, ViewManifest> = {
     accentColor: 'cyan',
     icon: 'Package',
     table: {
-      columns: ['name', 'categoryId', 'type', 'listPrice', 'standardCost'],
+      columns: ['name', 'categoryId', 'type', 'listPrice', 'standardPrice'],
       searchKeys: ['name'],
     },
     form: {
       title: 'PRODUCT CATALOG',
       sections: [
         { title: 'Product', columns: 2, fields: ['name', 'categoryId', 'type'] },
-        { title: 'Pricing', columns: 2, fields: ['listPrice', 'standardCost'] },
-        { title: 'Description', columns: 1, fields: ['description'] },
+        { title: 'Pricing', columns: 2, fields: ['listPrice', 'standardPrice'] },
+        { title: 'Identifiers', columns: 2, fields: ['defaultCode', 'barcode'] },
       ],
     },
   },

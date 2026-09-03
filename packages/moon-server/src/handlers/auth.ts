@@ -112,10 +112,10 @@ export async function handleLogin(
         user: { 
           id: user.id, 
           email: userEmail, 
-          name: user.name || user.login || 'TACTICAL OPERATOR',
+          name: user.name || user.login || 'Administrator',
           role,
           clearanceLevel,
-          title: clearanceLevel >= 3 ? 'Supreme Fleet Commander' : 'Mission Specialist',
+          title: clearanceLevel >= 3 ? 'System Administrator' : 'Staff Member',
           partnerId: user.partner_id || user.partnerId
         } 
       }, req)

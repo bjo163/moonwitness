@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
 import Link from "next/link"
-import { playWarpSound, playClickSound } from "@moon/client"
+import { playWarpSound, playClickSound, fetchSurahDetail } from "@moon/client"
 import { useLanguage } from "@workspace/state"
 import { Copy, Check, Volume2, Square } from "lucide-react"
 
@@ -86,7 +86,7 @@ export function RandomWarpGenerator() {
       textArabic:
         "هُوَ اللَّهُ الَّذِي لَا إِلَٰهَ إِلَّا هُوَ الْمَلِكُ الْقُدُّوسُ السَّلَامُ",
       textLatin:
-        "Huwallāhullażī lā ilāha illā huwa, al-malikul-quddūsus-salām.",
+        "Huwallāhul-lażī lā ilāha illā huw, al-malikul-quddūsus-salāmu.",
       translationId:
         "Dialah Allah tidak ada tuhan selain Dia. Maharaja, Yang Mahasuci, Yang Mahasejahtera.",
       asmaulName: "As-Salam (Maha Memberi Kesejahteraan)",
@@ -138,18 +138,42 @@ export function RandomWarpGenerator() {
     }
   }
 
-  function triggerWarp() {
+  async function triggerWarp() {
     stopAudio()
     playWarpSound()
     setWarping(true)
     setIsOpen(true)
 
-    setTimeout(() => {
-      const randomIdx = Math.floor(Math.random() * sampleVerses.length)
-      const selected = sampleVerses[randomIdx] ?? sampleVerses[0] ?? null
-      setWarpData(selected)
-      setWarping(false)
-    }, 450)
+    try {
+      // Pick random surah between 1 and 114
+      const randomSurah = Math.floor(Math.random() * 114) + 1
+      const surahData = await fetchSurahDetail(randomSurah)
+      if (surahData && surahData.ayahs && surahData.ayahs.length > 0) {
+        const randomAyahIdx = Math.floor(Math.random() * surahData.ayahs.length)
+        const ayah = surahData.ayahs[randomAyahIdx]!
+        setWarpData({
+          surahNumber: surahData.surah.number,
+          surahName: surahData.surah.name,
+          ayahNumber: ayah.number,
+          textArabic: ayah.textArabic || "",
+          textLatin: ayah.textLatin || "",
+          translationId: ayah.translationId || "Kalamullah yang penuh hikmah dan petunjuk.",
+          asmaulName: "Al-Hakeem (Maha Bijaksana)",
+          asmaulArabic: "الْحَكِيمُ",
+          hadithText: `QS. ${surahData.surah.name} Ayat ${ayah.number} — Wahyu Suci Al-Qur'anul Karim.`,
+          audioUrl: ayah.audioUrl || `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${ayah.number}.mp3`,
+        })
+        setWarping(false)
+        return
+      }
+    } catch {
+      // Graceful fallback to rich sample verses
+    }
+
+    const randomIdx = Math.floor(Math.random() * sampleVerses.length)
+    const selected = sampleVerses[randomIdx] ?? sampleVerses[0] ?? null
+    setWarpData(selected)
+    setWarping(false)
   }
 
   function copyTransmissionLink() {
@@ -166,7 +190,7 @@ export function RandomWarpGenerator() {
       {/* Warp Trigger Button (Task 6) */}
       <button
         onClick={triggerWarp}
-        className="btn-primary btn-primary-purple group flex items-center justify-center gap-2 px-3.5 py-1.5 text-[10px] shadow-[0_0_20px_rgba(161,0,255,0.5)] transition-all btn-clip hover:border-primary"
+        className="btn-primary btn-primary-purple group flex items-center justify-center gap-2 px-3.5 py-1.5 text-[10px] shadow-sm transition-all  hover:border-primary"
         suppressHydrationWarning
       >
         <span
@@ -190,14 +214,14 @@ export function RandomWarpGenerator() {
         mounted &&
         typeof document !== "undefined" &&
         createPortal(
-          <div className="bg-space/95 fixed inset-0 z-[99999] flex items-center justify-center p-4 font-mono backdrop-blur-2xl">
+          <div className="bg-background/95 fixed inset-0 z-[99999] flex items-center justify-center p-4 font-mono backdrop-blur-2xl">
             <div
-              className="corner-box bg-[#0A0F17] relative my-auto flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden border border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.35)] card-clip"
+              className=" bg-card relative my-auto flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden border border-primary/50 shadow-sm rounded-xl"
             >
               <div className="holo-scan-bar" />
 
               {/* Modal Header */}
-              <div className="bg-space/80 flex shrink-0 items-center justify-between border-b border-primary/20 px-6 py-4">
+              <div className="bg-background/80 flex shrink-0 items-center justify-between border-b border-primary/20 px-6 py-4">
                 <div className="flex items-center gap-2">
                   <span className="bg-success h-2 w-2 animate-pulse rounded-full" />
                   <span className="text-xs font-black tracking-widest text-primary uppercase">
@@ -210,7 +234,7 @@ export function RandomWarpGenerator() {
                     playClickSound()
                     setIsOpen(false)
                   }}
-                  className="bg-space flex items-center gap-1 rounded border border-primary/20 px-2.5 py-1 text-xs font-bold text-primary transition-all hover:border-primary/60 hover:text-white"
+                  className="bg-background flex items-center gap-1 rounded border border-primary/20 px-2.5 py-1 text-xs font-bold text-primary transition-all hover:border-primary/60 hover:text-foreground"
                 >
                   <span>[✕ CLOSE]</span>
                 </button>
@@ -234,11 +258,11 @@ export function RandomWarpGenerator() {
                   warpData && (
                     <div className="animate-in space-y-4 fade-in">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className="tag-clip tag-clip-green tag-clip text-[10px]">
+                        <span className="rounded-md border border-emerald-500/40 bg-success/10 text-success px-2 py-0.5 font-mono text-[10px]">
                           📖 Q.S {warpData.surahName} ({warpData.surahNumber}:
                           {warpData.ayahNumber})
                         </span>
-                        <span className="tag-clip tag-clip-yellow tag-clip text-[9px]">
+                        <span className="rounded-md border border-amber-500/40 bg-warning/10 text-warning px-2 py-0.5 font-mono text-[9px]">
                           ✨ {warpData.asmaulName}
                         </span>
                       </div>
@@ -252,12 +276,12 @@ export function RandomWarpGenerator() {
                         &ldquo;{warpData.textLatin}&rdquo;
                       </p>
 
-                      <div className="bg-space tag-clip border border-primary/20 p-3 text-xs text-foreground/90">
+                      <div className="bg-background rounded-md border border-primary/20 p-3 text-xs text-foreground/90">
                         &ldquo;{warpData.translationId}&rdquo;
                       </div>
 
                       {/* Hadith Note */}
-                      <div className="tag-clip border border-secondary/40 bg-secondary/15 p-3 text-xs text-primary">
+                      <div className="rounded-md border border-secondary/40 bg-secondary/15 p-3 text-xs text-primary">
                         <span className="mb-1 block font-bold text-accent">
                           📜 KAITAN HADITS NABAWI:
                         </span>
@@ -269,7 +293,7 @@ export function RandomWarpGenerator() {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={triggerWarp}
-                            className="btn-primary px-3.5 py-2 text-[10px] btn-clip"
+                            className="btn-primary px-3.5 py-2 text-[10px] "
                           >
                             🔄 WARP AGAIN
                           </button>
@@ -323,7 +347,7 @@ export function RandomWarpGenerator() {
                               stopAudio()
                               setIsOpen(false)
                             }}
-                            className="btn-primary px-3.5 py-2 text-[10px] btn-clip"
+                            className="btn-primary px-3.5 py-2 text-[10px] "
                           >
                             READ SURAH →
                           </Link>

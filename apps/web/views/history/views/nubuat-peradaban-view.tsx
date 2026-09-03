@@ -85,16 +85,16 @@ export function NubuatPeradabanView() {
           <div className="border-success/40 relative ml-4 space-y-6 border-l-2 pl-6">
             {CIVILIZATION_TIMELINE.map((ep, idx) => (
               <div key={idx} className="group relative">
-                <div className="bg-space border-success absolute top-1.5 -left-[31px] flex h-3.5 w-3.5 items-center justify-center rounded-full border-2">
+                <div className="bg-background border-success absolute top-1.5 -left-[31px] flex h-3.5 w-3.5 items-center justify-center rounded-full border-2">
                   <span className="bg-success h-1 w-1 rounded-full" />
                 </div>
 
-                <div className="panel-box border-success/30 bg-space tag-clip space-y-3 border p-6">
+                <div className="rounded-xl border border-border/40 bg-card/90 border-success/30 bg-background rounded-md space-y-3 border p-6">
                   <div className="border-success/20 flex flex-wrap items-center justify-between gap-2 border-b pb-2">
-                    <h3 className="font-display text-sm font-bold text-foreground">
+                    <h3 className="font-sans text-sm font-bold text-foreground">
                       {ep.epochName}
                     </h3>
-                    <span className="tag-clip tag-clip-green tag-clip text-[9px] font-bold">
+                    <span className="rounded-md border border-emerald-500/40 bg-success/10 text-success px-2 py-0.5 font-mono text-[9px] font-bold">
                       {ep.quranRef}
                     </span>
                   </div>

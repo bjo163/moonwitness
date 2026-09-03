@@ -12,7 +12,7 @@ test.describe('Scenario 4: Public Cosmic Portal & 3D Celestial Visualizers', () 
     await page.goto(WEB_PORTAL_URL)
 
     // Check for canvas or celestial container
-    const celestialView = page.locator('canvas, .military-box')
+    const celestialView = page.locator('canvas, .rounded-xl, .rounded-xl')
     await expect(celestialView.first()).toBeVisible()
   })
 })

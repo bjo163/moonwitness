@@ -141,7 +141,7 @@ export function GardenBrainstormView() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn-primary flex w-full items-center justify-center gap-2 px-4 py-2 text-xs btn-clip disabled:opacity-50"
+                className="btn-primary flex w-full items-center justify-center gap-2 px-4 py-2 text-xs  disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <LoaderCircle className="h-4 w-4 animate-spin" />
@@ -214,7 +214,7 @@ function Field({
         required={required}
         rows={3}
         maxLength={required ? 2500 : 1200}
-        className="tag-clip bg-space w-full border border-primary/30 p-3 text-xs text-foreground placeholder:text-primary/60 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
+        className="rounded-md bg-background w-full border border-primary/30 p-3 text-xs text-foreground placeholder:text-primary/60 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
       />
     </label>
   )
@@ -249,14 +249,14 @@ function ResultState({
     )
   if (!result)
     return (
-      <p className="bg-space/60 mt-4 border border-primary/15 p-4 text-xs leading-relaxed text-primary/70">
+      <p className="bg-background/60 mt-4 border border-primary/15 p-4 text-xs leading-relaxed text-primary/70">
         Complete the project context to receive a focused action plan.
       </p>
     )
 
   if (!parsedTasks) {
     return (
-      <pre className="border-success/25 bg-space/70 mt-4 max-h-[620px] overflow-auto border p-4 text-xs leading-relaxed whitespace-pre-wrap text-foreground">
+      <pre className="border-success/25 bg-background/70 mt-4 max-h-[620px] overflow-auto border p-4 text-xs leading-relaxed whitespace-pre-wrap text-foreground">
         {result}
       </pre>
     )
@@ -267,14 +267,14 @@ function ResultState({
       {parsedTasks.map((task, index) => (
         <div
           key={`${task.title}-${index}`}
-          className="tag-clip border-success/25 bg-space/70 border p-3"
+          className="rounded-md border-success/25 bg-background/70 border p-3"
         >
           <div className="border-success/20 mb-2 flex flex-wrap items-center justify-between gap-2 border-b pb-2">
             <p className="text-success text-[10px] font-bold">
               TASK {String(index + 1).padStart(2, "0")}
             </p>
             <div className="flex items-center gap-2 text-[10px]">
-              <span className="tag-clip tag-clip-green px-2 py-0.5 font-bold">
+              <span className="rounded-md border border-emerald-500/40 bg-success/10 text-success px-2 py-0.5 font-mono text-[10px] font-bold">
                 {task.type}
               </span>
               <span className="font-bold text-primary">{task.score}/99</span>

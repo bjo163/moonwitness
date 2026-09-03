@@ -223,14 +223,14 @@ export function GlobalSearchModal() {
       {/* Search Trigger Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="tag-clip flex cursor-pointer items-center gap-2 border border-primary/40 bg-primary/10 px-3 py-1.5 text-[10px] font-bold text-primary transition-all hover:bg-primary/25"
+        className="rounded-md flex cursor-pointer items-center gap-2 border border-primary/40 bg-primary/10 px-3 py-1.5 text-[10px] font-bold text-primary transition-all hover:bg-primary/25"
         title="Buka Mesin Pencari Universal (Ctrl + K)"
       >
         <Search className="h-3.5 w-3.5 text-primary" />
         <span className="hidden sm:inline">
           {/* SEARCH SCRIPTURES & HADITH */}
         </span>
-        <kbd className="bg-space hidden rounded border border-primary/30 px-1.5 py-0.5 text-[8px] text-muted md:inline">
+        <kbd className="bg-background hidden rounded border border-primary/30 px-1.5 py-0.5 text-[8px] text-muted md:inline">
           CTRL + K
         </kbd>
       </button>
@@ -256,7 +256,7 @@ export function GlobalSearchModal() {
         </div>
 
         {/* Input Bar (CLI Style) */}
-        <div className="border-success/20 bg-space/90 flex shrink-0 items-center gap-2 border-b px-5 py-4">
+        <div className="border-success/20 bg-background/90 flex shrink-0 items-center gap-2 border-b px-5 py-4">
           <div className="text-success text-sm font-bold tracking-wider whitespace-nowrap">
             root@moonwitness:~#
           </div>
@@ -304,7 +304,7 @@ export function GlobalSearchModal() {
           {query && (
             <button
               onClick={() => setQuery("")}
-              className="text-muted hover:text-white"
+              className="text-muted hover:text-foreground"
             >
               <X className="h-4 w-4" />
             </button>

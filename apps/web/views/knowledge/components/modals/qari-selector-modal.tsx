@@ -1,11 +1,11 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { Mic, Check, Volume2 } from "lucide-react"
-import { Modal } from "@workspace/ui"
-import { ModalTrigger } from "@workspace/ui"
+import { useLocalStorage } from "@workspace/hooks"
+import { Modal, ModalTrigger } from "@workspace/ui"
 
-export type QariOption = {
+export interface QariOption {
   id: string
   name: string
   arabicName: string
@@ -16,24 +16,38 @@ export type QariOption = {
 export const QARI_LIST: QariOption[] = [
   {
     id: "alafasy",
-    name: "Shaykh Mishary Rashid Alafasy",
-    arabicName: "مشاري بن راشد العفاسي",
-    subtext: "Kuwait • Clear Crisp Murattal",
+    name: "Mishary Rashid Al-Afasy",
+    arabicName: "مشاري راشد العفاسي",
+    subtext: "Kuwait • Clear & Melodic",
     cdnPath: "ar.alafasy",
   },
   {
     id: "abdulbasit",
-    name: "Shaykh Abdul Basit Abdul Samad",
+    name: "Abdul Basit Abdul Samad",
     arabicName: "عبد الباسط عبد الصمد",
-    subtext: "Egypt • Legendary Emotional Recitation",
+    subtext: "Egypt • Classic Murattal",
     cdnPath: "ar.abdulbasitmurattal",
   },
   {
-    id: "saadghamdi",
-    name: "Shaykh Saad Al-Ghamdi",
-    arabicName: "سعد الغامدي",
-    subtext: "Saudi Arabia • Melodic Warm Recitation",
-    cdnPath: "ar.saadghamdi",
+    id: "minshawi",
+    name: "Mohamed Siddiq Al-Minshawi",
+    arabicName: "محمد صديق المنشاوي",
+    subtext: "Egypt • Soulful & Precise",
+    cdnPath: "ar.minshawi",
+  },
+  {
+    id: "shuraym",
+    name: "Saud Al-Shuraim",
+    arabicName: "سعود الشريم",
+    subtext: "Makkah • Former Imam of Haram",
+    cdnPath: "ar.saoodshuraym",
+  },
+  {
+    id: "sudais",
+    name: "Abdur-Rahman As-Sudais",
+    arabicName: "عبد الرحمن السديس",
+    subtext: "Makkah • Imam of Grand Mosque",
+    cdnPath: "ar.abdurrahmaansudais",
   },
   {
     id: "husary",
@@ -47,19 +61,17 @@ export const QARI_LIST: QariOption[] = [
 export function QariSelectorModal() {
   const [mounted, setMounted] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedQariId, setSelectedQariId] = useState("alafasy")
+  const [selectedQariId, setSelectedQariId] = useLocalStorage<string>(
+    "mw_active_qari",
+    "alafasy"
+  )
 
   useEffect(() => {
     setTimeout(() => setMounted(true), 0)
-    const saved = localStorage.getItem("mw_active_qari")
-    if (saved) {
-      setSelectedQariId(saved)
-    }
   }, [])
 
   function selectQari(qariId: string) {
     setSelectedQariId(qariId)
-    localStorage.setItem("mw_active_qari", qariId)
     window.dispatchEvent(new CustomEvent("mw_qari_changed", { detail: qariId }))
     setIsOpen(false)
   }
@@ -93,10 +105,10 @@ export function QariSelectorModal() {
               <button
                 key={qari.id}
                 onClick={() => selectQari(qari.id)}
-                className={`tag-clip flex w-full items-center justify-between border p-3.5 text-left transition-all ${
+                className={`rounded-md flex w-full items-center justify-between border p-3.5 text-left transition-all ${
                   isSelected
-                    ? "bg-success/15 border-success text-white shadow-[0_0_15px_rgba(0,255,102,0.2)]"
-                    : "bg-space hover:border-success/50 border-primary/20 text-muted hover:text-foreground"
+                    ? "bg-success/15 border-success text-foreground shadow-sm"
+                    : "bg-background hover:border-success/50 border-primary/20 text-muted hover:text-foreground"
                 }`}
               >
                 <div className="space-y-1">
@@ -114,7 +126,7 @@ export function QariSelectorModal() {
                 </div>
 
                 {isSelected && (
-                  <div className="tag-clip bg-success/20 border-success text-success flex items-center gap-1 border px-2 py-1 text-[9px] font-bold">
+                  <div className="rounded-md bg-success/20 border-success text-success flex items-center gap-1 border px-2 py-1 text-[9px] font-bold">
                     <Check className="h-3 w-3" />
                     <span>ACTIVE</span>
                   </div>

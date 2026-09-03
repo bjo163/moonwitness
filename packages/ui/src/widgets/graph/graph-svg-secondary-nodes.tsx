@@ -9,7 +9,7 @@ export function GraphSvgSecondaryNodes() {
           r="30"
           className="stroke-warning fill-black"
           strokeWidth="2"
-          filter="url(#glow-yellow)"
+          filter="url(#node-shadow-)"
         />
         <ellipse
           cx="0"
@@ -57,7 +57,7 @@ export function GraphSvgSecondaryNodes() {
           r="30"
           className="fill-black stroke-primary"
           strokeWidth="2"
-          filter="url(#glow-cyan)"
+          filter="url(#node-shadow-)"
         />
         <path
           d="M0,8 L0,12 M-5,8 L5,8"
@@ -101,7 +101,7 @@ export function GraphSvgSecondaryNodes() {
           r="30"
           className="fill-black stroke-secondary"
           strokeWidth="2"
-          filter="url(#glow-blue)"
+          filter="url(#node-shadow-)"
         />
         <path
           d="M0,12 Q-10,0 -10,-5 A10,10 0 1,1 10,-5 Q10,0 0,12 Z"
@@ -145,7 +145,7 @@ export function GraphSvgSecondaryNodes() {
           r="30"
           className="stroke-knowledge fill-black"
           strokeWidth="2"
-          filter="url(#glow-purple)"
+          filter="url(#node-shadow-)"
         />
         <path
           d="M-10,10 L0,-10 L10,10 Z M-5,0 L5,0"
@@ -181,7 +181,7 @@ export function GraphSvgSecondaryNodes() {
           r="30"
           className="stroke-success fill-black"
           strokeWidth="2"
-          filter="url(#glow-emerald)"
+          filter="url(#node-shadow-)"
         />
         <path
           d="M-10,10 L10,10 M-8,10 L-8,-5 M0,10 L0,-5 M8,10 L8,-5 M-10,-5 L10,-5 L0,-12 Z"
@@ -217,7 +217,7 @@ export function GraphSvgSecondaryNodes() {
           r="14"
           className="fill-black stroke-primary"
           strokeWidth="2"
-          filter="url(#glow-cyan)"
+          filter="url(#node-shadow-)"
         />
         <circle
           r="18"

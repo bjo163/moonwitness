@@ -30,13 +30,52 @@ export function onCrash(listener: CrashListener): () => void {
 }
 
 export function reportCrash(error: Error | unknown, context?: { module?: string; extra?: Record<string, unknown> }): void {
-  const err = error instanceof Error ? error : new Error(String(error))
+  if (error === null || error === undefined) return
+
+  // Ignore abort errors from fetch or Next.js navigation cancellation
+  if (
+    (typeof error === 'object' && error !== null && 'name' in error && (error as any).name === 'AbortError') ||
+    (error instanceof Error && error.name === 'AbortError') ||
+    (typeof error === 'object' && error !== null && 'digest' in error && String((error as any).digest).startsWith('NEXT_'))
+  ) {
+    return
+  }
+
+  // Ignore empty objects or empty strings
+  if (typeof error === 'object' && error !== null && !(error instanceof Error) && Object.keys(error).length === 0) {
+    return
+  }
+
+  let message = 'Unknown runtime error'
+  let stack: string | undefined
+
+  if (error instanceof Error) {
+    message = error.message || error.name || 'Unknown Error'
+    stack = error.stack
+  } else if (typeof error === 'string') {
+    if (!error.trim()) return
+    message = error
+  } else if (typeof error === 'object' && error !== null) {
+    if ('message' in error && typeof (error as any).message === 'string' && (error as any).message.trim()) {
+      message = (error as any).message
+    } else {
+      try {
+        message = JSON.stringify(error)
+      } catch {
+        message = String(error)
+      }
+    }
+    if ('stack' in error && typeof (error as any).stack === 'string') {
+      stack = (error as any).stack
+    }
+  }
+
   const payload: CrashEventPayload = {
-    message: err.message || 'Unknown runtime error',
-    stack: err.stack,
+    message,
+    stack,
     module: context?.module,
     timestamp: new Date().toISOString(),
-    url: typeof window !== 'undefined' ? window.location.href : undefined,
+    url: typeof window !== 'undefined' ? window.location?.href : undefined,
   }
 
   if (process.env.NODE_ENV !== 'production') {
@@ -59,13 +98,35 @@ export function initGlobalCrashHandler(): void {
   initialized = true
 
   window.addEventListener('error', (event) => {
-    reportCrash(event.error || new Error(event.message), {
+    // Ignore DOM resource loading errors (e.g. <img>, <link>, <script> loading failures)
+    if (event.target && event.target !== window && event.target !== document) {
+      return
+    }
+
+    if (!event.error && !event.message) {
+      return
+    }
+
+    reportCrash(event.error || new Error(event.message || 'Window error event'), {
       module: 'window.onerror',
     })
   })
 
   window.addEventListener('unhandledrejection', (event) => {
-    reportCrash(event.reason || new Error('Unhandled Promise Rejection'), {
+    if (!event.reason) return
+    if (
+      typeof event.reason === 'object' &&
+      event.reason !== null &&
+      Object.keys(event.reason).length === 0 &&
+      !(event.reason instanceof Error)
+    ) {
+      return
+    }
+    if (event.reason?.name === 'AbortError' || event.reason?.message?.includes('aborted')) {
+      return
+    }
+
+    reportCrash(event.reason, {
       module: 'window.unhandledrejection',
     })
   })

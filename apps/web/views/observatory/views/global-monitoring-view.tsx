@@ -35,7 +35,7 @@ import { MaritimeTrafficWidget } from "@workspace/ui"
 import { GlobalClimateWidget } from "@workspace/ui"
 import { FinancialMarketsWidget } from "@workspace/ui"
 
-// Humanity & Cyber Widgets
+// Humanity & digital Widgets
 import { GlobalPopulationWidget } from "@workspace/ui"
 import { DigitalConsciousnessWidget } from "@workspace/ui"
 import { TrendingTopicsWidget } from "@workspace/ui"
@@ -119,7 +119,7 @@ export function GlobalMonitoringView() {
   return (
     <section
       id="monitoring"
-      className="bg-space border-success/30 relative z-10 overflow-hidden border-b py-20 font-mono text-foreground"
+      className="border-success/30 relative z-10 overflow-hidden border-b bg-background py-20 font-mono text-foreground"
     >
       {/* ═══ LAYER 1: DEEP SPACE BACKGROUND ══════════════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
@@ -129,10 +129,10 @@ export function GlobalMonitoringView() {
 
       <div className="relative z-10 mx-auto max-w-[1600px] space-y-4 px-4">
         {/* ═══ TOP HEADER ═════════════════════════════════════════════════════ */}
-        <div className="flex flex-col items-center justify-between gap-4 border-b border-white/10 pb-4 xl:flex-row">
+        <div className="flex flex-col items-center justify-between gap-4 border-b border-border pb-4 xl:flex-row">
           <div className="flex items-center gap-4">
-            <div className="bg-space inline-flex items-center gap-3 rounded-sm border-2 border-primary/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)]">
-              <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-black">
+            <div className="inline-flex items-center gap-3 rounded-sm border-2 border-primary/60 bg-background px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
+              <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-foreground">
                 12
               </span>
               <span>GLOBAL MONITORING CENTER</span>
@@ -144,7 +144,7 @@ export function GlobalMonitoringView() {
 
           <div className="flex shrink-0 items-center gap-6">
             <div className="text-right">
-              <div className="font-mono text-xl font-black tracking-widest text-white drop-shadow-[0_0_8px_#FFF]">
+              <div className="font-mono text-xl font-black tracking-widest text-foreground drop-shadow-sm">
                 {clockWIB}
               </div>
               <div className="mt-0.5 text-[9px] font-bold text-primary uppercase">
@@ -157,18 +157,18 @@ export function GlobalMonitoringView() {
                   .toUpperCase()}
               </div>
             </div>
-            <div className="border-l border-white/10 pl-6">
-              <div className="text-[9px] font-bold text-white/50 uppercase">
+            <div className="border-l border-border pl-6">
+              <div className="text-[9px] font-bold text-foreground/50 uppercase">
                 STATUS
               </div>
               {isLoading ? (
                 <div className="text-warning mt-1 flex items-center gap-2 text-[10px] font-black">
-                  <div className="bg-warning h-2 w-2 animate-pulse rounded-full shadow-[0_0_10px_#FF9900]" />
+                  <div className="bg-warning h-2 w-2 animate-pulse rounded-full shadow-sm" />
                   SYNCHRONIZING APIs...
                 </div>
               ) : (
                 <div className="text-success mt-1 flex items-center gap-2 text-[10px] font-black">
-                  <div className="bg-success h-2 w-2 animate-pulse rounded-full shadow-[0_0_10px_#00FF66]" />
+                  <div className="bg-success h-2 w-2 animate-pulse rounded-full shadow-sm" />
                   API SYNCED
                 </div>
               )}
@@ -188,7 +188,7 @@ export function GlobalMonitoringView() {
             { id: "SPIRITUAL", label: "SPIRITUAL", icon: Moon },
             { id: "DEMOGRAPHIC", label: "DEMOGRAPHIC", icon: Users },
             { id: "INTERNET", label: "INTERNET", icon: Wifi },
-            { id: "CYBER", label: "CYBER THREATS", icon: ShieldAlert },
+            { id: "SECURITY", label: "SECURITY THREATS", icon: ShieldAlert },
             { id: "ECONOMY", label: "ECONOMY", icon: DollarSign },
           ].map((cat) => (
             <button
@@ -196,8 +196,8 @@ export function GlobalMonitoringView() {
               onClick={() => setActiveCategory(cat.id as MonitoringCategory)}
               className={`flex items-center gap-2 rounded-sm border px-4 py-2 text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${
                 activeCategory === cat.id
-                  ? "border-primary bg-primary/20 text-primary shadow-[0_0_15px_rgba(0,240,255,0.2)]"
-                  : "bg-space border-white/10 text-white/50 hover:bg-white/5 hover:text-white"
+                  ? "border-primary bg-primary/20 text-primary shadow-sm"
+                  : "border-border bg-background text-foreground/50 hover:bg-muted/30 hover:text-foreground"
               }`}
             >
               <cat.icon
@@ -336,12 +336,12 @@ export function GlobalMonitoringView() {
         )}
 
         {/* ═══ FOOTER ═════════════════════════════════════════════════════════ */}
-        <div className="mt-6 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-4 font-mono text-[9px] text-primary md:flex-row">
+        <div className="mt-6 flex flex-col items-center justify-between gap-4 border-t border-border pt-4 font-mono text-[9px] text-primary md:flex-row">
           <div className="flex items-center gap-3">
             <span className="font-bold tracking-widest text-primary uppercase">
               GLOBAL INTELLIGENCE CENTER
             </span>
-            <div className="hidden border-l border-white/10 pl-3 font-sans text-white/50 normal-case italic lg:block">
+            <div className="hidden border-l border-border pl-3 font-sans text-foreground/50 normal-case italic lg:block">
               &quot;Knowledge without action is potential. Action without
               knowledge is risk. Together, they create a better world.&quot;
             </div>
@@ -354,7 +354,7 @@ export function GlobalMonitoringView() {
                 DATA INTEGRITY <span className="text-success">100%</span>
               </span>
               {/* Progress bar */}
-              <div className="bg-space ml-2 flex h-1.5 w-20 gap-0.5">
+              <div className="ml-2 flex h-1.5 w-20 gap-0.5 bg-background">
                 {[...Array(PROGRESS_SEGMENTS)].map((_, i) => (
                   <div key={i} className="bg-success h-full flex-1" />
                 ))}
@@ -364,11 +364,11 @@ export function GlobalMonitoringView() {
             <div className="hidden xl:block">
               <span>LAST UPDATED</span>
               <br />
-              <span className="text-white">26 May 2025 {clockWIB}</span>
+              <span className="text-foreground">26 May 2025 {clockWIB}</span>
             </div>
 
             <div>
-              <span className="text-white">SYSTEM {systemStatus}</span>
+              <span className="text-foreground">SYSTEM {systemStatus}</span>
               <br />
               <span className="text-success mt-0.5 flex items-center gap-1.5">
                 <span className="bg-success h-1.5 w-1.5 animate-pulse rounded-full" />{" "}

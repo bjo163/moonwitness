@@ -43,27 +43,24 @@ export function QiblaArView() {
     )
   }, [])
 
-  // 2. Fetch Arah Kiblat dari Aladhan API
+  // 2. Calculate Great-Circle Qibla Direction to Kaaba (Makkah: 21.4225° N, 39.8262° E)
   useEffect(() => {
     if (!location) return
 
-    const fetchQibla = async () => {
-      try {
-        const res = await fetch(
-          `http://api.aladhan.com/v1/qibla/${location.lat}/${location.lng}`
-        )
-        const json = await res.json()
-        if (json.data && json.data.direction) {
-          setQiblaTarget(json.data.direction)
-          setStatusMsg("QIBLA VECTOR ACQUIRED. CALIBRATING GYROSCOPE...")
-        } else {
-          setError("FAILED TO CALCULATE QIBLA DIRECTION FROM SATELLITE")
-        }
-      } catch (e: any) {
-        setError(`QIBLA API ERROR: ${e.message.toUpperCase()}`)
-      }
+    try {
+      const phi1 = (location.lat * Math.PI) / 180
+      const phi2 = (21.4225 * Math.PI) / 180
+      const deltaLambda = ((39.8262 - location.lng) * Math.PI) / 180
+      const y = Math.sin(deltaLambda)
+      const x = Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(deltaLambda)
+      const qiblaAngle = (Math.atan2(y, x) * 180) / Math.PI
+      const normalizedAngle = (qiblaAngle + 360) % 360
+
+      setQiblaTarget(Number(normalizedAngle.toFixed(1)))
+      setStatusMsg("QIBLA VECTOR ACQUIRED. CALIBRATING GYROSCOPE...")
+    } catch {
+      setError("FAILED TO CALCULATE QIBLA VECTOR")
     }
-    fetchQibla()
   }, [location])
 
   // 3. Sensor Kompas (Device Orientation)
@@ -170,7 +167,7 @@ export function QiblaArView() {
         accentColor="success"
       />
 
-      <div className="panel-box bg-space relative space-y-6 overflow-hidden border-2 border-primary/50 p-8 text-center shadow-[0_0_50px_rgba(0,240,255,0.25)]">
+      <div className="rounded-xl border border-border/40 bg-card/90 bg-background relative space-y-6 overflow-hidden border-2 border-primary/50 p-8 text-center shadow-sm">
         {/* Header Bar */}
         <div className="flex items-center justify-between border-b border-primary/20 pb-3 text-xs">
           <div className="flex items-center gap-2 font-bold text-primary">
@@ -178,7 +175,7 @@ export function QiblaArView() {
             <span>SATELLITE QIBLA RADAR</span>
           </div>
           <span
-            className={`tag-clip tag-clip px-2 py-0.5 text-[9px] font-bold ${isAligned ? "bg-success text-black shadow-[0_0_15px_#00FF66]" : "bg-warning text-black"}`}
+            className={`rounded-md rounded-md px-2 py-0.5 text-[9px] font-bold ${isAligned ? "bg-success text-black shadow-sm" : "bg-warning text-black"}`}
           >
             {isAligned ? "● TARGET LOCKED" : "○ SCANNING HORIZON"}
           </span>
@@ -227,7 +224,7 @@ export function QiblaArView() {
 
         {/* Status Telemetry Dashboard */}
         <div className="grid grid-cols-2 gap-3 pt-4 text-xs sm:grid-cols-4">
-          <div className="bg-panel tag-clip border border-primary/20 p-3 text-left">
+          <div className="bg-panel rounded-md border border-primary/20 p-3 text-left">
             <span className="block flex items-center gap-1 text-[8px] text-primary/50">
               <MapPin className="h-3 w-3" /> LATITUDE
             </span>
@@ -235,7 +232,7 @@ export function QiblaArView() {
               {location ? location.lat.toFixed(4) : "---"}°
             </span>
           </div>
-          <div className="bg-panel tag-clip border border-primary/20 p-3 text-left">
+          <div className="bg-panel rounded-md border border-primary/20 p-3 text-left">
             <span className="block flex items-center gap-1 text-[8px] text-primary/50">
               <MapPin className="h-3 w-3" /> LONGITUDE
             </span>
@@ -244,7 +241,7 @@ export function QiblaArView() {
             </span>
           </div>
 
-          <div className="bg-panel tag-clip border border-primary/20 p-3 text-left">
+          <div className="bg-panel rounded-md border border-primary/20 p-3 text-left">
             <span className="block text-[8px] text-primary/50">
               COMPASS HEADING
             </span>
@@ -254,7 +251,7 @@ export function QiblaArView() {
           </div>
 
           <div
-            className={`bg-panel tag-clip border p-3 text-left ${isAligned ? "border-success bg-success/10" : "border-primary/20"}`}
+            className={`bg-panel rounded-md border p-3 text-left ${isAligned ? "border-success bg-success/10" : "border-primary/20"}`}
           >
             <span className="block text-[8px] text-primary/50">
               QIBLA TARGET

@@ -5,7 +5,7 @@ export function ObservatoryTelemetry({ obs }: { obs: any }) {
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2.5 text-xs font-black tracking-widest text-primary uppercase">
-        <Activity className="h-4 w-4 animate-pulse text-emerald-400" />
+        <Activity className="h-4 w-4 animate-pulse text-success" />
         <span>LIVE TELEMETRY FEED</span>
       </div>
 
@@ -63,13 +63,13 @@ export function ObservatoryTelemetry({ obs }: { obs: any }) {
         ].map((t, idx) => (
           <div
             key={idx}
-            className="bg-space/40 hover:bg-space/60 flex flex-col justify-between rounded-lg border border-cyan-500/20 p-3 text-center shadow-inner backdrop-blur-md transition-colors hover:border-cyan-400/50"
+            className="bg-background/40 hover:bg-background/60 flex flex-col justify-between rounded-lg border border-border p-3 text-center shadow-inner backdrop-blur-md transition-colors hover:border-border"
           >
             <div className="text-[9px] font-black tracking-wider text-primary uppercase">
               {t.label}
             </div>
             <div
-              className="my-1.5 font-mono text-base font-black text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.7)]"
+              className="my-1.5 font-mono text-base font-black text-foreground drop-shadow-sm"
               style={{ color: t.col }}
             >
               {t.val}

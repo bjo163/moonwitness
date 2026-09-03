@@ -1,19 +1,16 @@
-import { Orbitron, JetBrains_Mono, Geist } from "next/font/google"
+import { Geist } from "next/font/google"
 import "@workspace/ui/globals.css"
 import { MoonProvider } from "@workspace/state"
 import { CommandCenterShell } from "@/components/shell"
 
-const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" })
-const jetBrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-})
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
 export const metadata = {
-  title: "MoonWitness OS — Command Center",
-  description: "Tactical Governance and Administrative Operations Terminal",
+  title: "MoonWitness — Command Center",
+  description: "MoonWitness administrative operations and platform management.",
 }
+
+export const dynamic = "force-dynamic"
 
 export default function RootLayout({
   children,
@@ -22,12 +19,12 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
-      className={`${orbitron.variable} ${jetBrainsMono.variable} ${geist.variable} dark`}
+      lang="id"
+      className={`${geist.variable}`}
       suppressHydrationWarning
     >
       <body
-        className="bg-[#030508] font-sans text-white antialiased selection:bg-cyber-purple/30 selection:text-white"
+        className="bg-background font-sans text-foreground antialiased"
         suppressHydrationWarning
       >
         <MoonProvider>

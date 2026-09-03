@@ -18,6 +18,8 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from "react"
+import { useLocalStorage } from "@workspace/hooks"
+import { readStoredWhispers, writeStoredWhispers } from "../lib/whisper-storage"
 import {
   MessageCircle,
   Send,
@@ -130,13 +132,15 @@ function getMercyMessage(requestId: string, count: number) {
   return `${m.arabic}\n\n"${m.meaning}"\n\n— ${m.latin} · ${m.ref}`
 }
 
+
+
 /**
  * Kirim MERCY whisper ke localStorage channel request tertentu.
  * Bisa dipanggil dari luar WhisperPanel (e.g., dari card header).
  */
 export function sendMercyWhisper(requestId: string): void {
   if (typeof window === "undefined") return
-  const existing = loadWhispers(requestId)
+  const existing = readStoredWhispers(requestId)
   const content = getMercyMessage(requestId, existing.length)
   const now = Date.now()
   const newWhisper: Whisper = {
@@ -149,7 +153,7 @@ export function sendMercyWhisper(requestId: string): void {
     isRead: false,
   }
   const updated = [...existing, newWhisper]
-  saveWhispers(requestId, updated)
+  writeStoredWhispers(requestId, updated)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -178,12 +182,12 @@ export function MercyButton({ requestId, onMercySent }: MercyButtonProps) {
     <button
       onClick={handleMercy}
       title="Kirim MERCY — DIVINE whisper rahmat"
-      className={`group hud-clip-btn flex items-center gap-1.5 border px-3 py-1.5 font-mono text-[9px] font-bold tracking-widest uppercase transition-all duration-300 ${
+      className={`group rounded-lg flex items-center gap-1.5 border px-3 py-1.5 font-mono text-[9px] font-bold tracking-widest uppercase transition-all duration-300 ${
         glowing
-          ? "border-yellow-300/80 bg-yellow-400/20 text-yellow-200 shadow-[0_0_20px_rgba(255,230,0,0.4)]"
+          ? "border-yellow-300/80 bg-yellow-400/20 text-yellow-200 shadow-sm"
           : sent
             ? "border-yellow-400/50 bg-yellow-400/10 text-yellow-300"
-            : "border-yellow-400/20 bg-transparent text-yellow-400/50 hover:border-yellow-400/50 hover:bg-yellow-400/10 hover:text-yellow-300 hover:shadow-[0_0_12px_rgba(255,230,0,0.2)]"
+            : "border-yellow-400/20 bg-transparent text-warning/50 hover:border-yellow-400/50 hover:bg-yellow-400/10 hover:text-yellow-300 hover:shadow-sm"
       } `}
     >
       <Heart
@@ -272,50 +276,19 @@ const TIER_CONFIG: Record<
   SHADOW: {
     label: "SHADOW",
     icon: <Star className="h-3 w-3" />,
-    color: "text-white",
-    border: "border-white/20",
-    bg: "bg-white/5",
+    color: "text-foreground",
+    border: "border-border",
+    bg: "bg-muted/30",
     align: "items-end",
   },
   HUMAN: {
     label: "HUMAN",
     icon: <User className="h-3 w-3" />,
-    color: "text-cyber-cyan",
-    border: "border-cyber-cyan/30",
-    bg: "bg-cyber-cyan/5",
+    color: "text-primary",
+    border: "border-primary/30",
+    bg: "bg-primary/5",
     align: "items-start",
   },
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// STORAGE — localStorage (pure, no server needed)
-// Decentralized: setiap device menyimpan whisper-nya sendiri
-// ─────────────────────────────────────────────────────────────────────────────
-
-function storageKey(requestId: string) {
-  return `mw_whisper_${requestId}`
-}
-
-function loadWhispers(requestId: string): Whisper[] {
-  if (typeof window === "undefined") return []
-  try {
-    const raw = localStorage.getItem(storageKey(requestId))
-    if (!raw) return []
-    const all: Whisper[] = JSON.parse(raw)
-    const now = Date.now()
-    // Auto-expire: buang yang sudah habis masanya
-    return all.filter((w) => w.expiresAt > now)
-  } catch {
-    return []
-  }
-}
-
-function saveWhispers(requestId: string, whispers: Whisper[]) {
-  if (typeof window === "undefined") return
-  const now = Date.now()
-  // Hanya simpan yang belum expired
-  const active = whispers.filter((w) => w.expiresAt > now)
-  localStorage.setItem(storageKey(requestId), JSON.stringify(active))
 }
 
 function generateId() {
@@ -377,14 +350,14 @@ function WhisperBubble({
         >
           {cfg.icon} {cfg.label}
         </span>
-        <span className="font-mono text-[8px] text-white/20">
+        <span className="font-mono text-[8px] text-foreground/20">
           {formatDate(whisper.createdAt)}
         </span>
       </div>
 
       {/* Bubble */}
       <div
-        className={`hud-clip-card relative max-w-[85%] border px-3 py-2 ${cfg.border} ${cfg.bg} `}
+        className={`rounded-xl relative max-w-[85%] border px-3 py-2 ${cfg.border} ${cfg.bg} `}
       >
         <p className={`font-mono text-xs ${cfg.color} leading-relaxed`}>
           {whisper.content}
@@ -394,7 +367,7 @@ function WhisperBubble({
         <div className={`mt-2 flex items-center justify-between gap-2`}>
           <span
             className={`flex items-center gap-1 font-mono text-[8px] ${
-              timeLeft.urgent ? "text-yellow-400/70" : "text-white/20"
+              timeLeft.urgent ? "text-warning/70" : "text-foreground/20"
             }`}
           >
             <Clock className="h-2.5 w-2.5" />
@@ -402,7 +375,7 @@ function WhisperBubble({
           </span>
           <button
             onClick={() => onDelete(whisper.id)}
-            className="text-white/15 transition-colors hover:text-red-400/60"
+            className="text-foreground/15 transition-colors hover:text-destructive/60"
             title="Hapus whisper"
           >
             <Trash2 className="h-3 w-3" />
@@ -424,86 +397,73 @@ interface WhisperPanelProps {
 
 export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [whispers, setWhispers] = useState<Whisper[]>([])
+  const [storedWhispers, setStoredWhispers] = useLocalStorage<Whisper[]>(
+    `mw_whisper_${requestId}`,
+    []
+  )
   const [inputValue, setInputValue] = useState("")
   const [selectedTier, setSelectedTier] = useState<WhisperTier>("SHADOW")
   const [selectedExpiry, setSelectedExpiry] = useState<WhisperExpiry>(7)
   const [showExpiryPicker, setShowExpiryPicker] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
 
-  // Load on mount & when opened
-  useEffect(() => {
-    if (isOpen) {
-      setWhispers(loadWhispers(requestId))
-    }
-  }, [isOpen, requestId])
+  const now = Date.now()
+  const whispers = storedWhispers.filter((w) => w.expiresAt > now)
 
   // Scroll to bottom on new message
   useEffect(() => {
     if (isOpen) {
       bottomRef.current?.scrollIntoView({ behavior: "smooth" })
     }
-  }, [whispers, isOpen])
-
-  // Tick every minute to refresh expiry display
-  useEffect(() => {
-    if (!isOpen) return
-    const id = setInterval(() => {
-      setWhispers(loadWhispers(requestId))
-    }, 60_000)
-    return () => clearInterval(id)
-  }, [isOpen, requestId])
+  }, [whispers.length, isOpen])
 
   const handleSend = () => {
     if (!inputValue.trim()) return
 
-    const now = Date.now()
+    const sendTime = Date.now()
     const newWhisper: Whisper = {
       id: generateId(),
       requestId,
       tier: selectedTier,
       content: inputValue.trim(),
-      createdAt: now,
-      expiresAt: now + selectedExpiry * 86_400_000,
+      createdAt: sendTime,
+      expiresAt: sendTime + selectedExpiry * 86_400_000,
       isRead: false,
     }
 
-    const updated = [...whispers, newWhisper]
-    setWhispers(updated)
-    saveWhispers(requestId, updated)
+    const active = storedWhispers.filter((w) => w.expiresAt > sendTime)
+    setStoredWhispers([...active, newWhisper])
     setInputValue("")
   }
 
   const handleDelete = (id: string) => {
-    const updated = whispers.filter((w) => w.id !== id)
-    setWhispers(updated)
-    saveWhispers(requestId, updated)
+    setStoredWhispers(storedWhispers.filter((w) => w.id !== id))
   }
 
-  const activeCount = whispers.filter((w) => w.expiresAt > Date.now()).length
+  const activeCount = whispers.length
   const selectedExpiryConfig = EXPIRY_OPTIONS.find(
     (e) => e.days === selectedExpiry
   )!
 
   return (
-    <div className="mt-4 border-t border-white/5 pt-3">
+    <div className="mt-4 border-t border-border/30 pt-3">
       {/* Toggle button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`flex w-full items-center justify-between gap-2 rounded-none px-2 py-2 font-mono text-[10px] tracking-widest uppercase transition-all ${
-          isOpen ? "text-yellow-400/80" : "text-white/25 hover:text-white/50"
+          isOpen ? "text-warning" : "text-muted-foreground hover:text-foreground"
         } `}
       >
         <span className="flex items-center gap-2">
           <MessageCircle className="h-3.5 w-3.5" />
           WHISPER CHANNEL
           {activeCount > 0 && (
-            <span className="hud-clip-tag border border-yellow-400/30 px-1.5 py-0.5 text-[8px] text-yellow-400">
+            <span className="rounded-md border border-yellow-400/30 px-1.5 py-0.5 text-[8px] text-warning">
               {activeCount}
             </span>
           )}
         </span>
-        <span className="font-mono text-[8px] text-white/20">
+        <span className="font-mono text-[8px] text-muted-foreground">
           {isOpen ? (
             <ChevronUp className="h-3 w-3" />
           ) : (
@@ -515,20 +475,20 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
       {isOpen && (
         <div className="mt-2 flex flex-col gap-3">
           {/* Theology note */}
-          <div className="flex items-start gap-2 rounded-none border border-yellow-400/10 bg-yellow-400/4 px-3 py-2">
-            <Infinity className="mt-0.5 h-3 w-3 shrink-0 text-yellow-400/40" />
-            <p className="font-mono text-[9px] text-yellow-400/40 italic">
+          <div className="flex items-start gap-2 rounded-none border border-yellow-400/20 bg-yellow-400/5 px-3 py-2">
+            <Infinity className="mt-0.5 h-3 w-3 shrink-0 text-warning/60" />
+            <p className="font-mono text-[9px] text-warning/80 italic">
               Whisper ini bersifat fana — ia akan berakhir pada masanya.
               &quot;Kullu man &apos;alayha fan.&quot; QS 55:26
             </p>
           </div>
 
           {/* Chat area */}
-          <div className="flex max-h-64 flex-col gap-2 overflow-y-auto rounded-none border border-white/5 bg-black/30 p-3">
+          <div className="flex max-h-64 flex-col gap-2 overflow-y-auto rounded-none border border-border/40 bg-card/60 p-3">
             {whispers.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-6 text-center">
-                <MessageCircle className="mb-2 h-6 w-6 text-white/10" />
-                <p className="font-mono text-[9px] text-white/20">
+                <MessageCircle className="mb-2 h-6 w-6 text-muted-foreground/30" />
+                <p className="font-mono text-[9px] text-muted-foreground">
                   Belum ada whisper. Mulai komunikasi antar layer.
                 </p>
               </div>
@@ -544,7 +504,7 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
           <div className="relative">
             <button
               onClick={() => setShowExpiryPicker(!showExpiryPicker)}
-              className="flex w-full items-center justify-between border border-white/10 bg-black/30 px-3 py-2 font-mono text-[9px] text-white/40 hover:border-white/20"
+              className="flex w-full items-center justify-between border border-border/40 bg-card/60 px-3 py-2 font-mono text-[9px] text-muted-foreground hover:border-border/70"
             >
               <span className="flex items-center gap-2">
                 <Clock className="h-3 w-3" />
@@ -555,7 +515,7 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
             </button>
 
             {showExpiryPicker && (
-              <div className="absolute top-full right-0 left-0 z-10 border border-white/10 bg-black/90 backdrop-blur-md">
+              <div className="absolute top-full right-0 left-0 z-10 border border-border/40 bg-card/95 shadow-md backdrop-blur-md">
                 {EXPIRY_OPTIONS.map((opt) => (
                   <button
                     key={opt.days}
@@ -563,12 +523,12 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
                       setSelectedExpiry(opt.days)
                       setShowExpiryPicker(false)
                     }}
-                    className="flex w-full flex-col px-3 py-2 text-left hover:bg-white/5"
+                    className="flex w-full flex-col px-3 py-2 text-left hover:bg-muted/50"
                   >
-                    <span className="font-mono text-[10px] font-bold text-white/70">
+                    <span className="font-mono text-[10px] font-bold text-foreground">
                       {opt.label} — {opt.desc}
                     </span>
-                    <span className="font-mono text-[8px] text-yellow-400/40">
+                    <span className="font-mono text-[8px] text-warning/80">
                       {opt.ref}
                     </span>
                   </button>
@@ -585,10 +545,10 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
                 <button
                   key={tier}
                   onClick={() => setSelectedTier(tier)}
-                  className={`hud-clip-btn flex flex-1 items-center justify-center gap-1 border px-2 py-1.5 font-mono text-[8px] font-bold tracking-widest uppercase transition-all ${
+                  className={`rounded-lg flex flex-1 items-center justify-center gap-1 border px-2 py-1.5 font-mono text-[8px] font-bold tracking-widest uppercase transition-all ${
                     selectedTier === tier
                       ? `${cfg.border} ${cfg.color} ${cfg.bg}`
-                      : "border-white/10 text-white/25 hover:border-white/20"
+                      : "border-border/40 text-muted-foreground hover:border-border/70"
                   } `}
                 >
                   {cfg.icon} {tier}
@@ -609,12 +569,12 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
                 }
               }}
               placeholder={`Whisper dari ${selectedTier}...`}
-              className="flex-1 border border-white/10 bg-black/40 px-3 py-2 font-mono text-xs text-white placeholder:text-white/20 focus:border-yellow-400/30 focus:outline-none"
+              className="flex-1 border border-border/40 bg-card/60 px-3 py-2 font-mono text-xs text-foreground placeholder:text-muted-foreground focus:border-yellow-400/50 focus:outline-none"
             />
             <button
               onClick={handleSend}
               disabled={!inputValue.trim()}
-              className="hud-clip-btn border border-yellow-400/30 bg-yellow-400/8 px-3 py-2 text-yellow-400 transition-all hover:bg-yellow-400/15 hover:shadow-[0_0_10px_rgba(255,230,0,0.15)] disabled:cursor-not-allowed disabled:opacity-30"
+              className="rounded-lg border border-yellow-400/30 bg-yellow-400/10 px-3 py-2 text-warning transition-all hover:bg-yellow-400/20 hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-30"
             >
               <Send className="h-3.5 w-3.5" />
             </button>
@@ -622,8 +582,8 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
 
           {/* Warning */}
           <div className="flex items-center gap-2">
-            <AlertTriangle className="h-3 w-3 shrink-0 text-white/15" />
-            <p className="font-mono text-[8px] text-white/15">
+            <AlertTriangle className="h-3 w-3 shrink-0 text-foreground/15" />
+            <p className="font-mono text-[8px] text-foreground/15">
               Whisper disimpan secara lokal. Tidak ada server. Akan hilang
               otomatis sesuai masa yang dipilih.
             </p>

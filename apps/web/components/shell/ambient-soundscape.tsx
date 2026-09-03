@@ -119,26 +119,22 @@ export function AmbientSoundscape() {
   }
 
   return (
-    <div className="flex items-center gap-1.5 font-mono">
+    <div className="flex items-center gap-1.5 font-sans">
       <button
         onClick={togglePlay}
-        className={`tag-clip flex cursor-pointer items-center gap-1 border px-2 py-0.5 text-[8px] font-bold transition-all ${
+        className={`flex cursor-pointer items-center gap-1 rounded border px-2 py-1 text-xs font-medium transition-colors ${
           isPlaying
-            ? "text-success border-success/60 bg-success/10 animate-pulse"
-            : "border-primary/30 text-primary hover:border-primary"
+            ? "border-success/60 bg-success/10 text-success"
+            : "border-border text-muted-foreground hover:border-primary hover:text-primary"
         }`}
         title="Toggle Ambient Audio Soundscape"
       >
         {isPlaying ? (
-          <Volume2 className="text-success h-3 w-3" />
+          <Volume2 className="text-success h-3.5 w-3.5" />
         ) : (
-          <VolumeX className="h-3 w-3 text-primary" />
+          <VolumeX className="h-3.5 w-3.5" />
         )}
-        <span>
-          {isPlaying
-            ? `[ ${selectedTrack.name.toUpperCase()} ]`
-            : "[ AMBIENT SOUND ]"}
-        </span>
+        <span>{isPlaying ? selectedTrack.name : "Ambient sound"}</span>
       </button>
     </div>
   )

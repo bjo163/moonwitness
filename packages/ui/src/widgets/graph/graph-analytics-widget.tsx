@@ -36,7 +36,7 @@ export function GraphAnalyticsWidget() {
   return (
     <div className="grid grid-cols-1 items-stretch gap-4 pt-2 md:grid-cols-2 lg:grid-cols-5">
       {/* Graph Statistics */}
-      <div className="bg-space flex flex-col justify-between rounded-xl border border-white/10 p-4">
+      <div className="bg-background flex flex-col justify-between rounded-xl border border-border p-4">
         <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
           GRAPH STATISTICS
         </div>
@@ -45,7 +45,7 @@ export function GraphAnalyticsWidget() {
             <span className="flex items-center gap-2 text-primary">
               <Network className="h-3.5 w-3.5" /> Total Entities
             </span>
-            <span className="font-mono text-white">
+            <span className="font-mono text-foreground">
               {loading ? "..." : data?.statistics?.totalEntities}
             </span>
           </div>
@@ -53,7 +53,7 @@ export function GraphAnalyticsWidget() {
             <span className="flex items-center gap-2 text-primary">
               <Link2 className="h-3.5 w-3.5" /> Total Connections
             </span>
-            <span className="font-mono text-white">
+            <span className="font-mono text-foreground">
               {loading ? "..." : data?.statistics?.totalConnections}
             </span>
           </div>
@@ -61,7 +61,7 @@ export function GraphAnalyticsWidget() {
             <span className="flex items-center gap-2 text-primary">
               <Activity className="h-3.5 w-3.5" /> Active Relations
             </span>
-            <span className="font-mono text-white">
+            <span className="font-mono text-foreground">
               {loading ? "..." : data?.statistics?.activeRelations}
             </span>
           </div>
@@ -69,11 +69,11 @@ export function GraphAnalyticsWidget() {
             <span className="flex items-center gap-2 text-primary">
               <Database className="h-3.5 w-3.5" /> Data Sources
             </span>
-            <span className="font-mono text-white">
+            <span className="font-mono text-foreground">
               {loading ? "..." : data?.statistics?.dataSources}
             </span>
           </div>
-          <div className="mt-2 flex items-center justify-between border-t border-white/10 pt-2">
+          <div className="mt-2 flex items-center justify-between border-t border-border pt-2">
             <span className="flex items-center gap-2 text-primary">
               <Clock className="h-3.5 w-3.5" /> Last Updated
             </span>
@@ -85,18 +85,18 @@ export function GraphAnalyticsWidget() {
       </div>
 
       {/* Connection Strength */}
-      <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4">
+      <div className="bg-background flex flex-col rounded-xl border border-border p-4">
         <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
           CONNECTION STRENGTH
         </div>
         <div className="flex flex-1 items-center justify-between">
-          <div className="relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-4 border-primary shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+          <div className="relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-4 border-primary shadow-sm">
             <div
               className="absolute inset-0 rounded-full border-[4px] border-secondary border-r-transparent border-b-transparent"
               style={{ transform: "rotate(-20deg)" }}
             />
             <div
-              className="absolute inset-0 rounded-full border-[4px] border-primary border-b-transparent border-l-transparent shadow-[0_0_10px_#00F0FF]"
+              className="absolute inset-0 rounded-full border-[4px] border-primary border-b-transparent border-l-transparent shadow-sm"
               style={{ transform: "rotate(70deg)" }}
             />
             <div
@@ -109,7 +109,7 @@ export function GraphAnalyticsWidget() {
             />
 
             <div className="text-center">
-              <div className="font-mono text-sm leading-none font-black text-white">
+              <div className="font-mono text-sm leading-none font-black text-foreground">
                 128K
               </div>
               <div className="mt-0.5 text-[5px] font-bold text-primary uppercase">
@@ -122,25 +122,25 @@ export function GraphAnalyticsWidget() {
 
           <div className="flex-1 space-y-1.5 pl-4 text-[9px]">
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5 text-white/80">
+              <span className="flex items-center gap-1.5 text-foreground">
                 <span className="h-2 w-2 rounded-full bg-secondary" /> Strong
               </span>
               <span className="font-mono text-primary">42%</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5 text-white/80">
+              <span className="flex items-center gap-1.5 text-foreground">
                 <span className="h-2 w-2 rounded-full bg-primary" /> Medium
               </span>
               <span className="font-mono text-primary">35%</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5 text-white/80">
+              <span className="flex items-center gap-1.5 text-foreground">
                 <span className="bg-success h-2 w-2 rounded-full" /> Weak
               </span>
               <span className="font-mono text-primary">17%</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5 text-white/80">
+              <span className="flex items-center gap-1.5 text-foreground">
                 <span className="bg-knowledge h-2 w-2 rounded-full" /> Potential
               </span>
               <span className="font-mono text-primary">6%</span>
@@ -150,13 +150,13 @@ export function GraphAnalyticsWidget() {
       </div>
 
       {/* Top Connected Entities */}
-      <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4">
+      <div className="bg-background flex flex-col rounded-xl border border-border p-4">
         <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
           TOP CONNECTED ENTITIES
         </div>
         <div className="flex-1 space-y-2">
           {loading ? (
-            <div className="animate-pulse text-xs text-white/50">
+            <div className="animate-pulse text-xs text-foreground/50">
               Loading insights...
             </div>
           ) : (
@@ -168,7 +168,7 @@ export function GraphAnalyticsWidget() {
                     key={i}
                     className="group flex cursor-pointer items-center justify-between text-[9px]"
                   >
-                    <span className="flex items-center gap-2 text-white/80 transition-colors group-hover:text-white">
+                    <span className="flex items-center gap-2 text-foreground transition-colors group-hover:text-foreground">
                       <span className="w-4 text-center text-primary">
                         {i + 1}
                       </span>
@@ -187,17 +187,17 @@ export function GraphAnalyticsWidget() {
       </div>
 
       {/* Connections Over Time */}
-      <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4">
+      <div className="bg-background flex flex-col rounded-xl border border-border p-4">
         <div className="mb-2 flex items-center justify-between">
           <div className="text-[9px] font-black tracking-widest text-primary uppercase">
             CONNECTIONS OVER TIME
           </div>
-          <div className="flex cursor-pointer items-center gap-1 rounded bg-white/5 px-1.5 py-0.5 text-[8px] text-primary">
+          <div className="flex cursor-pointer items-center gap-1 rounded bg-muted/30 px-1.5 py-0.5 text-[8px] text-primary">
             All Time ∨
           </div>
         </div>
 
-        <div className="relative mt-2 mb-4 ml-5 flex-1 border-b border-l border-white/10">
+        <div className="relative mt-2 mb-4 ml-5 flex-1 border-b border-l border-border">
           <div className="absolute top-0 -left-5 -translate-y-1/2 text-[6px] text-primary">
             150K
           </div>
@@ -259,14 +259,14 @@ export function GraphAnalyticsWidget() {
 
       {/* Discovery Insights & Knowledge Explorer */}
       <div className="flex flex-col gap-4">
-        <div className="bg-space flex flex-1 flex-col rounded-xl border border-white/10 p-3">
+        <div className="bg-background flex flex-1 flex-col rounded-xl border border-border p-3">
           <div className="mb-2 text-[9px] font-black tracking-widest text-primary uppercase">
             DISCOVERY INSIGHTS
           </div>
           <div className="flex-1 space-y-2">
             <div className="flex items-start gap-2">
               <Zap className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
-              <div className="text-[8px] leading-tight text-white/80">
+              <div className="text-[8px] leading-tight text-foreground">
                 New connection found between{" "}
                 <span className="text-primary">Qur&apos;an (55:33)</span> and
                 Black Holes
@@ -274,24 +274,24 @@ export function GraphAnalyticsWidget() {
             </div>
             <div className="flex items-start gap-2">
               <CheckCircle2 className="text-success mt-0.5 h-3.5 w-3.5 shrink-0" />
-              <div className="text-[8px] leading-tight text-white/80">
+              <div className="text-[8px] leading-tight text-foreground">
                 Strong relation discovered between Patience and 37 historical
                 events
               </div>
             </div>
             <div className="flex items-start gap-2">
               <Globe2 className="text-warning mt-0.5 h-3.5 w-3.5 shrink-0" />
-              <div className="text-[8px] leading-tight text-white/80">
+              <div className="text-[8px] leading-tight text-foreground">
                 Ibrahim (AS) connected to 5 new astronomical phenomena
               </div>
             </div>
           </div>
-          <button className="mt-2 flex items-center gap-1 text-[8px] font-bold text-primary transition-colors hover:text-white">
+          <button className="mt-2 flex items-center gap-1 text-[8px] font-bold text-primary transition-colors hover:text-foreground">
             View All Insights <ArrowRight className="h-2.5 w-2.5" />
           </button>
         </div>
 
-        <div className="bg-space rounded-xl border border-primary/20 p-3">
+        <div className="bg-background rounded-xl border border-primary/20 p-3">
           <div className="mb-2 text-[9px] font-black tracking-widest text-primary uppercase">
             KNOWLEDGE EXPLORER
           </div>
@@ -300,7 +300,7 @@ export function GraphAnalyticsWidget() {
             <input
               type="text"
               placeholder="Search in graph..."
-              className="bg-space w-full rounded border border-white/10 py-1 pr-6 pl-6 text-[8px] text-white focus:outline-none"
+              className="bg-background w-full rounded border border-border py-1 pr-6 pl-6 text-[8px] text-foreground focus:outline-none"
             />
             <div className="absolute top-1/2 right-1 -translate-y-1/2 px-1 text-[6px] text-primary">
               ⌘ K
@@ -336,7 +336,7 @@ export function GraphAnalyticsWidget() {
               ))}
             </svg>
           </div>
-          <button className="mt-1 flex w-full items-center justify-center gap-1 text-center text-[8px] font-bold text-primary transition-colors hover:text-white">
+          <button className="mt-1 flex w-full items-center justify-center gap-1 text-center text-[8px] font-bold text-primary transition-colors hover:text-foreground">
             Open Full Explorer <ArrowRight className="h-2.5 w-2.5" />
           </button>
         </div>

@@ -60,7 +60,7 @@ export function MukjizatSainsView() {
       <div className="mx-auto max-w-5xl space-y-6 px-4 sm:px-6">
         {/* System Breadcrumb */}
 
-        {/* Tactical Context Block */}
+        {/* strategic Context Block */}
         <ContextBlock
           title={t("QURANIC SCIENTIFIC MIRACLES", "MUKJIZAT SAINS AL-QUR'AN")}
           subtitle={t(
@@ -69,16 +69,16 @@ export function MukjizatSainsView() {
           )}
           operation="QURAN-SCIENCE-MATRIX"
           status="ONLINE"
-          accentColor="knowledge"
+          accentColor="primary"
         />
 
         {/* Science Miracles Catalog */}
-        <Panel level="level2" accentColor="knowledge">
+        <Panel level="level2" accentColor="primary">
           <PanelHeader
             title="// QURANIC SCIENTIFIC PROOF MATRIX"
             status="VERIFIED"
             icon={Atom}
-            accentColor="knowledge"
+            accentColor="primary"
             subtitle="Harmonization of divine revelations revealed 1,400+ years ago with modern astrophysics & oceanography."
           />
 
@@ -86,13 +86,13 @@ export function MukjizatSainsView() {
             {SCIENCE_MIRACLES.map((sm) => (
               <div
                 key={sm.id}
-                className="bg-space tag-clip space-y-3 border border-secondary/30 p-5"
+                className="bg-background rounded-md space-y-3 border border-secondary/30 p-5"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-secondary/20 pb-2">
                   <h4 className="text-sm font-bold text-foreground">
                     {sm.title}
                   </h4>
-                  <span className="tag-clip tag-clip-purple tag-clip text-[9px] font-bold">
+                  <span className="rounded-md border border-border bg-muted text-primary px-2 py-0.5 font-mono text-[9px] font-bold">
                     {sm.quranRef}
                   </span>
                 </div>
@@ -102,7 +102,7 @@ export function MukjizatSainsView() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 pt-1 text-xs sm:grid-cols-2">
-                  <div className="bg-space tag-clip border border-secondary/20 p-3">
+                  <div className="bg-background rounded-md border border-secondary/20 p-3">
                     <p className="text-[9px] font-bold text-primary uppercase">
                       {/* PENEMUAN SAINS MODERN ({sm.discoveryYear}): */}
                     </p>
@@ -111,7 +111,7 @@ export function MukjizatSainsView() {
                     </p>
                   </div>
 
-                  <div className="bg-space tag-clip border border-secondary/20 p-3">
+                  <div className="bg-background rounded-md border border-secondary/20 p-3">
                     <p className="text-[9px] font-bold text-primary uppercase">
                       {/* ANALISIS HARMONISASI WAHYU & SAINS: */}
                     </p>

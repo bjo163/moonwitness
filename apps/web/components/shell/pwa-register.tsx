@@ -75,36 +75,36 @@ export function PwaRegister() {
   return (
     <>
       {isOffline && (
-        <div className="fixed right-4 bottom-16 z-50 flex animate-bounce items-center gap-2 rounded-2xl bg-amber-500 px-4 py-2 text-xs font-bold text-slate-950 shadow-xl">
-          <span>📡 Mode Offline Aktif</span>
-          <span className="text-[10px] opacity-80">
-            (Membaca Data Ter-Cache)
+        <div className="border-warning/50 text-warning fixed right-4 bottom-16 z-50 flex items-center gap-2 rounded-md border bg-card px-4 py-2 text-sm">
+          <span>Offline mode</span>
+          <span className="text-xs text-muted-foreground">
+            Cached data available
           </span>
         </div>
       )}
 
       {showInstallBanner && !isOffline && (
-        <div className="bg-space/90 fixed bottom-16 left-1/2 z-50 flex -translate-x-1/2 items-center gap-4 rounded-xl border border-cyan-500/30 p-4 shadow-[0_0_25px_rgba(0,240,255,0.2)] backdrop-blur-md">
+        <div className="fixed bottom-16 left-1/2 z-50 flex -translate-x-1/2 items-center gap-4 rounded-lg border border-primary/40 bg-card p-4">
           <div className="flex flex-col">
-            <span className="font-sans text-sm font-bold tracking-wider text-white uppercase">
+            <span className="font-sans text-sm font-semibold text-foreground">
               Install MoonWitness OS
             </span>
-            <span className="font-mono text-[10px] text-cyan-400">
-              Access offline via dedicated app
+            <span className="text-xs text-muted-foreground">
+              Access cached modules from the dedicated app
             </span>
           </div>
           <div className="flex gap-2">
             <button
               onClick={() => setShowInstallBanner(false)}
-              className="rounded border border-white/20 bg-black/40 px-3 py-1 font-mono text-[10px] text-slate-300 hover:text-white"
+              className="rounded-md border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             >
-              DISMISS
+              Dismiss
             </button>
             <button
               onClick={handleInstallClick}
-              className="rounded bg-cyan-500 px-3 py-1 font-mono text-[10px] font-bold text-black shadow-[0_0_10px_rgba(0,240,255,0.4)] hover:bg-cyan-400"
+              className="rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              INSTALL
+              Install
             </button>
           </div>
         </div>

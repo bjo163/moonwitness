@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "private": true,
-  "description": "Fault tolerance, HUD error boundaries, and telemetry crash reporter for MoonWitness OS",
+  "description": "Fault tolerance, error boundaries, and telemetry crash reporter for MoonWitness OS",
   "scripts": {
     "typecheck": "tsc --noEmit"
   },

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useResource } from "@workspace/hooks"
 import { fetchHadithList } from "@moon/client"
 import { HaditsCompendiumsBar } from "../components/hadits/hadits-compendiums-bar"
@@ -12,6 +12,7 @@ export function HaditsPortalView() {
   const [activeId, setActiveId] = useState("0")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedGrade, setSelectedGrade] = useState("ALL")
+  const [selectedCompendium, setSelectedCompendium] = useState("bukhari")
   const [currentPage, setCurrentPage] = useState(1)
   const PAGE_LIMIT = 20
 
@@ -20,7 +21,7 @@ export function HaditsPortalView() {
     total: number
   }>(
     async () => {
-      const res = await fetchHadithList("bukhari", currentPage, PAGE_LIMIT)
+      const res = await fetchHadithList(selectedCompendium, currentPage, PAGE_LIMIT)
       const rawList = res.items || []
 
       const formatted: FormattedHadithItem[] = rawList.map((item: any) => {
@@ -50,10 +51,15 @@ export function HaditsPortalView() {
       }
     },
     {
-      deps: [currentPage],
+      deps: [currentPage, selectedCompendium],
       initialData: { data: [], total: 187642 },
     }
   )
+
+  useEffect(() => {
+    setCurrentPage(1)
+    setActiveId("0")
+  }, [searchQuery, selectedGrade, selectedCompendium])
 
   const hadithData = hadithResponse?.data || []
   const totalHadiths = hadithResponse?.total || 187642
@@ -71,32 +77,36 @@ export function HaditsPortalView() {
   })
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#040814] pb-12 font-sans text-white selection:bg-cyan-500/30">
+    <div className="min-h-screen overflow-x-hidden bg-card pb-12 font-sans text-foreground selection:bg-primary/10">
       {/* 1. Top Compendiums Stats Bar */}
-      <HaditsCompendiumsBar totalHadiths={totalHadiths} />
+      <HaditsCompendiumsBar
+        totalHadiths={totalHadiths}
+        selectedSlug={selectedCompendium}
+        onSelect={setSelectedCompendium}
+      />
 
       <div className="mx-auto max-w-[1800px] space-y-6 px-4 pt-6 lg:px-6">
         {/* 2. Header Title */}
-        <div className="flex flex-col items-start justify-between gap-4 border-b border-white/10 pb-4 md:flex-row md:items-center">
+        <div className="flex flex-col items-start justify-between gap-4 border-b border-border pb-4 md:flex-row md:items-center">
           <div>
             <div className="mb-1 flex items-center gap-3">
-              <h1 className="font-mono text-2xl font-black tracking-widest text-white uppercase drop-shadow-md sm:text-3xl">
-                HADITH TRANSMISSION COMPENDIUM
+              <h1 className="font-sans text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+                {selectedCompendium === "bukhari" ? "Sahih al-Bukhari Collection" : "Hadith Collection Reader"}
               </h1>
-              <span className="rounded border border-cyan-500/30 bg-cyan-500/10 px-2 py-0.5 font-mono text-[9px] font-bold text-cyan-400">
-                KUTUBUT TIS&apos;AH
+              <span className="rounded-md border border-border bg-primary/10 px-2 py-0.5 font-sans text-xs font-semibold text-primary">
+                Kutubut Tis&apos;ah
               </span>
             </div>
-            <p className="font-mono text-xs text-white/50">
-              Universal Prophetic Sunnah & Chains of Transmission (Sanad) Telemetry
+            <p className="text-xs text-muted-foreground">
+              Prophetic traditions, verified narrations, and chains of transmission (Sanad).
             </p>
           </div>
 
           <div className="text-right">
-            <div className="font-arabic text-xl text-cyan-400/90 drop-shadow-[0_0_10px_rgba(0,240,255,0.3)]">
+            <div className="font-arabic text-xl text-primary/90 drop-shadow-sm">
               تَرَكْتُ فِيكُمْ أَمْرَيْنِ لَنْ تَضِلُّوا مَا تَمَسَّكْتُمْ بِهِمَا
             </div>
-            <p className="font-mono text-[9px] text-white/40 italic">
+            <p className="font-mono text-[9px] text-foreground/40 italic">
               &ldquo;I have left among you two matters; you will not go astray as long as you adhere to them.&rdquo;
             </p>
           </div>
@@ -119,11 +129,11 @@ export function HaditsPortalView() {
           {/* LEFT: Hadith Cards List */}
           <div className="space-y-4 lg:col-span-2">
             {loading && hadithData.length === 0 ? (
-              <div className="flex h-64 items-center justify-center rounded-xl border border-white/5 bg-[#080E1C] font-mono text-xs text-cyan-400">
+              <div className="flex h-64 items-center justify-center rounded-xl border border-border bg-card font-mono text-xs text-primary">
                 SYNCHRONIZING HADITH TELEMETRY...
               </div>
             ) : filteredHadiths.length === 0 ? (
-              <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-white/5 bg-[#080E1C] p-6 text-center font-mono text-xs text-white/40">
+              <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-border bg-card p-6 text-center font-mono text-xs text-foreground/40">
                 <p>No hadiths matched your query or filter.</p>
               </div>
             ) : (

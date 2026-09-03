@@ -25,25 +25,25 @@ export function QuickActions() {
   ]
 
   return (
-    <div className="flex h-full flex-col rounded-xl border border-cyan-500/20 bg-black/40 p-6 backdrop-blur-md">
-      <h3 className="mb-6 font-sans text-[10px] font-bold tracking-widest text-cyan-500/70 uppercase">
+    <div className="flex h-full flex-col rounded-xl border border-border bg-card p-6 shadow-sm text-card-foreground">
+      <h3 className="mb-4 font-sans text-xs font-semibold uppercase tracking-wider text-muted-foreground">
         Quick Actions
       </h3>
 
-      <div className="grid flex-1 grid-cols-1 gap-3">
+      <div className="grid flex-1 grid-cols-1 gap-2.5">
         {actions.map((action, i) => (
           <button
             key={i}
-            className="group flex items-center gap-4 rounded-lg border border-cyan-500/10 bg-white/5 p-3 text-left transition-all hover:border-cyan-500/40 hover:bg-cyan-500/10"
+            className="group flex items-center gap-3.5 rounded-lg border border-border bg-muted/30 p-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground"
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-md border border-cyan-500/20 bg-black text-cyan-500 transition-all group-hover:text-cyan-400 group-hover:shadow-[0_0_10px_rgba(34,211,238,0.3)]">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-primary shadow-sm">
               <action.icon className="h-4 w-4" />
             </div>
             <div>
-              <h4 className="font-sans text-xs font-semibold text-slate-200 transition-colors group-hover:text-white">
+              <h4 className="font-sans text-xs font-semibold text-foreground group-hover:text-accent-foreground">
                 {action.label}
               </h4>
-              <p className="font-sans text-[9px] text-slate-400">
+              <p className="font-sans text-[11px] text-muted-foreground">
                 {action.desc}
               </p>
             </div>

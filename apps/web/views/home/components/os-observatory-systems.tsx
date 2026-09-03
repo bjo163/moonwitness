@@ -34,7 +34,7 @@ export function OSObservatorySystems() {
       id="observatory"
       className="relative z-10 overflow-hidden border-b border-primary/30 py-20 font-mono text-foreground"
     >
-      {/* ═══ LAYER 1: DEEP SPACE SCI-FI GRADIENT & NEBULA MATRIX ═════════════ */}
+      {/* ═══ LAYER 1: DEEP SPACE modern GRADIENT & NEBULA MATRIX ═════════════ */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -44,15 +44,15 @@ export function OSObservatorySystems() {
         }}
       >
         <div className="theme-grid-bg absolute inset-0 opacity-20" />
-        <div className="bg-radial-gradient absolute bottom-1/3 left-1/2 h-[700px] w-[1300px] -translate-x-1/2 from-cyan-950/25 via-blue-900/15 to-transparent blur-[160px]" />
+        <div className="bg-radial-gradient absolute bottom-1/3 left-1/2 h-[700px] w-[1300px] -translate-x-1/2 from-primary/10 via-blue-900/15 to-transparent blur-[160px]" />
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,240,255,0.02)_1px,transparent_1px)] bg-[size:100%_4px]" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl space-y-10 px-6 sm:px-10">
         {/* ═══ SECTION HEADER ══════════════════════ */}
-        <div className="flex flex-col justify-between gap-6 border-b border-white/15 pb-6 md:flex-row md:items-end">
+        <div className="flex flex-col justify-between gap-6 border-b border-border pb-6 md:flex-row md:items-end">
           <div className="max-w-2xl space-y-4">
-            <h2 className="font-mono text-3xl font-black tracking-wider text-white uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] sm:text-5xl">
+            <h2 className="font-mono text-3xl font-black tracking-wider text-foreground uppercase drop-shadow-sm sm:text-5xl">
               GLOBAL CELESTIAL MONITORING TERMINAL
             </h2>
             <p className="border-l-2 border-primary pl-3 font-sans text-xs leading-relaxed text-primary italic">
@@ -65,10 +65,10 @@ export function OSObservatorySystems() {
           </div>
 
           {/* Atomic Clock & Date Terminal Badge */}
-          <div className="bg-space/40 flex shrink-0 items-center gap-4 rounded-xl border border-cyan-500/30 p-4 shadow-[0_0_35px_rgba(0,240,255,0.1)] backdrop-blur-xl transition-all duration-500 hover:border-cyan-400/50">
-            <Clock className="h-10 w-10 shrink-0 animate-pulse text-primary drop-shadow-[0_0_8px_#00F0FF]" />
+          <div className="bg-background/40 flex shrink-0 items-center gap-4 rounded-xl border border-border p-4 shadow-sm backdrop-blur-xl transition-all duration-500 hover:border-border">
+            <Clock className="h-10 w-10 shrink-0 animate-pulse text-primary drop-shadow-sm" />
             <div className="text-left">
-              <div className="font-mono text-2xl font-black tracking-widest text-white drop-shadow-[0_0_10px_#FFF]">
+              <div className="font-mono text-2xl font-black tracking-widest text-foreground drop-shadow-sm">
                 {clockWIB}
               </div>
               <div className="mt-0.5 text-[11px] font-bold text-primary uppercase">

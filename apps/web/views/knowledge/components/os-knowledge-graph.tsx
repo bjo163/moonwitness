@@ -15,7 +15,7 @@ export function OSKnowledgeGraph() {
   return (
     <section
       id="knowledge-graph"
-      className="bg-space border-knowledge/30 relative z-10 overflow-hidden border-b py-20 font-mono text-foreground"
+      className="bg-background border-knowledge/30 relative z-10 overflow-hidden border-b py-20 font-mono text-foreground"
     >
       {/* ═══ LAYER 1: DEEP SPACE BACKGROUND ══════════════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
@@ -25,10 +25,10 @@ export function OSKnowledgeGraph() {
 
       <div className="relative z-10 mx-auto max-w-[1700px] space-y-4 px-4">
         {/* ═══ TOP HEADER (Blueprint 14) ══════════════════════════════════════ */}
-        <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-4 xl:flex-row xl:items-center">
+        <div className="flex flex-col justify-between gap-4 border-b border-border pb-4 xl:flex-row xl:items-center">
           <div className="flex items-center gap-4">
-            <div className="bg-space inline-flex items-center gap-3 rounded-sm border-2 border-primary/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-[0_0_15px_rgba(0,240,255,0.2)]">
-              <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-black">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-primary/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
+              <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-foreground">
                 14
               </span>
               <span>KNOWLEDGE GRAPH</span>
@@ -65,7 +65,7 @@ export function OSKnowledgeGraph() {
               <div className="mb-1.5 text-[8px] tracking-widest text-primary uppercase">
                 RELATION TYPES
               </div>
-              <div className="bg-space flex items-center gap-3 rounded border border-white/10 px-3 py-1.5 text-[8px] font-bold text-primary uppercase">
+              <div className="bg-background flex items-center gap-3 rounded border border-border px-3 py-1.5 text-[8px] font-bold text-primary uppercase">
                 <span className="flex items-center gap-1">
                   <span className="bg-danger h-1.5 w-1.5 rounded-full" />{" "}
                   Revealed In
@@ -90,7 +90,7 @@ export function OSKnowledgeGraph() {
                   <span className="bg-knowledge h-1.5 w-1.5 rounded-full" />{" "}
                   Influenced By
                 </span>
-                <span className="ml-2 cursor-pointer text-primary hover:text-white">
+                <span className="ml-2 cursor-pointer text-primary hover:text-foreground">
                   View All
                 </span>
               </div>

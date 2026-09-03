@@ -1,6 +1,13 @@
-import { Vertex, fields } from '@moon/orm'
+import { Vertex, fields, type Ctx } from '@moon/orm'
+import { guardStockLocationMutation } from './stock-write-guards.js'
 
 export default class StockLocation extends Vertex {
+  static override beforeSave(_model: typeof Vertex, env: Ctx, values: Record<string, unknown>, id?: number) {
+    return guardStockLocationMutation(env, values, id)
+  }
+  static override beforeDelete(_model: typeof Vertex, env: Ctx, id: number) {
+    return guardStockLocationMutation(env, {}, id)
+  }
   static override _name = 'stock.location'
   static override _description = 'Inventory Location'
 

@@ -6,15 +6,15 @@ export const views: Record<string, ViewManifest> = {
     accentColor: 'pink',
     icon: 'Crosshair',
     table: {
-      columns: ['name', 'type', 'status', 'scriptureRef', 'createdAt'],
+      columns: ['name', 'targetUrl', 'verseIds', 'createdAt'],
       defaultSort: { field: 'createdAt', direction: 'desc' },
       searchKeys: ['name'],
     },
     form: {
       title: 'OPERATION RECORD',
       sections: [
-        { title: 'Operation', columns: 2, fields: ['name', 'type', 'status', 'scriptureRef'] },
-        { title: 'Details', columns: 1, fields: ['description'] },
+        { title: 'Operation', columns: 2, fields: ['name', 'targetUrl', 'targetImage', 'verseIds'] },
+        { title: 'Details', columns: 1, fields: ['argument', 'wisdom'] },
       ],
     },
   },

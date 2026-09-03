@@ -13,41 +13,41 @@ import {
 
 export function LawJusticeView() {
   return (
-    <div className="min-h-screen bg-[#020813] p-4 font-sans text-white select-none md:p-8">
+    <div className="min-h-screen bg-card p-4 font-sans text-foreground select-none md:p-8">
       {/* ═══ HEADER ROW ═══ */}
-      <div className="relative mb-8 grid grid-cols-1 gap-8 overflow-hidden rounded-2xl border border-white/5 bg-[#040C1A] p-8 lg:grid-cols-12">
-        {/* Glow Effects */}
-        <div className="pointer-events-none absolute top-0 right-0 h-[500px] w-[500px] translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/10 blur-[100px]" />
-        <div className="pointer-events-none absolute bottom-0 left-0 h-[300px] w-[300px] -translate-x-1/2 translate-y-1/2 rounded-full bg-cyan-500/10 blur-[80px]" />
+      <div className="relative mb-8 grid grid-cols-1 gap-8 overflow-hidden rounded-2xl border border-border bg-card p-8 lg:grid-cols-12">
+        {/* ambient Effects */}
+        <div className="pointer-events-none absolute top-0 right-0 h-[500px] w-[500px] translate-x-1/2 -translate-y-1/2 rounded-full bg-success/10 blur-[100px]" />
+        <div className="pointer-events-none absolute bottom-0 left-0 h-[300px] w-[300px] -translate-x-1/2 translate-y-1/2 rounded-full bg-primary/10 blur-[80px]" />
 
         <div className="relative z-10 flex flex-col justify-center lg:col-span-7">
           <div className="mb-6 flex items-center gap-3">
-            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-              <Scale className="h-6 w-6 text-emerald-400" />
+            <div className="rounded-xl border border-success/30 bg-success/10 p-3 shadow-sm">
+              <Scale className="h-6 w-6 text-success" />
             </div>
-            <span className="text-[10px] font-bold tracking-widest text-emerald-400 uppercase">
+            <span className="text-[10px] font-bold tracking-widest text-success uppercase">
               UMBRELLA MODULE
             </span>
           </div>
 
-          <h1 className="mb-4 text-3xl leading-tight font-black tracking-wider text-white md:text-5xl">
+          <h1 className="mb-4 text-3xl leading-tight font-black tracking-wider text-foreground md:text-5xl">
             LAW, JUSTICE &<br />
-            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-400 to-transparent bg-clip-text text-transparent">
               LIBERATION
             </span>
           </h1>
 
-          <p className="mb-8 max-w-xl text-sm leading-relaxed text-[#8F9FB3]">
+          <p className="mb-8 max-w-xl text-sm leading-relaxed text-muted-foreground">
             "And let not the hatred of others to you make you swerve to wrong
             and depart from justice. Be just: that is next to piety." (Q.S.
             Al-Ma'idah: 8)
           </p>
 
           <div className="flex gap-4">
-            <button className="flex items-center gap-2 rounded bg-emerald-500 px-6 py-3 text-[10px] font-bold tracking-widest text-[#020813] uppercase transition-colors hover:bg-emerald-400">
+            <button className="flex items-center gap-2 rounded bg-emerald-500 px-6 py-3 text-[10px] font-bold tracking-widest text-foreground uppercase transition-colors hover:bg-emerald-400">
               <Gavel className="h-4 w-4" /> INITIATE ADVOCACY
             </button>
-            <button className="flex items-center gap-2 rounded border border-white/10 bg-transparent px-6 py-3 text-[10px] font-bold tracking-widest text-white uppercase transition-colors hover:border-emerald-500/50 hover:bg-emerald-500/10">
+            <button className="flex items-center gap-2 rounded border border-border bg-transparent px-6 py-3 text-[10px] font-bold tracking-widest text-foreground uppercase transition-colors hover:border-emerald-500/50 hover:bg-success/10">
               <FileText className="h-4 w-4" /> LEGAL MANIFESTO
             </button>
           </div>
@@ -58,7 +58,7 @@ export function LawJusticeView() {
           <div className="relative aspect-square w-full max-w-[400px]">
             <svg
               viewBox="0 0 200 200"
-              className="h-full w-full drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+              className="h-full w-full drop-shadow-sm"
             >
               <defs>
                 <linearGradient
@@ -146,13 +146,13 @@ export function LawJusticeView() {
                 strokeWidth="1"
               />
 
-              {/* Glowing Nodes */}
+              {/* ambienting Nodes */}
               <circle
                 cx="100"
                 cy="40"
                 r="8"
                 fill="#10B981"
-                className="animate-pulse drop-shadow-[0_0_10px_rgba(16,185,129,1)]"
+                className="animate-pulse drop-shadow-sm"
               />
               <circle cx="42" cy="62" r="4" fill="#06B6D4" />
               <circle cx="158" cy="62" r="4" fill="#06B6D4" />
@@ -160,14 +160,14 @@ export function LawJusticeView() {
 
             {/* Overlay Text */}
             <div className="absolute top-[35%] left-[10%] text-center">
-              <div className="text-[20px] font-bold text-white">42%</div>
-              <div className="text-[6px] tracking-widest text-emerald-400 uppercase">
+              <div className="text-[20px] font-bold text-foreground">42%</div>
+              <div className="text-[6px] tracking-widest text-success uppercase">
                 JUSTICE INDEX
               </div>
             </div>
             <div className="absolute top-[35%] right-[10%] text-center">
-              <div className="text-[20px] font-bold text-white">58%</div>
-              <div className="text-[6px] tracking-widest text-emerald-400 uppercase">
+              <div className="text-[20px] font-bold text-foreground">58%</div>
+              <div className="text-[6px] tracking-widest text-success uppercase">
                 LIBERATION
               </div>
             </div>
@@ -182,17 +182,17 @@ export function LawJusticeView() {
             t: "UNIVERSAL JUSTICE",
             d: "Ensuring fair treatment, equal rights, and unbiased trials for all humanity regardless of background.",
             i: Scale,
-            c: "text-emerald-400",
-            bg: "bg-emerald-400/10",
-            bc: "border-emerald-500/30",
+            c: "text-success",
+            bg: "bg-success/10",
+            bc: "border-success/30",
           },
           {
             t: "LIBERATION OF OPPRESSED",
             d: "Actively breaking the systemic chains of the Mustadhafin (the marginalized and oppressed).",
             i: Shield,
-            c: "text-cyan-400",
-            bg: "bg-cyan-400/10",
-            bc: "border-cyan-500/30",
+            c: "text-primary",
+            bg: "bg-primary/10",
+            bc: "border-border",
           },
           {
             t: "HUMAN RIGHTS ADVOCACY",
@@ -205,17 +205,17 @@ export function LawJusticeView() {
         ].map((p, i) => (
           <div
             key={i}
-            className="group rounded-xl border border-white/5 bg-[#040C1A] p-6 transition-colors hover:border-white/20"
+            className="group rounded-xl border border-border bg-card p-6 transition-colors hover:border-border"
           >
             <div
               className={`h-12 w-12 rounded-lg ${p.bg} ${p.bc} mb-6 flex items-center justify-center border transition-transform group-hover:scale-110`}
             >
               <p.i className={`h-6 w-6 ${p.c}`} />
             </div>
-            <h3 className="mb-3 text-sm font-bold tracking-widest text-white uppercase">
+            <h3 className="mb-3 text-sm font-bold tracking-widest text-foreground uppercase">
               {p.t}
             </h3>
-            <p className="mb-6 text-[11px] leading-relaxed text-[#8F9FB3]">
+            <p className="mb-6 text-[11px] leading-relaxed text-muted-foreground">
               {p.d}
             </p>
             <button
@@ -231,12 +231,12 @@ export function LawJusticeView() {
       {/* ═══ DATA INTELLIGENCE ROW ═══ */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Active Cases */}
-        <div className="rounded-xl border border-white/5 bg-[#040C1A] p-6 lg:col-span-8">
+        <div className="rounded-xl border border-border bg-card p-6 lg:col-span-8">
           <div className="mb-6 flex items-center justify-between">
-            <h3 className="text-[10px] font-bold tracking-widest text-white uppercase">
+            <h3 className="text-[10px] font-bold tracking-widest text-foreground uppercase">
               ACTIVE LIBERATION FRONTS
             </h3>
-            <span className="rounded border border-emerald-500/30 bg-emerald-500/20 px-2 py-1 text-[8px] font-bold tracking-widest text-emerald-400 uppercase">
+            <span className="rounded border border-success/30 bg-success/20 px-2 py-1 text-[8px] font-bold tracking-widest text-success uppercase">
               3 HIGH PRIORITY
             </span>
           </div>
@@ -255,7 +255,7 @@ export function LawJusticeView() {
                 status: "Investigating",
                 progress: 45,
                 cases: "8,300",
-                color: "bg-cyan-500",
+                color: "bg-primary",
               },
               {
                 region: "Sudan Refugee Aid",
@@ -267,29 +267,29 @@ export function LawJusticeView() {
             ].map((c, i) => (
               <div
                 key={i}
-                className="flex flex-col justify-between gap-4 rounded-lg border border-white/5 bg-[#020813] p-4 md:flex-row md:items-center"
+                className="flex flex-col justify-between gap-4 rounded-lg border border-border bg-card p-4 md:flex-row md:items-center"
               >
                 <div>
-                  <div className="mb-1 text-[11px] font-bold tracking-widest text-white uppercase">
+                  <div className="mb-1 text-[11px] font-bold tracking-widest text-foreground uppercase">
                     {c.region}
                   </div>
-                  <div className="text-[9px] text-[#8F9FB3]">
+                  <div className="text-[9px] text-muted-foreground">
                     {c.cases} Affected Individuals
                   </div>
                 </div>
                 <div className="w-full max-w-xs flex-1">
                   <div className="mb-1.5 flex justify-between text-[8px] tracking-widest uppercase">
-                    <span className="text-white/70">{c.status}</span>
-                    <span className="text-white">{c.progress}%</span>
+                    <span className="text-foreground">{c.status}</span>
+                    <span className="text-foreground">{c.progress}%</span>
                   </div>
-                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted/30">
                     <div
                       className={`h-full ${c.color} rounded-full`}
                       style={{ width: `${c.progress}%` }}
                     />
                   </div>
                 </div>
-                <button className="rounded border border-white/10 px-4 py-2 text-[8px] font-bold tracking-widest text-white uppercase transition-colors hover:bg-white/5">
+                <button className="rounded border border-border px-4 py-2 text-[8px] font-bold tracking-widest text-foreground uppercase transition-colors hover:bg-muted/30">
                   View Docket
                 </button>
               </div>
@@ -298,12 +298,12 @@ export function LawJusticeView() {
         </div>
 
         {/* Strategic Directives */}
-        <div className="flex flex-col rounded-xl border border-white/5 bg-[#040C1A] p-6 lg:col-span-4">
+        <div className="flex flex-col rounded-xl border border-border bg-card p-6 lg:col-span-4">
           <div className="mb-6">
-            <h3 className="text-[10px] font-bold tracking-widest text-white uppercase">
+            <h3 className="text-[10px] font-bold tracking-widest text-foreground uppercase">
               STRATEGIC DIRECTIVES
             </h3>
-            <p className="mt-1 text-[9px] text-[#8F9FB3]">
+            <p className="mt-1 text-[9px] text-muted-foreground">
               Core tenets of prophetic justice
             </p>
           </div>
@@ -317,19 +317,19 @@ export function LawJusticeView() {
               "Foster restorative justice",
             ].map((d, i) => (
               <div key={i} className="flex items-start gap-3">
-                <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
-                <span className="text-[10px] leading-relaxed text-white/80">
+                <CheckCircle2 className="h-4 w-4 shrink-0 text-success" />
+                <span className="text-[10px] leading-relaxed text-foreground">
                   {d}
                 </span>
               </div>
             ))}
           </div>
 
-          <div className="mt-6 border-t border-white/10 pt-5">
-            <div className="mb-1 text-[8px] tracking-widest text-[#8F9FB3] uppercase">
+          <div className="mt-6 border-t border-border pt-5">
+            <div className="mb-1 text-[8px] tracking-widest text-muted-foreground uppercase">
               UMBRELLA COMMANDER
             </div>
-            <div className="font-mono text-[10px] font-bold text-emerald-400">
+            <div className="font-mono text-[10px] font-bold text-success">
               ALLIANCE OF THE JUST
             </div>
           </div>

@@ -82,18 +82,18 @@ export function KhidraCommandWidget() {
   }
 
   return (
-    <div className="bg-space border-success/30 flex h-[300px] flex-col gap-4 rounded-xl border-2 p-4 shadow-[0_0_20px_rgba(0,255,102,0.1)] md:flex-row lg:col-span-5">
+    <div className="bg-background border-success/30 flex h-[300px] flex-col gap-4 rounded-xl border-2 p-4 shadow-sm md:flex-row lg:col-span-5">
       <div className="flex w-24 shrink-0 flex-col items-center justify-center">
-        <div className="bg-space border-success/50 relative h-24 w-24 overflow-hidden rounded-lg border">
+        <div className="bg-background border-success/50 relative h-24 w-24 overflow-hidden rounded-lg border">
           <img
             alt="Khidra AI"
             src="/assets/mod_khidra.png"
             className="h-full w-full object-cover opacity-90 mix-blend-screen"
           />
-          <div className="from-space absolute inset-0 bg-gradient-to-t to-transparent opacity-50" />
+          <div className="from-background absolute inset-0 bg-gradient-to-t to-transparent opacity-50" />
         </div>
         <div className="mt-2 text-center">
-          <div className="text-[10px] font-black tracking-widest text-white uppercase">
+          <div className="text-[10px] font-black tracking-widest text-foreground uppercase">
             AI ADVISOR <span className="text-success">KHIDRA</span>
           </div>
           <div className="text-success/70 mt-0.5 text-[7px] uppercase">
@@ -102,7 +102,7 @@ export function KhidraCommandWidget() {
         </div>
       </div>
 
-      <div className="border-success/20 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border bg-black/40">
+      <div className="border-success/20 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border bg-card">
         <div
           ref={chatRef}
           className="hide-scrollbar flex-1 space-y-3 overflow-y-auto p-3 font-mono text-[9px] leading-relaxed"
@@ -116,7 +116,7 @@ export function KhidraCommandWidget() {
                 className={`max-w-[90%] rounded-md p-2 ${
                   msg.role === "user"
                     ? "bg-success/20 text-success border-success/30 border"
-                    : "border border-white/10 bg-white/5 text-white/90"
+                    : "border border-border bg-muted/30 text-foreground"
                 }`}
               >
                 {msg.content.split("\n").map((line, i) => (
@@ -129,7 +129,7 @@ export function KhidraCommandWidget() {
           ))}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="text-success flex items-center gap-2 rounded-md border border-white/10 bg-white/5 p-2">
+              <div className="text-success flex items-center gap-2 rounded-md border border-border bg-muted/30 p-2">
                 <Loader2 className="h-3 w-3 animate-spin" /> Analyzing...
               </div>
             </div>
@@ -143,7 +143,7 @@ export function KhidraCommandWidget() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             placeholder="Ask Khidra..."
-            className="border-success/30 text-success placeholder:text-success/30 focus:border-success flex-1 rounded border bg-black/50 px-2 py-1.5 font-mono text-[10px] focus:outline-none"
+            className="border-success/30 text-success placeholder:text-success/30 focus:border-success flex-1 rounded border bg-card px-2 py-1.5 font-mono text-[10px] focus:outline-none"
           />
           <button
             onClick={handleSend}

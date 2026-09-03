@@ -18,6 +18,47 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  audit:
+    name: Constitutional & UI Audit
+    runs-on: self-hosted
+    timeout-minutes: 10
+    env:
+      CI: 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Enable pinned pnpm
+        shell: bash
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.33.4 --activate
+          pnpm --version
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Constitutional & Enterprise UI Audit
+        id: audit
+        run: node scripts/audit-rules.mjs
+
+      - name: Audit Summary
+        if: always()
+        run: |
+          if [ "${{ steps.audit.outcome }}" == "success" ]; then
+            echo "audit=passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "audit=failed" >> $GITHUB_STEP_SUMMARY
+          fi
+
   lint:
     name: Lint
     runs-on: self-hosted
@@ -188,7 +229,7 @@ jobs:
     name: Report
     runs-on: self-hosted
     timeout-minutes: 5
-    needs: [lint, typecheck, test, build]
+    needs: [audit, lint, typecheck, test, build]
     if: always() && github.event_name == 'pull_request'
 
     steps:
@@ -196,6 +237,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const audit = '${{ needs.audit.result }}';
             const lint = '${{ needs.lint.result }}';
             const typecheck = '${{ needs.typecheck.result }}';
             const test = '${{ needs.test.result }}';
@@ -210,7 +252,7 @@ jobs:
 
             const isBlocking = (result) => result === 'failure' && result !== lint && result !== typecheck;
 
-            const allPassed = test === 'success' && build === 'success';
+            const allPassed = audit === 'success' && test === 'success' && build === 'success';
             const header = allPassed
               ? '## ✅ CI Passed — All Critical Checks Green'
               : '## ❌ CI Report — Action Required';
@@ -219,12 +261,13 @@ jobs:
 
             | Check | Status |
             |-------|--------|
+            | Constitutional & UI Audit | ${audit === 'success' ? '✅ passed' : '❌ failed'} |
             | Lint | ${status(lint)} |
             | Typecheck | ${status(typecheck)} |
             | Test | ${test === 'success' ? '✅ passed' : '❌ failed'} |
             | Build | ${build === 'success' ? '✅ passed' : '❌ failed'} |
 
-            ${allPassed ? '> **Critical checks (Test, Build) passed.** Lint and Typecheck are non-blocking.' : '> **Critical checks failed.** Please resolve Test or Build failures before merging.'}
+            ${allPassed ? '> **Critical checks (Audit, Test, Build) passed.** Lint and Typecheck are non-blocking.' : '> **Critical checks failed.** Please resolve Audit, Test, or Build failures before merging.'}
 
             — *MoonWitness Foundation CI · Run #${{ github.run_id }}*`;
 

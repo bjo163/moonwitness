@@ -8,9 +8,9 @@ export function SpaceWeatherWidget({
   spaceWeather?: SpaceWeatherEvent[]
 }) {
   return (
-    <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-3 xl:col-span-2">
+    <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-3 xl:col-span-2">
       <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-[9px] font-black tracking-widest text-white uppercase">
+        <div className="flex items-center gap-2 text-[9px] font-black tracking-widest text-foreground uppercase">
           SPACE WEATHER (DONKI)
           <span className="bg-warning/20 text-warning border-warning/30 animate-pulse rounded-[2px] border px-1.5 py-0.5 text-[8px]">
             NASA API
@@ -27,12 +27,12 @@ export function SpaceWeatherWidget({
           spaceWeather.map((sw, i) => (
             <div
               key={i}
-              className="group flex cursor-default items-center justify-between rounded border border-white/5 p-2 transition-colors hover:bg-white/5"
+              className="group flex cursor-default items-center justify-between rounded border border-border p-2 transition-colors hover:bg-muted/30"
             >
               <div className="flex max-w-[75%] items-start gap-2">
-                <Sun className="text-warning mt-0.5 h-4 w-4 shrink-0 transition-colors group-hover:text-white" />
+                <Sun className="text-warning mt-0.5 h-4 w-4 shrink-0 transition-colors group-hover:text-foreground" />
                 <div className="flex flex-col">
-                  <span className="text-[9px] font-bold text-white transition-colors">
+                  <span className="text-[9px] font-bold text-foreground transition-colors">
                     Coronal Mass Ejection
                   </span>
                   <span className="mt-1 line-clamp-2 text-[7px] text-primary">
@@ -44,7 +44,7 @@ export function SpaceWeatherWidget({
                 <span className="text-warning font-mono text-[9px] font-bold">
                   ACTIVE
                 </span>
-                <span className="text-[7px] text-white/50 uppercase">
+                <span className="text-[7px] text-foreground/50 uppercase">
                   {sw.startTime?.split("T")[0]}
                 </span>
               </div>

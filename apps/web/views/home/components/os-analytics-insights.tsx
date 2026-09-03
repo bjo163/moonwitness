@@ -40,33 +40,33 @@ export function OSAnalyticsInsights() {
   return (
     <section
       id="analytics"
-      className="bg-space relative z-10 overflow-hidden border-b border-purple-500/30 py-20 font-mono text-foreground"
+      className="bg-background relative z-10 overflow-hidden border-b border-border py-20 font-mono text-foreground"
     >
       {/* ═══ LAYER 1: DEEP SPACE MATRIX BACKGROUND ═══════════════════════════ */}
       <div className="pointer-events-none absolute inset-0">
         <div className="theme-grid-bg absolute inset-0 opacity-30" />
-        <div className="bg-radial-gradient absolute top-1/4 right-1/4 h-[800px] w-[800px] from-purple-900/15 via-blue-900/10 to-transparent blur-[120px]" />
+        <div className="bg-radial-gradient absolute top-1/4 right-1/4 h-[800px] w-[800px] from-primary/10 via-blue-900/10 to-transparent blur-[120px]" />
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(168,85,247,0.02)_1px,transparent_1px)] bg-[size:100%_4px]" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl space-y-6 px-6 sm:px-10">
         {/* ═══ TOP HEADER (Blueprint 09) ══════════════════════════════════════ */}
-        <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-6 lg:flex-row lg:items-end">
+        <div className="flex flex-col justify-between gap-6 border-b border-border pb-6 lg:flex-row lg:items-end">
           <div className="max-w-xl space-y-4">
-            <div className="bg-space inline-flex items-center gap-3 rounded-sm border-2 border-purple-500/60 px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-purple-300 uppercase shadow-[0_0_15px_rgba(168,85,247,0.3)]">
-              <span className="rounded-xs bg-purple-500 px-1.5 py-0.5 font-black text-black">
+            <div className="bg-background inline-flex items-center gap-3 rounded-sm border-2 border-border px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
+              <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-foreground">
                 09
               </span>
               <span>ANALYTICS & INSIGHTS</span>
             </div>
-            <h2 className="font-mono text-xl font-black tracking-widest text-white uppercase drop-shadow-[0_0_12px_rgba(255,255,255,0.7)] sm:text-3xl">
+            <h2 className="font-mono text-xl font-black tracking-widest text-foreground uppercase drop-shadow-sm sm:text-3xl">
               Knowledge. Progress. Impact.
             </h2>
           </div>
 
           <div className="flex flex-1 flex-col items-center justify-center p-4">
             <div
-              className="font-arabic mb-2 text-sm font-bold text-primary drop-shadow-[0_0_8px_#00F0FF] md:text-base"
+              className="font-arabic mb-2 text-sm font-bold text-primary drop-shadow-sm md:text-base"
               dir="rtl"
             >
               وَقُل رَّبِّ زِدْنِي عِلْمًا
@@ -81,7 +81,7 @@ export function OSAnalyticsInsights() {
 
           <div className="flex shrink-0 items-center gap-6">
             <div className="text-right">
-              <div className="font-mono text-2xl font-black tracking-widest text-white drop-shadow-[0_0_8px_#FFF]">
+              <div className="font-mono text-2xl font-black tracking-widest text-foreground drop-shadow-sm">
                 {clockWIB}
               </div>
               <div className="mt-1 text-[9px] font-bold text-primary uppercase">
@@ -92,19 +92,19 @@ export function OSAnalyticsInsights() {
               </div>
             </div>
 
-            <div className="h-14 w-px bg-white/10" />
+            <div className="h-14 w-px bg-muted/30" />
 
             <div className="flex items-center gap-3">
               <div>
                 <div className="mb-1 text-[9px] font-black tracking-widest text-primary uppercase">
                   KNOWLEDGE CYCLE
                 </div>
-                <div className="text-sm font-black tracking-wider text-emerald-400">
+                <div className="text-sm font-black tracking-wider text-success">
                   ACTIVE
                 </div>
               </div>
-              <div className="bg-space relative flex h-10 w-10 items-center justify-center rounded-full border border-emerald-500/40">
-                <Target className="h-5 w-5 animate-pulse text-emerald-500" />
+              <div className="bg-background relative flex h-10 w-10 items-center justify-center rounded-full border border-emerald-500/40">
+                <Target className="h-5 w-5 animate-pulse text-success" />
                 <div className="animate-spin-slow absolute inset-0 rounded-full border-t border-emerald-400" />
               </div>
             </div>
@@ -119,7 +119,7 @@ export function OSAnalyticsInsights() {
               TODAY'S SNAPSHOT
             </div>
 
-            <div className="bg-space flex items-start gap-3 rounded-lg border border-primary/30 p-3 shadow-[0_0_15px_rgba(0,240,255,0.1)]">
+            <div className="bg-background flex items-start gap-3 rounded-lg border border-primary/30 p-3 shadow-sm">
               <div className="shrink-0 rounded border border-primary/30 bg-primary/20 p-2 text-primary">
                 <BookOpen className="h-4 w-4" />
               </div>
@@ -127,7 +127,7 @@ export function OSAnalyticsInsights() {
                 <div className="mb-1 text-[10px] font-black tracking-wider text-primary uppercase">
                   TODAY&apos;S VERSE
                 </div>
-                <div className="mb-1 text-xs font-bold text-white">
+                <div className="mb-1 text-xs font-bold text-foreground">
                   Qur'an 67:5
                 </div>
                 <div className="font-sans text-[9px] leading-relaxed text-primary">
@@ -137,15 +137,15 @@ export function OSAnalyticsInsights() {
               </div>
             </div>
 
-            <div className="bg-space flex items-start gap-3 rounded-lg border border-amber-500/30 p-3 shadow-[0_0_15px_rgba(245,158,11,0.1)]">
-              <div className="shrink-0 rounded border border-amber-500/30 bg-amber-950/50 p-2 text-amber-400">
+            <div className="bg-background flex items-start gap-3 rounded-lg border border-warning/30 p-3 shadow-sm">
+              <div className="shrink-0 rounded border border-warning/30 bg-amber-950/50 p-2 text-warning">
                 <Scroll className="h-4 w-4" />
               </div>
               <div>
-                <div className="mb-1 text-[10px] font-black tracking-wider text-amber-400 uppercase">
+                <div className="mb-1 text-[10px] font-black tracking-wider text-warning uppercase">
                   TODAY'S HADITH
                 </div>
-                <div className="mb-1 text-xs font-bold text-white">
+                <div className="mb-1 text-xs font-bold text-foreground">
                   Sahih Bukhari 1
                 </div>
                 <div className="font-sans text-[9px] leading-relaxed text-primary">
@@ -155,7 +155,7 @@ export function OSAnalyticsInsights() {
               </div>
             </div>
 
-            <div className="bg-space flex items-center gap-3 rounded-lg border border-blue-500/30 p-3">
+            <div className="bg-background flex items-center gap-3 rounded-lg border border-blue-500/30 p-3">
               <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full">
                 <Image
                   unoptimized
@@ -170,7 +170,7 @@ export function OSAnalyticsInsights() {
                 <div className="mb-0.5 text-[10px] font-black tracking-wider text-blue-400 uppercase">
                   MOON STATUS
                 </div>
-                <div className="mb-1 text-[11px] font-bold text-white uppercase">
+                <div className="mb-1 text-[11px] font-bold text-foreground uppercase">
                   WAXING GIBBOUS
                 </div>
                 <div className="flex justify-between text-[8px] text-primary">
@@ -180,26 +180,26 @@ export function OSAnalyticsInsights() {
               </div>
             </div>
 
-            <div className="bg-space group flex cursor-pointer items-center justify-between rounded-lg border border-emerald-500/30 p-3 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+            <div className="bg-background group flex cursor-pointer items-center justify-between rounded-lg border border-success/30 p-3 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="shrink-0 rounded border border-emerald-500/30 bg-emerald-950/50 p-2 text-emerald-400">
+                <div className="shrink-0 rounded border border-success/30 bg-emerald-950/50 p-2 text-success">
                   <Clock className="h-4 w-4 animate-pulse" />
                 </div>
                 <div>
-                  <div className="mb-0.5 text-[10px] font-black tracking-wider text-emerald-400 uppercase">
+                  <div className="mb-0.5 text-[10px] font-black tracking-wider text-success uppercase">
                     PRAYER WINDOW
                   </div>
                   <div className="text-[9px] text-primary uppercase">
                     NEXT WAKTU
                   </div>
-                  <div className="text-[11px] font-bold text-white">
+                  <div className="text-[11px] font-bold text-foreground">
                     Dhuhr 11:55 WIB
                   </div>
                 </div>
               </div>
               <div className="text-right">
-                <ArrowRight className="mb-2 ml-auto h-3 w-3 text-primary transition-colors group-hover:text-emerald-400" />
-                <div className="text-xs font-black text-emerald-400">
+                <ArrowRight className="mb-2 ml-auto h-3 w-3 text-primary transition-colors group-hover:text-success" />
+                <div className="text-xs font-black text-success">
                   05:04:43
                 </div>
               </div>
@@ -207,7 +207,7 @@ export function OSAnalyticsInsights() {
           </div>
 
           {/* CENTER: KNOWLEDGE PROGRESS (Col 4-8) */}
-          <div className="bg-space flex flex-col justify-between rounded-xl border-2 border-primary/30 p-6 shadow-[0_0_40px_rgba(0,240,255,0.1)] lg:col-span-5">
+          <div className="bg-background flex flex-col justify-between rounded-xl border-2 border-primary/30 p-6 shadow-sm lg:col-span-5">
             <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
               KNOWLEDGE PROGRESS
             </div>
@@ -218,11 +218,11 @@ export function OSAnalyticsInsights() {
                 {/* 3 Rings */}
                 <div className="absolute inset-0 rounded-full border-[8px] border-primary" />
                 <div
-                  className="absolute inset-0 rounded-full border-[8px] border-primary border-t-transparent border-l-transparent shadow-[0_0_20px_#00F0FF]"
+                  className="absolute inset-0 rounded-full border-[8px] border-primary border-t-transparent border-l-transparent shadow-sm"
                   style={{ transform: "rotate(45deg)" }}
                 />
                 <div
-                  className="absolute inset-2 rounded-full border-[6px] border-purple-500 border-b-transparent border-l-transparent"
+                  className="absolute inset-2 rounded-full border-[6px] border-border border-b-transparent border-l-transparent"
                   style={{ transform: "rotate(-20deg)" }}
                 />
                 <div
@@ -230,15 +230,15 @@ export function OSAnalyticsInsights() {
                   style={{ transform: "rotate(10deg)" }}
                 />
 
-                <div className="animate-spin-slow absolute inset-0 rounded-full border border-dashed border-white/5" />
+                <div className="animate-spin-slow absolute inset-0 rounded-full border border-dashed border-border" />
 
                 <div className="text-center">
-                  <div className="mb-1 text-[9px] font-bold tracking-widest text-white uppercase">
+                  <div className="mb-1 text-[9px] font-bold tracking-widest text-foreground uppercase">
                     OVERALL
                     <br />
                     PROGRESS
                   </div>
-                  <div className="text-4xl font-black text-primary drop-shadow-[0_0_12px_#00F0FF]">
+                  <div className="text-4xl font-black text-primary drop-shadow-sm">
                     68%
                   </div>
                 </div>
@@ -261,10 +261,10 @@ export function OSAnalyticsInsights() {
                       className="h-3.5 w-3.5 shrink-0"
                       style={{ color: item.c }}
                     />
-                    <div className="w-20 text-[9px] font-black text-white">
+                    <div className="w-20 text-[9px] font-black text-foreground">
                       {item.n}
                     </div>
-                    <div className="bg-space h-1 flex-1 overflow-hidden rounded-full">
+                    <div className="bg-background h-1 flex-1 overflow-hidden rounded-full">
                       <div
                         className="h-full rounded-full"
                         style={{
@@ -290,7 +290,7 @@ export function OSAnalyticsInsights() {
               </div>
             </div>
 
-            <button className="mt-4 flex w-full items-center justify-center gap-2 rounded border border-cyan-500/40 bg-transparent py-3 text-[10px] font-black tracking-widest text-primary uppercase transition-colors hover:bg-primary/10">
+            <button className="mt-4 flex w-full items-center justify-center gap-2 rounded border border-border bg-transparent py-3 text-[10px] font-black tracking-widest text-primary uppercase transition-colors hover:bg-primary/10">
               VIEW DETAILED ANALYTICS <ArrowRight className="h-3.5 w-3.5" />
             </button>
           </div>
@@ -298,19 +298,19 @@ export function OSAnalyticsInsights() {
           {/* RIGHT: ACTIVITY OVERVIEW & RECENT (Col 9-12) */}
           <div className="flex flex-col gap-6 lg:col-span-4">
             {/* Activity Chart */}
-            <div className="bg-space flex flex-1 flex-col justify-between rounded-xl border border-white/10 p-5 shadow-lg">
+            <div className="bg-background flex flex-1 flex-col justify-between rounded-xl border border-border p-5 shadow-lg">
               <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
                 ACTIVITY OVERVIEW
               </div>
 
               <div className="mb-6 flex gap-2 text-[9px] font-bold tracking-wider">
-                <button className="flex-1 rounded border border-cyan-500/40 bg-primary/20 py-1.5 text-primary">
+                <button className="flex-1 rounded border border-border bg-primary/20 py-1.5 text-primary">
                   7 DAYS
                 </button>
-                <button className="flex-1 rounded border border-white/10 bg-transparent py-1.5 text-primary transition-colors hover:border-white/30">
+                <button className="flex-1 rounded border border-border bg-transparent py-1.5 text-primary transition-colors hover:border-border">
                   30 DAYS
                 </button>
-                <button className="flex-1 rounded border border-white/10 bg-transparent py-1.5 text-primary transition-colors hover:border-white/30">
+                <button className="flex-1 rounded border border-border bg-transparent py-1.5 text-primary transition-colors hover:border-border">
                   90 DAYS
                 </button>
               </div>
@@ -318,11 +318,11 @@ export function OSAnalyticsInsights() {
               {/* Chart Visual Simulation */}
               <div className="relative flex h-24 w-full items-end justify-between px-2 text-[8px] text-primary">
                 {/* Horizontal grid lines */}
-                <div className="absolute inset-x-0 bottom-0 border-t border-white/5" />
-                <div className="absolute inset-x-0 bottom-[25%] border-t border-white/5" />
-                <div className="absolute inset-x-0 bottom-[50%] border-t border-white/5" />
-                <div className="absolute inset-x-0 bottom-[75%] border-t border-white/5" />
-                <div className="absolute inset-x-0 top-0 border-t border-white/5" />
+                <div className="absolute inset-x-0 bottom-0 border-t border-border" />
+                <div className="absolute inset-x-0 bottom-[25%] border-t border-border" />
+                <div className="absolute inset-x-0 bottom-[50%] border-t border-border" />
+                <div className="absolute inset-x-0 bottom-[75%] border-t border-border" />
+                <div className="absolute inset-x-0 top-0 border-t border-border" />
 
                 {/* Left labels */}
                 <div className="absolute top-0 left-0 -translate-y-1/2">
@@ -352,7 +352,7 @@ export function OSAnalyticsInsights() {
                     fill="none"
                     stroke="#00F0FF"
                     strokeWidth="1.5"
-                    className="drop-shadow-[0_0_3px_#00F0FF]"
+                    className="drop-shadow-sm"
                   />
                   {/* Green line */}
                   <polyline
@@ -370,7 +370,7 @@ export function OSAnalyticsInsights() {
                   />
                 </svg>
 
-                <div className="relative z-10 mt-auto flex w-full justify-between border-t border-white/10 pt-2 pl-6 font-mono text-[7px] uppercase">
+                <div className="relative z-10 mt-auto flex w-full justify-between border-t border-border pt-2 pl-6 font-mono text-[7px] uppercase">
                   <span>19 MAY</span>
                   <span>20 MAY</span>
                   <span>21 MAY</span>
@@ -382,9 +382,9 @@ export function OSAnalyticsInsights() {
               </div>
 
               {/* Chart Legend */}
-              <div className="mt-4 flex items-center justify-between text-[8px] font-bold tracking-wider text-white uppercase">
+              <div className="mt-4 flex items-center justify-between text-[8px] font-bold tracking-wider text-foreground uppercase">
                 <span className="flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />{" "}
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />{" "}
                   READING
                 </span>
                 <span className="flex items-center gap-1.5">
@@ -392,7 +392,7 @@ export function OSAnalyticsInsights() {
                   STUDY
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-purple-400" />{" "}
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />{" "}
                   RESEARCH
                 </span>
                 <span className="flex items-center gap-1.5">
@@ -403,7 +403,7 @@ export function OSAnalyticsInsights() {
             </div>
 
             {/* Recent Discoveries */}
-            <div className="bg-space flex flex-1 flex-col justify-between rounded-xl border border-white/10 p-5">
+            <div className="bg-background flex flex-1 flex-col justify-between rounded-xl border border-border p-5">
               <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
                 RECENT DISCOVERIES
               </div>
@@ -445,7 +445,7 @@ export function OSAnalyticsInsights() {
                       style={{ color: act.c }}
                     />
                     <div className="flex-1">
-                      <div className="text-[10px] font-bold text-white">
+                      <div className="text-[10px] font-bold text-foreground">
                         {act.n}
                       </div>
                       <div className="max-w-[200px] truncate text-[9px] text-primary">
@@ -459,7 +459,7 @@ export function OSAnalyticsInsights() {
                 ))}
               </div>
 
-              <button className="mt-3 flex w-full items-center justify-end gap-1 text-right text-[9px] font-bold tracking-widest text-primary uppercase hover:text-white">
+              <button className="mt-3 flex w-full items-center justify-end gap-1 text-right text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
                 VIEW ALL ACTIVITY <ArrowRight className="h-3 w-3" />
               </button>
             </div>
@@ -469,18 +469,18 @@ export function OSAnalyticsInsights() {
         {/* ═══ LAYER 3: BOTTOM PANELS ROW (Blueprint 09) ══════════════════════ */}
         <div className="grid grid-cols-1 gap-6 pt-2 md:grid-cols-2 lg:grid-cols-4">
           {/* Panel 1: Learning Streak */}
-          <div className="bg-space flex flex-col justify-between rounded-xl border border-white/10 p-5">
+          <div className="bg-background flex flex-col justify-between rounded-xl border border-border p-5">
             <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
               LEARNING STREAK
             </div>
 
             <div className="mb-6 flex items-center gap-4">
-              <Flame className="h-10 w-10 animate-pulse text-rose-500 drop-shadow-[0_0_10px_#F43F5E]" />
+              <Flame className="h-10 w-10 animate-pulse text-rose-500 drop-shadow-sm" />
               <div>
                 <div className="font-mono text-3xl leading-none font-black text-primary">
                   100
                 </div>
-                <div className="mt-1 text-[9px] font-bold tracking-widest text-white uppercase">
+                <div className="mt-1 text-[9px] font-bold tracking-widest text-foreground uppercase">
                   DAYS
                 </div>
               </div>
@@ -492,26 +492,26 @@ export function OSAnalyticsInsights() {
             <div className="mb-6 flex items-center justify-between px-2 font-mono text-[9px] font-black">
               {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => (
                 <div key={i} className="flex flex-col items-center gap-2">
-                  <span className="text-white">{day}</span>
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500 drop-shadow-[0_0_5px_#10B981]" />
+                  <span className="text-foreground">{day}</span>
+                  <CheckCircle2 className="h-4 w-4 text-success drop-shadow-sm" />
                 </div>
               ))}
             </div>
 
-            <button className="flex w-full items-center gap-1 border-t border-white/10 pt-4 text-left text-[9px] font-bold tracking-widest text-primary uppercase hover:text-white">
+            <button className="flex w-full items-center gap-1 border-t border-border pt-4 text-left text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
               <Calendar className="h-3.5 w-3.5" /> VIEW CALENDAR{" "}
               <ArrowRight className="ml-auto h-3 w-3" />
             </button>
           </div>
 
           {/* Panel 2: Time Investment */}
-          <div className="bg-space flex flex-col justify-between rounded-xl border border-white/10 p-5">
+          <div className="bg-background flex flex-col justify-between rounded-xl border border-border p-5">
             <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
               TIME INVESTMENT
             </div>
 
             <div className="flex items-center justify-between gap-4">
-              <div className="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-full border-[6px] border-primary shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+              <div className="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-full border-[6px] border-primary shadow-sm">
                 {/* 4 Colored arcs */}
                 <div
                   className="absolute inset-0 rounded-full border-[6px] border-emerald-400 border-t-transparent border-l-transparent"
@@ -522,7 +522,7 @@ export function OSAnalyticsInsights() {
                   style={{ transform: "rotate(45deg)" }}
                 />
                 <div
-                  className="absolute inset-0 rounded-full border-[6px] border-purple-500 border-b-transparent border-l-transparent"
+                  className="absolute inset-0 rounded-full border-[6px] border-border border-b-transparent border-l-transparent"
                   style={{ transform: "rotate(-45deg)" }}
                 />
                 <div
@@ -534,7 +534,7 @@ export function OSAnalyticsInsights() {
                   <div className="mb-0.5 text-[8px] font-bold tracking-wider text-primary uppercase">
                     TOTAL
                   </div>
-                  <div className="font-mono text-sm leading-tight font-black text-white">
+                  <div className="font-mono text-sm leading-tight font-black text-foreground">
                     128h
                     <br />
                     45m
@@ -552,7 +552,7 @@ export function OSAnalyticsInsights() {
                   { l: "OTHERS", v: "8h 45m", c: "#64748B" },
                 ].map((t, i) => (
                   <div key={i} className="flex items-center justify-between">
-                    <span className="flex items-center gap-1.5 text-white">
+                    <span className="flex items-center gap-1.5 text-foreground">
                       <span
                         className="h-1.5 w-1.5 rounded-full"
                         style={{ backgroundColor: t.c }}
@@ -565,13 +565,13 @@ export function OSAnalyticsInsights() {
               </div>
             </div>
 
-            <button className="mt-6 flex w-full items-center justify-between border-t border-white/10 pt-4 text-center text-[9px] font-bold tracking-widest text-primary uppercase hover:text-white">
+            <button className="mt-6 flex w-full items-center justify-between border-t border-border pt-4 text-center text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
               VIEW TIME ANALYTICS <ArrowRight className="h-3 w-3" />
             </button>
           </div>
 
           {/* Panel 3: Weekly Goal */}
-          <div className="bg-space flex flex-col justify-between rounded-xl border border-emerald-500/30 p-5 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+          <div className="bg-background flex flex-col justify-between rounded-xl border border-success/30 p-5 shadow-sm">
             <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
               WEEKLY GOAL
             </div>
@@ -579,15 +579,15 @@ export function OSAnalyticsInsights() {
             <div className="flex items-center justify-between gap-4">
               <div className="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-full border-4 border-emerald-950">
                 <div
-                  className="absolute inset-0 rounded-full border-4 border-emerald-400 border-l-transparent shadow-[0_0_15px_#10B981]"
+                  className="absolute inset-0 rounded-full border-4 border-emerald-400 border-l-transparent shadow-sm"
                   style={{ transform: "rotate(-45deg)" }}
                 />
 
                 <div className="text-center">
-                  <div className="font-mono text-2xl font-black text-emerald-400">
+                  <div className="font-mono text-2xl font-black text-success">
                     78%
                   </div>
-                  <div className="text-[8px] font-bold tracking-wider text-white uppercase">
+                  <div className="text-[8px] font-bold tracking-wider text-foreground uppercase">
                     COMPLETED
                   </div>
                 </div>
@@ -600,94 +600,94 @@ export function OSAnalyticsInsights() {
                 </div>
                 <div>
                   <div className="text-primary">Achieved</div>
-                  <div className="font-black text-emerald-400">11h 42m</div>
+                  <div className="font-black text-success">11h 42m</div>
                 </div>
                 <div>
                   <div className="text-primary">Remaining</div>
-                  <div className="font-black text-white">03h 18m</div>
+                  <div className="font-black text-foreground">03h 18m</div>
                 </div>
               </div>
             </div>
 
-            <button className="mt-6 flex w-full items-center justify-between border-t border-white/10 pt-4 text-center text-[9px] font-bold tracking-widest text-emerald-400 uppercase hover:text-white">
+            <button className="mt-6 flex w-full items-center justify-between border-t border-border pt-4 text-center text-[9px] font-bold tracking-widest text-success uppercase hover:text-foreground">
               ADJUST GOAL <ArrowRight className="h-3 w-3" />
             </button>
           </div>
 
           {/* Panel 4: Knowledge Impact */}
-          <div className="bg-space flex flex-col justify-between rounded-xl border border-white/10 p-5">
+          <div className="bg-background flex flex-col justify-between rounded-xl border border-border p-5">
             <div className="mb-4 text-[10px] font-black tracking-widest text-primary uppercase">
               KNOWLEDGE IMPACT
             </div>
 
             <div className="grid h-full grid-cols-2 gap-3">
-              <div className="rounded border border-white/5 bg-white/5 p-2">
+              <div className="rounded border border-border bg-muted/30 p-2">
                 <div className="mb-2 flex items-center gap-2">
-                  <BookOpen className="h-3.5 w-3.5 text-emerald-400" />
+                  <BookOpen className="h-3.5 w-3.5 text-success" />
                   <span className="text-[8px] text-primary uppercase">
                     VERSES READ
                   </span>
                 </div>
-                <div className="font-mono text-xl font-black text-white">
+                <div className="font-mono text-xl font-black text-foreground">
                   1,248
                 </div>
-                <div className="text-[8px] text-emerald-400">
+                <div className="text-[8px] text-success">
                   +156 this week
                 </div>
               </div>
-              <div className="rounded border border-white/5 bg-white/5 p-2">
+              <div className="rounded border border-border bg-muted/30 p-2">
                 <div className="mb-2 flex items-center gap-2">
-                  <Scroll className="h-3.5 w-3.5 text-amber-400" />
+                  <Scroll className="h-3.5 w-3.5 text-warning" />
                   <span className="text-[8px] text-primary uppercase">
                     AHADITH READ
                   </span>
                 </div>
-                <div className="font-mono text-xl font-black text-white">
+                <div className="font-mono text-xl font-black text-foreground">
                   982
                 </div>
-                <div className="text-[8px] text-emerald-400">
+                <div className="text-[8px] text-success">
                   +112 this week
                 </div>
               </div>
-              <div className="rounded border border-white/5 bg-white/5 p-2">
+              <div className="rounded border border-border bg-muted/30 p-2">
                 <div className="mb-2 flex items-center gap-2">
                   <Book className="h-3.5 w-3.5 text-primary" />
                   <span className="text-[8px] text-primary uppercase">
                     PAGES STUDIED
                   </span>
                 </div>
-                <div className="font-mono text-xl font-black text-white">
+                <div className="font-mono text-xl font-black text-foreground">
                   1,532
                 </div>
-                <div className="text-[8px] text-emerald-400">
+                <div className="text-[8px] text-success">
                   +203 this week
                 </div>
               </div>
-              <div className="rounded border border-white/5 bg-white/5 p-2">
+              <div className="rounded border border-border bg-muted/30 p-2">
                 <div className="mb-2 flex items-center gap-2">
                   <FileText className="text-knowledge h-3.5 w-3.5" />
                   <span className="text-[8px] text-primary uppercase">
                     NOTES TAKEN
                   </span>
                 </div>
-                <div className="font-mono text-xl font-black text-white">
+                <div className="font-mono text-xl font-black text-foreground">
                   245
                 </div>
-                <div className="text-[8px] text-emerald-400">+37 this week</div>
+                <div className="text-[8px] text-success">+37 this week</div>
               </div>
             </div>
 
-            <button className="mt-4 flex w-full items-center justify-between border-t border-white/10 pt-4 text-center text-[9px] font-bold tracking-widest text-primary uppercase hover:text-white">
+            <button className="mt-4 flex w-full items-center justify-between border-t border-border pt-4 text-center text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
               VIEW IMPACT REPORT <ArrowRight className="h-3 w-3" />
             </button>
           </div>
         </div>
 
         {/* ═══ FOOTER STATUS STRIP (Blueprint 09 Footer) ══════════════════════ */}
-        <div className="mt-6 flex flex-col items-center justify-between gap-6 border-t border-white/10 px-2 pt-4 font-mono text-[9px] font-bold tracking-widest text-primary uppercase md:flex-row">
+        <div className="mt-6 flex flex-col items-center justify-between gap-6 border-t border-border px-2 pt-4 font-mono text-[9px] font-bold tracking-widest text-primary uppercase md:flex-row">
           <div className="flex items-center gap-4">
             <BookOpen className="h-6 w-6 text-primary" />
-            <div className="font-sans text-white/60 normal-case italic">
+            <div className="font-sans text-foreground/60 normal-case italic">
               "Knowledge is light. Action is power.
               <br />
               Sincerity is the key."
@@ -705,13 +705,13 @@ export function OSAnalyticsInsights() {
             ].map((h, i) => (
               <div
                 key={i}
-                className="w-0.5 bg-cyan-400"
+                className="w-0.5 bg-primary"
                 style={{ height: `${h}px` }}
               />
             ))}
           </div>
           <div className="flex flex-col items-end gap-1">
-            <div className="flex items-center gap-2 text-emerald-400">
+            <div className="flex items-center gap-2 text-success">
               KNOWLEDGE INTEGRITY 100% <ShieldCheck className="h-4 w-4" />
             </div>
             {/* Dot Progress Bar */}

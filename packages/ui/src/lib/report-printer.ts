@@ -1,7 +1,7 @@
 import type { ModelSchema } from "@workspace/types"
 
 /**
- * Universal Tactical Document & Briefing Printer
+ * Universal System Report & Document Printer
  * Opens a print-formatted window with cryptographic verification seal and triggers native browser print/PDF.
  */
 export function printRecordBriefing(schema: ModelSchema, record: any): void {
@@ -168,7 +168,7 @@ export function printRecordBriefing(schema: ModelSchema, record: any): void {
 
       <div class="signoff-section">
         <div>
-          <div class="signature-box">OPERATOR RATIFICATION & AUTHORITY SEAL</div>
+          <div class="signature-box">AUTHORIZED SIGNATURE & VERIFICATION SEAL</div>
         </div>
         <div class="qr-block">
           <div>TIMESTAMP: ${nowStr}</div>

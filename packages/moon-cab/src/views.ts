@@ -36,16 +36,16 @@ export const views: Record<string, ViewManifest> = {
     accentColor: 'purple',
     icon: 'CalendarDays',
     table: {
-      columns: ['title', 'scheduledAt', 'status', 'chairId'],
-      defaultSort: { field: 'scheduledAt', direction: 'desc' },
+      columns: ['title', 'scheduledFor', 'status', 'facilitatorId'],
+      defaultSort: { field: 'scheduledFor', direction: 'desc' },
       searchKeys: ['title'],
     },
     form: {
       title: 'GOVERNANCE MEETING',
       sections: [
-        { title: 'Meeting', columns: 2, fields: ['title', 'scheduledAt', 'status', 'chairId'] },
-        { title: 'Agenda', columns: 1, fields: ['agenda'] },
-        { title: 'Minutes', columns: 1, fields: ['minutes'] },
+        { title: 'Meeting', columns: 2, fields: ['title', 'scheduledFor', 'status', 'facilitatorId'] },
+        { title: 'Attendees', columns: 1, fields: ['attendeeIds'] },
+        { title: 'Notes', columns: 1, fields: ['notes'] },
       ],
     },
   },
@@ -55,13 +55,13 @@ export const views: Record<string, ViewManifest> = {
     accentColor: 'purple',
     icon: 'Gavel',
     table: {
-      columns: ['changeId', 'meetingId', 'decision', 'rationale'],
+      columns: ['changeId', 'meetingId', 'outcome', 'rationale'],
       searchKeys: ['rationale'],
     },
     form: {
       title: 'GOVERNANCE DECISION',
       sections: [
-        { title: 'Decision', columns: 2, fields: ['changeId', 'meetingId', 'decision'] },
+        { title: 'Decision', columns: 2, fields: ['changeId', 'meetingId', 'outcome'] },
         { title: 'Rationale', columns: 1, fields: ['rationale'] },
       ],
     },

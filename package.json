@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "private": true,
   "scripts": {
-    "dev": "turbo dev --parallel",
+    "dev": "turbo dev --filter=web --filter=command-center --filter=api --parallel",
     "dev:all": "turbo dev --filter=web --filter=command-center --filter=api --parallel",
     "dev:web": "turbo dev --filter=web",
     "dev:admin": "turbo dev --filter=command-center",
@@ -19,6 +19,10 @@
     "typecheck": "turbo typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
+    "certify:knowledge": "vitest run packages/moon-witness/tests/knowledge-certification.test.ts",
+    "release:check": "node scripts/release-check.mjs",
+    "release:verify": "node scripts/release-check.mjs && pnpm certify:knowledge && pnpm audit:ci",
+    "corpus:sync": "pnpm --filter=@moon/witness exec tsx scripts/sync-corpus.ts",
     "audit:rules": "node scripts/audit-rules.mjs",
     "audit:packages": "node scripts/audit-rules.mjs",
     "audit:ci": "node scripts/audit-rules.mjs && turbo typecheck && vitest run"

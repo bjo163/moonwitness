@@ -51,39 +51,39 @@ export interface ResourceTableProps<T> {
 
 const COLOR_MAP = {
   cyan: {
-    border: "border-cyber-cyan/30 hover:border-cyber-cyan/60",
-    headerGlow: "via-cyber-cyan",
-    badge: "bg-cyber-cyan/10 text-cyber-cyan border-cyber-cyan/30",
-    searchRing: "focus:border-cyber-cyan/60 focus:ring-cyber-cyan/20",
-    btnEdit: "border-cyber-cyan/40 bg-cyber-cyan/10 text-cyber-cyan hover:bg-cyber-cyan/20",
+    border: "border-sky-500/30 hover:border-sky-500/60",
+    headerGlow: "via-sky-500",
+    badge: "bg-sky-500/10 text-sky-500 border-sky-500/30",
+    searchRing: "focus:border-sky-500/60 focus:ring-sky-500/20",
+    btnEdit: "border-sky-500/40 bg-sky-500/10 text-sky-500 hover:bg-sky-500/20",
   },
   green: {
-    border: "border-cyber-green/30 hover:border-cyber-green/60",
-    headerGlow: "via-cyber-green",
-    badge: "bg-cyber-green/10 text-cyber-green border-cyber-green/30",
-    searchRing: "focus:border-cyber-green/60 focus:ring-cyber-green/20",
-    btnEdit: "border-cyber-green/40 bg-cyber-green/10 text-cyber-green hover:bg-cyber-green/20",
+    border: "border-success/30 hover:border-emerald-500/60",
+    headerGlow: "via-emerald-500",
+    badge: "bg-success/10 text-success border-success/30",
+    searchRing: "focus:border-emerald-500/60 focus:ring-emerald-500/20",
+    btnEdit: "border-emerald-500/40 bg-success/10 text-success hover:bg-success/20",
   },
   yellow: {
-    border: "border-cyber-yellow/30 hover:border-cyber-yellow/60",
-    headerGlow: "via-cyber-yellow",
-    badge: "bg-cyber-yellow/10 text-cyber-yellow border-cyber-yellow/30",
-    searchRing: "focus:border-cyber-yellow/60 focus:ring-cyber-yellow/20",
-    btnEdit: "border-cyber-yellow/40 bg-cyber-yellow/10 text-cyber-yellow hover:bg-cyber-yellow/20",
+    border: "border-warning/30 hover:border-amber-500/60",
+    headerGlow: "via-amber-500",
+    badge: "bg-warning/10 text-warning border-warning/30",
+    searchRing: "focus:border-amber-500/60 focus:ring-amber-500/20",
+    btnEdit: "border-amber-500/40 bg-warning/10 text-warning hover:bg-warning/20",
   },
   purple: {
-    border: "border-cyber-purple/30 hover:border-cyber-purple/60",
-    headerGlow: "via-cyber-purple",
-    badge: "bg-cyber-purple/10 text-cyber-purple border-cyber-purple/30",
-    searchRing: "focus:border-cyber-purple/60 focus:ring-cyber-purple/20",
-    btnEdit: "border-cyber-purple/40 bg-cyber-purple/10 text-cyber-purple hover:bg-cyber-purple/20",
+    border: "border-border hover:border-border",
+    headerGlow: "via-transparent",
+    badge: "bg-muted text-primary border-border",
+    searchRing: "focus:border-border focus:ring-purple-500/20",
+    btnEdit: "border-border bg-muted text-primary hover:bg-muted",
   },
   pink: {
-    border: "border-cyber-pink/30 hover:border-cyber-pink/60",
-    headerGlow: "via-cyber-pink",
-    badge: "bg-cyber-pink/10 text-cyber-pink border-cyber-pink/30",
-    searchRing: "focus:border-cyber-pink/60 focus:ring-cyber-pink/20",
-    btnEdit: "border-cyber-pink/40 bg-cyber-pink/10 text-cyber-pink hover:bg-cyber-pink/20",
+    border: "border-rose-500/30 hover:border-rose-500/60",
+    headerGlow: "via-rose-500",
+    badge: "bg-rose-500/10 text-rose-500 border-rose-500/30",
+    searchRing: "focus:border-rose-500/60 focus:ring-rose-500/20",
+    btnEdit: "border-rose-500/40 bg-rose-500/10 text-rose-500 hover:bg-rose-500/20",
   },
 }
 
@@ -141,21 +141,18 @@ export function ResourceTable<T = any>({
   const hasActions = onEdit || onDelete || actions
 
   return (
-    <div className={`relative overflow-hidden border bg-[#0A0F17]/90 backdrop-blur-md ${colors.border} ${className}`}>
-      {/* Top Accent Bar */}
-      <div className={`absolute top-0 right-0 left-0 h-[2px] bg-gradient-to-r from-transparent ${colors.headerGlow} to-transparent opacity-80`} />
-
+    <div className={`relative overflow-hidden rounded-xl border border-border/40 bg-card/90 backdrop-blur-md shadow-sm ${className}`}>
       {/* Header & Search Toolbar */}
       {(title || subtitle || searchKeys.length > 0 || headerActions) && (
-        <div className="flex flex-col justify-between gap-4 border-b border-white/10 p-5 sm:flex-row sm:items-center">
+        <div className="flex flex-col justify-between gap-4 border-b border-border/40 p-4 sm:p-5 sm:flex-row sm:items-center">
           <div>
             {title && (
-              <h3 className="font-orbitron text-sm font-black tracking-widest text-white uppercase">
-                ◈ {title}
+              <h3 className="text-sm font-bold tracking-tight text-foreground uppercase">
+                {title}
               </h3>
             )}
             {subtitle && (
-              <p className="mt-1 font-mono text-xs text-[#8B9BB0]">
+              <p className="mt-1 text-xs text-muted-foreground">
                 {subtitle}
               </p>
             )}
@@ -166,16 +163,16 @@ export function ResourceTable<T = any>({
 
             {searchKeys.length > 0 && (
               <div className="relative w-full sm:w-60">
-                <Search className="absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-white/40" />
+                <Search className="absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
                 <input
                   type="text"
-                  placeholder="FILTER DATABASE..."
+                  placeholder="Filter records..."
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value)
                     setCurrentPage(1)
                   }}
-                  className={`w-full border border-white/10 bg-black/60 py-1.5 pr-3 pl-8 font-mono text-xs text-white placeholder-white/30 transition-all focus:outline-none ${colors.searchRing}`}
+                  className={`w-full rounded-lg border border-border/50 bg-background/60 py-1.5 pr-3 pl-8 text-xs text-foreground placeholder:text-muted-foreground transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20`}
                 />
               </div>
             )}
@@ -188,7 +185,7 @@ export function ResourceTable<T = any>({
       {/* Table Container */}
       <div className="overflow-x-auto">
         <table className="w-full text-left font-mono text-xs">
-          <thead className="border-b border-white/10 bg-white/5 text-[9px] tracking-widest text-[#8B9BB0] uppercase">
+          <thead className="border-b border-border/50 bg-muted/50 text-[9px] tracking-widest text-muted-foreground uppercase">
             <tr>
               {columns.map((col, idx) => (
                 <th
@@ -211,17 +208,17 @@ export function ResourceTable<T = any>({
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-white/5">
+          <tbody className="divide-y divide-border/30">
             {loading ? (
               <tr>
                 <td
                   colSpan={columns.length + (hasActions ? 1 : 0)}
-                  className="py-16 text-center text-[#8B9BB0]"
+                  className="py-16 text-center text-muted-foreground"
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <Loader2 className="h-6 w-6 animate-spin text-cyber-cyan" />
-                    <span className="font-mono text-xs tracking-widest text-cyber-cyan uppercase">
-                      SYNCHRONIZING RECORDS...
+                    <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                    <span className="font-mono text-xs tracking-widest text-primary uppercase">
+                      Loading records...
                     </span>
                   </div>
                 </td>
@@ -230,7 +227,7 @@ export function ResourceTable<T = any>({
               <tr>
                 <td
                   colSpan={columns.length + (hasActions ? 1 : 0)}
-                  className="py-12 text-center font-mono text-xs text-[#8B9BB0]"
+                  className="py-12 text-center font-mono text-xs text-muted-foreground"
                 >
                   {emptyMessage}
                 </td>
@@ -243,14 +240,14 @@ export function ResourceTable<T = any>({
                   <tr
                     key={key}
                     onClick={() => onRowClick?.(item)}
-                    className={`transition-colors hover:bg-white/5 ${
+                    className={`transition-colors hover:bg-muted/40 ${
                       onRowClick ? "cursor-pointer" : ""
                     }`}
                   >
                     {columns.map((col, cIdx) => (
                       <td
                         key={col.key || cIdx}
-                        className={`px-4 py-3 text-slate-200 ${
+                        className={`px-4 py-3 text-foreground ${
                           col.align === "right"
                             ? "text-right"
                             : col.align === "center"
@@ -274,9 +271,9 @@ export function ResourceTable<T = any>({
                                 e.stopPropagation()
                                 onEdit(item)
                               }}
-                              className={`border px-2.5 py-1 font-mono text-[10px] font-bold tracking-wider uppercase transition-all ${colors.btnEdit}`}
+                              className="rounded-md border border-primary/40 bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
                             >
-                              [ EDIT ]
+                              Edit
                             </button>
                           )}
 
@@ -287,9 +284,9 @@ export function ResourceTable<T = any>({
                                 e.stopPropagation()
                                 onDelete(item)
                               }}
-                              className="border border-cyber-pink/40 bg-cyber-pink/10 px-2.5 py-1 font-mono text-[10px] font-bold tracking-wider text-cyber-pink uppercase transition-all hover:bg-cyber-pink/20"
+                              className="rounded-md border border-destructive/40 bg-destructive/10 px-2.5 py-1 text-xs font-semibold text-destructive transition-colors hover:bg-destructive/20"
                             >
-                              [ DEL ]
+                              Delete
                             </button>
                           )}
                         </div>
@@ -305,29 +302,29 @@ export function ResourceTable<T = any>({
 
       {/* Pagination Footer */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between border-t border-white/10 px-5 py-3 font-mono text-xs text-[#8B9BB0]">
+        <div className="flex items-center justify-between border-t border-border/40 px-5 py-3 font-mono text-xs text-muted-foreground">
           <span>
-            RECORD {filteredData.length > 0 ? (currentPage - 1) * pageSize + 1 : 0} -{" "}
-            {Math.min(currentPage * pageSize, filteredData.length)} OF {filteredData.length}
+            Showing {filteredData.length > 0 ? (currentPage - 1) * pageSize + 1 : 0} -{" "}
+            {Math.min(currentPage * pageSize, filteredData.length)} of {filteredData.length}
           </span>
 
           <div className="flex items-center gap-2">
             <button
               disabled={currentPage <= 1}
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              className="border border-white/10 bg-black/40 px-2.5 py-1 text-[10px] font-bold uppercase transition-all hover:bg-white/10 disabled:opacity-30"
+              className="rounded-md border border-border/50 bg-secondary/50 px-2.5 py-1 text-xs font-medium text-foreground transition-all hover:bg-secondary disabled:opacity-30"
             >
-              [ PREV ]
+              Previous
             </button>
-            <span className="px-2 text-[10px] font-bold text-white">
+            <span className="px-2 text-xs font-bold text-foreground">
               {currentPage} / {totalPages}
             </span>
             <button
               disabled={currentPage >= totalPages}
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              className="border border-white/10 bg-black/40 px-2.5 py-1 text-[10px] font-bold uppercase transition-all hover:bg-white/10 disabled:opacity-30"
+              className="rounded-md border border-border/50 bg-secondary/50 px-2.5 py-1 text-xs font-medium text-foreground transition-all hover:bg-secondary disabled:opacity-30"
             >
-              [ NEXT ]
+              Next
             </button>
           </div>
         </div>

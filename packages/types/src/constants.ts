@@ -7,7 +7,7 @@ export const STORAGE_KEYS = {
   VERSES: "mw_erp_quran_verses_data",
   HADITHS: "mw_erp_hadiths_data",
   ASMAUL_HUSNA: "mw_asmaul_husna_data",
-  SETTINGS: "mw_tactical_settings",
+  SETTINGS: "mw_settings",
   RAMADAN_MODE: "mw_ramadan_mode_active",
 } as const
 
@@ -31,8 +31,8 @@ export const DEFAULT_COORDINATES = {
 } as const
 
 export const SYSTEM_CONSTANTS = {
-  OS_VERSION: "MoonWitness OS V9.0",
-  OS_CODENAME: "DEEP SPACE SCI-FI DIVINE OPERATING SYSTEM",
+  OS_VERSION: "MoonWitness OS V10.0",
+  OS_CODENAME: "ENTERPRISE UNIFIED OBSERVATORY PLATFORM",
   MAX_PAGE_ANIMATIONS: 5,
   MAX_BLUR_ELEMENTS: 2,
   SESSION_COOKIE_NAME: "mw_session",

@@ -40,7 +40,7 @@ export function PropheticAIConsultantModal() {
           e.stopPropagation()
           setIsOpen(true)
         }}
-        className="bg-success/20 hover:bg-success text-success border-success/60 relative z-20 mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm border px-3 py-2.5 text-xs font-bold tracking-wider uppercase shadow-[0_0_15px_rgba(0,255,102,0.2)] transition-all duration-200 hover:text-white active:scale-95"
+        className="bg-success/20 hover:bg-success text-success border-success/60 relative z-20 mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm border px-3 py-2.5 text-xs font-bold tracking-wider uppercase shadow-sm transition-all duration-200 hover:text-foreground active:scale-95"
       >
         <Bot className="h-4 w-4" />
         <span>[ OPEN KHIDRA AI - FULLSCREEN OVERLAY ]</span>
@@ -49,9 +49,9 @@ export function PropheticAIConsultantModal() {
       {isOpen &&
         mounted &&
         createPortal(
-          <div className="bg-space fixed inset-0 z-[999999] flex animate-in flex-col overflow-hidden font-mono text-foreground duration-150 zoom-in-95 fade-in">
+          <div className="bg-background fixed inset-0 z-[999999] flex animate-in flex-col overflow-hidden font-mono text-foreground duration-150 zoom-in-95 fade-in">
             {/* Header Overlay */}
-            <div className="bg-space border-success/40 z-10 flex h-10 shrink-0 items-center justify-between border-b px-3 sm:h-11 sm:px-6">
+            <div className="bg-background border-success/40 z-10 flex h-10 shrink-0 items-center justify-between border-b px-3 sm:h-11 sm:px-6">
               <div className="flex items-center gap-2 sm:gap-3">
                 <div className="text-success flex items-center gap-1.5 text-xs font-bold tracking-wider uppercase">
                   <Radio className="text-success h-3.5 w-3.5 shrink-0 animate-pulse" />
@@ -65,7 +65,7 @@ export function PropheticAIConsultantModal() {
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="text-danger flex cursor-pointer items-center gap-1 rounded-sm border border-red-500/50 bg-red-500/20 p-1.5 text-xs font-bold uppercase transition-colors hover:bg-red-500 hover:text-white sm:px-3 sm:py-1"
+                  className="text-danger flex cursor-pointer items-center gap-1 rounded-sm border border-red-500/50 bg-destructive/20 p-1.5 text-xs font-bold uppercase transition-colors hover:bg-red-500 hover:text-foreground sm:px-3 sm:py-1"
                 >
                   <X className="h-4 w-4" />
                   <span className="hidden sm:inline">CLOSE [ESC]</span>

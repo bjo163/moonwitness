@@ -78,8 +78,8 @@ export function DigitalConsciousnessWidget() {
   }, [])
 
   return (
-    <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-8 xl:col-span-6">
-      <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-2">
+    <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-8 xl:col-span-6">
+      <div className="mb-4 flex items-center justify-between border-b border-border pb-2">
         <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-primary uppercase">
           <BookOpen className="h-4 w-4" />
           DIGITAL CONSCIOUSNESS
@@ -100,7 +100,7 @@ export function DigitalConsciousnessWidget() {
       </div>
 
       <div className="flex-1 overflow-hidden">
-        <div className="mb-2 grid grid-cols-12 gap-4 border-b border-white/5 pb-2 text-[8px] font-bold tracking-widest text-white/50">
+        <div className="mb-2 grid grid-cols-12 gap-4 border-b border-border pb-2 text-[8px] font-bold tracking-widest text-foreground/50">
           <div className="col-span-2">TIME</div>
           <div className="col-span-5">KNOWLEDGE ARTICLE</div>
           <div className="col-span-3">EDITOR</div>
@@ -123,7 +123,7 @@ export function DigitalConsciousnessWidget() {
               return (
                 <div
                   key={edit.id}
-                  className="group grid grid-cols-12 items-start gap-4 rounded border border-transparent px-2 py-2 text-[9px] transition-colors hover:border-white/10 hover:bg-white/5"
+                  className="group grid grid-cols-12 items-start gap-4 rounded border border-transparent px-2 py-2 text-[9px] transition-colors hover:border-border hover:bg-muted/30"
                 >
                   <div className="col-span-2 mt-0.5 font-mono text-primary/50">
                     {new Date(edit.timestamp).toLocaleTimeString([], {
@@ -131,18 +131,18 @@ export function DigitalConsciousnessWidget() {
                     })}
                   </div>
                   <div className="col-span-5 flex flex-col">
-                    <span className="leading-tight font-bold text-white transition-colors group-hover:text-primary">
+                    <span className="leading-tight font-bold text-foreground transition-colors group-hover:text-primary">
                       {edit.title}
                     </span>
-                    <span className="mt-1 line-clamp-1 text-[7px] text-white/40 italic">
+                    <span className="mt-1 line-clamp-1 text-[7px] text-foreground/40 italic">
                       {edit.comment || "No comment"}
                     </span>
                   </div>
-                  <div className="col-span-3 mt-0.5 truncate font-mono text-white/70">
+                  <div className="col-span-3 mt-0.5 truncate font-mono text-foreground">
                     {edit.user}
                   </div>
                   <div className="col-span-2 mt-0.5 text-right">
-                    <span className="rounded-sm bg-white/10 px-1.5 py-0.5 text-[7px] font-black text-white/80">
+                    <span className="rounded-sm bg-muted/30 px-1.5 py-0.5 text-[7px] font-black text-foreground">
                       {langCode}
                     </span>
                   </div>

@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test'
 test.describe('Scenario 1: Authentication & Single Sign-On (SSO)', () => {
   const COMMAND_CENTER_URL = process.env.PLAYWRIGHT_CC_URL || 'http://localhost:3001'
 
-  test('should render tactical login portal with cyber styling', async ({ page }) => {
+  test('should render sign in portal with cyber styling', async ({ page }) => {
     await page.goto(`${COMMAND_CENTER_URL}/login`)
     await expect(page).toHaveTitle(/MoonWitness/i)
     
@@ -14,7 +14,7 @@ test.describe('Scenario 1: Authentication & Single Sign-On (SSO)', () => {
     await expect(passwordInput).toBeVisible()
   })
 
-  test('should authenticate operator and navigate to tactical dashboard', async ({ page }) => {
+  test('should authenticate user and navigate to dashboard', async ({ page }) => {
     await page.goto(`${COMMAND_CENTER_URL}/login`)
 
     await page.fill('input[type="email"], input[name="login"], input[name="email"]', 'commander@moonwitness.os')

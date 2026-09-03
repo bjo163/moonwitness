@@ -3,20 +3,24 @@
 import { useState } from "react"
 import { Calculator, Coins, TrendingUp, ShieldCheck } from "lucide-react"
 import { ContextBlock } from "@workspace/ui"
+import { useResource } from "@workspace/hooks"
+import { fetchGoldPrice } from "@moon/client"
 
-// Simulasi harga emas global (real-time API can be hooked here)
-const MOCK_GOLD_PRICE_PER_GRAM = 1350000 // Rupiah
+const DEFAULT_GOLD_PRICE_PER_GRAM = 1350000 // Rupiah fallback
 const NISAB_GOLD_GRAMS = 85
-const NISAB_VALUE = MOCK_GOLD_PRICE_PER_GRAM * NISAB_GOLD_GRAMS
 const ZAKAT_RATE = 0.025 // 2.5%
 
 export function KalkulatorZakatView() {
+  const { data: goldData } = useResource(fetchGoldPrice, { storageKey: "mw_gold_price" })
+  const goldPricePerGram = goldData?.pricePerGramIdr || DEFAULT_GOLD_PRICE_PER_GRAM
+  const nisabValue = goldPricePerGram * NISAB_GOLD_GRAMS
+
   const [savings, setSavings] = useState<number>(0)
   const [investments, setInvestments] = useState<number>(0)
   const [goldSilver, setGoldSilver] = useState<number>(0)
 
   const totalWealth = savings + investments + goldSilver
-  const isEligible = totalWealth >= NISAB_VALUE
+  const isEligible = totalWealth >= nisabValue
   const zakatAmount = isEligible ? totalWealth * ZAKAT_RATE : 0
 
   const formatCurrency = (val: number) => {
@@ -39,7 +43,7 @@ export function KalkulatorZakatView() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Input Panel */}
-        <div className="panel-box bg-space border-2 border-primary/50 p-6 shadow-[0_0_30px_rgba(0,240,255,0.1)] lg:col-span-2">
+        <div className="rounded-xl border border-border/40 bg-card/90 bg-background border-2 border-primary/50 p-6 shadow-sm lg:col-span-2">
           <div className="mb-6 flex items-center gap-3 border-b border-primary/20 pb-4">
             <Calculator className="h-5 w-5 text-primary" />
             <h2 className="text-sm font-bold tracking-widest text-primary">
@@ -59,7 +63,7 @@ export function KalkulatorZakatView() {
                 <input
                   type="number"
                   min="0"
-                  className="w-full rounded-none border border-primary/30 bg-black/50 p-3 pl-12 font-mono text-foreground focus:border-primary focus:outline-none"
+                  className="w-full rounded-none border border-primary/30 bg-card p-3 pl-12 font-mono text-foreground focus:border-primary focus:outline-none"
                   placeholder="0"
                   onChange={(e) => setSavings(Number(e.target.value) || 0)}
                 />
@@ -77,7 +81,7 @@ export function KalkulatorZakatView() {
                 <input
                   type="number"
                   min="0"
-                  className="w-full rounded-none border border-primary/30 bg-black/50 p-3 pl-12 font-mono text-foreground focus:border-primary focus:outline-none"
+                  className="w-full rounded-none border border-primary/30 bg-card p-3 pl-12 font-mono text-foreground focus:border-primary focus:outline-none"
                   placeholder="0"
                   onChange={(e) => setInvestments(Number(e.target.value) || 0)}
                 />
@@ -95,7 +99,7 @@ export function KalkulatorZakatView() {
                 <input
                   type="number"
                   min="0"
-                  className="w-full rounded-none border border-primary/30 bg-black/50 p-3 pl-12 font-mono text-foreground focus:border-primary focus:outline-none"
+                  className="w-full rounded-none border border-primary/30 bg-card p-3 pl-12 font-mono text-foreground focus:border-primary focus:outline-none"
                   placeholder="0"
                   onChange={(e) => setGoldSilver(Number(e.target.value) || 0)}
                 />
@@ -107,7 +111,7 @@ export function KalkulatorZakatView() {
         {/* Output/Telemetry Panel */}
         <div className="space-y-6">
           {/* Global Market Data */}
-          <div className="panel-box bg-panel border border-primary/30 p-6">
+          <div className="rounded-xl border border-border/40 bg-card/90 bg-panel border border-primary/30 p-6">
             <div className="mb-4 flex items-center gap-2 text-xs font-bold text-primary/70">
               <TrendingUp className="text-warning h-4 w-4" />
               GLOBAL GOLD INDEX
@@ -115,10 +119,10 @@ export function KalkulatorZakatView() {
             <div className="space-y-3">
               <div className="flex items-center justify-between border-b border-primary/10 pb-2">
                 <span className="text-[10px] text-primary/50">
-                  HARGA EMAS / GRAM
+                  HARGA EMAS / GRAM (PAXG)
                 </span>
                 <span className="font-mono text-xs font-bold text-foreground">
-                  {formatCurrency(MOCK_GOLD_PRICE_PER_GRAM)}
+                  {formatCurrency(goldPricePerGram)}
                 </span>
               </div>
               <div className="flex items-center justify-between border-b border-primary/10 pb-2">
@@ -126,7 +130,7 @@ export function KalkulatorZakatView() {
                   BATAS NISAB (85 GRAM)
                 </span>
                 <span className="text-warning font-mono text-xs font-bold">
-                  {formatCurrency(NISAB_VALUE)}
+                  {formatCurrency(nisabValue)}
                 </span>
               </div>
             </div>
@@ -134,13 +138,13 @@ export function KalkulatorZakatView() {
 
           {/* Calculation Result */}
           <div
-            className={`panel-box border-2 p-6 transition-all duration-500 ${isEligible ? "bg-success/10 border-success shadow-[0_0_30px_rgba(0,255,102,0.2)]" : "border-primary/30 bg-black/50"}`}
+            className={`rounded-xl border border-border/40 bg-card/90 border-2 p-6 transition-all duration-500 ${isEligible ? "bg-success/10 border-success shadow-sm" : "border-primary/30 bg-card"}`}
           >
             <div className="mb-6 text-center">
               <div className="mb-2 text-[10px] font-bold tracking-widest text-primary/50">
                 TOTAL AKUMULASI HARTA
               </div>
-              <div className="font-mono text-2xl font-black text-white">
+              <div className="font-mono text-2xl font-black text-foreground">
                 {formatCurrency(totalWealth)}
               </div>
             </div>
@@ -151,11 +155,11 @@ export function KalkulatorZakatView() {
                   STATUS WAJIB ZAKAT
                 </span>
                 {isEligible ? (
-                  <span className="tag-clip bg-success flex items-center gap-1 px-2 py-1 text-[10px] font-bold text-black">
+                  <span className="rounded-md bg-success flex items-center gap-1 px-2 py-1 text-[10px] font-bold text-foreground">
                     <ShieldCheck className="h-3 w-3" /> WAJIB (MELEBIHI NISAB)
                   </span>
                 ) : (
-                  <span className="tag-clip bg-primary/20 px-2 py-1 text-[10px] font-bold text-primary">
+                  <span className="rounded-md bg-primary/20 px-2 py-1 text-[10px] font-bold text-primary">
                     BELUM MENCAPAI NISAB
                   </span>
                 )}

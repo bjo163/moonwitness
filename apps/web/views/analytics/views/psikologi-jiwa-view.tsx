@@ -55,7 +55,7 @@ export function PsikologiJiwaView() {
       <div className="mx-auto max-w-5xl space-y-6 px-4 sm:px-6">
         {/* System Breadcrumb */}
 
-        {/* Tactical Context Block */}
+        {/* strategic Context Block */}
         <ContextBlock
           title={t(
             "NAFS PSYCHOLOGY & MENTAL HEALTH",
@@ -67,16 +67,16 @@ export function PsikologiJiwaView() {
           )}
           operation="NAFS-PSYCHOLOGY-MATRIX"
           status="ONLINE"
-          accentColor="knowledge"
+          accentColor="primary"
         />
 
         {/* 3 Nafs Stages */}
-        <Panel level="level2" accentColor="knowledge">
+        <Panel level="level2" accentColor="primary">
           <PanelHeader
             title="// THE 3 STAGES OF NAFS PSYCHOLOGY IN AL-QUR'AN"
             status="ACTIVE"
             icon={Heart}
-            accentColor="knowledge"
+            accentColor="primary"
             subtitle="Spiritual evolution stages from emotional turmoil to absolute inner peace."
           />
 
@@ -84,13 +84,13 @@ export function PsikologiJiwaView() {
             {NAFS_PSYCHOLOGY_STAGES.map((st, idx) => (
               <div
                 key={idx}
-                className="bg-space tag-clip space-y-3 border border-secondary/30 p-5"
+                className="bg-background rounded-md space-y-3 border border-secondary/30 p-5"
               >
                 <div className="flex items-center justify-between border-b border-secondary/20 pb-2">
                   <h4 className="text-sm font-bold text-foreground">
                     {st.stageName}
                   </h4>
-                  <span className="tag-clip tag-clip-purple tag-clip text-[9px] font-bold">
+                  <span className="rounded-md border border-border bg-muted text-primary px-2 py-0.5 font-mono text-[9px] font-bold">
                     {st.quranRef}
                   </span>
                 </div>
@@ -100,7 +100,7 @@ export function PsikologiJiwaView() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 pt-1 text-xs sm:grid-cols-2">
-                  <div className="bg-space tag-clip border border-secondary/20 p-3">
+                  <div className="bg-background rounded-md border border-secondary/20 p-3">
                     <p className="text-[9px] font-bold text-primary uppercase">
                       {/* MAKNA PSIKOLOGIS: */}
                     </p>
@@ -109,7 +109,7 @@ export function PsikologiJiwaView() {
                     </p>
                   </div>
 
-                  <div className="bg-space tag-clip border border-secondary/20 p-3">
+                  <div className="bg-background rounded-md border border-secondary/20 p-3">
                     <p className="text-[9px] font-bold text-primary uppercase">
                       {/* TERAPI & OPERASIONAL: */}
                     </p>

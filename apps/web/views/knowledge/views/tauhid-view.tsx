@@ -44,18 +44,18 @@ export function TauhidPortalView() {
           )}
           operation="TAUHID-PILLARS-SYNC"
           status="ONLINE"
-          accentColor="knowledge"
+          accentColor="primary"
         />
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {tauhidPillars.map((pillar, idx) => (
             <div
               key={pillar.title}
-              className="corner-accent flex flex-col justify-between space-y-4 panel-glass p-6 card-clip"
+              className="flex flex-col justify-between space-y-4 rounded-xl border border-border/40 bg-card p-6 shadow-sm"
             >
               <div>
                 <div className="mb-4 flex items-center justify-between">
-                  <span className="tag-clip tag-clip-yellow tag-clip text-[9px]">
+                  <span className="rounded-md border border-amber-500/40 bg-warning/10 text-warning px-2 py-0.5 font-mono text-[9px]">
                     PILLAR 0{idx + 1}
                   </span>
                   <span className="font-bold text-accent">☝️</span>

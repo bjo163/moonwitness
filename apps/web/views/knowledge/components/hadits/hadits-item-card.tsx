@@ -25,32 +25,37 @@ export function HaditsItemCard({ hadith, isActive, onClick }: HaditsItemCardProp
   const getBadgeStyle = (color: string) => {
     switch (color) {
       case "emerald":
-        return "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+        return "border-success/30 bg-success/10 text-success"
       case "blue":
         return "border-blue-500/30 bg-blue-500/10 text-blue-400"
       case "amber":
-        return "border-amber-500/30 bg-amber-500/10 text-amber-400"
+        return "border-warning/30 bg-warning/10 text-warning"
       default:
-        return "border-red-500/30 bg-red-500/10 text-red-400"
+        return "border-destructive/30 bg-destructive/10 text-destructive"
     }
   }
 
   return (
-    <div
+    <article
       onClick={onClick}
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") onClick()
+      }}
+      aria-label={`Hadith ${hadith.id}, ${hadith.grade}`}
       className={`group relative cursor-pointer rounded-xl border p-5 transition-all duration-300 ${
         isActive
-          ? "border-cyan-500/50 bg-[#0B1528] shadow-[0_0_20px_rgba(0,240,255,0.15)]"
-          : "border-white/5 bg-[#080E1C] hover:border-white/20 hover:bg-[#0A1224]"
+          ? "border-primary/50 bg-primary/10 shadow-sm"
+          : "border-border bg-card hover:border-border/80 hover:bg-accent/40"
       }`}
     >
       {/* Top Metadata Strip */}
-      <div className="mb-4 flex items-center justify-between gap-2 border-b border-white/5 pb-3">
+      <div className="mb-4 flex items-center justify-between gap-2 border-b border-border pb-3">
         <div className="flex items-center gap-2 font-mono text-[10px]">
-          <span className="flex h-5 items-center justify-center rounded bg-white/5 px-2 font-black text-cyan-400">
+          <span className="flex h-5 items-center justify-center rounded bg-muted/30 px-2 font-black text-primary">
             #{hadith.id}
           </span>
-          <span className="text-white/60">{hadith.ref}</span>
+          <span className="text-foreground/60">{hadith.ref}</span>
         </div>
         <div className="flex items-center gap-2">
           <span
@@ -61,39 +66,39 @@ export function HaditsItemCard({ hadith, isActive, onClick }: HaditsItemCardProp
             <ShieldCheck className="h-2.5 w-2.5" />
             {hadith.grade}
           </span>
-          <button className="text-white/30 transition-colors hover:text-white">
+          <button className="text-foreground/30 transition-colors hover:text-foreground">
             <Bookmark className="h-3.5 w-3.5" />
           </button>
         </div>
       </div>
 
       {/* Arabic Matan */}
-      <div className="font-arabic mb-4 text-right text-lg leading-relaxed text-white/95 drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] sm:text-xl">
+      <div lang="ar" dir="rtl" className="font-arabic mb-4 text-right text-lg leading-relaxed text-foreground/95 drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] sm:text-xl">
         {hadith.arabic}
       </div>
 
       {/* Translation / Interpretation */}
-      <p className="mb-4 text-xs leading-relaxed text-white/70 italic">
+      <p className="mb-4 text-xs leading-relaxed text-foreground italic">
         &ldquo;{hadith.translation}&rdquo;
       </p>
 
       {/* Card Action Footnotes */}
-      <div className="flex items-center justify-between border-t border-white/5 pt-3 text-[10px] text-white/40">
-        <div className="flex items-center gap-1 font-mono text-cyan-400/80">
+      <div className="flex items-center justify-between border-t border-border pt-3 text-[10px] text-foreground/40">
+        <div className="flex items-center gap-1 font-mono text-primary/80">
           <Quote className="h-3 w-3" />
           <span>Universal Wisdom Corpus</span>
         </div>
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-1 font-mono hover:text-cyan-400">
+          <button className="flex items-center gap-1 font-mono hover:text-primary">
             <BookOpen className="h-3 w-3" />
             <span>Takhrij</span>
           </button>
-          <button className="flex items-center gap-1 font-mono hover:text-cyan-400">
+          <button className="flex items-center gap-1 font-mono hover:text-primary">
             <LinkIcon className="h-3 w-3" />
             <span>Sanad Graph</span>
           </button>
         </div>
       </div>
-    </div>
+    </article>
   )
 }

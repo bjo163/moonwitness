@@ -53,7 +53,7 @@ export function AudioWaveformVisualizer({ isPlaying }: VisualizerProps) {
   }, [isPlaying])
 
   return (
-    <div className="panel-box bg-space tag-clip flex items-center gap-3 border border-primary/30 p-2.5">
+    <div className="rounded-xl border border-border/40 bg-card bg-background rounded-md flex items-center gap-3 border border-primary/30 p-2.5">
       <div className="shrink-0 text-[8px] font-bold tracking-widest text-primary uppercase">
         // AUDIO OSCILLOSCOPE
       </div>

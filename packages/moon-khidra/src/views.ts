@@ -6,14 +6,14 @@ export const views: Record<string, ViewManifest> = {
     accentColor: 'purple',
     icon: 'BrainCircuit',
     table: {
-      columns: ['title', 'userId', 'model', 'createdAt'],
+      columns: ['title', 'userId', 'sessionId', 'createdAt'],
       defaultSort: { field: 'createdAt', direction: 'desc' },
       searchKeys: ['title'],
     },
     form: {
       title: 'AI DIALOGUE LOG',
       sections: [
-        { title: 'Conversation', columns: 2, fields: ['title', 'userId', 'model'] },
+        { title: 'Conversation', columns: 2, fields: ['title', 'userId', 'sessionId'] },
       ],
     },
   },

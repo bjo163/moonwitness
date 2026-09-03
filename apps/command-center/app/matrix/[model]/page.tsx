@@ -2,7 +2,7 @@
 
 import React from "react"
 import { useParams } from "next/navigation"
-import { CosmicModelWorkspace } from "@workspace/ui"
+import { ModelWorkspace } from "@workspace/ui"
 import { ModuleGuard } from "@workspace/error"
 
 export default function DynamicMatrixModelPage() {
@@ -12,15 +12,15 @@ export default function DynamicMatrixModelPage() {
 
   if (!model) {
     return (
-      <div className="p-8 text-center text-steel-gray font-mono text-xs">
-        NO MODEL IDENTIFIER SPECIFIED IN ROUTE PARAMETERS.
+      <div className="p-8 text-center text-muted-foreground font-sans text-xs">
+        No model identifier specified in route parameters.
       </div>
     )
   }
 
   return (
     <ModuleGuard moduleId={`matrix-${model}`}>
-      <CosmicModelWorkspace model={model} />
+      <ModelWorkspace model={model} />
     </ModuleGuard>
   )
 }

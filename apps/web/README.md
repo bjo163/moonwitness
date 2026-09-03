@@ -23,7 +23,7 @@
 - **Hadith Compendiums**: 9 major Hadith Kutubus Sittah collections with authentication grading.
 - **Real-Time Telemetry**: Live prayer schedules, solar telemetry, and SSE intelligence briefings.
 - **Universal Command Palette**: Quick navigation mesh & search (`Cmd+K` / `Ctrl+K`).
-- **Procedural Web Audio**: Built-in Solfeggio 528Hz cosmic resonance & tactical clicks (`M` key toggle).
+- **Procedural Web Audio**: Built-in Solfeggio 528Hz cosmic resonance & procedural clicks (`M` key toggle).
 
 ---
 

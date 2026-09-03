@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers -- Audio synthesis parameters require exact numeric frequencies and durations */
 
 /**
- * Web Audio API Sci-Fi Sound Synthesizer
- * Generates futuristic HUD sound effects using browser AudioContext without external audio files.
+ * Web Audio API Sound Synthesizer
+ * Generates interface feedback audio effects using browser AudioContext without external audio files.
  */
 
 let audioCtx: AudioContext | null = null
@@ -129,6 +129,3 @@ export function playHoverSound() {
     // Ignore audio context errors
   }
 }
-
-export const playHudClickSound = playClickSound
-export const playHudHoverSound = playHoverSound

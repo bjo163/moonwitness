@@ -57,16 +57,16 @@ export function VerseInsightTooltip({
       {children}
 
       {showTooltip && (
-        <div className="bg-space/95 absolute bottom-full left-1/2 z-50 mb-2 w-72 -translate-x-1/2 animate-in rounded-xl border border-cyan-500/30 p-4 shadow-[0_0_20px_rgba(0,240,255,0.15)] backdrop-blur-md fade-in slide-in-from-bottom-2 md:w-96">
+        <div className="bg-background/95 absolute bottom-full left-1/2 z-50 mb-2 w-72 -translate-x-1/2 animate-in rounded-xl border border-border p-4 shadow-sm backdrop-blur-md fade-in slide-in-from-bottom-2 md:w-96">
           <div className="mb-2 flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-cyan-400" />
-            <span className="font-sans text-[10px] font-black tracking-widest text-white uppercase">
+            <Sparkles className="h-4 w-4 text-primary" />
+            <span className="font-sans text-[10px] font-black tracking-widest text-foreground uppercase">
               AI Insight Engine (MW-{verseKey})
             </span>
           </div>
-          <div className="border-l-2 border-cyan-500/50 pl-3 font-serif text-xs leading-relaxed text-cyan-50/90 italic">
+          <div className="border-l-2 border-border pl-3 font-serif text-xs leading-relaxed text-primary/90 italic">
             {loading ? (
-              <span className="flex items-center gap-2 text-cyan-400">
+              <span className="flex items-center gap-2 text-primary">
                 <Loader2 className="h-3 w-3 animate-spin" />
                 Synthesizing Divine Knowledge...
               </span>

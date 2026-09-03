@@ -23,59 +23,59 @@ export function DoaCardItem({ item }: DoaCardItemProps) {
   const target = item.repetition || 1
 
   return (
-    <div className="group relative rounded-xl border border-white/10 bg-[#080E1C] p-5 shadow-lg transition-all duration-300 hover:border-emerald-500/40 hover:bg-[#0B1528]">
+    <div className="group relative rounded-xl border border-border bg-card p-5 shadow-lg transition-all duration-300 hover:border-emerald-500/40 hover:bg-card">
       {/* Top Metadata */}
-      <div className="mb-4 flex items-center justify-between border-b border-white/5 pb-3">
+      <div className="mb-4 flex items-center justify-between border-b border-border pb-3">
         <div>
-          <h3 className="font-mono text-sm font-black text-white">{item.title}</h3>
+          <h3 className="font-mono text-sm font-black text-foreground">{item.title}</h3>
           {item.category && (
-            <span className="font-mono text-[9px] text-emerald-400/80 uppercase">
+            <span className="font-mono text-[9px] text-success/80 uppercase">
               {item.category}
             </span>
           )}
         </div>
         <div className="flex items-center gap-2">
           {item.source && (
-            <span className="rounded border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 font-mono text-[8px] font-bold text-emerald-400">
+            <span className="rounded border border-success/30 bg-success/10 px-2 py-0.5 font-mono text-[8px] font-bold text-success">
               {item.source}
             </span>
           )}
-          <button className="text-white/30 transition-colors hover:text-white">
+          <button className="text-foreground/30 transition-colors hover:text-foreground">
             <Bookmark className="h-3.5 w-3.5" />
           </button>
         </div>
       </div>
 
       {/* Arabic Text */}
-      <div className="font-arabic my-4 text-right text-xl leading-relaxed text-white/95 drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] sm:text-2xl">
+      <div className="font-arabic my-4 text-right text-xl leading-relaxed text-foreground/95 drop-shadow-sm sm:text-2xl">
         {item.arabic}
       </div>
 
       {/* Latin Transliteration */}
       {item.latin && (
-        <p className="mb-2 font-mono text-[11px] text-emerald-300/80 italic">
+        <p className="mb-2 font-mono text-[11px] text-success/80 italic">
           {item.latin}
         </p>
       )}
 
       {/* Translation */}
-      <p className="mb-4 text-xs leading-relaxed text-white/70">
+      <p className="mb-4 text-xs leading-relaxed text-foreground">
         &ldquo;{item.translation}&rdquo;
       </p>
 
       {/* Bottom Counter & Action Bar */}
-      <div className="flex items-center justify-between border-t border-white/5 pt-3">
+      <div className="flex items-center justify-between border-t border-border pt-3">
         <button
           onClick={() => setCount((prev) => Math.min(prev + 1, target))}
           className={`flex items-center gap-2 rounded-lg border px-3 py-1.5 font-mono text-xs font-bold transition-all ${
             count >= target
-              ? "border-emerald-500 bg-emerald-500/20 text-emerald-300"
-              : "border-white/10 bg-white/5 text-white/70 hover:border-emerald-500/40 hover:text-white"
+              ? "border-emerald-500 bg-success/20 text-success"
+              : "border-border bg-muted/30 text-foreground hover:border-emerald-500/40 hover:text-foreground"
           }`}
         >
           {count >= target ? (
             <>
-              <Check className="h-3.5 w-3.5 text-emerald-400" />
+              <Check className="h-3.5 w-3.5 text-success" />
               <span>COMPLETED ({count}/{target})</span>
             </>
           ) : (
@@ -83,12 +83,12 @@ export function DoaCardItem({ item }: DoaCardItemProps) {
           )}
         </button>
 
-        <div className="flex items-center gap-2 text-white/40">
-          <button className="flex items-center gap-1 font-mono text-[10px] hover:text-emerald-400">
+        <div className="flex items-center gap-2 text-foreground/40">
+          <button className="flex items-center gap-1 font-mono text-[10px] hover:text-success">
             <PlayCircle className="h-3.5 w-3.5" />
             <span>Audio</span>
           </button>
-          <button className="flex items-center gap-1 font-mono text-[10px] hover:text-emerald-400">
+          <button className="flex items-center gap-1 font-mono text-[10px] hover:text-success">
             <Share2 className="h-3.5 w-3.5" />
             <span>Share</span>
           </button>

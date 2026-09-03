@@ -68,8 +68,8 @@ export function SocialMediaTrendsWidget() {
   }, [])
 
   return (
-    <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-12 xl:col-span-8">
-      <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-2">
+    <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-12 xl:col-span-8">
+      <div className="mb-4 flex items-center justify-between border-b border-border pb-2">
         <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-secondary uppercase">
           <Share2 className="h-4 w-4" />
           SOCIAL MEDIA PULSE
@@ -77,21 +77,21 @@ export function SocialMediaTrendsWidget() {
             LIVE
           </span>
         </div>
-        <div className="flex items-center gap-3 font-mono text-[10px] text-white/50">
+        <div className="flex items-center gap-3 font-mono text-[10px] text-foreground/50">
           <div className="flex items-center gap-1">
-            <Hash className="h-3 w-3 text-[#1DA1F2]" /> X
+            <Hash className="h-3 w-3 text-foreground" /> X
           </div>
           <div className="flex items-center gap-1">
-            <PlaySquare className="h-3 w-3 text-[#FF0000]" /> YT
+            <PlaySquare className="h-3 w-3 text-foreground" /> YT
           </div>
           <div className="flex items-center gap-1">
-            <Camera className="h-3 w-3 text-[#E1306C]" /> IG
+            <Camera className="h-3 w-3 text-foreground" /> IG
           </div>
         </div>
       </div>
 
       <div className="flex-1 overflow-hidden">
-        <div className="mb-2 grid grid-cols-12 gap-4 border-b border-white/5 pb-2 text-[8px] font-bold tracking-widest text-secondary/50">
+        <div className="mb-2 grid grid-cols-12 gap-4 border-b border-border pb-2 text-[8px] font-bold tracking-widest text-secondary/50">
           <div className="col-span-2">PLATFORM</div>
           <div className="col-span-5">VIRAL TOPIC / HASHTAG</div>
           <div className="col-span-3">ENGAGEMENT VOL.</div>
@@ -102,17 +102,17 @@ export function SocialMediaTrendsWidget() {
           {metrics.map((metric) => (
             <div
               key={metric.id}
-              className="group grid grid-cols-12 items-center gap-4 rounded border border-transparent bg-white/5 px-2 py-2 text-[9px] transition-colors hover:border-secondary/30 hover:bg-white/10"
+              className="group grid grid-cols-12 items-center gap-4 rounded border border-transparent bg-muted/30 px-2 py-2 text-[9px] transition-colors hover:border-secondary/30 hover:bg-muted/30"
             >
               <div className="col-span-2 flex items-center gap-2 font-bold">
                 {metric.platform === "X" && (
-                  <Hash className="h-3.5 w-3.5 text-[#1DA1F2]" />
+                  <Hash className="h-3.5 w-3.5 text-foreground" />
                 )}
                 {metric.platform === "YouTube" && (
-                  <PlaySquare className="h-3.5 w-3.5 text-[#FF0000]" />
+                  <PlaySquare className="h-3.5 w-3.5 text-foreground" />
                 )}
                 {metric.platform === "Instagram" && (
-                  <Camera className="h-3.5 w-3.5 text-[#E1306C]" />
+                  <Camera className="h-3.5 w-3.5 text-foreground" />
                 )}
                 <span className="opacity-70 group-hover:opacity-100">
                   {metric.platform}
@@ -120,11 +120,11 @@ export function SocialMediaTrendsWidget() {
               </div>
 
               <div className="col-span-5 flex items-center gap-2">
-                <span className="truncate font-bold text-white transition-colors group-hover:text-secondary">
+                <span className="truncate font-bold text-foreground transition-colors group-hover:text-secondary">
                   {metric.topic}
                 </span>
                 {metric.volume > 3000000 && (
-                  <ArrowUpRight className="h-3 w-3 animate-bounce text-red-500" />
+                  <ArrowUpRight className="h-3 w-3 animate-bounce text-destructive" />
                 )}
               </div>
 
@@ -138,8 +138,8 @@ export function SocialMediaTrendsWidget() {
                     metric.sentiment === "Positive"
                       ? "bg-success/20 text-success border-success/30 border"
                       : metric.sentiment === "Negative"
-                        ? "border border-red-500/30 bg-red-500/20 text-red-400"
-                        : "border border-white/20 bg-white/10 text-white/70"
+                        ? "border border-destructive/30 bg-destructive/20 text-destructive"
+                        : "border border-border bg-muted/30 text-foreground"
                   } `}
                 >
                   {metric.sentiment}

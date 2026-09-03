@@ -227,31 +227,50 @@ export function IntelligenceGraphView() {
   const [edges, setEdges] = useState<Edge[]>(KNOWLEDGE_EDGES)
 
   useEffect(() => {
-    client
-      .model("wx.scripture.book")
-      .fetch()
-      .then((books: any[]) => {
-        const bookNodes: Node[] = books.map((b, i) => ({
-          id: `book_${b.id}`,
-          label: b.name,
-          type: "book",
-          x: Math.random() * 800,
-          y: Math.random() * 600,
-          vx: (Math.random() - 0.5) * 1,
-          vy: (Math.random() - 0.5) * 1,
-          radius: 28,
-        }))
+    Promise.allSettled([
+      client.model("wx.scripture.book").fetch(),
+      client.model("wx.figure").fetch(),
+    ]).then(([booksRes, figuresRes]) => {
+      const books = booksRes.status === "fulfilled" && Array.isArray(booksRes.value) ? booksRes.value : []
+      const figures = figuresRes.status === "fulfilled" && Array.isArray(figuresRes.value) ? figuresRes.value : []
 
-        const bookEdges: Edge[] = books.map((b) => ({
-          source: "n12", // Connecting to Makkah/Madinah conceptually
-          target: `book_${b.id}`,
-          strength: 0.6,
-        }))
+      const dynamicBookNodes: Node[] = books.map((b) => ({
+        id: `book_${b.id}`,
+        label: b.name || "Canonical Book",
+        type: "book" as const,
+        x: Math.random() * 800,
+        y: Math.random() * 600,
+        vx: (Math.random() - 0.5) * 1,
+        vy: (Math.random() - 0.5) * 1,
+        radius: 28,
+      }))
 
-        setNodes([...KNOWLEDGE_NODES, ...bookNodes])
-        setEdges([...KNOWLEDGE_EDGES, ...bookEdges])
-      })
-      .catch(console.error)
+      const dynamicFigureNodes: Node[] = figures.slice(0, 10).map((f) => ({
+        id: `fig_${f.id}`,
+        label: f.name || "Scholar",
+        type: "person" as const,
+        x: Math.random() * 800,
+        y: Math.random() * 600,
+        vx: (Math.random() - 0.5) * 1,
+        vy: (Math.random() - 0.5) * 1,
+        radius: 24,
+      }))
+
+      const bookEdges: Edge[] = books.map((b) => ({
+        source: "n12",
+        target: `book_${b.id}`,
+        strength: 0.6,
+      }))
+
+      const figureEdges: Edge[] = figures.slice(0, 10).map((f) => ({
+        source: "n1",
+        target: `fig_${f.id}`,
+        strength: 0.5,
+      }))
+
+      setNodes([...KNOWLEDGE_NODES, ...dynamicBookNodes, ...dynamicFigureNodes])
+      setEdges([...KNOWLEDGE_EDGES, ...bookEdges, ...figureEdges])
+    }).catch(() => {})
   }, [client])
 
   useEffect(() => {
@@ -399,8 +418,8 @@ export function IntelligenceGraphView() {
         accentColor="primary"
       />
 
-      <div className="panel-box bg-space relative flex h-[700px] flex-col overflow-hidden border-2 border-primary/50 shadow-[0_0_50px_rgba(0,240,255,0.15)]">
-        {/* Top Bar HUD */}
+      <div className="rounded-xl border border-border/40 bg-card/90 bg-background relative flex h-[700px] flex-col overflow-hidden border-2 border-primary/50 shadow-sm">
+        {/* Top Bar display */}
         <div className="pointer-events-none absolute top-0 left-0 z-10 flex w-full items-center justify-between p-4">
           <div className="flex items-center gap-3">
             <Network className="h-5 w-5 animate-pulse text-primary" />
@@ -415,21 +434,21 @@ export function IntelligenceGraphView() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 border border-primary/30 bg-black/50 p-2 text-[10px] font-bold backdrop-blur-sm">
+          <div className="flex items-center gap-4 border border-primary/30 bg-card p-2 text-[10px] font-bold backdrop-blur-sm">
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-[#00f0ff]" /> TOKOH
+              <span className="h-2 w-2 rounded-full bg-primary" /> TOKOH
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-[#00ff66]" /> LOKASI
+              <span className="h-2 w-2 rounded-full bg-emerald-500" /> LOKASI
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-[#ff3366]" /> PERISTIWA
+              <span className="h-2 w-2 rounded-full bg-rose-500" /> PERISTIWA
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-[#ffaa00]" /> KONSEP
+              <span className="h-2 w-2 rounded-full bg-amber-500" /> KONSEP
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-[#b829ff]" />{" "}
+              <span className="h-2 w-2 rounded-full bg-primary" />{" "}
               KITAB/SUMBER
             </span>
           </div>
@@ -441,16 +460,16 @@ export function IntelligenceGraphView() {
           className="z-0 h-full w-full cursor-crosshair"
         />
 
-        {/* Selected Node HUD */}
+        {/* Selected Node display */}
         {hoveredNode && (
-          <div className="pointer-events-none absolute right-6 bottom-6 z-10 max-w-[300px] border border-primary bg-black/80 p-4 shadow-[0_0_20px_rgba(0,240,255,0.2)] backdrop-blur-md">
+          <div className="pointer-events-none absolute right-6 bottom-6 z-10 max-w-[300px] border border-primary bg-card p-4 shadow-sm backdrop-blur-md">
             <div className="mb-2 flex items-center gap-2 border-b border-primary/20 pb-2">
               <Scan className="animate-spin-slow h-4 w-4 text-accent" />
               <span className="text-xs font-bold tracking-widest text-primary">
                 TARGET ACQUIRED
               </span>
             </div>
-            <h3 className="text-xl font-black text-white">
+            <h3 className="text-xl font-black text-foreground">
               {hoveredNode.label}
             </h3>
             <div className="mt-1 text-[10px] text-primary/70 uppercase">

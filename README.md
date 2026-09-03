@@ -14,7 +14,7 @@ MoonWitness follows a strict **Model-First & Enterprise Standard** architecture 
 │                       MOONWITNESS DUAL-PORTAL SYSTEM                        │
 │   ┌──────────────────────────────────┐   ┌──────────────────────────────┐   │
 │   │   Web Portal (Port 3000)         │   │ Command Center (Port 3001)   │   │
-│   │   Next.js 16 · Cosmic Dashboard  │   │ Next.js 16 · Tactical Gov    │   │
+│   │   Next.js 16 · Cosmic Dashboard  │   │ Next.js 16 · Governance Console │   │
 │   └─────────────────┬────────────────┘   └──────────────┬───────────────┘   │
 └─────────────────────┼───────────────────────────────────┼───────────────────┘
                       │                                   │
@@ -23,7 +23,7 @@ MoonWitness follows a strict **Model-First & Enterprise Standard** architecture 
 │      SHARED WORKSPACE ENGINE (@workspace/ui, @workspace/hooks, @workspace/state) │
 │    • Universal Command Palette (Cmd+K)    • 3D Celestial Visualizers        │
 │    • Cosmic Matrix Engine (Table/Kanban/Pivot) • Procedural Audio Synth     │
-│    • Universal CSV Ingestion Wizard       • Tactical Document Printer       │
+│    • Universal CSV Ingestion Wizard       • Universal System Report Printer │
 │    • useResource & useModal               • ErrorBoundary & ModuleGuard     │
 └─────────────────────────────────────┬───────────────────────────────────────┘
                                       │
@@ -37,7 +37,7 @@ MoonWitness follows a strict **Model-First & Enterprise Standard** architecture 
                                       ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                     MOON SERVER & BACKEND RUNTIME (Port 4000)               │
-│        apps/api · @moon/server · Cron Runner & BullMQ CosmicWorker Pool     │
+│        apps/api · @moon/server · Cron Runner & BullMQ TaskWorker Pool     │
 └─────────────────────────────────────┬───────────────────────────────────────┘
                                       │
                                       ▼
@@ -48,7 +48,7 @@ MoonWitness follows a strict **Model-First & Enterprise Standard** architecture 
                                       │ Knex / Native SQL
                                       ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                    POSTGRESQL 16+ & REDIS INFRASTRUCTURE                    │
+│                    POSTGRESQL 18+ & REDIS INFRASTRUCTURE                    │
 │                 Relational Storage · pgvector 0.8+ · High-Speed Cache       │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -61,9 +61,8 @@ MoonWitness follows a strict **Model-First & Enterprise Standard** architecture 
 moonwitness/
 ├── apps/
 │   ├── web/                  # Cosmic Dashboard Next.js 16 frontend (:3000)
-│   ├── command-center/       # Tactical Governance & Administrative Console (:3001)
-│   ├── api/                  # MoonWitness backend service & worker queue (:4000)
-│   └── rocksoul/             # Companion web experimental runtime
+│   ├── command-center/       # Governance & Administrative Console (:3001)
+│   └── api/                  # MoonWitness backend service & worker queue (:4000)
 ├── packages/
 │   ├── ui/                   # @workspace/ui (Master Cosmic Design System & CME 3-View Engine)
 │   ├── types/                # @workspace/types (Domain types, constants, NAVIGATION_MESH)
@@ -92,7 +91,7 @@ moonwitness/
 │   ├── moon-crm/             # @moon/crm (Lead outreach & relationship tracking)
 │   ├── moon-project/         # @moon/project (Task backlog & milestone sprints)
 │   ├── moon-helpdesk/        # @moon/helpdesk (Support tickets & SLA tracking)
-│   ├── moon-shootgun/        # @moon/shootgun (Operation logs & tactical executions)
+│   ├── moon-shootgun/        # @moon/shootgun (Operation logs & rapid broadcast executions)
 │   ├── moon-performance/     # @moon/performance (Benchmarking, telemetry & dashboard widgets)
 │   ├── moon-time/            # @moon/time (Timekeeping & lunar calendars)
 │   ├── moon-testing/         # @moon/testing (Test fixtures & protocol contract suites)
@@ -122,7 +121,7 @@ moonwitness/
 - **`[PRINT BRIEFING]`**: Zero-dependency `@media print` engine generating Apple/NASA-grade printable documents with dynamic SHA-256 cryptographic verification checksums.
 
 ### 3. ⚡ BullMQ-Class Job Queue & Scheduled Cron Runner (`@moon/cron`)
-- **`IrQueueJob` & `CosmicQueue`**: High-concurrency worker pool with exponential backoff retries (`backoffMs * 2^(attempts-1)`) and progress callbacks.
+- **`IrQueueJob` & `TaskQueue`**: High-concurrency worker pool with exponential backoff retries (`backoffMs * 2^(attempts-1)`) and progress callbacks.
 - **`IrCron` & `IrCronLog`**: Autonomous periodic scheduler polling every 30s.
 
 ### 4. 🤖 Autonomous Workflows & Outbound Webhook Mesh (`@moon/khidra`)

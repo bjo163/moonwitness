@@ -16,10 +16,10 @@ export const views: Record<string, ViewManifest> = {
     defaultView: 'table',
     accentColor: 'cyan',
     icon: 'MapPin',
-    table: { columns: ['name', 'type', 'warehouseId', 'parentId'], searchKeys: ['name'] },
+    table: { columns: ['name', 'usage', 'locationId', 'companyId'], searchKeys: ['name'] },
     form: {
       title: 'STORAGE LOCATION',
-      sections: [{ title: 'Location', columns: 2, fields: ['name', 'type', 'warehouseId', 'parentId'] }],
+      sections: [{ title: 'Location', columns: 2, fields: ['name', 'usage', 'locationId', 'companyId'] }],
     },
   },
 
@@ -28,17 +28,17 @@ export const views: Record<string, ViewManifest> = {
     accentColor: 'cyan',
     icon: 'ArrowRightLeft',
     table: {
-      columns: ['reference', 'productId', 'quantity', 'sourceLocationId', 'destinationLocationId', 'status'],
+      columns: ['name', 'productId', 'productUomQty', 'locationId', 'locationDestId', 'state'],
       defaultSort: { field: 'createdAt', direction: 'desc' },
-      searchKeys: ['reference'],
+      searchKeys: ['name'],
     },
     form: {
       title: 'INVENTORY MOVE',
-      statusBar: { field: 'status' },
+      statusBar: { field: 'state' },
       sections: [
-        { title: 'Move', columns: 2, fields: ['reference', 'productId', 'quantity', 'uom'] },
-        { title: 'Locations', columns: 2, fields: ['sourceLocationId', 'destinationLocationId'] },
-        { title: 'Status', columns: 2, fields: ['status', 'pickingId'] },
+        { title: 'Move', columns: 2, fields: ['name', 'productId', 'productUomQty', 'companyId'] },
+        { title: 'Locations', columns: 2, fields: ['locationId', 'locationDestId'] },
+        { title: 'Status', columns: 2, fields: ['state', 'pickingId'] },
       ],
     },
   },

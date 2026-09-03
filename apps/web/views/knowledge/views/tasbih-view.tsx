@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useLanguage } from "@workspace/state"
-import { playClickSound, moonClientInstance, useAuthSession } from "@moon/client"
+import { playClickSound, moonClientInstance, useAuthSession, fetchDevotions } from "@moon/client"
+import { useResource } from "@workspace/hooks"
 import { Target, Award, RotateCcw } from "lucide-react"
 import { ContextBlock } from "@workspace/ui"
 
@@ -13,7 +14,7 @@ type ZikrPreset = {
   translation: string
 }
 
-const ZIKR_PRESETS: ZikrPreset[] = [
+const DEFAULT_ZIKR_PRESETS: ZikrPreset[] = [
   {
     id: "subhanallah",
     arabic: "سُبْحَانَ اللَّهِ",
@@ -45,7 +46,18 @@ export function TasbihView() {
   const { user } = useAuthSession()
   const moonClient = moonClientInstance
 
-  const [activeZikr, setActiveZikr] = useState<ZikrPreset>(ZIKR_PRESETS[0]!)
+  const { data: devotionsData } = useResource(() => fetchDevotions("dhikr"), { storageKey: "mw_tasbih_presets" })
+
+  const zikrPresets: ZikrPreset[] = devotionsData?.devotions?.length
+    ? devotionsData.devotions.map((d: any) => ({
+        id: String(d.id || d.number),
+        arabic: d.textArabic || d.textOriginal || "",
+        latin: d.transliteration || d.textTransliteration || d.title || "",
+        translation: d.translationId || d.translationEn || "",
+      }))
+    : DEFAULT_ZIKR_PRESETS
+
+  const [activeZikr, setActiveZikr] = useState<ZikrPreset>(DEFAULT_ZIKR_PRESETS[0]!)
   const [count, setCount] = useState(0)
   const [targetCount, setTargetCount] = useState(33)
   const [completedLoops, setCompletedLoops] = useState(0)
@@ -123,8 +135,8 @@ export function TasbihView() {
     >
       <div className="mx-auto max-w-4xl space-y-6 px-4 sm:px-6">
         <ContextBlock
-          title="TACTICAL HUD TASBIH COUNTER"
-          subtitle="Counter Zikir & Tasbih digital taktis dengan target preset."
+          title="DIGITAL TASBIH COUNTER"
+          subtitle="Counter Zikir & Tasbih digital interaktif dengan target preset dan audio feedback."
           operation="TASBIH-COUNTER-SYNC"
           status="ONLINE"
           accentColor="success"
@@ -132,7 +144,7 @@ export function TasbihView() {
 
         {/* Zikr Presets Selection */}
         <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-          {ZIKR_PRESETS.map((item) => {
+          {zikrPresets.map((item) => {
             const isSelected = activeZikr.id === item.id
             return (
               <button
@@ -142,10 +154,10 @@ export function TasbihView() {
                   setActiveZikr(item)
                   setCount(0)
                 }}
-                className={`tag-clip border p-3 text-center transition-all ${
+                className={`rounded-md border p-3 text-center transition-all ${
                   isSelected
-                    ? "bg-success/20 border-success text-white shadow-[0_0_15px_rgba(0,255,102,0.3)]"
-                    : "bg-space border-primary/20 text-primary hover:text-white"
+                    ? "bg-success/20 border-success text-foreground shadow-sm"
+                    : "bg-background border-primary/20 text-primary hover:text-foreground"
                 }`}
               >
                 <div className="text-success arabic-text text-sm font-bold">
@@ -157,8 +169,8 @@ export function TasbihView() {
           })}
         </div>
 
-        {/* Main Interactive Counter HUD Console */}
-        <div className="panel-box border-success/50 bg-space/95 space-y-6 border p-8 text-center shadow-[0_0_40px_rgba(0,255,102,0.2)]">
+        {/* Main Interactive Counter display Console */}
+        <div className="rounded-xl border border-border/40 bg-card/90 border-success/50 bg-background/95 space-y-6 border p-8 text-center shadow-sm">
           {/* Target Selector */}
           <div className="border-success/20 flex items-center justify-between border-b pb-4 text-xs font-bold">
             <div className="flex items-center gap-2 text-primary">
@@ -174,10 +186,10 @@ export function TasbihView() {
                     setTargetCount(tVal)
                     setCount(0)
                   }}
-                  className={`tag-clip px-3 py-1 text-xs font-bold transition-all ${
+                  className={`rounded-md px-3 py-1 text-xs font-bold transition-all ${
                     targetCount === tVal
-                      ? "bg-success font-black text-black"
-                      : "bg-space border-success/30 border text-primary"
+                      ? "bg-success font-black text-foreground"
+                      : "bg-background border-success/30 border text-primary"
                   }`}
                 >
                   {tVal}x
@@ -202,9 +214,9 @@ export function TasbihView() {
           {/* Giant Click Counter Button */}
           <button
             onClick={handleIncrement}
-            className="bg-success/10 border-success hover:bg-success/25 mx-auto flex h-48 w-48 cursor-pointer flex-col items-center justify-center space-y-1 rounded-full border-4 shadow-[0_0_30px_rgba(0,255,102,0.4)] transition-all select-none active:scale-95"
+            className="bg-success/10 border-success hover:bg-success/25 mx-auto flex h-48 w-48 cursor-pointer flex-col items-center justify-center space-y-1 rounded-full border-4 shadow-sm transition-all select-none active:scale-95"
           >
-            <span className="text-success font-display text-5xl font-black">
+            <span className="text-success font-sans text-5xl font-black">
               {count}
             </span>
             <span className="text-[10px] font-bold tracking-widest text-primary uppercase">
@@ -221,7 +233,7 @@ export function TasbihView() {
 
             <button
               onClick={handleReset}
-              className="btn-primary btn-primary-ghost text-danger border-danger/30 hover:border-danger flex items-center gap-1.5 px-3 py-1.5 text-xs btn-clip"
+              className="btn-primary btn-primary-ghost text-danger border-danger/30 hover:border-danger flex items-center gap-1.5 px-3 py-1.5 text-xs "
             >
               <RotateCcw className="h-3.5 w-3.5" />
               <span>RESET COUNTER</span>

@@ -33,10 +33,10 @@ export function HomeCelestialFeedWidget() {
   const deepSkyImg = apod?.url ?? "/assets/cam_deepsky.png"
 
   return (
-    <div className="relative rounded-lg border border-primary/20 bg-black/10 p-4 shadow-[inset_0_0_20px_rgba(0,255,255,0.02)] backdrop-blur-xl sm:p-5">
+    <div className="relative rounded-lg border border-primary/20 bg-black/10 p-4 shadow-sm backdrop-blur-xl sm:p-5">
       <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3 text-xs font-bold tracking-widest text-primary uppercase">
         <div className="flex items-center gap-2.5">
-          <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_8px_#10B981]" />
+          <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400 shadow-sm" />
           <span>LIVE CELESTIAL FEED</span>
         </div>
         <div className="flex gap-1.5 font-sans text-[9px] font-medium tracking-widest text-primary uppercase">
@@ -61,7 +61,7 @@ export function HomeCelestialFeedWidget() {
             />
           </div>
           <div className="mt-1.5 flex w-full items-center justify-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_5px_#22D3EE]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-sm" />
             <span className="text-[9px] font-bold tracking-wider text-primary uppercase">
               LUNAR OPTICS
             </span>
@@ -85,7 +85,7 @@ export function HomeCelestialFeedWidget() {
             />
           </div>
           <div className="mt-1.5 flex w-full items-center justify-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-500 shadow-[0_0_5px_#06b6d4]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-sm" />
             <span className="text-[9px] font-bold tracking-wider text-primary uppercase">
               GOES-19 EARTH
             </span>
@@ -111,7 +111,7 @@ export function HomeCelestialFeedWidget() {
             />
           </div>
           <div className="mt-1.5 flex w-full items-center justify-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-fuchsia-400 shadow-[0_0_5px_#c026d3]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-fuchsia-400 shadow-sm" />
             <span className="text-[9px] font-bold tracking-wider text-fuchsia-400 uppercase">
               NASA APOD
             </span>
@@ -135,7 +135,7 @@ export function HomeCelestialFeedWidget() {
             />
           </div>
           <div className="mt-1.5 flex w-full items-center justify-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-orange-500 shadow-[0_0_5px_#F97316]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-orange-500 shadow-sm" />
             <span className="text-[9px] font-bold tracking-wider text-orange-400 uppercase">
               SDO AIA-304
             </span>

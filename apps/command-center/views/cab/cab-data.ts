@@ -28,6 +28,8 @@ export interface UpgradeRequest {
   bridgeNote: string
   status: UpgradeStatus
   submittedAt: string
+  currentState?: string
+  proposedChange?: string
 }
 
 export const Q4Q_LEVELS = [
@@ -37,8 +39,8 @@ export const Q4Q_LEVELS = [
     name: "Physical Human",
     arabicTerm: "Body / Five Senses",
     icon: Eye,
-    color: "text-slate-400",
-    border: "border-slate-400/30",
+    color: "text-muted-foreground",
+    border: "border-border",
     coreQuestion: "What am I experiencing?",
     quranRef: "QS 16:78",
     torahRef: "Deut 4:28",
@@ -67,8 +69,8 @@ export const Q4Q_LEVELS = [
     name: "Intellectual Human",
     arabicTerm: "'Aql (Al-'Aql)",
     icon: Brain,
-    color: "text-cyber-cyan",
-    border: "border-cyber-cyan/30",
+    color: "text-primary",
+    border: "border-primary/30",
     coreQuestion: "What is true? What is real and right?",
     quranRef: "QS 16:78",
     torahRef: "Deut 4:6",
@@ -82,8 +84,8 @@ export const Q4Q_LEVELS = [
     name: "Inner Human",
     arabicTerm: "Qalb (Al-Qalb)",
     icon: Heart,
-    color: "text-red-400",
-    border: "border-red-400/30",
+    color: "text-destructive",
+    border: "border-destructive/30",
     coreQuestion: "What does this truth mean within me?",
     quranRef: "QS 2:225",
     torahRef: "Deut 10:12",
@@ -97,8 +99,8 @@ export const Q4Q_LEVELS = [
     name: "God-Conscious Human",
     arabicTerm: "Taqwa (At-Taqwa)",
     icon: Shield,
-    color: "text-cyber-green",
-    border: "border-cyber-green/30",
+    color: "text-success",
+    border: "border-success/30",
     coreQuestion: "How should I live before God?",
     quranRef: "QS 2:2",
     torahRef: "Deut 10:12",
@@ -112,7 +114,7 @@ export const Q4Q_LEVELS = [
     name: "Ihsan Human",
     arabicTerm: "Ihsan (Al-Ihsan)",
     icon: Star,
-    color: "text-yellow-400",
+    color: "text-warning",
     border: "border-yellow-400/30",
     coreQuestion: "How can I live beautifully and embody this truth?",
     quranRef: "QS 16:90",
@@ -127,8 +129,8 @@ export const Q4Q_LEVELS = [
     name: "Deep-Knowing Human",
     arabicTerm: "Ma'rifah (Al-Ma'rifah)",
     icon: Sparkles,
-    color: "text-cyber-purple",
-    border: "border-cyber-purple/30",
+    color: "text-primary",
+    border: "border-border",
     coreQuestion: "What is the deeper reality behind what I perceive?",
     quranRef: "QS 59:19",
     torahRef: "Deut 6:4-5",
@@ -205,18 +207,18 @@ export const UPGRADE_REQUESTS: UpgradeRequest[] = [
 ]
 
 export const STATUS_CONFIG: Record<UpgradeStatus, { label: string; color: string }> = {
-  PROPOSED: { label: "PROPOSED", color: "text-slate-400 border-slate-400/30" },
+  PROPOSED: { label: "PROPOSED", color: "text-muted-foreground border-border" },
   BRIDGE_REVIEW: {
     label: "BRIDGE REVIEW",
-    color: "text-yellow-400 border-yellow-400/30",
+    color: "text-warning border-yellow-400/30",
   },
   APPROVED: {
     label: "APPROVED",
-    color: "text-cyber-cyan border-cyber-cyan/30",
+    color: "text-primary border-primary/30",
   },
-  ACTIVE: { label: "ACTIVE", color: "text-cyber-green border-cyber-green/40" },
+  ACTIVE: { label: "ACTIVE", color: "text-success border-emerald-500/40" },
   COMPLETE: {
     label: "COMPLETE",
-    color: "text-cyber-purple border-cyber-purple/30",
+    color: "text-primary border-border",
   },
 }

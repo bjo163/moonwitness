@@ -32,31 +32,31 @@ export function HomePlanetaryTelemetryWidget() {
   const neoTrend =
     neoCount !== undefined ? (neoCount > 15 ? "▲ ALERT" : "▼ SAFE") : "..."
   const neoColor = neoTrend.includes("ALERT")
-    ? "text-amber-400"
-    : "text-emerald-400"
+    ? "text-warning"
+    : "text-success"
 
   const quakeStat = quake ? `${quake.count} DETECTED` : "SCANNING..."
   const quakeTrend = quake?.trend ?? "..."
   const quakeColor = quakeTrend.includes("▲")
     ? "text-fuchsia-400"
-    : "text-emerald-400"
+    : "text-success"
 
   const weatherStat = weather ? `${weather.temp} °C` : "SCANNING..."
   const weatherTrend = weather?.condition ?? "..."
   const weatherColor = weatherTrend.includes("▲")
-    ? "text-amber-400"
-    : "text-emerald-400"
+    ? "text-warning"
+    : "text-success"
 
   const kpStat = kp ? `${kp.kp.toFixed(1)} KP` : "SCANNING..."
   const kpTrend = kp?.trend ?? "..."
-  const kpColor = kpTrend.includes("STORM") ? "text-danger" : "text-emerald-400"
+  const kpColor = kpTrend.includes("STORM") ? "text-danger" : "text-success"
 
   const metrics = [
     {
       label: "POPULATION",
       stat: population,
       trend: "▲ +0.8% YR",
-      trendColor: "text-emerald-400",
+      trendColor: "text-success",
     },
     {
       label: "EARTHQUAKES",
@@ -85,9 +85,9 @@ export function HomePlanetaryTelemetryWidget() {
   ]
 
   return (
-    <div className="bg-space/10 flex flex-col justify-between rounded-xl border border-white/[0.08] p-5 shadow-[0_8px_32px_rgba(0,0,0,0.4)] backdrop-blur-2xl lg:col-span-3">
+    <div className="bg-background/10 flex flex-col justify-between rounded-xl border border-border/[0.08] p-5 shadow-sm backdrop-blur-2xl lg:col-span-3">
       <div>
-        <div className="mb-3 flex items-center justify-between border-b border-white/10 pb-2.5 text-xs font-bold tracking-wider text-primary uppercase">
+        <div className="mb-3 flex items-center justify-between border-b border-border pb-2.5 text-xs font-bold tracking-wider text-primary uppercase">
           <span>PLANETARY TELEMETRY</span>
           <Globe className="h-4 w-4 text-primary" />
         </div>
@@ -95,7 +95,7 @@ export function HomePlanetaryTelemetryWidget() {
           {metrics.map((row) => (
             <div
               key={row.label}
-              className="group -mx-2 flex flex-wrap items-center justify-between rounded border-b border-white/[0.02] px-2 py-2 transition-colors last:border-0 hover:bg-white/[0.02] sm:flex-nowrap sm:py-1.5"
+              className="group -mx-2 flex flex-wrap items-center justify-between rounded border-b border-border/[0.02] px-2 py-2 transition-colors last:border-0 hover:bg-card/[0.02] sm:flex-nowrap sm:py-1.5"
             >
               <span className="w-1/2 truncate pr-2 tracking-widest text-primary uppercase sm:w-[35%]">
                 {row.label}
@@ -114,7 +114,7 @@ export function HomePlanetaryTelemetryWidget() {
       </div>
 
       <div className="mt-6 flex items-center gap-2 border-t border-primary/20 pt-3 font-sans text-[10px] font-medium tracking-[0.2em] text-primary/70 uppercase">
-        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400" />{" "}
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />{" "}
         SYSTEM ACTIVE
       </div>
     </div>

@@ -1,0 +1,7 @@
+import { PublicFrame, PublicHeader } from "@/components/knowledge/public-content"
+
+export const metadata = { title: "Source transparency · MoonWitness", description: "How MoonWitness tracks public content sources and provenance." }
+
+export default function TransparencyPage() {
+  return <PublicFrame><div className="space-y-8"><PublicHeader eyebrow="Transparency" title="Where public content comes from" description="MoonWitness presents records that flow from an approved corpus through the Witness domain and public API." /><div className="grid max-w-4xl gap-4 md:grid-cols-3"><div className="rounded-xl border border-border bg-card p-5"><h2 className="font-semibold">Corpus</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">The corpus owns canonical source artifacts and releases.</p></div><div className="rounded-xl border border-border bg-card p-5"><h2 className="font-semibold">Witness</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">Witness maps content, hierarchy, editions, and provenance.</p></div><div className="rounded-xl border border-border bg-card p-5"><h2 className="font-semibold">API</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">The API exposes public records, references, and metadata to the web reader.</p></div></div><p className="max-w-3xl text-sm leading-7 text-muted-foreground">Release, revision, license, and checksum details are shown only when supplied by the source metadata. Missing metadata is not inferred by the interface.</p></div></PublicFrame>
+}

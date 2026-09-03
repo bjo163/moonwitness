@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">MoonWitness</title>
+  <desc id="desc">A crescent moon with a witness star</desc>
+  <defs>
+    <linearGradient id="sky" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#172554"/>
+      <stop offset="1" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="moon" x1="19" y1="14" x2="47" y2="50" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fef3c7"/>
+      <stop offset="1" stop-color="#fbbf24"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#sky)"/>
+  <circle cx="31" cy="32" r="19" fill="url(#moon)"/>
+  <circle cx="40" cy="24" r="19" fill="url(#sky)"/>
+  <path fill="#fef3c7" d="m48 11 1.55 3.45L53 16l-3.45 1.55L48 21l-1.55-3.45L43 16l3.45-1.55L48 11Z"/>
+  <circle cx="17" cy="43" r="1.5" fill="#fef3c7" opacity=".85"/>
+  <circle cx="47" cy="45" r="1" fill="#fef3c7" opacity=".7"/>
+</svg>

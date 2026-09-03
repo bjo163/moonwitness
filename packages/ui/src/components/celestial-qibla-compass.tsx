@@ -96,12 +96,12 @@ export function CelestialQiblaCompass({
         className="relative flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
         style={{ width: size, height: size }}
       >
-        {/* Outer Laser Ring */}
+        {/* Outer beam Ring */}
         <div
           className={`absolute inset-0 rounded-full border transition-all duration-300 ${
             isLocked
-              ? "border-emerald-400 shadow-[0_0_50px_rgba(0,255,102,0.4)] bg-emerald-950/20"
-              : "border-cyan-500/30 shadow-[0_0_30px_rgba(0,240,255,0.15)] bg-[#0A0F17]/80"
+              ? "border-emerald-400 shadow-sm bg-emerald-950/20"
+              : "border-border shadow-sm bg-card/80"
           } backdrop-blur-md`}
         />
 
@@ -125,11 +125,11 @@ export function CelestialQiblaCompass({
               >
                 <div
                   className={`w-0.5 ${
-                    isCardinal ? "h-3.5 bg-cyan-400 font-bold" : "h-2 bg-cyan-500/30"
+                    isCardinal ? "h-3.5 bg-primary font-bold" : "h-2 bg-primary/10"
                   }`}
                 />
                 {isCardinal && (
-                  <span className="absolute top-4 left-1/2 -translate-x-1/2 text-[9px] font-black text-cyan-300">
+                  <span className="absolute top-4 left-1/2 -translate-x-1/2 text-[9px] font-black text-primary">
                     {angle === 0 ? "N" : angle === 90 ? "E" : angle === 180 ? "S" : "W"}
                   </span>
                 )}
@@ -146,7 +146,7 @@ export function CelestialQiblaCompass({
             }}
           >
             <div className="flex flex-col items-center">
-              <div className="h-5 w-5 rounded-full border border-emerald-400 bg-emerald-500/30 p-0.5 shadow-[0_0_15px_rgba(0,255,102,0.8)] animate-pulse flex items-center justify-center">
+              <div className="h-5 w-5 rounded-full border border-emerald-400 bg-emerald-500/30 p-0.5 shadow-sm animate-pulse flex items-center justify-center">
                 <div className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
               </div>
               <span className="mt-1 text-[8px] font-black tracking-widest text-emerald-400">
@@ -161,13 +161,13 @@ export function CelestialQiblaCompass({
           <div
             className={`h-16 w-16 rounded-full border flex flex-col items-center justify-center transition-all ${
               isLocked
-                ? "border-emerald-400 bg-emerald-950/60 text-emerald-300 shadow-[0_0_20px_rgba(0,255,102,0.6)]"
-                : "border-cyan-500/40 bg-black/60 text-cyan-400"
+                ? "border-emerald-400 bg-emerald-950/60 text-emerald-300 shadow-sm"
+                : "border-border bg-black/60 text-primary"
             }`}
           >
             <Navigation
               className={`h-6 w-6 transition-transform duration-300 ${
-                isLocked ? "text-emerald-400 scale-110" : "text-cyan-400"
+                isLocked ? "text-emerald-400 scale-110" : "text-primary"
               }`}
               style={{
                 transform: `rotate(${qiblaBearing - heading}deg)`,
@@ -181,24 +181,24 @@ export function CelestialQiblaCompass({
 
         {/* Top Fixed Needle Pointer */}
         <div className="absolute top-1 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
-          <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[10px] border-t-cyan-400 drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]" />
+          <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[10px] border-t-cyan-400 drop-shadow-sm" />
         </div>
       </div>
 
-      {/* Telemetry HUD Cards */}
+      {/* Telemetry display Cards */}
       <div className="mt-6 w-full max-w-sm grid grid-cols-2 gap-3 text-xs">
         <div
           className={`rounded-xl border p-3 flex flex-col items-center justify-center transition-colors ${
             isLocked
               ? "border-emerald-500/50 bg-emerald-950/20 text-emerald-300"
-              : "border-cyan-500/20 bg-[#0A0F17]/80 text-zinc-300"
+              : "border-border bg-card/80 text-zinc-300"
           }`}
         >
           <div className="flex items-center gap-1.5 text-[10px] text-zinc-500 uppercase tracking-wider">
             {isLocked ? (
               <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
             ) : (
-              <Compass className="h-3.5 w-3.5 text-cyan-400" />
+              <Compass className="h-3.5 w-3.5 text-primary" />
             )}
             Status
           </div>
@@ -207,7 +207,7 @@ export function CelestialQiblaCompass({
           </div>
         </div>
 
-        <div className="rounded-xl border border-cyan-500/20 bg-[#0A0F17]/80 p-3 flex flex-col items-center justify-center text-zinc-300">
+        <div className="rounded-xl border border-border bg-card/80 p-3 flex flex-col items-center justify-center text-zinc-300">
           <div className="flex items-center gap-1.5 text-[10px] text-zinc-500 uppercase tracking-wider">
             <MapPin className="h-3.5 w-3.5 text-amber-400" />
             Distance

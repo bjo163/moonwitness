@@ -37,13 +37,13 @@ export function MoonwitnessAuthFlow() {
   }
 
   const renderLogin = () => (
-    <div className="w-full max-w-[420px] animate-in rounded-2xl border border-cyan-500/20 bg-slate-950/80 p-8 shadow-[0_0_40px_rgba(0,150,255,0.1)] backdrop-blur-xl duration-500 slide-in-from-bottom-4">
+    <div className="w-full max-w-[420px] animate-in rounded-2xl border border-border bg-background/80 p-8 shadow-sm backdrop-blur-xl duration-500 slide-in-from-bottom-4">
       <div className="mb-8 text-center">
-        <h2 className="font-sans text-2xl font-bold text-white">
+        <h2 className="font-sans text-2xl font-bold text-foreground">
           WELCOME BACK
         </h2>
-        <p className="mt-1 font-sans text-xs text-primary/60">
-          Login to continue your mission
+        <p className="mt-1 font-sans text-xs text-muted-foreground">
+          Sign in to continue to your workspace
         </p>
       </div>
 
@@ -82,7 +82,7 @@ export function MoonwitnessAuthFlow() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none"
+            className="w-full rounded-xl border border-border bg-card px-4 py-3 font-sans text-sm text-foreground placeholder:text-primary/30 focus:border-border focus:bg-primary/10 focus:outline-none"
             placeholder="johnny@moonwitness.org"
           />
         </div>
@@ -96,23 +96,23 @@ export function MoonwitnessAuthFlow() {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none"
+            className="w-full rounded-xl border border-border bg-card px-4 py-3 font-sans text-sm text-foreground placeholder:text-primary/30 focus:border-border focus:bg-primary/10 focus:outline-none"
             placeholder="••••••••••••••••"
           />
         </div>
 
         <div className="flex items-center justify-between text-xs">
-          <label className="flex cursor-pointer items-center gap-2 text-primary/70 hover:text-white">
+          <label className="flex cursor-pointer items-center gap-2 text-primary/70 hover:text-foreground">
             <input
               type="checkbox"
-              className="rounded border-cyan-500/30 bg-black/50 text-cyan-500 focus:ring-0 focus:ring-offset-0"
+              className="rounded border-border bg-card text-primary focus:ring-0 focus:ring-offset-0"
             />
             Remember me
           </label>
           <button
             type="button"
             onClick={() => setCurrentState("FORGOT_1")}
-            className="text-cyan-400 hover:text-cyan-300"
+            className="text-primary hover:text-primary"
           >
             Forgot Password?
           </button>
@@ -121,7 +121,7 @@ export function MoonwitnessAuthFlow() {
         <button
           type="submit"
           disabled={loading}
-          className="mt-6 w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] disabled:opacity-50"
+          className="mt-6 w-full rounded-xl bg-gradient-to-r from-primary/10 to-transparent py-3.5 font-sans text-sm font-bold text-foreground transition-all hover:opacity-90 hover:shadow-sm disabled:opacity-50"
         >
           {loading ? "AUTHENTICATING..." : "LOGIN"}
         </button>
@@ -131,7 +131,7 @@ export function MoonwitnessAuthFlow() {
         Don&apos;t have an account?{" "}
         <button
           onClick={() => setCurrentState("REGISTER")}
-          className="font-semibold text-cyan-400 hover:text-cyan-300"
+          className="font-semibold text-primary hover:text-primary"
         >
           Create one
         </button>
@@ -140,13 +140,13 @@ export function MoonwitnessAuthFlow() {
   )
 
   const renderRegister = () => (
-    <div className="w-full max-w-[480px] animate-in rounded-2xl border border-cyan-500/20 bg-slate-950/80 p-8 shadow-[0_0_40px_rgba(0,150,255,0.1)] backdrop-blur-xl duration-500 slide-in-from-bottom-4">
+    <div className="w-full max-w-[480px] animate-in rounded-2xl border border-border bg-background/80 p-8 shadow-sm backdrop-blur-xl duration-500 slide-in-from-bottom-4">
       <div className="mb-8 text-center">
-        <h2 className="font-sans text-2xl font-bold tracking-wider text-white uppercase">
+        <h2 className="font-sans text-2xl font-bold tracking-wider text-foreground uppercase">
           CREATE YOUR ACCOUNT
         </h2>
-        <p className="mt-1 font-sans text-xs text-primary/60">
-          Join MoonWitness OS and start your mission
+        <p className="mt-1 font-sans text-xs text-muted-foreground">
+          Join MoonWitness OS and access the unified knowledge platform
         </p>
       </div>
 
@@ -184,7 +184,7 @@ export function MoonwitnessAuthFlow() {
             required
             value={registerName}
             onChange={(e) => setRegisterName(e.target.value)}
-            className="w-full rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none"
+            className="w-full rounded-xl border border-border bg-card px-4 py-3 font-sans text-sm text-foreground placeholder:text-primary/30 focus:border-border focus:bg-primary/10 focus:outline-none"
             placeholder="Johnny Rocksoul"
           />
         </div>
@@ -197,7 +197,7 @@ export function MoonwitnessAuthFlow() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none"
+            className="w-full rounded-xl border border-border bg-card px-4 py-3 font-sans text-sm text-foreground placeholder:text-primary/30 focus:border-border focus:bg-primary/10 focus:outline-none"
             placeholder="johnny@moonwitness.org"
           />
         </div>
@@ -210,7 +210,7 @@ export function MoonwitnessAuthFlow() {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none"
+            className="w-full rounded-xl border border-border bg-card px-4 py-3 font-sans text-sm text-foreground placeholder:text-primary/30 focus:border-border focus:bg-primary/10 focus:outline-none"
             placeholder="••••••••••••••••"
           />
         </div>
@@ -221,7 +221,7 @@ export function MoonwitnessAuthFlow() {
           <input
             type="password"
             required
-            className="w-full rounded-xl border border-cyan-500/20 bg-black/50 px-4 py-3 font-sans text-sm text-white placeholder:text-primary/30 focus:border-cyan-400 focus:bg-cyan-500/10 focus:outline-none"
+            className="w-full rounded-xl border border-border bg-card px-4 py-3 font-sans text-sm text-foreground placeholder:text-primary/30 focus:border-border focus:bg-primary/10 focus:outline-none"
             placeholder="••••••••••••••••"
           />
         </div>
@@ -230,15 +230,15 @@ export function MoonwitnessAuthFlow() {
           <input
             type="checkbox"
             required
-            className="rounded border-cyan-500/30 bg-black/50 text-cyan-500 focus:ring-0 focus:ring-offset-0"
+            className="rounded border-border bg-card text-primary focus:ring-0 focus:ring-offset-0"
           />
           <span>
             I agree to the{" "}
-            <span className="cursor-pointer text-cyan-400 hover:underline">
+            <span className="cursor-pointer text-primary hover:underline">
               Terms of Service
             </span>{" "}
             and{" "}
-            <span className="cursor-pointer text-cyan-400 hover:underline">
+            <span className="cursor-pointer text-primary hover:underline">
               Privacy Policy
             </span>
           </span>
@@ -247,7 +247,7 @@ export function MoonwitnessAuthFlow() {
         <button
           type="submit"
           disabled={loading}
-          className="mt-6 w-full rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-400 py-3.5 font-sans text-sm font-bold text-white transition-all hover:opacity-90 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] disabled:opacity-50"
+          className="mt-6 w-full rounded-xl bg-gradient-to-r from-primary/10 to-transparent py-3.5 font-sans text-sm font-bold text-foreground transition-all hover:opacity-90 hover:shadow-sm disabled:opacity-50"
         >
           {loading ? "CREATING ACCOUNT..." : "CREATE ACCOUNT"}
         </button>
@@ -257,7 +257,7 @@ export function MoonwitnessAuthFlow() {
         Already have an account?{" "}
         <button
           onClick={() => setCurrentState("LOGIN")}
-          className="font-semibold text-cyan-400 hover:text-cyan-300"
+          className="font-semibold text-primary hover:text-primary"
         >
           Login
         </button>

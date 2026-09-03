@@ -37,9 +37,12 @@ Every graph node and edge is traceable to its source:
 - Immutable run and result records (`wx.engine.run`, `wx.engine.result`).
 - Reproducible finding explanations (`explainFinding`).
 
-### 4. Corpus Ingestion Data Plane
-- Pluggable source adapters (`WitnessSourceAdapter`, `FixtureAdapter`).
-- Checksum verification, fingerprinting, and normalization pipelines.
+### 4. Canonical Corpus Ingestion Data Plane
+- **Canonical Corpus Source**: `moonwitness-corpus` (pinned release / revision).
+- **Application Projection**: `@moon/witness` graph & PostgreSQL database.
+- **Dedicated Adapters**: `MoonwitnessCorpusAdapter`, `FixtureAdapter`.
+- **Domain Importer**: `importCanonicalCorpus` mapping immutable releases into `wx.source`, `wx.provenance`, `wx.text.edition`, `wx.passage`, and `wx.content`.
+- **CLI Sync**: `pnpm corpus:sync --manifest <code|path> [--dry-run]`
 
 ### 5. Pure Compute Astronomy
 - Precision astronomical calculations (Moon phase data, daily prayer times, Duha time, and Qibla vectors) without DB dependencies.
@@ -123,9 +126,9 @@ console.log('Result Summary:', run.result?.summary)
 pnpm --filter @moon/witness test
 ```
 
-## ??? View Configuration
+## Matrix View Configuration
 
-This package exports declarative view manifests for the **Cosmic Matrix Engine** (src/views.ts):
+This package exports declarative view manifests for the **Enterprise Matrix Engine** (`src/views.ts`):
 - Introspected automatically by `@moon/server` at `GET /api/meta/model/:name`
-- Rendered dynamically in Command Center via `<CosmicModelWorkspace model="..." />`
+- Rendered dynamically in Command Center via `<ModelWorkspace model="..." />`
 - Supported view modes: Kanban Pipeline, Sortable Table, Responsive Form Modal, and Activity Chatter.

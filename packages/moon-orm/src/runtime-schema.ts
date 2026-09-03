@@ -1,6 +1,7 @@
 import {
   forge as runSchemaSync,
   type SchemaSyncResult,
+  type SchemaSyncOptions,
 } from './schema-sync.js'
 
 export interface RuntimeSchemaEnvironment {
@@ -18,7 +19,7 @@ export function isRuntimeSchemaSyncAllowed(
 }
 
 export async function forge(
-  options: { dryRun?: boolean; silent?: boolean } = {}
+  options: SchemaSyncOptions = {}
 ): Promise<SchemaSyncResult> {
   if (!options.dryRun && !isRuntimeSchemaSyncAllowed()) {
     if (!options.silent) {

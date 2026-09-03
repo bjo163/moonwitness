@@ -11,8 +11,8 @@ export type ModalProps = {
   icon?: React.ElementType
   children: React.ReactNode
   maxWidth?: string // e.g. "max-w-lg", "max-w-2xl", "max-w-3xl"
-  borderColor?: string // e.g. "border-primary/60"
-  glowColor?: string // e.g. "rgba(0,240,255,0.3)"
+  borderColor?: string
+  glowColor?: string
 }
 
 const FOCUS_DELAY_MS = 50
@@ -24,8 +24,6 @@ export function Modal({
   icon: Icon,
   children,
   maxWidth = "max-w-lg",
-  borderColor = "border-primary/50",
-  glowColor = "rgba(0,240,255,0.35)",
 }: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null)
   const closeBtnRef = useRef<HTMLButtonElement>(null)
@@ -34,7 +32,6 @@ export function Modal({
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden"
-      // Auto-focus close button for keyboard accessibility
       setTimeout(() => closeBtnRef.current?.focus(), FOCUS_DELAY_MS)
     } else {
       document.body.style.overflow = "unset"
@@ -56,33 +53,17 @@ export function Modal({
 
   if (!isOpen) return null
 
-  // Derive theme color
-  const isPink =
-    borderColor?.includes("pink") || glowColor?.includes("255, 0, 85")
-  const isYellow =
-    borderColor?.includes("yellow") || glowColor?.includes("255, 230, 0")
-  const isGreen =
-    borderColor?.includes("green") || glowColor?.includes("0, 255, 102")
-  const isPurple =
-    borderColor?.includes("purple") || glowColor?.includes("161, 0, 255")
-
-  let iconColor = "text-primary"
-  if (isPink) iconColor = "text-fuchsia-400"
-  if (isYellow) iconColor = "text-amber-500"
-  if (isGreen) iconColor = "text-emerald-400"
-  if (isPurple) iconColor = "text-fuchsia-400"
-
   const ModalContent = (
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 font-sans font-light sm:p-6"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 font-sans sm:p-6"
     >
       {/* Backdrop */}
       <div
         ref={overlayRef}
-        className="bg-space/80 absolute inset-0 backdrop-blur-md"
+        className="bg-background/80 fixed inset-0 backdrop-blur-sm"
         onClick={(e) => {
           if (e.target === overlayRef.current) onClose()
         }}
@@ -91,20 +72,17 @@ export function Modal({
 
       {/* Modal Box */}
       <div
-        className={`w-full ${maxWidth} relative flex max-h-[90vh] flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/40 shadow-[0_30px_100px_rgba(0,0,0,0.8)] backdrop-blur-2xl`}
+        className={`w-full ${maxWidth} relative flex max-h-[90vh] flex-col overflow-hidden rounded-xl border border-border bg-card text-card-foreground shadow-lg`}
       >
-        {/* Subtle Top Gradient Accent */}
-        <div className="absolute top-0 left-0 h-[1px] w-full bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-50" />
-
         {/* Header */}
-        <div className="flex shrink-0 items-center justify-between border-b border-white/5 bg-white/5 px-6 py-5">
-          <div className="flex items-center gap-4">
+        <div className="flex shrink-0 items-center justify-between border-b border-border px-6 py-4">
+          <div className="flex items-center gap-3">
             {Icon && (
-              <Icon className={`h-5 w-5 ${iconColor}`} aria-hidden="true" />
+              <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
             )}
             <h3
               id="modal-title"
-              className="text-sm font-light tracking-[0.3em] text-foreground uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] sm:text-base"
+              className="text-sm font-semibold tracking-tight text-foreground sm:text-base"
             >
               {title}
             </h3>
@@ -112,15 +90,15 @@ export function Modal({
           <button
             ref={closeBtnRef}
             onClick={onClose}
-            className="rounded-full p-2 text-primary transition-all hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:outline-none"
+            className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
             aria-label="Close modal"
           >
-            <X className="h-5 w-5" />
+            <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Content Body */}
-        <div className="flex-1 overflow-y-auto bg-transparent">{children}</div>
+        <div className="flex-1 overflow-y-auto p-6">{children}</div>
       </div>
     </div>
   )
@@ -132,7 +110,6 @@ export function Modal({
 export function ModalTrigger({
   icon: Icon,
   label,
-  color = "cyan",
   title,
   onClick,
   hideLabelOnMobile,
@@ -150,9 +127,9 @@ export function ModalTrigger({
     <button
       onClick={onClick}
       title={title}
-      className={`inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-xs text-foreground transition-all hover:border-cyan-500/50 hover:bg-cyan-500/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-500 ${className}`}
+      className={`inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 font-sans text-xs font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ${className}`}
     >
-      {Icon && <Icon className="h-3.5 w-3.5 text-cyan-400" />}
+      {Icon && <Icon className="h-3.5 w-3.5 text-primary" />}
       <span className={hideLabelOnMobile ? "hidden sm:inline" : ""}>{label}</span>
     </button>
   )

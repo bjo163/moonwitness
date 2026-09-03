@@ -21,7 +21,7 @@ export function EclipseMainVisualizer({ eclipse, isSolar }: EclipseMainVisualize
 
       {/* 2. Specs & Geographic Path Grid */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 font-mono text-[10px]">
-        <div className="rounded-xl border border-white/5 bg-[#080E1C] p-3 shadow-md">
+        <div className="rounded-xl border border-white/5 bg-card p-3 shadow-md">
           <div className="flex items-center gap-1.5 text-white/40">
             <Target className="h-3.5 w-3.5 text-yellow-400" />
             <span>MAGNITUDE</span>
@@ -29,7 +29,7 @@ export function EclipseMainVisualizer({ eclipse, isSolar }: EclipseMainVisualize
           <div className="mt-1 text-sm font-black text-white">{eclipse.magnitude}</div>
         </div>
 
-        <div className="rounded-xl border border-white/5 bg-[#080E1C] p-3 shadow-md">
+        <div className="rounded-xl border border-white/5 bg-card p-3 shadow-md">
           <div className="flex items-center gap-1.5 text-white/40">
             <Clock className="h-3.5 w-3.5 text-yellow-400" />
             <span>MAX DURATION</span>
@@ -37,7 +37,7 @@ export function EclipseMainVisualizer({ eclipse, isSolar }: EclipseMainVisualize
           <div className="mt-1 text-sm font-black text-white">{eclipse.duration}</div>
         </div>
 
-        <div className="rounded-xl border border-white/5 bg-[#080E1C] p-3 shadow-md">
+        <div className="rounded-xl border border-white/5 bg-card p-3 shadow-md">
           <div className="flex items-center gap-1.5 text-white/40">
             <MapPin className="h-3.5 w-3.5 text-yellow-400" />
             <span>PRIMARY VISIBILITY</span>
@@ -45,7 +45,7 @@ export function EclipseMainVisualizer({ eclipse, isSolar }: EclipseMainVisualize
           <div className="mt-1 truncate text-xs font-bold text-white">{eclipse.location}</div>
         </div>
 
-        <div className="rounded-xl border border-white/5 bg-[#080E1C] p-3 shadow-md">
+        <div className="rounded-xl border border-white/5 bg-card p-3 shadow-md">
           <div className="flex items-center gap-1.5 text-white/40">
             <Globe className="h-3.5 w-3.5 text-yellow-400" />
             <span>SAROS SERIES</span>

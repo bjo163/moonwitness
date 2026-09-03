@@ -37,7 +37,7 @@ export function KhidraTelemetryDock() {
   return (
     <div className="grid w-full grid-cols-1 gap-6 font-mono text-primary sm:grid-cols-12">
       {/* STATUS */}
-      <div className="col-span-12 flex flex-col justify-between rounded-lg panel-glass p-4 sm:col-span-3">
+      <div className="col-span-12 flex flex-col justify-between rounded-lg rounded-xl border border-border/40 bg-card/90 p-4 sm:col-span-3">
         <div className="mb-2 text-[10px] font-bold tracking-widest uppercase">
           KHIDRA STATUS
         </div>
@@ -46,7 +46,7 @@ export function KhidraTelemetryDock() {
           <div className="relative flex h-16 w-16 items-center justify-center rounded-full border border-primary/20">
             <div className="absolute h-12 w-12 rounded-full border border-primary/40" />
             <div className="absolute h-8 w-8 rounded-full border border-primary/60" />
-            <div className="h-2 w-2 rounded-full bg-primary shadow-[0_0_10px_#00FF41]" />
+            <div className="h-2 w-2 rounded-full bg-primary shadow-sm" />
             <div className="absolute h-[1px] w-full bg-primary/20" />
             <div className="absolute h-full w-[1px] bg-primary/20" />
             {/* Sweep */}
@@ -77,7 +77,7 @@ export function KhidraTelemetryDock() {
       </div>
 
       {/* ACTIVE LEARNING */}
-      <div className="col-span-12 flex flex-col justify-between rounded-lg panel-glass p-4 sm:col-span-3">
+      <div className="col-span-12 flex flex-col justify-between rounded-lg rounded-xl border border-border/40 bg-card/90 p-4 sm:col-span-3">
         <div className="mb-4 text-[10px] font-bold tracking-widest uppercase">
           ACTIVE LEARNING
         </div>
@@ -94,7 +94,7 @@ export function KhidraTelemetryDock() {
             {learningNodes.map((node, i) => (
               <div
                 key={i}
-                className={`h-1.5 w-1.5 rounded-full transition-all duration-500 ${node.active ? "scale-150 bg-primary shadow-[0_0_8px_#00FF41]" : "bg-primary/30"}`}
+                className={`h-1.5 w-1.5 rounded-full transition-all duration-500 ${node.active ? "scale-150 bg-primary shadow-sm" : "bg-primary/30"}`}
               />
             ))}
           </div>
@@ -103,7 +103,7 @@ export function KhidraTelemetryDock() {
           {learningNodes.map((node, i) => (
             <div
               key={i}
-              className={`w-[20%] transition-colors duration-500 ${node.active ? "font-bold text-primary drop-shadow-[0_0_3px_#00FF41]" : ""}`}
+              className={`w-[20%] transition-colors duration-500 ${node.active ? "font-bold text-primary drop-shadow-sm" : ""}`}
             >
               {node.label.split(" ").map((word, j) => (
                 <div key={j}>{word}</div>
@@ -114,7 +114,7 @@ export function KhidraTelemetryDock() {
       </div>
 
       {/* LIVE KNOWLEDGE FLOW */}
-      <div className="col-span-12 flex flex-col items-center justify-between rounded-lg panel-glass p-4 text-center sm:col-span-3">
+      <div className="col-span-12 flex flex-col items-center justify-between rounded-lg rounded-xl border border-border/40 bg-card/90 p-4 text-center sm:col-span-3">
         <div className="mb-2 w-full text-left text-[10px] font-bold tracking-widest uppercase">
           LIVE KNOWLEDGE FLOW
         </div>
@@ -123,7 +123,7 @@ export function KhidraTelemetryDock() {
           <div className="absolute inset-0 bg-[url('/assets/world-map.svg')] bg-contain bg-center bg-no-repeat opacity-20" />
           <div className="relative flex items-center justify-center">
             <div className="absolute h-16 w-16 animate-ping rounded-full border border-primary/30" />
-            <Network className="h-6 w-6 text-primary drop-shadow-[0_0_8px_#00FF41]" />
+            <Network className="h-6 w-6 text-primary drop-shadow-sm" />
           </div>
         </div>
         <div className="mt-2 text-[8px] tracking-widest text-primary/60 uppercase">
@@ -132,7 +132,7 @@ export function KhidraTelemetryDock() {
       </div>
 
       {/* KHIDRA AVATAR & AUDIO */}
-      <div className="relative col-span-12 flex flex-col justify-between overflow-hidden rounded-lg panel-glass p-4 sm:col-span-3">
+      <div className="relative col-span-12 flex flex-col justify-between overflow-hidden rounded-lg rounded-xl border border-border/40 bg-card/90 p-4 sm:col-span-3">
         <div className="z-10 mb-2 text-[10px] font-bold tracking-widest uppercase">
           KHIDRA AVATAR
         </div>
@@ -140,7 +140,7 @@ export function KhidraTelemetryDock() {
         <div className="z-10 mt-2 flex flex-col gap-4 text-[9px] font-medium tracking-widest uppercase">
           <div className="flex justify-between border-b border-primary/10 pb-1">
             <span className="text-primary/60">HOLOGRAM MODE</span>
-            <span className="font-bold text-primary drop-shadow-[0_0_5px_#00FF41]">
+            <span className="font-bold text-primary drop-shadow-sm">
               ACTIVE
             </span>
           </div>
@@ -165,7 +165,7 @@ export function KhidraTelemetryDock() {
                   )
                 })}
               </div>
-              <span className="font-bold text-primary drop-shadow-[0_0_5px_#00FF41]">
+              <span className="font-bold text-primary drop-shadow-sm">
                 ON
               </span>
             </div>
@@ -187,10 +187,10 @@ export function KhidraTelemetryDock() {
       </div>
 
       {/* Bottom Sub-bar */}
-      <div className="col-span-12 flex flex-col items-center justify-between gap-4 rounded-lg border border-primary/20 bg-black/40 p-3 text-[9px] font-bold tracking-widest uppercase backdrop-blur-md sm:flex-row">
+      <div className="col-span-12 flex flex-col items-center justify-between gap-4 rounded-lg border border-primary/20 bg-card p-3 text-[9px] font-bold tracking-widest uppercase backdrop-blur-md sm:flex-row">
         <div className="flex items-center gap-2">
           <Database className="h-4 w-4 text-primary" />
-          <span className="text-white">
+          <span className="text-foreground">
             &quot;Knowledge is a light that guides to truth. Khidra is here to
             walk with you.&quot;
           </span>
@@ -198,14 +198,14 @@ export function KhidraTelemetryDock() {
 
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_5px_#00FF41]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-sm" />
             <span>SYSTEM SYNCHRONIZED</span>
           </div>
 
           <div className="flex items-center gap-3">
             <div className="flex flex-col text-right">
               <span className="text-[7px] text-primary/50">KNOWLEDGE CORE</span>
-              <span className="text-primary drop-shadow-[0_0_5px_#00FF41]">
+              <span className="text-primary drop-shadow-sm">
                 CONNECTED
               </span>
             </div>
@@ -215,7 +215,7 @@ export function KhidraTelemetryDock() {
           <div className="flex items-center gap-2">
             <span className="text-[7px] text-primary/50">DATA INTEGRITY</span>
             <div className="h-1 w-24 overflow-hidden rounded-full bg-primary/20">
-              <div className="h-full w-full bg-primary shadow-[0_0_5px_#00FF41]" />
+              <div className="h-full w-full bg-primary shadow-sm" />
             </div>
             <span className="text-primary">100%</span>
             <Lock className="ml-1 h-3.5 w-3.5 text-primary/50" />

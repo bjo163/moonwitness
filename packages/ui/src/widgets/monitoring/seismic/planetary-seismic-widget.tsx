@@ -11,10 +11,10 @@ export function PlanetarySeismicWidget({
   const recentEvents = earthquakes.slice(0, 6)
 
   return (
-    <div className="bg-space flex flex-col rounded-xl border border-white/10 p-4 lg:col-span-6 xl:col-span-7">
+    <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-6 xl:col-span-7">
       <div className="mb-4 flex items-center gap-2 text-[9px] font-black tracking-widest text-primary uppercase">
         PLANETARY SEISMIC ACTIVITY
-        <span className="animate-pulse rounded-[2px] border border-red-500/30 bg-red-500/20 px-1.5 py-0.5 text-[8px] text-red-400">
+        <span className="animate-pulse rounded-[2px] border border-destructive/30 bg-destructive/20 px-1.5 py-0.5 text-[8px] text-destructive">
           USGS LIVE
         </span>
       </div>
@@ -44,11 +44,11 @@ export function PlanetarySeismicWidget({
             return (
               <div
                 key={eq.id}
-                className="bg-space group flex flex-col justify-between rounded-lg border border-white/5 p-3 transition-colors hover:border-white/20"
+                className="bg-background group flex flex-col justify-between rounded-lg border border-border p-3 transition-colors hover:border-border"
               >
                 <div className="mb-2 flex items-start gap-2">
-                  <Activity className="h-4 w-4 shrink-0 text-white/50 group-hover:text-white" />
-                  <div className="text-[9px] leading-tight font-bold text-white">
+                  <Activity className="h-4 w-4 shrink-0 text-foreground/50 group-hover:text-foreground" />
+                  <div className="text-[9px] leading-tight font-bold text-foreground">
                     {eq.properties.place}
                   </div>
                 </div>

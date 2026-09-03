@@ -81,7 +81,7 @@ export function ToolkitRasulullahView() {
       <div className="mx-auto max-w-5xl space-y-6 px-4 sm:px-6">
         {/* Standard System Breadcrumb (Task 15) */}
 
-        {/* Standard Tactical Context Block (Task 16) */}
+        {/* Standard strategic Context Block (Task 16) */}
         <ContextBlock
           title={t(
             "TOOLKITS PERADABAN RASULULLAH SAW",
@@ -111,14 +111,14 @@ export function ToolkitRasulullahView() {
               <Panel key={tk.id} level="level2" accentColor="success">
                 <div className="border-success/20 mb-3 flex flex-wrap items-center justify-between gap-2 border-b pb-3">
                   <div>
-                    <h3 className="font-display text-sm font-bold text-foreground">
+                    <h3 className="font-sans text-sm font-bold text-foreground">
                       {tk.toolkitName}
                     </h3>
                     <p className="mt-0.5 text-[10px] text-primary">
                       {/* PERAN: {tk.role} */}
                     </p>
                   </div>
-                  <span className="tag-clip tag-clip-green tag-clip text-[9px] font-bold">
+                  <span className="rounded-md border border-emerald-500/40 bg-success/10 text-success px-2 py-0.5 font-mono text-[9px] font-bold">
                     {tk.quranRef}
                   </span>
                 </div>
@@ -128,7 +128,7 @@ export function ToolkitRasulullahView() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 pt-1 text-xs sm:grid-cols-2">
-                  <div className="bg-space border-success/20 tag-clip border p-3">
+                  <div className="bg-background border-success/20 rounded-md border p-3">
                     <p className="text-[9px] font-bold text-primary uppercase">
                       {/* FRAMEWORK OPERASIONAL: */}
                     </p>
@@ -137,7 +137,7 @@ export function ToolkitRasulullahView() {
                     </p>
                   </div>
 
-                  <div className="bg-space border-success/20 tag-clip flex flex-col justify-between border p-3">
+                  <div className="bg-background border-success/20 rounded-md flex flex-col justify-between border p-3">
                     <div>
                       <p className="text-[9px] font-bold text-primary uppercase">
                         {/* INSTRUMEN AKSI: */}
@@ -150,7 +150,7 @@ export function ToolkitRasulullahView() {
                     <div className="mt-3">
                       <Button
                         variant="default"
-                        className="w-full py-1.5 text-[10px] bg-emerald-600 hover:bg-emerald-500 text-white"
+                        className="w-full py-1.5 text-[10px] bg-emerald-600 hover:bg-emerald-500 text-foreground"
                       >
                         EKSEKUSI TOOLKIT →
                       </Button>

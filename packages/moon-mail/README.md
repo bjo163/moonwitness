@@ -19,7 +19,7 @@
 
 | Function | Parameters | Description |
 |---|---|---|
-| `sendTransactionalEmail()` | `options: EmailPayload` | Dispatches tactical email via configured transport |
+| `sendTransactionalEmail()` | `options: EmailPayload` | Dispatches transactional email via configured transport |
 | `renderOtpEmailTemplate()` | `otp: string, expiryMin: number` | Produces dark sci-fi responsive HTML email template |
 | `verifyMailTransport()` | `() => Promise<boolean>` | Health check verifying outgoing SMTP connection |
 

@@ -16,7 +16,7 @@ export default function NotFound() {
         />
         <div className="mt-6 flex justify-center">
           <Link href="/">
-            <Button variant="default">RETURN TO MISSION CONTROL</Button>
+            <Button variant="default">RETURN TO operations overview</Button>
           </Link>
         </div>
       </div>

@@ -146,36 +146,36 @@ export function ERPShootgunView() {
         subtitle="Create and maintain operation records for the public archive."
         operation="SHOOTGUN-OPS"
         status="ONLINE"
-        accentColor="system"
+        accentColor="primary"
       />
 
-      <section className="border border-cyan-400/20 bg-black/40 backdrop-blur-md">
-        <div className="flex flex-col gap-4 border-b border-cyan-400/20 p-4 sm:flex-row sm:items-center sm:justify-between">
+      <section className="border border-border bg-card backdrop-blur-md">
+        <div className="flex flex-col gap-4 border-b border-border p-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-sm font-semibold tracking-wider text-white">
+            <h2 className="text-sm font-semibold tracking-wider text-foreground">
               OPERATION RECORDS
             </h2>
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 text-xs text-muted-foreground">
               {operations.length} record(s) visible in the public archive.
             </p>
           </div>
           <button
             onClick={openCreate}
-            className="inline-flex h-9 items-center justify-center gap-2 bg-cyan-400 px-3 text-xs font-semibold text-slate-950 hover:bg-cyan-300"
+            className="inline-flex h-9 items-center justify-center gap-2 bg-primary px-3 text-xs font-semibold text-primary-foreground hover:bg-primary"
           >
             <Plus className="size-4" /> ADD OPERATION
           </button>
         </div>
 
         {error && (
-          <p className="border-b border-red-400/30 bg-red-950/30 px-4 py-3 text-xs text-red-200">
+          <p className="border-b border-destructive/30 bg-red-950/30 px-4 py-3 text-xs text-red-200">
             {error}
           </p>
         )}
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[760px] text-left text-xs">
-            <thead className="border-b border-cyan-400/15 text-slate-500">
+            <thead className="border-b border-border text-muted-foreground">
               <tr>
                 <th className="px-4 py-3 font-medium">NAME</th>
                 <th className="px-4 py-3 font-medium">ARGUMENT</th>
@@ -187,9 +187,9 @@ export function ERPShootgunView() {
               {operations.map((operation) => (
                 <tr
                   key={operation.id}
-                  className="border-b border-cyan-400/10 text-slate-300"
+                  className="border-b border-border text-foreground"
                 >
-                  <td className="px-4 py-3 font-medium text-white">
+                  <td className="px-4 py-3 font-medium text-foreground">
                     {operation.name}
                   </td>
                   <td className="max-w-80 px-4 py-3 leading-5">
@@ -205,7 +205,7 @@ export function ERPShootgunView() {
                           href={operation.targetUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1.5 text-slate-400 hover:text-cyan-300"
+                          className="p-1.5 text-muted-foreground hover:text-primary"
                           title="Open target"
                         >
                           <ExternalLink className="size-4" />
@@ -213,14 +213,14 @@ export function ERPShootgunView() {
                       )}
                       <button
                         onClick={() => openEdit(operation)}
-                        className="p-1.5 text-slate-400 hover:text-cyan-300"
+                        className="p-1.5 text-muted-foreground hover:text-primary"
                         title="Edit operation"
                       >
                         <Pencil className="size-4" />
                       </button>
                       <button
                         onClick={() => remove(operation.id)}
-                        className="p-1.5 text-slate-400 hover:text-red-300"
+                        className="p-1.5 text-muted-foreground hover:text-red-300"
                         title="Delete operation"
                       >
                         <Trash2 className="size-4" />
@@ -233,7 +233,7 @@ export function ERPShootgunView() {
                 <tr>
                   <td
                     colSpan={4}
-                    className="px-4 py-10 text-center text-slate-500"
+                    className="px-4 py-10 text-center text-muted-foreground"
                   >
                     No operation records yet.
                   </td>
@@ -245,24 +245,24 @@ export function ERPShootgunView() {
       </section>
 
       {isFormOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/75 p-4 sm:items-center">
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-card/75 p-4 sm:items-center">
           <form
             onSubmit={save}
-            className="my-4 w-full max-w-3xl border border-cyan-400/30 bg-slate-950 shadow-2xl"
+            className="my-4 w-full max-w-3xl border border-border bg-background shadow-2xl"
           >
-            <div className="flex items-center justify-between border-b border-cyan-400/20 p-4">
+            <div className="flex items-center justify-between border-b border-border p-4">
               <div>
-                <h2 className="text-sm font-semibold text-white">
+                <h2 className="text-sm font-semibold text-foreground">
                   {editingId ? "EDIT OPERATION" : "NEW OPERATION"}
                 </h2>
-                <p className="mt-1 text-xs text-slate-400">
+                <p className="mt-1 text-xs text-muted-foreground">
                   Verse references can be selected from all four scriptures.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
-                className="p-1 text-slate-400 hover:text-white"
+                className="p-1 text-muted-foreground hover:text-foreground"
                 title="Close form"
               >
                 <X className="size-5" />
@@ -270,61 +270,61 @@ export function ERPShootgunView() {
             </div>
             <div className="grid gap-4 p-4 sm:grid-cols-2">
               <label className="space-y-1.5 sm:col-span-2">
-                <span className="text-xs text-slate-300">Name</span>
+                <span className="text-xs text-foreground">Name</span>
                 <input
                   required
                   value={form.name}
                   onChange={(event) =>
                     setForm({ ...form, name: event.target.value })
                   }
-                  className="h-9 w-full border border-cyan-400/20 bg-black/40 px-3 text-sm text-white outline-none focus:border-cyan-300"
+                  className="h-9 w-full border border-border bg-card px-3 text-sm text-foreground outline-none focus:border-border"
                 />
               </label>
               <label className="space-y-1.5">
-                <span className="text-xs text-slate-300">Target URL</span>
+                <span className="text-xs text-foreground">Target URL</span>
                 <input
                   type="url"
                   value={form.targetUrl}
                   onChange={(event) =>
                     setForm({ ...form, targetUrl: event.target.value })
                   }
-                  className="h-9 w-full border border-cyan-400/20 bg-black/40 px-3 text-sm text-white outline-none focus:border-cyan-300"
+                  className="h-9 w-full border border-border bg-card px-3 text-sm text-foreground outline-none focus:border-border"
                 />
               </label>
               <label className="space-y-1.5">
-                <span className="text-xs text-slate-300">Target image URL</span>
+                <span className="text-xs text-foreground">Target image URL</span>
                 <input
                   type="url"
                   value={form.targetImage}
                   onChange={(event) =>
                     setForm({ ...form, targetImage: event.target.value })
                   }
-                  className="h-9 w-full border border-cyan-400/20 bg-black/40 px-3 text-sm text-white outline-none focus:border-cyan-300"
+                  className="h-9 w-full border border-border bg-card px-3 text-sm text-foreground outline-none focus:border-border"
                 />
               </label>
               <label className="space-y-1.5 sm:col-span-2">
-                <span className="text-xs text-slate-300">Argument</span>
+                <span className="text-xs text-foreground">Argument</span>
                 <textarea
                   value={form.argument}
                   onChange={(event) =>
                     setForm({ ...form, argument: event.target.value })
                   }
-                  className="min-h-24 w-full border border-cyan-400/20 bg-black/40 p-3 text-sm text-white outline-none focus:border-cyan-300"
+                  className="min-h-24 w-full border border-border bg-card p-3 text-sm text-foreground outline-none focus:border-border"
                 />
               </label>
               <label className="space-y-1.5 sm:col-span-2">
-                <span className="text-xs text-slate-300">Wisdom</span>
+                <span className="text-xs text-foreground">Wisdom</span>
                 <textarea
                   value={form.wisdom}
                   onChange={(event) =>
                     setForm({ ...form, wisdom: event.target.value })
                   }
-                  className="min-h-24 w-full border border-cyan-400/20 bg-black/40 p-3 text-sm text-white outline-none focus:border-cyan-300"
+                  className="min-h-24 w-full border border-border bg-card p-3 text-sm text-foreground outline-none focus:border-border"
                 />
               </label>
               <label className="space-y-1.5 sm:col-span-2">
-                <span className="flex items-center gap-2 text-xs text-slate-300">
-                  <ScrollText className="size-4 text-cyan-300" /> Verse
+                <span className="flex items-center gap-2 text-xs text-foreground">
+                  <ScrollText className="size-4 text-primary" /> Verse
                   references
                 </span>
                 <select
@@ -339,7 +339,7 @@ export function ERPShootgunView() {
                       ),
                     })
                   }
-                  className="h-48 w-full border border-cyan-400/20 bg-black/40 p-2 text-xs text-white outline-none focus:border-cyan-300"
+                  className="h-48 w-full border border-border bg-card p-2 text-xs text-foreground outline-none focus:border-border"
                 >
                   {verses.map((verse) => (
                     <option key={verse.id} value={verse.id}>
@@ -347,23 +347,23 @@ export function ERPShootgunView() {
                     </option>
                   ))}
                 </select>
-                <span className="block text-[11px] text-slate-500">
+                <span className="block text-[11px] text-muted-foreground">
                   {form.verseIds.length} verse(s) selected. The first 200 verses
                   are available for selection.
                 </span>
               </label>
             </div>
-            <div className="flex justify-end gap-3 border-t border-cyan-400/20 p-4">
+            <div className="flex justify-end gap-3 border-t border-border p-4">
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
-                className="h-9 px-3 text-xs text-slate-300 hover:text-white"
+                className="h-9 px-3 text-xs text-foreground hover:text-foreground"
               >
                 Cancel
               </button>
               <button
                 disabled={isSaving}
-                className="inline-flex h-9 items-center gap-2 bg-cyan-400 px-4 text-xs font-semibold text-slate-950 disabled:opacity-60"
+                className="inline-flex h-9 items-center gap-2 bg-primary px-4 text-xs font-semibold text-primary-foreground disabled:opacity-60"
               >
                 <Save className="size-4" />
                 {isSaving ? "SAVING..." : "SAVE OPERATION"}

@@ -1,19 +1,17 @@
 import { Suspense } from "react"
-import { Orbitron, JetBrains_Mono, Geist, Amiri } from "next/font/google"
+import { JetBrains_Mono, Geist, Amiri } from "next/font/google"
 
 import "@workspace/ui/globals.css"
-import { Navbar, Taskbar, PwaRegister, Cosmic3DBackground } from "../components/shell"
+import { Navbar, Taskbar, PwaRegister } from "../components/shell"
 import { MoonProvider } from "@workspace/state"
 import {
   FlyingPropheticAIWidget,
   OnboardingWizard,
   GlobalTickerWidget,
   CommandPalette,
-  CosmicAudioToggle,
+  AudioToggle,
 } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
-
-const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" })
 
 const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -29,16 +27,20 @@ const amiri = Amiri({
 })
 
 export const viewport = {
-  themeColor: "#05070A",
   width: "device-width",
   initialScale: 1,
 }
 
 export const metadata = {
-  title: "MoonWitness — When the Moon Witness, We Share messages.",
+  title: "MoonWitness — Knowledge Platform",
   description:
-    "MoonWitness: When the Moon Witness, We Share messages. Global Platform for Tauhid & Divine Scriptures (Al-Qur'an 114 Surah, Tajwid Warna, & Audio).",
+    "MoonWitness is a source-aware platform for exploring scripture, traditions, references, and research with transparent provenance.",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 }
 
 export default function RootLayout({
@@ -48,10 +50,10 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="id"
+      suppressHydrationWarning
       className={cn(
-        "dark antialiased",
-        orbitron.variable,
+        "antialiased",
         jetBrainsMono.variable,
         "font-sans",
         geist.variable,
@@ -60,15 +62,12 @@ export default function RootLayout({
     >
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#05070A" />
       </head>
-      <body className="bg-space relative min-h-screen pb-[44px]">
-        <Cosmic3DBackground />
-
+      <body className="min-h-screen bg-background pb-[44px] font-sans text-foreground">
         {/* Accessible Skip Navigation */}
         <a
           href="#main-content"
-          className="text-space sr-only z-[999999] bg-primary px-4 py-2 font-black tracking-widest uppercase focus:not-sr-only focus:absolute focus:top-4 focus:left-4"
+          className="sr-only z-[999999] bg-primary px-4 py-2 font-semibold text-primary-foreground focus:not-sr-only focus:absolute focus:top-4 focus:left-4"
         >
           Skip to content
         </a>
@@ -94,8 +93,8 @@ export default function RootLayout({
           <PwaRegister />
         </MoonProvider>
         <CommandPalette />
-        <div className="fixed bottom-14 right-4 z-40 hidden sm:block">
-          <CosmicAudioToggle />
+        <div className="fixed right-4 bottom-14 z-40 hidden sm:block">
+          <AudioToggle />
         </div>
       </body>
     </html>

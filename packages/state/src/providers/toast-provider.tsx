@@ -55,41 +55,36 @@ const VARIANT_CONFIG: Record<
     borderClass: string
     iconClass: string
     titleClass: string
-    glow: string
     label: string
   }
 > = {
   success: {
     icon: CheckCircle,
-    borderClass: "border-success/50",
+    borderClass: "border-success/40 bg-card",
     iconClass: "text-success",
     titleClass: "text-success",
-    glow: "rgba(0,255,102,0.15)",
-    label: "OPERATION COMPLETE",
+    label: "SUCCESS",
   },
   error: {
     icon: XCircle,
-    borderClass: "border-danger/50",
-    iconClass: "text-danger",
-    titleClass: "text-danger",
-    glow: "rgba(255,0,85,0.15)",
-    label: "SYSTEM FAULT",
+    borderClass: "border-destructive/40 bg-card",
+    iconClass: "text-destructive",
+    titleClass: "text-destructive",
+    label: "ERROR",
   },
   warning: {
     icon: AlertTriangle,
-    borderClass: "border-warning/50",
+    borderClass: "border-warning/40 bg-card",
     iconClass: "text-warning",
     titleClass: "text-warning",
-    glow: "rgba(255,230,0,0.15)",
-    label: "CAUTION",
+    label: "WARNING",
   },
   info: {
     icon: Info,
-    borderClass: "border-primary/50",
+    borderClass: "border-border bg-card",
     iconClass: "text-primary",
     titleClass: "text-primary",
-    glow: "rgba(0,240,255,0.15)",
-    label: "TRANSMISSION",
+    label: "INFO",
   },
 }
 
@@ -123,11 +118,10 @@ function ToastItem({
       role="alert"
       aria-live="assertive"
       aria-atomic="true"
-      className={`panel-clip w-80 border sm:w-96 ${cfg.borderClass} bg-space/98 relative flex items-start gap-3 overflow-hidden px-4 py-3 font-mono backdrop-blur-md transition-all duration-280 ${exiting ? "translate-x-4 opacity-0" : "translate-x-0 opacity-100"} `}
-      style={{ boxShadow: `0 0 30px ${cfg.glow}, 0 4px 20px rgba(0,0,0,0.6)` }}
+      className={`rounded-xl w-80 border sm:w-96 ${cfg.borderClass} relative flex items-start gap-3 overflow-hidden px-4 py-3 font-sans shadow-lg backdrop-blur-md transition-all duration-280 ${exiting ? "translate-x-4 opacity-0" : "translate-x-0 opacity-100"}`}
     >
       <div
-        className="absolute bottom-0 left-0 h-0.5 bg-current opacity-40"
+        className="absolute bottom-0 left-0 h-0.5 bg-primary opacity-40"
         style={{
           animation: `toastProgress ${duration}ms linear forwards`,
         }}
@@ -140,12 +134,12 @@ function ToastItem({
 
       <div className="min-w-0 flex-1">
         <p
-          className={`text-[9px] font-black tracking-widest uppercase ${cfg.titleClass}`}
+          className={`text-xs font-semibold tracking-wide uppercase ${cfg.titleClass}`}
         >
-          // {toast.title}
+          {toast.title}
         </p>
         {toast.description && (
-          <p className="mt-0.5 text-[9px] leading-relaxed text-primary">
+          <p className="mt-0.5 text-xs text-muted-foreground">
             {toast.description}
           </p>
         )}
@@ -153,7 +147,7 @@ function ToastItem({
 
       <button
         onClick={dismiss}
-        className="mt-0.5 shrink-0 p-0.5 text-primary transition-colors hover:text-white focus-visible:ring-1 focus-visible:ring-primary focus-visible:outline-none"
+        className="mt-0.5 shrink-0 p-0.5 text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-1 focus-visible:ring-primary focus-visible:outline-none"
         aria-label="Dismiss notification"
       >
         <X className="h-3.5 w-3.5" />
@@ -214,7 +208,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     mounted && toasts.length > 0 && typeof document !== "undefined"
       ? createPortal(
           <div
-            className="fixed right-4 bottom-10 z-[99998] flex flex-col items-end gap-2 font-mono"
+            className="fixed right-4 bottom-10 z-[99998] flex flex-col items-end gap-2 font-sans"
             aria-label="Notifications"
             aria-live="polite"
           >

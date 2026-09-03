@@ -24,14 +24,14 @@ export const views: Record<string, ViewManifest> = {
     accentColor: 'cyan',
     icon: 'CalendarCheck',
     table: {
-      columns: ['resModel', 'resId', 'activityTypeId', 'userId', 'dateDue', 'status'],
-      defaultSort: { field: 'dateDue', direction: 'asc' },
+      columns: ['resModel', 'resId', 'activityTypeId', 'userId', 'dateDeadline', 'state'],
+      defaultSort: { field: 'dateDeadline', direction: 'asc' },
       searchKeys: ['summary'],
     },
     form: {
       title: 'SCHEDULED ACTIVITY',
       sections: [
-        { title: 'Activity', columns: 2, fields: ['activityTypeId', 'userId', 'dateDue', 'status'] },
+        { title: 'Activity', columns: 2, fields: ['activityTypeId', 'userId', 'dateDeadline', 'state'] },
         { title: 'Reference', columns: 2, fields: ['resModel', 'resId'] },
         { title: 'Notes', columns: 1, fields: ['summary', 'note'] },
       ],
