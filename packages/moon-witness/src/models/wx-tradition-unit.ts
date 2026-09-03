@@ -23,6 +23,7 @@ function relationId(value: unknown): number | null {
 export default class WxTraditionUnit extends Vertex {
   static _name = 'wx.tradition.unit'
   static _description = 'Witness Tradition / Transmission Unit'
+  static _rec_name = 'stableKey'
 
   entityId = fields.Many2one({ comodel: 'wx.entity', required: true, index: true })
   corpusId = fields.Many2one({ comodel: 'wx.tradition.corpus', required: true, index: true })
