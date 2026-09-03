@@ -125,7 +125,7 @@ describe('Fastify canonical transport (#126/#132)', () => {
 
     await server.handleRequest({ method: 'GET', url: '/health/live', headers: {} } as any, res)
     expect(status).toBe(200)
-    expect(chunks.join('')).toContain('ok')
+    expect(JSON.parse(chunks.join('')).status).toBe('live')
     expect(Object.keys(headers).some((name) => name.toLowerCase() === 'x-request-id')).toBe(true)
     await server.stop()
   })
