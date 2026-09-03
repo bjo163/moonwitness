@@ -15,6 +15,8 @@ import {
   WxRelation,
   WxRelationType,
   WxReligion,
+  WxScripture,
+  WxPassage,
   WxSource,
   WxSourcePolicy,
   WxFigure,
@@ -382,6 +384,27 @@ async function main() {
     /immutable/
   )
 
+  const scriptureEntity = await WxEntity.spawn(WxEntity, env, {
+    canonicalKey: "cert:scripture:quran",
+    kind: "SCRIPTURE_FAMILY",
+    label: "Qur’an Certification Scripture",
+    sourceClass: "REVELATION",
+    epistemicLane: "CORE",
+    authorityClass: "PRIMARY_SOURCE",
+    operationalStatus: "ESTABLISHED",
+    sourceRevision: "cert-r1",
+    active: true,
+  })
+  const scripture = await WxScripture.spawn(WxScripture, env, {
+    entityId: scriptureEntity.id,
+    canonicalCode: "QURAN",
+    name: "Qur’an Certification Scripture",
+    slug: "cert-quran",
+    sourceClass: "REVELATION",
+    authorityClass: "PRIMARY_SOURCE",
+    status: "APPROVED",
+    active: true,
+  })
   const passage = await WxEntity.spawn(WxEntity, env, {
     canonicalKey: "cert:passage:quran:2:255",
     kind: "PASSAGE",
@@ -391,6 +414,17 @@ async function main() {
     authorityClass: "PRIMARY_SOURCE",
     operationalStatus: "ESTABLISHED",
     sourceRevision: "cert-r1",
+    active: true,
+  })
+  await WxPassage.spawn(WxPassage, env, {
+    entityId: passage.id,
+    scriptureId: scripture.id,
+    passageType: "AYAH",
+    sequence: 255,
+    canonicalReference: "QURAN 2:255",
+    localNumber: 255,
+    sourceRevision: "cert-r1",
+    provenanceId: provenance.id,
     active: true,
   })
   const musa = await WxEntity.spawn(WxEntity, env, {
