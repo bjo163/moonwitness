@@ -1,197 +1,113 @@
 # MoonWitness Promotion Path
 
-> Branch promotion strategy for the Fastify + OTel migration and all feature work.
-
----
+> Canonical promotion strategy for all feature, integration, database, and release work.
 
 ## Branch Architecture
 
-```
+```text
 feature/*  ──PR──▶  dev  ──PR──▶  main  ──tag──▶  release
      │                 │                │
-     │                 │                └── Production (tagged releases only)
-     │                 └── Integration (continuous deployment target)
-     └── Feature development (ephemeral)
+     │                 │                └── Production release branch
+     │                 └── Integration and certification branch
+     └── Ephemeral feature/fix work
 ```
 
-### Branch Definitions
+| Branch | Purpose | CI |
+|---|---|---|
+| `feature/*` | Feature development and fixes | Foundation CI |
+| `dev` | Integration | Foundation CI + PostgreSQL certification when applicable |
+| `main` | Production candidate | Foundation CI + PostgreSQL certification + release-on-tag |
 
-| Branch | Purpose | Protection | CI |
-|--------|---------|------------|----|
-| `feature/*` | Feature development, bug fixes | None (ephemeral) | Foundation CI on PR |
-| `dev` | Integration branch, continuous deployment target | PR required, 1 review, up-to-date | Foundation CI on push + PR |
-| `main` | Production release branch | PR required, 1 review, up-to-date, required status checks | Foundation CI + Release on tag |
+## Stage 1: Feature → Dev
 
----
+Requirements:
 
-## Promotion Stages
+- Foundation CI is green for the exact feature SHA.
+- Audit, Lint, Typecheck, Test, and Build all pass.
+- Required review is approved.
+- Branch is up to date and conflict free.
 
-### Stage 1: Feature → Dev
+Foundation CI uses `CI_RUNNER` when configured and otherwise defaults to `ubuntu-latest`, so promotion does not silently depend on one offline self-hosted machine.
 
-**Trigger**: Pull request from `feature/*` to `dev`
+## Stage 2: Dev → Main
 
-**Requirements**:
-- Foundation CI passes (Test + Build required; Lint + Typecheck non-blocking)
-- At least one approving review
-- Branch is up-to-date with `dev`
-- No merge conflicts
+Requirements:
 
-**Process**:
-1. Create feature branch: `git checkout -b feature/<issue>-<slug> dev`
-2. Implement changes with tests
-3. Push and open PR to `dev`
-4. CI runs automatically on PR
-5. Address review feedback
-6. Squash or rebase merge into `dev`
+- Stage 1 requirements remain green on the exact `dev` candidate.
+- Integration/regression checks pass.
+- Production PostgreSQL Certification passes for database, API-runtime, migration, or deployment-sensitive changes.
+- Changelog/versioning are ready where applicable.
 
-**CI Checks**:
-| Check | Blocking | Timeout |
-|-------|----------|---------|
-| Lint | No (`continue-on-error`) | 15 min |
-| Typecheck | No (`continue-on-error`) | 15 min |
-| Test | Yes | 20 min |
-| Build | Yes | 30 min |
+The certification path proves:
 
----
+```text
+fresh PostgreSQL 18
+-> exact-candidate apps/api/Dockerfile
+-> db:install
+-> db:verify
+-> Witness graph certification
+-> backup/restore
+-> API boot
+-> /health/ready
+-> quality/security regressions
+```
 
-### Stage 2: Dev → Main
+## Stage 3: Main → Release
 
-**Trigger**: Pull request from `dev` to `main`
+Trigger: semantic version tag (`v*.*.*` or prerelease variant).
 
-**Requirements**:
-- All Stage 1 requirements met
-- Integration tests pass (no regressions)
-- PostgreSQL certification passes (if DB changes)
-- Changelog updated
-- Version bumps consistent across workspace
+Requirements:
 
-**Process**:
-1. Ensure `dev` is stable and all CI green
-2. Open PR from `dev` to `main`
-3. Review integration test results
-4. Merge after approval
-
----
-
-### Stage 3: Main → Release
-
-**Trigger**: Git tag push to `main`
-
-**Requirements**:
-- All Stage 2 requirements met
-- Tag follows semantic versioning (`v*.*.*`)
-- Release workflow passes (verify → publish dry-run → release notes)
-
-**Process**:
-1. Create annotated tag: `git tag -a v<version> -m "Release v<version>"`
-2. Push tag: `git push origin v<version>`
-3. Release workflow triggers automatically
-4. Verify job runs build, typecheck, test
-5. Publish job runs dry-run (no actual publishing yet)
-6. Release notes job creates draft GitHub Release
-7. Review and publish release
-
----
-
-## Fastify + OTel Migration Promotion
-
-The Fastify + OpenTelemetry migration follows the standard promotion path:
-
-### Current Status
-
-| Package | Status | Branch |
-|---------|--------|--------|
-| `@moon/server` (Fastify) | In Progress | `feature/fastify-otel-migration` |
-| `@moon/client` (OTel hooks) | In Progress | `feature/fastify-otel-migration` |
-| `@moon/protocol` (schema updates) | In Progress | `feature/fastify-otel-migration` |
-
-### Migration Checklist
-
-- [ ] Fastify server runtime replaces previous HTTP engine
-- [ ] OpenTelemetry instrumentation integrated
-- [ ] All existing REST/RPC/SSE routes migrated
-- [ ] Schema introspection (`/api/meta/model/:name`) preserved
-- [ ] CORS handling maintained
-- [ ] Error boundaries preserved
-- [ ] Performance benchmarks meet or exceed previous implementation
-- [ ] All existing tests pass
-- [ ] New tests for OTel spans and metrics
-- [ ] Documentation updated
-
-### Promotion Steps
-
-1. **Feature branch**: Complete migration on `feature/fastify-otel-migration`
-2. **PR to dev**: Open PR, CI validates, review approved
-3. **Dev integration**: Merge to `dev`, monitor for regressions
-4. **PR to main**: After integration period, promote to `main`
-5. **Tag release**: Tag `v0.3.0` (minor bump for new features)
-
----
+- Stage 2 requirements are satisfied.
+- Release Verify passes build, typecheck, and tests.
+- Publish remains dry-run until intentional publishing is enabled.
+- Draft GitHub Release is generated for review.
 
 ## CI/CD Workflows
 
-### Foundation CI (`foundation-ci.yml`)
+### Foundation CI — `.github/workflows/foundation-ci.yml`
 
-- **Triggers**: Push to any branch, PR to any branch, manual dispatch
-- **Jobs**: Lint, Typecheck, Test, Build, Report
-- **Reporting**: Posts PR comment with results matrix
-- **Concurrency**: Cancels in-progress runs on new pushes
+Triggers on pushes, pull requests, and manual dispatch. Every validation job is blocking.
 
-### Release (`release.yml`)
+### Production PostgreSQL Certification — `.github/workflows/witness-postgres-certification.yml`
 
-- **Triggers**: Tag push matching `v*.*.*`
-- **Jobs**: Verify, Publish (dry-run), Release Notes
-- **Publishing**: Dry-run mode (no actual npm publish)
-- **Artifacts**: Draft GitHub Release with changelog
+Triggers on pull requests to `dev`/`main`, pushes to `dev`/`main`, weekly schedule, and manual dispatch. This is the authoritative clean-database and production API certification gate.
 
-### PostgreSQL Certification (`witness-postgres-certification.yml`)
+### Release — `.github/workflows/release.yml`
 
-- **Triggers**: Push to `dev`/`main` (DB paths), weekly schedule, manual
-- **Purpose**: Validates migrations, seed, and Witness graph against PostgreSQL 18
+Triggers on release tags. Runner selection follows the same `CI_RUNNER` override with `ubuntu-latest` fallback.
 
----
+The former duplicate `.github/workflows/ci.yml` is intentionally removed. Foundation CI is the single fast validation authority, preventing duplicate jobs and ambiguous green statuses.
 
-## Emergency Procedures
+## Deployment Promotion
 
-### Hotfix Flow
+Production deployment must use the canonical scripts:
 
-```
-main ──checkout──▶ hotfix/* ──PR──▶ main ──tag──▶ release
-                      │
-                      └──PR──▶ dev (reconciliation)
+```text
+scripts/deploy-prod.sh
+scripts/deploy-prod.ps1
 ```
 
-1. Branch from `main`: `git checkout -b hotfix/<issue>-<slug> main`
-2. Apply minimal fix with tests
-3. Fast-track review and merge to `main`
-4. Tag and release immediately
-5. Merge hotfix commit back into `dev`
-6. Reconcile into active feature branches
+For Docker Compose they validate configuration, build the deployable artifacts, start PostgreSQL/Redis, execute `db:install`, execute `db:verify`, then start API and portals. The API container is built from the same `apps/api/Dockerfile` used by PostgreSQL certification.
 
-### Rollback Procedure
+## Emergency Hotfix
 
-1. Identify problematic tag/release
-2. Create rollback branch from previous stable tag
-3. Cherry-pick or revert problematic commits
-4. Tag new patch version
-5. Release with rollback notes
+```text
+main -> hotfix/* -> PR -> main -> tag
+                  |
+                  -> PR -> dev
+```
 
----
+Emergency fixes remain minimal, reviewed, tested, released, and reconciled back into `dev` and active work.
 
-## Branch Protection Rules
+## Branch Protection Target
 
-Configure in GitHub Settings → Rules → Rulesets:
+For both `dev` and `main`:
 
-### `dev` branch
-- Require pull request before merging
-- Require at least 1 approving review
-- Dismiss stale approvals on new commits
-- Require branch up-to-date before merging
-- Block force pushes
-- Block deletion
+- require pull request;
+- require review;
+- require branch up to date where practical;
+- require Foundation CI checks: `Constitutional & UI Audit`, `Lint`, `Typecheck`, `Test`, `Build`;
+- block force pushes and branch deletion.
 
-### `main` branch
-- All `dev` rules, plus:
-- Require status checks: `Test`, `Build`
-- Require conversation resolution before merging
-- Include administrators
+For `dev → main`, additionally require `Production PostgreSQL 18 Certification` when repository settings permit required checks.

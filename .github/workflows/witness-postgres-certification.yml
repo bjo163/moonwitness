@@ -23,7 +23,7 @@ concurrency:
 jobs:
   certify-postgres:
     name: Production PostgreSQL 18 Certification
-    runs-on: self-hosted
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 45
     env:
       CI: "true"
@@ -58,7 +58,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          command -v docker >/dev/null || { echo "Docker is required on the self-hosted runner."; exit 1; }
+          command -v docker >/dev/null || { echo "Docker is required on the selected CI runner."; exit 1; }
           docker network inspect "$CERT_NETWORK" >/dev/null 2>&1 || docker network create "$CERT_NETWORK"
           docker run -d --rm \
             --name "$CERT_PG_CONTAINER" \
