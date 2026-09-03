@@ -50,7 +50,7 @@ jobs:
       - name: Apply reviewed migration history only
         run: pnpm --filter api db:migrate
       - name: Generate additive registry completion migration
-        run: pnpm --filter api exec tsx src/migrate.ts diff:additive
+        run: pnpm --filter api db:diff:additive
       - name: Commit generated migration
         shell: bash
         run: |
