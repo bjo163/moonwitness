@@ -73,8 +73,9 @@ export {
   getAllRegisteredProcedures,
   isAllowedRpcMethod,
   validateRpcMethod,
-  resolveRpcHandler,
+  resolveRpcProcedure,
   type RpcProcedure,
+  type RpcProcedureContext,
 } from './rpc-registry.js'
 export {
   handleSSE,
@@ -93,4 +94,3 @@ export { globalRoutes, type Route, type ProxyRoute, type HttpHandler } from './r
 export { renderDashboard, renderSwaggerUI } from './views/dashboard.js'
 
 export * from './vercel.js'
-

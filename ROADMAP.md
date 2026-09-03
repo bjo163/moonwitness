@@ -2,44 +2,77 @@
 
 Status: **Canonical high-level roadmap**.
 
-Current release line: **Deep Space OS V3.0 & Dual-Portal Monorepo (v0.3.0)**. 
-Dual-portal separation (`apps/web` on `:3000` & `apps/command-center` on `:3001`), shared UI engine (`@workspace/ui`), unified SSO & SSE client (`@moon/client`), and 3D celestial visualizers are fully completed and production-certified.
+Current release line: **v0.3.1 — Production Hardening & Canonical Fastify Transport**.
+
+The dual-portal architecture, canonical PostgreSQL lifecycle, Fastify transport boundary, explicit RPC procedure surface, and release certification path are the current production baseline.
 
 ---
 
-## 🏛️ Completed Foundation & UI Alignment Phases
+## Completed platform phases
 
 ### Phase 0 — Architecture Freeze ✅
-- Branch flow (`feature` -> `dev` -> `main`) canonicalized.
-- Model -> ORM -> Server -> Addon architecture established.
+- Model -> ORM -> Server -> Addon ownership established.
+- Normal promotion flow defined as feature branch -> `dev` -> `main` -> release tag.
 
-### Phase 1 & 2 — Moon ORM Correctness, Security & Cleanup ✅
-- Transactional write boundary with fail-closed security.
-- PostgreSQL `pgvector 0.8+` integration and Odoo-style relational magic tuples.
+### Phase 1–2 — Moon ORM Correctness & Security ✅
+- Transactional write boundary and fail-closed authorization.
+- PostgreSQL/pgvector support and relational tuple semantics.
+- Explicit migration/install/verify production lifecycle.
 
-### Phase 3 & 4 — Moon Server & Base Addon Hardening ✅
-- Thin transport boundary (`@moon/server`) with SSE/realtime lifecycle.
-- Universal authentication and role-based access control.
+### Phase 3–4 — Moon Server & Base Hardening ✅
+- Canonical auth/session lifecycle.
+- REST/OpenAPI boundary and schema validation.
+- SSE session revocation/revalidation.
+- Explicit RPC registry; caller-controlled class-property dispatch removed.
+- Fastify 5 is the internal production HTTP engine behind `NativeServer`.
+- Optional OpenTelemetry auto-instrumentation at the server boundary.
 
-### Phase 5, 6 & 7 — Witness Foundation, CAB & Mizan Addons ✅
-- Canonical knowledge graph indexing revelation passages, historical figures, and transmission chains.
-- Civilizational analytics (CAB) and ethical balance matrix (Mizan).
+### Phase 5–7 — Witness, CAB & Mizan ✅
+- Provenance-first Witness graph and deterministic engine runtime.
+- CAB governance and Mizan assessment domains.
+- PostgreSQL-backed graph certification.
 
-### Phase 8 — Web / UI Alignment & Deep Space OS V3.0 ✅
-- **Dual-Portal App Separation**: `apps/web` (Portal on `:3000`) and `apps/command-center` (Operations Terminal on `:3001`).
-- **Universal Shared Engine**: `@workspace/ui` (Cosmic HUD, 3D Moon/Qibla/Eclipse, Seismic Radar, Quran Root Matrix, Web Audio Synth) and `@workspace/types` (`NAVIGATION_MESH`).
-- **Universal Client & SSO**: `@moon/client` (`useAuthSession`, `useRealtimeStream`, typed CRUD).
-- **SEO Master Engine**: Automated `generateMetadata()` for dynamic routes.
+### Phase 8 — Dual Portal / Shared UI ✅
+- `apps/web` public portal and `apps/command-center` administration portal.
+- Shared `@workspace/ui`, typed client/state layers, theme system, and application metadata.
+
+### Phase 9 — Production Release Engineering ✅
+- Blocking Foundation CI: audit, lint, typecheck, test, build.
+- PostgreSQL 18 clean install/seed/verify certification.
+- Backup/restore and `/health/ready` smoke.
+- Deterministic production Docker artifacts and release workflow.
 
 ---
 
-## 🛰️ Active & Next Production Priorities
+## Remaining release-governance action
 
-### Phase 9 — Global Knowledge Corpus Expansion & Epistemic Verification
-- Automated ingestion pipelines for complete 9 Hadith compendiums (Kutubus Sittah + Musnad Ahmad, Muwatta, Sunan Ad-Darimi).
-- Epistemic authority & provenance seal validation.
+### P0 — GitHub branch policy
 
-### Phase 10 — Production Certification & Cloud Deployments
-- Multi-region Docker / Cloudflare edge containerization.
-- Automated database backup & restore runbooks.
-- Live telemetry health-check monitoring dashboards.
+Repository code and CI define the required promotion flow, but GitHub branch/ruleset configuration must enforce it administratively:
+
+- protect `main`
+- protect `dev`
+- require pull requests for normal promotion
+- require the canonical CI checks
+- block force push/deletion on `main`
+
+This is tracked by issue #18 and must remain visible until GitHub reports the rules as active.
+
+---
+
+## Next product priorities
+
+### Phase 10 — Corpus Expansion & Epistemic Verification
+- Expand versioned corpus ingestion through the separate canonical corpus repository.
+- Strengthen provenance and evidence-resolution tooling.
+- Keep search/AI outputs derived from, and traceable to, canonical evidence.
+
+### Phase 11 — Operations & Scale
+- Production SLOs and alerting from health/readiness + telemetry.
+- Automated backup retention/restore drills.
+- Deployment rollback drills against immutable release tags/artifacts.
+- Capacity planning before introducing new infrastructure or frameworks.
+
+## Technology policy
+
+Prefer simplification over additional stack expansion. New infrastructure is justified only when a measured production constraint cannot be solved by the current Node.js/Fastify/PostgreSQL/Redis/Next.js platform.
