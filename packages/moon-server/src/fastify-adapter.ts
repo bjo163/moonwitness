@@ -164,6 +164,7 @@ export class FastifyAdapter {
     return async (req: FastifyRequest, reply: FastifyReply) => {
       const startedAt = Date.now()
       const rawReq = this.bridgeRequest(req)
+      reply.raw.setHeader('x-request-id', req.id)
       reply.hijack()
       await this.runMiddlewares(rawReq, reply.raw, () => handler(rawReq, reply.raw))
       logger.info('moon.http', `${req.method} ${req.url} ${reply.raw.statusCode} (${Date.now() - startedAt}ms)`, { requestId: req.id })
