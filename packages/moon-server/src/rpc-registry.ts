@@ -41,7 +41,9 @@ const GenericModelRpcInputSchema = z.object({
   kwargs: z.record(z.unknown()).default({}),
 })
 
-const callArgs = (input: z.infer<typeof GenericModelRpcInputSchema>) => {
+type GenericModelRpcInput = z.infer<typeof GenericModelRpcInputSchema>
+
+const callArgs = (input: GenericModelRpcInput) => {
   if (Object.keys(input.kwargs).length === 0) return input.args
   return [...input.args, input.kwargs]
 }
@@ -54,7 +56,7 @@ function registerBuiltinReadProcedures() {
     output: z.unknown(),
     requireAuth: true,
     handler: async ({ ModelClass, env }, input) =>
-      ModelClass.fetch(ModelClass, env, ...callArgs(input) as any),
+      (ModelClass.fetch as any)(ModelClass, env, ...callArgs(input)),
   })
 
   defineProcedure({
@@ -64,7 +66,7 @@ function registerBuiltinReadProcedures() {
     output: z.number(),
     requireAuth: true,
     handler: async ({ ModelClass, env }, input) =>
-      ModelClass.searchCount(ModelClass, env, ...callArgs(input) as any),
+      (ModelClass.searchCount as any)(ModelClass, env, ...callArgs(input)),
   })
 
   defineProcedure({
@@ -74,7 +76,7 @@ function registerBuiltinReadProcedures() {
     output: z.number(),
     requireAuth: true,
     handler: async ({ ModelClass, env }, input) =>
-      ModelClass.searchCount(ModelClass, env, ...callArgs(input) as any),
+      (ModelClass.searchCount as any)(ModelClass, env, ...callArgs(input)),
   })
 
   defineProcedure({
@@ -84,7 +86,7 @@ function registerBuiltinReadProcedures() {
     output: z.unknown(),
     requireAuth: true,
     handler: async ({ ModelClass, env }, input) =>
-      ModelClass.readGroup(ModelClass, env, ...callArgs(input) as any),
+      (ModelClass.readGroup as any)(ModelClass, env, ...callArgs(input)),
   })
 }
 
