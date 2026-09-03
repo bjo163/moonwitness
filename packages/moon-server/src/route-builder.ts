@@ -13,21 +13,13 @@ import { createCtx, getModel, SUPERUSER_ID, ANONYMOUS_ID, AuthorizationError } f
 import { resolveCorsOrigin, getSecurityHeaders, getCorsConfig } from './utils/http.js'
 import { defineEndpoint } from '@moon/protocol'
 
-// ── ROUTE CONTEXT ─────────────────────────────────────────────
 export interface RouteContext {
-  /** Parsed query params from URL */
   query: Record<string, string>
-  /** Parsed JSON body (POST/PUT) */
   body: any
-  /** Raw IncomingMessage (escape hatch) */
   req: IncomingMessage
-  /** Raw ServerResponse (escape hatch) */
   res: ServerResponse
-  /** ORM context for the authenticated user */
   env: ReturnType<typeof createCtx>
-  /** Authenticated user ID */
   uid: number
-  /** URL path params from route pattern (e.g. :id) */
   params: Record<string, string>
 }
 
@@ -41,22 +33,15 @@ export interface RouteSchemas {
   params?: SchemaValidator
 }
 
-// ── ROUTE DEFINITION ──────────────────────────────────────────
 export interface RouteDefinition<TBody = any, TQuery = Record<string, string>> {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE'
   path: string
-  /** Auth requirement: 'none' = public, 'user' = any authenticated, 'admin' = superuser only */
   auth?: 'none' | 'user' | 'admin'
-  /** Optional Zod runtime validation schemas for body, query, or params */
   schema?: RouteSchemas
-  /** OpenAPI group(s). Defaults to a tag derived from the path. */
   tags?: string[]
-  /** Human-readable summary/description for the generated OpenAPI document. */
   summary?: string
   description?: string
-  /** Optional Zod response schema; surfaced in the generated OpenAPI document. */
   response?: z.ZodTypeAny
-  /** Handler receives clean context, returns data to be JSON-serialized */
   handler: (ctx: RouteContext & { body: TBody; query: TQuery }) => Promise<unknown>
 }
 
@@ -82,10 +67,12 @@ function buildHeaders(req: IncomingMessage): Record<string, string> {
   return headers
 }
 
-/**
- * Parse JSON body from request (max 1MB)
- */
 async function readBody(req: IncomingMessage): Promise<any> {
+  const bridgedReq = req as IncomingMessage & { __moonBody?: unknown; __moonBodyPresent?: boolean }
+  if (bridgedReq.__moonBodyPresent) {
+    return bridgedReq.__moonBody ?? {}
+  }
+
   if (req.method === 'GET' || req.method === 'HEAD' || req.method === 'DELETE') {
     return {}
   }
@@ -115,9 +102,6 @@ async function readBody(req: IncomingMessage): Promise<any> {
   })
 }
 
-/**
- * Parse query string from URL into Record
- */
 function parseQueryParams(url: string): Record<string, string> {
   const q: Record<string, string> = {}
   const idx = url.indexOf('?')
@@ -133,18 +117,12 @@ function parseQueryParams(url: string): Record<string, string> {
   return q
 }
 
-/**
- * Register a route using the declarative pattern.
- * Auto-handles: error wrapping, CORS, query parsing, body parsing, auth, and Zod schema validation.
- */
 export function defineRoute(def: RouteDefinition): void {
   const isSystemMutation = def.path.startsWith('/api/system/') && def.method !== 'GET'
   if (isSystemMutation && def.auth !== 'admin') {
     throw new Error(`System mutation routes must explicitly require admin authorization: ${def.method} ${def.path}`)
   }
 
-  // Register the canonical contract so the generated OpenAPI document and
-  // contract tests read the same source of truth as the runtime handler.
   defineEndpoint({
     method: def.method,
     path: def.path,
@@ -155,7 +133,7 @@ export function defineRoute(def: RouteDefinition): void {
     body: def.schema?.body as any,
     params: def.schema?.params as any,
     response: def.response || (z.unknown() as any),
-    successStatus: def.method === 'POST' ? 200 : 200,
+    successStatus: 200,
   })
 
   globalRoutes.push({
@@ -163,16 +141,13 @@ export function defineRoute(def: RouteDefinition): void {
     path: def.path,
     handler: async (req: IncomingMessage, res: ServerResponse) => {
       try {
-        // ── AUTH ──
         const jwtSecret = process.env.JWT_SECRET || ''
         let uid = ANONYMOUS_ID
         const authLevel = def.auth || 'none'
 
         if (authLevel !== 'none') {
           try {
-            const session = await authenticateRequest(req, jwtSecret, {
-              allowAnonymous: false,
-            })
+            const session = await authenticateRequest(req, jwtSecret, { allowAnonymous: false })
             uid = session.uid
 
             if (authLevel === 'admin' && uid !== SUPERUSER_ID) {
@@ -190,13 +165,11 @@ export function defineRoute(def: RouteDefinition): void {
           }
         }
 
-        // ── PARSE ──
         let query = parseQueryParams(req.url || '')
         let body = await readBody(req)
-        const params = (req as any).params || {}
+        let params = (req as any).params || {}
         const env = createCtx(uid, {}, getModel as any)
 
-        // ── SCHEMA VALIDATION ──
         if (def.schema) {
           if (def.schema.query) {
             const parsedQuery = def.schema.query.safeParse(query)
@@ -225,27 +198,31 @@ export function defineRoute(def: RouteDefinition): void {
             }
             body = parsedBody.data
           }
+
+          if (def.schema.params) {
+            const parsedParams = def.schema.params.safeParse(params)
+            if (!parsedParams.success) {
+              res.writeHead(400, buildHeaders(req))
+              res.end(JSON.stringify({
+                error: 'Invalid path parameters',
+                code: 'VALIDATION_ERROR',
+                details: parsedParams.error.format ? parsedParams.error.format() : parsedParams.error,
+              }))
+              return
+            }
+            params = parsedParams.data
+          }
         }
 
-        // ── EXECUTE ──
         const result = await def.handler({ query, body, req, res, env, uid, params })
-
-        // If handler already sent response (escape hatch), skip
         if (res.writableEnded) return
 
-        // ── RESPOND ──
         res.writeHead(200, buildHeaders(req))
         res.end(JSON.stringify(result))
       } catch (err: any) {
-        // Don't double-send if already responded
         if (res.writableEnded) return
 
-        if (err instanceof AuthError) {
-          res.writeHead(err.statusCode, buildHeaders(req))
-          res.end(JSON.stringify({ error: err.message, code: err.code }))
-          return
-        }
-        if (err instanceof AuthorizationError) {
+        if (err instanceof AuthError || err instanceof AuthorizationError) {
           res.writeHead(err.statusCode, buildHeaders(req))
           res.end(JSON.stringify({ error: err.message, code: err.code }))
           return

@@ -1,10 +1,8 @@
 # MoonWitness Architecture Specification (Enterprise Standard)
 
-Status: **Canonical**. This document defines the application architecture and ownership boundaries for the MoonWitness monorepo.
+Status: **Canonical**. This document defines application architecture and ownership boundaries for the MoonWitness monorepo.
 
----
-
-## 1. System Model
+## 1. System model
 
 ```text
 PUBLIC / ADMIN UI
@@ -18,13 +16,15 @@ apps/web + apps/command-center
           |
           v
 @moon/server
+NativeServer public API
+Fastify 5 internal HTTP engine
           |
           v
 DOMAIN + APPLICATION SERVICES
-@moon/witness + @moon/compute + @moon/orm
+@moon/witness + other addons + @moon/orm
           |
           v
-PostgreSQL / application infrastructure
+PostgreSQL / Redis / application infrastructure
 ```
 
 The canonical corpus is maintained separately by:
@@ -35,85 +35,55 @@ bjo163/moonwitness-corpus
 
 The application consumes versioned corpus releases through `@moon/witness` ingestion and represents them in the canonical Witness domain graph.
 
----
-
-## 2. Source and Ownership Boundaries
+## 2. Source and ownership boundaries
 
 ### `moonwitness-corpus`
-Owns:
 
-- canonical corpus authoring
-- upstream synchronization
-- source metadata
-- corpus schemas
-- canonical JSON/JSONL
-- corpus releases and artifacts
-- corpus-level provenance
-
-The corpus repository does not own the MoonWitness application database.
+Owns canonical corpus authoring, upstream synchronization, source metadata, corpus schemas, canonical JSON/JSONL, corpus releases/artifacts, and corpus-level provenance. It does not own the application database.
 
 ### `@moon/witness`
-Owns:
 
-- source-aware ingestion
-- normalization and validation
-- application knowledge graph
-- source/artifact/snapshot records
-- passage and textual content models
-- provenance relationships
-- evidence and research-domain integration
+Owns source-aware ingestion, normalization/validation, application knowledge graph, source/artifact/snapshot records, passages/content, provenance relationships, evidence, and research-domain integration.
 
 ### MoonWitness database
 
-The database is the operational persistence and query projection of the application domain. It is not the editorial source of the corpus.
+The database is operational persistence and query projection of the application domain. It is not the editorial source of the corpus.
 
 ### `apps/web`
 
-Public product presentation and source-aware knowledge browsing.
+Owns public product presentation and source-aware knowledge browsing.
 
 ### `apps/command-center`
 
-Authorized administration, operational monitoring, corpus/import controls, and application management.
+Owns authorized administration, operational monitoring, corpus/import controls, and application management.
 
----
-
-## 3. Corpus Integration Flow
+## 3. Corpus integration flow
 
 ```text
 moonwitness-corpus
         |
-        | immutable release / pinned revision
         v
-Corpus artifact + manifest
+immutable release / pinned revision
         |
         v
 @moon/witness ingestion
         |
         +--> source / artifact / snapshot
         +--> provenance
-        +--> text edition
-        +--> passage
-        +--> content
+        +--> text edition / passage / content
         +--> tradition / research graph where applicable
         |
         v
 MoonWitness API
-        |
    +----+----+
    |         |
    v         v
  Web   Command Center
 ```
 
-The public Web and Command Center never read raw corpus files directly.
+Web and Command Center never treat raw corpus files as a parallel source of truth.
 
----
-
-## 4. Canonical Write Path
-
-New business capabilities should start from an appropriate domain model or existing domain service.
-
-Canonical application write path:
+## 4. Canonical write path
 
 ```text
 HTTP / RPC / Worker
@@ -125,17 +95,15 @@ Application Service / Domain Operation
 Canonical Model
         |
         v
-Moon ORM
+Moon ORM transaction + authorization
         |
         v
-Database transaction
+PostgreSQL
 ```
 
-Corpus ingestion follows the same application boundary through `@moon/witness` rather than creating a parallel repository or persistence layer.
+Corpus ingestion uses the same application boundary through `@moon/witness`.
 
----
-
-## 5. Enterprise UI Architecture
+## 5. Enterprise UI architecture
 
 `@workspace/ui` is the shared design system for both applications.
 
@@ -153,105 +121,93 @@ Standards:
 
 Application UI must not introduce a competing visual language.
 
----
+## 6. Design token architecture
 
-## 6. Design Token Architecture
-
-The canonical semantic token layer lives in:
+Canonical semantic tokens live in:
 
 ```text
 packages/ui/src/styles/globals.css
 packages/ui/src/tokens/theme-tokens.ts
 ```
 
-Primary semantic roles include:
+Domain-specific visualization tokens may exist only where they represent a real domain meaning; they must not replace the global semantic palette.
+
+## 7. Theme rules
+
+Root layouts use semantic theme classes and must not force dark mode. Theme selection supports Light, Dark, and System through the shared state/provider infrastructure.
+
+## 8. Component naming
+
+Prefer standard descriptive names such as `ResourceTable`, `DataTable`, `Panel`, `Modal`, `ContextBlock`, `BreadcrumbTrail`, and `ErrorBoundary`. Avoid decorative legacy naming for ordinary application primitives.
+
+## 9. Backend transport architecture
+
+`apps/api` constructs `NativeServer` from `@moon/server`.
+
+`NativeServer` is the stable Moon public abstraction. **Fastify 5 is the only canonical production HTTP routing/lifecycle engine underneath it.**
 
 ```text
-background
-foreground
-card
-card-foreground
-popover
-popover-foreground
-primary
-primary-foreground
-secondary
-secondary-foreground
-muted
-muted-foreground
-accent
-accent-foreground
-destructive
-destructive-foreground
-success
-success-foreground
-warning
-warning-foreground
-info
-info-foreground
-border
-input
-ring
+apps/api
+  -> NativeServer / Moon contracts
+  -> FastifyAdapter
+  -> Fastify router + request lifecycle
+  -> raw Moon handler bridge where compatibility requires it
+  -> domain / ORM
 ```
 
-Domain-specific visualization tokens may exist where they have a real domain meaning. They must not become substitutes for the global UI palette.
+The removed handwritten `node:http` route matcher is not a production alternative. `NativeServer.handleRequest()` exists only as a compatibility/test shim and uses Fastify injection.
 
----
+Addon/domain packages must not import Fastify for ordinary route registration. They use `defineRoute()` or other Moon-owned contracts.
 
-## 7. Theme Rules
+## 10. Request lifecycle
 
-The root layouts of both applications must use semantic theme classes:
+Canonical request ordering:
 
 ```text
-bg-background
-text-foreground
+Fastify request acceptance
+-> request id + body parsing
+-> Moon raw-request bridge
+-> Moon middleware chain
+-> authentication/authorization
+-> route / REST / explicit RPC procedure
+-> domain + ORM transaction
+-> Moon response/error envelope
+-> Fastify lifecycle completion
 ```
 
-Neither application may force a dark theme at the root.
+Fastify request IDs are returned as `x-request-id`, bridged to raw handlers, and logged at the transport boundary.
 
-The theme is selected by the existing application state/provider and must support:
+## 11. RPC boundary
 
-```text
-Light
-Dark
-System
-```
+RPC exposure is explicit. Network callers may invoke only names registered through `defineProcedure()`.
 
----
+Every procedure has:
 
-## 8. Component Naming
+- explicit name
+- runtime input schema
+- runtime output schema
+- fixed handler
+- auth/admin policy where needed
 
-Use standard, descriptive names:
+Caller-controlled model/method strings must never resolve arbitrary class properties. Adding a new static ORM/model helper must expose zero new RPC surface automatically.
 
-```text
-ResourceTable
-DataTable
-Panel
-Modal
-ContextBlock
-BreadcrumbTrail
-ErrorBoundary
-```
+Ordinary CRUD continues to use the canonical bounded REST contract when possible.
 
-Avoid legacy or decorative naming conventions.
+## 12. SSE boundary
 
----
+SSE runs as a deliberate raw-response escape hatch under the Fastify listener. Protected streams bind session identity, periodically revalidate token/user state, and close on revocation, expiry, inactivity, or shutdown.
 
-## 9. Backend Architecture
+## 13. OpenTelemetry and performance
 
-`apps/api` is the application backend runtime.
+`@moon/server` owns OpenTelemetry initialization and shutdown. The NodeSDK auto-instrumentation bundle provides supported transport/database tracing when `ENABLE_TELEMETRY=true`; local development must work with telemetry disabled and no collector.
 
-`@moon/server` provides transport and route infrastructure.
+`@moon/performance` remains application/product metrics. OTel complements it rather than replacing it.
 
-`@moon/protocol` is the API contract source of truth.
+Telemetry must never record JWTs, passwords, OTPs, authorization headers, raw sensitive bodies, secrets, or unbounded user text.
 
-Routes should remain thin and delegate application behavior to services/domain models.
+## 14. Witness domain architecture
 
----
-
-## 10. Witness Domain Architecture
-
-The canonical Witness graph includes, where applicable:
+Canonical Witness models include, where applicable:
 
 ```text
 wx.source
@@ -270,82 +226,66 @@ wx.assertion
 wx.evidence
 ```
 
-Do not create duplicate models when an existing canonical model already represents the requirement.
+Do not create duplicate models when an existing canonical model represents the requirement.
 
----
+## 15. Engine and research boundary
 
-## 11. Engine and Research Boundary
-
-Engine and research outputs are derived application data.
+Derived application data must remain distinct and traceable:
 
 ```text
 source content
-    !=
-translation
-    !=
-evidence
-    !=
-assertion
-    !=
-research result
-    !=
-AI-generated synthesis
+!= translation
+!= evidence
+!= assertion
+!= research result
+!= AI-generated synthesis
 ```
 
-Derived results must remain traceable to the source/evidence and execution context that produced them where the domain supports this.
+Derived results should retain source/evidence and execution context where the domain supports it.
 
----
+## 16. Search architecture
 
-## 12. Search Architecture
-
-Search is a projection over canonical application data.
+Search is a projection over canonical application data, never a second source of truth:
 
 ```text
-Witness graph
-    |
-    v
-search projection
-    |
-    v
-retrieval service
-    |
-    v
-@moon/protocol
-    |
-    v
-Web / Command Center
+Witness graph -> search projection -> retrieval service -> @moon/protocol -> UIs
 ```
 
-Search must not become a second source of truth.
-
----
-
-## 13. Repository Cleanliness
+## 17. Repository cleanliness
 
 - Keep application scripts in dedicated script locations.
 - Keep domain logic inside domain/service packages.
 - Keep UI rendering inside UI/application layers.
 - Do not commit local caches, credentials, temporary corpus downloads, or generated runtime state.
+- Avoid duplicate implementation paths once a migration is complete.
 
----
+## 18. File size and maintainability
 
-## 14. File Size and Maintainability
+Keep source files below configured repository limits. Split components/services when they grow beyond the audit threshold. Views should orchestrate rather than contain large blocks of business or presentation logic.
 
-Keep source files below the repository's configured file-size limits. When a component or service grows beyond the limit, split it into focused modules.
+## 19. Production database lifecycle
 
-Views should orchestrate rather than contain large blocks of business or presentation logic.
+Application startup is not the schema migration mechanism. Production promotion requires reviewed migrations and canonical install/verify commands before service promotion.
 
----
+```text
+build exact artifact
+-> PostgreSQL/Redis healthy
+-> db:install
+-> db:verify
+-> API healthy
+-> portals start
+```
 
-## 15. Operational Principle
+## 20. Operational ownership
 
-Every production behavior should have an identifiable owner:
+Every production behavior has an identifiable owner:
 
 ```text
 source data       -> moonwitness-corpus
 application graph -> @moon/witness
-transport         -> @moon/server
+transport         -> @moon/server / Fastify internally
 API contract      -> @moon/protocol
+persistence       -> @moon/orm + PostgreSQL
 public UI         -> apps/web
 admin UI          -> apps/command-center
 shared UI         -> @workspace/ui

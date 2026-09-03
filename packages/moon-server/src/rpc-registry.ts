@@ -1,73 +1,109 @@
-import type { z } from 'zod'
-import { getModel } from '@moon/orm'
+import { z } from 'zod'
+import type { Ctx, Vertex } from '@moon/orm'
 
-export interface RpcProcedure {
+export interface RpcProcedureContext {
+  uid: number
+  model: string
+  ModelClass: typeof Vertex
+  env: Ctx
+}
+
+export interface RpcProcedure<TInput = unknown, TOutput = unknown> {
   name: string
   description: string
-  input?: z.ZodTypeAny
-  output?: z.ZodTypeAny
+  input: z.ZodType<TInput>
+  output: z.ZodType<TOutput>
   requireAuth?: boolean
   requireAdmin?: boolean
+  handler: (ctx: RpcProcedureContext, input: TInput) => Promise<TOutput> | TOutput
 }
 
-const globalProcedures = new Map<string, RpcProcedure>()
+const globalProcedures = new Map<string, RpcProcedure<any, any>>()
 
-export function defineProcedure(procedure: RpcProcedure) {
-  globalProcedures.set(procedure.name, procedure)
+export function defineProcedure<TInput, TOutput>(procedure: RpcProcedure<TInput, TOutput>) {
+  if (globalProcedures.has(procedure.name)) {
+    throw new Error(`RPC procedure already registered: ${procedure.name}`)
+  }
+  globalProcedures.set(procedure.name, procedure as RpcProcedure<any, any>)
 }
 
-export function getRegisteredProcedure(name: string): RpcProcedure | undefined {
+export function getRegisteredProcedure(name: string): RpcProcedure<any, any> | undefined {
   return globalProcedures.get(name)
 }
 
-export function getAllRegisteredProcedures(): RpcProcedure[] {
+export function getAllRegisteredProcedures(): RpcProcedure<any, any>[] {
   return Array.from(globalProcedures.values())
 }
 
-const SAFE_READONLY_METHODS = new Set([
-  'fetch',
-  'count',
-  'searchCount',
-  'readGroup',
-])
+const GenericModelRpcInputSchema = z.object({
+  model: z.string().min(1),
+  args: z.array(z.unknown()).default([]),
+  kwargs: z.record(z.unknown()).default({}),
+})
 
-const DANGEROUS_METHODS = new Set([
-  'spawn',
-  'morph',
-  'purge',
-  'destroy',
-  'unlink',
-  'create',
-  'write',
-  'update',
-  'delete',
-  'transaction',
-  'emitEvent',
-  'getFieldDefs',
-  'tableName',
-  'validateData',
-  'splitVals',
-  'processRelationalTuples',
-  'checkRecordOperationAccess',
-  'onchange',
-  'label',
-])
+type GenericModelRpcInput = {
+  model: string
+  args?: unknown[]
+  kwargs?: Record<string, unknown>
+}
+
+const callArgs = (input: GenericModelRpcInput) => {
+  const args = input.args ?? []
+  const kwargs = input.kwargs ?? {}
+  if (Object.keys(kwargs).length === 0) return args
+  return [...args, kwargs]
+}
+
+function registerBuiltinReadProcedures() {
+  defineProcedure({
+    name: 'fetch',
+    description: 'Read model records through the canonical ORM ACL and record-rule boundary.',
+    input: GenericModelRpcInputSchema,
+    output: z.unknown(),
+    requireAuth: true,
+    handler: async ({ ModelClass, env }, input) =>
+      (ModelClass.fetch as any)(ModelClass, env, ...callArgs(input)),
+  })
+
+  defineProcedure({
+    name: 'searchCount',
+    description: 'Count model records through the canonical ORM ACL and record-rule boundary.',
+    input: GenericModelRpcInputSchema,
+    output: z.number(),
+    requireAuth: true,
+    handler: async ({ ModelClass, env }, input) =>
+      (ModelClass.searchCount as any)(ModelClass, env, ...callArgs(input)),
+  })
+
+  defineProcedure({
+    name: 'count',
+    description: 'Compatibility alias for the canonical searchCount read procedure.',
+    input: GenericModelRpcInputSchema,
+    output: z.number(),
+    requireAuth: true,
+    handler: async ({ ModelClass, env }, input) =>
+      (ModelClass.searchCount as any)(ModelClass, env, ...callArgs(input)),
+  })
+
+  defineProcedure({
+    name: 'readGroup',
+    description: 'Read grouped model aggregates through the canonical ORM boundary.',
+    input: GenericModelRpcInputSchema,
+    output: z.unknown(),
+    requireAuth: true,
+    handler: async ({ ModelClass, env }, input) =>
+      (ModelClass.readGroup as any)(ModelClass, env, ...callArgs(input)),
+  })
+}
+
+registerBuiltinReadProcedures()
 
 export function isAllowedRpcMethod(method: string): boolean {
-  if (globalProcedures.has(method)) {
-    return true
-  }
-  if (DANGEROUS_METHODS.has(method)) {
-    return false
-  }
-  if (SAFE_READONLY_METHODS.has(method)) {
-    return true
-  }
-  return false
+  return globalProcedures.has(method)
 }
 
 export function validateRpcMethod(method: string): { ok: boolean; error?: string } {
-  if (!/^[a-zA-Z0-9_]+$/.test(method)) {
+  if (!/^[a-zA-Z0-9_.]+$/.test(method)) {
     return { ok: false, error: `Invalid method name format: ${method}` }
   }
   if (method.includes('__')) {
@@ -76,20 +112,12 @@ export function validateRpcMethod(method: string): { ok: boolean; error?: string
   if (method.startsWith('_')) {
     return { ok: false, error: `Private methods are not allowed: ${method}` }
   }
-  if (!isAllowedRpcMethod(method)) {
+  if (!globalProcedures.has(method)) {
     return { ok: false, error: `Method ${method} is not registered for RPC access` }
   }
   return { ok: true }
 }
 
-export function resolveRpcHandler(modelName: string, method: string) {
-  const ModelClass = getModel(modelName)
-  if (!ModelClass) {
-    return null
-  }
-  const methodFn = (ModelClass as any)[method]
-  if (typeof methodFn !== 'function') {
-    return null
-  }
-  return methodFn
+export function resolveRpcProcedure(method: string): RpcProcedure<any, any> | null {
+  return globalProcedures.get(method) ?? null
 }
