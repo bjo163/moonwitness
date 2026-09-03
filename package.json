@@ -1,6 +1,6 @@
 {
   "name": "moonwitness",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "scripts": {
     "dev": "turbo dev --filter=web --filter=command-center --filter=api --parallel",

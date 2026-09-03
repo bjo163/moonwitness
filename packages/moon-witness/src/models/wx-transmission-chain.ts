@@ -5,6 +5,7 @@ import { RECORD_STATUS_SELECTION } from '../graph/contracts.js'
 export default class WxTransmissionChain extends Vertex {
   static _name = 'wx.transmission.chain'
   static _description = 'Witness Transmission Chain / Isnad'
+  static _rec_name = 'chainType'
 
   entityId = fields.Many2one({ comodel: 'wx.entity', index: true })
   traditionUnitId = fields.Many2one({ comodel: 'wx.tradition.unit', required: true, index: true })

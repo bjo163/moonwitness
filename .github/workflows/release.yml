@@ -7,7 +7,7 @@ on:
       - 'v*.*.*-*'
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 concurrency:
@@ -17,14 +17,33 @@ concurrency:
 jobs:
   verify:
     name: Verify Release
-    runs-on: self-hosted
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 30
     env:
       CI: 'true'
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Verify tag, version, and main identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP_VERSION=$(node -p "require('./package.json').version")
+          EXPECTED_TAG="v${APP_VERSION}"
+          test "$GITHUB_REF_NAME" = "$EXPECTED_TAG" || {
+            echo "Release tag $GITHUB_REF_NAME does not match package.json version $EXPECTED_TAG."
+            exit 1
+          }
+
+          git fetch origin main --depth=1
+          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" || {
+            echo "Release tag must point at the exact current main commit."
+            exit 1
+          }
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -55,7 +74,7 @@ jobs:
 
   publish:
     name: Publish to npm (Dry Run)
-    runs-on: self-hosted
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 20
     needs: verify
     env:
@@ -63,7 +82,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -114,14 +133,14 @@ jobs:
 
   release-notes:
     name: Generate Release Notes
-    runs-on: self-hosted
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
     needs: verify
     if: success()
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -154,6 +173,8 @@ jobs:
             ${{ steps.changelog.outputs.changelog }}
 
             ### Verification
+            - ✅ Tag matches package version
+            - ✅ Tag points at exact main
             - ✅ All packages built
             - ✅ Typecheck passed
             - ✅ Tests passed
@@ -162,5 +183,5 @@ jobs:
             This release was promoted through: feature → dev → main → tag
 
             — *MoonWitness CI/CD Pipeline*
-          draft: true
+          draft: false
           prerelease: ${{ contains(github.ref_name, '-') }}

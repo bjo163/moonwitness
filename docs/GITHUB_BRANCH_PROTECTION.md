@@ -4,36 +4,45 @@ This repository uses `dev` as the integration branch and `main` as the release b
 
 ## Required rules for `dev` and `main`
 
-Configure a repository ruleset or branch protection rule matching each branch:
+Configure repository rulesets or branch protection so both branches:
 
 - require a pull request before merging;
 - require at least one approving review;
 - dismiss stale approvals when new commits are pushed;
 - require the branch to be up to date before merging where practical;
-- require the status check `Lint, Typecheck, Test, Build`;
+- require Foundation CI checks:
+  - `Constitutional & UI Audit`
+  - `Lint`
+  - `Typecheck`
+  - `Test`
+  - `Build`
 - block force pushes;
 - block branch deletion;
-- do not allow bypassing these rules for ordinary contributors.
+- do not allow ordinary contributors to bypass the rules.
 
-The PostgreSQL certification workflow runs on pushes to `dev` and `main`, weekly, and manually. It
-is a release/database-validation check and should be required for the `dev → main` promotion rule
-once a PostgreSQL-capable self-hosted runner is available. It intentionally does not run on
-`pull_request` events because it uses a self-hosted runner.
+Foundation CI uses the repository variable `CI_RUNNER` when present and defaults to `ubuntu-latest` when it is unset. This avoids making branch promotion depend permanently on one self-hosted runner while still allowing a repository-owned runner to be selected intentionally.
+
+## Production PostgreSQL certification
+
+`.github/workflows/witness-postgres-certification.yml` runs on pull requests to `dev`/`main`, pushes to `dev`/`main`, weekly schedule, and manual dispatch.
+
+For `dev → main`, require `Production PostgreSQL 18 Certification` for database, migration, API-runtime, or deployment-sensitive changes. It validates a clean PostgreSQL lifecycle and the same `apps/api/Dockerfile` artifact used by production Compose.
 
 ## Promotion policy
 
-- feature work enters `dev` through a pull request and Foundation CI;
-- `dev` enters `main` only through a pull request after integration checks pass;
+- feature work enters `dev` through a pull request and green Foundation CI;
+- `dev` enters `main` only after integration checks and applicable PostgreSQL certification pass;
 - direct pushes to `main` are reserved for the documented emergency procedure;
-- an emergency hotfix must be merged back into `dev`, then reconciled into active feature work.
+- emergency hotfixes are reconciled back into `dev` and active feature work.
 
 ## Emergency procedure
 
 1. Create a short-lived hotfix branch from `main`.
 2. Open a pull request to `main` and record the incident reference.
-3. After release, open a second pull request from the hotfix commit into `dev`.
-4. Reconcile the same change into any active feature branch.
-5. Remove the hotfix branch after both reconciliations are merged.
+3. Run the applicable exact-SHA checks.
+4. Release only after the required gate passes.
+5. Open a reconciliation pull request into `dev`.
+6. Reconcile the same change into active feature branches.
+7. Remove the hotfix branch after reconciliation.
 
-Branch protection administration is intentionally kept outside repository code. Only a repository
-owner/administrator can create or modify these rules in GitHub Settings → Rules → Rulesets.
+Branch-protection administration remains outside repository code. Repository owners configure these rules in GitHub Settings → Rules / Branch protection.

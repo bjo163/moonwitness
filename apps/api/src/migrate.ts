@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { bootstrap, check, diff, down, status, up } from "@moon/orm"
+import { bootstrap, check, diff, diffAdditive, down, status, up } from "@moon/orm"
 import { NativeServer } from "@moon/server"
 import baseAddons, {
   loadBaseData,
@@ -19,16 +19,17 @@ import accountAddons from "@moon/account"
 import crmAddons from "@moon/crm"
 import mailAddons from "@moon/mail"
 import geoAddons from "@moon/geo"
+import cronAddons from "@moon/cron"
 
 async function loadAllDemoData() {
-  console.log("=== Loading Demo Data across all 15 Addon Packages ===")
+  console.log("=== Loading Demo Data across all 16 Addon Packages ===")
 
   console.log("[Level 0] Seeding @moon/base demo data...")
   const { loadDemoData: loadBaseDemo } = await import("@moon/base")
   await loadBaseDemo()
 
   console.log("[Level 1] Seeding independent addon demo data...")
-  const [witnessM, perfM, projectM, productM, accountM, mailM, geoM] = await Promise.all([
+  const [witnessM, perfM, projectM, productM, accountM, mailM, geoM, cronM] = await Promise.all([
     import("@moon/witness"),
     import("@moon/performance"),
     import("@moon/project"),
@@ -36,6 +37,7 @@ async function loadAllDemoData() {
     import("@moon/account"),
     import("@moon/mail"),
     import("@moon/geo"),
+    import("@moon/cron"),
   ])
   await Promise.all([
     witnessM.loadDemoData(),
@@ -45,6 +47,7 @@ async function loadAllDemoData() {
     accountM.loadDemoData(),
     mailM.loadDemoData(),
     geoM.loadDemoData(),
+    cronM.loadDemoData(),
   ])
 
   console.log("[Level 2] Seeding higher-tier addon demo data...")
@@ -74,7 +77,7 @@ async function run() {
   const jwtSecret = process.env.JWT_SECRET?.trim()
   if (!jwtSecret) {
     throw new Error(
-      "JWT_SECRET is required for migration commands. Set it explicitly before running diff, up, or down."
+      "JWT_SECRET is required for migration commands. Set it explicitly before running migration operations."
     )
   }
 
@@ -97,6 +100,7 @@ async function run() {
       ...crmAddons.models,
       ...mailAddons.models,
       ...geoAddons.models,
+      ...cronAddons.models,
     ],
   })
 
@@ -106,6 +110,8 @@ async function run() {
 
   if (cmd === "diff") {
     await diff()
+  } else if (cmd === "diff:additive" || cmd === "additive") {
+    await diffAdditive()
   } else if (cmd === "up" || cmd === "migrate") {
     await up()
   } else if (cmd === "down" || cmd === "rollback") {
@@ -148,7 +154,7 @@ async function run() {
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
     console.log("Database migration and canonical seed integrity checks passed.")
   } else {
-    console.log("Usage: pnpm tsx src/migrate.ts <diff|up|down|bootstrap|status|check|seed|demo|install|verify> [--demo] [--with-external]")
+    console.log("Usage: pnpm tsx src/migrate.ts <diff|diff:additive|up|down|bootstrap|status|check|seed|demo|install|verify> [--demo] [--with-external]")
   }
 
   process.exit(0)

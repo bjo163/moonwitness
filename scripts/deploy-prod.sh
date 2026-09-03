@@ -1,52 +1,74 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
-# ◈ MOONWITNESS OS V9.5 — ZERO-DOWNTIME PRODUCTION DEPLOYMENT RUNNER
 echo "================================================================="
-echo "◈ MOONWITNESS OS — INITIATING ZERO-DOWNTIME PRODUCTION DEPLOYMENT"
+echo "◈ MOONWITNESS OS — PRODUCTION DEPLOYMENT"
 echo "================================================================="
 
-# 1. Pull latest production code
-echo "▶ Step 1/5: Pulling latest commits from origin/main..."
+echo "▶ Step 1/7: Pulling latest commits from origin/main..."
 git fetch origin main
 git checkout main
-git pull origin main
+git pull --ff-only origin main
 
-# 2. Install dependencies
-echo "▶ Step 2/5: Installing frozen dependencies with pnpm..."
+echo "▶ Step 2/7: Installing frozen dependencies..."
 pnpm install --frozen-lockfile
 
-# 3. Verify integrity & tests
-echo "▶ Step 3/5: Running monorepo typecheck and test verification..."
+echo "▶ Step 3/7: Running repository validation..."
 pnpm turbo typecheck
 pnpm test
 
-# 4. Build production bundles
-echo "▶ Step 4/5: Compiling multi-app Next.js 16 and backend bundles..."
+echo "▶ Step 4/7: Building production bundles..."
 pnpm turbo build
 
-# 5. Reload processes with PM2 or Docker
-echo "▶ Step 5/5: Executing zero-downtime cluster reload..."
-if command -v pm2 &> /dev/null; then
-    pm2 reload ecosystem.config.cjs --update-env
-    echo "✓ PM2 cluster successfully reloaded."
-elif command -v docker-compose &> /dev/null; then
+COMPOSE=()
+if docker compose version >/dev/null 2>&1; then
+    COMPOSE=(docker compose)
+elif command -v docker-compose >/dev/null 2>&1; then
+    COMPOSE=(docker-compose)
+fi
+
+if [[ ${#COMPOSE[@]} -gt 0 ]]; then
     if [[ ! -f .env.production ]]; then
-        echo "✖ Docker Compose deployment requires .env.production. Copy .env.production.example and set every required secret."
+        echo "✖ Docker Compose deployment requires .env.production."
+        echo "  Copy .env.production.example and replace every placeholder first."
         exit 1
     fi
-    docker-compose --env-file .env.production config --quiet
-    echo "▶ Step 5b/5: Running production readiness check..."
-    node cli/mw.mjs prod-check || {
-        echo "✖ Production readiness check failed. Resolve the reported issues before deploying."
-        exit 1
+
+    dc() {
+        "${COMPOSE[@]}" --env-file .env.production "$@"
     }
-    docker-compose --env-file .env.production up -d --build
-    echo "✓ Docker Compose containers successfully updated."
+
+    echo "▶ Step 5/7: Validating production configuration..."
+    dc config --quiet
+    node cli/mw.mjs prod-check
+
+    echo "▶ Step 6/7: Building deployable artifacts and verifying database state..."
+    dc build api web command-center
+    dc up -d postgres redis
+    dc run --rm api pnpm --filter=api db:install
+    dc run --rm api pnpm --filter=api db:verify
+
+    echo "▶ Step 7/7: Starting verified production services..."
+    dc up -d api command-center web
+    dc ps
+    echo "✓ Docker Compose deployment completed with verified migrations."
+elif command -v pm2 >/dev/null 2>&1; then
+    echo "▶ Step 5/7: Validating PM2 production environment..."
+    : "${DATABASE_URL:?DATABASE_URL must be exported before PM2 deployment}"
+    : "${JWT_SECRET:?JWT_SECRET must be exported before PM2 deployment}"
+
+    echo "▶ Step 6/7: Installing and verifying database state..."
+    pnpm --filter=api db:install
+    pnpm --filter=api db:verify
+
+    echo "▶ Step 7/7: Reloading PM2 processes..."
+    pm2 reload ecosystem.config.cjs --update-env
+    echo "✓ PM2 deployment completed with verified migrations."
 else
-    echo "⚠️  Neither PM2 nor Docker Compose detected. Please restart processes manually."
+    echo "✖ Neither Docker Compose nor PM2 is available. Deployment aborted."
+    exit 1
 fi
 
 echo "================================================================="
-echo "🎉 DEPLOYMENT COMPLETE — MOONWITNESS OS V9.5 IS NOW LIVE!"
+echo "✓ DEPLOYMENT COMPLETE — VERIFIED ARTIFACTS ARE LIVE"
 echo "================================================================="
