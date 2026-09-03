@@ -1,21 +1,14 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { EventEmitter } from 'node:events'
-import { FastifyAdapter } from '../src/fastify-adapter.js'
-import { closeAllSSEConnections } from '../src/handlers/sse.js'
 import { createServer as createNetServer } from 'node:net'
+import { FastifyAdapter } from '../src/fastify-adapter.js'
+import { NativeServer } from '../src/NativeServer.js'
+import { closeAllSSEConnections } from '../src/handlers/sse.js'
+import { parseBody, sendJson } from '../src/utils/http.js'
 
 function makeDb() {
   const tables: Record<string, any[]> = {
-    vx_user: [
-      {
-        id: 1,
-        email: 'admin@moonwitness.org',
-        name: 'Admin',
-        password: '$2a$10$abcdefghijklmnopqrstuvwxyz0123456789012345678901',
-        token_version: 1,
-        is_active: true,
-      },
-    ],
+    vx_user: [{ id: 1, email: 'admin@moonwitness.org', name: 'Admin', password: 'hash', token_version: 1, is_active: true }],
     mx_model: [{ id: 1, model: 'vx.user' }],
   }
 
@@ -29,22 +22,14 @@ function makeDb() {
     orderBy: () => dbFn,
     limit: () => dbFn,
     offset: () => dbFn,
-    async count() {
-      return [{ count: (tables[table] ?? []).length }]
-    },
-    async first() {
-      return (tables[table] ?? [])[0]
-    },
+    async count() { return [{ count: (tables[table] ?? []).length }] },
+    async first() { return (tables[table] ?? [])[0] },
     async update(vals: Record<string, any>) {
       const rows = tables[table] ?? []
-      for (const r of rows) {
-        Object.assign(r, vals)
-      }
+      for (const row of rows) Object.assign(row, vals)
       return rows.length
     },
-    then(resolve: (rows: any[]) => void) {
-      resolve(tables[table] ?? [])
-    },
+    then(resolve: (rows: any[]) => void) { resolve(tables[table] ?? []) },
   })
 
   dbFn.transaction = async (cb: (trx: any) => Promise<any>) => cb(dbFn)
@@ -53,85 +38,104 @@ function makeDb() {
   return dbFn
 }
 
-describe('FastifyAdapter (#128)', () => {
+describe('Fastify canonical transport (#126/#132)', () => {
   beforeEach(() => {
     closeAllSSEConnections('test_reset')
     ;(globalThis as any).moonEmitter = new EventEmitter()
     ;(globalThis as any).moonActiveSSEClients = new Map()
   })
 
-  afterEach(async () => {
+  afterEach(() => {
     closeAllSSEConnections('test_cleanup')
   })
 
-  it('can be instantiated with config', () => {
-    const adapter = new FastifyAdapter({
-      database: makeDb(),
-      jwtSecret: 'test-secret',
-      port: 0,
-    })
-    expect(adapter).toBeDefined()
+  it('keeps NativeServer as the public abstraction over FastifyAdapter', () => {
+    const server = new NativeServer({ database: makeDb(), jwtSecret: 'test-secret', port: 0 })
+    expect(server).toBeInstanceOf(FastifyAdapter)
   })
 
-  it('starts and listens on a random port', async () => {
+  it('starts Fastify and registers built-in routes', async () => {
     const port = await getRandomPort()
-    const adapter = new FastifyAdapter({
-      database: makeDb(),
-      jwtSecret: 'test-secret',
-      port,
-    })
-
+    const adapter = new FastifyAdapter({ database: makeDb(), jwtSecret: 'test-secret', port })
     await adapter.start()
-    
+
     const app = (adapter as any).app
     expect(app).toBeDefined()
-    expect(app).toHaveProperty('server')
-    const addr = app.server.address()
-    expect(addr.port).toBe(port)
+    expect(app.server.address().port).toBe(port)
 
-    await adapter.stop()
-  })
-
-  it('registers built-in routes and returns non-404 for known paths', async () => {
-    const port = await getRandomPort()
-    const adapter = new FastifyAdapter({
-      database: makeDb(),
-      jwtSecret: 'test-secret',
-      port,
-    })
-
-    await adapter.start()
-    
-    const paths: { path: string; method?: string }[] = [
-      { path: '/auth/me' },
+    for (const entry of [
+      { path: '/auth/me', method: 'GET' },
       { path: '/rpc', method: 'POST' },
-      { path: '/live' },
-      { path: '/health/live' },
-      { path: '/meta/models' },
-    ]
-    for (const entry of paths) {
-      const res = await fetch(`http://localhost:${port}${entry.path}`, {
-        method: entry.method || 'GET',
-      })
+      { path: '/live', method: 'GET' },
+      { path: '/health/live', method: 'GET' },
+      { path: '/meta/models', method: 'GET' },
+    ]) {
+      const res = await fetch(`http://localhost:${port}${entry.path}`, { method: entry.method })
       expect(res.status).not.toBe(404)
+      expect(res.headers.get('x-request-id')).toBeTruthy()
     }
 
     await adapter.stop()
   })
 
-  it('returns 404 for unknown routes', async () => {
+  it('registers Moon routes before start and bridges Fastify-parsed JSON bodies', async () => {
     const port = await getRandomPort()
-    const adapter = new FastifyAdapter({
-      database: makeDb(),
-      jwtSecret: 'test-secret',
-      port,
+    const adapter = new FastifyAdapter({ database: makeDb(), jwtSecret: 'test-secret', port })
+    adapter.post('/test/echo', async (req, res) => {
+      const body = await parseBody(req)
+      sendJson(res, 200, { echo: body.value }, req)
     })
 
     await adapter.start()
-    
+    const res = await fetch(`http://localhost:${port}/test/echo`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ value: 'fastify-bridge' }),
+    })
+
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({ echo: 'fastify-bridge' })
+    await adapter.stop()
+  })
+
+  it('keeps Moon middleware semantics on Fastify-owned routes', async () => {
+    const port = await getRandomPort()
+    const adapter = new FastifyAdapter({ database: makeDb(), jwtSecret: 'test-secret', port })
+    const middleware = vi.fn(async (_req, _res, next) => next())
+    adapter.use(middleware)
+    adapter.get('/test/middleware', (req, res) => sendJson(res, 200, { ok: true }, req))
+
+    await adapter.start()
+    const res = await fetch(`http://localhost:${port}/test/middleware`)
+    expect(res.status).toBe(200)
+    expect(middleware).toHaveBeenCalledTimes(1)
+    await adapter.stop()
+  })
+
+  it('routes the legacy handleRequest compatibility shim through Fastify injection', async () => {
+    const server = new NativeServer({ database: makeDb(), jwtSecret: 'test-secret', port: 0 })
+    const chunks: string[] = []
+    const headers: Record<string, unknown> = {}
+    let status = 0
+    const res: any = {
+      setHeader: (name: string, value: unknown) => { headers[name] = value },
+      writeHead: (code: number) => { status = code },
+      end: (body?: string) => { if (body) chunks.push(body) },
+    }
+
+    await server.handleRequest({ method: 'GET', url: '/health/live', headers: {} } as any, res)
+    expect(status).toBe(200)
+    expect(chunks.join('')).toContain('ok')
+    expect(Object.keys(headers).some((name) => name.toLowerCase() === 'x-request-id')).toBe(true)
+    await server.stop()
+  })
+
+  it('returns 404 for unknown routes', async () => {
+    const port = await getRandomPort()
+    const adapter = new FastifyAdapter({ database: makeDb(), jwtSecret: 'test-secret', port })
+    await adapter.start()
     const res = await fetch(`http://localhost:${port}/unknown-route`)
     expect(res.status).toBe(404)
-
     await adapter.stop()
   })
 })
