@@ -111,6 +111,7 @@ export async function logoutSession(): Promise<void> {
 /** Universal React hook backed by the server-owned HttpOnly session. */
 export function useAuthSession() {
   const [session, setSession] = useState<AuthSessionState>(anonymousSession)
+  const [isLoading, setIsLoading] = useState(true)
 
   const syncSession = useCallback(async () => {
     const s = await refreshSession()
@@ -124,6 +125,7 @@ export function useAuthSession() {
       const s = await refreshSession()
       if (isMounted) {
         setSession(s)
+        setIsLoading(false)
       }
     }
 
@@ -148,6 +150,7 @@ export function useAuthSession() {
 
   return {
     ...session,
+    isLoading,
     login: loginSession,
     logout: logoutSession,
     refresh: syncSession,

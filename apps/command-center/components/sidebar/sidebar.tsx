@@ -150,14 +150,24 @@ export function CommandCenterSidebar({
           <ul className="space-y-1">
             {utilityItems.map((item) => (
               <li key={item.href}>
+                {(() => {
+                  const isActive = active(pathname, item.href)
+                  return (
                 <Link
                   href={item.href}
                   onClick={onClose}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                  className={cn(
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium transition-colors",
+                    isActive
+                      ? "bg-accent font-semibold text-accent-foreground"
+                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                  )}
                 >
                   <item.icon className="h-4 w-4" />
                   <span>{item.label}</span>
                 </Link>
+                  )
+                })()}
               </li>
             ))}
           </ul>

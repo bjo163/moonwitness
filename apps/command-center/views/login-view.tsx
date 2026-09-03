@@ -43,7 +43,7 @@ export function LoginView() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background font-sans text-foreground selection:bg-primary/30 selection:text-foreground">
+    <div className="relative flex min-h-[100dvh] items-center justify-center overflow-x-hidden overflow-y-auto bg-background px-2 py-8 font-sans text-foreground selection:bg-primary/30 selection:text-foreground sm:px-0">
       {/* Background Atmosphere */}
       <div className="pointer-events-none absolute inset-0 z-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,240,255,0.08),rgba(255,255,255,0))]" />
@@ -51,7 +51,7 @@ export function LoginView() {
         <div className="bg-muted/20 absolute inset-0 opacity-40" />
       </div>
 
-      <main className="relative z-10 w-full max-w-md p-6">
+      <main className="relative z-10 w-full max-w-md p-3 sm:p-6">
         {/* Terminal Header */}
         <div className="mb-6 text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-border/40 bg-card/80 text-primary shadow-sm backdrop-blur-md">
@@ -66,7 +66,7 @@ export function LoginView() {
         </div>
 
         {/* Glass Form Card */}
-        <div className="relative rounded-2xl border border-border/40 bg-card/85 p-8 shadow-xl backdrop-blur-xl">
+        <div className="relative rounded-2xl border border-border/40 bg-card/85 p-5 shadow-xl backdrop-blur-xl sm:p-8">
           {errorMsg && (
             <div className="mb-5 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-center text-xs font-medium text-destructive">
               {errorMsg}
@@ -76,11 +76,12 @@ export function LoginView() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Field */}
             <div className="space-y-1.5">
-              <label className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+              <label htmlFor="command-center-email" className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
                 <Mail className="h-3.5 w-3.5 text-primary" />
                 Email Address
               </label>
               <input
+                id="command-center-email"
                 type="email"
                 required
                 value={email}
@@ -92,11 +93,12 @@ export function LoginView() {
 
             {/* Password Field */}
             <div className="space-y-1.5">
-              <label className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+              <label htmlFor="command-center-password" className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
                 <Lock className="h-3.5 w-3.5 text-primary" />
                 Password
               </label>
               <input
+                id="command-center-password"
                 type="password"
                 required
                 value={password}

@@ -24,6 +24,10 @@ const QUICK_COMMANDS = [
 
 const COMMAND_DELAY_MS = 250
 
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error)
+}
+
 function ConsoleHeader() {
   return (
     <header className="flex flex-col gap-4 border-b border-border pb-5 sm:flex-row sm:items-center sm:justify-between">
@@ -86,31 +90,31 @@ export function ConsoleView() {
       case "health":
       case "status":
         try { appendLog("SUCCESS", `SERVER HEALTH: ${JSON.stringify(await apiGet("/health"))}`) }
-        catch { appendLog("WARN", "Backend health endpoint is unavailable.") }
+        catch (error) { appendLog("WARN", `Backend health endpoint failed: ${errorMessage(error)}`) }
         break
       case "db":
         try { appendLog("SUCCESS", `DATABASE STATUS: ${JSON.stringify(await apiGet("/db/status"))}`) }
-        catch { appendLog("WARN", "Database status endpoint is unavailable.") }
+        catch (error) { appendLog("WARN", `Database status endpoint failed: ${errorMessage(error)}`) }
         break
       case "quakes":
         try {
           const data = await fetchEarthquakes()
           const latest = data?.features?.[0]?.properties
           appendLog("SUCCESS", `USGS FEED: ${data?.features?.length || 0} events. Latest: M${latest?.mag || "0.0"} at ${latest?.place || "unknown location"}`)
-        } catch { appendLog("WARN", "USGS feed is unavailable.") }
+        } catch (error) { appendLog("WARN", `USGS feed failed: ${errorMessage(error)}`) }
         break
       case "weather":
         try {
           const data = await fetchExternalWeather(-6.2, 106.8166)
           appendLog("SUCCESS", `WEATHER: ${data.current_weather?.temperature || 28}°C, wind ${data.current_weather?.windspeed || 12} km/h`)
-        } catch { appendLog("WARN", "Weather service is unavailable.") }
+        } catch (error) { appendLog("WARN", `Weather service failed: ${errorMessage(error)}`) }
         break
       case "trends":
         try {
           const data = await fetchGoogleTrends()
           const count = data?.default?.trendingSearchesDays?.[0]?.trendingSearches?.length || 0
           appendLog("SUCCESS", `GOOGLE TRENDS: ${count} current topics returned.`)
-        } catch { appendLog("WARN", "Google Trends service is unavailable.") }
+        } catch (error) { appendLog("WARN", `Google Trends service failed: ${errorMessage(error)}`) }
         break
       case "scan":
         appendLog("SYSTEM", "Scan complete: 3 astronomy targets found; no hazards reported.")

@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useEffect, useState } from "react"
 import {
   Activity,
@@ -58,14 +59,16 @@ function Metric({
   value,
   detail,
   icon: Icon,
+  href,
 }: {
   label: string
   value: string
   detail: string
   icon: typeof Activity
+  href?: string
 }) {
-  return (
-    <Card className="rounded-xl border border-border bg-card p-5 shadow-sm text-card-foreground">
+  const content = (
+    <>
       <div className="flex items-center justify-between">
         <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</p>
         <Icon className="h-4 w-4 text-muted-foreground" />
@@ -74,7 +77,21 @@ function Metric({
         {value}
       </p>
       <p className="mt-1 text-xs text-muted-foreground">{detail}</p>
-    </Card>
+    </>
+  )
+
+  if (!href) {
+    return (
+      <Card className="rounded-xl border border-border bg-card p-5 shadow-sm text-card-foreground">
+        {content}
+      </Card>
+    )
+  }
+
+  return (
+    <Link href={href} className="block rounded-xl border border-border bg-card p-5 shadow-sm text-card-foreground transition-colors hover:border-primary/50 hover:bg-accent/50">
+      {content}
+    </Link>
   )
 }
 
@@ -165,6 +182,7 @@ export function DashboardOverview() {
           value="Operational"
           detail="All services responding"
           icon={Activity}
+          href="/terminal"
         />
       </div>
 

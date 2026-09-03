@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { Bell, Database, Menu, Search, X } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
@@ -23,6 +24,11 @@ export function CommandCenterTopbar({ onMenu }: { onMenu: () => void }) {
   const title =
     titles[pathname] ??
     (pathname.split("/").filter(Boolean).pop()?.replaceAll("-", " ") ?? "Dashboard")
+  const isProfileActive = pathname === "/profile"
+
+  function openSearch() {
+    window.dispatchEvent(new Event("moonwitness:command-palette:open"))
+  }
 
   async function seedDemoData() {
     if (!window.confirm("Initialize demo data across the command center?")) return
@@ -59,6 +65,7 @@ export function CommandCenterTopbar({ onMenu }: { onMenu: () => void }) {
       <div className="flex items-center gap-2 sm:gap-3">
         {/* Search Shortcut */}
         <button
+          onClick={openSearch}
           className="hidden items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground shadow-sm hover:bg-accent hover:text-accent-foreground md:flex"
           aria-label="Search"
         >
@@ -117,12 +124,18 @@ export function CommandCenterTopbar({ onMenu }: { onMenu: () => void }) {
         <div className="hidden h-6 w-px bg-border sm:block" />
 
         {/* User Profile Badge */}
-        <div
-          className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/30 bg-primary/10 font-mono text-xs font-bold text-primary shadow-sm"
-          aria-label="User profile"
+        <Link
+          href="/profile"
+          aria-label="Open profile"
+          className={[
+            "flex h-8 w-8 items-center justify-center rounded-full border font-mono text-xs font-bold shadow-sm transition-colors",
+            isProfileActive
+              ? "border-primary bg-primary text-primary-foreground"
+              : "border-primary/30 bg-primary/10 text-primary hover:bg-primary/20",
+          ].join(" ")}
         >
           US
-        </div>
+        </Link>
       </div>
     </header>
   )

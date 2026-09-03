@@ -71,8 +71,9 @@ export function ScriptureEditDialog({
 
         <form onSubmit={handleSaveEdit} className="space-y-4 pt-2">
           <div>
-            <Label className="mb-1 block text-xs">Teks Arab (Uthmani) *</Label>
+            <Label htmlFor="scripture-arabic" className="mb-1 block text-xs">Teks Arab (Uthmani) *</Label>
             <Input
+              id="scripture-arabic"
               type="text"
               value={editArabic}
               onChange={(e) => setEditArabic(e.target.value)}
@@ -82,8 +83,9 @@ export function ScriptureEditDialog({
           </div>
 
           <div>
-            <Label className="mb-1 block text-xs">Transliterasi (Teks Latin)</Label>
+            <Label htmlFor="scripture-translit" className="mb-1 block text-xs">Transliterasi (Teks Latin)</Label>
             <Input
+              id="scripture-translit"
               type="text"
               value={editTranslit}
               onChange={(e) => setEditTranslit(e.target.value)}
@@ -92,8 +94,9 @@ export function ScriptureEditDialog({
           </div>
 
           <div>
-            <Label className="mb-1 block text-xs">Terjemahan Resmi Kemenag RI *</Label>
+            <Label htmlFor="scripture-translation" className="mb-1 block text-xs">Terjemahan Resmi Kemenag RI *</Label>
             <Input
+              id="scripture-translation"
               type="text"
               value={editTranslation}
               onChange={(e) => setEditTranslation(e.target.value)}
@@ -103,8 +106,9 @@ export function ScriptureEditDialog({
           </div>
 
           <div>
-            <Label className="mb-1 block text-xs">Catatan Tafsir / Hikmah Periodik *</Label>
+            <Label htmlFor="scripture-tafsir" className="mb-1 block text-xs">Catatan Tafsir / Hikmah Periodik *</Label>
             <Input
+              id="scripture-tafsir"
               type="text"
               value={editTafsir}
               onChange={(e) => setEditTafsir(e.target.value)}

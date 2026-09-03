@@ -67,8 +67,14 @@ export function CommandPalette({
       }
     }
 
+    const handleOpen = () => setOpen(true)
+
     window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
+    window.addEventListener("moonwitness:command-palette:open", handleOpen)
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+      window.removeEventListener("moonwitness:command-palette:open", handleOpen)
+    }
   }, [isOpen, isControlled, controlledOnClose, handleClose])
 
   if (!isOpen) return null

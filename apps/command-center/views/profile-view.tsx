@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
+import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useAuthSession } from "@moon/client"
 import { ProfileCard } from "./profile/profile-card"
@@ -85,9 +86,12 @@ export function ErpProfileView() {
                 </span>
               </div>
             </div>
-            <button className="mt-4 w-full rounded-md border border-border px-3 py-2 font-sans text-[10px] text-primary transition-colors hover:bg-primary/10">
-              View System Health &rarr;
-            </button>
+            <Link
+              href="/terminal"
+              className="mt-4 flex w-full items-center justify-center rounded-md border border-border px-3 py-2 font-sans text-[10px] text-primary transition-colors hover:bg-primary/10"
+            >
+              View System Health <span aria-hidden="true">&rarr;</span>
+            </Link>
           </div>
         </div>
 

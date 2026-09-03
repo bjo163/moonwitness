@@ -10,17 +10,17 @@ import { CommandCenterTopbar } from "../topbar"
 export function CommandCenterShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
-  const { isAuthenticated, logout } = useAuthSession()
+  const { isAuthenticated, isLoading, logout } = useAuthSession()
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
 
   const isAuthRoute = pathname === "/login" || pathname === "/auth/login"
 
   // Redirect unauthenticated users to /login
   React.useEffect(() => {
-    if (!isAuthenticated && !isAuthRoute) {
+    if (!isLoading && !isAuthenticated && !isAuthRoute) {
       router.push("/login")
     }
-  }, [isAuthenticated, isAuthRoute, router])
+  }, [isAuthenticated, isAuthRoute, isLoading, router])
 
   const handleLogout = () => {
     logout()
@@ -33,7 +33,7 @@ export function CommandCenterShell({ children }: { children: React.ReactNode }) 
   }
 
   // If not authenticated yet on protected route, show access verification loader
-  if (!isAuthenticated) {
+  if (isLoading) {
     return (
       <div className="flex min-h-screen w-full items-center justify-center bg-background font-sans text-foreground">
         <div className="flex flex-col items-center gap-3">
@@ -45,6 +45,8 @@ export function CommandCenterShell({ children }: { children: React.ReactNode }) 
       </div>
     )
   }
+
+  if (!isAuthenticated) return null
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
