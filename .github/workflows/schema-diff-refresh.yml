@@ -24,7 +24,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U moonwitness -d moonwitness"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
@@ -49,8 +49,8 @@ jobs:
         run: pnpm --filter "@moon/*" build
       - name: Apply reviewed migration history only
         run: pnpm --filter api db:migrate
-      - name: Generate registry-to-database migration diff
-        run: pnpm --filter api exec tsx src/migrate.ts diff
+      - name: Generate additive registry completion migration
+        run: pnpm --filter api exec tsx src/migrate.ts diff:additive
       - name: Commit generated migration
         shell: bash
         run: |
@@ -60,6 +60,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add apps/api/migrations
-          git diff --cached --quiet && { echo "No schema drift detected."; exit 0; }
-          git commit -m "fix(db): migrate current registry schema from zero state"
+          git diff --cached --quiet && { echo "No additive schema drift detected."; exit 0; }
+          git commit -m "fix(db): complete registry schema with additive migration"
           git push origin HEAD:feature/deployment-hardening
