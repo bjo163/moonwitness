@@ -51,17 +51,12 @@ export async function initMigrationTable(db: Knex = getDb()) {
     })
   }
 
-  try {
-    await db.schema.alterTable('moon_migrations', (table) => {
-      table.index(['batch'], 'moon_migrations_batch_index')
-    })
-  } catch {
-    // index may already exist under a different name
-  }
+  // Existing history is left intact. Recreating an existing index and catching
+  // the error aborts a PostgreSQL transaction, even when JavaScript continues.
 }
 
 export async function getMigrationFiles(dir: string): Promise<string[]> {
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+  if (!fs.existsSync(dir)) return []
   return fs.readdirSync(dir)
     .filter((file) => MIGRATION_FILE_RE.test(file))
     .sort()
@@ -181,8 +176,8 @@ function writeAutoMigration(
   if (!fs.existsSync(migrationsDir)) fs.mkdirSync(migrationsDir, { recursive: true })
   const timestamp = new Date().toISOString().replace(/[-:T]/g, '').split('.')[0]
   const filepath = path.join(migrationsDir, `${timestamp}_${label}.ts`)
-  const upStmts = migrations.map((migration) => `  await db.raw(\`${migration.up}\`)`).join('\n')
-  const downStmts = migrations.map((migration) => `  await db.raw(\`${migration.down}\`)`).join('\n')
+  const upStmts = migrations.map((migration) => `  await db.raw(${JSON.stringify(migration.up)})`).join('\n')
+  const downStmts = [...migrations].reverse().map((migration) => `  await db.raw(${JSON.stringify(migration.down)})`).join('\n')
   fs.writeFileSync(filepath, `import type { Knex } from 'knex'\n\nexport async function up(db: Knex): Promise<void> {\n${upStmts}\n}\n\nexport async function down(db: Knex): Promise<void> {\n${downStmts}\n}\n`)
   return filepath
 }
@@ -228,40 +223,6 @@ export async function snapshot(migrationsDir: string = path.join(process.cwd(), 
   return filepath
 }
 
-/**
- * Materialize any schema drift that remains after the committed migration files
- * have been applied. The drift is captured from `forge({ dryRun: true })`, written
- * as a recorded auto-migration, and applied. This guarantees a zero-state install
- * reaches full parity with the registry so the running application never needs to
- * perform runtime schema repair.
- */
-async function syncPendingSchema(db: Knex, migrationsDir: string): Promise<boolean> {
-  const { migrations } = await forge({ dryRun: true })
-  if (migrations.length === 0) return false
-  if (detectNonReversible(migrations)) {
-    console.warn(
-      '[moon.migrate] Schema drift contains a non-reversible column change; refusing automatic migration. ' +
-      'Run `moon diff` to author an explicit reviewed migration before continuing.'
-    )
-    return false
-  }
-
-  const filepath = writeAutoMigration(migrationsDir, 'auto', migrations)
-  const mod = await loadMigration(filepath)
-  const lastBatchRow = await db('moon_migrations').max('batch as maxBatch').first()
-  const nextBatch = (Number(lastBatchRow?.maxBatch) || 0) + 1
-  await db.transaction(async (trx) => {
-    console.log(`Migrating (schema sync): ${path.basename(filepath)}`)
-    await mod.up!(trx)
-    await trx('moon_migrations').insert({
-      name: path.basename(filepath),
-      checksum: checksum(filepath),
-      batch: nextBatch,
-    })
-  })
-  return true
-}
-
 export async function up(migrationsDir: string = path.join(process.cwd(), 'migrations')) {
   return withMigrationLock(async (db) => {
     await initMigrationTable(db)
@@ -287,11 +248,8 @@ export async function up(migrationsDir: string = path.join(process.cwd(), 'migra
       console.log('No pending migration files.')
     }
 
-    // Zero-state guarantee: bring the install to full schema parity with the
-    // registry by recording and applying any remaining drift as a migration.
-    if (process.env.MOON_NO_AUTO_MIGRATE !== 'true') {
-      await syncPendingSchema(db, migrationsDir)
-    }
+    // Apply only files prepared before this invocation. Schema drift must be
+    // planned using diff/snapshot and reviewed before a subsequent up().
 
     console.log('Migrations completed.')
   })
@@ -303,6 +261,9 @@ export async function up(migrationsDir: string = path.join(process.cwd(), 'migra
  * pending migration. Equivalent to `snapshot()` followed by `up()`.
  */
 export async function bootstrap(migrationsDir: string = path.join(process.cwd(), 'migrations')) {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('Production bootstrap requires reviewed migration files; use up() instead.')
+  }
   await snapshot(migrationsDir)
   return up(migrationsDir)
 }

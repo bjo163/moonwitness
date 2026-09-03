@@ -1,6 +1,15 @@
-import { Vertex, fields } from '@moon/orm'
+import { Vertex, fields, subtractDecimal, type Ctx } from '@moon/orm'
+import { guardLineMutation } from './account-write-guards.js'
+
+const amount = { precision: 38, scale: 12 }
 
 export default class AccountMoveLine extends Vertex {
+  static override beforeSave(_model: typeof Vertex, env: Ctx, vals: Record<string, unknown>, id?: number) {
+    return guardLineMutation(env, vals, id)
+  }
+  static override beforeDelete(_model: typeof Vertex, env: Ctx, id: number) {
+    return guardLineMutation(env, {}, id)
+  }
   static override _name = 'account.move.line'
   static override _description = 'Journal Item'
 
@@ -8,8 +17,8 @@ export default class AccountMoveLine extends Vertex {
   accountId = fields.Many2one({ comodel: 'account.account', required: true, index: true })
   partnerId = fields.Many2one({ comodel: 'vx.node' })
   name = fields.Char({ size: 255 })
-  debit = fields.Float({ default: 0.0 })
-  credit = fields.Float({ default: 0.0 })
-  balance = fields.Float({ default: 0.0, compute: (row: any) => (Number(row.debit) || 0) - (Number(row.credit) || 0), store: true })
+  debit = fields.Decimal({ ...amount, default: '0' })
+  credit = fields.Decimal({ ...amount, default: '0' })
+  balance = fields.Decimal({ ...amount, default: '0', compute: (row: any) => subtractDecimal(row.debit ?? '0', row.credit ?? '0', amount), store: true })
   companyId = fields.Many2one({ comodel: 'vx.org' })
 }

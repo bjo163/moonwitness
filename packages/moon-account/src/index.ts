@@ -5,6 +5,12 @@ import AccountMoveLine from './account-move-line.js'
 
 export { loadDemoData } from './demo-data.js'
 export { views } from './views.js'
+export { ExactLedger, normalizeLedgerDraft } from './exact-ledger.js'
+export { createPostgresLedgerStore } from './exact-ledger-postgres.js'
+export type {
+  LedgerScope, LedgerLine, LedgerDraft, PostedEntry, LedgerTransaction,
+  LedgerStore, LedgerAuthorization,
+} from './exact-ledger.js'
 export {
   AccountAccount,
   AccountJournal,

@@ -1,3 +1,5 @@
+import { normalizeDecimal, validateDecimalSpec } from './decimal.js'
+
 export type WidgetHint =
   | 'input' | 'textarea' | 'number' | 'toggle' | 'datepicker'
   | 'select' | 'badge' | 'autocomplete' | 'stages' | 'tags'
@@ -8,6 +10,8 @@ export interface FieldDef<T extends string = string> {
   type: T
   required?: boolean
   size?: number
+  precision?: number
+  scale?: number
   unique?: boolean
   default?: unknown
   comodel?: string
@@ -45,6 +49,7 @@ const FIELD_TYPES = new Set([
   'text',
   'integer',
   'float',
+  'decimal',
   'boolean',
   'date',
   'datetime',
@@ -72,6 +77,29 @@ function makeField<T extends string>(
 }
 
 export const fields = {
+  Decimal: (opts: {
+    precision: number
+    scale: number
+    required?: boolean
+    default?: string
+    unique?: boolean
+    index?: boolean
+    compute?: (record: any) => string
+    store?: boolean
+    depends?: string[]
+    help?: string
+  }): FieldDef<'decimal'> => {
+    validateDecimalSpec(opts)
+    const normalized = opts.default === undefined ? opts : { ...opts, default: normalizeDecimal(opts.default, opts) }
+    return makeField('decimal', {
+      ...normalized,
+      validate: (value: unknown) => {
+        if (value === undefined || value === null) return !opts.required || 'Decimal is required'
+        try { normalizeDecimal(value as string, opts); return true }
+        catch (error) { return error instanceof Error ? error.message : 'Invalid decimal' }
+      }
+    })
+  },
   Char: (opts: {
     required?: boolean
     size?: number
@@ -198,7 +226,7 @@ export const fields = {
 // TYPESCRIPT INFERENCE ENGINE
 // ==========================================
 
-export type InferFieldType<F> = F extends FieldDef<'char' | 'text' | 'date' | 'datetime' | 'selection'>
+export type InferFieldType<F> = F extends FieldDef<'char' | 'text' | 'date' | 'datetime' | 'selection' | 'decimal'>
   ? string
   : F extends FieldDef<'integer' | 'float'>
   ? number

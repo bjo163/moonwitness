@@ -6,7 +6,7 @@ export const views: Record<string, ViewManifest> = {
     accentColor: 'purple',
     icon: 'Scale',
     table: {
-      columns: ['title', 'status', 'method', 'authorId', 'createdAt'],
+      columns: ['title', 'status', 'subjectAlias', 'subjectAge', 'createdAt'],
       defaultSort: { field: 'createdAt', direction: 'desc' },
       searchKeys: ['title'],
     },
@@ -14,8 +14,8 @@ export const views: Record<string, ViewManifest> = {
       title: 'ETHICAL ASSESSMENT CASE',
       statusBar: { field: 'status' },
       sections: [
-        { title: 'Case', columns: 2, fields: ['title', 'status', 'method', 'authorId'] },
-        { title: 'Details', columns: 1, fields: ['description'] },
+        { title: 'Case', columns: 2, fields: ['title', 'status', 'subjectAlias', 'subjectAge'] },
+        { title: 'Details', columns: 1, fields: ['caseText'] },
       ],
       chatter: true,
     },
@@ -26,14 +26,14 @@ export const views: Record<string, ViewManifest> = {
     accentColor: 'purple',
     icon: 'ClipboardCheck',
     table: {
-      columns: ['caseId', 'filterId', 'score', 'verdict'],
-      searchKeys: ['verdict'],
+      columns: ['caseId', 'method', 'totalWeight', 'confidence', 'isFinalized'],
+      searchKeys: ['action', 'limitation'],
     },
     form: {
       title: 'ASSESSMENT RESULT',
       sections: [
-        { title: 'Assessment', columns: 2, fields: ['caseId', 'filterId', 'score', 'verdict'] },
-        { title: 'Reasoning', columns: 1, fields: ['reasoning'] },
+        { title: 'Assessment', columns: 2, fields: ['caseId', 'method', 'totalWeight', 'confidence', 'isFinalized'] },
+        { title: 'Results', columns: 1, fields: ['rightResult', 'leftResult', 'action', 'limitation'] },
       ],
     },
   },
