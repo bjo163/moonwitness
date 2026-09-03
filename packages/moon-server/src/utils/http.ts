@@ -134,7 +134,7 @@ export function resolveCorsOrigin(origin: string | undefined, config?: CorsConfi
   }
 
   if (effective.allowedOrigins.includes('*')) {
-    return effective.allowCredentials === false ? '*' : null
+    return '*'
   }
 
   return effective.allowedOrigins.includes(origin) ? origin : null
