@@ -1,0 +1,58 @@
+name: Passage Certification Fixture Refresh
+
+on:
+  push:
+    branches:
+      - feature/deployment-hardening
+    paths:
+      - .github/workflows/cert-passage-refresh.yml
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/deployment-hardening
+          fetch-depth: 0
+      - name: Align passage fixture with canonical graph models
+        shell: bash
+        env:
+          OLD_IMPORT_B64: ICBXeFJlbGlnaW9uLAogIFd4U291cmNlLAo=
+          NEW_IMPORT_B64: ICBXeFJlbGlnaW9uLAogIFd4U2NyaXB0dXJlLAogIFd4UGFzc2FnZSwKICBXeFNvdXJjZSwK
+          OLD_PASSAGE_B64: ICBjb25zdCBwYXNzYWdlID0gYXdhaXQgV3hFbnRpdHkuc3Bhd24oV3hFbnRpdHksIGVudiwgewogICAgY2Fub25pY2FsS2V5OiAiY2VydDpwYXNzYWdlOnF1cmFuOjI6MjU1IiwKICAgIGtpbmQ6ICJQQVNTQUdFIiwKICAgIGxhYmVsOiAiUXVy4oCZYW4gMjoyNTUgQ2VydGlmaWNhdGlvbiBGaXh0dXJlIiwKICAgIHNvdXJjZUNsYXNzOiAiUkVWRUxBVElPTiIsCiAgICBlcGlzdGVtaWNMYW5lOiAiQ09SRSIsCiAgICBhdXRob3JpdHlDbGFzczogIlBSSU1BUllfU09VUkNFIiwKICAgIG9wZXJhdGlvbmFsU3RhdHVzOiAiRVNUQUJMSVNIRUQiLAogICAgc291cmNlUmV2aXNpb246ICJjZXJ0LXIxIiwKICAgIGFjdGl2ZTogdHJ1ZSwKICB9KQo=
+          NEW_PASSAGE_B64: ICBjb25zdCBzY3JpcHR1cmVFbnRpdHkgPSBhd2FpdCBXeEVudGl0eS5zcGF3bihXeEVudGl0eSwgZW52LCB7CiAgICBjYW5vbmljYWxLZXk6ICJjZXJ0OnNjcmlwdHVyZTpxdXJhbiIsCiAgICBraW5kOiAiU0NSSVBUVVJFX0ZBTUlMWSIsCiAgICBsYWJlbDogIlF1cuKAmWFuIENlcnRpZmljYXRpb24gU2NyaXB0dXJlIiwKICAgIHNvdXJjZUNsYXNzOiAiUkVWRUxBVElPTiIsCiAgICBlcGlzdGVtaWNMYW5lOiAiQ09SRSIsCiAgICBhdXRob3JpdHlDbGFzczogIlBSSU1BUllfU09VUkNFIiwKICAgIG9wZXJhdGlvbmFsU3RhdHVzOiAiRVNUQUJMSVNIRUQiLAogICAgc291cmNlUmV2aXNpb246ICJjZXJ0LXIxIiwKICAgIGFjdGl2ZTogdHJ1ZSwKICB9KQogIGNvbnN0IHNjcmlwdHVyZSA9IGF3YWl0IFd4U2NyaXB0dXJlLnNwYXduKFd4U2NyaXB0dXJlLCBlbnYsIHsKICAgIGVudGl0eUlkOiBzY3JpcHR1cmVFbnRpdHkuaWQsCiAgICBjYW5vbmljYWxDb2RlOiAiUVVSQU4iLAogICAgbmFtZTogIlF1cuKAmWFuIENlcnRpZmljYXRpb24gU2NyaXB0dXJlIiwKICAgIHNsdWc6ICJjZXJ0LXF1cmFuIiwKICAgIHNvdXJjZUNsYXNzOiAiUkVWRUxBVElPTiIsCiAgICBhdXRob3JpdHlDbGFzczogIlBSSU1BUllfU09VUkNFIiwKICAgIHN0YXR1czogIkFQUFJPVkVEIiwKICAgIGFjdGl2ZTogdHJ1ZSwKICB9KQogIGNvbnN0IHBhc3NhZ2UgPSBhd2FpdCBXeEVudGl0eS5zcGF3bihXeEVudGl0eSwgZW52LCB7CiAgICBjYW5vbmljYWxLZXk6ICJjZXJ0OnBhc3NhZ2U6cXVyYW46MjoyNTUiLAogICAga2luZDogIlBBU1NBR0UiLAogICAgbGFiZWw6ICJRdXLigJlhbiAyOjI1NSBDZXJ0aWZpY2F0aW9uIEZpeHR1cmUiLAogICAgc291cmNlQ2xhc3M6ICJSRVZFTEFUSU9OIiwKICAgIGVwaXN0ZW1pY0xhbmU6ICJDT1JFIiwKICAgIGF1dGhvcml0eUNsYXNzOiAiUFJJTUFSWV9TT1VSQ0UiLAogICAgb3BlcmF0aW9uYWxTdGF0dXM6ICJFU1RBQkxJU0hFRCIsCiAgICBzb3VyY2VSZXZpc2lvbjogImNlcnQtcjEiLAogICAgYWN0aXZlOiB0cnVlLAogIH0pCiAgYXdhaXQgV3hQYXNzYWdlLnNwYXduKFd4UGFzc2FnZSwgZW52LCB7CiAgICBlbnRpdHlJZDogcGFzc2FnZS5pZCwKICAgIHNjcmlwdHVyZUlkOiBzY3JpcHR1cmUuaWQsCiAgICBwYXNzYWdlVHlwZTogIkFZQUgiLAogICAgc2VxdWVuY2U6IDI1NSwKICAgIGNhbm9uaWNhbFJlZmVyZW5jZTogIlFVUkFOIDI6MjU1IiwKICAgIGxvY2FsTnVtYmVyOiAyNTUsCiAgICBzb3VyY2VSZXZpc2lvbjogImNlcnQtcjEiLAogICAgcHJvdmVuYW5jZUlkOiBwcm92ZW5hbmNlLmlkLAogICAgYWN0aXZlOiB0cnVlLAogIH0pCg==
+        run: |
+          python <<'PY'
+          import base64
+          import os
+          from pathlib import Path
+          path = Path('apps/api/src/certify-witness-graph-pg.ts')
+          text = path.read_text()
+          pairs = [
+            ('OLD_IMPORT_B64', 'NEW_IMPORT_B64'),
+            ('OLD_PASSAGE_B64', 'NEW_PASSAGE_B64'),
+          ]
+          for old_key, new_key in pairs:
+            old = base64.b64decode(os.environ[old_key]).decode()
+            new = base64.b64decode(os.environ[new_key]).decode()
+            if old not in text:
+              raise SystemExit(f'Expected fixture fragment not found: {old_key}')
+            text = text.replace(old, new, 1)
+          path.write_text(text)
+          PY
+          git diff --check
+          git diff -- apps/api/src/certify-witness-graph-pg.ts
+      - name: Commit fixture repair
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/api/src/certify-witness-graph-pg.ts
+          git diff --cached --quiet && { echo "No fixture changes required."; exit 0; }
+          git commit -m "fix(cert): use canonical passage records in graph fixture"
+          git push origin HEAD:feature/deployment-hardening
