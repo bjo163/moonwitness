@@ -1,5 +1,6 @@
 import fastify from 'fastify'
 import type { FastifyInstance, FastifyRequest, FastifyReply, HTTPMethods } from 'fastify'
+import type { IncomingMessage, ServerResponse } from 'node:http'
 import {
   setupOrm,
   teardownOrm,
@@ -36,12 +37,7 @@ import {
 import { handleRest } from './handlers/rest.js'
 import { handleRpc } from './handlers/rpc.js'
 import { handleSSE, getActiveClientCount, closeAllSSEConnections } from './handlers/sse.js'
-import {
-  sendJson,
-  setCorsConfig,
-  handleCorsPreflight,
-  type CorsConfig,
-} from './utils/http.js'
+import { sendJson, setCorsConfig, handleCorsPreflight, type CorsConfig } from './utils/http.js'
 import { logger } from './logger.js'
 import { globalRoutes, type HttpHandler } from './router.js'
 import { createProxyHandler } from './proxy.js'
@@ -57,28 +53,22 @@ export interface FastifyAdapterConfig {
   addons?: typeof Vertex[]
   cors?: CorsConfig
   onBoot?: () => Promise<void>
-  email?: {
-    service?: string
-    user?: string
-    pass?: string
-    from?: string
-  }
+  email?: { service?: string; user?: string; pass?: string; from?: string }
 }
 
 type MoonMiddleware = (
-  req: import('node:http').IncomingMessage,
-  res: import('node:http').ServerResponse,
+  req: IncomingMessage,
+  res: ServerResponse,
   next: () => Promise<void>,
 ) => Promise<void> | void
 
 function resolveCorsConfig(config?: CorsConfig): CorsConfig {
   if (config) return config
-  const allowedOrigins = (process.env.ALLOWED_ORIGINS || '')
-    .split(',')
-    .map((origin) => origin.trim())
-    .filter(Boolean)
   return {
-    allowedOrigins,
+    allowedOrigins: (process.env.ALLOWED_ORIGINS || '')
+      .split(',')
+      .map((origin) => origin.trim())
+      .filter(Boolean),
     allowCredentials: true,
   }
 }
@@ -114,20 +104,10 @@ export class FastifyAdapter {
     this.middlewares.push(middleware)
   }
 
-  private registerRoute(
-    method: string,
-    path: string,
-    handler: HttpHandler,
-    auth: 'none' | 'user' | 'admin' = 'none',
-  ) {
+  private registerRoute(method: string, path: string, handler: HttpHandler, auth: 'none' | 'user' | 'admin' = 'none') {
     if (this.started) throw new Error('Moon routes must be registered before server.start()')
     globalRoutes.push({ method, path, handler })
-    defineEndpoint({
-      method: method as EndpointDef['method'],
-      path,
-      description: `Dynamic route ${method} ${path}`,
-      auth,
-    })
+    defineEndpoint({ method: method as EndpointDef['method'], path, description: `Dynamic route ${method} ${path}`, auth })
   }
 
   public get(path: string, handler: HttpHandler, auth: 'none' | 'user' | 'admin' = 'none') {
@@ -156,30 +136,25 @@ export class FastifyAdapter {
     this.registerRoute(method, path, createProxyHandler({ targetUrl, ...options }), auth)
   }
 
-  private bridgeRequest(req: FastifyRequest) {
-    const raw = req.raw as typeof req.raw & {
+  private bridgeRequest(req: FastifyRequest): IncomingMessage {
+    const raw = req.raw as IncomingMessage & {
       __moonBody?: unknown
       __moonBodyPresent?: boolean
       params?: Record<string, string>
+      requestId?: string
     }
     raw.__moonBody = req.body
     raw.__moonBodyPresent = true
     raw.params = (req.params ?? {}) as Record<string, string>
+    raw.requestId = req.id
     return raw
   }
 
-  private async runMiddlewares(
-    req: import('node:http').IncomingMessage,
-    res: import('node:http').ServerResponse,
-    handler: () => Promise<void> | void,
-  ) {
+  private async runMiddlewares(req: IncomingMessage, res: ServerResponse, handler: () => Promise<void> | void) {
     let index = 0
     const next = async (): Promise<void> => {
       const middleware = this.middlewares[index++]
-      if (middleware) {
-        await middleware(req, res, next)
-        return
-      }
+      if (middleware) return void await middleware(req, res, next)
       await handler()
     }
     await next()
@@ -187,13 +162,15 @@ export class FastifyAdapter {
 
   private rawHandler(handler: HttpHandler) {
     return async (req: FastifyRequest, reply: FastifyReply) => {
+      const startedAt = Date.now()
       const rawReq = this.bridgeRequest(req)
       reply.hijack()
       await this.runMiddlewares(rawReq, reply.raw, () => handler(rawReq, reply.raw))
+      logger.info('moon.http', `${req.method} ${req.url} ${reply.raw.statusCode} (${Date.now() - startedAt}ms)`, { requestId: req.id })
     }
   }
 
-  private async requireAdmin(req: import('node:http').IncomingMessage, res: import('node:http').ServerResponse) {
+  private async requireAdmin(req: IncomingMessage, res: ServerResponse) {
     try {
       const session = await authenticateRequest(req, this.config.jwtSecret, { allowAnonymous: false })
       if (session.uid !== SUPERUSER_ID) {
@@ -286,6 +263,29 @@ export class FastifyAdapter {
     }
   }
 
+  private ensureApp(): FastifyInstance {
+    if (this.app) return this.app
+    const app = fastify({
+      logger: false,
+      bodyLimit: (Number(process.env.MAX_REQUEST_BODY_MB || 1) || 1) * 1024 * 1024,
+      requestIdHeader: 'x-request-id',
+    })
+    app.addHook('onRequest', async (req, reply) => {
+      reply.header('x-request-id', req.id)
+    })
+    this.registerBuiltinRoutes(app)
+    this.registerCustomRoutes(app)
+    app.options('/*', this.rawHandler((req, res) => {
+      if (!handleCorsPreflight(req, res, this.config.cors)) {
+        res.writeHead(204)
+        res.end()
+      }
+    }))
+    app.setNotFoundHandler(this.rawHandler((req, res) => sendJson(res, 404, { error: 'Not Found', code: 'NOT_FOUND' }, req, this.config.cors)))
+    this.app = app
+    return app
+  }
+
   private async verifySchema() {
     if (process.env.MOON_AUTO_SYNC === 'true') {
       const { applied, summary } = await forge()
@@ -300,6 +300,24 @@ export class FastifyAdapter {
     }
   }
 
+  /** Compatibility shim for legacy tests/callers; routing is still executed by Fastify. */
+  public async handleRequest(req: IncomingMessage, res: ServerResponse): Promise<void> {
+    const app = this.ensureApp()
+    const body = (req as any).__moonBody ?? (req as any).body
+    const response = await app.inject({
+      method: (req.method || 'GET') as HTTPMethods,
+      url: req.url || '/',
+      headers: req.headers as Record<string, string>,
+      payload: body === undefined ? undefined : body,
+    })
+    const headers = response.headers as Record<string, string | string[] | undefined>
+    for (const [name, value] of Object.entries(headers)) {
+      if (value !== undefined && res.setHeader) res.setHeader(name, value as any)
+    }
+    res.writeHead(response.statusCode)
+    res.end(response.body)
+  }
+
   public async start() {
     if (this.started) return
     await bootstrapTelemetry({ serviceName: 'moonwitness-api' })
@@ -311,20 +329,8 @@ export class FastifyAdapter {
     await this.verifySchema()
     if (this.config.onBoot) await this.config.onBoot()
 
-    const app = fastify({ logger: false, bodyLimit: Number(process.env.MAX_REQUEST_BODY_MB || 1) * 1024 * 1024 })
-    this.app = app
-    this.registerBuiltinRoutes(app)
-    this.registerCustomRoutes(app)
-
-    app.options('/*', this.rawHandler((req, res) => {
-      if (!handleCorsPreflight(req, res, this.config.cors)) {
-        res.writeHead(204)
-        res.end()
-      }
-    }))
-    app.setNotFoundHandler(this.rawHandler((req, res) => sendJson(res, 404, { error: 'Not Found', code: 'NOT_FOUND' }, req, this.config.cors)))
-
-    const port = this.config.port ?? Number(process.env.API_PORT || process.env.PORT) || 4000
+    const app = this.ensureApp()
+    const port = this.config.port ?? (Number(process.env.API_PORT || process.env.PORT) || 4000)
     const host = this.config.host || '0.0.0.0'
     await app.listen({ port, host })
     this.started = true
