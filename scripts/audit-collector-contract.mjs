@@ -175,20 +175,27 @@ export function scanHardcodedLocalhost(rootDir) {
 export function scanRawSqlConcatenation(rootDir) {
   const findings = []
   let assessedFiles = 0
-  const unsafeSql = /(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)[^\n;]{0,300}(?:\$\{[^}]+\}|["'`]\s*\+\s*[A-Za-z_$][A-Za-z0-9_$.]*)/gi
+  const unsafeSqlPatterns = [
+    /\bSELECT\b[^\n;]{0,180}\bFROM\b[^\n;]{0,180}(?:\$\{[^}]+\}|["'`]\s*\+\s*[A-Za-z_$][A-Za-z0-9_$.]*)/gi,
+    /\bINSERT\s+INTO\b[^\n;]{0,220}(?:\$\{[^}]+\}|["'`]\s*\+\s*[A-Za-z_$][A-Za-z0-9_$.]*)/gi,
+    /\bUPDATE\b\s+[A-Za-z0-9_."`]+\s+\bSET\b[^\n;]{0,180}(?:\$\{[^}]+\}|["'`]\s*\+\s*[A-Za-z_$][A-Za-z0-9_$.]*)/gi,
+    /\bDELETE\s+FROM\b[^\n;]{0,180}(?:\$\{[^}]+\}|["'`]\s*\+\s*[A-Za-z_$][A-Za-z0-9_$.]*)/gi,
+  ]
 
   for (const filePath of collectFiles(rootDir)) {
     const relativePath = path.relative(rootDir, filePath).split(path.sep).join("/")
     if (isIgnoredPath(relativePath)) continue
     assessedFiles += 1
     const content = fs.readFileSync(filePath, "utf8")
-    for (const match of content.matchAll(unsafeSql)) {
-      findings.push({
-        file: relativePath,
-        line: lineNumberFor(content, match.index),
-        status: "VIOLATION",
-        reason: "SQL-like statement appears to interpolate or concatenate a runtime value.",
-      })
+    for (const unsafeSql of unsafeSqlPatterns) {
+      for (const match of content.matchAll(unsafeSql)) {
+        findings.push({
+          file: relativePath,
+          line: lineNumberFor(content, match.index),
+          status: "VIOLATION",
+          reason: "SQL statement appears to interpolate or concatenate a runtime value.",
+        })
+      }
     }
   }
 
