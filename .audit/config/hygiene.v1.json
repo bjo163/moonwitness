@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "profile": {
+    "version": "1.0.0",
+    "formula_id": "weighted_mean_v1",
+    "unknown_policy": "strict_required_v1",
+    "dimensions": [
+      { "id": "generated_artifacts", "weight": 0.18, "required": true },
+      { "id": "gitignore_integrity", "weight": 0.14, "required": true },
+      { "id": "secret_hygiene", "weight": 0.20, "required": true },
+      { "id": "stale_config", "weight": 0.12, "required": true },
+      { "id": "duplicate_config", "weight": 0.12, "required": true },
+      { "id": "repo_root_clutter", "weight": 0.10, "required": true },
+      { "id": "dead_code_ratio", "weight": 0.07, "required": false },
+      { "id": "unused_dependency_ratio", "weight": 0.07, "required": false }
+    ]
+  },
+  "penalties": {
+    "per_generated_artifact": 20,
+    "per_stale_config": 25,
+    "per_duplicate_config": 25,
+    "per_root_clutter_item": 5,
+    "secret_finding_score": 0
+  },
+  "generated_path_patterns": [
+    "(^|/)(node_modules|\\.next|dist|build|coverage|\\.turbo)(/|$)",
+    "(^|/)\\.audit/umbrella-report\\.json$",
+    "(^|/)\\.audit/runtime(/|$)"
+  ],
+  "required_gitignore_entries": [
+    "node_modules",
+    ".next/",
+    "dist",
+    "build",
+    "coverage",
+    ".turbo",
+    ".env*",
+    ".audit/umbrella-report.json",
+    ".audit/runtime/"
+  ],
+  "secret_patterns": [
+    { "id": "pem_private_key", "pattern": "-----BEGIN (RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----" },
+    { "id": "aws_access_key", "pattern": "AKIA[0-9A-Z]{16}" },
+    { "id": "github_token", "pattern": "gh[pousr]_[A-Za-z0-9]{36,}" }
+  ],
+  "secret_scan": {
+    "max_file_bytes": 1048576,
+    "exclude_patterns": [
+      "(^|/)(node_modules|dist|build|coverage|\\.next|\\.turbo)(/|$)",
+      "(^|/)pnpm-lock\\.yaml$",
+      "(^|/)scripts/umbrella-hygiene\\.test\\.mjs$"
+    ]
+  },
+  "root_allow_patterns": [
+    "^\\.[A-Za-z0-9_.-]+$",
+    "^[A-Z][A-Z0-9_.-]*\\.md$",
+    "^(package|tsconfig|turbo|pnpm-workspace)\\.(json|yaml|yml)$",
+    "^pnpm-lock\\.yaml$",
+    "^docker-compose\\.(yml|yaml)$",
+    "^Dockerfile$",
+    "^LICENSE(?:\\..*)?$"
+  ],
+  "duplicate_config_groups": [
+    {
+      "id": "package_manager_lockfile",
+      "allowed_max": 1,
+      "paths": ["pnpm-lock.yaml", "package-lock.json", "yarn.lock", "bun.lock", "bun.lockb"]
+    }
+  ]
+}
