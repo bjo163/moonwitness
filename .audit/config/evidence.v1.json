@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "collector_config_version": "1.0.0",
+  "collector_config_version": "1.1.0",
   "source_collectors": {
     "build_contract": {
       "maps": [{"profile":"RawHealth","dimension":"build"}],
@@ -23,7 +23,8 @@
         {"id":"database_url_required","type":"contains_all","path":"docker-compose.yml","values":["DATABASE_URL: ${DATABASE_URL:?","POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?"]},
         {"id":"jwt_required","type":"contains_all","path":"docker-compose.yml","values":["JWT_SECRET: ${JWT_SECRET:?"]},
         {"id":"redis_required","type":"contains_all","path":"docker-compose.yml","values":["REDIS_PASSWORD: ${REDIS_PASSWORD:?","REDIS_URL: ${REDIS_URL:?"]},
-        {"id":"public_api_required","type":"contains_all","path":"docker-compose.yml","values":["PUBLIC_API_URL:?PUBLIC_API_URL must be set"]}
+        {"id":"public_api_required","type":"contains_all","path":"docker-compose.yml","values":["PUBLIC_API_URL:?PUBLIC_API_URL must be set"]},
+        {"id":"generated_inventory_clean","type":"context_equals","context_path":"inventory.drift.status","value":"PASS"}
       ]
     },
     "deployment_contract": {
@@ -57,7 +58,8 @@
     "certification_workflow": "Production PostgreSQL Certification",
     "tracked_issues": [
       {"number":18,"priority":"P0","kind":"branch_enforcement","blocking":true},
-      {"number":26,"priority":"P2","kind":"release_publication","blocking":false}
+      {"number":26,"priority":"P2","kind":"release_publication","blocking":false},
+      {"number":157,"priority":"P1","kind":"umbrella_engineering","blocking":false}
     ]
   }
 }

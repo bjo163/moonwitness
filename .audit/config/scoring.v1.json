@@ -2,9 +2,9 @@
   "schema_version": 1,
   "model": {
     "id": "moonwitness-umbrella-engineering-health",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
-  "scoring_config_version": "1.1.0",
+  "scoring_config_version": "1.2.0",
   "validation": {
     "weight_sum_target": 1,
     "weight_sum_tolerance": 0.000001
@@ -81,7 +81,8 @@
   },
   "progress_policy": {
     "formula_id": "verified_dod_weighted_completion_v1",
-    "requires_issue_evidence": true
+    "requires_issue_evidence": true,
+    "config_version": "1.0.0"
   },
   "gate_policies": {
     "DeploymentGate": {
@@ -113,6 +114,10 @@
     ".audit/config/complexity.v1.json",
     ".audit/config/quality.v1.json",
     ".audit/config/future-baseline.v1.json"
+  ],
+  "phase_f_config_paths": [
+    ".audit/config/progress.v1.json",
+    ".audit/config/inventory.v1.json"
   ],
   "deferred_profiles": {
     "RepositoryHygieneScore": "PHASE_C_BOOTSTRAP",

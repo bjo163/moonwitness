@@ -10,6 +10,8 @@ This directory owns the versioned machine contract for MoonWitness engineering-h
 - `config/complexity.v1.json` owns complexity dimensions, thresholds, hotspot history policy, and component criticality multipliers.
 - `config/quality.v1.json` owns ProgrammaticQuality, Reproducibility, FutureReadiness dimensions and hardcode penalties.
 - `config/future-baseline.v1.json` is a dated technology-support baseline with source provenance. It is not treated as timeless truth.
+- `config/progress.v1.json` owns verified Definition-of-Done work items, lifecycle states, and completion factors for `Progress`.
+- `config/inventory.v1.json` owns only inventory source locations and semantic port mappings; service/env/dependency values are discovered from repository sources.
 - `config/certification.v1.json` owns Phase E certification checks, deterministic replay timestamp, and high-confidence secret-safety patterns.
 - `schema/umbrella-report.schema.json` is the public machine-readable report schema.
 - `schema/umbrella-certification.schema.json` is the machine-readable Phase E certification artifact schema.
@@ -17,9 +19,9 @@ This directory owns the versioned machine contract for MoonWitness engineering-h
 - `.audit/runtime/UMBRELLA_STATUS.md` is the generated human view and MUST NOT become an independent scoring source.
 - `.audit/runtime/umbrella-certification.json` is ephemeral certification evidence and MUST NOT be committed.
 
-The runtime scoring config hash is computed over the canonical scoring config plus evidence, hygiene, complexity, quality, and future-baseline configs. A change to any active audit/scoring input therefore changes report provenance.
+The runtime scoring config hash is computed over the canonical scoring config plus evidence, hygiene, complexity, quality, future-baseline, progress, and inventory configs. A change to any active audit/scoring input therefore changes report provenance.
 
-The generated report is derived from source/config/evidence. Human-readable reports are rendered from this machine state and never calculate scores, gates, progress, or issue truth independently.
+The generated report is derived from source/config/evidence. Human-readable reports are rendered from this machine state and never calculate scores, gates, progress, inventory drift, or issue truth independently.
 
 ## Commands
 
@@ -90,7 +92,7 @@ security-critical constitutional audit result
 observability contract
 rollback exact-SHA certification state
 branch-enforcement external blocker
-#18 / #26 tracker reconciliation
+#18 / #26 / #157 administrative state reconciliation
 classified hardcode findings from the constitutional collector layer
 ```
 
@@ -185,11 +187,55 @@ Secret-safety reports pattern IDs and counts only. Matched secret values are nev
 
 Certification is fail-closed: any missing required check, failed parity, SHA mismatch, or configured secret-pattern finding exits non-zero and prevents the UMBRELLA CI job from succeeding.
 
+## Phase F verified progress and generated service inventory
+
+`Progress` is computed by `verified_dod_weighted_completion_v1` from versioned work items in `config/progress.v1.json`. Administrative issue state is retained only as metadata and never contributes directly to completion. A closed issue with missing DoD checks therefore cannot produce `100`, while an open issue whose configured DoD is fully verified may have `verified_state=VALIDATED`.
+
+The supported lifecycle vocabulary remains explicit and versioned:
+
+```text
+NEW
+CONFIRMED
+TRACKED
+FIXED
+VALIDATED
+SUPPRESSED_WITH_REASON
+REGRESSED
+BLOCKED_EXTERNAL
+```
+
+Completion factors are config-owned. The report stores each work item's checks, verified state, weight, and linked administrative state so progress is explainable rather than handwritten.
+
+The service/config inventory is generated from repository truth, not maintained as a second manual list:
+
+```text
+docker-compose.yml
+.env.production.example
+packages/types/src/constants.ts -> APP_PORTS
+apps/**/package.json
+packages/**/package.json
+```
+
+The generated inventory records Compose services, images/Dockerfiles, environment key references, health endpoints, service dependencies, published/container ports, canonical `APP_PORTS`, workspace package names, and dependency names. Environment values are never copied into the report.
+
+Programmatic drift checks currently verify:
+
+```text
+Compose dependency targets exist
+Dockerfile references exist
+pnpm --filter targets resolve to workspace package names
+Compose environment references exist in .env.production.example
+application container ports match mapped APP_PORTS constants
+host-port defaults are unique
+```
+
+Inventory values remain discovered. `config/inventory.v1.json` owns only source locations and semantic service-to-port-constant mapping, so it does not duplicate the actual port/env/dependency truth. Inventory drift feeds the configuration source contract and can therefore reduce readiness instead of appearing as an informational-only warning.
+
 ## Determinism
 
 The report records model/config/generator/source provenance and a semantic `report_fingerprint`. `generated_at` is excluded from that fingerprint, and CI evidence deliberately omits volatile run IDs/timestamps. The same source revision + active configuration + normalized engineering evidence state yields the same semantic fingerprint.
 
-Stable ordering is required for findings, cycles, hotspots, recommendations, blocker display, rendered score rows, certification checks, and secret-safety finding classifications.
+Stable ordering is required for findings, cycles, hotspots, recommendations, generated inventory records, verified DoD work items, blocker display, rendered score rows, certification checks, and secret-safety finding classifications.
 
 ## Gate law
 
@@ -201,4 +247,4 @@ high score + external blocker => blocked
 unknown mandatory gate => not deployable
 ```
 
-No numeric score—including RawHealth, DeploymentReadinessScore, Hygiene, Complexity, Programmatic Quality, Reproducibility, or Future Readiness—may promote `UNKNOWN`, `FAIL`, or `BLOCKED_EXTERNAL` to `READY`.
+No numeric score—including RawHealth, Progress, DeploymentReadinessScore, Hygiene, Complexity, Programmatic Quality, Reproducibility, or Future Readiness—may promote `UNKNOWN`, `FAIL`, or `BLOCKED_EXTERNAL` to `READY`.

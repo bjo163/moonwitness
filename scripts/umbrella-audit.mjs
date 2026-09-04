@@ -10,6 +10,8 @@ import { runSupplementalCollectors } from "./audit-collector-contract.mjs"
 import { applyPhaseCMetrics, collectPhaseCMetrics } from "./umbrella-phase-c.mjs"
 import { loadUmbrellaConfig } from "./umbrella-config.mjs"
 import { writeGeneratedOutputs } from "./umbrella-output.mjs"
+import { collectServiceInventory } from "./umbrella-inventory.mjs"
+import { applyVerifiedProgress, collectVerifiedProgress } from "./umbrella-progress.mjs"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -62,11 +64,15 @@ const {
   complexityConfig,
   qualityConfig,
   futureBaseline,
+  progressConfig,
+  inventoryConfig,
 } = loadUmbrellaConfig(rootDir)
 validateConfig(config)
 
 const ciEvidence = ciEvidencePath && fs.existsSync(ciEvidencePath) ? readJson(ciEvidencePath) : null
-const collected = collectUmbrellaEvidence({ rootDir, evidenceConfig, ciEvidence })
+const inventoryResult = collectServiceInventory(rootDir, inventoryConfig)
+const sourceContext = { inventory: inventoryResult.inventory }
+const collected = collectUmbrellaEvidence({ rootDir, evidenceConfig, ciEvidence, sourceContext })
 const report = buildReport({
   config,
   sourceRevision: resolveSourceRevision(),
@@ -76,9 +82,12 @@ const report = buildReport({
   p0Remaining: collected.p0Remaining,
 })
 
-report.evidence = collected.evidence
+report.evidence = [...collected.evidence, inventoryResult.evidence].sort((a, b) => a.id.localeCompare(b.id))
 report.issues = collected.issues
-report.repositories = collected.repositories
+report.repositories = collected.repositories.length > 0
+  ? structuredClone(collected.repositories)
+  : [{ repository: null, source_revision: report.source_revision, branches: [] }]
+report.repositories[0].inventory = inventoryResult.inventory
 report.hardcodes = runSupplementalCollectors(rootDir)
   .flatMap((collector) => collector.findings.map((finding) => ({ collector: collector.id, ...finding })))
   .sort((a, b) => `${a.collector}:${a.file}:${a.line}`.localeCompare(`${b.collector}:${b.file}:${b.line}`))
@@ -92,6 +101,16 @@ const phaseC = collectPhaseCMetrics({
   futureBaseline,
 })
 applyPhaseCMetrics(report, phaseC)
+
+const progressResult = collectVerifiedProgress({
+  rootDir,
+  progressConfig,
+  scoringConfig: config,
+  issues: report.issues,
+  sourceContext,
+})
+applyVerifiedProgress(report, progressResult, progressConfig)
+
 rehashReport(report)
 validateReport(report, config)
 
@@ -113,6 +132,13 @@ const phaseCSummary = () => {
   }
 }
 
+const inventorySummary = () => {
+  const inventory = report.repositories?.[0]?.inventory
+  console.log(`Progress=${report.scores.Progress.value ?? report.scores.Progress.status}`)
+  console.log(`ServiceInventory=${inventory?.drift?.status ?? "UNKNOWN"}`)
+  console.log(`ServiceInventoryDrift=${inventory?.drift?.findings?.length ?? 0}`)
+}
+
 if (jsonMode) {
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`)
 } else if (validateMode) {
@@ -120,6 +146,7 @@ if (jsonMode) {
   console.log(`RawHealth=${report.scores.RawHealth.value ?? report.scores.RawHealth.status}`)
   console.log(`DeploymentReadinessScore=${report.scores.DeploymentReadinessScore.value ?? report.scores.DeploymentReadinessScore.status}`)
   console.log(`DeploymentGate=${report.scores.DeploymentGate.status}`)
+  inventorySummary()
   phaseCSummary()
   console.log(`report_fingerprint=${report.report_fingerprint}`)
 } else {
@@ -132,6 +159,7 @@ if (jsonMode) {
   console.log(`AuditCoverage=${report.scores.AuditCoverage.value}`)
   console.log(`VerifiedCoverage=${report.scores.VerifiedCoverage.value}`)
   console.log(`EvidenceConfidence=${report.scores.EvidenceConfidence.value}`)
+  inventorySummary()
   phaseCSummary()
   console.log(`report_fingerprint=${report.report_fingerprint}`)
 }

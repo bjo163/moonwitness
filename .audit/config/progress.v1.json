@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "version": "1.0.0",
+  "resolution_states": {
+    "validated": "VALIDATED",
+    "partial": "CONFIRMED",
+    "empty": "TRACKED"
+  },
+  "lifecycle_states": [
+    "NEW",
+    "CONFIRMED",
+    "TRACKED",
+    "FIXED",
+    "VALIDATED",
+    "SUPPRESSED_WITH_REASON",
+    "REGRESSED",
+    "BLOCKED_EXTERNAL"
+  ],
+  "completion_by_state": {
+    "NEW": 0,
+    "CONFIRMED": 0,
+    "TRACKED": 0,
+    "FIXED": 0.5,
+    "VALIDATED": 1,
+    "SUPPRESSED_WITH_REASON": 1,
+    "REGRESSED": 0,
+    "BLOCKED_EXTERNAL": 0
+  },
+  "work_items": [
+    {
+      "id": "machine_contract",
+      "weight": 1,
+      "linked_issue": 157,
+      "checks": [
+        { "id": "report_schema", "type": "file_exists", "path": ".audit/schema/umbrella-report.schema.json" },
+        { "id": "scoring_config", "type": "file_exists", "path": ".audit/config/scoring.v1.json" },
+        { "id": "core_unknown_gate_semantics", "type": "contains_all", "path": "scripts/umbrella-audit-core.mjs", "values": ["UNKNOWN_REQUIRED", "computeWeightedProfile", "deriveDeploymentGate"] }
+      ]
+    },
+    {
+      "id": "evidence_and_issue_reconciliation",
+      "weight": 1,
+      "linked_issue": 157,
+      "checks": [
+        { "id": "evidence_config", "type": "file_exists", "path": ".audit/config/evidence.v1.json" },
+        { "id": "execution_evidence", "type": "contains_all", "path": "scripts/umbrella-evidence.mjs", "values": ["administrative_state", "verified_state", "BLOCKED_EXTERNAL"] },
+        { "id": "ci_exact_evidence", "type": "contains_all", "path": ".github/workflows/foundation-ci.yml", "values": ["CANDIDATE_SHA", "Collect exact-SHA GitHub evidence", "fetch-depth: 0"] }
+      ]
+    },
+    {
+      "id": "engineering_quality_scores",
+      "weight": 1,
+      "linked_issue": 157,
+      "checks": [
+        { "id": "hygiene", "type": "file_exists", "path": "scripts/umbrella-hygiene.mjs" },
+        { "id": "complexity", "type": "file_exists", "path": "scripts/umbrella-complexity.mjs" },
+        { "id": "quality", "type": "file_exists", "path": "scripts/umbrella-quality.mjs" },
+        { "id": "phase_c_apply", "type": "contains_all", "path": "scripts/umbrella-phase-c.mjs", "values": ["RepositoryHygieneScore", "ComplexityScore", "ProgrammaticQualityScore", "ReproducibilityScore", "FutureReadinessScore"] }
+      ]
+    },
+    {
+      "id": "renderer_and_safe_cli",
+      "weight": 1,
+      "linked_issue": 157,
+      "checks": [
+        { "id": "renderer", "type": "file_exists", "path": "scripts/umbrella-render.mjs" },
+        { "id": "safe_output", "type": "file_exists", "path": "scripts/umbrella-output.mjs" },
+        { "id": "dry_run_script", "type": "json_script", "path": "package.json", "script": "audit:umbrella:dry-run" },
+        { "id": "safe_fix_script", "type": "json_script", "path": "package.json", "script": "audit:umbrella:fix-safe" },
+        { "id": "renderer_check_script", "type": "json_script", "path": "package.json", "script": "audit:umbrella:render:check" }
+      ]
+    },
+    {
+      "id": "replay_certification",
+      "weight": 1,
+      "linked_issue": 157,
+      "checks": [
+        { "id": "certification_config", "type": "file_exists", "path": ".audit/config/certification.v1.json" },
+        { "id": "certification_schema", "type": "file_exists", "path": ".audit/schema/umbrella-certification.schema.json" },
+        { "id": "certifier", "type": "file_exists", "path": "scripts/umbrella-certify.mjs" },
+        { "id": "ci_certifier", "type": "contains_all", "path": ".github/workflows/foundation-ci.yml", "values": ["Certify UMBRELLA determinism, parity, safety, and provenance", "audit:umbrella:certify"] }
+      ]
+    },
+    {
+      "id": "generated_service_inventory",
+      "weight": 1,
+      "linked_issue": 157,
+      "checks": [
+        { "id": "inventory_config", "type": "file_exists", "path": ".audit/config/inventory.v1.json" },
+        { "id": "inventory_collector", "type": "file_exists", "path": "scripts/umbrella-inventory.mjs" },
+        { "id": "inventory_clean", "type": "context_equals", "context_path": "inventory.drift.status", "value": "PASS" }
+      ]
+    }
+  ]
+}
