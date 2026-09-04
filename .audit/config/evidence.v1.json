@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "collector_config_version": "1.0.0",
+  "source_collectors": {
+    "build_contract": {
+      "maps": [{"profile":"RawHealth","dimension":"build"}],
+      "checks": [
+        {"id":"root_build_script","type":"json_script","path":"package.json","script":"build"},
+        {"id":"turbo_config","type":"file_exists","path":"turbo.json"},
+        {"id":"ci_build_job","type":"contains_all","path":".github/workflows/foundation-ci.yml","values":["name: Build","pnpm build"]}
+      ]
+    },
+    "test_contract": {
+      "maps": [{"profile":"RawHealth","dimension":"tests"}],
+      "checks": [
+        {"id":"root_test_script","type":"json_script","path":"package.json","script":"test"},
+        {"id":"ci_test_job","type":"contains_all","path":".github/workflows/foundation-ci.yml","values":["name: Test","pnpm test"]}
+      ]
+    },
+    "config_contract": {
+      "maps": [{"profile":"RawHealth","dimension":"config"},{"profile":"DeploymentReadinessScore","dimension":"config"}],
+      "checks": [
+        {"id":"database_url_required","type":"contains_all","path":"docker-compose.yml","values":["DATABASE_URL: ${DATABASE_URL:?","POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?"]},
+        {"id":"jwt_required","type":"contains_all","path":"docker-compose.yml","values":["JWT_SECRET: ${JWT_SECRET:?"]},
+        {"id":"redis_required","type":"contains_all","path":"docker-compose.yml","values":["REDIS_PASSWORD: ${REDIS_PASSWORD:?","REDIS_URL: ${REDIS_URL:?"]},
+        {"id":"public_api_required","type":"contains_all","path":"docker-compose.yml","values":["PUBLIC_API_URL:?PUBLIC_API_URL must be set"]}
+      ]
+    },
+    "deployment_contract": {
+      "maps": [{"profile":"RawHealth","dimension":"deployment"}],
+      "checks": [
+        {"id":"api_dockerfile","type":"file_exists","path":"apps/api/Dockerfile"},
+        {"id":"web_dockerfile","type":"file_exists","path":"Dockerfile"},
+        {"id":"api_readiness_healthcheck","type":"contains_all","path":"docker-compose.yml","values":["/health/ready","condition: service_healthy"]},
+        {"id":"data_network_internal","type":"contains_all","path":"docker-compose.yml","values":["data:","internal: true"]}
+      ]
+    },
+    "observability_contract": {
+      "maps": [{"profile":"RawHealth","dimension":"observability"},{"profile":"DeploymentReadinessScore","dimension":"observability"}],
+      "checks": [
+        {"id":"otel_server","type":"contains_all","path":"packages/moon-server/src/telemetry.ts","values":["NodeSDK","@opentelemetry"]},
+        {"id":"readiness_contract","type":"contains_all","path":"packages/moon-protocol/src/registry.ts","values":["/health/ready","database connectivity"]}
+      ]
+    }
+  },
+  "execution_mappings": {
+    "foundation.build": [{"profile":"RawHealth","dimension":"build"},{"profile":"DeploymentReadinessScore","dimension":"build"}],
+    "foundation.test": [{"profile":"RawHealth","dimension":"tests"},{"profile":"RawHealth","dimension":"integration"},{"profile":"DeploymentReadinessScore","dimension":"integration"}],
+    "foundation.audit": [{"profile":"DeploymentReadinessScore","dimension":"security_critical"}],
+    "foundation.aggregate": [{"profile":"DeploymentReadinessScore","dimension":"ci_cd"}],
+    "certification.runtime": [{"profile":"RawHealth","dimension":"runtime"},{"profile":"DeploymentReadinessScore","dimension":"runtime"}],
+    "certification.database": [{"profile":"RawHealth","dimension":"data"},{"profile":"DeploymentReadinessScore","dimension":"database_migration"}],
+    "certification.rollback": [{"profile":"DeploymentReadinessScore","dimension":"rollback"}]
+  },
+  "github": {
+    "required_branches": ["main", "dev"],
+    "certification_workflow": "Production PostgreSQL Certification",
+    "tracked_issues": [
+      {"number":18,"priority":"P0","kind":"branch_enforcement","blocking":true},
+      {"number":26,"priority":"P2","kind":"release_publication","blocking":false}
+    ]
+  }
+}
