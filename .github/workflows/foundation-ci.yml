@@ -38,7 +38,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Constitutional & Enterprise UI Audit
-        run: node scripts/audit-rules.mjs
+        run: pnpm audit:rules
 
   lint:
     name: Lint
