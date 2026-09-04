@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "profiles": {
+    "ProgrammaticQualityScore": {
+      "version": "1.0.0",
+      "formula_id": "weighted_mean_minus_hardcode_penalty_v1",
+      "base_formula_id": "weighted_mean_v1",
+      "unknown_policy": "strict_required_v1",
+      "dimensions": [
+        { "id": "config_driven", "weight": 0.25, "required": true },
+        { "id": "generated_truth", "weight": 0.20, "required": true },
+        { "id": "deterministic_test_data", "weight": 0.15, "required": true },
+        { "id": "automation_coverage", "weight": 0.20, "required": true },
+        { "id": "drift_detection", "weight": 0.20, "required": true }
+      ]
+    },
+    "ReproducibilityScore": {
+      "version": "1.0.0",
+      "formula_id": "weighted_mean_v1",
+      "unknown_policy": "strict_required_v1",
+      "dimensions": [
+        { "id": "lockfile", "weight": 0.15, "required": true },
+        { "id": "package_manager_pin", "weight": 0.12, "required": true },
+        { "id": "frozen_install_ci", "weight": 0.18, "required": true },
+        { "id": "node_runtime_pin", "weight": 0.12, "required": true },
+        { "id": "container_pin", "weight": 0.15, "required": true },
+        { "id": "action_pin", "weight": 0.13, "required": true },
+        { "id": "clean_checkout_certification", "weight": 0.15, "required": true }
+      ]
+    },
+    "FutureReadinessScore": {
+      "version": "1.0.0",
+      "formula_id": "weighted_mean_v1",
+      "unknown_policy": "strict_required_v1",
+      "dimensions": [
+        { "id": "runtime_support", "weight": 0.25, "required": true },
+        { "id": "actions_runtime", "weight": 0.25, "required": true },
+        { "id": "dependency_update_automation", "weight": 0.20, "required": true },
+        { "id": "release_upgrade_policy", "weight": 0.10, "required": true },
+        { "id": "security_automation", "weight": 0.10, "required": true },
+        { "id": "baseline_provenance", "weight": 0.10, "required": true }
+      ]
+    }
+  },
+  "hardcode_penalty": {
+    "VIOLATION": 5,
+    "SUPPRESSED_WITH_REASON": 2,
+    "cap": 20
+  },
+  "required_programmatic_files": [
+    ".audit/config/scoring.v1.json",
+    ".audit/config/evidence.v1.json",
+    ".audit/schema/umbrella-report.schema.json",
+    "scripts/audit-collector-contract.mjs",
+    "scripts/umbrella-audit-core.mjs",
+    "scripts/umbrella-evidence.mjs"
+  ],
+  "nondeterministic_test_patterns": [
+    "Math\\.random\\s*\\(",
+    "crypto\\.randomUUID\\s*\\(",
+    "Date\\.now\\s*\\("
+  ],
+  "test_path_pattern": "(?:\\.test|\\.spec)\\.[cm]?[jt]sx?$|(^|/)(fixtures?|seeds?)(/|$)",
+  "workflow_required_signals": [
+    "pnpm install --frozen-lockfile",
+    "pnpm audit:rules",
+    "UMBRELLA v6 Evidence",
+    "pnpm test",
+    "pnpm typecheck",
+    "pnpm build"
+  ],
+  "certification_required_signals": [
+    "db:install",
+    "db:verify",
+    "backup",
+    "restore",
+    "/health/ready"
+  ],
+  "security_signals": [
+    "audit:rules",
+    "JWT_SECRET",
+    "fail-closed",
+    "security"
+  ]
+}

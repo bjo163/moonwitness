@@ -123,13 +123,14 @@ jobs:
   umbrella:
     name: UMBRELLA v6 Evidence
     runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
-    timeout-minutes: 10
+    timeout-minutes: 15
     needs: [audit, lint, typecheck, test, build]
     if: always()
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
       - uses: pnpm/action-setup@v4
         with:
           version: 10.33.4

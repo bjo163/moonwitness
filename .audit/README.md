@@ -4,12 +4,18 @@ This directory owns the versioned machine contract for MoonWitness engineering-h
 
 ## Source of truth
 
-- `config/scoring.v1.json` owns scoring weights, evidence coefficients, score bands, unknown policy, gate policy, and required canonical outputs.
+- `config/scoring.v1.json` owns canonical score bands, evidence coefficients, RawHealth/DeploymentReadiness weights, unknown policy, gate policy, model version, and required outputs.
 - `config/evidence.v1.json` owns collector-to-dimension mappings, source-contract checks, exact-SHA execution mappings, required branch observations, and tracked engineering issues.
+- `config/hygiene.v1.json` owns repository-hygiene dimensions, weights, thresholds, allow patterns, and penalties.
+- `config/complexity.v1.json` owns complexity dimensions, thresholds, hotspot history policy, and component criticality multipliers.
+- `config/quality.v1.json` owns ProgrammaticQuality, Reproducibility, FutureReadiness dimensions and hardcode penalties.
+- `config/future-baseline.v1.json` is a dated technology-support baseline with source provenance. It is not treated as timeless truth.
 - `schema/umbrella-report.schema.json` is the public machine-readable report schema.
 - `umbrella-report.json` is generated output and MUST NOT be edited or committed manually.
 
-The generated report is derived from source/config/evidence. Human-readable reports must later be rendered from this machine state, never calculated independently.
+The runtime scoring config hash is computed over the canonical scoring config plus evidence, hygiene, complexity, quality, and future-baseline configs. A change to any active audit/scoring input therefore changes report provenance.
+
+The generated report is derived from source/config/evidence. Human-readable reports must be rendered from this machine state, never calculated independently.
 
 ## Commands
 
@@ -25,7 +31,7 @@ pnpm audit:umbrella:ci
 
 `audit:umbrella:ci` additionally consumes `.audit/runtime/ci-evidence.json`, which Foundation CI generates from exact-candidate job results, branch state, tracker state, and exact-SHA PostgreSQL certification state. The runtime evidence file is ephemeral and is never committed.
 
-`audit:umbrella:validate` validates the scoring config, generated report structure, invariants, config fingerprint, report fingerprint, and required canonical outputs without forcing deployment readiness to pass.
+`audit:umbrella:validate` validates configuration, generated report structure, invariants, config fingerprint, report fingerprint, and required canonical outputs without forcing deployment readiness to pass.
 
 `audit:umbrella:check` additionally enforces the configured deployment gate and exits non-zero for `UNKNOWN`, `FAIL`, or `BLOCKED_EXTERNAL`.
 
@@ -42,15 +48,15 @@ E4 = inference
 E5 = unknown
 ```
 
-Phase B source collectors compute scores only from explicit pass/fail check ratios. They do not contain handwritten readiness percentages.
+Source collectors compute scores only from explicit measured checks/formulas. They do not contain handwritten readiness percentages.
 
 Execution-sensitive dimensions such as runtime, database/migration, and rollback stay `UNKNOWN_REQUIRED` until exact-SHA PostgreSQL certification is complete. A workflow file existing in the repository is not treated as proof that the workflow executed successfully.
 
 Foundation build/test/audit results can override weaker source evidence with E0 evidence. Branch enforcement is observed independently of issue state: an open issue does not by itself create a P0, and a closed issue cannot hide observed unprotected required branches.
 
-## Current Phase B scope
+## Phase B evidence scope
 
-Programmatically collected now:
+Programmatically collected:
 
 ```text
 build contract + exact CI build result
@@ -69,11 +75,67 @@ branch-enforcement external blocker
 classified hardcode findings from the constitutional collector layer
 ```
 
-`RepositoryHygieneScore`, `ComplexityScore`, `ProgrammaticQualityScore`, `ReproducibilityScore`, and `FutureReadinessScore` remain explicitly deferred/insufficient until their Phase C collectors and calibrated profiles are implemented.
+## Phase C engineering-quality scope
+
+Phase C activates five additional independent scores. They are not folded into one universal score.
+
+### RepositoryHygieneScore
+
+Measured programmatically where reliable:
+
+```text
+tracked generated artifacts
+required .gitignore coverage
+high-confidence secret hygiene
+stale executable config/script targets
+duplicate package-manager config ownership
+repository-root clutter
+```
+
+`dead_code_ratio` and `unused_dependency_ratio` remain explicit optional/unknown dimensions until a reliable collector exists. Their missing measurement is exposed through hygiene measurement coverage; it is not silently reported as zero or clean.
+
+### ComplexityScore
+
+Uses TypeScript AST and dependency-graph analysis for:
+
+```text
+cyclomatic complexity
+cognitive complexity
+dependency cycles
+fan-in / fan-out
+duplication blocks
+abstraction depth
+package testability signal
+change-frequency hotspots
+```
+
+Hotspot ranking follows:
+
+```text
+NormalizedComplexity × NormalizedChangeFrequency × CriticalityMultiplier
+```
+
+The UMBRELLA CI checkout uses full history for this collector. If sufficient history is unavailable, `hotspot_history` remains explicit unknown instead of receiving a fabricated value.
+
+### ProgrammaticQualityScore
+
+Measures configuration ownership, generated truth, deterministic test-data signals, automation coverage, and drift detection. Classified hardcode findings apply only through the versioned penalty policy in `quality.v1.json`.
+
+### ReproducibilityScore
+
+Measures lockfile ownership, package-manager pinning, frozen installs, Node runtime pinning, container reference pinning, GitHub Action reference pinning, and clean-checkout production certification coverage.
+
+### FutureReadinessScore
+
+Measures runtime support alignment, GitHub Actions runtime alignment, dependency-update automation, release/upgrade policy, security automation, and baseline provenance.
+
+Technology recommendations are derived from `future-baseline.v1.json`, which records `as_of` and official source URLs. Refreshing technology assumptions requires changing that baseline/config, which changes report provenance and fingerprinting.
 
 ## Determinism
 
-The report records model/config/generator/source provenance and a semantic `report_fingerprint`. `generated_at` is excluded from that fingerprint, and CI evidence deliberately omits volatile run IDs/timestamps. The same source revision + configuration + normalized engineering evidence state yields the same semantic fingerprint.
+The report records model/config/generator/source provenance and a semantic `report_fingerprint`. `generated_at` is excluded from that fingerprint, and CI evidence deliberately omits volatile run IDs/timestamps. The same source revision + active configuration + normalized engineering evidence state yields the same semantic fingerprint.
+
+Stable ordering is required for findings, cycles, hotspots, and recommendations.
 
 ## Gate law
 
@@ -85,4 +147,4 @@ high score + external blocker => blocked
 unknown mandatory gate => not deployable
 ```
 
-No numeric score may promote `UNKNOWN`, `FAIL`, or `BLOCKED_EXTERNAL` to `READY`.
+No numeric score—including RawHealth, DeploymentReadinessScore, Hygiene, Complexity, Programmatic Quality, Reproducibility, or Future Readiness—may promote `UNKNOWN`, `FAIL`, or `BLOCKED_EXTERNAL` to `READY`.

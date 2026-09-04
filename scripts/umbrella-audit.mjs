@@ -7,12 +7,18 @@ import { fileURLToPath } from "node:url"
 import { buildReport, sha256, validateConfig, validateReport } from "./umbrella-audit-core.mjs"
 import { collectUmbrellaEvidence } from "./umbrella-evidence.mjs"
 import { runSupplementalCollectors } from "./audit-collector-contract.mjs"
+import { applyPhaseCMetrics, collectPhaseCMetrics } from "./umbrella-phase-c.mjs"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const rootDir = path.resolve(__dirname, "..")
-const configPath = path.join(rootDir, ".audit", "config", "scoring.v1.json")
-const evidenceConfigPath = path.join(rootDir, ".audit", "config", "evidence.v1.json")
+const configDir = path.join(rootDir, ".audit", "config")
+const configPath = path.join(configDir, "scoring.v1.json")
+const evidenceConfigPath = path.join(configDir, "evidence.v1.json")
+const hygieneConfigPath = path.join(configDir, "hygiene.v1.json")
+const complexityConfigPath = path.join(configDir, "complexity.v1.json")
+const qualityConfigPath = path.join(configDir, "quality.v1.json")
+const futureBaselinePath = path.join(configDir, "future-baseline.v1.json")
 const defaultOutputPath = path.join(rootDir, ".audit", "umbrella-report.json")
 
 function readJson(filePath) {
@@ -48,9 +54,25 @@ const outputPath = path.resolve(rootDir, getArg("--output") || path.relative(roo
 const ciEvidenceArg = getArg("--ci-evidence")
 const ciEvidencePath = ciEvidenceArg ? path.resolve(rootDir, ciEvidenceArg) : null
 
-const config = readJson(configPath)
+const scoringConfig = readJson(configPath)
 const evidenceConfig = readJson(evidenceConfigPath)
+const hygieneConfig = readJson(hygieneConfigPath)
+const complexityConfig = readJson(complexityConfigPath)
+const qualityConfig = readJson(qualityConfigPath)
+const futureBaseline = readJson(futureBaselinePath)
+
+const config = {
+  ...scoringConfig,
+  audit_configs: {
+    evidence: evidenceConfig,
+    hygiene: hygieneConfig,
+    complexity: complexityConfig,
+    quality: qualityConfig,
+    future_baseline: futureBaseline,
+  },
+}
 validateConfig(config)
+
 const ciEvidence = ciEvidencePath && fs.existsSync(ciEvidencePath) ? readJson(ciEvidencePath) : null
 const collected = collectUmbrellaEvidence({ rootDir, evidenceConfig, ciEvidence })
 const report = buildReport({
@@ -68,12 +90,29 @@ report.repositories = collected.repositories
 report.hardcodes = runSupplementalCollectors(rootDir)
   .flatMap((collector) => collector.findings.map((finding) => ({ collector: collector.id, ...finding })))
   .sort((a, b) => `${a.collector}:${a.file}:${a.line}`.localeCompare(`${b.collector}:${b.file}:${b.line}`))
+
+const phaseC = collectPhaseCMetrics({
+  rootDir,
+  scoringConfig: config,
+  hygieneConfig,
+  complexityConfig,
+  qualityConfig,
+  futureBaseline,
+})
+applyPhaseCMetrics(report, phaseC)
 rehashReport(report)
 validateReport(report, config)
 
 if (writeMode) {
   fs.mkdirSync(path.dirname(outputPath), { recursive: true })
   fs.writeFileSync(outputPath, `${JSON.stringify(report, null, 2)}\n`)
+}
+
+const phaseCSummary = () => {
+  for (const name of ["RepositoryHygieneScore", "ComplexityScore", "ProgrammaticQualityScore", "ReproducibilityScore", "FutureReadinessScore"]) {
+    const metric = report.scores[name]
+    console.log(`${name}=${metric.value ?? metric.status}`)
+  }
 }
 
 if (jsonMode) {
@@ -83,6 +122,7 @@ if (jsonMode) {
   console.log(`RawHealth=${report.scores.RawHealth.value ?? report.scores.RawHealth.status}`)
   console.log(`DeploymentReadinessScore=${report.scores.DeploymentReadinessScore.value ?? report.scores.DeploymentReadinessScore.status}`)
   console.log(`DeploymentGate=${report.scores.DeploymentGate.status}`)
+  phaseCSummary()
   console.log(`report_fingerprint=${report.report_fingerprint}`)
 } else {
   console.log(`UMBRELLA v6 engineering report: ${writeMode ? path.relative(rootDir, outputPath) : "generated in-memory"}`)
@@ -93,6 +133,7 @@ if (jsonMode) {
   console.log(`AuditCoverage=${report.scores.AuditCoverage.value}`)
   console.log(`VerifiedCoverage=${report.scores.VerifiedCoverage.value}`)
   console.log(`EvidenceConfidence=${report.scores.EvidenceConfidence.value}`)
+  phaseCSummary()
   console.log(`report_fingerprint=${report.report_fingerprint}`)
 }
 
