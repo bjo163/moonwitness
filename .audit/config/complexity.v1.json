@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "profile": {
+    "version": "1.0.0",
+    "formula_id": "weighted_mean_v1",
+    "unknown_policy": "strict_required_v1",
+    "dimensions": [
+      { "id": "cyclomatic", "weight": 0.24, "required": true },
+      { "id": "cognitive", "weight": 0.20, "required": true },
+      { "id": "dependency_cycles", "weight": 0.18, "required": true },
+      { "id": "duplication", "weight": 0.12, "required": true },
+      { "id": "fanout", "weight": 0.08, "required": true },
+      { "id": "abstraction_depth", "weight": 0.08, "required": true },
+      { "id": "testability", "weight": 0.05, "required": false },
+      { "id": "hotspot_history", "weight": 0.05, "required": false }
+    ]
+  },
+  "thresholds": {
+    "cyclomatic_warn": 10,
+    "cyclomatic_critical": 25,
+    "cognitive_warn": 15,
+    "cognitive_critical": 35,
+    "fanout_warn": 12,
+    "fanout_critical": 30,
+    "abstraction_depth_warn": 8,
+    "abstraction_depth_critical": 20,
+    "duplication_block_lines": 8,
+    "min_history_commits": 20,
+    "history_lookback_commits": 200
+  },
+  "criticality": {
+    "default_multiplier": 1,
+    "rules": [
+      { "pattern": "^(apps/api|packages/moon-server|packages/moon-orm|packages/moon-witness)/", "multiplier": 1.5 },
+      { "pattern": "^(apps/web|apps/command-center)/", "multiplier": 1.2 }
+    ]
+  },
+  "source_extensions": [".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs"],
+  "exclude_patterns": [
+    "(^|/)(node_modules|dist|build|coverage|\\.next|\\.turbo)(/|$)",
+    "(?:\\.test|\\.spec)\\.[cm]?[jt]sx?$",
+    "(^|/)scripts/umbrella-complexity\\.test\\.mjs$"
+  ]
+}
