@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "resolution_states": {
     "validated": "VALIDATED",
     "partial": "CONFIRMED",
@@ -34,7 +34,7 @@
       "checks": [
         { "id": "report_schema", "type": "file_exists", "path": ".audit/schema/umbrella-report.schema.json" },
         { "id": "scoring_config", "type": "file_exists", "path": ".audit/config/scoring.v1.json" },
-        { "id": "core_unknown_gate_semantics", "type": "contains_all", "path": "scripts/umbrella-audit-core.mjs", "values": ["UNKNOWN_REQUIRED", "computeWeightedProfile", "deriveDeploymentGate"] }
+        { "id": "core_unknown_gate_semantics", "type": "contains_all", "path": "scripts/umbrella-audit-core.mjs", "values": ["defaultInputsForProfile", "config.states.unknown_required", "computeWeightedProfile", "deriveDeploymentGate"] }
       ]
     },
     {
