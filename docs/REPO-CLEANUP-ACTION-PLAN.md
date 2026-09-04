@@ -18,7 +18,7 @@ Status: audit completed, cleanup in progress
 - [ ] Centralize API base URL resolution for Web and Command Center.
 - [ ] Remove direct production `localStorage` access or route it through the shared state layer.
 - [ ] Resolve synthetic or unlabeled telemetry in monitoring views.
-- [ ] Keep generated logs, build output, coverage, and audit runtime data ignored.
+- [x] Keep generated logs, build output, coverage, and audit runtime data ignored.
 - [ ] Add ownership/readme metadata for every workspace package.
 
 ## Phase 2 — structure and boundaries
