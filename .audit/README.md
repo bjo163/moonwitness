@@ -12,10 +12,11 @@ This directory owns the versioned machine contract for MoonWitness engineering-h
 - `config/future-baseline.v1.json` is a dated technology-support baseline with source provenance. It is not treated as timeless truth.
 - `schema/umbrella-report.schema.json` is the public machine-readable report schema.
 - `umbrella-report.json` is generated output and MUST NOT be edited or committed manually.
+- `.audit/runtime/UMBRELLA_STATUS.md` is the generated human view and MUST NOT become an independent scoring source.
 
 The runtime scoring config hash is computed over the canonical scoring config plus evidence, hygiene, complexity, quality, and future-baseline configs. A change to any active audit/scoring input therefore changes report provenance.
 
-The generated report is derived from source/config/evidence. Human-readable reports must be rendered from this machine state, never calculated independently.
+The generated report is derived from source/config/evidence. Human-readable reports are rendered from this machine state and never calculate scores, gates, progress, or issue truth independently.
 
 ## Commands
 
@@ -24,6 +25,10 @@ pnpm audit:umbrella
 pnpm audit:umbrella:json
 pnpm audit:umbrella:validate
 pnpm audit:umbrella:check
+pnpm audit:umbrella:render
+pnpm audit:umbrella:render:check
+pnpm audit:umbrella:dry-run
+pnpm audit:umbrella:fix-safe
 pnpm audit:umbrella:ci
 ```
 
@@ -34,6 +39,14 @@ pnpm audit:umbrella:ci
 `audit:umbrella:validate` validates configuration, generated report structure, invariants, config fingerprint, report fingerprint, and required canonical outputs without forcing deployment readiness to pass.
 
 `audit:umbrella:check` additionally enforces the configured deployment gate and exits non-zero for `UNKNOWN`, `FAIL`, or `BLOCKED_EXTERNAL`.
+
+`audit:umbrella:render` reads the already generated machine report, validates it against active configuration, and renders `.audit/runtime/UMBRELLA_STATUS.md`.
+
+`audit:umbrella:render:check` proves the human Markdown is byte-for-byte the deterministic renderer output for the machine report and verifies its embedded parity manifest.
+
+`audit:umbrella:dry-run` runs the same audit plus safe-output planning while writing zero files.
+
+`audit:umbrella:fix-safe` is deliberately narrow: it may regenerate only `.audit/umbrella-report.json` and a human status under `.audit/runtime/`. It cannot modify source code, scoring config, workflow policy, migrations, dependencies, or deployment configuration.
 
 ## Evidence semantics
 
@@ -131,11 +144,25 @@ Measures runtime support alignment, GitHub Actions runtime alignment, dependency
 
 Technology recommendations are derived from `future-baseline.v1.json`, which records `as_of` and official source URLs. Refreshing technology assumptions requires changing that baseline/config, which changes report provenance and fingerprinting.
 
+## Phase D renderer and mutation policy
+
+Human status is a deterministic projection of the canonical JSON report. The renderer embeds a compact parity manifest containing source revision, report fingerprint, overall state, canonical outputs, and external blocker IDs. Parity validation compares both that manifest and the complete rendered Markdown against a fresh deterministic render.
+
+The mutation law is intentionally restrictive:
+
+```text
+--dry-run => zero filesystem mutations
+--fix-safe => generated audit outputs only
+source/config/workflow/migration changes => never automatic
+```
+
+`--fix-safe` target validation prevents redirecting the report to source files and prevents the human status from escaping `.audit/runtime/`. Safe generation is reversible because both outputs are ignored generated artifacts.
+
 ## Determinism
 
 The report records model/config/generator/source provenance and a semantic `report_fingerprint`. `generated_at` is excluded from that fingerprint, and CI evidence deliberately omits volatile run IDs/timestamps. The same source revision + active configuration + normalized engineering evidence state yields the same semantic fingerprint.
 
-Stable ordering is required for findings, cycles, hotspots, and recommendations.
+Stable ordering is required for findings, cycles, hotspots, recommendations, blocker display, and rendered score rows.
 
 ## Gate law
 
