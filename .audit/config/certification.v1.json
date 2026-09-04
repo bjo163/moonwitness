@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "version": "1.0.0",
+  "fixed_generated_at": "2000-01-01T00:00:00.000Z",
+  "required_checks": [
+    "machine_report_byte_parity",
+    "report_fingerprint_parity",
+    "rendered_markdown_byte_parity",
+    "renderer_manifest_parity",
+    "source_revision_exact",
+    "secret_safety"
+  ],
+  "secret_patterns": [
+    {
+      "id": "pem_private_key",
+      "regex": "-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----",
+      "flags": "g"
+    },
+    {
+      "id": "github_token",
+      "regex": "\\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})\\b",
+      "flags": "g"
+    },
+    {
+      "id": "aws_access_key",
+      "regex": "\\b(?:AKIA|ASIA)[A-Z0-9]{16}\\b",
+      "flags": "g"
+    },
+    {
+      "id": "slack_token",
+      "regex": "\\bxox[baprs]-[A-Za-z0-9-]{10,}\\b",
+      "flags": "g"
+    },
+    {
+      "id": "stripe_live_secret",
+      "regex": "\\bsk_live_[A-Za-z0-9]{20,}\\b",
+      "flags": "g"
+    }
+  ]
+}

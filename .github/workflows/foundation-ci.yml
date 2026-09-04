@@ -123,7 +123,7 @@ jobs:
   umbrella:
     name: UMBRELLA v6 Evidence
     runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
-    timeout-minutes: 15
+    timeout-minutes: 20
     needs: [audit, lint, typecheck, test, build]
     if: always()
     steps:
@@ -203,6 +203,8 @@ jobs:
             fs.writeFileSync('.audit/runtime/ci-evidence.json', `${JSON.stringify(evidence, null, 2)}\n`);
       - name: Generate and validate UMBRELLA evidence report
         run: pnpm audit:umbrella:ci
+      - name: Certify UMBRELLA determinism, parity, safety, and provenance
+        run: pnpm audit:umbrella:certify --ci-evidence=.audit/runtime/ci-evidence.json --expected-sha=${{ github.event.pull_request.head.sha || github.sha }}
 
   report:
     name: Report
