@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moonwitness.local/schemas/umbrella-report.schema.json",
+  "title": "MoonWitness UMBRELLA Engineering Audit Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "source_revision",
+    "model_id",
+    "scoring_model_version",
+    "scoring_config_version",
+    "config_hash",
+    "generator",
+    "overall",
+    "scores",
+    "repositories",
+    "components",
+    "issues",
+    "deployment",
+    "evidence",
+    "hardcodes",
+    "complexity",
+    "hygiene",
+    "coverage",
+    "future_tech",
+    "external_blockers",
+    "report_fingerprint"
+  ],
+  "properties": {
+    "schema_version": { "type": "integer", "minimum": 1 },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "source_revision": { "type": "string", "minLength": 1 },
+    "model_id": { "type": "string", "minLength": 1 },
+    "scoring_model_version": { "type": "string", "minLength": 1 },
+    "scoring_config_version": { "type": "string", "minLength": 1 },
+    "config_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 }
+      }
+    },
+    "overall": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "can_deploy", "reason_codes"],
+      "properties": {
+        "status": { "enum": ["READY", "PARTIAL", "BLOCKED", "UNKNOWN"] },
+        "can_deploy": { "type": "boolean" },
+        "reason_codes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "RawHealth",
+        "Progress",
+        "DeploymentReadinessScore",
+        "DeploymentGate",
+        "AuditCoverage",
+        "VerifiedCoverage",
+        "EvidenceConfidence",
+        "RepositoryHygieneScore",
+        "ComplexityScore",
+        "ProgrammaticQualityScore",
+        "ReproducibilityScore",
+        "FutureReadinessScore"
+      ],
+      "properties": {
+        "RawHealth": { "$ref": "#/$defs/metric" },
+        "Progress": { "$ref": "#/$defs/metric" },
+        "DeploymentReadinessScore": { "$ref": "#/$defs/metric" },
+        "DeploymentGate": { "$ref": "#/$defs/gate" },
+        "AuditCoverage": { "$ref": "#/$defs/metric" },
+        "VerifiedCoverage": { "$ref": "#/$defs/metric" },
+        "EvidenceConfidence": { "$ref": "#/$defs/metric" },
+        "RepositoryHygieneScore": { "$ref": "#/$defs/metric" },
+        "ComplexityScore": { "$ref": "#/$defs/metric" },
+        "ProgrammaticQualityScore": { "$ref": "#/$defs/metric" },
+        "ReproducibilityScore": { "$ref": "#/$defs/metric" },
+        "FutureReadinessScore": { "$ref": "#/$defs/metric" }
+      }
+    },
+    "repositories": { "type": "array", "items": { "type": "object" } },
+    "components": { "type": "array", "items": { "$ref": "#/$defs/component" } },
+    "issues": { "type": "array", "items": { "type": "object" } },
+    "deployment": { "type": "object" },
+    "evidence": { "type": "array", "items": { "type": "object" } },
+    "hardcodes": { "type": "array", "items": { "type": "object" } },
+    "complexity": { "type": "array", "items": { "type": "object" } },
+    "hygiene": { "type": "array", "items": { "type": "object" } },
+    "coverage": { "type": "array", "items": { "$ref": "#/$defs/coverage" } },
+    "future_tech": { "type": "array", "items": { "type": "object" } },
+    "external_blockers": { "type": "array", "items": { "type": "object" } },
+    "report_fingerprint": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  },
+  "$defs": {
+    "metric": {
+      "type": "object",
+      "required": ["status", "value", "band", "formula_id", "profile_version"],
+      "properties": {
+        "status": { "enum": ["KNOWN_VALUE", "INSUFFICIENT", "NOT_APPLICABLE"] },
+        "value": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+        "band": { "type": ["string", "null"] },
+        "formula_id": { "type": ["string", "null"] },
+        "profile_version": { "type": ["string", "null"] },
+        "known_weight": { "type": "number", "minimum": 0 },
+        "applicable_weight": { "type": "number", "minimum": 0 },
+        "unknown_required": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "components": { "type": "array", "items": { "$ref": "#/$defs/component" } },
+        "reason_codes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "details": { "type": "object" }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "can_deploy", "failed_dimensions", "unknown_dimensions", "external_blockers", "reason_codes"],
+      "properties": {
+        "status": { "enum": ["READY", "FAIL", "UNKNOWN", "BLOCKED_EXTERNAL"] },
+        "can_deploy": { "type": "boolean" },
+        "failed_dimensions": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "unknown_dimensions": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "external_blockers": { "type": "array", "items": { "type": ["string", "number"] }, "uniqueItems": true },
+        "reason_codes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "component": {
+      "type": "object",
+      "required": ["id", "state", "value", "condition", "evidence_level", "reason_codes"],
+      "properties": {
+        "profile": { "type": "string" },
+        "id": { "type": "string" },
+        "weight": { "type": "number", "minimum": 0 },
+        "state": { "enum": ["KNOWN_VALUE", "UNKNOWN_REQUIRED", "NOT_APPLICABLE"] },
+        "value": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+        "condition": { "type": ["string", "null"] },
+        "evidence_level": { "enum": ["E0", "E1", "E2", "E3", "E4", "E5"] },
+        "reason_codes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["applicable_domains", "assessed_domains", "verified_domains", "audit_coverage", "verified_coverage", "evidence_confidence"],
+      "properties": {
+        "applicable_domains": { "type": "integer", "minimum": 0 },
+        "assessed_domains": { "type": "integer", "minimum": 0 },
+        "verified_domains": { "type": "integer", "minimum": 0 },
+        "audit_coverage": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+        "verified_coverage": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+        "evidence_confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 100 }
+      }
+    }
+  }
+}
