@@ -7,6 +7,7 @@ import {
   evaluateCollectorIntegrity,
   filterLegacyOutput,
   scanHardcodedLocalhost,
+  scanRawSqlConcatenation,
 } from "./audit-collector-contract.mjs"
 
 const tempDirs = []
@@ -65,6 +66,19 @@ describe("audit collector contract", () => {
       status: "SUPPRESSED_WITH_REASON",
       issue: 158,
     })
+  })
+
+  it("only classifies SQL-shaped interpolation, not ordinary selected/template UI code", () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "mw-audit-sql-"))
+    tempDirs.push(root)
+    fs.mkdirSync(path.join(root, "apps", "web"), { recursive: true })
+    const file = path.join(root, "apps", "web", "runtime.ts")
+
+    fs.writeFileSync(file, "const selected = true\nconst cls = `selected ${value}`\n")
+    expect(scanRawSqlConcatenation(root).findings).toHaveLength(0)
+
+    fs.writeFileSync(file, "const query = `SELECT * FROM users WHERE id = ${userId}`\n")
+    expect(scanRawSqlConcatenation(root).findings).toHaveLength(1)
   })
 
   it("fails integrity for unsuppressed supplemental violations", () => {
