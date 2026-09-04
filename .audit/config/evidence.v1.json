@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "collector_config_version": "1.1.0",
+  "collector_config_version": "1.2.0",
   "source_collectors": {
     "build_contract": {
       "maps": [{"profile":"RawHealth","dimension":"build"}],
@@ -55,6 +55,14 @@
   },
   "github": {
     "required_branches": ["main", "dev"],
+    "foundation_workflow": "Foundation CI",
+    "foundation_jobs": {
+      "audit": "Constitutional & UI Audit",
+      "lint": "Lint",
+      "typecheck": "Typecheck",
+      "test": "Test",
+      "build": "Build"
+    },
     "certification_workflow": "Production PostgreSQL Certification",
     "tracked_issues": [
       {"number":18,"priority":"P0","kind":"branch_enforcement","blocking":true},
