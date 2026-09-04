@@ -53,3 +53,5 @@ next-env.d.ts
 apps/web/public/sw.js
 apps/web/public/swe-worker-*.js
 
+# generated UMBRELLA engineering report
+.audit/umbrella-report.json

@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "model": {
+    "id": "moonwitness-umbrella-engineering-health",
+    "version": "1.0.0"
+  },
+  "scoring_config_version": "1.0.0",
+  "validation": {
+    "weight_sum_target": 1,
+    "weight_sum_tolerance": 0.000001
+  },
+  "rounding": {
+    "decimals": 2
+  },
+  "states": {
+    "known": "KNOWN_VALUE",
+    "unknown_required": "UNKNOWN_REQUIRED",
+    "not_applicable": "NOT_APPLICABLE"
+  },
+  "score_bands": [
+    { "label": "EXCELLENT", "min": 95 },
+    { "label": "GOOD", "min": 85 },
+    { "label": "ACCEPTABLE", "min": 70 },
+    { "label": "NEEDS_ATTENTION", "min": 50 },
+    { "label": "POOR", "min": 25 },
+    { "label": "CRITICAL", "min": 0 }
+  ],
+  "evidence_coefficients": {
+    "E0": 1,
+    "E1": 0.95,
+    "E2": 0.9,
+    "E3": 0.75,
+    "E4": 0.5,
+    "E5": 0
+  },
+  "unknown_policies": {
+    "strict_required_v1": {
+      "exclude_not_applicable_from_denominator": true,
+      "renormalize_not_applicable": true,
+      "allow_numeric_when_unknown_required": false,
+      "critical_unknown_gate_status": "UNKNOWN"
+    }
+  },
+  "profiles": {
+    "RawHealth": {
+      "version": "1.0.0",
+      "formula_id": "weighted_mean_v1",
+      "unknown_policy": "strict_required_v1",
+      "dimensions": [
+        { "id": "build", "weight": 0.1, "required": true },
+        { "id": "runtime", "weight": 0.18, "required": true },
+        { "id": "config", "weight": 0.1, "required": true },
+        { "id": "data", "weight": 0.12, "required": true },
+        { "id": "integration", "weight": 0.15, "required": true },
+        { "id": "tests", "weight": 0.1, "required": true },
+        { "id": "deployment", "weight": 0.15, "required": true },
+        { "id": "observability", "weight": 0.1, "required": true }
+      ]
+    },
+    "DeploymentReadinessScore": {
+      "version": "1.0.0",
+      "formula_id": "weighted_mean_v1",
+      "unknown_policy": "strict_required_v1",
+      "dimensions": [
+        { "id": "build", "weight": 0.15, "required": true, "mandatory_gate": true },
+        { "id": "runtime", "weight": 0.15, "required": true, "mandatory_gate": true },
+        { "id": "config", "weight": 0.15, "required": true, "mandatory_gate": true },
+        { "id": "database_migration", "weight": 0.15, "required": true, "mandatory_gate": true },
+        { "id": "integration", "weight": 0.15, "required": true, "mandatory_gate": true },
+        { "id": "ci_cd", "weight": 0.1, "required": true, "mandatory_gate": true },
+        { "id": "security_critical", "weight": 0.05, "required": true, "mandatory_gate": true },
+        { "id": "observability", "weight": 0.05, "required": true, "mandatory_gate": true },
+        { "id": "rollback", "weight": 0.05, "required": true, "mandatory_gate": true }
+      ]
+    }
+  },
+  "coverage_formulas": {
+    "AuditCoverage": "assessed_applicable_ratio_v1",
+    "VerifiedCoverage": "verified_applicable_ratio_v1",
+    "EvidenceConfidence": "evidence_coefficient_mean_v1"
+  },
+  "progress_policy": {
+    "formula_id": "verified_dod_weighted_completion_v1",
+    "requires_issue_evidence": true
+  },
+  "gate_policies": {
+    "DeploymentGate": {
+      "version": "1.0.0",
+      "profile": "DeploymentReadinessScore",
+      "ready_status": "READY",
+      "block_on_conditions": ["FAIL"],
+      "unknown_status": "UNKNOWN",
+      "external_blocker_status": "BLOCKED_EXTERNAL",
+      "p0_blocks": true
+    }
+  },
+  "required_outputs": [
+    "RawHealth",
+    "Progress",
+    "DeploymentReadinessScore",
+    "DeploymentGate",
+    "AuditCoverage",
+    "VerifiedCoverage",
+    "EvidenceConfidence",
+    "RepositoryHygieneScore",
+    "ComplexityScore",
+    "ProgrammaticQualityScore",
+    "ReproducibilityScore",
+    "FutureReadinessScore"
+  ],
+  "deferred_profiles": {
+    "RepositoryHygieneScore": "PHASE_C",
+    "ComplexityScore": "PHASE_C",
+    "ProgrammaticQualityScore": "PHASE_C",
+    "ReproducibilityScore": "PHASE_C",
+    "FutureReadinessScore": "PHASE_C"
+  }
+}

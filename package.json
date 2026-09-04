@@ -26,7 +26,11 @@
     "audit:rules": "node scripts/audit.mjs",
     "audit:packages": "node scripts/audit.mjs",
     "audit:collectors": "node scripts/audit.mjs --collector-json",
-    "audit:ci": "node scripts/audit.mjs && turbo typecheck && vitest run"
+    "audit:umbrella": "node scripts/umbrella-audit.mjs --write",
+    "audit:umbrella:json": "node scripts/umbrella-audit.mjs --json",
+    "audit:umbrella:validate": "node scripts/umbrella-audit.mjs --validate",
+    "audit:umbrella:check": "node scripts/umbrella-audit.mjs --check",
+    "audit:ci": "node scripts/audit.mjs && node scripts/umbrella-audit.mjs --validate && turbo typecheck && vitest run"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",

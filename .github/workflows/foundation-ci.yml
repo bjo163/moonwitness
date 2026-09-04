@@ -39,6 +39,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Constitutional & Enterprise UI Audit
         run: pnpm audit:rules
+      - name: UMBRELLA v6 Contract Validation
+        run: pnpm audit:umbrella:validate
 
   lint:
     name: Lint
