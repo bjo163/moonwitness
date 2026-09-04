@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "resolution_states": {
     "validated": "VALIDATED",
     "partial": "CONFIRMED",
@@ -44,7 +44,7 @@
       "checks": [
         { "id": "evidence_config", "type": "file_exists", "path": ".audit/config/evidence.v1.json" },
         { "id": "execution_evidence", "type": "contains_all", "path": "scripts/umbrella-evidence.mjs", "values": ["administrative_state", "verified_state", "BLOCKED_EXTERNAL"] },
-        { "id": "ci_exact_evidence", "type": "contains_all", "path": ".github/workflows/foundation-ci.yml", "values": ["CANDIDATE_SHA", "Collect exact-SHA GitHub evidence", "fetch-depth: 0"] }
+        { "id": "ci_exact_evidence", "type": "contains_all", "path": ".github/workflows/umbrella-certification.yml", "values": ["CANDIDATE_SHA", "Collect exact-SHA GitHub evidence", "fetch-depth: 0", "foundation_jobs", "certification_workflow"] }
       ]
     },
     {
@@ -78,7 +78,7 @@
         { "id": "certification_config", "type": "file_exists", "path": ".audit/config/certification.v1.json" },
         { "id": "certification_schema", "type": "file_exists", "path": ".audit/schema/umbrella-certification.schema.json" },
         { "id": "certifier", "type": "file_exists", "path": "scripts/umbrella-certify.mjs" },
-        { "id": "ci_certifier", "type": "contains_all", "path": ".github/workflows/foundation-ci.yml", "values": ["Certify UMBRELLA determinism, parity, safety, and provenance", "audit:umbrella:certify"] }
+        { "id": "ci_certifier", "type": "contains_all", "path": ".github/workflows/umbrella-certification.yml", "values": ["Certify UMBRELLA determinism, parity, safety, and provenance", "audit:umbrella:certify", "waitForWorkflow"] }
       ]
     },
     {
