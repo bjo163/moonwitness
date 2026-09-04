@@ -30,6 +30,7 @@
     "audit:umbrella:json": "node scripts/umbrella-audit.mjs --json",
     "audit:umbrella:validate": "node scripts/umbrella-audit.mjs --validate",
     "audit:umbrella:check": "node scripts/umbrella-audit.mjs --check",
+    "audit:umbrella:ci": "node scripts/umbrella-audit.mjs --ci-evidence=.audit/runtime/ci-evidence.json --write --validate",
     "audit:ci": "node scripts/audit.mjs && node scripts/umbrella-audit.mjs --validate && turbo typecheck && vitest run"
   },
   "devDependencies": {
