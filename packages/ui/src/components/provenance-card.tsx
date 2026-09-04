@@ -2,9 +2,9 @@
 
 import * as React from 'react'
 import { useState } from 'react'
-import { Card, CardHeader, CardTitle, CardContent } from './card.js'
-import { Button } from './button.js'
-import { EpistemicBadge } from './epistemic-badge.js'
+import { Card, CardHeader, CardTitle, CardContent } from './card'
+import { Button } from './button'
+import { EpistemicBadge } from './epistemic-badge'
 
 export interface ProvenanceData {
   sourceName?: string
