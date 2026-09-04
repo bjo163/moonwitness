@@ -2,9 +2,9 @@
   "schema_version": 1,
   "model": {
     "id": "moonwitness-umbrella-engineering-health",
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
-  "scoring_config_version": "1.0.0",
+  "scoring_config_version": "1.1.0",
   "validation": {
     "weight_sum_target": 1,
     "weight_sum_tolerance": 0.000001
@@ -108,11 +108,17 @@
     "ReproducibilityScore",
     "FutureReadinessScore"
   ],
+  "phase_c_config_paths": [
+    ".audit/config/hygiene.v1.json",
+    ".audit/config/complexity.v1.json",
+    ".audit/config/quality.v1.json",
+    ".audit/config/future-baseline.v1.json"
+  ],
   "deferred_profiles": {
-    "RepositoryHygieneScore": "PHASE_C",
-    "ComplexityScore": "PHASE_C",
-    "ProgrammaticQualityScore": "PHASE_C",
-    "ReproducibilityScore": "PHASE_C",
-    "FutureReadinessScore": "PHASE_C"
+    "RepositoryHygieneScore": "PHASE_C_BOOTSTRAP",
+    "ComplexityScore": "PHASE_C_BOOTSTRAP",
+    "ProgrammaticQualityScore": "PHASE_C_BOOTSTRAP",
+    "ReproducibilityScore": "PHASE_C_BOOTSTRAP",
+    "FutureReadinessScore": "PHASE_C_BOOTSTRAP"
   }
 }
