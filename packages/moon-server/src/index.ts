@@ -52,6 +52,8 @@ export {
   handleResetPassword,
   handleLogout,
   handleGetSession,
+  hashPassword,
+  comparePassword,
   type AuthConfig,
 } from './handlers/auth.js'
 export {

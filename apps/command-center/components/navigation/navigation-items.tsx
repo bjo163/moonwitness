@@ -21,6 +21,7 @@ import {
   Ticket,
   Users,
   Warehouse,
+  Boxes,
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 
@@ -35,6 +36,7 @@ const child = (label: string, href: string, icon: LucideIcon) => ({ label, href,
 
 export const navigationItems: NavigationItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "App Center", href: "/apps", icon: Boxes },
   {
     label: "Work management", href: "/matrix/pj.task", icon: BriefcaseBusiness,
     children: [child("Tasks", "/matrix/pj.task", CheckSquare), child("Projects", "/matrix/pj.project", FolderKanban), child("Sprints", "/matrix/pj.sprint", CalendarClock)],

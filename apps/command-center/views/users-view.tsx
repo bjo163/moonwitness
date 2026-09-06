@@ -11,6 +11,7 @@ import {
   PropertyRow,
   UserIdentity,
   SkeletonCard,
+  Button,
 } from "@workspace/ui"
 import { Users, Shield, Clock, MonitorPlay, Download } from "lucide-react"
 
@@ -184,9 +185,9 @@ export function UsersView() {
   ]
 
   const customActions = (
-    <button className="flex h-8 items-center gap-1.5 rounded-lg border border-border/50 bg-secondary/50 px-3 text-[10px] font-semibold tracking-wider text-foreground uppercase transition-colors hover:bg-secondary">
+    <Button type="button" variant="secondary" size="sm" className="text-[10px] font-semibold tracking-wider uppercase">
       <Download className="h-3.5 w-3.5" /> Export
-    </button>
+    </Button>
   )
 
   return (

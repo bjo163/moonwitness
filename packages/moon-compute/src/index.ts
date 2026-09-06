@@ -12,3 +12,6 @@
 export * from './moon-phase.js'
 export * from './prayer-times.js'
 export * from './sun-position.js'
+export * from './qibla.js'
+export * from './hilal.js'
+

@@ -28,6 +28,38 @@ const nextConfig: NextConfig = {
   experimental: {
     viewTransition: true,
   },
+  async rewrites() {
+    const apiUrl =
+      process.env.MOON_API_URL ||
+      process.env.NEXT_PUBLIC_API_URL ||
+      "http://127.0.0.1:4000"
+    return [
+      {
+        source: "/health/:path*",
+        destination: `${apiUrl}/health/:path*`,
+      },
+      {
+        source: "/db/:path*",
+        destination: `${apiUrl}/db/:path*`,
+      },
+      {
+        source: "/api/services/:path*",
+        destination: `${apiUrl}/api/services/:path*`,
+      },
+      {
+        source: "/api/system/:path*",
+        destination: `${apiUrl}/api/system/:path*`,
+      },
+      {
+        source: "/api/witness/:path*",
+        destination: `${apiUrl}/api/witness/:path*`,
+      },
+      {
+        source: "/api/meta/:path*",
+        destination: `${apiUrl}/api/meta/:path*`,
+      },
+    ]
+  },
   async headers() {
     return [
       {

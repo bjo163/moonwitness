@@ -8,6 +8,7 @@
     "dev:web": "turbo dev --filter=web",
     "dev:admin": "turbo dev --filter=command-center",
     "dev:api": "turbo dev --filter=api",
+    "dev:local": "node scripts/dev-local.mjs",
     "win:dev:up": "node scripts/win-dev-up.mjs",
     "win:dev:down": "node scripts/win-dev-down.mjs",
     "db:install": "pnpm --filter=api db:install",

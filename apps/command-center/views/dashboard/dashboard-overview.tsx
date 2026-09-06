@@ -68,9 +68,9 @@ export function DashboardOverview() {
       latencyMs?: number
     }>
   >([
-    { name: "API Gateway (Fastify)", url: "/health/live", port: 4000, status: "checking" },
-    { name: "Celestial Engine (Python)", url: "/api/services/celestial/health", port: 8001, status: "checking" },
-    { name: "AI Agent (Python)", url: "/api/services/ai/health", port: 8002, status: "checking" },
+    { name: "API Gateway (Node.js)", url: "/health/live", port: 4000, status: "checking" },
+    { name: "Celestial Engine (@moon/compute)", url: "/api/services/celestial/health", port: 4000, status: "checking" },
+    { name: "AI Knowledge Agent (@moon/witness)", url: "/api/services/ai/health", port: 4000, status: "checking" },
     { name: "PostgreSQL Database", url: "/db/status", port: 5432, status: "checking" },
   ])
 
@@ -88,11 +88,12 @@ export function DashboardOverview() {
         polyglotServices.map(async (svc) => {
           const t0 = performance.now()
           try {
-            const res = await fetch(svc.url)
+            const res = await apiClient.get(svc.url, { timeout: 4000 })
             const latencyMs = Math.round(performance.now() - t0)
+            const isOk = res.status >= 200 && res.status < 300
             return {
               ...svc,
-              status: res.ok ? ("online" as const) : ("offline" as const),
+              status: isOk ? ("online" as const) : ("offline" as const),
               latencyMs,
             }
           } catch {

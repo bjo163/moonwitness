@@ -10,6 +10,7 @@ import {
   AlertTriangle,
   Target,
 } from "lucide-react"
+import { Button, resolveSemanticColor, type SemanticColorToken } from "@workspace/ui"
 
 export function TaskCenterSummary() {
   return (
@@ -74,9 +75,9 @@ export function TaskCenterSummary() {
             </div>
           </div>
         </div>
-        <button className="mt-3 flex w-full items-center justify-center gap-1 border-t border-border py-1.5 text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:text-foreground">
+        <Button type="button" variant="ghost" size="sm" className="mt-3 w-full border-t border-border text-[8px] font-bold tracking-widest uppercase">
           View My Tasks <ArrowRight className="h-2.5 w-2.5" />
-        </button>
+        </Button>
       </div>
 
       {/* Upcoming Deadlines */}
@@ -91,7 +92,7 @@ export function TaskCenterSummary() {
               p: "Moon Observation",
               d: "May 27, 2025",
               l: "Tomorrow",
-              c: "#F43F5E",
+              c: "destructive" as SemanticColorToken,
               i: Moon,
             },
             {
@@ -99,7 +100,7 @@ export function TaskCenterSummary() {
               p: "Astronomy Atlas",
               d: "May 28, 2025",
               l: "2 days left",
-              c: "#F43F5E",
+              c: "destructive" as SemanticColorToken,
               i: Moon,
             },
             {
@@ -107,7 +108,7 @@ export function TaskCenterSummary() {
               p: "Qur'an Translation",
               d: "May 30, 2025",
               l: "4 days left",
-              c: "#F59E0B",
+              c: "warning" as SemanticColorToken,
               i: BookOpen,
             },
           ].map((dl, i) => (
@@ -124,15 +125,15 @@ export function TaskCenterSummary() {
                 </div>
                 <div className="flex items-center justify-between font-mono text-[8px]">
                   <span className="text-primary">{dl.d}</span>
-                  <span style={{ color: dl.c }}>{dl.l}</span>
+                  <span style={{ color: resolveSemanticColor(dl.c) }}>{dl.l}</span>
                 </div>
               </div>
             </div>
           ))}
         </div>
-        <button className="mt-2 flex w-full items-center justify-center gap-1 py-1.5 text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:text-foreground">
+        <Button type="button" variant="ghost" size="sm" className="mt-2 w-full text-[8px] font-bold tracking-widest uppercase">
           View Calendar <ArrowRight className="h-2.5 w-2.5" />
-        </button>
+        </Button>
       </div>
 
       {/* Team Workload */}
@@ -146,35 +147,35 @@ export function TaskCenterSummary() {
               n: "Ahmad Farisi",
               v: "8 / 12",
               s: "High",
-              c: "#F43F5E",
+              c: "destructive" as SemanticColorToken,
               w: "66%",
             },
             {
               n: "Fatimah Zahra",
               v: "6 / 10",
               s: "Medium",
-              c: "#F59E0B",
+              c: "warning" as SemanticColorToken,
               w: "60%",
             },
             {
               n: "Muhammad Ridwan",
               v: "7 / 10",
               s: "High",
-              c: "#F43F5E",
+              c: "destructive" as SemanticColorToken,
               w: "70%",
             },
             {
               n: "Aisha Nurul",
               v: "5 / 8",
               s: "Medium",
-              c: "#F59E0B",
+              c: "warning" as SemanticColorToken,
               w: "62%",
             },
             {
               n: "Omar Hassan",
               v: "9 / 12",
               s: "High",
-              c: "#F43F5E",
+              c: "destructive" as SemanticColorToken,
               w: "75%",
             },
           ].map((tm, i) => (
@@ -186,7 +187,7 @@ export function TaskCenterSummary() {
               <div className="bg-background h-1 flex-1 overflow-hidden rounded-full">
                 <div
                   className="h-full rounded-full"
-                  style={{ width: tm.w, backgroundColor: tm.c }}
+                  style={{ width: tm.w, backgroundColor: resolveSemanticColor(tm.c) }}
                 />
               </div>
               <div className="w-8 text-right font-mono text-primary">
@@ -194,16 +195,16 @@ export function TaskCenterSummary() {
               </div>
               <div
                 className="w-8 text-right font-bold"
-                style={{ color: tm.c }}
+                style={{ color: resolveSemanticColor(tm.c) }}
               >
                 {tm.s}
               </div>
             </div>
           ))}
         </div>
-        <button className="mt-3 flex w-full items-center justify-center gap-1 border-t border-border py-1.5 text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:text-foreground">
+        <Button type="button" variant="ghost" size="sm" className="mt-3 w-full border-t border-border text-[8px] font-bold tracking-widest uppercase">
           View Team Tasks <ArrowRight className="h-2.5 w-2.5" />
-        </button>
+        </Button>
       </div>
 
       {/* AI Suggested Actions */}

@@ -79,6 +79,11 @@ export async function handleRest(
       return sendJson(res, 400, { error: `Invalid model name: ${model}`, code: 'INVALID_MODEL' }, req)
     }
 
+    const ModelClass = getModel(model) as any
+    if (!ModelClass) {
+      return sendJson(res, 404, { error: `Model ${model} not found`, code: 'MODEL_NOT_FOUND' }, req)
+    }
+
     const idStr = match[2]
     let id: number | undefined
     if (idStr !== undefined) {
@@ -87,11 +92,6 @@ export async function handleRest(
         return sendJson(res, 400, { error: 'Record ID must be a positive integer', code: 'INVALID_RECORD_ID' }, req)
       }
       id = parsedId
-    }
-
-    const ModelClass = getModel(model) as any
-    if (!ModelClass) {
-      return sendJson(res, 404, { error: `Model ${model} not found`, code: 'MODEL_NOT_FOUND' }, req)
     }
 
     const { searchParams } = parseUrl(req)

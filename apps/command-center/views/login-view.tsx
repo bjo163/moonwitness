@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { ShieldCheck, Lock, Mail, ArrowRight, Loader2, Sparkles, KeyRound } from "lucide-react"
 import { useAuthSession } from "@moon/client"
-import { soundEngine, StatusNotice } from "@workspace/ui"
+import { Button, Input, soundEngine, StatusNotice } from "@workspace/ui"
 
 export function CommandCenterLoginView() {
   const router = useRouter()
@@ -78,7 +78,7 @@ export function CommandCenterLoginView() {
                 <Mail className="h-3.5 w-3.5 text-primary" />
                 Email Address
               </label>
-              <input
+              <Input
                 id="command-center-email"
                 type="email"
                 required
@@ -95,7 +95,7 @@ export function CommandCenterLoginView() {
                 <Lock className="h-3.5 w-3.5 text-primary" />
                 Password
               </label>
-              <input
+              <Input
                 id="command-center-password"
                 type="password"
                 required
@@ -112,27 +112,31 @@ export function CommandCenterLoginView() {
                 Demo Accounts:
               </span>
               <div className="grid grid-cols-2 gap-2">
-                <button
+                <Button
+                  variant="outline"
+                  size="sm"
                   type="button"
                   onClick={() => handleQuickPreset("commander@moonwitness.os", "password123")}
                   className="flex items-center justify-center gap-1.5 rounded-lg border border-border/40 bg-secondary/50 px-2.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-border hover:bg-muted"
                 >
                   <KeyRound className="h-3.5 w-3.5 text-primary" />
                   Supervisor
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
                   type="button"
                   onClick={() => handleQuickPreset("admin@moonwitness.org", "admin123")}
                   className="flex items-center justify-center gap-1.5 rounded-lg border border-border/40 bg-secondary/50 px-2.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-primary/10"
                 >
                   <Sparkles className="h-3.5 w-3.5 text-primary" />
                   Administrator
-                </button>
+                </Button>
               </div>
             </div>
 
             {/* Submit Action */}
-            <button
+            <Button
               type="submit"
               disabled={loading}
               className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 font-sans text-xs font-bold tracking-wide text-primary-foreground uppercase shadow-sm transition-all hover:bg-primary/90 disabled:opacity-50"
@@ -147,7 +151,7 @@ export function CommandCenterLoginView() {
                   Sign In <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </>
               )}
-            </button>
+            </Button>
           </form>
         </div>
 

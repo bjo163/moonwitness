@@ -11,6 +11,7 @@ import {
   Calendar,
   Eye,
 } from "lucide-react"
+import { Button, resolveSemanticColor, type SemanticColorToken } from "@workspace/ui"
 
 export function AstronomyEventsSidebar() {
   return (
@@ -28,45 +29,47 @@ export function AstronomyEventsSidebar() {
               sub: "Natural Satellite",
               icon: Moon,
               active: true,
-              color: "#00F0FF",
+              color: "info" as SemanticColorToken,
             },
             {
               id: "Sun",
               sub: "Star",
               icon: Sun,
               active: false,
-              color: "#F59E0B",
+              color: "warning" as SemanticColorToken,
             },
             {
               id: "Earth",
               sub: "Planet",
               icon: Globe,
               active: false,
-              color: "#3B82F6",
+              color: "primary" as SemanticColorToken,
             },
             {
               id: "Planets",
               sub: "Solar System",
               icon: Target,
               active: false,
-              color: "#A855F7",
+              color: "info" as SemanticColorToken,
             },
             {
               id: "Constellations",
               sub: "Star Patterns",
               icon: Star,
               active: false,
-              color: "#EC4899",
+              color: "primary" as SemanticColorToken,
             },
             {
               id: "Deep Sky",
               sub: "Galaxies & Nebula",
               icon: Sparkles,
               active: false,
-              color: "#10B981",
+              color: "success" as SemanticColorToken,
             },
           ].map((item, idx) => (
-            <button
+            <Button
+              type="button"
+              variant="ghost"
               key={idx}
               className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-all ${
                 item.active
@@ -79,7 +82,7 @@ export function AstronomyEventsSidebar() {
               >
                 <item.icon
                   className="h-4 w-4"
-                  style={{ color: item.active ? item.color : "var(--color-muted)" }}
+                  style={{ color: resolveSemanticColor(item.active ? item.color : "muted") }}
                 />
               </div>
               <div>
@@ -92,7 +95,7 @@ export function AstronomyEventsSidebar() {
                   {item.sub}
                 </div>
               </div>
-            </button>
+            </Button>
           ))}
         </div>
       </div>
@@ -109,25 +112,25 @@ export function AstronomyEventsSidebar() {
               n: "Lunar Eclipse",
               d: "12 JUN 2025",
               i: Moon,
-              c: "#A855F7",
+              c: "info" as SemanticColorToken,
             },
             {
               n: "Solar Eclipse",
               d: "21 SEP 2025",
               i: Sun,
-              c: "#F59E0B",
+              c: "warning" as SemanticColorToken,
             },
             {
               n: "Meteor Shower",
               d: "14 AUG 2025",
               i: Sparkles,
-              c: "#10B981",
+              c: "success" as SemanticColorToken,
             },
             {
               n: "Moon Visibility",
               d: "28 MAY 2025",
               i: Eye,
-              c: "#00F0FF",
+              c: "info" as SemanticColorToken,
             },
           ].map((ev, i) => (
             <div
@@ -135,7 +138,7 @@ export function AstronomyEventsSidebar() {
               className="group flex cursor-pointer items-center justify-between rounded border-b border-border p-2.5 transition-colors hover:bg-muted/30"
             >
               <div className="flex items-center gap-2.5">
-                <ev.i className="h-3.5 w-3.5" style={{ color: ev.c }} />
+                <ev.i className="h-3.5 w-3.5" style={{ color: resolveSemanticColor(ev.c) }} />
                 <span className="text-[10px] font-bold text-foreground transition-colors group-hover:text-blue-300">
                   {ev.n}
                 </span>

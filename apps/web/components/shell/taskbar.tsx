@@ -7,6 +7,7 @@ import { calculateLunarPhase, LunarPhaseInfo } from "@moon/client"
 import { getSunInfo, SunInfo } from "@moon/client"
 import { useLanguage } from "@workspace/state"
 import { useGlobalAudio } from "@workspace/state"
+import { Button } from "@workspace/ui"
 import { GlobalLiveAudioTranslator } from "./global-live-audio-translator"
 import {
   Play,
@@ -249,7 +250,9 @@ export function Taskbar() {
 
           {/* Sun Position & Duha Status */}
           {sunInfo && (
-            <button
+            <Button
+              variant="ghost"
+              size="icon-xs"
               onClick={() => playDuhaChime(sunInfo.duhaStatus === "AFDHAL")}
               type="button"
               className="hidden items-center gap-1.5 rounded-sm transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none lg:flex"
@@ -291,7 +294,7 @@ export function Taskbar() {
                   {sunInfo.duhaLabel}
                 </span>
               )}
-            </button>
+            </Button>
           )}
         </div>
 
@@ -314,13 +317,17 @@ export function Taskbar() {
 
             {/* Transport controls */}
             <div className="flex items-center gap-1 sm:ml-2">
-              <button
+              <Button
+                variant="ghost"
+                size="icon-xs"
                 aria-label="Previous"
                 className="flex items-center justify-center p-1 text-muted-foreground transition-colors hover:text-primary"
               >
                 <SkipBack className="h-3 w-3" />
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon-xs"
                 onClick={togglePlay}
                 aria-label={isPlaying ? "Pause" : "Play"}
                 className="hover:text-success flex items-center justify-center p-1 text-primary transition-colors"
@@ -330,25 +337,31 @@ export function Taskbar() {
                 ) : (
                   <Play className="h-3.5 w-3.5" />
                 )}
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon-xs"
                 aria-label="Next"
                 className="flex items-center justify-center p-1 text-muted-foreground transition-colors hover:text-primary"
               >
                 <SkipForward className="h-3 w-3" />
-              </button>
+              </Button>
             </div>
 
             {/* Speed & Loop Controls */}
             <div className="hidden items-center gap-2 sm:ml-2 sm:flex">
-              <button
+              <Button
+                variant="ghost"
+                size="icon-xs"
                 onClick={toggleLoop}
                 aria-label="Toggle Loop"
                 className={`flex items-center justify-center p-1 transition-colors ${isLooping ? "text-info" : "text-muted-foreground hover:text-primary"}`}
               >
                 <Repeat className="h-3 w-3" />
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon-xs"
                 onClick={() =>
                   setPlaybackRate(
                     playbackRate === 1 ? 1.5 : playbackRate === 1.5 ? 2 : 1
@@ -359,7 +372,7 @@ export function Taskbar() {
               >
                 <Gauge className="h-3 w-3" />
                 {playbackRate}x
-              </button>
+              </Button>
             </div>
           </div>
 

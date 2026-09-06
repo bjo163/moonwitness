@@ -1,6 +1,6 @@
 "use client"
 
-import { FormEvent, useEffect, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import {
   ExternalLink,
   Pencil,
@@ -10,7 +10,7 @@ import {
   Trash2,
   X,
 } from "lucide-react"
-import { ContextBlock } from "@workspace/ui"
+import { Button, ContextBlock, Input, NativeSelect, NativeSelectOption, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Textarea } from "@workspace/ui"
 import { moonClientInstance } from "@moon/client"
 
 type Operation = {
@@ -159,12 +159,14 @@ export function ERPShootgunView() {
               {operations.length} record(s) visible in the public archive.
             </p>
           </div>
-          <button
+          <Button
+            type="button"
+            size="sm"
             onClick={openCreate}
             className="inline-flex h-9 items-center justify-center gap-2 bg-primary px-3 text-xs font-semibold text-primary-foreground hover:bg-primary"
           >
             <Plus className="size-4" /> ADD OPERATION
-          </button>
+          </Button>
         </div>
 
         {error && (
@@ -174,31 +176,31 @@ export function ERPShootgunView() {
         )}
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[760px] text-left text-xs">
-            <thead className="border-b border-border text-muted-foreground">
-              <tr>
-                <th className="px-4 py-3 font-medium">NAME</th>
-                <th className="px-4 py-3 font-medium">ARGUMENT</th>
-                <th className="px-4 py-3 font-medium">VERSE REFERENCES</th>
-                <th className="px-4 py-3 text-right font-medium">ACTIONS</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table className="w-full min-w-[760px] text-left text-xs">
+            <TableHeader className="border-b border-border text-muted-foreground">
+              <TableRow>
+                <TableHead className="px-4 py-3 font-medium">NAME</TableHead>
+                <TableHead className="px-4 py-3 font-medium">ARGUMENT</TableHead>
+                <TableHead className="px-4 py-3 font-medium">VERSE REFERENCES</TableHead>
+                <TableHead className="px-4 py-3 text-right font-medium">ACTIONS</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {operations.map((operation) => (
-                <tr
+                <TableRow
                   key={operation.id}
                   className="border-b border-border text-foreground"
                 >
-                  <td className="px-4 py-3 font-medium text-foreground">
+                  <TableCell className="px-4 py-3 font-medium text-foreground">
                     {operation.name}
-                  </td>
-                  <td className="max-w-80 px-4 py-3 leading-5">
+                  </TableCell>
+                  <TableCell className="max-w-80 px-4 py-3 leading-5">
                     {operation.argument || "-"}
-                  </td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell className="px-4 py-3">
                     {operation.verseIds?.length ?? 0} selected
-                  </td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell className="px-4 py-3">
                     <div className="flex justify-end gap-2">
                       {operation.targetUrl && (
                         <a
@@ -211,36 +213,42 @@ export function ERPShootgunView() {
                           <ExternalLink className="size-4" />
                         </a>
                       )}
-                      <button
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-xs"
                         onClick={() => openEdit(operation)}
                         className="p-1.5 text-muted-foreground hover:text-primary"
                         title="Edit operation"
                       >
                         <Pencil className="size-4" />
-                      </button>
-                      <button
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-xs"
                         onClick={() => remove(operation.id)}
                         className="p-1.5 text-muted-foreground hover:text-red-300"
                         title="Delete operation"
                       >
                         <Trash2 className="size-4" />
-                      </button>
+                      </Button>
                     </div>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
               {operations.length === 0 && !error && (
-                <tr>
-                  <td
+                <TableRow>
+                  <TableCell
                     colSpan={4}
                     className="px-4 py-10 text-center text-muted-foreground"
                   >
                     No operation records yet.
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               )}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </section>
 
@@ -259,22 +267,24 @@ export function ERPShootgunView() {
                   Verse references can be selected from all four scriptures.
                 </p>
               </div>
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon-sm"
                 onClick={() => setIsFormOpen(false)}
                 className="p-1 text-muted-foreground hover:text-foreground"
                 title="Close form"
               >
                 <X className="size-5" />
-              </button>
+              </Button>
             </div>
             <div className="grid gap-4 p-4 sm:grid-cols-2">
               <label className="space-y-1.5 sm:col-span-2">
                 <span className="text-xs text-foreground">Name</span>
-                <input
+                <Input
                   required
                   value={form.name}
-                  onChange={(event) =>
+                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     setForm({ ...form, name: event.target.value })
                   }
                   className="h-9 w-full border border-border bg-card px-3 text-sm text-foreground outline-none focus:border-border"
@@ -282,10 +292,10 @@ export function ERPShootgunView() {
               </label>
               <label className="space-y-1.5">
                 <span className="text-xs text-foreground">Target URL</span>
-                <input
+                <Input
                   type="url"
                   value={form.targetUrl}
-                  onChange={(event) =>
+                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     setForm({ ...form, targetUrl: event.target.value })
                   }
                   className="h-9 w-full border border-border bg-card px-3 text-sm text-foreground outline-none focus:border-border"
@@ -293,10 +303,10 @@ export function ERPShootgunView() {
               </label>
               <label className="space-y-1.5">
                 <span className="text-xs text-foreground">Target image URL</span>
-                <input
+                <Input
                   type="url"
                   value={form.targetImage}
-                  onChange={(event) =>
+                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     setForm({ ...form, targetImage: event.target.value })
                   }
                   className="h-9 w-full border border-border bg-card px-3 text-sm text-foreground outline-none focus:border-border"
@@ -304,9 +314,9 @@ export function ERPShootgunView() {
               </label>
               <label className="space-y-1.5 sm:col-span-2">
                 <span className="text-xs text-foreground">Argument</span>
-                <textarea
+                <Textarea
                   value={form.argument}
-                  onChange={(event) =>
+                  onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
                     setForm({ ...form, argument: event.target.value })
                   }
                   className="min-h-24 w-full border border-border bg-card p-3 text-sm text-foreground outline-none focus:border-border"
@@ -314,9 +324,9 @@ export function ERPShootgunView() {
               </label>
               <label className="space-y-1.5 sm:col-span-2">
                 <span className="text-xs text-foreground">Wisdom</span>
-                <textarea
+                <Textarea
                   value={form.wisdom}
-                  onChange={(event) =>
+                  onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
                     setForm({ ...form, wisdom: event.target.value })
                   }
                   className="min-h-24 w-full border border-border bg-card p-3 text-sm text-foreground outline-none focus:border-border"
@@ -327,10 +337,10 @@ export function ERPShootgunView() {
                   <ScrollText className="size-4 text-primary" /> Verse
                   references
                 </span>
-                <select
+                <NativeSelect
                   multiple
                   value={form.verseIds.map(String)}
-                  onChange={(event) =>
+                  onChange={(event: ChangeEvent<HTMLSelectElement>) =>
                     setForm({
                       ...form,
                       verseIds: Array.from(
@@ -342,11 +352,11 @@ export function ERPShootgunView() {
                   className="h-48 w-full border border-border bg-card p-2 text-xs text-foreground outline-none focus:border-border"
                 >
                   {verses.map((verse) => (
-                    <option key={verse.id} value={verse.id}>
+                    <NativeSelectOption key={verse.id} value={verse.id}>
                       {verseLabel(verse)}
-                    </option>
+                    </NativeSelectOption>
                   ))}
-                </select>
+                </NativeSelect>
                 <span className="block text-[11px] text-muted-foreground">
                   {form.verseIds.length} verse(s) selected. The first 200 verses
                   are available for selection.
@@ -354,20 +364,21 @@ export function ERPShootgunView() {
               </label>
             </div>
             <div className="flex justify-end gap-3 border-t border-border p-4">
-              <button
+              <Button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
                 className="h-9 px-3 text-xs text-foreground hover:text-foreground"
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
+                type="submit"
                 disabled={isSaving}
                 className="inline-flex h-9 items-center gap-2 bg-primary px-4 text-xs font-semibold text-primary-foreground disabled:opacity-60"
               >
                 <Save className="size-4" />
                 {isSaving ? "SAVING..." : "SAVE OPERATION"}
-              </button>
+              </Button>
             </div>
           </form>
         </div>

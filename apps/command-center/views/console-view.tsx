@@ -3,7 +3,7 @@
 import React, { useState } from "react"
 import { ArrowLeft, Terminal } from "lucide-react"
 import { apiGet, fetchEarthquakes, fetchExternalWeather, fetchGoogleTrends } from "@moon/client"
-import { Button } from "@workspace/ui"
+import { Button, Input } from "@workspace/ui"
 import { TerminalLogViewer, type LogItem } from "./console/terminal-log-viewer"
 import { SystemDiagnosticsSidebar } from "./console/system-diagnostics-sidebar"
 
@@ -53,9 +53,9 @@ function QuickCommands({ onSelect }: { onSelect: (command: string) => void }) {
     <div className="flex flex-wrap items-center gap-2 border-b border-border bg-muted/20 px-4 py-3">
       <span className="mr-1 text-xs font-medium text-muted-foreground">Quick commands</span>
       {QUICK_COMMANDS.map((command) => (
-        <button key={command.label} type="button" title={command.description} onClick={() => onSelect(command.label)} className="rounded-md border border-border bg-background px-2.5 py-1.5 font-mono text-xs text-foreground transition-colors hover:border-primary/60 hover:bg-primary/10">
+        <Button key={command.label} type="button" variant="outline" size="sm" title={command.description} onClick={() => onSelect(command.label)} className="font-mono">
           {command.label}
-        </button>
+        </Button>
       ))}
     </div>
   )
@@ -147,7 +147,7 @@ export function ConsoleView() {
             <TerminalLogViewer logs={logs} />
             <form onSubmit={handleSubmit} className="flex items-center gap-3 border-t border-border bg-muted/20 p-3">
               <label htmlFor="console-command" className="font-mono text-sm text-primary">$</label>
-              <input id="console-command" value={input} onChange={(event) => setInput(event.target.value)} placeholder="Enter a command" className="min-w-0 flex-1 bg-transparent font-mono text-sm text-foreground outline-none placeholder:text-muted-foreground" autoFocus />
+              <Input id="console-command" value={input} onChange={(event) => setInput(event.target.value)} placeholder="Enter a command" className="min-w-0 flex-1 border-0 bg-transparent font-mono text-sm shadow-none" autoFocus />
               <Button type="submit" size="sm">Run</Button>
             </form>
           </section>

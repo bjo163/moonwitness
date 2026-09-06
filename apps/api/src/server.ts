@@ -10,7 +10,9 @@ import {
 } from "./addons/index.js"
 import { registerAllRoutes } from "./routes/index.js"
 import { bootstrapSystemData } from "./lifecycle/bootstrap.js"
+import { syncSuperuserFromEnv } from "./lifecycle/admin-sync.js"
 import { startSystemTelemetry } from "./lifecycle/telemetry.js"
+import { startSyncWorker } from "./lifecycle/sync-worker.js"
 import { registerGracefulShutdown } from "./lifecycle/shutdown.js"
 
 // ── 1. Initialize Server Instance ──────────────────────────────────────────
@@ -20,6 +22,7 @@ export const server = new NativeServer({
   port: config.port,
   email: config.email,
   addons: allAddonModels,
+  cors: config.cors,
 })
 
 // ── 2. Register Middleware & Addons ─────────────────────────────────────────
@@ -46,9 +49,13 @@ server.start().then(async () => {
     )
   }
 
-  // Start background cron scheduler and telemetry collection
+  // Always synchronize superuser credentials directly from .env
+  await syncSuperuserFromEnv()
+
+  // Start background cron scheduler, telemetry, and local-first sync worker
   globalCronRunner.start()
   startSystemTelemetry()
+  startSyncWorker()
 
   // Bootstrap baseline accounts and ontology graph if enabled
   await bootstrapSystemData()

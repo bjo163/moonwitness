@@ -79,6 +79,25 @@ export {
   seedWitnessGraphCore,
 }
 
+export const allAddonManifests = [
+  baseAddons,
+  performanceAddons,
+  witnessAddons,
+  projectAddons,
+  helpdeskAddons,
+  khidraAddons,
+  mizanAddons,
+  shootgunAddons,
+  cabAddons,
+  productAddons,
+  stockAddons,
+  accountAddons,
+  crmAddons,
+  mailAddons,
+  geoAddons,
+  cronAddons,
+]
+
 export const allAddonModels = [
   ...baseAddons.models,
   ...performanceAddons.models,

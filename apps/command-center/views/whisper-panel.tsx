@@ -34,6 +34,7 @@ import {
   ChevronUp,
   Sparkles,
 } from "lucide-react"
+import { Button, Input } from "@workspace/ui"
 
 import {
   type WhisperTier,
@@ -174,13 +175,16 @@ function WhisperBubble({
             <Clock className="h-2.5 w-2.5" />
             {timeLeft.text}
           </span>
-          <button
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-xs"
             onClick={() => onDelete(whisper.id)}
             className="text-foreground/15 transition-colors hover:text-destructive/60"
             title="Hapus whisper"
           >
             <Trash2 className="h-3 w-3" />
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -249,7 +253,9 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
   return (
     <div className="mt-4 border-t border-border/30 pt-3">
       {/* Toggle button */}
-      <button
+      <Button
+        type="button"
+        variant="ghost"
         onClick={() => setIsOpen(!isOpen)}
         className={`flex w-full items-center justify-between gap-2 rounded-none px-2 py-2 font-mono text-[10px] tracking-widest uppercase transition-all ${
           isOpen ? "text-warning" : "text-muted-foreground hover:text-foreground"
@@ -271,7 +277,7 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
             <ChevronDown className="h-3 w-3" />
           )}
         </span>
-      </button>
+      </Button>
 
       {isOpen && (
         <div className="mt-2 flex flex-col gap-3">
@@ -303,7 +309,10 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
 
           {/* Expiry picker */}
           <div className="relative">
-            <button
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
               onClick={() => setShowExpiryPicker(!showExpiryPicker)}
               className="flex w-full items-center justify-between border border-border/40 bg-card/60 px-3 py-2 font-mono text-[9px] text-muted-foreground hover:border-border/70"
             >
@@ -313,12 +322,14 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
                 {selectedExpiryConfig.desc}
               </span>
               <ChevronDown className="h-3 w-3" />
-            </button>
+            </Button>
 
             {showExpiryPicker && (
               <div className="absolute top-full right-0 left-0 z-10 border border-border/40 bg-card/95 shadow-md backdrop-blur-md">
                 {EXPIRY_OPTIONS.map((opt) => (
-                  <button
+                  <Button
+                    type="button"
+                    variant="ghost"
                     key={opt.days}
                     onClick={() => {
                       setSelectedExpiry(opt.days)
@@ -332,7 +343,7 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
                     <span className="font-mono text-[8px] text-warning/80">
                       {opt.ref}
                     </span>
-                  </button>
+                  </Button>
                 ))}
               </div>
             )}
@@ -343,7 +354,10 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
             {(["DIVINE", "SHADOW", "HUMAN"] as WhisperTier[]).map((tier) => {
               const cfg = TIER_CONFIG[tier]
               return (
-                <button
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
                   key={tier}
                   onClick={() => setSelectedTier(tier)}
                   className={`rounded-lg flex flex-1 items-center justify-center gap-1 border px-2 py-1.5 font-mono text-[8px] font-bold tracking-widest uppercase transition-all ${
@@ -353,14 +367,14 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
                   } `}
                 >
                   {cfg.icon} {tier}
-                </button>
+                </Button>
               )
             })}
           </div>
 
           {/* Input */}
           <div className="flex gap-2">
-            <input
+            <Input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => {
@@ -372,13 +386,16 @@ export function WhisperPanel({ requestId, requestTitle }: WhisperPanelProps) {
               placeholder={`Whisper dari ${selectedTier}...`}
               className="flex-1 border border-border/40 bg-card/60 px-3 py-2 font-mono text-xs text-foreground placeholder:text-muted-foreground focus:border-yellow-400/50 focus:outline-none"
             />
-            <button
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
               onClick={handleSend}
               disabled={!inputValue.trim()}
               className="rounded-lg border border-yellow-400/30 bg-yellow-400/10 px-3 py-2 text-warning transition-all hover:bg-yellow-400/20 hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-30"
             >
               <Send className="h-3.5 w-3.5" />
-            </button>
+            </Button>
           </div>
 
           {/* Warning */}

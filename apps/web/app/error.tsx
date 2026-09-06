@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import { AlertTriangle, RotateCcw } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 export default function GlobalError({
   error,
@@ -44,7 +45,9 @@ export default function GlobalError({
           </div>
         </div>
 
-        <button
+        <Button
+          type="button"
+          variant="destructive"
           onClick={() => reset()}
           className="group relative flex items-center gap-2 overflow-hidden rounded border border-red-500/50 bg-red-950/30 px-8 py-3 font-bold text-destructive transition-all hover:bg-red-900/50 hover:text-red-300 hover:shadow-sm active:scale-95"
         >
@@ -54,7 +57,7 @@ export default function GlobalError({
           </span>
           {/* Scanning line effect */}
           <div className="absolute top-0 left-0 h-full w-[2px] bg-red-400/50 opacity-0 blur-[1px] group-hover:animate-[scan_1.5s_ease-in-out_infinite] group-hover:opacity-100" />
-        </button>
+        </Button>
       </div>
     </div>
   )

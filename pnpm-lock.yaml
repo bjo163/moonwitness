@@ -47,6 +47,9 @@ importers:
       '@moon/client':
         specifier: workspace:*
         version: link:../../packages/moon-client
+      '@moon/compute':
+        specifier: workspace:*
+        version: link:../../packages/moon-compute
       '@moon/crm':
         specifier: workspace:*
         version: link:../../packages/moon-crm

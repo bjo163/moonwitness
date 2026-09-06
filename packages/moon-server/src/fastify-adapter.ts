@@ -65,14 +65,43 @@ type MoonMiddleware = (
 
 function resolveCorsConfig(config?: CorsConfig): CorsConfig {
   if (config) return config
+  const rawOrigins = (process.env.ALLOWED_ORIGINS || '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+
+  if (rawOrigins.length > 0) {
+    return {
+      allowedOrigins: rawOrigins,
+      allowCredentials: true,
+    }
+  }
+
+  // In development, automatically allow localhost and loopback origins
+  if (process.env.NODE_ENV !== 'production') {
+    return {
+      allowedOrigins: (origin: string) => {
+        try {
+          const url = new URL(origin)
+          return (
+            url.hostname === 'localhost' ||
+            url.hostname === '127.0.0.1' ||
+            url.hostname === '0.0.0.0'
+          )
+        } catch {
+          return false
+        }
+      },
+      allowCredentials: true,
+    }
+  }
+
   return {
-    allowedOrigins: (process.env.ALLOWED_ORIGINS || '')
-      .split(',')
-      .map((origin) => origin.trim())
-      .filter(Boolean),
+    allowedOrigins: [],
     allowCredentials: true,
   }
 }
+
 
 export class FastifyAdapter {
   private readonly config: FastifyAdapterConfig
@@ -259,7 +288,7 @@ export class FastifyAdapter {
     this.addRawRoute(app, 'POST', '/rpc', (req, res) => handleRpc(req, res, this.config.jwtSecret))
     for (const path of ['/health/live', '/livez']) this.addRawRoute(app, 'GET', path, handleLiveness)
     for (const path of ['/health/ready', '/readyz']) this.addRawRoute(app, 'GET', path, handleReadiness)
-    for (const path of ['/health', '/healthz', '/api/health']) this.addRawRoute(app, 'GET', path, handleHealth)
+    for (const path of ['/health', '/healthz', '/api/health', '/api/system/health']) this.addRawRoute(app, 'GET', path, handleHealth)
     this.addRawRoute(app, 'GET', '/db/status', handleDbStatus)
     this.addRawRoute(app, 'GET', '/meta/models', handleMetaModels)
     this.addRawRoute(app, 'GET', '/api/meta/model/:model', (req, res) => handleMetaModel(req, res, (req as any).params.model))
@@ -297,8 +326,8 @@ export class FastifyAdapter {
     app.addHook('onRequest', async (req, reply) => {
       reply.header('x-request-id', req.id)
     })
-    this.registerBuiltinRoutes(app)
     this.registerCustomRoutes(app)
+    this.registerBuiltinRoutes(app)
     app.options('/*', this.rawHandler((req, res) => {
       if (!handleCorsPreflight(req, res, this.config.cors)) {
         res.writeHead(204)

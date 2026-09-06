@@ -9,14 +9,13 @@ const repoRoot = join(__dirname, "..")
 const runnersDir = join(__dirname, "runners")
 
 const args = process.argv.slice(2)
-const noPython = args.includes("-NoPython") || args.includes("--no-python")
 const keepExisting = args.includes("-KeepExisting") || args.includes("--keep-existing")
 
 console.log("=================================================================")
 console.log("MOONWITNESS OS - WINDOWS MULTI-SERVICE DEV RUNNER")
 console.log("=================================================================")
 console.log(`Workspace Root: ${repoRoot}`)
-console.log("Execution Mode: Dedicated Windows CMD Windows (5 services)")
+console.log("Execution Mode: Dedicated Windows CMD Windows (3 Node.js services)")
 
 // Step 1: Clean occupied ports unless keepExisting is requested
 if (!keepExisting) {
@@ -37,39 +36,11 @@ try {
   console.log("[!] Package build finished with warnings, continuing...")
 }
 
-// Ensure Python venv if needed
-const venvBat = join(repoRoot, ".venv", "Scripts", "activate.bat")
-if (!noPython && !existsSync(venvBat)) {
-  console.log("  [*] Synchronizing Python virtual environment (.venv)...")
-  try {
-    spawnSync("python", ["-m", "uv", "sync", "--directory", join(repoRoot, "services", "celestial-engine")], {
-      stdio: "inherit",
-      cwd: repoRoot,
-    })
-    spawnSync("python", ["-m", "uv", "pip", "install", "--python", join(repoRoot, ".venv"), "-e", join(repoRoot, "services", "ai-agent")], {
-      stdio: "inherit",
-      cwd: repoRoot,
-    })
-  } catch {
-    console.log("  [!] Python setup notice, continuing...")
-  }
-}
-
-// Step 3: Launch all services in dedicated standalone CMD windows
-console.log("\n>> Step 3/3: Launching services in dedicated standalone Windows CMD windows...")
-
 const services = [
-  { id: "api", title: "MW-API [Port 4000]", file: "dev-api.cmd", desc: "API Backend", url: "http://localhost:4000" },
+  { id: "api", title: "MW-API [Port 4000]", file: "dev-api.cmd", desc: "API Backend (Node.js)", url: "http://localhost:4000" },
   { id: "command-center", title: "MW-COMMAND-CENTER [Port 3001]", file: "dev-command-center.cmd", desc: "Command Center", url: "http://localhost:3001" },
   { id: "web", title: "MW-WEB [Port 3000]", file: "dev-web.cmd", desc: "Public Web Portal", url: "http://localhost:3000" },
 ]
-
-if (!noPython) {
-  services.push(
-    { id: "celestial", title: "MW-CELESTIAL [Port 8001]", file: "dev-celestial.cmd", desc: "Celestial Engine", url: "http://localhost:8001" },
-    { id: "ai-agent", title: "MW-AI-AGENT [Port 8002]", file: "dev-ai-agent.cmd", desc: "AI Agent Service", url: "http://localhost:8002" }
-  )
-}
 
 for (const svc of services) {
   const runnerPath = join(runnersDir, svc.file)

@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { Menu, Moon, X } from "lucide-react"
 import { useAuthSession } from "@moon/client"
 import type { NavLinkConfig } from "@workspace/types"
-import { GlobalSearchModal, NotificationBell } from "@workspace/ui"
+import { Button, GlobalSearchModal, NotificationBell } from "@workspace/ui"
 import { APP_PORTS, NAVIGATION_MESH } from "@workspace/types"
 import { NavbarProfileMenu, type UserProfileData } from "./navbar-profile-menu"
 
@@ -128,7 +128,10 @@ export function WebNavbar({
               onLogout={handleLogout}
             />
           </div>
-          <button
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
             onClick={() => setMobileMenuOpen((open) => !open)}
             className="rounded-md border border-border bg-card p-2 text-foreground transition-colors hover:bg-accent lg:hidden"
             aria-label="Toggle navigation"
@@ -138,7 +141,7 @@ export function WebNavbar({
             ) : (
               <Menu className="h-5 w-5" />
             )}
-          </button>
+          </Button>
         </div>
       </div>
       {mobileMenuOpen && (

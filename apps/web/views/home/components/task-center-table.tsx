@@ -8,27 +8,28 @@ import {
   ChevronDown,
   User,
 } from "lucide-react"
+import { Button, resolveSemanticColor, type SemanticColorToken } from "@workspace/ui"
 
 export function TaskCenterTable() {
   return (
     <div className="bg-background flex flex-1 flex-col rounded-xl border border-border p-4">
       {/* Tabs */}
       <div className="mb-4 flex gap-4 border-b border-border px-2 text-[9px] font-bold tracking-widest text-primary uppercase">
-        <button className="border-b-2 border-primary py-2 text-primary">
+        <Button type="button" variant="ghost" size="sm" className="border-b-2 border-primary py-2 text-primary">
           All Tasks
-        </button>
-        <button className="py-2 transition-colors hover:text-foreground">
+        </Button>
+        <Button type="button" variant="ghost" size="sm" className="py-2 transition-colors">
           High Priority
-        </button>
-        <button className="py-2 transition-colors hover:text-foreground">
+        </Button>
+        <Button type="button" variant="ghost" size="sm" className="py-2 transition-colors">
           Due Today
-        </button>
-        <button className="py-2 transition-colors hover:text-foreground">
+        </Button>
+        <Button type="button" variant="ghost" size="sm" className="py-2 transition-colors">
           This Week
-        </button>
-        <button className="py-2 transition-colors hover:text-foreground">
+        </Button>
+        <Button type="button" variant="ghost" size="sm" className="py-2 transition-colors">
           Overdue
-        </button>
+        </Button>
       </div>
 
       {/* Table Header */}
@@ -53,9 +54,9 @@ export function TaskCenterTable() {
             proj: "Moon Observation",
             asg: "Ahmad Farisi",
             prio: "HIGH",
-            prioC: "#F43F5E",
+            prioC: "destructive" as SemanticColorToken,
             stat: "In Progress",
-            statC: "#F59E0B",
+            statC: "warning" as SemanticColorToken,
             date: "May 27, 2025",
             prog: 70,
           },
@@ -65,9 +66,9 @@ export function TaskCenterTable() {
             proj: "Astronomy Atlas",
             asg: "Fatimah Zahra",
             prio: "HIGH",
-            prioC: "#F43F5E",
+            prioC: "destructive" as SemanticColorToken,
             stat: "In Progress",
-            statC: "#F59E0B",
+            statC: "warning" as SemanticColorToken,
             date: "May 28, 2025",
             prog: 45,
           },
@@ -77,9 +78,9 @@ export function TaskCenterTable() {
             proj: "Qur'an Translation",
             asg: "Muhammad Ridwan",
             prio: "MEDIUM",
-            prioC: "#F59E0B",
+            prioC: "warning" as SemanticColorToken,
             stat: "Review",
-            statC: "#A855F7",
+            statC: "info" as SemanticColorToken,
             date: "May 30, 2025",
             prog: 80,
           },
@@ -89,9 +90,9 @@ export function TaskCenterTable() {
             proj: "Islamic History",
             asg: "Aisha Nurul",
             prio: "MEDIUM",
-            prioC: "#F59E0B",
+            prioC: "warning" as SemanticColorToken,
             stat: "To Do",
-            statC: "#3B82F6",
+            statC: "primary" as SemanticColorToken,
             date: "Jun 01, 2025",
             prog: 0,
           },
@@ -101,9 +102,9 @@ export function TaskCenterTable() {
             proj: "AI Systems",
             asg: "Omar Hassan",
             prio: "HIGH",
-            prioC: "#F43F5E",
+            prioC: "destructive" as SemanticColorToken,
             stat: "In Progress",
-            statC: "#F59E0B",
+            statC: "warning" as SemanticColorToken,
             date: "Jun 03, 2025",
             prog: 60,
           },
@@ -113,9 +114,9 @@ export function TaskCenterTable() {
             proj: "Climate Monitor",
             asg: "Yusuf Al-Kaff",
             prio: "LOW",
-            prioC: "#10B981",
+            prioC: "success" as SemanticColorToken,
             stat: "To Do",
-            statC: "#3B82F6",
+            statC: "primary" as SemanticColorToken,
             date: "Jun 04, 2025",
             prog: 0,
           },
@@ -125,9 +126,9 @@ export function TaskCenterTable() {
             proj: "Content Creation",
             asg: "Zainab Azzahra",
             prio: "MEDIUM",
-            prioC: "#F59E0B",
+            prioC: "warning" as SemanticColorToken,
             stat: "Review",
-            statC: "#A855F7",
+            statC: "info" as SemanticColorToken,
             date: "Jun 05, 2025",
             prog: 75,
           },
@@ -137,9 +138,9 @@ export function TaskCenterTable() {
             proj: "Monthly Reports",
             asg: "Ahmad Farisi",
             prio: "HIGH",
-            prioC: "#F43F5E",
+            prioC: "destructive" as SemanticColorToken,
             stat: "To Do",
-            statC: "#3B82F6",
+            statC: "primary" as SemanticColorToken,
             date: "Jun 06, 2025",
             prog: 10,
           },
@@ -171,7 +172,7 @@ export function TaskCenterTable() {
             <div className="col-span-1 flex justify-center">
               <span
                 className="text-[8px] font-bold"
-                style={{ color: row.prioC }}
+            style={{ color: resolveSemanticColor(row.prioC) }}
               >
                 {row.prio}
               </span>
@@ -180,8 +181,8 @@ export function TaskCenterTable() {
               <span
                 className="rounded border px-1.5 py-0.5 text-[8px] whitespace-nowrap"
                 style={{
-                  borderColor: `${row.statC}50`,
-                  color: row.statC,
+                  borderColor: resolveSemanticColor(row.statC),
+                  color: resolveSemanticColor(row.statC),
                 }}
               >
                 {row.stat}
@@ -196,7 +197,7 @@ export function TaskCenterTable() {
                   className="h-full rounded-full"
                   style={{
                     width: `${row.prog}%`,
-                    backgroundColor: row.statC,
+                    backgroundColor: resolveSemanticColor(row.statC),
                   }}
                 />
               </div>

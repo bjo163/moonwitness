@@ -7,7 +7,7 @@ import {
 } from "@moon/server"
 import { getModel, createCtx, SUPERUSER_ID } from "@moon/orm"
 import { config } from "../config/index.js"
-import { allDemoLoaders } from "../addons/index.js"
+import { allDemoLoaders, allAddonManifests, allAddonViews } from "../addons/index.js"
 
 /**
  * ◈ System & Admin Operational Routes
@@ -16,6 +16,49 @@ export function registerSystemRoutes(server: NativeServer): void {
   // Direct in-process database status & model introspection (eliminates HTTP loopback)
   server.get("/api/external/db/status", handleDbStatus, "user")
   server.get("/api/external/meta/models", handleMetaModels, "user")
+
+  // Model-Driven Addons & Apps Catalog (served directly by API)
+  defineRoute({
+    method: "GET",
+    path: "/api/meta/addons",
+    auth: "none",
+    tags: ["System"],
+    summary: "Get full Model-Driven Addons Catalog and App manifests",
+    handler: async () => {
+      const addons = allAddonManifests.map((manifest) => {
+        const models = (manifest.models || []).map((modelClass: any) => {
+          const modelName = modelClass._name || ""
+          const viewConfig = (allAddonViews as any)[modelName] || {}
+          return {
+            name: modelName,
+            description: modelClass._description || "",
+            recName: modelClass._rec_name || "name",
+            defaultView: viewConfig.defaultView || "table",
+            icon: viewConfig.icon || "Layers",
+            accentColor: viewConfig.accentColor || "cyan",
+          }
+        })
+
+        const primaryModel = models[0]?.name ?? ""
+
+        return {
+          id: manifest.name,
+          name: manifest.name.charAt(0).toUpperCase() + manifest.name.slice(1),
+          packageName: `@moon/${manifest.name}`,
+          description: manifest.description || "",
+          depends: manifest.depends || [],
+          primaryModel,
+          modelCount: models.length,
+          models,
+        }
+      })
+
+      return {
+        count: addons.length,
+        addons,
+      }
+    },
+  })
 
   // Realtime test publish route
   defineRoute({
@@ -103,14 +146,14 @@ export function registerSystemRoutes(server: NativeServer): void {
     },
   })
 
-  // Universal demo matrix installer across all 16 addon packages
+  // Universal demo matrix installer across all 16 addon packages (or a specific package)
   defineRoute({
     method: "POST",
     path: "/api/system/demo-seed",
     auth: "admin",
     tags: ["System"],
-    summary: "Seed comprehensive demo data matrix across all 16 addon packages",
-    handler: async () => {
+    summary: "Seed comprehensive demo data matrix across all 16 addon packages or a specific package",
+    handler: async (ctx) => {
       if (!config.demoSeedEnabled) {
         throw Object.assign(new Error("Demo seeding is disabled in production"), {
           statusCode: 403,
@@ -118,8 +161,20 @@ export function registerSystemRoutes(server: NativeServer): void {
         })
       }
 
+      const targetPackage = ctx.body?.package ? String(ctx.body.package).trim().toLowerCase() : null
+      const loadersToRun = targetPackage
+        ? allDemoLoaders.filter((l) => l.name.toLowerCase() === targetPackage)
+        : allDemoLoaders
+
+      if (targetPackage && loadersToRun.length === 0) {
+        throw Object.assign(new Error(`Unknown package '${targetPackage}' for demo seed`), {
+          statusCode: 400,
+          code: "UNKNOWN_PACKAGE",
+        })
+      }
+
       const seededPackages: Record<string, string> = {}
-      for (const { name, fn } of allDemoLoaders) {
+      for (const { name, fn } of loadersToRun) {
         try {
           if (typeof fn === "function") {
             await fn()
@@ -132,7 +187,9 @@ export function registerSystemRoutes(server: NativeServer): void {
 
       return {
         success: true,
-        message: "Universal demo matrix initialized successfully across all 16 addon packages",
+        message: targetPackage
+          ? `Package '${targetPackage}' demo data initialized successfully`
+          : "Universal demo matrix initialized successfully across all 16 addon packages",
         seededPackages,
       }
     },

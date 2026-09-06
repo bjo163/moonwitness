@@ -1,6 +1,7 @@
 import type { NativeServer } from "@moon/server"
 import { globalCronRunner } from "../addons/index.js"
 import { stopSystemTelemetry } from "./telemetry.js"
+import { stopSyncWorker } from "./sync-worker.js"
 
 let isShuttingDown = false
 
@@ -21,6 +22,7 @@ export function registerGracefulShutdown(server: NativeServer): void {
       // 1. Stop background workers
       globalCronRunner.stop()
       stopSystemTelemetry()
+      stopSyncWorker()
 
       // 2. Terminate server, SSE streams, OpenTelemetry, and Knex/SQLite connection pool
       await server.stop()

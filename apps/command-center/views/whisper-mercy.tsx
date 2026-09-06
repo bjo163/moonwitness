@@ -130,7 +130,7 @@ interface MercyButtonProps {
   onMercySent?: () => void
 }
 
-export function MercyButton({ requestId, onMercySent }: MercyButtonProps) {
+export function WhisperMercyButton({ requestId, onMercySent }: MercyButtonProps) {
   const [glowing, setGlowing] = useState(false)
   const [sent, setSent] = useState(false)
 
@@ -171,6 +171,8 @@ export function MercyButton({ requestId, onMercySent }: MercyButtonProps) {
     </button>
   )
 }
+
+export const MercyButton = WhisperMercyButton
 
 export function formatTimeLeft(expiresAt: number): { text: string; urgent: boolean } {
   const diff = expiresAt - Date.now()

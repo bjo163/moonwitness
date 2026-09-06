@@ -1,104 +1,168 @@
-import type { NativeServer } from "@moon/server"
-import { config } from "../config/index.js"
+import { defineRoute, type NativeServer } from "@moon/server"
+import {
+  calculateQiblaBearing,
+  evaluateHilalVisibility,
+  calculateDetailedPrayerTimes,
+  calculateLunarPhaseCycle,
+} from "@moon/compute"
+import {
+  computeBm25Similarity,
+  computeHybridSearch,
+} from "../services/semantic-search.js"
 
 /**
- * ◈ Polyglot Services Bridge
+ * ◈ Native Services Bridge (@moon/compute & @moon/witness)
  *
- * Proxies requests to high-performance Python microservices:
- * - Celestial Engine (FastAPI on port 8001): astronomical and ephemeris calculations.
- * - AI Knowledge Agent (FastAPI on port 8002): semantic BM25/vector retrieval.
+ * Runs all celestial astronomical ephemeris and AI semantic retrieval
+ * in-process natively in Node.js, eliminating external Python microservice dependencies.
  */
-export function registerPolyglotBridge(server: NativeServer): void {
-  const celestialEngineUrl = config.celestialEngineUrl
-  const aiAgentUrl = config.aiAgentUrl
+export function registerPolyglotBridge(_server?: NativeServer): void {
+  // ── Celestial Engine (@moon/compute) ──────────────────────────────────────
+  defineRoute({
+    method: "GET",
+    path: "/api/services/celestial/health",
+    auth: "none",
+    tags: ["Celestial Engine"],
+    summary: "Celestial Compute Service Health Check",
+    handler: async () => ({
+      status: "ok",
+      service: "celestial-engine",
+      version: "0.1.0",
+      runtime: "node-in-process",
+      package: "@moon/compute",
+    }),
+  })
 
-  // ── Celestial Engine ──────────────────────────────────────────────────────
-  server.proxy(
-    "GET",
-    "/api/services/celestial/health",
-    `${celestialEngineUrl}/health`,
-    { cache: "5s", timeoutMs: 5000 },
-    "none"
-  )
+  defineRoute({
+    method: "POST",
+    path: "/api/services/celestial/lunar-phase",
+    auth: "none",
+    tags: ["Celestial Engine"],
+    summary: "Calculate Lunar Phase and Illumination Fraction",
+    handler: async (ctx) => {
+      const days = Number(ctx.body?.days_since_new_moon ?? 0.0)
+      return calculateLunarPhaseCycle(days)
+    },
+  })
 
-  server.proxy(
-    "POST",
-    "/api/services/celestial/lunar-phase",
-    `${celestialEngineUrl}/ephemeris/lunar-phase`,
-    { cache: "1m", timeoutMs: 8000 },
-    "none"
-  )
+  const handleQibla = async (ctx: any) => {
+    const lat = Number(ctx.query?.lat ?? ctx.query?.latitude ?? ctx.body?.latitude ?? ctx.body?.lat ?? 0.0)
+    const lon = Number(ctx.query?.lon ?? ctx.query?.longitude ?? ctx.body?.longitude ?? ctx.body?.lon ?? 0.0)
+    return calculateQiblaBearing(lat, lon)
+  }
 
-  server.proxy(
-    "GET",
-    "/api/services/celestial/qibla",
-    `${celestialEngineUrl}/ephemeris/qibla`,
-    { cache: "10m", query: ["lat", "lon"], timeoutMs: 8000 },
-    "none"
-  )
+  defineRoute({
+    method: "GET",
+    path: "/api/services/celestial/qibla",
+    auth: "none",
+    tags: ["Celestial Engine"],
+    summary: "Calculate Great Circle Qibla bearing and distance to Ka'bah",
+    handler: handleQibla,
+  })
 
-  server.proxy(
-    "POST",
-    "/api/services/celestial/qibla",
-    `${celestialEngineUrl}/ephemeris/qibla`,
-    { cache: "10m", timeoutMs: 8000 },
-    "none"
-  )
+  defineRoute({
+    method: "POST",
+    path: "/api/services/celestial/qibla",
+    auth: "none",
+    tags: ["Celestial Engine"],
+    summary: "Calculate Great Circle Qibla bearing and distance to Ka'bah",
+    handler: handleQibla,
+  })
 
-  server.proxy(
-    "GET",
-    "/api/services/celestial/hilal-visibility",
-    `${celestialEngineUrl}/ephemeris/hilal-visibility`,
-    { cache: "1m", query: ["alt", "elong", "width"], timeoutMs: 8000 },
-    "none"
-  )
+  const handleHilal = async (ctx: any) => {
+    const alt = Number(ctx.query?.alt ?? ctx.query?.altitude_degrees ?? ctx.body?.altitude_degrees ?? ctx.body?.alt ?? 0.0)
+    const elong = Number(ctx.query?.elong ?? ctx.query?.elongation_degrees ?? ctx.body?.elongation_degrees ?? ctx.body?.elong ?? 0.0)
+    const width = Number(ctx.query?.width ?? ctx.query?.crescent_width_arcmin ?? ctx.body?.crescent_width_arcmin ?? ctx.body?.width ?? 0.5)
+    return evaluateHilalVisibility(alt, elong, width)
+  }
 
-  server.proxy(
-    "POST",
-    "/api/services/celestial/hilal-visibility",
-    `${celestialEngineUrl}/ephemeris/hilal-visibility`,
-    { cache: "1m", timeoutMs: 8000 },
-    "none"
-  )
+  defineRoute({
+    method: "GET",
+    path: "/api/services/celestial/hilal-visibility",
+    auth: "none",
+    tags: ["Celestial Engine"],
+    summary: "Evaluate crescent moon visibility under MABIMS and Odeh criteria",
+    handler: handleHilal,
+  })
 
-  server.proxy(
-    "GET",
-    "/api/services/celestial/prayer-times",
-    `${celestialEngineUrl}/ephemeris/prayer-times`,
-    { cache: "5m", query: ["lat", "lon", "date", "tz", "convention"], timeoutMs: 8000 },
-    "none"
-  )
+  defineRoute({
+    method: "POST",
+    path: "/api/services/celestial/hilal-visibility",
+    auth: "none",
+    tags: ["Celestial Engine"],
+    summary: "Evaluate crescent moon visibility under MABIMS and Odeh criteria",
+    handler: handleHilal,
+  })
 
-  server.proxy(
-    "POST",
-    "/api/services/celestial/prayer-times",
-    `${celestialEngineUrl}/ephemeris/prayer-times`,
-    { cache: "5m", timeoutMs: 8000 },
-    "none"
-  )
+  const handlePrayerTimes = async (ctx: any) => {
+    const lat = Number(ctx.query?.lat ?? ctx.query?.latitude ?? ctx.body?.latitude ?? ctx.body?.lat ?? -6.2088)
+    const lon = Number(ctx.query?.lon ?? ctx.query?.longitude ?? ctx.body?.longitude ?? ctx.body?.lon ?? 106.8456)
+    const date = String(ctx.query?.date ?? ctx.body?.date ?? "2026-09-06")
+    const tz = Number(ctx.query?.tz ?? ctx.query?.timezone_offset ?? ctx.body?.timezone_offset ?? ctx.body?.tz ?? 7.0)
+    const rawConv = String(ctx.query?.convention ?? ctx.body?.convention ?? "KEMENAG")
+    const allowed = ["KEMENAG", "MWL", "ISNA", "UMM_AL_QURA"]
+    const conv = (allowed.includes(rawConv) ? rawConv : "KEMENAG") as any
+    return calculateDetailedPrayerTimes(lat, lon, date, tz, conv)
+  }
 
-  // ── AI Knowledge Agent ────────────────────────────────────────────────────
-  server.proxy(
-    "GET",
-    "/api/services/ai/health",
-    `${aiAgentUrl}/health`,
-    { cache: "5s", timeoutMs: 5000 },
-    "none"
-  )
+  defineRoute({
+    method: "GET",
+    path: "/api/services/celestial/prayer-times",
+    auth: "none",
+    tags: ["Celestial Engine"],
+    summary: "Calculate precise Islamic prayer times using solar declination and Spencer EqT formula",
+    handler: handlePrayerTimes,
+  })
 
-  server.proxy(
-    "POST",
-    "/api/services/ai/semantic/search",
-    `${aiAgentUrl}/semantic/search`,
-    { cache: "30s", timeoutMs: 10000 },
-    "none"
-  )
+  defineRoute({
+    method: "POST",
+    path: "/api/services/celestial/prayer-times",
+    auth: "none",
+    tags: ["Celestial Engine"],
+    summary: "Calculate precise Islamic prayer times using solar declination and Spencer EqT formula",
+    handler: handlePrayerTimes,
+  })
 
-  server.proxy(
-    "POST",
-    "/api/services/ai/semantic/hybrid-search",
-    `${aiAgentUrl}/semantic/hybrid-search`,
-    { cache: "30s", timeoutMs: 10000 },
-    "none"
-  )
+  // ── AI Knowledge Agent (@moon/witness) ────────────────────────────────────
+  defineRoute({
+    method: "GET",
+    path: "/api/services/ai/health",
+    auth: "none",
+    tags: ["AI Agent"],
+    summary: "AI Knowledge Agent Service Health Check",
+    handler: async () => ({
+      status: "ok",
+      service: "ai-agent",
+      version: "0.1.0",
+      runtime: "node-in-process",
+      package: "@moon/witness",
+    }),
+  })
+
+  defineRoute({
+    method: "POST",
+    path: "/api/services/ai/semantic/search",
+    auth: "none",
+    tags: ["AI Agent"],
+    summary: "Perform BM25 search with Arabic text normalization across scriptures and hadiths",
+    handler: async (ctx) => {
+      const query = String(ctx.body?.query || "")
+      const topK = Number(ctx.body?.top_k || 5)
+      return computeBm25Similarity(query, topK)
+    },
+  })
+
+  defineRoute({
+    method: "POST",
+    path: "/api/services/ai/semantic/hybrid-search",
+    auth: "none",
+    tags: ["AI Agent"],
+    summary: "Execute hybrid search combining BM25 term matching with dense semantic concept embeddings",
+    handler: async (ctx) => {
+      const query = String(ctx.body?.query || "")
+      const topK = Number(ctx.body?.top_k || 5)
+      const alpha = Number(ctx.body?.alpha ?? 0.5)
+      return computeHybridSearch(query, topK, alpha)
+    },
+  })
 }

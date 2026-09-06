@@ -69,3 +69,11 @@ apps/web/public/swe-worker-*.js
 # generated UMBRELLA engineering report/runtime evidence
 .audit/umbrella-report.json
 .audit/runtime/
+
+# sqlite local databases
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+data/*.db
+data/*.db-*
