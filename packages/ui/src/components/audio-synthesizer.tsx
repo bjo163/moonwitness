@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import { Volume2, VolumeX } from "lucide-react"
+import { safeGetStorage, safeSetStorage } from "@workspace/hooks"
 
 /**
  * Procedural Web Audio API Synthesizer
@@ -13,8 +14,8 @@ class SystemAudioEngine {
 
   constructor() {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("mw_audio_muted")
-      this.isMuted = saved !== null ? saved === "true" : true
+      const saved = safeGetStorage("mw_audio_muted")
+      this.isMuted = saved ? saved === "true" : true
     }
   }
 
@@ -33,7 +34,7 @@ class SystemAudioEngine {
   public toggleMute(): boolean {
     this.isMuted = !this.isMuted
     if (typeof window !== "undefined") {
-      localStorage.setItem("mw_audio_muted", String(this.isMuted))
+      safeSetStorage("mw_audio_muted", String(this.isMuted))
       window.dispatchEvent(new CustomEvent("mw_audio_toggle", { detail: { isMuted: this.isMuted } }))
     }
     return this.isMuted

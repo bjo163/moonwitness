@@ -1,5 +1,5 @@
 "use client"
-import { useMounted } from "@workspace/hooks"
+import { useMounted, safeGetStorage, safeSetStorage } from "@workspace/hooks"
 
 import { useState, useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
@@ -48,7 +48,7 @@ export function Taskbar() {
   // Get geolocation once
   useEffect(() => {
     // Try cache first
-    const cached = localStorage.getItem("mw_last_location")
+    const cached = safeGetStorage("mw_last_location")
     if (cached) {
       try {
         const { lat, lng, timestamp } = JSON.parse(cached)
@@ -63,7 +63,7 @@ export function Taskbar() {
         (pos) => {
           const lat = pos.coords.latitude
           const lng = pos.coords.longitude
-          localStorage.setItem(
+          safeSetStorage(
             "mw_last_location",
             JSON.stringify({ lat, lng, timestamp: Date.now() })
           )

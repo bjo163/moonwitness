@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { DEFAULT_COORDINATES } from "@workspace/types"
+import { safeGetStorage, safeSetStorage } from "./use-local-storage"
 
 export interface GeolocationState {
   lat: number | null
@@ -30,7 +31,7 @@ export function useGeolocation(): GeolocationState {
     }
 
     // Attempt to read from cache first for fast load
-    const cachedLoc = localStorage.getItem("mw_last_location")
+    const cachedLoc = safeGetStorage("mw_last_location")
     if (cachedLoc) {
       try {
         const { lat, lng, timestamp } = JSON.parse(cachedLoc)
@@ -48,7 +49,7 @@ export function useGeolocation(): GeolocationState {
       (position) => {
         const lat = position.coords.latitude
         const lng = position.coords.longitude
-        localStorage.setItem(
+        safeSetStorage(
           "mw_last_location",
           JSON.stringify({ lat, lng, timestamp: Date.now() })
         )

@@ -98,6 +98,20 @@ function Metric({
 export function DashboardOverview() {
   const [data, setData] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [polyglotServices, setPolyglotServices] = useState<
+    Array<{
+      name: string
+      url: string
+      port: number
+      status: "online" | "offline" | "checking"
+      latencyMs?: number
+    }>
+  >([
+    { name: "API Gateway (Fastify)", url: "/health/live", port: 4000, status: "checking" },
+    { name: "Celestial Engine (Python)", url: "/api/services/celestial/health", port: 8001, status: "checking" },
+    { name: "AI Agent (Python)", url: "/api/services/ai/health", port: 8002, status: "checking" },
+    { name: "PostgreSQL Database", url: "/db/status", port: 5432, status: "checking" },
+  ])
 
   useEffect(() => {
     apiClient
@@ -107,7 +121,32 @@ export function DashboardOverview() {
       })
       .catch((error) => console.error("Failed to load dashboard", error))
       .finally(() => setLoading(false))
+
+    const checkServices = async () => {
+      const updated = await Promise.all(
+        polyglotServices.map(async (svc) => {
+          const t0 = performance.now()
+          try {
+            const res = await fetch(svc.url)
+            const latencyMs = Math.round(performance.now() - t0)
+            return {
+              ...svc,
+              status: res.ok ? ("online" as const) : ("offline" as const),
+              latencyMs,
+            }
+          } catch {
+            return { ...svc, status: "offline" as const }
+          }
+        })
+      )
+      setPolyglotServices(updated)
+    }
+
+    checkServices()
+    const interval = setInterval(checkServices, 20000)
+    return () => clearInterval(interval)
   }, [])
+
 
   if (loading) {
     return (
@@ -291,20 +330,44 @@ export function DashboardOverview() {
             </dl>
           </Panel>
 
-          <Panel title="Service Status">
+          <Panel title="Polyglot Services & Telemetry">
             <div className="space-y-3">
-              {monitoring.slice(0, 5).map((service, index) => (
+              {polyglotServices.map((svc) => (
                 <div
-                  key={service.name ?? index}
-                  className="flex items-center justify-between"
+                  key={svc.name}
+                  className="flex items-center justify-between border-b border-border/40 pb-2 last:border-0 last:pb-0"
                 >
-                  <span className="flex items-center gap-2 text-sm text-foreground">
-                    <span className="h-2 w-2 rounded-full bg-success" />
-                    {service.name ?? "Service"}
-                  </span>
-                  <span className="text-xs font-medium text-success font-mono">
-                    {service.value ?? "Healthy"}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`h-2 w-2 rounded-full ${
+                        svc.status === "online"
+                          ? "bg-success"
+                          : svc.status === "checking"
+                            ? "bg-warning"
+                            : "bg-destructive"
+                      }`}
+                    />
+                    <div>
+                      <p className="text-xs font-medium text-foreground">{svc.name}</p>
+                      <p className="text-[10px] text-muted-foreground font-mono">Port :{svc.port}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span
+                      className={`text-[10px] font-mono font-bold uppercase ${
+                        svc.status === "online"
+                          ? "text-success"
+                          : svc.status === "checking"
+                            ? "text-warning"
+                            : "text-destructive"
+                      }`}
+                    >
+                      {svc.status}
+                    </span>
+                    {svc.latencyMs !== undefined && (
+                      <p className="text-[10px] text-muted-foreground font-mono">{svc.latencyMs}ms</p>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
