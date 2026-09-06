@@ -1,4 +1,4 @@
-import { LoginView } from "@/views/login-view"
+import { CommandCenterLoginView } from "@/views/login-view"
 
 export const metadata = {
   title: "Sign In — MoonWitness OS Command Center",
@@ -6,5 +6,5 @@ export const metadata = {
 }
 
 export default function LoginPage() {
-  return <LoginView />
+  return <CommandCenterLoginView />
 }

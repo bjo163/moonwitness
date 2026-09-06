@@ -10,7 +10,7 @@ import { GlobalSearchModal, NotificationBell } from "@workspace/ui"
 import { APP_PORTS, NAVIGATION_MESH } from "@workspace/types"
 import { NavbarProfileMenu, type UserProfileData } from "./navbar-profile-menu"
 
-export function Navbar({
+export function WebNavbar({
   navLinks = NAVIGATION_MESH.portal,
 }: {
   navLinks?: readonly NavLinkConfig[] | NavLinkConfig[]

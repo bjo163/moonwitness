@@ -2,7 +2,7 @@ import { Suspense } from "react"
 import { JetBrains_Mono, Geist, Amiri } from "next/font/google"
 
 import "@workspace/ui/globals.css"
-import { Navbar, Taskbar, PwaRegister } from "../components/shell"
+import { WebNavbar, Taskbar, PwaRegister } from "../components/shell"
 import { MoonProvider } from "@workspace/state"
 import {
   FlyingPropheticAIWidget,
@@ -43,7 +43,7 @@ export const metadata = {
   },
 }
 
-export default function RootLayout({
+export default function WebRootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
@@ -73,7 +73,7 @@ export default function RootLayout({
         </a>
         <MoonProvider>
           <Suspense fallback={null}>
-            <Navbar />
+            <WebNavbar />
           </Suspense>
           <Suspense fallback={null}>
             <GlobalTickerWidget />

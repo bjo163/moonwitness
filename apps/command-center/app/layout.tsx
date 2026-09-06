@@ -12,7 +12,7 @@ export const metadata = {
 
 export const dynamic = "force-dynamic"
 
-export default function RootLayout({
+export default function CommandCenterRootLayout({
   children,
 }: {
   children: React.ReactNode

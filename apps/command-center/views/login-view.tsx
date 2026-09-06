@@ -6,7 +6,7 @@ import { ShieldCheck, Lock, Mail, ArrowRight, Loader2, Sparkles, KeyRound } from
 import { useAuthSession } from "@moon/client"
 import { soundEngine } from "@workspace/ui"
 
-export function LoginView() {
+export function CommandCenterLoginView() {
   const router = useRouter()
   const { login } = useAuthSession()
 

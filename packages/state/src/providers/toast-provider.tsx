@@ -156,7 +156,7 @@ function ToastItem({
   )
 }
 
-export function ToastProvider({ children }: { children: React.ReactNode }) {
+export function MoonToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([])
   const mounted = useMounted()
 
@@ -227,3 +227,6 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     </ToastContext.Provider>
   )
 }
+
+export { MoonToastProvider as ToastProvider }
+

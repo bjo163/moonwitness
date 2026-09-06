@@ -227,7 +227,7 @@ const DEFAULT_SIDEBAR_ITEMS: SidebarItem[] = [
   { label: "Dev Terminal", href: "/terminal", icon: "Terminal" },
 ]
 
-export function Sidebar({
+export function SidebarNav({
   items = DEFAULT_SIDEBAR_ITEMS,
   brandTitle = "COMMAND CENTER",
   brandSubtitle = "SYS-VER 1.0",
@@ -459,4 +459,4 @@ export function Sidebar({
   )
 }
 
-export { Sidebar as CommandCenterSidebar }
+export { SidebarNav as Sidebar, SidebarNav as CommandCenterSidebar }
