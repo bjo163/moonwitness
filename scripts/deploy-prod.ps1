@@ -52,13 +52,13 @@ if ($UseComposeV2 -or $UseComposeV1) {
     if ($LASTEXITCODE -ne 0) { throw "Production readiness check failed." }
 
     Write-Host "▶ Step 6/7: Building deployable artifacts and verifying database state..." -ForegroundColor Yellow
-    Invoke-Compose build api web command-center
+    Invoke-Compose build api celestial-engine ai-agent web command-center
     Invoke-Compose up -d postgres redis
     Invoke-Compose run --rm api pnpm --filter=api db:install
     Invoke-Compose run --rm api pnpm --filter=api db:verify
 
     Write-Host "▶ Step 7/7: Starting verified production services..." -ForegroundColor Yellow
-    Invoke-Compose up -d api command-center web
+    Invoke-Compose up -d api celestial-engine ai-agent command-center web
     Invoke-Compose ps
     Write-Host "✓ Docker Compose deployment completed with verified migrations." -ForegroundColor Green
 } elseif (Get-Command pm2 -ErrorAction SilentlyContinue) {

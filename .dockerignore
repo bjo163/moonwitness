@@ -9,5 +9,15 @@ dist
 .kilo
 .turbo
 **/.turbo
+.venv
+**/.venv
+__pycache__
+**/__pycache__
 .audit/runtime
+.agents
+.vscode
+.github
+docs
 *.log
+*.md
+!README.md

@@ -42,7 +42,13 @@
     "audit:umbrella:certify": "node scripts/umbrella-certify.mjs",
     "audit:umbrella:ci": "node scripts/umbrella-audit.mjs --ci-evidence=.audit/runtime/ci-evidence.json --write --validate",
     "audit:ci": "node scripts/audit.mjs && node scripts/umbrella-audit.mjs --validate && turbo typecheck && vitest run",
-    "test:scripts": "vitest run scripts"
+    "test:scripts": "vitest run scripts",
+    "deploy:docker": "node scripts/deploy-docker.mjs",
+    "deploy:docker:build": "node scripts/deploy-docker.mjs --build-only",
+    "deploy:docker:down": "node scripts/deploy-docker.mjs --down",
+    "deploy:docker:status": "node scripts/deploy-docker.mjs --status",
+    "deploy:docker:logs": "node scripts/deploy-docker.mjs --logs",
+    "deploy:docker:restart": "node scripts/deploy-docker.mjs --restart"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
