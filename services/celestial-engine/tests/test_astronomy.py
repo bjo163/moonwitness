@@ -43,3 +43,40 @@ def test_hilal_odeh_classification():
     # Very low altitude should fall into Category D (not visible)
     res_impossible = evaluate_hilal_visibility(0.5, 3.0, crescent_width_arcmin=0.05)
     assert res_impossible["odeh_classification"] == "D"
+
+
+def test_prayer_times_jakarta():
+    # Jakarta coordinates: -6.2088, 106.8456, timezone UTC+7
+    from src.astronomy import calculate_prayer_times
+    res = calculate_prayer_times(
+        latitude=-6.2088,
+        longitude=106.8456,
+        date_str="2026-09-06",
+        timezone_offset=7.0,
+        convention="KEMENAG",
+    )
+    assert res["convention"] == "KEMENAG"
+    assert res["fajr"].startswith("04:")
+    assert res["sunrise"].startswith("05:")
+    assert res["dhuhr"].startswith("11:") or res["dhuhr"].startswith("12:")
+    assert res["asr"].startswith("15:")
+    assert res["maghrib"].startswith("17:") or res["maghrib"].startswith("18:")
+    assert res["isha"].startswith("18:") or res["isha"].startswith("19:")
+    assert 294.0 <= res["qibla_bearing"] <= 296.0
+
+
+def test_prayer_times_makkah_umm_al_qura():
+    # Makkah coordinates: 21.4225, 39.8262, timezone UTC+3
+    from src.astronomy import calculate_prayer_times
+    res = calculate_prayer_times(
+        latitude=21.4225,
+        longitude=39.8262,
+        date_str="2026-09-06",
+        timezone_offset=3.0,
+        convention="UMM_AL_QURA",
+    )
+    assert res["convention"] == "UMM_AL_QURA"
+    assert len(res["fajr"]) == 5
+    assert len(res["maghrib"]) == 5
+    assert len(res["isha"]) == 5
+

@@ -25,3 +25,24 @@ def test_search_sun_celestial():
     results = compute_bm25_similarity("matahari dan orbit")
     assert len(results) >= 1
     assert "10:5" in results[0]["id"] or "36:39" in results[0]["id"]
+
+
+def test_hybrid_search_scoring():
+    from src.search import compute_hybrid_search
+    res = compute_hybrid_search(query="waktu hisab perhitungan bulan", top_k=3, alpha=0.6)
+    assert res["total_hits"] >= 1
+    assert res["alpha"] == 0.6
+    top = res["results"][0]
+    assert top["similarity_score"] > 0.0
+    assert top["bm25_score"] >= 0.0
+    assert top["dense_score"] >= 0.0
+    assert top["match_type"] in ["HYBRID", "SEMANTIC", "LEXICAL"]
+
+
+def test_hybrid_concept_matching():
+    from src.search import compute_hybrid_search
+    # Query with celestial concepts
+    res = compute_hybrid_search(query="celestial cosmology sun moon calculation", top_k=2, alpha=0.3)
+    assert res["total_hits"] >= 1
+    assert res["results"][0]["dense_score"] > 0.0
+

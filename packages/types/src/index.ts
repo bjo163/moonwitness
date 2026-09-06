@@ -70,4 +70,10 @@ export {
   type SemanticSearchHit,
   type SemanticSearchRequest,
   type SemanticSearchResult,
+  type CelestialPrayerTimesRequest,
+  type CelestialPrayerTimesResult,
+  type HybridSearchHit,
+  type HybridSearchRequest,
+  type HybridSearchResult,
 } from "@moon/protocol"
+

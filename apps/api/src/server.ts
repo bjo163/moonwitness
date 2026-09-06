@@ -474,6 +474,22 @@ server.proxy(
 
 server.proxy(
   "GET",
+  "/api/services/celestial/prayer-times",
+  `${celestialEngineUrl}/ephemeris/prayer-times`,
+  { cache: "5m", query: ["lat", "lon", "date", "tz", "convention"] },
+  "user"
+)
+
+server.proxy(
+  "POST",
+  "/api/services/celestial/prayer-times",
+  `${celestialEngineUrl}/ephemeris/prayer-times`,
+  { cache: "5m" },
+  "user"
+)
+
+server.proxy(
+  "GET",
   "/api/services/ai/health",
   `${aiAgentUrl}/health`,
   { cache: "5s" },
@@ -487,6 +503,15 @@ server.proxy(
   { cache: "30s" },
   "user"
 )
+
+server.proxy(
+  "POST",
+  "/api/services/ai/semantic/hybrid-search",
+  `${aiAgentUrl}/semantic/hybrid-search`,
+  { cache: "30s" },
+  "user"
+)
+
 
 server.start().then(async () => {
   const dbHealth = await checkDbConnection()

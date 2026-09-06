@@ -2673,6 +2673,347 @@
           }
         }
       }
+    },
+    "/api/services/celestial/prayer-times": {
+      "get": {
+        "tags": [
+          "Celestial Engine"
+        ],
+        "summary": "Calculate precise Islamic prayer times using solar declination and Spencer EqT formula.",
+        "description": "Calculate precise Islamic prayer times using solar declination and Spencer EqT formula.",
+        "security": [],
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tz",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "convention",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "date": {
+                      "type": "string"
+                    },
+                    "latitude": {
+                      "type": "number"
+                    },
+                    "longitude": {
+                      "type": "number"
+                    },
+                    "timezone_offset": {
+                      "type": "number"
+                    },
+                    "convention": {
+                      "type": "string"
+                    },
+                    "fajr": {
+                      "type": "string"
+                    },
+                    "sunrise": {
+                      "type": "string"
+                    },
+                    "dhuhr": {
+                      "type": "string"
+                    },
+                    "asr": {
+                      "type": "string"
+                    },
+                    "maghrib": {
+                      "type": "string"
+                    },
+                    "isha": {
+                      "type": "string"
+                    },
+                    "qibla_bearing": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "date",
+                    "latitude",
+                    "longitude",
+                    "timezone_offset",
+                    "convention",
+                    "fajr",
+                    "sunrise",
+                    "dhuhr",
+                    "asr",
+                    "maghrib",
+                    "isha",
+                    "qibla_bearing"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/services/ai/semantic/hybrid-search": {
+      "post": {
+        "tags": [
+          "AI Agent"
+        ],
+        "summary": "Execute hybrid search combining BM25 term matching with dense semantic concept embeddings.",
+        "description": "Execute hybrid search combining BM25 term matching with dense semantic concept embeddings.",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string"
+                  },
+                  "top_k": {
+                    "type": "number"
+                  },
+                  "alpha": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "query"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "query": {
+                      "type": "string"
+                    },
+                    "total_hits": {
+                      "type": "number"
+                    },
+                    "alpha": {
+                      "type": "number"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "source_type": {
+                            "type": "string"
+                          },
+                          "reference": {
+                            "type": "string"
+                          },
+                          "excerpt": {
+                            "type": "string"
+                          },
+                          "similarity_score": {
+                            "type": "number"
+                          },
+                          "bm25_score": {
+                            "type": "number"
+                          },
+                          "dense_score": {
+                            "type": "number"
+                          },
+                          "match_type": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "source_type",
+                          "reference",
+                          "excerpt",
+                          "similarity_score",
+                          "bm25_score",
+                          "dense_score",
+                          "match_type"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "query",
+                    "total_hits",
+                    "alpha",
+                    "results"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

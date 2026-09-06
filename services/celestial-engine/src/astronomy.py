@@ -126,3 +126,151 @@ def evaluate_hilal_visibility(
         odeh_classification=odeh_class,
         odeh_description=odeh_desc,
     )
+
+
+class PrayerTimesResult(TypedDict):
+    date: str
+    latitude: float
+    longitude: float
+    timezone_offset: float
+    convention: str
+    fajr: str
+    sunrise: str
+    dhuhr: str
+    asr: str
+    maghrib: str
+    isha: str
+    qibla_bearing: float
+
+
+def _hours_to_time_str(hours: float) -> str:
+    """Format floating-point hour (0..24) into HH:MM string."""
+    normalized = hours % 24.0
+    h = int(normalized)
+    m = int(round((normalized - h) * 60.0))
+    if m >= 60:
+        h = (h + 1) % 24
+        m = 0
+    return f"{h:02d}:{m:02d}"
+
+
+def calculate_prayer_times(
+    latitude: float,
+    longitude: float,
+    date_str: str = "2026-09-06",
+    timezone_offset: float = 7.0,
+    convention: Literal["KEMENAG", "MWL", "ISNA", "UMM_AL_QURA"] = "KEMENAG",
+) -> PrayerTimesResult:
+    """
+    Calculate high-precision Islamic prayer times using solar declination and equation of time.
+    Supported conventions:
+    - KEMENAG: Fajr 20.0°, Isha 18.0° (Ministry of Religious Affairs Indonesia)
+    - MWL: Fajr 18.0°, Isha 17.0° (Muslim World League)
+    - ISNA: Fajr 15.0°, Isha 15.0° (Islamic Society of North America)
+    - UMM_AL_QURA: Fajr 18.5°, Isha = Maghrib + 90 minutes (Makkah, Saudi Arabia)
+    """
+    from datetime import datetime
+    try:
+        dt = datetime.strptime(date_str, "%Y-%m-%d")
+    except ValueError:
+        dt = datetime(2026, 9, 6)
+
+    day_of_year = dt.timetuple().tm_yday
+
+    # Fractional year in radians
+    gamma = 2.0 * math.pi / 365.25 * (day_of_year - 1)
+
+    # Equation of Time (minutes) - Spencer formula
+    eqt = 229.18 * (
+        0.000075
+        + 0.001868 * math.cos(gamma)
+        - 0.032077 * math.sin(gamma)
+        - 0.014615 * math.cos(2.0 * gamma)
+        - 0.040849 * math.sin(2.0 * gamma)
+    )
+
+    # Solar Declination in radians - Spencer formula
+    decl = (
+        0.006918
+        - 0.399912 * math.cos(gamma)
+        + 0.070257 * math.sin(gamma)
+        - 0.006758 * math.cos(2.0 * gamma)
+        + 0.000907 * math.sin(2.0 * gamma)
+        - 0.002697 * math.cos(3.0 * gamma)
+        + 0.00148 * math.sin(3.0 * gamma)
+    )
+
+    phi = math.radians(latitude)
+
+    # Solar Transit (Solar Noon) in local standard time hours
+    solar_transit = 12.0 + (timezone_offset * 15.0 - longitude) / 15.0 - (eqt / 60.0)
+
+    # Helper function for Hour Angle omega given solar altitude alpha_deg
+    def hour_angle(alpha_deg: float) -> float:
+        alpha = math.radians(alpha_deg)
+        cos_omega = (math.sin(alpha) - math.sin(phi) * math.sin(decl)) / (
+            math.cos(phi) * math.cos(decl)
+        )
+        # Clamp to [-1, 1] for extreme polar latitudes
+        cos_omega = max(-1.0, min(1.0, cos_omega))
+        return math.degrees(math.acos(cos_omega))
+
+    # Angles by convention
+    if convention == "MWL":
+        fajr_angle = 18.0
+        isha_angle = 17.0
+    elif convention == "ISNA":
+        fajr_angle = 15.0
+        isha_angle = 15.0
+    elif convention == "UMM_AL_QURA":
+        fajr_angle = 18.5
+        isha_angle = 18.5
+    else:  # Default KEMENAG
+        fajr_angle = 20.0
+        isha_angle = 18.0
+
+    # 1. Sunrise & Sunset (geometric center of sun at -0.833° accounting for refraction & radius)
+    omega_sun = hour_angle(-0.833)
+    t_sunrise = solar_transit - omega_sun / 15.0
+    t_sunset = solar_transit + omega_sun / 15.0
+
+    # 2. Fajr (Dawn)
+    omega_fajr = hour_angle(-fajr_angle)
+    t_fajr = solar_transit - omega_fajr / 15.0
+
+    # 3. Dhuhr (Transit + 2 minutes safety/ihtiyat)
+    t_dhuhr = solar_transit + (2.0 / 60.0)
+
+    # 4. Asr (Standard Shafi'i/Hanbali/Maliki: shadow = object length + shadow at noon)
+    asr_altitude_rad = math.atan(1.0 / (1.0 + math.tan(abs(phi - decl))))
+    omega_asr = hour_angle(math.degrees(asr_altitude_rad))
+    t_asr = solar_transit + omega_asr / 15.0
+
+    # 5. Maghrib (Sunset + 2 minutes ihtiyat)
+    t_maghrib = t_sunset + (2.0 / 60.0)
+
+    # 6. Isha (Nightfall)
+    if convention == "UMM_AL_QURA":
+        t_isha = t_maghrib + 1.5  # Fixed 90 minutes after Maghrib
+    else:
+        omega_isha = hour_angle(-isha_angle)
+        t_isha = solar_transit + omega_isha / 15.0
+
+    # Qibla bearing
+    qibla = calculate_qibla_bearing(latitude, longitude)
+
+    return PrayerTimesResult(
+        date=dt.strftime("%Y-%m-%d"),
+        latitude=round(latitude, 4),
+        longitude=round(longitude, 4),
+        timezone_offset=round(timezone_offset, 2),
+        convention=convention,
+        fajr=_hours_to_time_str(t_fajr),
+        sunrise=_hours_to_time_str(t_sunrise),
+        dhuhr=_hours_to_time_str(t_dhuhr),
+        asr=_hours_to_time_str(t_asr),
+        maghrib=_hours_to_time_str(t_maghrib),
+        isha=_hours_to_time_str(t_isha),
+        qibla_bearing=qibla["bearing_degrees"],
+    )
+

@@ -298,6 +298,54 @@ export const SemanticSearchResultSchema = z.object({
   results: z.array(SemanticSearchHitSchema),
 })
 
+export const CelestialPrayerTimesRequestSchema = z.object({
+  latitude: z.number(),
+  longitude: z.number(),
+  date: z.string().optional().default('2026-09-06'),
+  timezone_offset: z.number().optional().default(7.0),
+  convention: z.enum(['KEMENAG', 'MWL', 'ISNA', 'UMM_AL_QURA']).optional().default('KEMENAG'),
+})
+
+export const CelestialPrayerTimesResultSchema = z.object({
+  date: z.string(),
+  latitude: z.number(),
+  longitude: z.number(),
+  timezone_offset: z.number(),
+  convention: z.string(),
+  fajr: z.string(),
+  sunrise: z.string(),
+  dhuhr: z.string(),
+  asr: z.string(),
+  maghrib: z.string(),
+  isha: z.string(),
+  qibla_bearing: z.number(),
+})
+
+export const HybridSearchHitSchema = z.object({
+  id: z.string(),
+  source_type: z.string(),
+  reference: z.string(),
+  excerpt: z.string(),
+  similarity_score: z.number(),
+  bm25_score: z.number(),
+  dense_score: z.number(),
+  match_type: z.string(),
+})
+
+export const HybridSearchRequestSchema = z.object({
+  query: z.string(),
+  top_k: z.number().optional().default(5),
+  alpha: z.number().optional().default(0.5),
+})
+
+export const HybridSearchResultSchema = z.object({
+  query: z.string(),
+  total_hits: z.number(),
+  alpha: z.number(),
+  results: z.array(HybridSearchHitSchema),
+})
+
+
 // ═══════════════════════════════════════════
 // 📌 BOOKMARK & HISTORY SCHEMAS
 // ═══════════════════════════════════════════
@@ -389,4 +437,11 @@ export type HilalVisibilityEvaluation = z.infer<typeof HilalVisibilityEvaluation
 export type SemanticSearchHit = z.infer<typeof SemanticSearchHitSchema>
 export type SemanticSearchRequest = z.infer<typeof SemanticSearchRequestSchema>
 export type SemanticSearchResult = z.infer<typeof SemanticSearchResultSchema>
+
+export type CelestialPrayerTimesRequest = z.infer<typeof CelestialPrayerTimesRequestSchema>
+export type CelestialPrayerTimesResult = z.infer<typeof CelestialPrayerTimesResultSchema>
+export type HybridSearchHit = z.infer<typeof HybridSearchHitSchema>
+export type HybridSearchRequest = z.infer<typeof HybridSearchRequestSchema>
+export type HybridSearchResult = z.infer<typeof HybridSearchResultSchema>
+
 

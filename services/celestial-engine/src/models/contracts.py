@@ -73,3 +73,42 @@ class SemanticSearchResult(BaseModel):
     total_hits: float
     results: List[SemanticSearchHit]
 
+
+class CelestialPrayerTimesResult(BaseModel):
+    date: str
+    latitude: float
+    longitude: float
+    timezone_offset: float
+    convention: str
+    fajr: str
+    sunrise: str
+    dhuhr: str
+    asr: str
+    maghrib: str
+    isha: str
+    qibla_bearing: float
+
+
+class HybridSearchRequest(BaseModel):
+    query: str
+    top_k: Optional[float] = None
+    alpha: Optional[float] = None
+
+
+class HybridSearchHit(BaseModel):
+    id: str
+    source_type: str
+    reference: str
+    excerpt: str
+    similarity_score: float
+    bm25_score: float
+    dense_score: float
+    match_type: str
+
+
+class HybridSearchResult(BaseModel):
+    query: str
+    total_hits: float
+    alpha: float
+    results: List[HybridSearchHit]
+

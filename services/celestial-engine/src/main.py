@@ -9,8 +9,10 @@ from src.ephemeris import calculate_lunar_phase, LunarPhase
 from src.astronomy import (
     calculate_qibla_bearing,
     evaluate_hilal_visibility,
+    calculate_prayer_times,
     QiblaResult,
     HilalVisibilityResult,
+    PrayerTimesResult,
 )
 
 app = FastAPI(
@@ -79,4 +81,40 @@ def get_hilal_visibility(
         elongation_degrees=elongation,
         crescent_width_arcmin=crescent_width,
     )
+
+
+class PrayerTimesRequest(BaseModel):
+    latitude: float = Field(..., ge=-90.0, le=90.0, description="Observer latitude in decimal degrees")
+    longitude: float = Field(..., ge=-180.0, le=180.0, description="Observer longitude in decimal degrees")
+    date: Optional[str] = Field("2026-09-06", description="Gregorian date string YYYY-MM-DD")
+    timezone_offset: Optional[float] = Field(7.0, ge=-12.0, le=14.0, description="UTC timezone offset in hours")
+    convention: Optional[str] = Field("KEMENAG", description="Calculation method: KEMENAG | MWL | ISNA | UMM_AL_QURA")
+
+
+@app.get("/ephemeris/prayer-times", response_model=PrayerTimesResult)
+@app.post("/ephemeris/prayer-times", response_model=PrayerTimesResult)
+def get_prayer_times(
+    lat: Optional[float] = None,
+    lon: Optional[float] = None,
+    date: Optional[str] = None,
+    tz: Optional[float] = None,
+    convention: Optional[str] = None,
+    req: Optional[PrayerTimesRequest] = None,
+):
+    latitude = req.latitude if req else (lat if lat is not None else -6.2088)
+    longitude = req.longitude if req else (lon if lon is not None else 106.8456)
+    date_val = req.date if req and req.date else (date if date else "2026-09-06")
+    tz_val = req.timezone_offset if req and req.timezone_offset is not None else (tz if tz is not None else 7.0)
+    conv_val = req.convention if req and req.convention else (convention if convention else "KEMENAG")
+    # Cast convention to literal
+    allowed_conventions = {"KEMENAG", "MWL", "ISNA", "UMM_AL_QURA"}
+    validated_conv = conv_val if conv_val in allowed_conventions else "KEMENAG"
+    return calculate_prayer_times(
+        latitude=latitude,
+        longitude=longitude,
+        date_str=date_val,
+        timezone_offset=tz_val,
+        convention=validated_conv,  # type: ignore
+    )
+
 
