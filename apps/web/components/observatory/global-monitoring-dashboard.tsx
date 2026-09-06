@@ -14,6 +14,7 @@ import {
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import { useGlobalMonitoring, type EarthquakeFeature } from "@moon/client"
+import { MetricCard } from "@workspace/ui"
 
 type MonitoringFilter =
   | "all"
@@ -27,19 +28,20 @@ type FilterDefinition = {
   icon: LucideIcon
 }
 
-const FILTERS: FilterDefinition[] = [
-  { id: "all", label: "All activity", icon: Globe2 },
+const FILTERS: readonly FilterDefinition[] = [
+  { id: "all", label: "All layers", icon: Globe2 },
   { id: "seismic", label: "Seismic", icon: Activity },
   { id: "aviation", label: "Aviation", icon: Plane },
-  { id: "space", label: "Space weather", icon: Sun },
+  { id: "space", label: "Space weather", icon: Satellite },
 ]
 
-const formatTime = (timestamp: number) =>
-  new Date(timestamp).toLocaleTimeString("en-GB", {
+const formatTime = (time: number) =>
+  new Intl.DateTimeFormat("en-GB", {
     hour: "2-digit",
     minute: "2-digit",
+    second: "2-digit",
     timeZone: "Asia/Jakarta",
-  })
+  }).format(new Date(time))
 
 const formatDate = (timestamp: number) =>
   new Date(timestamp).toLocaleDateString("en-GB", {
@@ -50,19 +52,6 @@ const formatDate = (timestamp: number) =>
 
 const mapX = (longitude: number) => Math.max(2, Math.min(98, ((longitude + 180) / 360) * 100))
 const mapY = (latitude: number) => Math.max(4, Math.min(96, ((90 - latitude) / 180) * 100))
-
-function MetricCard({ label, value, detail, icon: Icon }: { label: string; value: string; detail: string; icon: LucideIcon }) {
-  return (
-    <article className="rounded-md border border-border bg-card p-4">
-      <div className="flex items-center justify-between gap-3 text-muted-foreground">
-        <span className="text-xs font-medium text-muted-foreground">{label}</span>
-        <Icon className="size-4" aria-hidden="true" />
-      </div>
-      <p className="mt-3 text-2xl font-semibold tracking-tight text-foreground">{value}</p>
-      <p className="mt-1 text-xs text-muted-foreground">{detail}</p>
-    </article>
-  )
-}
 
 function ActivityChart({ earthquakes }: { earthquakes: EarthquakeFeature[] }) {
   const buckets = useMemo(() => {

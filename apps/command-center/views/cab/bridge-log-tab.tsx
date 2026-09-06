@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import { StatusBadge } from "@workspace/ui"
 
 export function BridgeLogTab() {
   return (
@@ -94,15 +95,11 @@ export function BridgeLogTab() {
                   {log.basis}
                 </p>
               </div>
-              <span
-                className={`rounded-md shrink-0 border px-2 py-0.5 font-mono text-[8px] font-bold tracking-widest uppercase ${
-                  log.status === "CONFIRMED"
-                    ? "border-success/30 text-success"
-                    : "border-warning/30 text-warning"
-                }`}
-              >
-                {log.status}
-              </span>
+              <StatusBadge
+                status={log.status === "CONFIRMED" ? "success" : "warning"}
+                label={log.status}
+                size="sm"
+              />
             </div>
           </div>
         ))}

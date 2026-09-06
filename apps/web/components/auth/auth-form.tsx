@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react"
 import Link from "next/link"
 import { ArrowRight, LockKeyhole, Mail, UserRound } from "lucide-react"
 import { apiPost, useAuthSession } from "@moon/client"
+import { StatusNotice } from "@workspace/ui"
 
 type AuthMode = "login" | "register"
 
@@ -91,8 +92,8 @@ export function AuthForm() {
       </div>
 
       <form className="space-y-5" onSubmit={submit} noValidate>
-        {message ? <div role="alert" className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">{message}</div> : null}
-        {success ? <div role="status" className="rounded-md border border-success/40 bg-success/10 p-3 text-sm text-success">{success}</div> : null}
+        {message ? <StatusNotice variant="destructive" message={message} /> : null}
+        {success ? <StatusNotice variant="success" message={success} /> : null}
         {!isLogin ? (
           <div>
             <label htmlFor="auth-name" className="text-sm font-medium text-foreground">Full name</label>

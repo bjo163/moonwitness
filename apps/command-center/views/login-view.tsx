@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { ShieldCheck, Lock, Mail, ArrowRight, Loader2, Sparkles, KeyRound } from "lucide-react"
 import { useAuthSession } from "@moon/client"
-import { soundEngine } from "@workspace/ui"
+import { soundEngine, StatusNotice } from "@workspace/ui"
 
 export function CommandCenterLoginView() {
   const router = useRouter()
@@ -68,9 +68,7 @@ export function CommandCenterLoginView() {
         {/* Glass Form Card */}
         <div className="relative rounded-2xl border border-border/40 bg-card/85 p-5 shadow-xl backdrop-blur-xl sm:p-8">
           {errorMsg && (
-            <div className="mb-5 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-center text-xs font-medium text-destructive">
-              {errorMsg}
-            </div>
+            <StatusNotice variant="destructive" message={errorMsg} className="mb-5 text-center text-xs" />
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">

@@ -1,27 +1,17 @@
 import Link from "next/link"
 import { ArrowLeft, ArrowRight, ExternalLink, Search } from "lucide-react"
-import { CitationBox, ProvenanceCard } from "@workspace/ui"
+import { CitationBox, ProvenanceCard, ErrorNotice, PageHeader } from "@workspace/ui"
 import { contentLanguage, contentText, contentType, displaySource, field, type WitnessContent } from "@/lib/knowledge-api"
 import type { ReactNode } from "react"
 
-export { field }
+export { field, ErrorNotice }
 
 export function PublicHeader({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
-  return (
-    <header className="space-y-2 border-b border-border pb-4">
-      <p className="text-xs font-medium text-muted-foreground">{eyebrow}</p>
-      <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">{title}</h1>
-      <p className="max-w-3xl leading-7 text-muted-foreground">{description}</p>
-    </header>
-  )
+  return <PageHeader eyebrow={eyebrow} title={title} description={description} />
 }
 
 export function PublicFrame({ children }: { children: ReactNode }) {
   return <div className="min-h-screen bg-background px-4 pb-8 pt-24 text-foreground sm:px-8"><div className="mx-auto max-w-6xl">{children}</div></div>
-}
-
-export function ErrorNotice({ message = "Content is temporarily unavailable." }: { message?: string }) {
-  return <div role="alert" className="rounded-xl border border-destructive/30 bg-destructive/10 p-5 text-sm text-destructive">{message}</div>
 }
 
 export function SearchEntry({ initialQuery = "" }: { initialQuery?: string }) {

@@ -14,7 +14,7 @@ import {
 } from "lucide-react"
 import { apiClient } from "@moon/client"
 import type { ReactNode } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui"
+import { Card, CardContent, CardHeader, CardTitle, MetricCard, ErrorNotice } from "@workspace/ui"
 
 type DashboardData = {
   missionStatus: Record<string, any> | null
@@ -54,46 +54,7 @@ function Panel({
   )
 }
 
-function Metric({
-  label,
-  value,
-  detail,
-  icon: Icon,
-  href,
-}: {
-  label: string
-  value: string
-  detail: string
-  icon: typeof Activity
-  href?: string
-}) {
-  const content = (
-    <>
-      <div className="flex items-center justify-between">
-        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</p>
-        <Icon className="h-4 w-4 text-muted-foreground" />
-      </div>
-      <p className="mt-3 text-2xl font-bold tracking-tight text-foreground font-mono">
-        {value}
-      </p>
-      <p className="mt-1 text-xs text-muted-foreground">{detail}</p>
-    </>
-  )
-
-  if (!href) {
-    return (
-      <Card className="rounded-xl border border-border bg-card p-5 shadow-sm text-card-foreground">
-        {content}
-      </Card>
-    )
-  }
-
-  return (
-    <Link href={href} className="block rounded-xl border border-border bg-card p-5 shadow-sm text-card-foreground transition-colors hover:border-primary/50 hover:bg-accent/50">
-      {content}
-    </Link>
-  )
-}
+const Metric = MetricCard
 
 export function DashboardOverview() {
   const [data, setData] = useState<DashboardData | null>(null)
@@ -160,11 +121,7 @@ export function DashboardOverview() {
   }
 
   if (!data) {
-    return (
-      <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-5 text-sm text-destructive">
-        Dashboard data is temporarily unavailable.
-      </div>
-    )
+    return <ErrorNotice message="Dashboard data is temporarily unavailable." />
   }
 
   const missions = data.todayMission ?? []
