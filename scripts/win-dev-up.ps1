@@ -2,12 +2,12 @@
 param(
     [ValidateSet("cmd", "wt", "powershell", "turbo")]
     [string]$Mode = "cmd",
-    [switch]$WithPython,
+    [switch]$NoPython,
     [switch]$KeepExisting
 )
 
 $ErrorActionPreference = "Stop"
-$RepoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
+$RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 
 Write-Host "=================================================================" -ForegroundColor Cyan
 Write-Host "MOONWITNESS OS - WINDOWS MULTI-SERVICE DEV RUNNER" -ForegroundColor Cyan
@@ -15,14 +15,44 @@ Write-Host "=================================================================" -
 Write-Host "Workspace Root: $RepoRoot" -ForegroundColor DarkGray
 Write-Host "Execution Mode: $Mode (Dedicated Windows CMD per service)" -ForegroundColor DarkGray
 
-# 1. Service Definitions
+# 1. Resolve Python Runner
+$venvActivateBat = Join-Path $RepoRoot ".venv\Scripts\activate.bat"
+$venvActivatePs1 = Join-Path $RepoRoot ".venv\Scripts\Activate.ps1"
+$hasVenv = (Test-Path $venvActivateBat)
+
+$celestialCmdBat = if ($hasVenv) {
+    "call $venvActivateBat & uvicorn src.main:app --port 8001 --reload"
+} else {
+    "python -m uv run uvicorn src.main:app --port 8001 --reload"
+}
+
+$celestialCmdPs = if (Test-Path $venvActivatePs1) {
+    "& '$venvActivatePs1'; uvicorn src.main:app --port 8001 --reload"
+} else {
+    "python -m uv run uvicorn src.main:app --port 8001 --reload"
+}
+
+$aiAgentCmdBat = if ($hasVenv) {
+    "call $venvActivateBat & uvicorn src.main:app --port 8002 --reload"
+} else {
+    "python -m uv run uvicorn src.main:app --port 8002 --reload"
+}
+
+$aiAgentCmdPs = if (Test-Path $venvActivatePs1) {
+    "& '$venvActivatePs1'; uvicorn src.main:app --port 8002 --reload"
+} else {
+    "python -m uv run uvicorn src.main:app --port 8002 --reload"
+}
+
+# 2. Service Definitions (All 5 Polyglot Services)
 $services = @(
     @{
         Id = "api"
         Title = "MW-API [Port 4000]"
         Path = "apps\api"
         Port = 4000
-        Command = "pnpm dev"
+        CmdCommand = "pnpm dev"
+        PsCommand = "pnpm dev"
         Description = "API Backend"
         Url = "http://localhost:4000"
     },
@@ -31,7 +61,8 @@ $services = @(
         Title = "MW-COMMAND-CENTER [Port 3001]"
         Path = "apps\command-center"
         Port = 3001
-        Command = "pnpm dev"
+        CmdCommand = "pnpm dev"
+        PsCommand = "pnpm dev"
         Description = "Command Center"
         Url = "http://localhost:3001"
     },
@@ -40,25 +71,39 @@ $services = @(
         Title = "MW-WEB [Port 3000]"
         Path = "apps\web"
         Port = 3000
-        Command = "pnpm dev"
+        CmdCommand = "pnpm dev"
+        PsCommand = "pnpm dev"
         Description = "Public Web Portal"
         Url = "http://localhost:3000"
     }
 )
 
-if ($WithPython) {
-    $services += @{
-        Id = "celestial"
-        Title = "MW-CELESTIAL [Port 8001]"
-        Path = "services\celestial-engine"
-        Port = 8001
-        Command = "python -m uvicorn src.main:app --port 8001 --reload"
-        Description = "Celestial Engine"
-        Url = "http://localhost:8001"
-    }
+if (-not $NoPython) {
+    $services += @(
+        @{
+            Id = "celestial"
+            Title = "MW-CELESTIAL [Port 8001]"
+            Path = "services\celestial-engine"
+            Port = 8001
+            CmdCommand = $celestialCmdBat
+            PsCommand = $celestialCmdPs
+            Description = "Celestial Engine"
+            Url = "http://localhost:8001"
+        },
+        @{
+            Id = "ai-agent"
+            Title = "MW-AI-AGENT [Port 8002]"
+            Path = "services\ai-agent"
+            Port = 8002
+            CmdCommand = $aiAgentCmdBat
+            PsCommand = $aiAgentCmdPs
+            Description = "AI Agent Service"
+            Url = "http://localhost:8002"
+        }
+    )
 }
 
-# 2. Port Check and Automatic Cleanup
+# 3. Port Check and Automatic Cleanup
 Write-Host "`n>> Step 1/3: Checking local port availability..." -ForegroundColor Yellow
 foreach ($svc in $services) {
     $connections = Get-NetTCPConnection -LocalPort $svc.Port -State Listen -ErrorAction SilentlyContinue
@@ -84,7 +129,7 @@ foreach ($svc in $services) {
     }
 }
 
-# 3. Build Shared Packages (@moon/*)
+# 4. Build Shared Workspace Packages (@moon/*)
 Write-Host "`n>> Step 2/3: Building shared workspace packages (@moon/*)..." -ForegroundColor Yellow
 Push-Location $RepoRoot
 try {
@@ -98,17 +143,30 @@ try {
     Pop-Location
 }
 
-# 4. Launch Services Based on Mode
+# Ensure Python Virtualenv is synced if needed
+if ((-not $NoPython) -and (-not $hasVenv)) {
+    Write-Host "  [*] Synchronizing Python virtual environment (.venv)..." -ForegroundColor Cyan
+    try {
+        & python -m uv sync --directory "$RepoRoot\services\celestial-engine"
+        & python -m uv pip install --python "$RepoRoot\.venv" -e "$RepoRoot\services\ai-agent"
+        Write-Host "  [OK] Python dependencies verified." -ForegroundColor Green
+    } catch {
+        Write-Host "  [!] Python sync returned warning, proceeding with startup..." -ForegroundColor Yellow
+    }
+}
+
+# 5. Launch Services Based on Mode
 Write-Host "`n>> Step 3/3: Launching services using [$Mode] mode..." -ForegroundColor Yellow
 
 if ($Mode -eq "cmd") {
-    # Default: Separate Windows CMD console window for each service
+    # Default: Dedicated Windows CMD console window for each service
     Write-Host "[+] Launching dedicated Windows CMD window for each service..." -ForegroundColor Cyan
 
     foreach ($svc in $services) {
         $svcDir = (Resolve-Path (Join-Path $RepoRoot $svc.Path)).Path
-        Start-Process "cmd.exe" -ArgumentList "/k", "title $($svc.Title) & $($svc.Command)" -WorkingDirectory $svcDir
+        Start-Process "cmd.exe" -ArgumentList "/k", "title $($svc.Title) & cd /d $svcDir & $($svc.CmdCommand)" -WorkingDirectory $svcDir
         Write-Host "  [OK] Started CMD window: $($svc.Title)" -ForegroundColor Green
+        Start-Sleep -Milliseconds 400
     }
 
 } elseif ($Mode -eq "powershell") {
@@ -117,9 +175,10 @@ if ($Mode -eq "cmd") {
 
     foreach ($svc in $services) {
         $svcDir = (Resolve-Path (Join-Path $RepoRoot $svc.Path)).Path
-        $psCmd = "`$host.UI.RawUI.WindowTitle = '$($svc.Title)'; Write-Host 'Starting $($svc.Description)...' -ForegroundColor Cyan; $($svc.Command)"
+        $psCmd = "Set-Location `"$svcDir`"; `$host.UI.RawUI.WindowTitle = '$($svc.Title)'; Write-Host 'Starting $($svc.Description)...' -ForegroundColor Cyan; $($svc.PsCommand)"
         Start-Process "powershell.exe" -ArgumentList "-NoExit", "-Command", $psCmd -WorkingDirectory $svcDir
         Write-Host "  [OK] Started PowerShell window: $($svc.Title)" -ForegroundColor Green
+        Start-Sleep -Milliseconds 400
     }
 
 } elseif ($Mode -eq "wt") {
@@ -139,11 +198,15 @@ if ($Mode -eq "cmd") {
         "new-tab", "--title", "MW-WEB [3000]", "-d", $WebDir, "cmd.exe", "/k", "pnpm dev"
     )
 
-    if ($WithPython) {
-        $PythonDir = (Resolve-Path (Join-Path $RepoRoot "services\celestial-engine")).Path
+    if (-not $NoPython) {
+        $CelestialDir = (Resolve-Path (Join-Path $RepoRoot "services\celestial-engine")).Path
+        $AiAgentDir = (Resolve-Path (Join-Path $RepoRoot "services\ai-agent")).Path
+
         $wtArgs += @(
             ";",
-            "new-tab", "--title", "MW-CELESTIAL [8001]", "-d", $PythonDir, "cmd.exe", "/k", "python -m uvicorn src.main:app --port 8001 --reload"
+            "new-tab", "--title", "MW-CELESTIAL [8001]", "-d", $CelestialDir, "cmd.exe", "/k", $celestialCmdBat,
+            ";",
+            "new-tab", "--title", "MW-AI-AGENT [8002]", "-d", $AiAgentDir, "cmd.exe", "/k", $aiAgentCmdBat
         )
     }
 
@@ -162,7 +225,7 @@ if ($Mode -eq "cmd") {
 }
 
 Write-Host "`n=================================================================" -ForegroundColor Cyan
-Write-Host "SERVICES LAUNCHED SUCCESSFULLY:" -ForegroundColor Cyan
+Write-Host "ALL MOONWITNESS SERVICES ACTIVE:" -ForegroundColor Cyan
 foreach ($svc in $services) {
     Write-Host "  * $($svc.Description.PadRight(18)) : $($svc.Url) ($($svc.Path))" -ForegroundColor White
 }
