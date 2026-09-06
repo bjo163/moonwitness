@@ -15,44 +15,14 @@ Write-Host "=================================================================" -
 Write-Host "Workspace Root: $RepoRoot" -ForegroundColor DarkGray
 Write-Host "Execution Mode: $Mode (Dedicated Windows CMD per service)" -ForegroundColor DarkGray
 
-# 1. Resolve Python Runner
-$venvActivateBat = Join-Path $RepoRoot ".venv\Scripts\activate.bat"
-$venvActivatePs1 = Join-Path $RepoRoot ".venv\Scripts\Activate.ps1"
-$hasVenv = (Test-Path $venvActivateBat)
-
-$celestialCmdBat = if ($hasVenv) {
-    "call $venvActivateBat & uvicorn src.main:app --port 8001 --reload"
-} else {
-    "python -m uv run uvicorn src.main:app --port 8001 --reload"
-}
-
-$celestialCmdPs = if (Test-Path $venvActivatePs1) {
-    "& '$venvActivatePs1'; uvicorn src.main:app --port 8001 --reload"
-} else {
-    "python -m uv run uvicorn src.main:app --port 8001 --reload"
-}
-
-$aiAgentCmdBat = if ($hasVenv) {
-    "call $venvActivateBat & uvicorn src.main:app --port 8002 --reload"
-} else {
-    "python -m uv run uvicorn src.main:app --port 8002 --reload"
-}
-
-$aiAgentCmdPs = if (Test-Path $venvActivatePs1) {
-    "& '$venvActivatePs1'; uvicorn src.main:app --port 8002 --reload"
-} else {
-    "python -m uv run uvicorn src.main:app --port 8002 --reload"
-}
-
-# 2. Service Definitions (All 5 Polyglot Services)
+# 1. Service Definitions (All 5 Polyglot Services)
 $services = @(
     @{
         Id = "api"
         Title = "MW-API [Port 4000]"
         Path = "apps\api"
         Port = 4000
-        CmdCommand = "pnpm dev"
-        PsCommand = "pnpm dev"
+        Runner = "dev-api.cmd"
         Description = "API Backend"
         Url = "http://localhost:4000"
     },
@@ -61,8 +31,7 @@ $services = @(
         Title = "MW-COMMAND-CENTER [Port 3001]"
         Path = "apps\command-center"
         Port = 3001
-        CmdCommand = "pnpm dev"
-        PsCommand = "pnpm dev"
+        Runner = "dev-command-center.cmd"
         Description = "Command Center"
         Url = "http://localhost:3001"
     },
@@ -71,8 +40,7 @@ $services = @(
         Title = "MW-WEB [Port 3000]"
         Path = "apps\web"
         Port = 3000
-        CmdCommand = "pnpm dev"
-        PsCommand = "pnpm dev"
+        Runner = "dev-web.cmd"
         Description = "Public Web Portal"
         Url = "http://localhost:3000"
     }
@@ -85,8 +53,7 @@ if (-not $NoPython) {
             Title = "MW-CELESTIAL [Port 8001]"
             Path = "services\celestial-engine"
             Port = 8001
-            CmdCommand = $celestialCmdBat
-            PsCommand = $celestialCmdPs
+            Runner = "dev-celestial.cmd"
             Description = "Celestial Engine"
             Url = "http://localhost:8001"
         },
@@ -95,15 +62,14 @@ if (-not $NoPython) {
             Title = "MW-AI-AGENT [Port 8002]"
             Path = "services\ai-agent"
             Port = 8002
-            CmdCommand = $aiAgentCmdBat
-            PsCommand = $aiAgentCmdPs
+            Runner = "dev-ai-agent.cmd"
             Description = "AI Agent Service"
             Url = "http://localhost:8002"
         }
     )
 }
 
-# 3. Port Check and Automatic Cleanup
+# 2. Port Check and Automatic Cleanup
 Write-Host "`n>> Step 1/3: Checking local port availability..." -ForegroundColor Yellow
 foreach ($svc in $services) {
     $connections = Get-NetTCPConnection -LocalPort $svc.Port -State Listen -ErrorAction SilentlyContinue
@@ -129,7 +95,7 @@ foreach ($svc in $services) {
     }
 }
 
-# 4. Build Shared Workspace Packages (@moon/*)
+# 3. Build Shared Workspace Packages (@moon/*)
 Write-Host "`n>> Step 2/3: Building shared workspace packages (@moon/*)..." -ForegroundColor Yellow
 Push-Location $RepoRoot
 try {
@@ -144,7 +110,8 @@ try {
 }
 
 # Ensure Python Virtualenv is synced if needed
-if ((-not $NoPython) -and (-not $hasVenv)) {
+$venvActivateBat = Join-Path $RepoRoot ".venv\Scripts\activate.bat"
+if ((-not $NoPython) -and (-not (Test-Path $venvActivateBat))) {
     Write-Host "  [*] Synchronizing Python virtual environment (.venv)..." -ForegroundColor Cyan
     try {
         & python -m uv sync --directory "$RepoRoot\services\celestial-engine"
@@ -155,17 +122,28 @@ if ((-not $NoPython) -and (-not $hasVenv)) {
     }
 }
 
-# 5. Launch Services Based on Mode
+# 4. Launch Services Based on Mode
 Write-Host "`n>> Step 3/3: Launching services using [$Mode] mode..." -ForegroundColor Yellow
 
 if ($Mode -eq "cmd") {
-    # Default: Dedicated Windows CMD console window for each service
+    # Default: Dedicated Windows CMD console window for each service via start command
     Write-Host "[+] Launching dedicated Windows CMD window for each service..." -ForegroundColor Cyan
 
     foreach ($svc in $services) {
-        $svcDir = (Resolve-Path (Join-Path $RepoRoot $svc.Path)).Path
-        Start-Process "cmd.exe" -ArgumentList "/k", "title $($svc.Title) & cd /d $svcDir & $($svc.CmdCommand)" -WorkingDirectory $svcDir
+        $runnerFile = Join-Path $RepoRoot "scripts\runners\$($svc.Runner)"
+        Start-Process "cmd.exe" -ArgumentList "/c", "start", "`"$($svc.Title)`"", "`"$runnerFile`""
         Write-Host "  [OK] Started CMD window: $($svc.Title)" -ForegroundColor Green
+        Start-Sleep -Milliseconds 400
+    }
+
+} elseif ($Mode -eq "wt") {
+    # Windows Terminal: Each in a new window or tabs
+    Write-Host "[+] Launching services in Windows Terminal..." -ForegroundColor Cyan
+
+    foreach ($svc in $services) {
+        $runnerFile = Join-Path $RepoRoot "scripts\runners\$($svc.Runner)"
+        Start-Process "wt.exe" -ArgumentList "-w", "new", "--title", $svc.Title, "cmd.exe", "/c", "`"$runnerFile`""
+        Write-Host "  [OK] Started WT window: $($svc.Title)" -ForegroundColor Green
         Start-Sleep -Milliseconds 400
     }
 
@@ -175,43 +153,11 @@ if ($Mode -eq "cmd") {
 
     foreach ($svc in $services) {
         $svcDir = (Resolve-Path (Join-Path $RepoRoot $svc.Path)).Path
-        $psCmd = "Set-Location `"$svcDir`"; `$host.UI.RawUI.WindowTitle = '$($svc.Title)'; Write-Host 'Starting $($svc.Description)...' -ForegroundColor Cyan; $($svc.PsCommand)"
+        $psCmd = "Set-Location `"$svcDir`"; `$host.UI.RawUI.WindowTitle = '$($svc.Title)'; Write-Host 'Starting $($svc.Description)...' -ForegroundColor Cyan; pnpm dev"
         Start-Process "powershell.exe" -ArgumentList "-NoExit", "-Command", $psCmd -WorkingDirectory $svcDir
         Write-Host "  [OK] Started PowerShell window: $($svc.Title)" -ForegroundColor Green
         Start-Sleep -Milliseconds 400
     }
-
-} elseif ($Mode -eq "wt") {
-    # Windows Terminal tabbed session
-    Write-Host "[+] Launching services in Windows Terminal tabbed session..." -ForegroundColor Cyan
-
-    $ApiDir = (Resolve-Path (Join-Path $RepoRoot "apps\api")).Path
-    $CcDir = (Resolve-Path (Join-Path $RepoRoot "apps\command-center")).Path
-    $WebDir = (Resolve-Path (Join-Path $RepoRoot "apps\web")).Path
-
-    $wtArgs = @(
-        "-w", "0",
-        "new-tab", "--title", "MW-API [4000]", "-d", $ApiDir, "cmd.exe", "/k", "pnpm dev",
-        ";",
-        "new-tab", "--title", "MW-COMMAND-CENTER [3001]", "-d", $CcDir, "cmd.exe", "/k", "pnpm dev",
-        ";",
-        "new-tab", "--title", "MW-WEB [3000]", "-d", $WebDir, "cmd.exe", "/k", "pnpm dev"
-    )
-
-    if (-not $NoPython) {
-        $CelestialDir = (Resolve-Path (Join-Path $RepoRoot "services\celestial-engine")).Path
-        $AiAgentDir = (Resolve-Path (Join-Path $RepoRoot "services\ai-agent")).Path
-
-        $wtArgs += @(
-            ";",
-            "new-tab", "--title", "MW-CELESTIAL [8001]", "-d", $CelestialDir, "cmd.exe", "/k", $celestialCmdBat,
-            ";",
-            "new-tab", "--title", "MW-AI-AGENT [8002]", "-d", $AiAgentDir, "cmd.exe", "/k", $aiAgentCmdBat
-        )
-    }
-
-    Start-Process "wt.exe" -ArgumentList $wtArgs
-    Write-Host "  [OK] Windows Terminal opened with dedicated service tabs." -ForegroundColor Green
 
 } else {
     # Turbo parallel mode in current console
