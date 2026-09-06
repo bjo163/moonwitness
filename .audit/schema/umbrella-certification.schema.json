@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moonwitness.local/schemas/umbrella-certification.schema.json",
+  "title": "MoonWitness UMBRELLA Certification Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "certification_version",
+    "status",
+    "source_revision",
+    "report_fingerprint",
+    "certification_config_hash",
+    "fixed_generated_at",
+    "checks",
+    "missing_required_checks",
+    "failed_required_checks",
+    "artifacts"
+  ],
+  "properties": {
+    "schema_version": { "type": "integer", "const": 1 },
+    "certification_version": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["PASS", "FAIL"] },
+    "source_revision": { "type": ["string", "null"] },
+    "report_fingerprint": { "type": ["string", "null"] },
+    "certification_config_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "fixed_generated_at": { "type": "string", "format": "date-time" },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "details"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "status": { "enum": ["PASS", "FAIL"] },
+          "details": { "type": "object" }
+        }
+      }
+    },
+    "missing_required_checks": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "failed_required_checks": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report_sha256", "markdown_sha256"],
+      "properties": {
+        "report_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "markdown_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

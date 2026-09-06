@@ -292,3 +292,35 @@ shared UI         -> @workspace/ui
 ```
 
 No parallel implementation should silently compete with these owners.
+
+## 21. Polyglot monorepo architecture & contracts
+
+The repository supports an enterprise polyglot architecture enabling compute-intensive capabilities to be implemented in their most effective runtime (TypeScript for application web/admin/BFF, Python for astronomical ephemeris and AI/NLP):
+
+```text
+moonwitness/
+├── apps/
+│   ├── web/                 # Public Next.js 16 Web application (Port 3000)
+│   ├── command-center/      # Operations & administrative portal (Port 3001)
+│   └── api/                 # Fastify / NativeServer Gateway (Port 4000)
+├── services/
+│   ├── celestial-engine/    # Python 3.12 FastAPI astronomical service (Port 8001)
+│   │   ├── src/ephemeris.py # Lunar phase & orbital parameters
+│   │   └── src/astronomy.py # Qibla Great Circle & Hilal MABIMS/Odeh criteria
+│   └── ai-agent/            # Python 3.12 FastAPI AI service (Port 8002)
+│       └── src/search.py    # Arabic text normalization & BM25 ranking
+├── packages/                # 33 shared TypeScript packages (protocol, client, UI, ORM)
+├── contracts/
+│   └── openapi/             # Universal OpenAPI 3.0 contract artifact
+└── docs/                    # Structured enterprise documentation (architecture, roadmap)
+```
+
+### Universal contract flow
+1. `@moon/protocol` defines the canonical source of truth for endpoints, models, and schemas in TypeScript with Zod.
+2. `pnpm contracts:export` exports `contracts/openapi/openapi.json` from the server registry.
+3. `pnpm contracts:verify` validates that committed contracts match code with zero drift (blocking in CI and release pre-flight).
+4. `pnpm contracts:generate:python` derives strongly-typed Pydantic v2 models directly into `services/celestial-engine/src/models/contracts.py` and `services/ai-agent/src/models/contracts.py`.
+5. `apps/api` transparently proxies requests to `services/celestial-engine` and `services/ai-agent` with in-memory caching.
+6. `@moon/client` provides typed frontend methods (`fetchQiblaDirection`, `fetchHilalVisibility`, `searchSemanticPassages`) consumed by `apps/web`.
+
+

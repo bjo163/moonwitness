@@ -420,6 +420,74 @@ server.proxy(
   "user"
 )
 
+// ── Polyglot Services Bridge (Celestial Engine & AI Agent) ───────────────────
+const celestialEngineUrl = process.env.CELESTIAL_ENGINE_URL || "http://127.0.0.1:8001"
+const aiAgentUrl = process.env.AI_AGENT_URL || "http://127.0.0.1:8002"
+
+server.proxy(
+  "GET",
+  "/api/services/celestial/health",
+  `${celestialEngineUrl}/health`,
+  { cache: "5s" },
+  "user"
+)
+
+server.proxy(
+  "POST",
+  "/api/services/celestial/lunar-phase",
+  `${celestialEngineUrl}/ephemeris/lunar-phase`,
+  { cache: "1m" },
+  "user"
+)
+
+server.proxy(
+  "GET",
+  "/api/services/celestial/qibla",
+  `${celestialEngineUrl}/ephemeris/qibla`,
+  { cache: "10m", query: ["lat", "lon"] },
+  "user"
+)
+
+server.proxy(
+  "POST",
+  "/api/services/celestial/qibla",
+  `${celestialEngineUrl}/ephemeris/qibla`,
+  { cache: "10m" },
+  "user"
+)
+
+server.proxy(
+  "GET",
+  "/api/services/celestial/hilal-visibility",
+  `${celestialEngineUrl}/ephemeris/hilal-visibility`,
+  { cache: "1m", query: ["alt", "elong", "width"] },
+  "user"
+)
+
+server.proxy(
+  "POST",
+  "/api/services/celestial/hilal-visibility",
+  `${celestialEngineUrl}/ephemeris/hilal-visibility`,
+  { cache: "1m" },
+  "user"
+)
+
+server.proxy(
+  "GET",
+  "/api/services/ai/health",
+  `${aiAgentUrl}/health`,
+  { cache: "5s" },
+  "user"
+)
+
+server.proxy(
+  "POST",
+  "/api/services/ai/semantic/search",
+  `${aiAgentUrl}/semantic/search`,
+  { cache: "30s" },
+  "user"
+)
+
 server.start().then(async () => {
   const dbHealth = await checkDbConnection()
   if (dbHealth.ok) {

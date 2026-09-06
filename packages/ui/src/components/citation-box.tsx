@@ -2,9 +2,9 @@
 
 import * as React from 'react'
 import { useState } from 'react'
-import { Card, CardContent } from './card.js'
-import { Button } from './button.js'
-import { Badge } from './badge.js'
+import { Card, CardContent } from './card'
+import { Button } from './button'
+import { Badge } from './badge'
 
 export interface CitationProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string

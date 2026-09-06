@@ -15,6 +15,9 @@ import type {
   CabSummaryResponse,
   HealthResponse,
   DbStatusResponse,
+  QiblaCalculationResult,
+  HilalVisibilityEvaluation,
+  SemanticSearchResult,
 } from "@workspace/types"
 
 export const API_ENDPOINTS = {
@@ -26,6 +29,11 @@ export const API_ENDPOINTS = {
     PRAYER_TIMES: "/api/prayer-times",
     HIJRI_DATE: "/api/islamic/hijri-date",
     QIBLA: "/api/islamic/qibla",
+  },
+  SERVICES: {
+    CELESTIAL_QIBLA: "/api/services/celestial/qibla",
+    CELESTIAL_HILAL: "/api/services/celestial/hilal-visibility",
+    AI_SEARCH: "/api/services/ai/semantic/search",
   },
   SYSTEM: {
     HEALTH: "/api/system/health",
@@ -161,3 +169,41 @@ export async function fetchGoldPrice(): Promise<{ pricePerGramIdr: number; symbo
 export async function sendChatMessage(messages: ChatMessage[]): Promise<ChatMessage> {
   return await apiPost<ChatMessage>("/api/agent", { messages })
 }
+
+// ── POLYGLOT MICROSERVICES (CELESTIAL ENGINE & AI AGENT) ─────────────
+export async function fetchQiblaDirection(
+  latitude: number,
+  longitude: number
+): Promise<QiblaCalculationResult> {
+  return await apiGet<QiblaCalculationResult>(
+    `/api/services/celestial/qibla?lat=${encodeURIComponent(latitude)}&lon=${encodeURIComponent(longitude)}`
+  )
+}
+
+export async function fetchHilalVisibility(
+  altitudeDegrees: number,
+  elongationDegrees: number,
+  crescentWidthArcmin?: number
+): Promise<HilalVisibilityEvaluation> {
+  const params = new URLSearchParams({
+    alt: String(altitudeDegrees),
+    elong: String(elongationDegrees),
+  })
+  if (crescentWidthArcmin !== undefined) {
+    params.set("width", String(crescentWidthArcmin))
+  }
+  return await apiGet<HilalVisibilityEvaluation>(
+    `/api/services/celestial/hilal-visibility?${params.toString()}`
+  )
+}
+
+export async function searchSemanticPassages(
+  query: string,
+  topK = 5
+): Promise<SemanticSearchResult> {
+  return await apiPost<SemanticSearchResult>("/api/services/ai/semantic/search", {
+    query,
+    top_k: topK,
+  })
+}
+

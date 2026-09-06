@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-09-04",
+  "sources": [
+    "https://nodejs.org/en/about/previous-releases",
+    "https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+    "https://github.com/actions/checkout/releases",
+    "https://github.com/actions/setup-node/releases",
+    "https://github.com/actions/github-script/releases",
+    "https://github.com/pnpm/action-setup/releases"
+  ],
+  "node": {
+    "production_supported_majors": [22, 24],
+    "current_major": 26,
+    "eol_majors": [20],
+    "next_schedule_change": "2026-10"
+  },
+  "github_actions": {
+    "node20_removal_date": "2026-09-23",
+    "minimum_node24_major": {
+      "actions/checkout": 5,
+      "actions/setup-node": 5,
+      "actions/github-script": 8,
+      "pnpm/action-setup": 6,
+      "actions/cache": 5,
+      "actions/upload-artifact": 6
+    },
+    "observed_current_major": {
+      "actions/checkout": 7,
+      "actions/setup-node": 6,
+      "actions/github-script": 9,
+      "pnpm/action-setup": 6,
+      "actions/cache": 5,
+      "actions/upload-artifact": 7
+    }
+  }
+}

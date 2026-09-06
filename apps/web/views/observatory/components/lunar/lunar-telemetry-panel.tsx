@@ -1,8 +1,10 @@
 "use client"
 
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { Moon, Sun, Clock, Compass, BookOpen, Star, AlertTriangle } from "lucide-react"
 import { CelestialMoonSphere } from "@workspace/ui"
+import { fetchHilalVisibility } from "@moon/client"
+import type { HilalVisibilityEvaluation } from "@workspace/types"
 import type { LunarDayItem } from "./lunar-calendar-grid"
 
 interface LunarTelemetryPanelProps {
@@ -11,6 +13,27 @@ interface LunarTelemetryPanelProps {
 
 export function LunarTelemetryPanel({ day }: LunarTelemetryPanelProps) {
   const calculatedPhase = ((day.hijriDay - 1) % 30) / 29.53
+  const [hilalEval, setHilalEval] = useState<HilalVisibilityEvaluation | null>(null)
+
+  useEffect(() => {
+    let isMounted = true
+    const isCrescentWindow = day.hijriDay <= 3 || day.hijriDay >= 28
+    const alt = isCrescentWindow ? (day.hijriDay === 1 ? 5.2 : 2.8) : 12.0
+    const elong = isCrescentWindow ? (day.hijriDay === 1 ? 8.1 : 5.0) : 18.0
+
+    fetchHilalVisibility(alt, elong, 0.6)
+      .then((res) => {
+        if (isMounted) setHilalEval(res)
+      })
+      .catch(() => {
+        if (isMounted) setHilalEval(null)
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [day.hijriDay])
+
 
   return (
     <div className="space-y-4">
@@ -68,6 +91,33 @@ export function LunarTelemetryPanel({ day }: LunarTelemetryPanelProps) {
           </div>
         </div>
       </div>
+
+      {/* Hilal Visibility Evaluation (MABIMS & Odeh) */}
+      {hilalEval && (
+        <div className="rounded-xl border border-border bg-card p-4 font-mono text-xs shadow-sm">
+          <div className="flex items-center justify-between pb-2 border-b border-border">
+            <span className="text-foreground font-semibold">HILAL VISIBILITY (IMKANUR RUKYAT)</span>
+            <span
+              className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
+                hilalEval.mabims_criterion.passed
+                  ? "bg-success/15 text-success border border-success/30"
+                  : "bg-warning/15 text-warning border border-warning/30"
+              }`}
+            >
+              MABIMS: {hilalEval.mabims_criterion.status}
+            </span>
+          </div>
+          <div className="mt-2.5 space-y-1.5 text-[11px]">
+            <div className="flex justify-between text-muted-foreground">
+              <span>Odeh Criterion:</span>
+              <span className="text-foreground font-medium">{hilalEval.odeh_criterion.category}</span>
+            </div>
+            <div className="text-[10px] text-muted-foreground/80 leading-tight">
+              {hilalEval.overall_verdict}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Ayyamul Bidh / Spiritual Note */}
       {day.isAyyamulBidh && (
