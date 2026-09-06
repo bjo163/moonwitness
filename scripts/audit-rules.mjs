@@ -18,6 +18,7 @@
 
 import { researchUiFindings } from "./audit-research-ui.mjs"
 import { componentHealth, componentHealthRecommendation } from "./component-health.mjs"
+import { consistencyFindings } from "./audit-consistency.mjs"
 import { auditThemeTokens } from "./audit-theme-tokens.mjs"
 import fs from "fs"
 import path from "path"
@@ -86,6 +87,7 @@ const VIOLATIONS = {
   componentReuse: [],
   duplicateComponents: [],
   uiConsistency: [],
+  consistency: [],
   ghostFolders: [],
   legacyHudNaming: [],
   legacyCoreImports: [],
@@ -378,6 +380,7 @@ function auditFile(filePath) {
   const isTest = /(?:\.test|\.spec)\.[cm]?[jt]sx?$/.test(filePath)
   const isDoc = isDocumentation(filePath)
   const isActive = isActiveImplementation(filePath)
+  if (isActive) VIOLATIONS.consistency.push(...consistencyFindings(relativePath, content))
   if (isActive && /\.tsx$/.test(filePath)) {
     for (const item of componentHealth(relativePath, content)) {
       VIOLATIONS.componentReuse.push({ file: relativePath, line: item.line, issue: `${item.component} health ${item.score}/100 (${item.lines} lines, ${item.props} props, ${item.conditionals} conditionals); ${componentHealthRecommendation(item)}` })
@@ -690,6 +693,7 @@ else console.log(`  ${RED}❌ [LAW 24] Direct localStorage Calls: ${VIOLATIONS.d
 
 console.log(`\n${BOLD}${CYAN}▶ PHASE 5 GOVERNANCE: CANONICAL ENTERPRISE DESIGN SYSTEM AUDIT${RESET}`)
 const governanceChecks = [
+  ["CROSS-FILE CONSISTENCY", VIOLATIONS.consistency],
   ["SHARED UI BOUNDARY", VIOLATIONS.uiConsistency],
   ["COMPONENT REUSE & COMPOSITION", VIOLATIONS.componentReuse],
   ["DUPLICATE COMPONENT DEFINITIONS", VIOLATIONS.duplicateComponents],

@@ -56,4 +56,10 @@ describe("Phase 5 governance auditor", () => {
     expect(source).toContain("DUPLICATE COMPONENT DEFINITIONS")
     expect(source).toContain("consolidate the canonical implementation")
   })
+
+  it("includes cross-file consistency checks", () => {
+    const source = readFileSync(auditor, "utf8")
+    expect(source).toContain("CROSS-FILE CONSISTENCY")
+    expect(source).toContain("consistencyFindings")
+  })
 })

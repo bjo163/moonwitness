@@ -24,6 +24,11 @@
   `review` means inspect before copying. Generic UI belongs in `packages/ui`;
   domain-bound logic stays in its owning package. Renaming or wrapping a
   duplicate does not resolve the finding.
+- `audit-consistency.mjs` checks cross-file conventions: one UI import style per
+  file, explicit button types, and focused file/component naming. Fix the
+  contract at the source; do not silence it with aliases or wrapper exports.
+  Use the public `@workspace/ui` entrypoint for feature code unless a documented
+  package-level subpath is required.
 - `audit-theme-tokens.mjs` checks required light/dark tokens, Tailwind color
   mappings, duplicate declarations, direct self-references, and text contrast.
 - `audit-research-ui.mjs` checks literal classes in the migrated public home,
