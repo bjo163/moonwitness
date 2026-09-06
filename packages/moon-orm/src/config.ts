@@ -19,15 +19,15 @@ export function setupOrm(config: DbConfig) {
     setDialect(dialect)
     const knexConfig = parseDbUrl(config)
     dbInstance = knex(knexConfig as any)
-  } else if (typeof config !== 'function' && !('select' in config)) {
-    // Plain config object
+  } else if (typeof config !== 'function' && 'client' in config && typeof (config as any).client === 'string' && !('raw' in config)) {
+    // Plain Knex config object
     const clientStr = String((config as any).client || '')
     setDialect(detectDialect(clientStr))
     dbInstance = knex(config as any)
   } else {
-    // Already a Knex instance
+    // Already a Knex instance or mock DB instance
     dbInstance = config as Knex
-    const clientStr = String((dbInstance.client as any)?.config?.client || '')
+    const clientStr = String((dbInstance.client as any)?.config?.client || (dbInstance.client as any)?.driverName || '')
     setDialect(detectDialect(clientStr))
   }
   

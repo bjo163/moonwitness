@@ -107,7 +107,29 @@ export class FastifyAdapter {
 
   private registerRoute(method: string, path: string, handler: HttpHandler, auth: 'none' | 'user' | 'admin' = 'none') {
     if (this.started) throw new Error('Moon routes must be registered before server.start()')
-    globalRoutes.push({ method, path, handler })
+
+    let effectiveHandler = handler
+    if (auth !== 'none') {
+      effectiveHandler = async (req: IncomingMessage, res: ServerResponse) => {
+        try {
+          const session = await authenticateRequest(req, this.config.jwtSecret, { allowAnonymous: false })
+          if (auth === 'admin' && session.uid !== SUPERUSER_ID) {
+            sendJson(res, 403, { error: 'Administrator access required', code: 'AUTH_FORBIDDEN' }, req, this.config.cors)
+            return
+          }
+          ;(req as any).__moonSession = session
+          return await handler(req, res)
+        } catch (error) {
+          if (error instanceof AuthError) {
+            sendJson(res, error.statusCode, { error: error.message, code: error.code }, req, this.config.cors)
+          } else {
+            sendJson(res, 401, { error: 'Authentication required', code: 'AUTH_REQUIRED' }, req, this.config.cors)
+          }
+        }
+      }
+    }
+
+    globalRoutes.push({ method, path, handler: effectiveHandler })
     defineEndpoint({ method: method as EndpointDef['method'], path, description: `Dynamic route ${method} ${path}`, auth })
   }
 
@@ -131,10 +153,10 @@ export class FastifyAdapter {
     method: string,
     path: string,
     targetUrl: string,
-    options?: { cache?: string; query?: string[]; headers?: Record<string, string>; apiKey?: string },
+    options?: { cache?: string; query?: string[]; headers?: Record<string, string>; apiKey?: string; timeoutMs?: number },
     auth: 'none' | 'user' | 'admin' = 'user',
   ) {
-    this.registerRoute(method, path, createProxyHandler({ targetUrl, ...options }), auth)
+    this.registerRoute(method, path, createProxyHandler({ targetUrl, method, ...options }), auth)
   }
 
   private bridgeRequest(req: FastifyRequest): IncomingMessage {

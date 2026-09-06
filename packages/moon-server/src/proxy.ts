@@ -1,11 +1,15 @@
-import { HttpHandler } from './router.js'
+import { createHash } from 'node:crypto'
+import type { HttpHandler } from './router.js'
+import { sendJson, resolveCorsOrigin, getCorsConfig, getSecurityHeaders } from './utils/http.js'
 
 export interface ProxyOptions {
   targetUrl: string
+  method?: string
   cache?: string
   query?: string[]
   headers?: Record<string, string>
   apiKey?: string
+  timeoutMs?: number
 }
 
 function parseCacheMs(cache?: string): number {
@@ -40,7 +44,7 @@ function buildTargetUrl(base: string, reqUrl: string, query?: string[], apiKey?:
 }
 
 export class ExternalCache {
-  private store = new Map<string, { data: any; expiresAt: number }>()
+  private store = new Map<string, { data: any; contentType?: string; expiresAt: number }>()
 
   get(key: string) {
     const entry = this.store.get(key)
@@ -49,17 +53,17 @@ export class ExternalCache {
       this.store.delete(key)
       return null
     }
-    return entry.data
+    return entry
   }
 
-  set(key: string, data: any, ttlMs: number) {
-    this.store.set(key, { data, expiresAt: Date.now() + ttlMs })
+  set(key: string, data: any, ttlMs: number, contentType?: string) {
+    this.store.set(key, { data, contentType, expiresAt: Date.now() + ttlMs })
   }
 
   getStale(key: string) {
     const entry = this.store.get(key)
     if (!entry) return null
-    return entry.data
+    return entry
   }
 
   keys() {
@@ -70,13 +74,28 @@ export class ExternalCache {
 export function createProxyHandler(opts: ProxyOptions): HttpHandler {
   const cacheMs = parseCacheMs(opts.cache)
   const cache = new ExternalCache()
+  const timeoutMs = opts.timeoutMs ?? 12000
 
   return async (req, res) => {
-    // Add CORS headers
-    const corsHeaders = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    const corsConfig = getCorsConfig()
+    const reqOrigin = req.headers.origin as string | undefined
+    const allowedOrigin = resolveCorsOrigin(reqOrigin, corsConfig)
+
+    const corsHeaders: Record<string, string> = {
+      ...getSecurityHeaders(),
+    }
+    if (allowedOrigin) {
+      corsHeaders['Access-Control-Allow-Origin'] = allowedOrigin
+      if (allowedOrigin !== '*') {
+        corsHeaders['Vary'] = 'Origin'
+        if (corsConfig?.allowCredentials !== false) {
+          corsHeaders['Access-Control-Allow-Credentials'] = 'true'
+        }
+      }
+      corsHeaders['Access-Control-Allow-Methods'] = 'OPTIONS, POST, GET, PUT, DELETE, PATCH'
+      corsHeaders['Access-Control-Allow-Headers'] =
+        (req.headers['access-control-request-headers'] as string) ||
+        'Content-Type, Authorization, X-Requested-With, Accept, Origin'
     }
 
     // Handle preflight
@@ -86,33 +105,71 @@ export function createProxyHandler(opts: ProxyOptions): HttpHandler {
       return
     }
 
-    const cacheKey = req.url as string
+    const method = (req.method || opts.method || 'GET').toUpperCase()
+    const rawBody = (req as any).__moonBody ?? (req as any).body
+    let bodyPayload: string | undefined
+
+    if (rawBody !== undefined && rawBody !== null && ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+      bodyPayload = typeof rawBody === 'string' ? rawBody : JSON.stringify(rawBody)
+    }
+
+    // Build unique cache key (for POST/PUT, factor in body hash)
+    let cacheKey = `${method}:${req.url}`
+    if (bodyPayload) {
+      const hash = createHash('sha256').update(bodyPayload).digest('hex').slice(0, 16)
+      cacheKey += `:${hash}`
+    }
+
     if (cacheMs > 0) {
       const cached = cache.get(cacheKey)
       if (cached) {
-        res.writeHead(200, { 'Content-Type': 'application/json', 'X-Cache': 'HIT', ...corsHeaders })
-        res.end(JSON.stringify(cached))
+        const ct = cached.contentType || 'application/json'
+        res.writeHead(200, { 'Content-Type': ct, 'X-Cache': 'HIT', ...corsHeaders })
+        res.end(typeof cached.data === 'string' ? cached.data : JSON.stringify(cached.data))
         return
       }
     }
 
     const targetUrl = buildTargetUrl(opts.targetUrl, req.url as string, opts.query, opts.apiKey)
 
+    const headers: Record<string, string> = {
+      'Accept': 'application/json, text/xml, application/xml, text/plain, */*',
+      'User-Agent': 'Moonwitness-Proxy/1.0',
+      ...(opts.headers || {}),
+    }
+
+    if (bodyPayload && !headers['Content-Type'] && !headers['content-type']) {
+      headers['Content-Type'] = 'application/json'
+    }
+
+    // Forward incoming Authorization header if present
+    if (req.headers.authorization && !headers['Authorization'] && !headers['authorization']) {
+      headers['Authorization'] = req.headers.authorization
+    }
+
     try {
-      const upstream = await fetch(targetUrl, {
-        headers: {
-          'Accept': 'application/json',
-          'User-Agent': 'Moonwitness-Proxy/1.0',
-          ...(opts.headers || {})
-        }
-      })
+      const controller = new AbortController()
+      const timer = setTimeout(() => controller.abort(), timeoutMs)
+
+      let upstream: Response
+      try {
+        upstream = await fetch(targetUrl, {
+          method,
+          headers,
+          body: bodyPayload,
+          signal: controller.signal,
+        })
+      } finally {
+        clearTimeout(timer)
+      }
 
       if (upstream.status === 429) {
         if (cacheMs > 0) {
           const stale = cache.getStale(cacheKey)
           if (stale) {
-            res.writeHead(200, { 'Content-Type': 'application/json', 'X-Cache': 'STALE', ...corsHeaders })
-            res.end(JSON.stringify(stale))
+            const ct = stale.contentType || 'application/json'
+            res.writeHead(200, { 'Content-Type': ct, 'X-Cache': 'STALE', ...corsHeaders })
+            res.end(typeof stale.data === 'string' ? stale.data : JSON.stringify(stale.data))
             return
           }
         }
@@ -128,23 +185,41 @@ export function createProxyHandler(opts: ProxyOptions): HttpHandler {
         return
       }
 
-      const data = await upstream.json()
-      if (cacheMs > 0) {
-        cache.set(cacheKey, data, cacheMs)
+      const responseContentType = upstream.headers.get('content-type') || ''
+      const isJson = responseContentType.includes('application/json')
+
+      if (isJson) {
+        const data = await upstream.json()
+        if (cacheMs > 0) {
+          cache.set(cacheKey, data, cacheMs, 'application/json')
+        }
+        res.writeHead(200, { 'Content-Type': 'application/json', 'X-Cache': 'MISS', ...corsHeaders })
+        res.end(JSON.stringify(data))
+      } else {
+        // Handle XML/RSS/Plaintext safely (e.g. Google Trends RSS feed)
+        const textData = await upstream.text()
+        if (cacheMs > 0) {
+          cache.set(cacheKey, textData, cacheMs, responseContentType || 'text/plain')
+        }
+        res.writeHead(200, { 'Content-Type': responseContentType || 'text/plain', 'X-Cache': 'MISS', ...corsHeaders })
+        res.end(textData)
       }
-      res.writeHead(200, { 'Content-Type': 'application/json', 'X-Cache': 'MISS', ...corsHeaders })
-      res.end(JSON.stringify(data))
     } catch (err: any) {
       if (cacheMs > 0) {
         const stale = cache.getStale(cacheKey)
         if (stale) {
-          res.writeHead(200, { 'Content-Type': 'application/json', 'X-Cache': 'STALE', ...corsHeaders })
-          res.end(JSON.stringify(stale))
+          const ct = stale.contentType || 'application/json'
+          res.writeHead(200, { 'Content-Type': ct, 'X-Cache': 'STALE', ...corsHeaders })
+          res.end(typeof stale.data === 'string' ? stale.data : JSON.stringify(stale.data))
           return
         }
       }
-      res.writeHead(502, { 'Content-Type': 'application/json', ...corsHeaders })
-      res.end(JSON.stringify({ error: 'Proxy fetch failed', message: err.message }))
+      const isAbort = err?.name === 'AbortError'
+      const statusCode = isAbort ? 504 : 502
+      const errorLabel = isAbort ? 'Proxy upstream timed out' : 'Proxy fetch failed'
+
+      res.writeHead(statusCode, { 'Content-Type': 'application/json', ...corsHeaders })
+      res.end(JSON.stringify({ error: errorLabel, message: err?.message || String(err), statusCode }))
     }
   }
 }
