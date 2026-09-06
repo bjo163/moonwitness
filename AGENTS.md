@@ -293,4 +293,19 @@ shared UI         -> @workspace/ui
 ```
 
 No parallel implementation should silently compete with these owners.
+
+## 21. Reuse and component health
+
+- Generic presentation primitives belong in `packages/ui`; feature components
+  that depend on domain models, API clients, or feature state remain in their
+  owning `apps/*` or `packages/moon-*` package.
+- Before adding a component, search `packages/ui` and the feature packages for
+  an existing equivalent. Extend the canonical component with a typed variant
+  or slot when the behavior is genuinely shared.
+- Renaming a duplicate component, moving it to a differently named file, or
+  wrapping the same markup does not satisfy reuse. The audit treats equivalent
+  duplicate definitions as a refactor finding.
+- Use `node scripts/audit-rules.mjs` and `pnpm test:scripts`; inspect component
+  health findings. Components rated `extract-now` need decomposition before
+  adding more behavior. Do not silence a finding by changing its name.
 <!-- END:moonwitness-core-rules -->

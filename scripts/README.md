@@ -19,6 +19,11 @@
   repeated custom JSX, and long utility-class strings repeated three or more
   times. Treat each finding as a refactor queue: extract a named component,
   data-driven row, or shared variant before adding another copy.
+- `component-health.mjs` scores TSX components using lines, props, conditionals,
+  nested JSX, and imports. `extract-now` means decompose before extending;
+  `review` means inspect before copying. Generic UI belongs in `packages/ui`;
+  domain-bound logic stays in its owning package. Renaming or wrapping a
+  duplicate does not resolve the finding.
 - `audit-theme-tokens.mjs` checks required light/dark tokens, Tailwind color
   mappings, duplicate declarations, direct self-references, and text contrast.
 - `audit-research-ui.mjs` checks literal classes in the migrated public home,

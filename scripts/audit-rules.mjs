@@ -17,6 +17,7 @@
  */
 
 import { researchUiFindings } from "./audit-research-ui.mjs"
+import { componentHealth, componentHealthRecommendation } from "./component-health.mjs"
 import { auditThemeTokens } from "./audit-theme-tokens.mjs"
 import fs from "fs"
 import path from "path"
@@ -129,7 +130,7 @@ const componentDefinitions = new Map()
 function auditDuplicateComponents() {
   for (const [name, files] of componentDefinitions) {
     const unique = [...new Set(files)]
-    if (unique.length < 2 || /^(Button|Card|Dialog|Input|Label|Badge|Table|Modal|Panel)$/.test(name)) continue
+    if (unique.length < 2 || /^(Button|Card|Dialog|Input|Label|Badge|Table|Modal|Panel|RootLayout|Layout|Page|Loading|Error|NotFound)$/.test(name)) continue
     VIOLATIONS.duplicateComponents.push({
       file: unique.join(", "),
       line: 1,
@@ -377,6 +378,11 @@ function auditFile(filePath) {
   const isTest = /(?:\.test|\.spec)\.[cm]?[jt]sx?$/.test(filePath)
   const isDoc = isDocumentation(filePath)
   const isActive = isActiveImplementation(filePath)
+  if (isActive && /\.tsx$/.test(filePath)) {
+    for (const item of componentHealth(relativePath, content)) {
+      VIOLATIONS.componentReuse.push({ file: relativePath, line: item.line, issue: `${item.component} health ${item.score}/100 (${item.lines} lines, ${item.props} props, ${item.conditionals} conditionals); ${componentHealthRecommendation(item)}` })
+    }
+  }
 
   if (isActive && /\.tsx$/.test(filePath)) {
     for (const match of content.matchAll(/(?:export\s+)?function\s+([A-Z][A-Za-z0-9_]*)\s*\(/g)) {
@@ -409,7 +415,7 @@ function auditFile(filePath) {
   }
 
   // Reuse guard: keep view files thin and surface repeated local UI patterns.
-  if (isActive && /\.tsx$/.test(filePath)) {
+  if (isActive && relativePath.startsWith("apps/") && /\.tsx$/.test(filePath)) {
     const localComponents = [...content.matchAll(/(?:export\s+)?function\s+([A-Z][A-Za-z0-9_]*)\s*\(/g)]
       .map((match) => match[1])
     if (localComponents.length > 6) {
@@ -420,9 +426,14 @@ function auditFile(filePath) {
       })
     }
 
+    const iconImports = new Set(
+      [...content.matchAll(/import\s+\{([^}]+)\}\s+from\s+["'](?:lucide-react|@radix-ui\/[^"']+)["']/g)]
+        .flatMap((m) => m[1].split(",").map((s) => s.trim().split(/\s+as\s+/)[0]))
+    )
+
     const jsxTags = [...content.matchAll(/<([A-Z][A-Za-z0-9_]*)\b/g)]
       .map((match) => match[1])
-      .filter((tag) => !/^(Link|Suspense|Fragment|[A-Z][a-z]+)$/.test(tag))
+      .filter((tag) => !iconImports.has(tag) && !/^(Link|Suspense|Fragment|Image|Motion|[A-Z][a-z]+|.*Primitive|.*Icon)$/.test(tag))
     const counts = new Map()
     for (const tag of jsxTags) counts.set(tag, (counts.get(tag) || 0) + 1)
     for (const [tag, count] of counts) {
