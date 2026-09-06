@@ -168,7 +168,7 @@ export function extractParityManifest(markdown) {
 }
 
 export function assertRenderedParity(markdown, report) {
-  assert.deepEqual(extractParityManifest(markdown), buildParityManifest(report))
+  assert.deepEqual(extractParityManifest(markdown), buildParityManifest(report), "Rendered parity manifest diverges from canonical report")
   assert.equal(markdown, renderUmbrellaStatus(report), "Rendered Markdown diverges from canonical report")
   return true
 }

@@ -8,11 +8,15 @@
 @source "../**/*.{ts,tsx}";
 @source "../../**/*.{ts,tsx}";
 
+/* Non-inline font utilities preserve the font variables supplied by app layouts. */
+@theme {
+  --font-mono: "JetBrains Mono", monospace;
+  --font-sans: "Geist", sans-serif;
+  --font-arabic: "Amiri", serif;
+}
+
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-mono: var(--font-mono, "JetBrains Mono", monospace);
-  --font-sans: var(--font-sans, "Geist", sans-serif);
-  --font-arabic: var(--font-arabic, "Amiri", serif);
 
   /* Canonical Semantic Tokens */
   --color-background: var(--background);
@@ -76,7 +80,7 @@
   --secondary: #f4f4f5;
   --secondary-foreground: #18181b;
   --muted: #f4f4f5;
-  --muted-foreground: #71717a;
+  --muted-foreground: #666670;
   --accent: #f4f4f5;
   --accent-foreground: #18181b;
   --destructive: #dc2626;

@@ -140,19 +140,23 @@ function collectFiles(rootDir) {
   return result.sort((a, b) => a.localeCompare(b))
 }
 
+function readSources(rootDir) {
+  return collectFiles(rootDir).flatMap((filePath) => {
+    const relativePath = path.relative(rootDir, filePath).split(path.sep).join('/')
+    return isIgnoredPath(relativePath) ? [] : [{ relativePath, content: fs.readFileSync(filePath, 'utf8') }]
+  })
+}
+
 function lineNumberFor(content, index) {
   return content.slice(0, index).split("\n").length
 }
 
-export function scanHardcodedLocalhost(rootDir) {
+export function scanHardcodedLocalhost(rootDir, sources = readSources(rootDir)) {
   const findings = []
   let assessedFiles = 0
 
-  for (const filePath of collectFiles(rootDir)) {
-    const relativePath = path.relative(rootDir, filePath).split(path.sep).join("/")
-    if (isIgnoredPath(relativePath)) continue
+  for (const { relativePath, content } of sources) {
     assessedFiles += 1
-    const content = fs.readFileSync(filePath, "utf8")
 
     for (const match of content.matchAll(/127\.0\.0\.1/g)) {
       const start = Math.max(0, match.index - 280)
@@ -172,7 +176,7 @@ export function scanHardcodedLocalhost(rootDir) {
   return { id: "hardcodedLocalhost", executed: true, assessedFiles, findings }
 }
 
-export function scanRawSqlConcatenation(rootDir) {
+export function scanRawSqlConcatenation(rootDir, sources = readSources(rootDir)) {
   const findings = []
   let assessedFiles = 0
   const unsafeSqlPatterns = [
@@ -182,11 +186,8 @@ export function scanRawSqlConcatenation(rootDir) {
     /\bDELETE\s+FROM\b[^\n;]{0,180}(?:\$\{[^}]+\}|["'`]\s*\+\s*[A-Za-z_$][A-Za-z0-9_$.]*)/gi,
   ]
 
-  for (const filePath of collectFiles(rootDir)) {
-    const relativePath = path.relative(rootDir, filePath).split(path.sep).join("/")
-    if (isIgnoredPath(relativePath)) continue
+  for (const { relativePath, content } of sources) {
     assessedFiles += 1
-    const content = fs.readFileSync(filePath, "utf8")
     for (const unsafeSql of unsafeSqlPatterns) {
       for (const match of content.matchAll(unsafeSql)) {
         findings.push({
@@ -203,7 +204,8 @@ export function scanRawSqlConcatenation(rootDir) {
 }
 
 export function runSupplementalCollectors(rootDir) {
-  return [scanHardcodedLocalhost(rootDir), scanRawSqlConcatenation(rootDir)]
+  const sources = readSources(rootDir)
+  return [scanHardcodedLocalhost(rootDir, sources), scanRawSqlConcatenation(rootDir, sources)]
 }
 
 export function evaluateCollectorIntegrity(coverage, supplementalResults) {

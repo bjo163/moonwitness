@@ -72,6 +72,9 @@ CI_RUNNER unset                   -> use ubuntu-latest
 
 Set `CI_RUNNER=self-hosted` only when the repository-owned runner is healthy and intentionally selected.
 
+Audit implementation and test commands are documented in [scripts/README.md](scripts/README.md).
+Run `pnpm test:scripts` for focused audit regression coverage.
+
 Every Foundation CI check is blocking:
 
 ```text

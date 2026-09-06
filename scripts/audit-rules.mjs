@@ -17,6 +17,7 @@
  */
 
 import { researchUiFindings } from "./audit-research-ui.mjs"
+import { auditThemeTokens } from "./audit-theme-tokens.mjs"
 import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
@@ -48,47 +49,6 @@ const IGNORE_DIRS = new Set([
 const TARGET_DIRS = ["apps", "packages"]
 const SOURCE_EXTENSIONS = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".css", ".scss"])
 const DOC_EXTENSIONS = new Set([".md", ".mdx", ".txt"])
-
-const CANONICAL_SEMANTIC_TOKENS = [
-  "background",
-  "foreground",
-  "card",
-  "card-foreground",
-  "popover",
-  "popover-foreground",
-  "primary",
-  "primary-foreground",
-  "secondary",
-  "secondary-foreground",
-  "muted",
-  "muted-foreground",
-  "accent",
-  "accent-foreground",
-  "destructive",
-  "destructive-foreground",
-  "success",
-  "success-foreground",
-  "warning",
-  "warning-foreground",
-  "info",
-  "info-foreground",
-  "border",
-  "input",
-  "ring",
-  "chart-1",
-  "chart-2",
-  "chart-3",
-  "chart-4",
-  "chart-5",
-  "sidebar",
-  "sidebar-foreground",
-  "sidebar-primary",
-  "sidebar-primary-foreground",
-  "sidebar-accent",
-  "sidebar-accent-foreground",
-  "sidebar-border",
-  "sidebar-ring",
-]
 
 const RAW_UI_COLOR_RE = /(?:^|[\s"'`])(?:bg|text|border|ring|outline|fill|stroke|decoration|divide|from|via|to|shadow)-\[#(?:[0-9a-fA-F]{3,8})\]/i
 const RAW_PALETTE_RE = /\b(?:bg|text|border|ring|divide|from|via|to|shadow)-(?:white|black|slate-\d+|gray-\d+|zinc-\d+|neutral-\d+)\b/i
@@ -306,120 +266,16 @@ function auditPackageBoundaries() {
   }
 }
 
-// Parse hex color string to sRGB [0..1]
-function parseHexToRgb(hex) {
-  let clean = hex.replace("#", "").trim()
-  if (clean.length === 3) clean = clean.split("").map((c) => c + c).join("")
-  if (clean.length === 6 || clean.length === 8) {
-    const r = parseInt(clean.slice(0, 2), 16) / 255
-    const g = parseInt(clean.slice(2, 4), 16) / 255
-    const b = parseInt(clean.slice(4, 6), 16) / 255
-    return [r, g, b]
-  }
-  return null
-}
-
-// Calculate relative luminance for WCAG contrast
-function getLuminance([r, g, b]) {
-  const a = [r, g, b].map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)))
-  return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722
-}
-
-function getContrastRatio(hex1, hex2) {
-  const rgb1 = parseHexToRgb(hex1)
-  const rgb2 = parseHexToRgb(hex2)
-  if (!rgb1 || !rgb2) return null
-  const lum1 = getLuminance(rgb1)
-  const lum2 = getLuminance(rgb2)
-  const brightest = Math.max(lum1, lum2)
-  const darkest = Math.min(lum1, lum2)
-  return (brightest + 0.05) / (darkest + 0.05)
-}
-
 function auditThemeParity() {
-  const cssPath = path.join(ROOT_DIR, "packages", "ui", "src", "styles", "globals.css")
+  const cssPath = path.join(ROOT_DIR, 'packages/ui/src/styles/globals.css')
   if (!fs.existsSync(cssPath)) {
-    VIOLATIONS.themeParity.push({ file: "globals.css", token: "globals.css not found" })
+    VIOLATIONS.themeParity.push({ file: 'globals.css', token: 'Canonical stylesheet missing' })
     return
   }
-
-  const css = fs.readFileSync(cssPath, "utf8")
-
-  // Check for any forbidden --cyber- variables
-  const cyberMatches = [...css.matchAll(/--cyber-[a-z-]+/g)]
-  if (cyberMatches.length > 0) {
-    VIOLATIONS.cyberVarMisuse.push({ file: "globals.css", snippet: `Found forbidden cyber vars: ${cyberMatches.map(m => m[0]).slice(0, 5).join(", ")}` })
-  }
-
-  // Extract :root block
-  const rootBlockMatch = css.match(/:root\s*\{([^}]+)\}/)
-  const darkBlockMatch = css.match(/\.dark\s*\{([^}]+)\}/)
-
-  if (!rootBlockMatch) {
-    VIOLATIONS.themeParity.push({ file: "globals.css", token: "Missing :root theme block" })
-  }
-  if (!darkBlockMatch) {
-    VIOLATIONS.themeParity.push({ file: "globals.css", token: "Missing .dark theme block" })
-  }
-
-  const rootVars = new Map()
-  if (rootBlockMatch) {
-    for (const match of rootBlockMatch[1].matchAll(/--([a-z0-9-]+)\s*:\s*([^;]+);/g)) {
-      rootVars.set(match[1], match[2].trim())
-    }
-  }
-
-  const darkVars = new Map()
-  if (darkBlockMatch) {
-    for (const match of darkBlockMatch[1].matchAll(/--([a-z0-9-]+)\s*:\s*([^;]+);/g)) {
-      darkVars.set(match[1], match[2].trim())
-    }
-  }
-
-  // Check that every canonical token is present in :root and .dark
-  for (const token of CANONICAL_SEMANTIC_TOKENS) {
-    if (!rootVars.has(token)) {
-      VIOLATIONS.themeParity.push({ file: "globals.css", token: `:root missing canonical token --${token}` })
-    }
-    if (!darkVars.has(token)) {
-      VIOLATIONS.themeParity.push({ file: "globals.css", token: `.dark missing canonical token --${token}` })
-    }
-  }
-
-  // Real WCAG Contrast Checks on canonical color pairs
-  const contrastPairs = [
-    ["background", "foreground"],
-    ["card", "card-foreground"],
-    ["popover", "popover-foreground"],
-    ["primary", "primary-foreground"],
-    ["secondary", "secondary-foreground"],
-    ["muted", "muted-foreground"],
-    ["accent", "accent-foreground"],
-    ["destructive", "destructive-foreground"],
-    ["success", "success-foreground"],
-    ["warning", "warning-foreground"],
-    ["info", "info-foreground"],
-  ]
-
-  for (const [bgToken, fgToken] of contrastPairs) {
-    const lightBg = rootVars.get(bgToken)
-    const lightFg = rootVars.get(fgToken)
-    if (lightBg && lightFg && lightBg.startsWith("#") && lightFg.startsWith("#")) {
-      const ratio = getContrastRatio(lightBg, lightFg)
-      if (ratio && ratio < 4.0) {
-        VIOLATIONS.accessibility.push({ file: "globals.css", issue: `Light mode contrast below standard for ${bgToken}/${fgToken}: ${ratio.toFixed(2)}:1` })
-      }
-    }
-
-    const darkBg = darkVars.get(bgToken)
-    const darkFg = darkVars.get(fgToken)
-    if (darkBg && darkFg && darkBg.startsWith("#") && darkFg.startsWith("#")) {
-      const ratio = getContrastRatio(darkBg, darkFg)
-      if (ratio && ratio < 4.0) {
-        VIOLATIONS.accessibility.push({ file: "globals.css", issue: `Dark mode contrast below standard for ${bgToken}/${fgToken}: ${ratio.toFixed(2)}:1` })
-      }
-    }
-  }
+  const findings = auditThemeTokens(fs.readFileSync(cssPath, 'utf8'))
+  VIOLATIONS.themeParity.push(...findings.themeParity)
+  VIOLATIONS.accessibility.push(...findings.accessibility)
+  VIOLATIONS.cyberVarMisuse.push(...findings.cyberVarMisuse)
 }
 
 function auditThemeInfrastructure() {

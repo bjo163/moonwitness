@@ -21,7 +21,7 @@ describe("Phase 5 governance auditor", () => {
       "FORCED DARK MODE",
       "ACCESSIBILITY",
       "PACKAGE BOUNDARIES",
-      "SEMANTIC THEME PARITY",
+      "CANONICAL THEME PARITY",
     ]) expect(output).toContain(label)
   })
 

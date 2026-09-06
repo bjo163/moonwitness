@@ -39,7 +39,8 @@
     "audit:umbrella:fix-safe": "node scripts/umbrella-audit.mjs --fix-safe",
     "audit:umbrella:certify": "node scripts/umbrella-certify.mjs",
     "audit:umbrella:ci": "node scripts/umbrella-audit.mjs --ci-evidence=.audit/runtime/ci-evidence.json --write --validate",
-    "audit:ci": "node scripts/audit.mjs && node scripts/umbrella-audit.mjs --validate && turbo typecheck && vitest run"
+    "audit:ci": "node scripts/audit.mjs && node scripts/umbrella-audit.mjs --validate && turbo typecheck && vitest run",
+    "test:scripts": "vitest run scripts"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",

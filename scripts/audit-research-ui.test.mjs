@@ -1,4 +1,4 @@
-import { test } from 'node:test'
+import { test } from 'vitest'
 import assert from 'node:assert/strict'
 import { researchUiFindings } from './audit-research-ui.mjs'
 const file = 'apps/web/components/home/public-home.tsx'
