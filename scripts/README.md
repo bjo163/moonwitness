@@ -29,6 +29,11 @@
   contract at the source; do not silence it with aliases or wrapper exports.
   Use the public `@workspace/ui` entrypoint for feature code unless a documented
   package-level subpath is required.
+  Shared UI internals are checked by the same rule: they must use relative
+  imports, while package consumers may use the published barrel or an exported
+  subpath. The package export map is the contract for supported subpaths.
+  Buttons nested in forms must always declare `type` in both app consumers and
+  `packages/ui` sources.
 - Its `color-contract` finding covers dynamic inline colors in ordinary UI.
   Resolve them with `resolveSemanticColor()` from `@workspace/ui`; chart,
   map, seismix, Tajweed, and celestial files remain explicit domain exceptions

@@ -11,45 +11,46 @@ import {
   Flame,
   Target,
 } from "lucide-react"
+import { resolveSemanticColor, type SemanticColorToken } from "@workspace/ui"
 
 const TRENDING_METRICS = [
-  { n: "MOON", v: "68.4K", p: "+42%", i: Moon, c: "#3B82F6" },
+  { n: "MOON", v: "68.4K", p: "+42%", i: Moon, c: "primary" as SemanticColorToken },
   {
     n: "AI & TECHNOLOGY",
     v: "53.1K",
     p: "+38%",
     i: Brain,
-    c: "#00F0FF",
+    c: "info" as SemanticColorToken,
   },
-  { n: "HISTORY", v: "48.7K", p: "+31%", i: Map, c: "#10B981" },
+  { n: "HISTORY", v: "48.7K", p: "+31%", i: Map, c: "success" as SemanticColorToken },
   {
     n: "ASTRONOMY",
     v: "47.2K",
     p: "+26%",
     i: Telescope,
-    c: "#3B82F6",
+    c: "primary" as SemanticColorToken,
   },
-  { n: "HADITH", v: "36.8K", p: "+24%", i: Scroll, c: "#F59E0B" },
+  { n: "HADITH", v: "36.8K", p: "+24%", i: Scroll, c: "warning" as SemanticColorToken },
   {
     n: "QUR'AN",
     v: "35.9K",
     p: "+22%",
     i: BookOpen,
-    c: "#10B981",
+    c: "success" as SemanticColorToken,
   },
   {
     n: "ESCHATOLOGY",
     v: "29.7K",
     p: "+18%",
     i: Flame,
-    c: "#A855F7",
+    c: "info" as SemanticColorToken,
   },
   {
     n: "SCIENCE",
     v: "21.3K",
     p: "+16%",
     i: Target,
-    c: "#F43F5E",
+    c: "destructive" as SemanticColorToken,
   },
 ]
 
@@ -73,7 +74,7 @@ export function KnowledgeTrendSummaryCards() {
               className="bg-background group flex flex-col justify-between rounded-xl border border-border p-3 shadow-sm transition-colors hover:border-border"
             >
               <div className="mb-2 flex items-center gap-2">
-                <tr.i className="h-3.5 w-3.5" style={{ color: tr.c }} />
+                <tr.i className="h-3.5 w-3.5" style={{ color: resolveSemanticColor(tr.c) }} />
                 <div className="truncate text-[8px] font-black text-primary uppercase transition-colors group-hover:text-foreground">
                   {tr.n}
                 </div>
@@ -82,7 +83,7 @@ export function KnowledgeTrendSummaryCards() {
                 <div className="text-sm font-black text-foreground">{tr.v}</div>
                 <div
                   className="text-[9px] font-bold"
-                  style={{ color: tr.c }}
+                  style={{ color: resolveSemanticColor(tr.c) }}
                 >
                   {tr.p}
                 </div>
@@ -96,7 +97,7 @@ export function KnowledgeTrendSummaryCards() {
                 <polyline
                   points={`0,15 20,${12 - (i % 3)} 40,${15 - (i % 4)} 60,${8 + (i % 2)} 80,5 100,2`}
                   fill="none"
-                  stroke={tr.c}
+                  stroke={resolveSemanticColor(tr.c)}
                   strokeWidth="1.5"
                 />
               </svg>

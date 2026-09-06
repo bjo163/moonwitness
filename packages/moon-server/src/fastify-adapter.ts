@@ -16,7 +16,7 @@ import {
   isSqlite,
 } from '@moon/orm'
 import { defineEndpoint, type EndpointDef } from '@moon/protocol'
-import { authenticateRequest, AuthError, issueJwt } from './utils/auth.js'
+import { authenticateRequest, AuthError, issueJwt, resolveUserRole } from './utils/auth.js'
 import {
   handleLogin,
   handleRegister,
@@ -143,8 +143,13 @@ export class FastifyAdapter {
         try {
           const session = await authenticateRequest(req, this.config.jwtSecret, { allowAnonymous: false })
           if (auth === 'admin' && session.uid !== SUPERUSER_ID) {
-            sendJson(res, 403, { error: 'Administrator access required', code: 'AUTH_FORBIDDEN' }, req, this.config.cors)
-            return
+            // Allow users with admin/superadmin role (clearance >= 2) in addition to SUPERUSER_ID
+            const authCtx = createCtx(session.uid, {}, getModel as any)
+            const { clearanceLevel } = await resolveUserRole(session.uid, authCtx)
+            if (clearanceLevel < 2) {
+              sendJson(res, 403, { error: 'Administrator access required', code: 'AUTH_FORBIDDEN' }, req, this.config.cors)
+              return
+            }
           }
           ;(req as any).__moonSession = session
           return await handler(req, res)
@@ -227,8 +232,13 @@ export class FastifyAdapter {
     try {
       const session = await authenticateRequest(req, this.config.jwtSecret, { allowAnonymous: false })
       if (session.uid !== SUPERUSER_ID) {
-        sendJson(res, 403, { error: 'Administrator access required', code: 'AUTH_FORBIDDEN' }, req, this.config.cors)
-        return null
+        // Allow users with admin/superadmin role (clearance >= 2) in addition to SUPERUSER_ID
+        const authCtx = createCtx(session.uid, {}, getModel as any)
+        const { clearanceLevel } = await resolveUserRole(session.uid, authCtx)
+        if (clearanceLevel < 2) {
+          sendJson(res, 403, { error: 'Administrator access required', code: 'AUTH_FORBIDDEN' }, req, this.config.cors)
+          return null
+        }
       }
       return session
     } catch (error) {

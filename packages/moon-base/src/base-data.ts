@@ -19,9 +19,10 @@ export async function loadBaseData() {
   const Groups = getModel('vx.role')
   const MxModel = getModel('mx.model')
   const MxGrant = getModel('mx.grant')
+  const MxRule = getModel('mx.rule')
   const Lang = getModel('ix.lang')
 
-  if (!Country || !Currency || !Partner || !Company || !User || !Groups || !MxModel || !MxGrant || !Lang) {
+  if (!Country || !Currency || !Partner || !Company || !User || !Groups || !MxModel || !MxGrant || !MxRule || !Lang) {
     return
   }
 
@@ -52,6 +53,30 @@ export async function loadBaseData() {
       modelIds[m] = row.id as number
     } else {
       modelIds[m] = mRows[0].id as number
+    }
+  }
+
+  // Idempotent multi-company read/write scope for every model that declares
+  // companyId. Superuser remains the only unrestricted bypass in the ORM.
+  for (const modelClass of Array.from(registry.values()).filter((candidate) => {
+    if (candidate._abstract || !candidate._name) return false
+    const defs = candidate.getFieldDefs(candidate) as Record<string, unknown>
+    return Boolean(defs.companyId || defs.company_id)
+  })) {
+    const modelId = modelIds[modelClass._name]
+    if (!modelId) continue
+    const existing = await MxRule.fetch(MxRule, env, [['modelId', '=', modelId], ['name', '=', `${modelClass._name} company scope`]])
+    if (!existing.length) {
+      await MxRule.spawn(MxRule, env, {
+        name: `${modelClass._name} company scope`,
+        modelId,
+        domainForce: '[["company_id", "in", "$user.company_ids"]]',
+        permRead: true,
+        permWrite: true,
+        permCreate: true,
+        permUnlink: true,
+        active: true
+      })
     }
   }
 

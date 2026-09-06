@@ -1,37 +1,38 @@
 "use client"
 
 import React from "react"
+import { resolveSemanticColor, type SemanticColorToken } from "@workspace/ui"
 
 const POPULAR_VERSES = [
   {
     v: "وَقُل رَّبِّ زِدْنِي عِلْمًا",
     ref: "Qur'an 20:114",
     cnt: "12,842",
-    c: "#00F0FF",
+    c: "info" as SemanticColorToken,
   },
   {
     v: "إِنَّ مَعَ الْعُسْرِ يُسْرًا",
     ref: "Qur'an 94:5-6",
     cnt: "9,721",
-    c: "#10B981",
+    c: "success" as SemanticColorToken,
   },
   {
     v: "قُلْ سِيرُوا فِي الْأَرْضِ فَانظُرُوا",
     ref: "Qur'an 29:20",
     cnt: "8,653",
-    c: "#A855F7",
+    c: "info" as SemanticColorToken,
   },
   {
     v: "وَمَا تَوْفِيقِي إِلَّا بِاللَّهِ",
     ref: "Qur'an 11:88",
     cnt: "7,321",
-    c: "#3B82F6",
+    c: "primary" as SemanticColorToken,
   },
   {
     v: "فَاذْكُرُونِي أَذْكُرْكُمْ",
     ref: "Qur'an 2:152",
     cnt: "6,128",
-    c: "#F59E0B",
+    c: "warning" as SemanticColorToken,
   },
 ]
 
@@ -52,7 +53,7 @@ export function KnowledgeTrendPopularVerses() {
           <div key={i} className="flex items-center gap-3">
             <div
               className="bg-background flex h-5 w-5 shrink-0 items-center justify-center rounded border text-[9px] font-black"
-              style={{ borderColor: `${vrs.c}50`, color: vrs.c }}
+              style={{ borderColor: resolveSemanticColor(vrs.c), color: resolveSemanticColor(vrs.c) }}
             >
               {i + 1}
             </div>

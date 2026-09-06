@@ -1,0 +1,148 @@
+{
+  "crons": [
+    {
+      "name": "Telemetry Log Pruning",
+      "model": "px.request",
+      "method": "pruneOldLogs",
+      "intervalNumber": 1,
+      "intervalType": "days",
+      "priority": 8,
+      "active": true
+    },
+    {
+      "name": "Support Ticket SLA Breach Monitor",
+      "model": "hd.ticket",
+      "method": "checkSlaBreaches",
+      "intervalNumber": 15,
+      "intervalType": "minutes",
+      "priority": 2,
+      "active": true
+    },
+    {
+      "name": "Celestial Ephemeris & Hilal Sync",
+      "model": "geo.city",
+      "method": "recomputeSunMoonPositions",
+      "intervalNumber": 6,
+      "intervalType": "hours",
+      "priority": 4,
+      "active": true
+    },
+    {
+      "name": "System Resource Heartbeat Telemetry",
+      "model": "px.system",
+      "method": "recordHeartbeat",
+      "intervalNumber": 5,
+      "intervalType": "minutes",
+      "priority": 1,
+      "active": true
+    },
+    {
+      "name": "Daily Prayer & Twilight Altitude Calibration",
+      "model": "geo.city",
+      "method": "recomputeTwilightWindows",
+      "intervalNumber": 24,
+      "intervalType": "hours",
+      "priority": 3,
+      "active": true
+    },
+    {
+      "name": "Waqf & Zakat Financial Balance Verification",
+      "model": "account.journal",
+      "method": "verifyEndowmentLedgers",
+      "intervalNumber": 7,
+      "intervalType": "days",
+      "priority": 6,
+      "active": true
+    },
+    {
+      "name": "Observatory Network Seeing Sensor Heartbeat",
+      "model": "stock.location",
+      "method": "pollAtmosphericSensors",
+      "intervalNumber": 10,
+      "intervalType": "minutes",
+      "priority": 2,
+      "active": true
+    },
+    {
+      "name": "Automated Fastify Cache Pre-Warming",
+      "model": "px.cache",
+      "method": "warmCommonEndpoints",
+      "intervalNumber": 30,
+      "intervalType": "minutes",
+      "priority": 5,
+      "active": true
+    }
+  ],
+  "logs": [
+    {
+      "cronName": "System Resource Heartbeat Telemetry",
+      "status": "success",
+      "durationMs": 42.5,
+      "message": "Recorded system metrics successfully (memory: 48MB, activeClients: 12)"
+    },
+    {
+      "cronName": "Support Ticket SLA Breach Monitor",
+      "status": "success",
+      "durationMs": 18.2,
+      "message": "Scanned 14 active support tickets. 0 breaches detected."
+    },
+    {
+      "cronName": "Celestial Ephemeris & Hilal Sync",
+      "status": "success",
+      "durationMs": 145.8,
+      "message": "Synchronized VSOP87 & ELP2000 planetary coordinates for 29 observatory cities."
+    },
+    {
+      "cronName": "Automated Fastify Cache Pre-Warming",
+      "status": "success",
+      "durationMs": 62.1,
+      "message": "Pre-warmed 6 high-traffic endpoints: scriptures, hadiths, and active pricelists."
+    }
+  ],
+  "jobs": [
+    {
+      "name": "Batch Celestial Telemetry Aggregator",
+      "queueName": "celestial-compute",
+      "status": "completed",
+      "priority": 3,
+      "progress": 100,
+      "attempts": 1,
+      "maxAttempts": 3,
+      "durationMs": 1800,
+      "payload": "{\"batchSize\":50,\"algorithm\":\"VSOP87D\"}",
+      "result": "{\"processedCount\":50,\"success\":true}"
+    },
+    {
+      "name": "Dispatch RFC Status Digest Notification",
+      "queueName": "notifications",
+      "status": "active",
+      "priority": 2,
+      "progress": 65,
+      "attempts": 1,
+      "maxAttempts": 3,
+      "payload": "{\"channel\":\"email\",\"recipients\":[\"council@moonwitness.org\"]}"
+    },
+    {
+      "name": "Transactional Stock Valuation Recompute",
+      "queueName": "finance",
+      "status": "waiting",
+      "priority": 5,
+      "progress": 0,
+      "attempts": 0,
+      "maxAttempts": 3,
+      "payload": "{\"fiscalYear\":1448}"
+    },
+    {
+      "name": "Global Lunar Crescent Visibility Map Generation",
+      "queueName": "celestial-compute",
+      "status": "completed",
+      "priority": 1,
+      "progress": 100,
+      "attempts": 1,
+      "maxAttempts": 3,
+      "durationMs": 3420,
+      "payload": "{\"shaban\":1448,\"criterion\":\"MABIMS-2021\"}",
+      "result": "{\"mapGenerated\":true,\"zones\":[\"Zone 1\",\"Zone 2\",\"Zone 3\"]}"
+    }
+  ]
+}

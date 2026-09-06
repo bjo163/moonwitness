@@ -1,4 +1,4 @@
-import { getDb, getModel, createCtx, SUPERUSER_ID } from "@moon/orm"
+import { getDb, getModel, createCtx, SUPERUSER_ID, registry } from "@moon/orm"
 import { hashPassword, comparePassword } from "@moon/server"
 
 /**
@@ -67,6 +67,22 @@ export async function syncSuperuserFromEnv(): Promise<void> {
         }
         console.log(`[moon.auth] ✓ Synced superuser (${normalizedEmail}) password directly from .env`)
       }
+
+      // Ensure existing admin user has Admin role assigned
+      if (VxRole) {
+        const roleRows = await VxRole.fetch(VxRole as any, env, [["name", "=", "Admin"]])
+        const adminRoleId = roleRows.length > 0 ? roleRows[0].id : 1
+        const relExists = await conn("vx_user_vx_role_rel")
+          .where({ vx_user_id: existingUser.id, vx_role_id: adminRoleId })
+          .first()
+        if (!relExists) {
+          await conn("vx_user_vx_role_rel").insert({
+            vx_user_id: existingUser.id,
+            vx_role_id: adminRoleId,
+          })
+          console.log(`[moon.auth] ✓ Assigned Admin role to superuser (${normalizedEmail})`)
+        }
+      }
     } else {
       // Create company & partner if not present
       let companyId: number = 1
@@ -118,7 +134,46 @@ export async function syncSuperuserFromEnv(): Promise<void> {
         }
       }
     }
+
+    // Ensure all registered models have entries in mx_model and mx_grant for Admin role
+    let adminRoleId = 1
+    if (VxRole) {
+      const roleRows = await VxRole.fetch(VxRole as any, env, [["name", "=", "Admin"]])
+      if (roleRows.length > 0) adminRoleId = roleRows[0].id
+    }
+    const registeredModels = Array.from(registry.values())
+      .filter((m) => !m._abstract && Boolean(m._name))
+      .map((m) => m._name)
+
+    for (const modelName of registeredModels) {
+      let modelRow = await conn("mx_model").where({ model: modelName }).first()
+      if (!modelRow) {
+        const inserted = await conn("mx_model")
+          .insert({ model: modelName, name: modelName })
+          .returning("id")
+        const newModelId = typeof inserted[0] === "object" ? inserted[0].id : inserted[0]
+        modelRow = { id: newModelId }
+      }
+
+      const modelId = modelRow.id
+      const grantExists = await conn("mx_grant")
+        .where({ model_id: modelId, group_id: adminRoleId })
+        .first()
+
+      if (!grantExists) {
+        await conn("mx_grant").insert({
+          name: `${modelName} admin access`,
+          model_id: modelId,
+          group_id: adminRoleId,
+          perm_read: true,
+          perm_write: true,
+          perm_create: true,
+          perm_unlink: true,
+        })
+      }
+    }
   } catch (err: any) {
     console.error("[moon.auth] Warning: Could not sync superuser from .env:", err?.message || err)
   }
 }
+

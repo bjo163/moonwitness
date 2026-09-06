@@ -1,4 +1,4 @@
-import { createCtx, getModel, SUPERUSER_ID } from "@moon/orm"
+import { createCtx, getModel, SUPERUSER_ID, loadJsonSeed } from "@moon/orm"
 
 export async function loadDemoData() {
   const Team = getModel("hd.team")
@@ -10,8 +10,15 @@ export async function loadDemoData() {
 
   const env = createCtx(SUPERUSER_ID, {}, getModel)
 
+  const jsonSeed = loadJsonSeed<{
+    tags?: { name: string; color: string }[]
+    teams?: { code: string; name: string; description: string }[]
+    slas?: { name: string; teamCode: string; priority: string; responseHours: number; resolutionHours: number }[]
+    tickets?: { reference: string; title: string; teamCode: string; stage: string; priority: string }[]
+  }>('helpdesk')
+
   // ── Tags ──
-  const tagSeeds = [
+  const tagSeeds = jsonSeed?.tags || [
     { name: "Bug", color: "#FF0055" },
     { name: "Feature Request", color: "#A100FF" },
     { name: "Documentation", color: "#00F0FF" },
@@ -23,7 +30,7 @@ export async function loadDemoData() {
   }
 
   // ── Teams ──
-  const teamSeeds = [
+  const teamSeeds = jsonSeed?.teams || [
     {
       code: "OBSERVATORY-SUPPORT",
       name: "Observatory Support",
@@ -83,7 +90,7 @@ export async function loadDemoData() {
   }
 
   // ── SLA Policies ──
-  const slaSeeds = [
+  const slaSeeds = jsonSeed?.slas || [
     {
       name: "Urgent SLA",
       teamCode: "OBSERVATORY-SUPPORT",
@@ -146,7 +153,7 @@ export async function loadDemoData() {
   }
 
   // ── Tickets ──
-  const ticketSeeds = [
+  const ticketSeeds = jsonSeed?.tickets || [
     {
       reference: "TKT-0001",
       title: "Moon phase calculation off by 2% at high latitudes",
@@ -203,6 +210,6 @@ export async function loadDemoData() {
   }
 
   console.log(
-    "[moon-helpdesk] Demo data loaded: 2 teams, 10 stages, 6 SLAs, 5 tickets"
+    `[moon-helpdesk] Demo data loaded: ${teamSeeds.length} teams, ${slaSeeds.length} SLAs, ${ticketSeeds.length} tickets`
   )
 }

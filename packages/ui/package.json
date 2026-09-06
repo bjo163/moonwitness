@@ -57,6 +57,7 @@
     "./globals.css": "./src/styles/globals.css",
     "./postcss.config": "./postcss.config.mjs",
     "./tokens": "./src/tokens/index.ts",
+    "./hooks/*": "./src/hooks/*.ts",
     "./lib/*": "./src/lib/*.ts",
     "./components/*": "./src/components/*.tsx",
     "./widgets": "./src/widgets/index.ts",

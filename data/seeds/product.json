@@ -1,0 +1,290 @@
+{
+  "categories": [
+    { "name": "Optical Telescopes & Astrographes" },
+    { "name": "High-QE Scientific Sensors & Cameras" },
+    { "name": "Direct-Drive Mounts & Precision Tracking" },
+    { "name": "Atmospheric Seeing & Environmental Telemetry" },
+    { "name": "High-Resolution Astrophotometric Spectrographs" },
+    { "name": "Radio Astronomy & Microwave Receivers" },
+    { "name": "Field Computational Hardware & Rugged Terminals" },
+    { "name": "Celestial Waqf & Community Outreach Bundles" }
+  ],
+  "products": [
+    {
+      "name": "Planewave CDK 700 0.7m Observatory Telescope",
+      "defaultCode": "TEL-PW-CDK700",
+      "category": "Optical Telescopes & Astrographes",
+      "type": "consu",
+      "listPrice": 4250000000,
+      "standardPrice": 3800000000,
+      "description": "70cm f/6.5 Corrected Dall-Kirkham dual Nasmyth focus system with direct drive alt-azimuth mount and integrated field de-rotator."
+    },
+    {
+      "name": "Ritchey-Chrétien 16-Inch Carbon Truss OTA",
+      "defaultCode": "TEL-RC-16TRUSS",
+      "category": "Optical Telescopes & Astrographes",
+      "type": "consu",
+      "listPrice": 325000000,
+      "standardPrice": 275000000,
+      "description": "Research grade 16-inch f/8 Ritchey-Chrétien optical tube assembly with low-thermal-expansion fused silica optics and carbon fiber truss."
+    },
+    {
+      "name": "Takahashi FSQ-106EDX4 Petzval Quadruplet Astrograph",
+      "defaultCode": "TEL-TAK-FSQ106",
+      "category": "Optical Telescopes & Astrographes",
+      "type": "consu",
+      "listPrice": 145000000,
+      "standardPrice": 125000000,
+      "description": "Modified Petzval quadruplet fluorite refractor optimized for wide-field Hilal twilight imaging across full 88mm image circle."
+    },
+    {
+      "name": "Celestron EdgeHD 14-Inch Aplanatic Schmidt-Cassegrain",
+      "defaultCode": "TEL-CEL-EHD14",
+      "category": "Optical Telescopes & Astrographes",
+      "type": "consu",
+      "listPrice": 185000000,
+      "standardPrice": 155000000,
+      "description": "14-inch aplanatic flat-field SCT with StarBright XLT coatings and integrated mirror support locks for tracking past meridian."
+    },
+    {
+      "name": "Coronado SolarMax III 90mm H-Alpha Solar Telescope",
+      "defaultCode": "TEL-COR-SM90",
+      "category": "Optical Telescopes & Astrographes",
+      "type": "consu",
+      "listPrice": 95000000,
+      "standardPrice": 80000000,
+      "description": "90mm aperture solar telescope with dual-stacked <0.5Å etalon bandpass for high-contrast solar flare and transit observations."
+    },
+    {
+      "name": "FLI Kepler KL4040 Back-Illuminated Scientific CMOS Camera",
+      "defaultCode": "CAM-FLI-KL4040",
+      "category": "High-QE Scientific Sensors & Cameras",
+      "type": "consu",
+      "listPrice": 360000000,
+      "standardPrice": 310000000,
+      "description": "GSENSE4040 16.8MP back-illuminated sCMOS sensor with 95% peak quantum efficiency and deep thermoelectric cooling to -45C below ambient."
+    },
+    {
+      "name": "ZWO ASI6200MM Pro Full-Frame Cooled Mono Camera",
+      "defaultCode": "CAM-ZWO-6200MM",
+      "category": "High-QE Scientific Sensors & Cameras",
+      "type": "consu",
+      "listPrice": 68000000,
+      "standardPrice": 56000000,
+      "description": "Sony IMX455 61MP ultra-low read noise (1.2e-) 16-bit ADC mono CMOS camera with zero amp-glow."
+    },
+    {
+      "name": "QHY600PH-M 60MP Photometric Photographic CMOS",
+      "defaultCode": "CAM-QHY-600PH",
+      "category": "High-QE Scientific Sensors & Cameras",
+      "type": "consu",
+      "listPrice": 72000000,
+      "standardPrice": 60000000,
+      "description": "Native 16-bit monochrome image sensor with USB 3.0 fiber optic interface and anti-dew heating collar."
+    },
+    {
+      "name": "Andor iXon Ultra 888 Back-Illuminated EMCCD Sensor",
+      "defaultCode": "CAM-AND-IX888",
+      "category": "High-QE Scientific Sensors & Cameras",
+      "type": "consu",
+      "listPrice": 550000000,
+      "standardPrice": 480000000,
+      "description": "Electron-multiplying CCD capable of single-photon sensitivity and 26 fps full-frame frame rates for high-speed atmospheric speckle tracking."
+    },
+    {
+      "name": "Alcor System OMEA 3 All-Sky Atmospheric Sentry Camera",
+      "defaultCode": "CAM-ALC-OMEA3",
+      "category": "High-QE Scientific Sensors & Cameras",
+      "type": "consu",
+      "listPrice": 85000000,
+      "standardPrice": 72000000,
+      "description": "Autonomous robotic 180-degree fisheye sky monitor with heated optical dome and cloud-cover percentage automated classifier."
+    },
+    {
+      "name": "10Micron GM3000 HPS Robotic Direct-Drive Equatorial Mount",
+      "defaultCode": "MNT-10M-GM3000",
+      "category": "Direct-Drive Mounts & Precision Tracking",
+      "type": "consu",
+      "listPrice": 380000000,
+      "standardPrice": 320000000,
+      "description": "Ultra-precise absolute on-axis optical encoders with <0.5 arcsecond pointing precision without autoguiding up to 100kg payload."
+    },
+    {
+      "name": "Software Bisque Paramount ME II Robotic Equatorial Mount",
+      "defaultCode": "MNT-SB-PME2",
+      "category": "Direct-Drive Mounts & Precision Tracking",
+      "type": "consu",
+      "listPrice": 295000000,
+      "standardPrice": 250000000,
+      "description": "109kg instrument payload capacity with MKS 5000 control system and internal cable routing through both axes."
+    },
+    {
+      "name": "iOptron CEM120-EC2 Center-Balanced Mount with Real-Time Encoders",
+      "defaultCode": "MNT-IOP-CEM120",
+      "category": "Direct-Drive Mounts & Precision Tracking",
+      "type": "consu",
+      "listPrice": 125000000,
+      "standardPrice": 105000000,
+      "description": "Dual-axis high-resolution optical encoder mount delivering sub-0.15 arcsec RMS tracking error."
+    },
+    {
+      "name": "Rainbow Astro RST-300 Strain-Wave Harmonic Drive Mount",
+      "defaultCode": "MNT-RB-RST300",
+      "category": "Direct-Drive Mounts & Precision Tracking",
+      "type": "consu",
+      "listPrice": 140000000,
+      "standardPrice": 118000000,
+      "description": "Harmonic strain wave gear system with 30kg counterweightless capacity for mobile expeditionary rukyatul hilal."
+    },
+    {
+      "name": "DIMM Atmospheric Differential Image Motion Monitor",
+      "defaultCode": "TEL-DIMM-ATM01",
+      "category": "Atmospheric Seeing & Environmental Telemetry",
+      "type": "consu",
+      "listPrice": 195000000,
+      "standardPrice": 160000000,
+      "description": "Dual-aperture mask seeing measurement system calculating Fried parameter r0 and zenith seeing FWHM in real time."
+    },
+    {
+      "name": "Davis Vantage Pro2 Plus Solar & UV Weather Station",
+      "defaultCode": "ENV-DAV-VP2",
+      "category": "Atmospheric Seeing & Environmental Telemetry",
+      "type": "consu",
+      "listPrice": 28000000,
+      "standardPrice": 22000000,
+      "description": "Precision anemometer, barometric pressure transducer, temperature and humidity sensors with wireless solar-powered transmitter."
+    },
+    {
+      "name": "Unihedron SQM-LU Sky Quality Meter with USB Interface",
+      "defaultCode": "ENV-UNI-SQMLU",
+      "category": "Atmospheric Seeing & Environmental Telemetry",
+      "type": "consu",
+      "listPrice": 9500000,
+      "standardPrice": 7500000,
+      "description": "Calibrated photodiode measuring night sky brightness in magnitudes per square arcsecond (MPSAS)."
+    },
+    {
+      "name": "Shelyak eShel III High-Resolution Fiber-Fed Echelle Spectrograph",
+      "defaultCode": "SPEC-SHE-ESHEL3",
+      "category": "High-Resolution Astrophotometric Spectrographs",
+      "type": "consu",
+      "listPrice": 420000000,
+      "standardPrice": 360000000,
+      "description": "R=11000 optical fiber spectrograph covering 390nm to 780nm across 24 spectral orders with thorium-argon calibration lamp."
+    },
+    {
+      "name": "Baader Planetarium DADOS Slit Spectrograph",
+      "defaultCode": "SPEC-BAA-DADOS",
+      "category": "High-Resolution Astrophotometric Spectrographs",
+      "type": "consu",
+      "listPrice": 45000000,
+      "standardPrice": 38000000,
+      "description": "Versatile reflection grating slit spectrograph with micrometer slit width adjustment for radial velocity measurement."
+    },
+    {
+      "name": "Radio Astronomy Ku-Band 1.8m Dish Antenna Kit",
+      "defaultCode": "RAD-KU-18M",
+      "category": "Radio Astronomy & Microwave Receivers",
+      "type": "consu",
+      "listPrice": 65000000,
+      "standardPrice": 52000000,
+      "description": "12GHz receiver for measuring solar flux, lunar microwave thermal emission, and neutral hydrogen 1420MHz line."
+    },
+    {
+      "name": "SDRplay RSPdx-R2 Wideband Software Defined Receiver",
+      "defaultCode": "RAD-SDR-RSPDX",
+      "category": "Radio Astronomy & Microwave Receivers",
+      "type": "consu",
+      "listPrice": 7800000,
+      "standardPrice": 6200000,
+      "description": "14-bit ADC wideband receiver covering 1kHz to 2GHz with dual antenna inputs and notch filters."
+    },
+    {
+      "name": "Spectracom SecureSync Rubidium Atomic Clock Master Oscillator",
+      "defaultCode": "HW-SEC-RUBID01",
+      "category": "Field Computational Hardware & Rugged Terminals",
+      "type": "consu",
+      "listPrice": 210000000,
+      "standardPrice": 180000000,
+      "description": "High-stability rubidium reference standard with disciplined GPS PPS sync (<10ns accuracy) for time-critical lunar occultation timings."
+    },
+    {
+      "name": "Panasonic Toughbook 55 Rugged Astronomical Field Terminal",
+      "defaultCode": "HW-PAN-TB55",
+      "category": "Field Computational Hardware & Rugged Terminals",
+      "type": "consu",
+      "listPrice": 58000000,
+      "standardPrice": 48000000,
+      "description": "IP53 MIL-STD-810H ruggedized laptop with sunlight-viewable 1000-nit display, dual hot-swappable batteries, and RS232 COM ports."
+    },
+    {
+      "name": "Astro-PC Fanless Core-i7 Dome Controller Edge Node",
+      "defaultCode": "HW-APC-FANLESS",
+      "category": "Field Computational Hardware & Rugged Terminals",
+      "type": "consu",
+      "listPrice": 24000000,
+      "standardPrice": 19000000,
+      "description": "Wide-temperature -20C to +70C fanless embedded controller with 8x USB 3.2, 4x isolated RS485, and dual Intel Gigabit LAN."
+    },
+    {
+      "name": "Chroma Technology Research Bessell Photometric Filter Set (UBVRI)",
+      "defaultCode": "FIL-CHR-UBVRI",
+      "category": "Atmospheric Seeing & Environmental Telemetry",
+      "type": "consu",
+      "listPrice": 34000000,
+      "standardPrice": 28000000,
+      "description": "50mm unmounted precision optical interference filters conforming strictly to Johnson-Cousins/Bessell photometric standard."
+    },
+    {
+      "name": "Astronomik L-3 Deep UV/IR Blocking Filter 2-Inch",
+      "defaultCode": "FIL-AST-L3",
+      "category": "Atmospheric Seeing & Environmental Telemetry",
+      "type": "consu",
+      "listPrice": 4800000,
+      "standardPrice": 3900000,
+      "description": "Strict UV/IR cut filter tailored for refractive telescopes preventing chromatic aberration in twilight conditions."
+    },
+    {
+      "name": "Baader Planetarium Solar Continuum 7.5nm Filter",
+      "defaultCode": "FIL-BAA-SOL7",
+      "category": "Atmospheric Seeing & Environmental Telemetry",
+      "type": "consu",
+      "listPrice": 3600000,
+      "standardPrice": 2900000,
+      "description": "540nm green narrowband filter designed to maximize solar photosphere granulation and penumbral contrast."
+    },
+    {
+      "name": "Waqf Bundle: Complete Mosque Hilal Observation Station Kit",
+      "defaultCode": "BUN-WQF-MOSQUE01",
+      "category": "Celestial Waqf & Community Outreach Bundles",
+      "type": "service",
+      "listPrice": 185000000,
+      "standardPrice": 150000000,
+      "description": "Turnkey community observatory kit including 8-inch ED refractor, motorized EQ mount, cooled camera, GPS clock, and training workshop."
+    },
+    {
+      "name": "Waqf Bundle: High School & Islamic Boarding School Falak Lab",
+      "defaultCode": "BUN-WQF-SCHOOL02",
+      "category": "Celestial Waqf & Community Outreach Bundles",
+      "type": "service",
+      "listPrice": 95000000,
+      "standardPrice": 75000000,
+      "description": "Educational astronomical package with 6-inch GoTo telescope, solar projection system, celestial sphere globes, and textbooks."
+    },
+    {
+      "name": "Perpetual Waqf: Digital Celestial Ephemeris Cloud Node",
+      "defaultCode": "BUN-WQF-CLOUD03",
+      "category": "Celestial Waqf & Community Outreach Bundles",
+      "type": "service",
+      "listPrice": 50000000,
+      "standardPrice": 40000000,
+      "description": "Perpetual endowment providing 5-year dedicated cloud computing power for Islamic prayer time and lunar visibility calculations."
+    }
+  ],
+  "pricelists": [
+    { "name": "Public / Standard Catalog (IDR)", "currency": "IDR" },
+    { "name": "Academic & Islamic Boarding School Grant Discount (IDR)", "currency": "IDR" },
+    { "name": "Observatory Network Partner Pricing (IDR)", "currency": "IDR" },
+    { "name": "International Institutional Tier (USD)", "currency": "USD" }
+  ]
+}

@@ -4,6 +4,7 @@ import { validateAssessment, type AssessmentInput } from '../engine.js'
 export default class MzAssessment extends Vertex {
   static _name = 'mz.assessment'
   static _description = 'Mizan Assessment Result'
+  static override _rec_name = 'method'
 
   caseId = fields.Many2one({ comodel: 'mz.case', required: true, index: true })
   method = fields.Selection({

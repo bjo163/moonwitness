@@ -55,6 +55,26 @@ export const MizanSummarySchema = z.object({
   needsReference: z.number(),
 })
 
+export const DashboardDataSchema = z.object({
+  missionStatus: z.record(z.unknown()).nullable(),
+  todayMission: z.array(z.record(z.unknown())).nullable(),
+  todayPrayer: z.array(z.record(z.unknown())).nullable(),
+  aiBriefing: z.array(z.record(z.unknown())).nullable(),
+  knowledgeFeed: z.array(z.record(z.unknown())).nullable(),
+  activeProjects: z.array(z.record(z.unknown())).nullable(),
+  tasksOverview: z.record(z.unknown()).nullable(),
+  moonObservatory: z.record(z.unknown()).nullable(),
+  globalMonitoring: z.array(z.record(z.unknown())).nullable(),
+})
+
+export const DashboardResponseSchema = z.object({
+  success: z.boolean(),
+  status: z.enum(['success', 'partial', 'unavailable']),
+  generatedAt: z.string().datetime().optional(),
+  sources: z.record(z.enum(['success', 'unavailable', 'not_configured'])).optional(),
+  data: DashboardDataSchema,
+})
+
 // ═══════════════════════════════════════════
 // INFERRED TYPES
 // ═══════════════════════════════════════════
@@ -65,3 +85,5 @@ export type ModelMeta = z.infer<typeof ModelMetaSchema>
 export type PerformanceStats = z.infer<typeof PerformanceStatsSchema>
 export type MizanDecision = z.infer<typeof MizanDecisionSchema>
 export type MizanSummary = z.infer<typeof MizanSummarySchema>
+export type DashboardData = z.infer<typeof DashboardDataSchema>
+export type DashboardResponse = z.infer<typeof DashboardResponseSchema>

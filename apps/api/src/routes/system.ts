@@ -8,11 +8,22 @@ import {
 import { getModel, createCtx, SUPERUSER_ID } from "@moon/orm"
 import { config } from "../config/index.js"
 import { allDemoLoaders, allAddonManifests, allAddonViews } from "../addons/index.js"
+import { DashboardResponseSchema } from "@moon/protocol"
+import { buildCommandCenterDashboard } from "../services/command-center-dashboard.js"
 
 /**
  * ◈ System & Admin Operational Routes
  */
 export function registerSystemRoutes(server: NativeServer): void {
+  defineRoute({
+    method: "GET",
+    path: "/api/command-center/dashboard",
+    auth: "user",
+    tags: ["System"],
+    summary: "Get the Command Center operational dashboard read model",
+    response: DashboardResponseSchema,
+    handler: async ({ env, uid }) => buildCommandCenterDashboard(env, uid),
+  })
   // Direct in-process database status & model introspection (eliminates HTTP loopback)
   server.get("/api/external/db/status", handleDbStatus, "user")
   server.get("/api/external/meta/models", handleMetaModels, "user")

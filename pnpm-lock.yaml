@@ -83,6 +83,9 @@ importers:
       '@moon/project':
         specifier: workspace:*
         version: link:../../packages/moon-project
+      '@moon/protocol':
+        specifier: workspace:*
+        version: link:../../packages/moon-protocol
       '@moon/server':
         specifier: workspace:*
         version: link:../../packages/moon-server

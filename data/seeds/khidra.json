@@ -1,0 +1,168 @@
+{
+  "conversations": [
+    {
+      "sessionId": "demo-session-spiritual-routine",
+      "title": "Balancing Spiritual Routine with High-Tempo Space Research",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Bagaimana cara menjaga konsistensi wirid harian dan shalat malam saat jadwal observasi hilal dan riset astronomi berlangsung padat di malam hari?"
+        },
+        {
+          "role": "model",
+          "content": "Observasi keteraturan ciptaan Allah di langit malam itu sendiri adalah bentuk tafakkur yang bernilai ibadah agung (QS Ali Imran: 190-191). Anda dapat menggabungkan dzikir lisan saat mengamati instrumen, dan membagi waktu istirahat secara proporsional agar qiyamul lail tetap terlaksana walau dua rakaat ringkas."
+        }
+      ]
+    },
+    {
+      "sessionId": "demo-session-prophetic-diplomacy",
+      "title": "Prophetic Diplomacy: Insights from Treaty of Hudaybiyyah",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Pelajaran apa yang dapat diambil dari Perjanjian Hudaibiyah terkait resolusi konflik dan negosiasi strategis?"
+        },
+        {
+          "role": "model",
+          "content": "Perjanjian Hudaibiyah mengajarkan pentingnya visi jangka panjang (strategic patience), fleksibilitas dalam klausul redaksional demi maslahat substansial, serta komitmen penuh terhadap perdamaian (Fathan Mubina)."
+        }
+      ]
+    },
+    {
+      "sessionId": "demo-session-quranic-cosmology",
+      "title": "Cosmological Harmony & Determination in Surah Yasin",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Jelaskan tafsir ayat 'wa ash-shamsu tajri li mustaqarril laha' dalam konteks gerak matahari di galaksi Bimasakti."
+        },
+        {
+          "role": "model",
+          "content": "Ayat ke-38 dari Surah Yasin menyatakan matahari beredar menuju tempat perhentiannya (mustaqarr). Secara astrofisika modern, tata surya berputar mengelilingi pusat galaksi Bimasakti dengan kecepatan ~220 km/s menuju titik solar apex. Redaksi wahyu selaras secara presisi dengan dinamika orbit kosmik yang deterministik."
+        }
+      ]
+    },
+    {
+      "sessionId": "demo-session-hilal-criteria-ethics",
+      "title": "Ethical Reconciliation of Scientific Calculation and Physical Ru'yah",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Bagaimana integrasi kriteria hisab modern (seperti MABIMS 3-6.4) dengan tradisi rukyatul hilal bil fi'li agar umat mencapai ukhuwah?"
+        },
+        {
+          "role": "model",
+          "content": "Hisab dan rukyat tidaklah kontradiktif melainkan komplementer. Hisab bertindak sebagai penentu batas kemungkinan keterlihatan (imkanur rukyat) dan penunjuk koordinat teleskop, sementara rukyat adalah konfirmasi empiris verifikatif. Pendekatan integratif ini merefleksikan semangat keilmuan Islam yang memadukan burhan aqli dan sunnah amaliyyah."
+        }
+      ]
+    },
+    {
+      "sessionId": "demo-session-zakat-digital-currency",
+      "title": "Jurisprudence of Digital Assets and Waqf Optimization",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Apakah aset kripto dan komputasi awan yang diwakafkan untuk riset astronomi memenuhi syarat legalitas syariah?"
+        },
+        {
+          "role": "model",
+          "content": "Mayoritas fatwa kontemporer (AAOIFI, DSN-MUI) menegaskan bahwa manfaat hak guna (manfa'ah) dan aset bernilai digital (maal mutaqawwam) sah dijadikan obyek wakaf produktif (waqf al-manafi'), asalkan dimanfaatkan untuk kepentingan keilmuan yang maslahat bagi peradaban."
+        }
+      ]
+    },
+    {
+      "sessionId": "demo-session-telescope-maintenance-discipline",
+      "title": "Theology of Excellence (Ihsan) in Instrument Calibration",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Mengapa ketelitian kalibrasi cermin primer dan sensor optik bernilai ibadah?"
+        },
+        {
+          "role": "model",
+          "content": "Konsep Ihsan menuntut kesempurnaan dalam setiap amanah ('Inna Allaha kataba al-ihsana 'ala kulli syai'). Dalam observasi falakiyah, kesalahan fraksi milimeter pada optik atau sekon busur pada koordinat dapat mengubah kepastian waktu ibadah jutaan orang. Menjaga presisi adalah bentuk ketaatan tertinggi."
+        }
+      ]
+    }
+  ],
+  "automations": [
+    {
+      "name": "Auto-Schedule SLA Review on Critical Ticket",
+      "model": "hd.ticket",
+      "trigger": "on_create",
+      "domain": "{\"priority\":\"critical\"}",
+      "actionType": "create_activity",
+      "actionData": "{\"summary\":\"Emergency SLA Triage Required (2h window)\"}",
+      "active": true
+    },
+    {
+      "name": "Broadcast CAB RFC Approval to Outbound Mesh",
+      "model": "cab.change",
+      "trigger": "on_update",
+      "domain": "{\"status\":\"approved\"}",
+      "actionType": "enqueue_job",
+      "actionData": "{\"jobName\":\"Dispatch RFC Approved Webhook\",\"queueName\":\"automations\"}",
+      "active": true
+    },
+    {
+      "name": "Notify Astronomical Operations on Low Stock Quantity",
+      "model": "stock.quant",
+      "trigger": "on_update",
+      "domain": "{\"quantity\":{\"<\":5}}",
+      "actionType": "create_activity",
+      "actionData": "{\"summary\":\"Replenish critical optical filters and cryogenic coolant\"}",
+      "active": true
+    },
+    {
+      "name": "Trigger Hadith Verification Workflow on New Corpus Entry",
+      "model": "wx.tradition.corpus",
+      "trigger": "on_create",
+      "domain": "{\"status\":\"draft\"}",
+      "actionType": "enqueue_job",
+      "actionData": "{\"jobName\":\"Sanad Chain Analysis Engine\",\"queueName\":\"celestial-compute\"}",
+      "active": true
+    }
+  ],
+  "webhooks": [
+    {
+      "name": "Cosmic Council Security Dispatcher",
+      "url": "https://security.moonwitness.org/api/hooks/telemetry",
+      "eventTrigger": "record.created",
+      "active": true,
+      "logs": [
+        {
+          "event": "ticket.created",
+          "status": "success",
+          "responseCode": 200,
+          "durationMs": 38.4,
+          "payload": "{\"event\":\"ticket.created\",\"id\":104,\"priority\":\"high\"}",
+          "responseBody": "{\"acknowledged\":true,\"receiptId\":\"MW-SEC-991\"}"
+        },
+        {
+          "event": "rfc.approved",
+          "status": "success",
+          "responseCode": 200,
+          "durationMs": 52.1,
+          "payload": "{\"event\":\"rfc.approved\",\"code\":\"RFC-2026-004\"}",
+          "responseBody": "{\"acknowledged\":true,\"receiptId\":\"MW-SEC-1004\"}"
+        }
+      ]
+    },
+    {
+      "name": "Global Ephemeris Distribution Network",
+      "url": "https://ephemeris.moonwitness.org/webhook/sync",
+      "eventTrigger": "record.updated",
+      "active": true,
+      "logs": [
+        {
+          "event": "city.coordinates_updated",
+          "status": "success",
+          "responseCode": 200,
+          "durationMs": 24.6,
+          "payload": "{\"city\":\"Bandung\",\"elev\":718}",
+          "responseBody": "{\"synced\":true}"
+        }
+      ]
+    }
+  ]
+}

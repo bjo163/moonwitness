@@ -48,6 +48,14 @@ const nextConfig: NextConfig = {
         source: "/api/meta/:path*",
         destination: `${apiUrl}/api/meta/:path*`,
       },
+      {
+        source: "/api/witness/:path*",
+        destination: `${apiUrl}/api/witness/:path*`,
+      },
+      {
+        source: "/api/:model/:path*",
+        destination: `${apiUrl}/api/:model/:path*`,
+      },
     ]
   },
   serverExternalPackages: [

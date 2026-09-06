@@ -8,7 +8,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { z } from 'zod'
 import { globalRoutes } from './router.js'
-import { authenticateRequest, AuthError } from './utils/auth.js'
+import { authenticateRequest, AuthError, resolveUserRole } from './utils/auth.js'
 import { createCtx, getModel, SUPERUSER_ID, ANONYMOUS_ID, AuthorizationError } from '@moon/orm'
 import { resolveCorsOrigin, getSecurityHeaders, getCorsConfig } from './utils/http.js'
 import { defineEndpoint } from '@moon/protocol'
@@ -151,9 +151,14 @@ export function defineRoute(def: RouteDefinition): void {
             uid = session.uid
 
             if (authLevel === 'admin' && uid !== SUPERUSER_ID) {
-              res.writeHead(403, buildHeaders(req))
-              res.end(JSON.stringify({ error: 'Administrator access required', code: 'AUTH_FORBIDDEN' }))
-              return
+              // Allow users with admin/superadmin role (clearance >= 2) in addition to SUPERUSER_ID
+              const authCtx = createCtx(uid, {}, getModel as any)
+              const { clearanceLevel } = await resolveUserRole(uid, authCtx)
+              if (clearanceLevel < 2) {
+                res.writeHead(403, buildHeaders(req))
+                res.end(JSON.stringify({ error: 'Administrator access required', code: 'AUTH_FORBIDDEN' }))
+                return
+              }
             }
           } catch (error) {
             if (error instanceof AuthError) {

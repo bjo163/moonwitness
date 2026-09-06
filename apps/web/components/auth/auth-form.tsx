@@ -4,7 +4,7 @@ import { FormEvent, useState } from "react"
 import Link from "next/link"
 import { ArrowRight, LockKeyhole, Mail, UserRound } from "lucide-react"
 import { apiPost, useAuthSession } from "@moon/client"
-import { StatusNotice } from "@workspace/ui"
+import { Button, Input, StatusNotice } from "@workspace/ui"
 
 type AuthMode = "login" | "register"
 
@@ -76,9 +76,10 @@ export function AuthForm() {
 
       <div className="mb-6 grid grid-cols-2 gap-2 border-b border-border pb-4" role="tablist" aria-label="Authentication mode">
         {(["login", "register"] as AuthMode[]).map((tab) => (
-          <button
+          <Button
             key={tab}
             type="button"
+            variant="ghost"
             role="tab"
             aria-selected={mode === tab}
             onClick={() => changeMode(tab)}
@@ -87,7 +88,7 @@ export function AuthForm() {
             }`}
           >
             {tab}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -97,27 +98,27 @@ export function AuthForm() {
         {!isLogin ? (
           <div>
             <label htmlFor="auth-name" className="text-sm font-medium text-foreground">Full name</label>
-            <input id="auth-name" name="name" autoComplete="name" required value={name} onChange={(event) => setName(event.target.value)} className={inputClass} placeholder="Your name" />
+            <Input id="auth-name" name="name" autoComplete="name" required value={name} onChange={(event) => setName(event.target.value)} className={inputClass} placeholder="Your name" />
           </div>
         ) : null}
         <div>
           <label htmlFor="auth-email" className="text-sm font-medium text-foreground">Email address</label>
-          <div className="relative"><Mail aria-hidden="true" className="absolute top-5 left-3 h-4 w-4 text-muted-foreground" /><input id="auth-email" name="email" type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} className={`${inputClass} pl-10`} placeholder="you@example.com" /></div>
+          <div className="relative"><Mail aria-hidden="true" className="absolute top-5 left-3 h-4 w-4 text-muted-foreground" /><Input id="auth-email" name="email" type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} className={`${inputClass} pl-10`} placeholder="you@example.com" /></div>
         </div>
         <div>
           <label htmlFor="auth-password" className="text-sm font-medium text-foreground">Password</label>
-          <input id="auth-password" name="password" type="password" autoComplete={isLogin ? "current-password" : "new-password"} required minLength={8} value={password} onChange={(event) => setPassword(event.target.value)} className={inputClass} aria-describedby="password-hint" />
+          <Input id="auth-password" name="password" type="password" autoComplete={isLogin ? "current-password" : "new-password"} required minLength={8} value={password} onChange={(event) => setPassword(event.target.value)} className={inputClass} aria-describedby="password-hint" />
           {!isLogin ? <p id="password-hint" className="mt-2 text-xs text-muted-foreground">Use at least 8 characters.</p> : null}
         </div>
         {!isLogin ? (
           <div>
             <label htmlFor="auth-confirmation" className="text-sm font-medium text-foreground">Confirm password</label>
-            <input id="auth-confirmation" name="confirmation" type="password" autoComplete="new-password" required minLength={8} value={confirmation} onChange={(event) => setConfirmation(event.target.value)} className={inputClass} />
+            <Input id="auth-confirmation" name="confirmation" type="password" autoComplete="new-password" required minLength={8} value={confirmation} onChange={(event) => setConfirmation(event.target.value)} className={inputClass} />
           </div>
         ) : null}
-        <button type="submit" disabled={busy} className="rounded-md flex w-full items-center justify-center gap-2 bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-wait disabled:opacity-60">
+        <Button type="submit" disabled={busy} className="rounded-md flex w-full items-center justify-center gap-2 bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-wait disabled:opacity-60">
           {busy ? "Processing..." : isLogin ? "Sign in" : "Create account"}<ArrowRight aria-hidden="true" className="h-4 w-4" />
-        </button>
+        </Button>
       </form>
       <p className="mt-6 text-center text-xs text-muted-foreground">Need help? <Link href="/home" className="text-primary underline-offset-4 hover:underline">Return to observatory</Link></p>
     </section>

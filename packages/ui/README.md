@@ -19,6 +19,11 @@
 
 `@workspace/ui` enforces the **Enterprise Design System Bible** with standard shadcn/ui ergonomics, high-contrast accessible surfaces (`bg-background`, `bg-card`, `border-border`), compact containers (`rounded-md`) without default shadows, and crisp Geist/JetBrains Mono/Amiri typography.
 
+Feature code should import shared components from the public `@workspace/ui`
+barrel. Package internals use relative imports; published subpaths such as
+`@workspace/ui/components/*`, `@workspace/ui/hooks/*`, and `@workspace/ui/lib/*`
+are reserved for cases where a focused import is required.
+
 ---
 
 See [Research UI guidelines](../../docs/RESEARCH-UI.md) for typography, spacing, reading width, and accessibility. Prefer text sections and separators over nested cards.

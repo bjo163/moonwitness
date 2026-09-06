@@ -17,7 +17,7 @@ export function ZakatCalculatorWidget() {
     <MetricCard
       title="Zakat Calculator"
       value="Rp 2.450.000"
-      detail="Nisab 85g Emas (Terpenuhi)"
+      detail="Demo data · backend belum tersedia"
       icon={<Calculator className="h-4 w-4" />}
     />
   )
@@ -28,7 +28,7 @@ export function InfaqTrackerWidget() {
     <MetricCard
       title="Infaq & Sedekah"
       value="Rp 850.000"
-      detail="12 Transaksi Bulan Ini"
+      detail="Demo data · backend belum tersedia"
       icon={<HeartHandshake className="h-4 w-4" />}
       variant="success"
     />
@@ -40,7 +40,7 @@ export function MutabaahWidget() {
     <MetricCard
       title="Mutaba'ah Yaumiyah"
       value="85% Selesai"
-      detail="Shalat 5 Waktu & Tilawah"
+      detail="Demo data · backend belum tersedia"
       icon={<CheckCircle2 className="h-4 w-4" />}
     />
   )
@@ -51,7 +51,7 @@ export function MosqueRadarWidget() {
     <MetricCard
       title="Radar Masjid Terdekat"
       value="Masjid Raya Istiqlal"
-      detail="1.2 KM • Arah 295° NW"
+      detail="Demo data · backend belum tersedia"
       icon={<MapPin className="h-4 w-4" />}
       variant="warning"
     />
@@ -66,22 +66,22 @@ export function SpiritualReportWidget() {
           <Sparkles className="h-4 w-4" />
           <span>Spiritual Health & Reflection Analytics</span>
         </div>
-        <StatusBadge status="success" label="STATUS: OPTIMAL" size="sm" />
+        <StatusBadge status="warning" label="DEMO DATA" size="sm" />
       </div>
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs">
         <MetricCard
           title="Konsistensi Ibadah"
-          value="94.2%"
+          value="—"
           variant="default"
         />
         <MetricCard
           title="Khatam Qur'an Target"
-          value="Juz 18 / 30"
+          value="—"
           variant="success"
         />
         <MetricCard
           title="Indeks Kedamaian Hati"
-          value="High (Al-Muthma'innah)"
+          value="—"
           variant="default"
         />
       </div>

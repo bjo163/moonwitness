@@ -1,6 +1,7 @@
 import React from "react"
 import { Activity } from "lucide-react"
 import { EarthquakeFeature } from "@moon/client"
+import { resolveSemanticColor, type SemanticColorToken } from "../../../lib/semantic-color"
 
 export function PlanetarySeismicWidget({
   earthquakes = [],
@@ -28,17 +29,17 @@ export function PlanetarySeismicWidget({
           recentEvents.map((eq, i) => {
             const mag = eq.properties.mag
             let sev = "Low"
-            let color = "#00FF66"
+            let color: SemanticColorToken = "success"
 
             if (mag >= 6) {
               sev = "Critical"
-              color = "#FF0055"
+              color = "destructive"
             } else if (mag >= 4.5) {
               sev = "High"
-              color = "#FF9900"
+              color = "warning"
             } else if (mag >= 3) {
               sev = "Medium"
-              color = "#00F0FF"
+              color = "info"
             }
 
             return (
@@ -61,13 +62,13 @@ export function PlanetarySeismicWidget({
                   <div className="mb-2 flex items-baseline justify-between">
                     <span
                       className="text-[10px] font-black"
-                      style={{ color: color }}
+                      style={{ color: resolveSemanticColor(color) }}
                     >
                       {sev}
                     </span>
                     <span
                       className="font-mono text-[9px] font-bold"
-                      style={{ color: color }}
+                      style={{ color: resolveSemanticColor(color) }}
                     >
                       {mag.toFixed(1)}
                     </span>
@@ -91,7 +92,7 @@ export function PlanetarySeismicWidget({
                           className="w-1.5 opacity-30"
                           style={{
                             height: `${height}px`,
-                            backgroundColor: color,
+                            backgroundColor: resolveSemanticColor(color),
                           }}
                         />
                       )

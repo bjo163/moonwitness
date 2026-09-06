@@ -44,6 +44,7 @@
     "@moon/mail": "workspace:*",
     "@moon/geo": "workspace:*",
     "@moon/cron": "workspace:*",
+    "@moon/protocol": "workspace:*",
     "dotenv": "^16.4.5",
     "knex": "^3.0.0",
     "pg": "^8.13.0"

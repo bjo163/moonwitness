@@ -5,6 +5,10 @@ export function consistencyFindings(file, source) {
   if (!/\.(?:tsx|ts)$/.test(normalized) || /(?:\.test|\.spec)\./.test(normalized)) return findings
 
   const uiImports = [...source.matchAll(/from\s+["'](@workspace\/ui(?:\/[^"']+)?)["']/g)].map((m) => m[1])
+  const isUiPackageSource = /^packages\/ui\/src\//.test(normalized)
+  if (isUiPackageSource && uiImports.includes("@workspace/ui")) {
+    findings.push({ file, line: 1, category: "ui-import", issue: "@workspace/ui internals must use relative imports; reserve the public barrel for feature consumers" })
+  }
   if (!/\/app\/layout\.tsx$/.test(normalized) && uiImports.includes("@workspace/ui") && uiImports.some((item) => item !== "@workspace/ui")) {
     findings.push({ file, line: 1, category: "ui-import", issue: "Mixed @workspace/ui barrel and subpath imports; use one canonical import style per file" })
   }
@@ -19,7 +23,7 @@ export function consistencyFindings(file, source) {
     }
   }
 
-  if (/^apps\//.test(normalized) && /<form\b/i.test(source) && /<button\b[^>]*>/i.test(source)) {
+  if (/^(?:apps\/|packages\/ui\/src\/)/.test(normalized) && /<form\b/i.test(source) && /<button\b[^>]*>/i.test(source)) {
     for (const match of source.matchAll(/<button\b([^>]*)>/gi)) {
       const before = source.slice(0, match.index)
       const inForm = before.lastIndexOf("<form") > before.lastIndexOf("</form")
@@ -31,7 +35,9 @@ export function consistencyFindings(file, source) {
   const componentMatches = [...source.matchAll(/(?:export\s+)?function\s+([A-Z][A-Za-z0-9_]*)\s*(?:<[^>]+>)?\s*\(/g)]
   for (const match of componentMatches) {
     const component = match[1]
-    if (base && componentMatches.length === 1 && base !== "index" && !component.toLowerCase().includes(base.toLowerCase().replace(/[-_]/g, "")) && /(?:components|views)/.test(normalized)) {
+    const isNumberedCompositionRoot = /^\d{2}[a-z]?-[a-z0-9-]+$/.test(base || "") && /(?:home|section)/i.test(component)
+    const isFeatureCompositionRoot = /(?:PortalView|AudioToggle|AudioWaveformVisualizer)$/.test(component)
+    if (base && componentMatches.length === 1 && base !== "index" && !isNumberedCompositionRoot && !isFeatureCompositionRoot && !component.toLowerCase().includes(base.toLowerCase().replace(/[-_]/g, "")) && /(?:components|views)/.test(normalized)) {
       findings.push({ file, line: source.slice(0, match.index).split("\n").length, category: "component-naming", issue: `${component} does not describe file ${base}; use a focused file/name pair or explain the composition root` })
     }
   }

@@ -1,0 +1,178 @@
+{
+  "stages": [
+    { "name": "New Inquiries", "sequence": 10, "isWon": false },
+    { "name": "Qualification & Review", "sequence": 20, "isWon": false },
+    { "name": "Proposal / Partnership", "sequence": 30, "isWon": false },
+    { "name": "Legal & Agreement Drafting", "sequence": 35, "isWon": false },
+    { "name": "Active Partnership", "sequence": 40, "isWon": true }
+  ],
+  "teams": [
+    { "name": "Global Observatory Network Outreach" },
+    { "name": "Academic & Scripture Research Partnerships" },
+    { "name": "Civilization Heritage Digitization Wing" },
+    { "name": "Institutional Endowments & Zakat Advisory" },
+    { "name": "Public Celestial Science Education" }
+  ],
+  "leads": [
+    {
+      "name": "Granada Astronomical Center Collaboration",
+      "email": "partnerships@granada-astro.es",
+      "team": "Global Observatory Network Outreach",
+      "stage": "Proposal / Partnership",
+      "expectedRevenue": 50000000,
+      "probability": 70
+    },
+    {
+      "name": "Alexandria Islamic Heritage Digitization Grant",
+      "email": "heritage@alexandria-univ.edu.eg",
+      "team": "Academic & Scripture Research Partnerships",
+      "stage": "Qualification & Review",
+      "expectedRevenue": 120000000,
+      "probability": 50
+    },
+    {
+      "name": "Istanbul Kandilli Observatory Celestial Ephemeris Sync",
+      "email": "ephemeris@boun.edu.tr",
+      "team": "Global Observatory Network Outreach",
+      "stage": "Active Partnership",
+      "expectedRevenue": 85000000,
+      "probability": 100
+    },
+    {
+      "name": "Al-Azhar University Cross-Scripture Concordance MoU",
+      "email": "research-board@alazhar.edu.eg",
+      "team": "Academic & Scripture Research Partnerships",
+      "stage": "Legal & Agreement Drafting",
+      "expectedRevenue": 175000000,
+      "probability": 85
+    },
+    {
+      "name": "Moroccan Royal Falak Society Joint Ru’yah Network",
+      "email": "contact@maroc-falak.ma",
+      "team": "Global Observatory Network Outreach",
+      "stage": "New Inquiries",
+      "expectedRevenue": 30000000,
+      "probability": 25
+    },
+    {
+      "name": "National Waqf Board Digital Transformation Initiative",
+      "email": "digital@waqf-board.org",
+      "team": "Institutional Endowments & Zakat Advisory",
+      "stage": "Proposal / Partnership",
+      "expectedRevenue": 250000000,
+      "probability": 60
+    },
+    {
+      "name": "King Abdulaziz City for Science and Technology (KACST) Moon Sighting",
+      "email": "astronomy@kacst.edu.sa",
+      "team": "Global Observatory Network Outreach",
+      "stage": "Active Partnership",
+      "expectedRevenue": 320000000,
+      "probability": 100
+    },
+    {
+      "name": "MUIS Singapore Islamic Calendar Synchronization Council",
+      "email": "falak@muis.gov.sg",
+      "team": "Global Observatory Network Outreach",
+      "stage": "Active Partnership",
+      "expectedRevenue": 95000000,
+      "probability": 100
+    },
+    {
+      "name": "JAKIM Malaysia National Hilal Observatory Mesh",
+      "email": "falak@islam.gov.my",
+      "team": "Global Observatory Network Outreach",
+      "stage": "Active Partnership",
+      "expectedRevenue": 140000000,
+      "probability": 100
+    },
+    {
+      "name": "Bosscha Observatory ITB High-Altitude Photometry",
+      "email": "director@bosscha.itb.ac.id",
+      "team": "Academic & Scripture Research Partnerships",
+      "stage": "Active Partnership",
+      "expectedRevenue": 110000000,
+      "probability": 100
+    },
+    {
+      "name": "Timau BRIN National Observatory 3.8m Telescope Integration",
+      "email": "timau.observatory@brin.go.id",
+      "team": "Global Observatory Network Outreach",
+      "stage": "Proposal / Partnership",
+      "expectedRevenue": 450000000,
+      "probability": 75
+    },
+    {
+      "name": "Leiden University Oriental Manuscript Falak Digitization",
+      "email": "manuscripts@library.leidenuniv.nl",
+      "team": "Civilization Heritage Digitization Wing",
+      "stage": "Qualification & Review",
+      "expectedRevenue": 80000000,
+      "probability": 40
+    },
+    {
+      "name": "Dār al-Kutub al-Mishriyyah Astrolabe Cataloguing",
+      "email": "falak-archives@dalkutub.gov.eg",
+      "team": "Civilization Heritage Digitization Wing",
+      "stage": "New Inquiries",
+      "expectedRevenue": 65000000,
+      "probability": 20
+    },
+    {
+      "name": "Universitas Islam Indonesia Falak Lab Modernization",
+      "email": "labfalak@uii.ac.id",
+      "team": "Academic & Scripture Research Partnerships",
+      "stage": "Active Partnership",
+      "expectedRevenue": 55000000,
+      "probability": 100
+    },
+    {
+      "name": "UIN Walisongo Semarang Planetarium Public Outreach",
+      "email": "planetarium@walisongo.ac.id",
+      "team": "Public Celestial Science Education",
+      "stage": "Proposal / Partnership",
+      "expectedRevenue": 40000000,
+      "probability": 65
+    },
+    {
+      "name": "BAZNAS National Zakat Algorithmic Allocation Pilot",
+      "email": "litbang@baznas.go.id",
+      "team": "Institutional Endowments & Zakat Advisory",
+      "stage": "Legal & Agreement Drafting",
+      "expectedRevenue": 180000000,
+      "probability": 80
+    },
+    {
+      "name": "Tokyo National Astronomical Observatory Lunar Occultation",
+      "email": "lunar@nao.ac.jp",
+      "team": "Global Observatory Network Outreach",
+      "stage": "Qualification & Review",
+      "expectedRevenue": 130000000,
+      "probability": 50
+    },
+    {
+      "name": "South African Astronomical Observatory (SAAO) Sutherland Station",
+      "email": "sutherland@saao.ac.za",
+      "team": "Global Observatory Network Outreach",
+      "stage": "New Inquiries",
+      "expectedRevenue": 90000000,
+      "probability": 30
+    },
+    {
+      "name": "Royal Astronomical Society of Jordan Crescent Observation Project",
+      "email": "jordan.astronomy@jas.org.jo",
+      "team": "Global Observatory Network Outreach",
+      "stage": "Proposal / Partnership",
+      "expectedRevenue": 70000000,
+      "probability": 60
+    },
+    {
+      "name": "European Southern Observatory (ESO) Archive Mirror Agreement",
+      "email": "archive-agreements@eso.org",
+      "team": "Academic & Scripture Research Partnerships",
+      "stage": "Qualification & Review",
+      "expectedRevenue": 200000000,
+      "probability": 45
+    }
+  ]
+}

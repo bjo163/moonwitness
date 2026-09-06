@@ -1,6 +1,7 @@
 import Link from "next/link"
 import React from "react"
 import { Sun, Compass, Sparkles } from "lucide-react"
+import { resolveSemanticColor, type SemanticColorToken } from "@workspace/ui"
 
 export function ObservatoryRightColumn({ obs }: { obs: any }) {
   return (
@@ -17,25 +18,25 @@ export function ObservatoryRightColumn({ obs }: { obs: any }) {
             {
               title: "LAST QUARTER",
               dt: "03 JUN 2025 / 02:41 WIB",
-              col: "#00F0FF",
+              col: "info" as SemanticColorToken,
             },
             {
               title: "NEW MOON",
               dt: obs.loading
                 ? "SCANNING..."
                 : `${obs.moon.nextFullMoon} / 12:00 WIB`,
-              col: "#10B981",
+              col: "success" as SemanticColorToken,
             },
             {
               title: "SOLAR ECLIPSE",
               dt: "21 SEP / VISIBLE PARTIAL",
-              col: "#F59E0B",
+              col: "warning" as SemanticColorToken,
             },
           ].map((ev, i) => (
             <div
               key={i}
               className="flex flex-col border-l-2 py-1 pl-2.5 transition-colors hover:bg-muted/30"
-              style={{ borderColor: ev.col }}
+              style={{ borderColor: resolveSemanticColor(ev.col) }}
             >
               <span className="text-xs font-black text-foreground">{ev.title}</span>
               <span className="mt-0.5 text-[10px] text-primary">{ev.dt}</span>

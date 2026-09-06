@@ -2,6 +2,7 @@
 
 import React from "react"
 import { FileText, Moon, Sun, Globe2, Brain, BookOpen } from "lucide-react"
+import { resolveVisualizationColor } from "@workspace/ui"
 
 const POPULAR_QUESTIONS = [
   { q: "When will the Moon be sighted?", c: "12,842" },
@@ -131,7 +132,7 @@ export function KnowledgeTrendMultiPanel() {
                 <div className="bg-background flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-border">
                   <ev.icon
                     className="h-3.5 w-3.5"
-                    style={{ color: ev.clr }}
+                    style={{ color: resolveVisualizationColor(ev.clr) }}
                   />
                 </div>
                 <div>

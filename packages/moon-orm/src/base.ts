@@ -417,7 +417,7 @@ export class Vertex {
                 }
               }
             }
-            if (Object.keys(parentVals).length > 0) {
+            if (clonedVals[fkField] === undefined && Object.keys(parentVals).length > 0) {
                const pRec = await ParentModel.spawn(ParentModel, trxEnv, parentVals)
                clonedVals[fkField] = pRec.id
             }
@@ -1236,11 +1236,17 @@ export class Vertex {
   ): Promise<[number, string][]> {
     if (ids.length === 0) return []
     await checkAccessRights(modelClass, env, 'permRead')
-    const recName = modelClass._rec_name || 'name'
+    const fieldDefs = this.getFieldDefs(modelClass)
+    let recName = modelClass._rec_name || 'name'
+    if (!fieldDefs[recName]) {
+      const candidates = ['name', 'title', 'code', 'key', 'label', 'description', 'summary']
+      const found = candidates.find((c) => fieldDefs[c])
+      recName = found || Object.keys(fieldDefs)[0] || 'id'
+    }
     const colName = toSnakeCase(recName)
     
     const rows = await this.fetch(modelClass, env, [['id', 'in', ids]], ['id', colName])
-    return rows.map((r: any) => [r.id, String(r[colName] || r[recName] || '')])
+    return rows.map((r: any) => [r.id, String(r[colName] || r[recName] || `#${r.id}`)])
   }
 
   static async purge(

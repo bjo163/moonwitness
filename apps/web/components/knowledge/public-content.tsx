@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { ArrowLeft, ArrowRight, ExternalLink, Search } from "lucide-react"
-import { CitationBox, ProvenanceCard, ErrorNotice, PageHeader } from "@workspace/ui"
+import { Button, CitationBox, ErrorNotice, Input, PageHeader, ProvenanceCard } from "@workspace/ui"
 import { contentLanguage, contentText, contentType, displaySource, field, type WitnessContent } from "@/lib/knowledge-api"
 import type { ReactNode } from "react"
 
@@ -17,8 +17,8 @@ export function PublicFrame({ children }: { children: ReactNode }) {
 export function SearchEntry({ initialQuery = "" }: { initialQuery?: string }) {
   return <form action="/knowledge/search" className="flex flex-col gap-2 sm:flex-row" role="search">
     <label htmlFor="knowledge-query" className="sr-only">Search the public knowledge corpus</label>
-    <input id="knowledge-query" name="q" defaultValue={initialQuery} placeholder="Try quran:1:1 or a word from the corpus" className="h-11 min-w-0 flex-1 rounded-lg border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
-    <button type="submit" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground hover:opacity-90"><Search className="h-4 w-4" aria-hidden="true" />Search</button>
+    <Input id="knowledge-query" name="q" defaultValue={initialQuery} placeholder="Try quran:1:1 or a word from the corpus" className="h-11 min-w-0 flex-1 rounded-lg border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+    <Button type="submit" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground hover:opacity-90"><Search className="h-4 w-4" aria-hidden="true" />Search</Button>
   </form>
 }
 

@@ -2,12 +2,13 @@
 
 import React from "react"
 import { ArrowRight, Download, Database, Share2 } from "lucide-react"
+import { Button, resolveSemanticColor, type SemanticColorToken } from "@workspace/ui"
 
 const COMPARISONS = [
-  { n: "Moon", p: 80, c: "#3B82F6", v: "+42%" },
-  { n: "AI & Technology", p: 65, c: "#00F0FF", v: "+38%" },
-  { n: "History", p: 55, c: "#10B981", v: "+31%" },
-  { n: "Astronomy", p: 45, c: "#A855F7", v: "+26%" },
+  { n: "Moon", p: 80, c: "primary" as SemanticColorToken, v: "+42%" },
+  { n: "AI & Technology", p: 65, c: "info" as SemanticColorToken, v: "+38%" },
+  { n: "History", p: 55, c: "success" as SemanticColorToken, v: "+31%" },
+  { n: "Astronomy", p: 45, c: "info" as SemanticColorToken, v: "+26%" },
 ]
 
 export function KnowledgeTrendBottomGrid() {
@@ -63,9 +64,9 @@ export function KnowledgeTrendBottomGrid() {
             "The synergy between faith, science, and technology is the key to
             understanding the signs around us."
           </div>
-          <button className="flex items-center gap-1 text-[8px] font-bold tracking-widest text-success uppercase transition-colors hover:text-foreground">
+          <Button type="button" variant="ghost" size="sm" className="text-[8px] font-bold tracking-widest text-success uppercase">
             ASK KHIDRA <ArrowRight className="h-2.5 w-2.5" />
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -86,12 +87,12 @@ export function KnowledgeTrendBottomGrid() {
               <div className="bg-background h-1.5 flex-1 overflow-hidden rounded-full">
                 <div
                   className="h-full rounded-full"
-                  style={{ width: `${cmp.p}%`, backgroundColor: cmp.c }}
+                  style={{ width: `${cmp.p}%`, backgroundColor: resolveSemanticColor(cmp.c) }}
                 />
               </div>
               <div
                 className="w-8 text-right font-mono font-bold"
-                style={{ color: cmp.c }}
+                style={{ color: resolveSemanticColor(cmp.c) }}
               >
                 {cmp.v}
               </div>
@@ -111,15 +112,15 @@ export function KnowledgeTrendBottomGrid() {
           </div>
         </div>
         <div className="space-y-2">
-          <button className="bg-background flex w-full items-center gap-2 rounded border border-border px-3 py-1.5 text-left text-[9px] text-foreground transition-colors hover:bg-muted/30">
+          <Button type="button" variant="outline" size="sm" className="w-full justify-start text-left text-[9px]">
             <Download className="h-3 w-3 text-primary" /> Export as PDF
-          </button>
-          <button className="bg-background flex w-full items-center gap-2 rounded border border-border px-3 py-1.5 text-left text-[9px] text-foreground transition-colors hover:bg-muted/30">
+          </Button>
+          <Button type="button" variant="outline" size="sm" className="w-full justify-start text-left text-[9px]">
             <Database className="h-3 w-3 text-success" /> Export as CSV
-          </button>
-          <button className="bg-background flex w-full items-center gap-2 rounded border border-border px-3 py-1.5 text-left text-[9px] text-foreground transition-colors hover:bg-muted/30">
+          </Button>
+          <Button type="button" variant="outline" size="sm" className="w-full justify-start text-left text-[9px]">
             <Share2 className="text-knowledge h-3 w-3" /> Share Insights
-          </button>
+          </Button>
         </div>
       </div>
     </div>

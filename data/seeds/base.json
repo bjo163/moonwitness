@@ -1,0 +1,124 @@
+{
+  "operators": [
+    {
+      "name": "Tariq Ibn Ziyad",
+      "email": "tariq@moonwitness.os",
+      "password": "password123",
+      "isAdmin": false
+    },
+    {
+      "name": "Fatima Al-Fihri",
+      "email": "fatima@moonwitness.os",
+      "password": "password123",
+      "isAdmin": true
+    },
+    {
+      "name": "Hassan Ibn Al-Haytham",
+      "email": "hassan@moonwitness.os",
+      "password": "password123",
+      "isAdmin": false
+    },
+    {
+      "name": "Maryam Mirzakhani",
+      "email": "maryam@moonwitness.os",
+      "password": "password123",
+      "isAdmin": false
+    },
+    {
+      "name": "Abu Raihan Al-Biruni",
+      "email": "biruni@moonwitness.os",
+      "password": "password123",
+      "isAdmin": true
+    },
+    {
+      "name": "Ulugh Beg",
+      "email": "ulughbeg@moonwitness.os",
+      "password": "password123",
+      "isAdmin": false
+    },
+    {
+      "name": "Nasir al-Din al-Tusi",
+      "email": "tusi@moonwitness.os",
+      "password": "password123",
+      "isAdmin": true
+    },
+    {
+      "name": "Al-Battani (Albatenius)",
+      "email": "battani@moonwitness.os",
+      "password": "password123",
+      "isAdmin": false
+    },
+    {
+      "name": "Ibn Yunus al-Sadafi",
+      "email": "ibnyunus@moonwitness.os",
+      "password": "password123",
+      "isAdmin": false
+    },
+    {
+      "name": "Maryam al-Ijliya (Al-Asturlabiya)",
+      "email": "asturlabiya@moonwitness.os",
+      "password": "password123",
+      "isAdmin": false
+    }
+  ],
+  "stations": [
+    { "name": "MoonWitness Observatory - Alexandria", "email": "alexandria@moonwitness.os", "is_company": true },
+    { "name": "MoonWitness Lunar Station - Granada", "email": "granada@moonwitness.os", "is_company": true },
+    { "name": "MoonWitness Observatorium Bosscha - Lembang", "email": "bosscha@moonwitness.os", "is_company": true },
+    { "name": "MoonWitness Samarkand Planetary Station", "email": "samarkand@moonwitness.os", "is_company": true },
+    { "name": "MoonWitness Maragha Historical Observatory Post", "email": "maragha@moonwitness.os", "is_company": true },
+    { "name": "MoonWitness Timau National Observatory (Kupang)", "email": "timau@moonwitness.os", "is_company": true }
+  ],
+  "reportTemplates": [
+    {
+      "name": "Project Milestone Status Briefing",
+      "model": "pj.project",
+      "reportType": "briefing",
+      "orientation": "portrait",
+      "headerTitle": "COSMIC MISSION EXECUTION BRIEFING",
+      "footerNotice": "CONFIDENTIAL // FOR INTERNAL OBSERVATORY GOVERNANCE ONLY",
+      "showQrCode": true,
+      "active": true
+    },
+    {
+      "name": "Support SLA Compliance Audit",
+      "model": "hd.ticket",
+      "reportType": "audit",
+      "orientation": "portrait",
+      "headerTitle": "INCIDENT & SLA AUDIT CERTIFICATION",
+      "footerNotice": "OFFICIAL SYSTEM COMPLIANCE VERIFICATION RECORD",
+      "showQrCode": true,
+      "active": true
+    },
+    {
+      "name": "CAB RFC Decision Memorandum",
+      "model": "cab.change",
+      "reportType": "briefing",
+      "orientation": "portrait",
+      "headerTitle": "CIVILIZATION ARCHITECTURE BOARD // RFC MEMO",
+      "footerNotice": "CONSENSUS RATIFIED UNDER CONSTITUTIONAL LAW",
+      "showQrCode": true,
+      "active": true
+    },
+    {
+      "name": "Financial Ledger & Zakat Disbursement Summary",
+      "model": "account.move",
+      "reportType": "audit",
+      "orientation": "landscape",
+      "headerTitle": "FINANCIAL INTEGRITY & ZAKAT DISTRIBUTION REPORT",
+      "footerNotice": "VERIFIED AGAINST DOUBLE-ENTRY LEDGER CONSTRAINTS",
+      "showQrCode": true,
+      "active": true
+    },
+    {
+      "name": "Astronomical Ru’yah Observation Registry",
+      "model": "geo.city",
+      "reportType": "briefing",
+      "orientation": "portrait",
+      "headerTitle": "NATIONAL RU'YATUL HILAL OBSERVATION REGISTRY",
+      "footerNotice": "AUTHENTICATED UNDER IMKANUR RUKYAT MABIMS CRITERIA",
+      "showQrCode": true,
+      "active": true
+    }
+  ]
+}

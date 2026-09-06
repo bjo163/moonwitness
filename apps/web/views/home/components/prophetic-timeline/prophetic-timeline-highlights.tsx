@@ -3,6 +3,7 @@
 import React from "react"
 import Image from "next/image"
 import { ArrowRight } from "lucide-react"
+import { Button, resolveSemanticColor, type SemanticColorToken } from "@workspace/ui"
 
 const HIGHLIGHT_ITEMS = [
   {
@@ -10,35 +11,35 @@ const HIGHLIGHT_ITEMS = [
     e: "Prophet Ibrahim (AS) Born",
     d: "The birth of Prophet Ibrahim (AS), the friend of Allah.",
     y: "2000 BCE",
-    c: "#F59E0B",
+    c: "warning" as SemanticColorToken,
   },
   {
     era: "CIVILIZATIONS",
     e: "The Rise of Bani Isra'il",
     d: "Bani Isra'il entered Egypt during the time of Prophet Yusuf (AS).",
     y: "1700 BCE",
-    c: "#F97316",
+    c: "warning" as SemanticColorToken,
   },
   {
     era: "PROPHETS",
     e: "Prophet Muhammad (SAW) Born",
     d: "The birth of the final prophet and messenger.",
     y: "570 CE",
-    c: "#F59E0B",
+    c: "warning" as SemanticColorToken,
   },
   {
     era: "EMPIRES",
     e: "Rise of Ottoman Empire",
     d: "Ottoman Empire became a major power in the world.",
     y: "1299 CE",
-    c: "#A855F7",
+    c: "info" as SemanticColorToken,
   },
   {
     era: "ASTRONOMY",
     e: "First Telescope Invented",
     d: "Galileo built the first telescope and changed astronomy forever.",
     y: "1608 CE",
-    c: "#3B82F6",
+    c: "primary" as SemanticColorToken,
   },
 ]
 
@@ -75,7 +76,7 @@ export function PropheticTimelineHighlights() {
               <div className="mb-0.5 flex items-start justify-between">
                 <div
                   className="text-[7px] font-black uppercase"
-                  style={{ color: hl.c }}
+                  style={{ color: resolveSemanticColor(hl.c) }}
                 >
                   {hl.era}
                 </div>
@@ -94,9 +95,9 @@ export function PropheticTimelineHighlights() {
         ))}
       </div>
 
-      <button className="mt-3 flex w-full items-center justify-center gap-1 rounded border border-primary/30 py-2 text-center text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:bg-primary/10">
+      <Button type="button" variant="outline" size="sm" className="mt-3 w-full text-[8px] font-bold tracking-widest uppercase">
         EXPLORE ALL HIGHLIGHTS <ArrowRight className="h-2.5 w-2.5" />
-      </button>
+      </Button>
     </div>
   )
 }

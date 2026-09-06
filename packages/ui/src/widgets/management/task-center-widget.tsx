@@ -1,5 +1,6 @@
 import React from "react"
 import { ArrowRight } from "lucide-react"
+import { resolveSemanticColor, type SemanticColorToken } from "../../lib/semantic-color"
 
 export function TaskCenterWidget() {
   return (
@@ -44,10 +45,10 @@ export function TaskCenterWidget() {
 
         <div className="w-full space-y-2.5">
           {[
-            { n: "To Do", v: 78, p: "33%", c: "#0088FF" },
-            { n: "In Progress", v: 96, p: "40%", c: "#FF9900" },
-            { n: "Review", v: 38, p: "16%", c: "#A100FF" },
-            { n: "Done", v: 26, p: "11%", c: "#00FF66" },
+            { n: "To Do", v: 78, p: "33%", c: "primary" },
+            { n: "In Progress", v: 96, p: "40%", c: "warning" },
+            { n: "Review", v: 38, p: "16%", c: "info" },
+            { n: "Done", v: 26, p: "11%", c: "success" },
           ].map((st, i) => (
             <div
               key={i}
@@ -56,7 +57,7 @@ export function TaskCenterWidget() {
               <span className="flex items-center gap-2 text-foreground">
                 <span
                   className="h-2 w-2 rounded-full"
-                  style={{ backgroundColor: st.c }}
+                  style={{ backgroundColor: resolveSemanticColor(st.c as SemanticColorToken) }}
                 />
                 {st.n}
               </span>
@@ -68,7 +69,7 @@ export function TaskCenterWidget() {
         </div>
       </div>
 
-      <button className="mt-2 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
+      <button type="button" className="mt-2 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
         VIEW ALL TASKS <ArrowRight className="h-2.5 w-2.5" />
       </button>
     </div>

@@ -7,21 +7,9 @@ import { calculateLunarPhase, LunarPhaseInfo } from "@moon/client"
 import { getSunInfo, SunInfo } from "@moon/client"
 import { useLanguage } from "@workspace/state"
 import { useGlobalAudio } from "@workspace/state"
-import { Button } from "@workspace/ui"
-import { GlobalLiveAudioTranslator } from "./global-live-audio-translator"
-import {
-  Play,
-  Pause,
-  SkipForward,
-  SkipBack,
-  Music,
-  Users,
-  Activity,
-  Compass,
-  Repeat,
-  Gauge,
-  Sun,
-} from "lucide-react"
+import { TaskbarAudioPlayer } from "./taskbar/taskbar-audio-player"
+import { TaskbarClock } from "./taskbar/taskbar-clock"
+import { TaskbarSystemStatus } from "./taskbar/taskbar-system-status"
 
 export function Taskbar() {
   const pathname = usePathname()
@@ -183,213 +171,17 @@ export function Taskbar() {
       style={{ height: "44px" }}
     >
       <div className="flex h-full items-center justify-between gap-1 px-2 text-xs tracking-wide sm:gap-2 sm:px-6">
-        {/* ── LEFT: System Status ────────────────────────────────── */}
-        <div className="flex shrink-0 items-center gap-4 text-primary sm:gap-6">
-          {/* SYS ONLINE indicator */}
-          <span
-            className="text-success flex items-center gap-1.5 font-medium"
-            title="System Online"
-          >
-            <span className="bg-success h-1.5 w-1.5 rounded-full" />
-            <span className="hidden sm:inline">System</span>
-          </span>
-
-          <span className="hidden h-3 w-px bg-border sm:block" />
-
-          {/* Active Connections */}
-          <span
-            className="text-success/80 hidden items-center gap-1.5 font-mono sm:flex"
-            title="Active Connections"
-          >
-            <Users className="text-success h-3 w-3" />
-            <strong className="text-success font-semibold">
-              {activeConnections}
-            </strong>
-          </span>
-
-          <span className="hidden h-3 w-px bg-border sm:block" />
-
-          {/* Latency */}
-          <span
-            className="hidden items-center gap-1.5 font-mono sm:flex"
-            title="Network Latency"
-          >
-            <Activity className="h-3 w-3 text-primary" />
-            <strong className="font-semibold text-primary">12 ms</strong>
-          </span>
-
-          <span className="hidden h-3 w-px bg-border md:block" />
-
-          {/* Qibla */}
-          <span
-            className="hidden items-center gap-1.5 font-mono md:flex"
-            title="Qibla Direction"
-          >
-            <Compass className="h-3 w-3 text-primary" />
-            <strong className="font-semibold text-primary">295.14°</strong>
-          </span>
-
-          <span className="hidden h-3 w-px bg-border lg:block" />
-
-          {/* Lunar Phase */}
-          {lunarInfo && (
-            <span
-              className="hidden items-center gap-1.5 lg:flex"
-              title={lunarInfo.phaseName}
-            >
-              <span className="text-warning">◐</span>
-              <span>
-                <strong className="text-warning font-mono font-semibold">
-                  {lunarInfo.illuminationPercent}%
-                </strong>
-              </span>
-            </span>
-          )}
-
-          <span className="hidden h-3 w-px bg-border lg:block" />
-
-          {/* Sun Position & Duha Status */}
-          {sunInfo && (
-            <Button
-              variant="ghost"
-              size="icon-xs"
-              onClick={() => playDuhaChime(sunInfo.duhaStatus === "AFDHAL")}
-              type="button"
-              className="hidden items-center gap-1.5 rounded-sm transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none lg:flex"
-              aria-label={`Sun position ${sunInfo.altitude} degrees, ${sunInfo.duhaLabel || sunInfo.label}`}
-              title={`Solar Altitude: ${sunInfo.altitude}° — ${sunInfo.duhaLabel || sunInfo.label}`}
-            >
-              <Sun
-                className={`h-3 w-3 ${
-                  sunInfo.duhaStatus === "AFDHAL"
-                    ? "text-warning"
-                    : sunInfo.duhaStatus === "ACTIVE"
-                      ? "text-warning"
-                      : sunInfo.altitude > 0
-                        ? "text-warning/60"
-                        : "text-muted-foreground"
-                }`}
-              />
-              <strong
-                className={`font-mono font-semibold ${
-                  sunInfo.duhaStatus === "AFDHAL"
-                    ? "text-warning"
-                    : sunInfo.duhaStatus === "ACTIVE"
-                      ? "text-warning"
-                      : sunInfo.altitude > 0
-                        ? "text-warning/70"
-                        : "text-muted-foreground"
-                }`}
-              >
-                {sunInfo.altitude}°
-              </strong>
-              {sunInfo.duhaLabel && (
-                <span
-                  className={`text-xs font-medium ${
-                    sunInfo.duhaStatus === "AFDHAL"
-                      ? "text-warning"
-                      : "text-success/70"
-                  }`}
-                >
-                  {sunInfo.duhaLabel}
-                </span>
-              )}
-            </Button>
-          )}
-        </div>
-
-        {/* ── CENTER: Clock ──────────────────────────────────────── */}
-        <div className="flex shrink-0 items-center gap-1.5 rounded-md border border-primary/40 bg-primary/10 px-3 py-1 font-mono text-sm font-semibold text-primary">
-          <span>{timeStr || "00:00:00"}</span>
-          <span className="hidden text-xs text-muted-foreground sm:inline">
-            WIB
-          </span>
-        </div>
-
-        {/* ── RIGHT: Audio Player + Version ──────────────────────── */}
-        <div className="flex shrink-0 items-center gap-4 text-primary sm:gap-6">
-          {/* Audio Player — compact inline */}
-          <div className="flex items-center gap-1 sm:gap-2">
-            <Music className="hidden h-3 w-3 text-primary sm:block" />
-            <span className="hidden max-w-[120px] truncate font-medium text-primary sm:inline-block">
-              #{currentSurah.number} {currentSurah.name}
-            </span>
-
-            {/* Transport controls */}
-            <div className="flex items-center gap-1 sm:ml-2">
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                aria-label="Previous"
-                className="flex items-center justify-center p-1 text-muted-foreground transition-colors hover:text-primary"
-              >
-                <SkipBack className="h-3 w-3" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                onClick={togglePlay}
-                aria-label={isPlaying ? "Pause" : "Play"}
-                className="hover:text-success flex items-center justify-center p-1 text-primary transition-colors"
-              >
-                {isPlaying ? (
-                  <Pause className="text-success h-3.5 w-3.5" />
-                ) : (
-                  <Play className="h-3.5 w-3.5" />
-                )}
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                aria-label="Next"
-                className="flex items-center justify-center p-1 text-muted-foreground transition-colors hover:text-primary"
-              >
-                <SkipForward className="h-3 w-3" />
-              </Button>
-            </div>
-
-            {/* Speed & Loop Controls */}
-            <div className="hidden items-center gap-2 sm:ml-2 sm:flex">
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                onClick={toggleLoop}
-                aria-label="Toggle Loop"
-                className={`flex items-center justify-center p-1 transition-colors ${isLooping ? "text-info" : "text-muted-foreground hover:text-primary"}`}
-              >
-                <Repeat className="h-3 w-3" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                onClick={() =>
-                  setPlaybackRate(
-                    playbackRate === 1 ? 1.5 : playbackRate === 1.5 ? 2 : 1
-                  )
-                }
-                aria-label="Toggle Speed"
-                className="flex items-center gap-1 p-1 font-mono text-xs text-primary/80 transition-colors hover:text-primary"
-              >
-                <Gauge className="h-3 w-3" />
-                {playbackRate}x
-              </Button>
-            </div>
-          </div>
-
-          <span className="hidden h-3 w-px bg-border sm:block" />
-
-          {/* Audio Translate */}
-          <div className="hidden md:block">
-            <GlobalLiveAudioTranslator />
-          </div>
-
-          <span className="hidden h-3 w-px bg-border md:block" />
-
-          {/* Version badge */}
-          <span className="rounded border border-border bg-muted px-2 py-1 text-xs text-muted-foreground">
-            MW-OS v6.5
-          </span>
-        </div>
+        <TaskbarSystemStatus activeConnections={activeConnections} lunarInfo={lunarInfo} sunInfo={sunInfo} onPlayDuhaChime={playDuhaChime} />
+        <TaskbarClock time={timeStr} />
+        <TaskbarAudioPlayer
+          currentSurah={currentSurah}
+          isPlaying={isPlaying}
+          playbackRate={playbackRate}
+          isLooping={isLooping}
+          onTogglePlay={togglePlay}
+          onToggleLoop={toggleLoop}
+          onSetPlaybackRate={setPlaybackRate}
+        />
       </div>
     </div>
   )

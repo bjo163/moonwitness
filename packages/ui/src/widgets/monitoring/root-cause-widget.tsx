@@ -1,5 +1,6 @@
 import React from "react"
 import { Globe2, Moon, Users, Target, Clock, ArrowRight } from "lucide-react"
+import { resolveSemanticColor, type SemanticColorToken } from "../../lib/semantic-color"
 
 export function RootCauseWidget() {
   return (
@@ -49,18 +50,18 @@ export function RootCauseWidget() {
             ROOT CAUSES
           </div>
           {[
-            { n: "Weather Conditions", v: "42%", c: "#00F0FF", icon: Globe2 },
-            { n: "Cloud Coverage", v: "28%", c: "#00FF66", icon: Moon },
-            { n: "Low Observer Density", v: "18%", c: "#0088FF", icon: Users },
-            { n: "Equipment Limitations", v: "7%", c: "#A100FF", icon: Target },
-            { n: "Reporting Delay", v: "5%", c: "#FF9900", icon: Clock },
+            { n: "Weather Conditions", v: "42%", c: "info", icon: Globe2 },
+            { n: "Cloud Coverage", v: "28%", c: "success", icon: Moon },
+            { n: "Low Observer Density", v: "18%", c: "primary", icon: Users },
+            { n: "Equipment Limitations", v: "7%", c: "info", icon: Target },
+            { n: "Reporting Delay", v: "5%", c: "warning", icon: Clock },
           ].map((rc, i) => (
             <div
               key={i}
               className="group flex cursor-pointer items-center justify-between text-[9px]"
             >
               <span className="flex items-center gap-1.5 text-foreground transition-colors group-hover:text-foreground">
-                <rc.icon className="h-3 w-3" style={{ color: rc.c }} />
+                <rc.icon className="h-3 w-3" style={{ color: resolveSemanticColor(rc.c as SemanticColorToken) }} />
                 <span className="max-w-[85px] truncate">{rc.n}</span>
               </span>
               <span className="font-mono text-foreground transition-colors group-hover:text-primary">
@@ -71,7 +72,7 @@ export function RootCauseWidget() {
         </div>
       </div>
 
-      <button className="mt-3 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
+      <button type="button" className="mt-3 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
         VIEW FULL ANALYSIS <ArrowRight className="h-2.5 w-2.5" />
       </button>
     </div>

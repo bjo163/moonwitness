@@ -79,3 +79,7 @@ export {
   booleanLiteral,
   nowExpression,
 } from './dialect.js'
+export {
+  findWorkspaceRoot,
+  loadJsonSeed,
+} from './seed-loader.js'

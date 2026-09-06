@@ -1,6 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { getModel, createCtx, AuthorizationError } from '@moon/orm'
 import { parseBody, sendJson, parseUrl } from '../utils/http.js'
+import { logger } from '../logger.js'
 import { authenticateRequest, AuthError } from '../utils/auth.js'
 import {
   MAX_LIMIT,
@@ -12,10 +13,12 @@ import {
 } from '@moon/protocol'
 
 const VALID_PARAM_KEY_REGEX = /^[a-zA-Z0-9_]+$/
-const VALID_MODEL_REGEX = /^[a-z][a-z0-9.]*$/
+const VALID_MODEL_REGEX = /^[a-z][a-z0-9._]*$/
 const RESERVED_PARAMS = new Set<string>(RESERVED_REST_PARAMS)
 const VALID_ORDER_REGEX = ORDER_REGEX
 const VALID_DOMAIN_OPERATORS = DOMAIN_OPERATOR_SET
+const mutationWindows = new Map<string, { started: number; count: number }>()
+const MUTATION_LIMIT = 120
 
 function parsePositiveInteger(value: string | null, fallback?: number): number | null {
   if (value === null) return fallback ?? null
@@ -71,6 +74,13 @@ export async function handleRest(
   jwtSecret: string
 ): Promise<void> {
   try {
+    if (req.method !== 'GET') {
+      const key = `${req.socket?.remoteAddress || 'unknown'}:${req.method}`
+      const now = Date.now()
+      const window = mutationWindows.get(key)
+      if (!window || now - window.started >= 60_000) mutationWindows.set(key, { started: now, count: 1 })
+      else if (++window.count > MUTATION_LIMIT) return sendJson(res, 429, { error: 'Mutation rate limit exceeded', code: 'RATE_LIMITED' }, req)
+    }
     const auth = await authenticateRequest(req, jwtSecret, { allowAnonymous: true })
     const uid = auth.uid
     const model = match[1] as string
@@ -183,6 +193,7 @@ export async function handleRest(
         return sendJson(res, 400, { error: 'Non-empty JSON object body required', code: 'INVALID_REQUEST_BODY' }, req)
       }
       const record = await ModelClass.transaction(env, async (txEnv: any) => ModelClass.spawn(ModelClass, txEnv, validated.data))
+      logger.info('moon.rest.audit', 'REST record created', { uid, model, recordId: record?.id })
       return sendJson(res, 201, { data: record }, req)
     }
 
@@ -196,6 +207,7 @@ export async function handleRest(
         }, req)
       }
       await ModelClass.transaction(env, async (txEnv: any) => ModelClass.morph(ModelClass, txEnv, id, validated.data))
+      logger.info('moon.rest.audit', 'REST record updated', { uid, model, recordId: id })
       const record = await ModelClass.query(env).where('id', id).first()
       return sendJson(res, 200, { data: record }, req)
     }
@@ -203,6 +215,7 @@ export async function handleRest(
     if (req.method === 'DELETE') {
       if (id === undefined) return sendJson(res, 400, { error: 'ID required for delete', code: 'INVALID_REQUEST' }, req)
       await ModelClass.transaction(env, async (txEnv: any) => ModelClass.purge(ModelClass, txEnv, id))
+      logger.warn('moon.rest.audit', 'REST record deleted', { uid, model, recordId: id })
       return sendJson(res, 200, { success: true }, req)
     }
 

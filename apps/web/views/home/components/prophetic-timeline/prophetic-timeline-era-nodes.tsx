@@ -11,6 +11,7 @@ import {
   Globe2,
   AlertTriangle,
 } from "lucide-react"
+import { Button, resolveSemanticColor, type SemanticColorToken } from "@workspace/ui"
 
 const ERA_ITEMS = [
   {
@@ -18,7 +19,7 @@ const ERA_ITEMS = [
     n: "CREATION",
     s: "The Beginning",
     y: "∞ - 4000 BCE",
-    c: "#00F0FF",
+    c: "info" as SemanticColorToken,
     icon: Star,
   },
   {
@@ -26,7 +27,7 @@ const ERA_ITEMS = [
     n: "PROPHETS",
     s: "Divine Guidance",
     y: "4000 BCE - 610 CE",
-    c: "#F59E0B",
+    c: "warning" as SemanticColorToken,
     icon: Users,
   },
   {
@@ -34,7 +35,7 @@ const ERA_ITEMS = [
     n: "CIVILIZATIONS",
     s: "Rise of Civilizations",
     y: "610 - 1500 CE",
-    c: "#F97316",
+    c: "warning" as SemanticColorToken,
     icon: Map,
   },
   {
@@ -42,7 +43,7 @@ const ERA_ITEMS = [
     n: "EMPIRES",
     s: "Great Empires",
     y: "1500 - 1800 CE",
-    c: "#A855F7",
+    c: "info" as SemanticColorToken,
     icon: Swords,
   },
   {
@@ -50,7 +51,7 @@ const ERA_ITEMS = [
     n: "ASTRONOMY",
     s: "Exploration of Universe",
     y: "1800 - 2000 CE",
-    c: "#3B82F6",
+    c: "primary" as SemanticColorToken,
     icon: Telescope,
   },
   {
@@ -58,7 +59,7 @@ const ERA_ITEMS = [
     n: "PRESENT",
     s: "Modern Era",
     y: "2000 CE - Now",
-    c: "#10B981",
+    c: "success" as SemanticColorToken,
     icon: Globe2,
     isNow: true,
   },
@@ -67,7 +68,7 @@ const ERA_ITEMS = [
     n: "FUTURE EVENTS",
     s: "What is to Come",
     y: "Beyond Now",
-    c: "#D946EF",
+    c: "info" as SemanticColorToken,
     icon: AlertTriangle,
     isDashed: true,
   },
@@ -92,17 +93,17 @@ export function PropheticTimelineEraNodes() {
               <div className="absolute inset-0 rounded-full border border-border bg-gradient-to-b from-primary/20 to-transparent opacity-50" />
               <div
                 className="animate-spin-slow absolute inset-2 rounded-full border border-dashed opacity-70"
-                style={{ borderColor: era.c }}
+                style={{ borderColor: resolveSemanticColor(era.c) }}
               />
               <era.icon
                 className="h-6 w-6 drop-shadow-sm"
-                style={{ color: era.c }}
+                style={{ color: resolveSemanticColor(era.c) }}
               />
               {/* The dot on the line */}
               <div
                 className={`border-panel absolute -bottom-[22px] z-20 h-4 w-4 rounded-full border-4 ${era.isDashed ? "border-dashed" : ""}`}
                 style={{
-                  backgroundColor: era.c,
+                  backgroundColor: resolveSemanticColor(era.c),
                   borderColor: "var(--background)",
                 }}
               />
@@ -120,7 +121,7 @@ export function PropheticTimelineEraNodes() {
             <div className="mt-2 text-center">
               <div
                 className="mb-0.5 text-[10px] font-black tracking-widest uppercase"
-                style={{ color: era.c }}
+                style={{ color: resolveSemanticColor(era.c) }}
               >
                 {era.n}
               </div>
@@ -135,9 +136,9 @@ export function PropheticTimelineEraNodes() {
         ))}
       </div>
 
-      <button className="bg-background flex items-center gap-2 rounded-full border border-border px-6 py-2 text-[9px] font-bold tracking-widest text-primary uppercase transition-colors hover:bg-muted/30 hover:text-foreground">
+      <Button type="button" variant="outline" size="sm" className="rounded-full px-6 text-[9px] font-bold tracking-widest uppercase">
         VIEW FULL TIMELINE <ArrowRight className="h-3 w-3" />
-      </button>
+      </Button>
     </div>
   )
 }
