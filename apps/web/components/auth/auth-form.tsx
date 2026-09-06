@@ -57,14 +57,14 @@ export function AuthForm() {
 
   const isLogin = mode === "login"
   return (
-    <section aria-labelledby="auth-title" className="rounded-2xl border border-border bg-card/95 backdrop-blur-md w-full max-w-lg p-6 sm:p-8 shadow-sm">
+    <section aria-labelledby="auth-title" className="rounded-md border border-border bg-card w-full max-w-lg p-6 sm:p-8">
       <div className="mb-8 flex items-start gap-4">
-        <div aria-hidden="true" className="rounded-xl flex h-12 w-12 shrink-0 items-center justify-center bg-primary/10 text-primary border border-primary/20">
+        <div aria-hidden="true" className="rounded-md flex h-12 w-12 shrink-0 items-center justify-center bg-primary/10 text-primary border border-primary/20">
           {isLogin ? <LockKeyhole className="h-5 w-5" /> : <UserRound className="h-5 w-5" />}
         </div>
         <div>
-          <p className="font-mono text-xs tracking-widest text-primary/70 uppercase">Secure access</p>
-          <h1 id="auth-title" className="mt-1 text-2xl font-bold font-sans tracking-tight text-foreground uppercase">
+          <p className="font-mono text-xs text-muted-foreground">Secure access</p>
+          <h1 id="auth-title" className="mt-1 text-2xl font-bold font-sans tracking-tight text-foreground">
             {isLogin ? "Welcome back" : "Create account"}
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -81,8 +81,8 @@ export function AuthForm() {
             role="tab"
             aria-selected={mode === tab}
             onClick={() => changeMode(tab)}
-            className={`rounded-lg px-3 py-2 font-mono text-xs font-semibold tracking-wider uppercase transition-colors focus:outline-none focus:ring-2 focus:ring-ring ${
-              mode === tab ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:bg-accent hover:text-foreground"
+            className={`rounded-md px-3 py-2 text-xs font-semibold capitalize transition-colors focus:outline-none focus:ring-2 focus:ring-ring ${
+              mode === tab ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent hover:text-foreground"
             }`}
           >
             {tab}
@@ -91,8 +91,8 @@ export function AuthForm() {
       </div>
 
       <form className="space-y-5" onSubmit={submit} noValidate>
-        {message ? <div role="alert" className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">{message}</div> : null}
-        {success ? <div role="status" className="rounded-lg border border-success/40 bg-success/10 p-3 text-sm text-success">{success}</div> : null}
+        {message ? <div role="alert" className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">{message}</div> : null}
+        {success ? <div role="status" className="rounded-md border border-success/40 bg-success/10 p-3 text-sm text-success">{success}</div> : null}
         {!isLogin ? (
           <div>
             <label htmlFor="auth-name" className="text-sm font-medium text-foreground">Full name</label>
@@ -114,7 +114,7 @@ export function AuthForm() {
             <input id="auth-confirmation" name="confirmation" type="password" autoComplete="new-password" required minLength={8} value={confirmation} onChange={(event) => setConfirmation(event.target.value)} className={inputClass} />
           </div>
         ) : null}
-        <button type="submit" disabled={busy} className="rounded-lg flex w-full items-center justify-center gap-2 bg-primary px-4 py-3 font-mono text-sm font-bold tracking-widest text-primary-foreground uppercase transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-wait disabled:opacity-60 shadow-sm">
+        <button type="submit" disabled={busy} className="rounded-md flex w-full items-center justify-center gap-2 bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-wait disabled:opacity-60">
           {busy ? "Processing..." : isLogin ? "Sign in" : "Create account"}<ArrowRight aria-hidden="true" className="h-4 w-4" />
         </button>
       </form>

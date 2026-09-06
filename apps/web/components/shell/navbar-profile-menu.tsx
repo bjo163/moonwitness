@@ -74,7 +74,7 @@ export function NavbarProfileMenu({
       </button>
 
       {profileDropdownOpen && (
-        <div className="absolute top-full right-0 mt-2 w-56 rounded-lg border border-border bg-card p-2 shadow-md">
+        <div className="absolute top-full right-0 mt-2 w-56 rounded-md border border-border bg-card p-2">
           <div className="mb-2 border-b border-border pb-2 pl-2 text-xs font-medium text-muted-foreground">
             Account actions
           </div>

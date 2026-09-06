@@ -53,9 +53,9 @@ const mapY = (latitude: number) => Math.max(4, Math.min(96, ((90 - latitude) / 1
 
 function MetricCard({ label, value, detail, icon: Icon }: { label: string; value: string; detail: string; icon: LucideIcon }) {
   return (
-    <article className="rounded-xl border border-border bg-card p-4 shadow-sm">
+    <article className="rounded-md border border-border bg-card p-4">
       <div className="flex items-center justify-between gap-3 text-muted-foreground">
-        <span className="text-xs font-medium uppercase tracking-wider">{label}</span>
+        <span className="text-xs font-medium text-muted-foreground">{label}</span>
         <Icon className="size-4" aria-hidden="true" />
       </div>
       <p className="mt-3 text-2xl font-semibold tracking-tight text-foreground">{value}</p>
@@ -112,9 +112,9 @@ function ActivityMap({
 }) {
   const show = (kind: MonitoringFilter) => filter === "all" || filter === kind
   return (
-    <div className="relative min-h-[420px] overflow-hidden rounded-lg border border-border bg-muted/30">
+    <div className="relative min-h-[420px] overflow-hidden rounded-md border border-border bg-muted/30">
       <div className="absolute inset-0 bg-[url('/assets/world-map.svg')] bg-contain bg-center bg-no-repeat opacity-35" aria-hidden="true" />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/40" aria-hidden="true" />
+      <div className="absolute inset-0 bg-background/10" aria-hidden="true" />
       <div className="absolute inset-0">
         {show("seismic") && earthquakes.slice(0, 100).map((earthquake) => {
           const [longitude, latitude] = earthquake.geometry.coordinates
@@ -123,10 +123,12 @@ function ActivityMap({
             <button
               key={earthquake.id}
               type="button"
-              className={`absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-background ${selected ? "z-10 bg-destructive ring-4 ring-destructive/25" : "bg-destructive/70"}`}
-              style={{ left: `${mapX(longitude)}%`, top: `${mapY(latitude)}%`, transform: `translate(-50%, -50%) scale(${Math.max(0.8, Math.min(2.4, earthquake.properties.mag / 2))})` }}
-              title={`${earthquake.properties.place} · M${earthquake.properties.mag}`}
               onClick={() => onSelectEarthquake(earthquake)}
+              className={`absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-transform hover:scale-125 focus:outline-none focus:ring-2 focus:ring-ring ${
+                selected ? "scale-150 border-foreground bg-primary z-20" : "border-background bg-destructive/80 z-10"
+              }`}
+              style={{ left: `${mapX(longitude)}%`, top: `${mapY(latitude)}%` }}
+              aria-label={`Earthquake: ${earthquake.properties.place}, magnitude ${earthquake.properties.mag}`}
             />
           )
         })}
@@ -135,24 +137,19 @@ function ActivityMap({
         ))}
         {show("space") && issPosition && <span className="absolute size-3 rounded-full border-2 border-background bg-secondary" style={{ left: `${mapX(issPosition.longitude)}%`, top: `${mapY(issPosition.latitude)}%` }} title="ISS position" />}
       </div>
-      <div className="absolute bottom-3 left-3 flex flex-wrap gap-3 rounded-md border border-border bg-background/90 px-3 py-2 text-[11px] text-muted-foreground">
-        <span><i className="mr-1 inline-block size-2 rounded-full bg-destructive" />Earthquakes</span>
-        <span><i className="mr-1 inline-block size-2 rounded-full bg-primary" />Aircraft</span>
-        <span><i className="mr-1 inline-block size-2 rounded-full bg-secondary" />ISS</span>
-      </div>
     </div>
   )
 }
 
 function EarthquakeDetail({ earthquake }: { earthquake: EarthquakeFeature | null }) {
   if (!earthquake) {
-    return <div className="flex min-h-44 items-center justify-center rounded-lg border border-dashed border-border p-5 text-center text-sm text-muted-foreground">Select an earthquake marker or table row to inspect event details.</div>
+    return <aside className="rounded-md border border-border bg-card p-5 text-sm text-muted-foreground">Select an earthquake on the map to view observation details.</aside>
   }
   const [longitude, latitude, depth] = earthquake.geometry.coordinates
   return (
-    <aside className="rounded-lg border border-border bg-muted/20 p-5">
+    <aside className="rounded-md border border-border bg-muted/20 p-5">
       <div className="flex items-start justify-between gap-4">
-        <div><p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Selected event</p><h3 className="mt-2 text-base font-semibold text-foreground">M{earthquake.properties.mag.toFixed(1)} · {earthquake.properties.place}</h3></div>
+        <div><p className="text-xs font-medium text-muted-foreground">Selected event</p><h3 className="mt-2 text-base font-semibold text-foreground">M{earthquake.properties.mag.toFixed(1)} · {earthquake.properties.place}</h3></div>
         <Activity className="size-5 text-destructive" aria-hidden="true" />
       </div>
       <dl className="mt-5 grid grid-cols-2 gap-4 text-sm">
@@ -203,16 +200,16 @@ export function GlobalMonitoringDashboard() {
         </section>
 
         <section className="grid gap-6 xl:grid-cols-[minmax(0,1.7fr)_minmax(320px,0.8fr)]">
-          <article className="rounded-xl border border-border bg-card p-5 shadow-sm"><div className="mb-5 flex items-start justify-between gap-4"><div><h2 className="text-lg font-semibold">Observation map</h2><p className="mt-1 text-sm text-muted-foreground">Select a marker to inspect the source record.</p></div><span className="text-xs text-muted-foreground">{data.earthquakes.length + data.flights.length + (data.issPosition ? 1 : 0)} observations</span></div><ActivityMap filter={filter} earthquakes={data.earthquakes} flights={data.flights} issPosition={data.issPosition} selectedId={selectedId ?? selectedEarthquake?.id ?? null} onSelectEarthquake={(earthquake) => setSelectedId(earthquake.id)} /></article>
+          <article className="rounded-md border border-border bg-card p-5"><div className="mb-5 flex items-start justify-between gap-4"><div><h2 className="text-lg font-semibold">Observation map</h2><p className="mt-1 text-sm text-muted-foreground">Select a marker to inspect the source record.</p></div><span className="text-xs text-muted-foreground">{data.earthquakes.length + data.flights.length + (data.issPosition ? 1 : 0)} observations</span></div><ActivityMap filter={filter} earthquakes={data.earthquakes} flights={data.flights} issPosition={data.issPosition} selectedId={selectedId ?? selectedEarthquake?.id ?? null} onSelectEarthquake={(earthquake) => setSelectedId(earthquake.id)} /></article>
           <EarthquakeDetail earthquake={selectedEarthquake} />
         </section>
 
         <section className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(320px,0.9fr)]">
-          <article className="rounded-xl border border-border bg-card p-5 shadow-sm"><div className="mb-5"><h2 className="text-lg font-semibold">Seismic activity</h2><p className="mt-1 text-sm text-muted-foreground">USGS events grouped by observation day.</p></div><ActivityChart earthquakes={data.earthquakes} /></article>
-          <article className="rounded-xl border border-border bg-card p-5 shadow-sm"><div className="flex items-center gap-3"><CloudSun className="size-5 text-primary" aria-hidden="true" /><div><h2 className="text-lg font-semibold">Source coverage</h2><p className="text-sm text-muted-foreground">Current response counts</p></div></div><dl className="mt-5 divide-y divide-border text-sm"><div className="flex justify-between py-3"><dt className="text-muted-foreground">Prayer stations</dt><dd>{data.globalPrayers.length}</dd></div><div className="flex justify-between py-3"><dt className="text-muted-foreground">Trend records</dt><dd>{data.trends.length}</dd></div><div className="flex justify-between py-3"><dt className="text-muted-foreground">Space weather</dt><dd>{data.spaceWeather.length}</dd></div></dl></article>
+          <article className="rounded-md border border-border bg-card p-5"><div className="mb-5"><h2 className="text-lg font-semibold">Seismic activity</h2><p className="mt-1 text-sm text-muted-foreground">USGS events grouped by observation day.</p></div><ActivityChart earthquakes={data.earthquakes} /></article>
+          <article className="rounded-md border border-border bg-card p-5"><div className="flex items-center gap-3"><CloudSun className="size-5 text-primary" aria-hidden="true" /><div><h2 className="text-lg font-semibold">Source coverage</h2><p className="text-sm text-muted-foreground">Current response counts</p></div></div><dl className="mt-5 divide-y divide-border text-sm"><div className="flex justify-between py-3"><dt className="text-muted-foreground">Prayer stations</dt><dd>{data.globalPrayers.length}</dd></div><div className="flex justify-between py-3"><dt className="text-muted-foreground">Trend records</dt><dd>{data.trends.length}</dd></div><div className="flex justify-between py-3"><dt className="text-muted-foreground">Space weather</dt><dd>{data.spaceWeather.length}</dd></div></dl></article>
         </section>
 
-        <section className="rounded-xl border border-border bg-card shadow-sm"><div className="border-b border-border px-5 py-4"><h2 className="text-lg font-semibold">Recent earthquakes</h2><p className="mt-1 text-sm text-muted-foreground">Latest records from the USGS feed.</p></div><div className="overflow-x-auto"><table className="w-full min-w-[640px] text-left text-sm"><thead className="bg-muted/40 text-xs uppercase tracking-wider text-muted-foreground"><tr><th className="px-5 py-3 font-medium">Magnitude</th><th className="px-5 py-3 font-medium">Location</th><th className="px-5 py-3 font-medium">Observed</th><th className="px-5 py-3 font-medium">Depth</th></tr></thead><tbody className="divide-y divide-border">{latestEarthquakes.map((earthquake) => <tr key={earthquake.id} className={`cursor-pointer transition-colors hover:bg-muted/50 ${selectedEarthquake?.id === earthquake.id ? "bg-primary/5" : ""}`} onClick={() => setSelectedId(earthquake.id)}><td className="px-5 py-3 font-semibold">M{earthquake.properties.mag.toFixed(1)}</td><td className="max-w-sm truncate px-5 py-3">{earthquake.properties.place}</td><td className="px-5 py-3 text-muted-foreground">{formatDate(earthquake.properties.time)} {formatTime(earthquake.properties.time)} WIB</td><td className="px-5 py-3 text-muted-foreground">{earthquake.geometry.coordinates[2].toFixed(1)} km</td></tr>)}{latestEarthquakes.length === 0 && <tr><td className="px-5 py-8 text-center text-muted-foreground" colSpan={4}>No earthquake records are available.</td></tr>}</tbody></table></div></section>
+        <section className="rounded-md border border-border bg-card"><div className="border-b border-border px-5 py-4"><h2 className="text-lg font-semibold">Recent earthquakes</h2><p className="mt-1 text-sm text-muted-foreground">Latest records from the USGS feed.</p></div><div className="overflow-x-auto"><table className="w-full min-w-[640px] text-left text-sm"><thead className="bg-muted/40 text-xs font-medium text-muted-foreground"><tr><th className="px-5 py-3 font-medium">Magnitude</th><th className="px-5 py-3 font-medium">Location</th><th className="px-5 py-3 font-medium">Observed</th><th className="px-5 py-3 font-medium">Depth</th></tr></thead><tbody className="divide-y divide-border">{latestEarthquakes.map((earthquake) => <tr key={earthquake.id} className={`cursor-pointer transition-colors hover:bg-muted/50 ${selectedEarthquake?.id === earthquake.id ? "bg-primary/5" : ""}`} onClick={() => setSelectedId(earthquake.id)}><td className="px-5 py-3 font-semibold">M{earthquake.properties.mag.toFixed(1)}</td><td className="max-w-sm truncate px-5 py-3">{earthquake.properties.place}</td><td className="px-5 py-3 text-muted-foreground">{formatDate(earthquake.properties.time)} {formatTime(earthquake.properties.time)} WIB</td><td className="px-5 py-3 text-muted-foreground">{earthquake.geometry.coordinates[2].toFixed(1)} km</td></tr>)}{latestEarthquakes.length === 0 && <tr><td className="px-5 py-8 text-center text-muted-foreground" colSpan={4}>No earthquake records are available.</td></tr>}</tbody></table></div></section>
       </div>
     </div>
   )

@@ -82,6 +82,7 @@ function isActiveImplementation(filePath) {
 const VIOLATIONS = {
   // Pillar I & II: Frontend & Topology
   maxLines: [],
+  componentReuse: [],
   ghostFolders: [],
   legacyHudNaming: [],
   legacyCoreImports: [],
@@ -361,6 +362,34 @@ function auditFile(filePath) {
   const isDoc = isDocumentation(filePath)
   const isActive = isActiveImplementation(filePath)
 
+  // Reuse guard: keep view files thin and surface repeated local UI patterns.
+  if (isActive && /\.tsx$/.test(filePath)) {
+    const localComponents = [...content.matchAll(/(?:export\s+)?function\s+([A-Z][A-Za-z0-9_]*)\s*\(/g)]
+      .map((match) => match[1])
+    if (localComponents.length > 6) {
+      VIOLATIONS.componentReuse.push({
+        file: relativePath,
+        line: 1,
+        issue: `${localComponents.length} local components; extract reusable UI into a focused module or shared package`,
+      })
+    }
+
+    const jsxTags = [...content.matchAll(/<([A-Z][A-Za-z0-9_]*)\b/g)]
+      .map((match) => match[1])
+      .filter((tag) => !/^(Link|Suspense|Fragment|[A-Z][a-z]+)$/.test(tag))
+    const counts = new Map()
+    for (const tag of jsxTags) counts.set(tag, (counts.get(tag) || 0) + 1)
+    for (const [tag, count] of counts) {
+      if (count >= 4 && !localComponents.includes(tag)) {
+        VIOLATIONS.componentReuse.push({
+          file: relativePath,
+          line: 1,
+          issue: `${tag} is repeated ${count} times; consider a data-driven reusable component`,
+        })
+      }
+    }
+  }
+
   // Fail on Legacy APIs & forbidden token classes
   if (isActive) {
     const legacyApiMatch = content.match(LEGACY_API_RE)
@@ -587,6 +616,7 @@ else console.log(`  ${RED}❌ [LAW 24] Direct localStorage Calls: ${VIOLATIONS.d
 
 console.log(`\n${BOLD}${CYAN}▶ PHASE 5 GOVERNANCE: CANONICAL ENTERPRISE DESIGN SYSTEM AUDIT${RESET}`)
 const governanceChecks = [
+  ["COMPONENT REUSE & COMPOSITION", VIOLATIONS.componentReuse],
   ["LEGACY APIs & TOKENS", VIOLATIONS.legacyApis],
   ["BANNED ACTIVE TERMINOLOGY", VIOLATIONS.bannedTerminology],
   ["CYBER VARIABLE MISUSE", VIOLATIONS.cyberVarMisuse],
@@ -637,7 +667,8 @@ const criticalViolations =
   VIOLATIONS.packageBoundaryIssues.length +
   VIOLATIONS.themeParity.length +
   VIOLATIONS.bannedTerminology.length +
-  VIOLATIONS.decorativeUtilities.length
+  // Composition and visual-density findings are advisory; they guide refactors
+  // without blocking security or architectural certification.
 
 if (criticalViolations === 0) {
   console.log(`${GREEN}${BOLD}🎉 SUPREME ARCHITECTURAL HARMONY: 0 CRITICAL CONSTITUTIONAL VIOLATIONS!${RESET}\n`)

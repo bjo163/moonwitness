@@ -68,7 +68,7 @@ export function Navbar({
     pathname === link.href || pathname?.startsWith(`${link.href}/`)
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background shadow-sm">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-8">
         <Link href="/home" className="group flex items-center gap-3">
           <span className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-primary transition-colors group-hover:bg-accent">
@@ -99,7 +99,7 @@ export function Navbar({
                 {link.label}
               </Link>
               {link.subLinks && (
-                <div className="invisible absolute top-full left-0 mt-1 w-56 translate-y-1 rounded-lg border border-border bg-card p-2 opacity-0 shadow-md transition-[opacity,visibility,transform] group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                <div className="invisible absolute top-full left-0 mt-1 w-56 translate-y-1 rounded-md border border-border bg-card p-2 opacity-0 transition-[opacity,visibility,transform] group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                   {link.subLinks.map((sub) => (
                     <Link
                       key={sub.label}
@@ -142,7 +142,7 @@ export function Navbar({
         </div>
       </div>
       {mobileMenuOpen && (
-        <div className="space-y-2 border-t border-border bg-card p-4 shadow-md lg:hidden">
+        <div className="space-y-2 border-t border-border bg-card p-4 lg:hidden">
           {navLinks.map((link) => (
             <Link
               key={link.href}

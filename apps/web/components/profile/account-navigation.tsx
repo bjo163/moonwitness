@@ -18,7 +18,7 @@ export function AccountNavigation({ active }: { active: string }) {
           aria-current={active === label ? "page" : undefined}
           className={`rounded-md border px-3.5 py-1.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring ${
             active === label
-              ? "border-primary bg-primary text-primary-foreground font-semibold shadow-sm"
+              ? "border-primary bg-primary text-primary-foreground font-semibold"
               : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground"
           }`}
         >

@@ -31,4 +31,10 @@ describe("Phase 5 governance auditor", () => {
     expect(source).toContain("function isDomainData")
     expect(source).toContain("isActiveImplementation")
   })
+
+  it("includes reusable component composition checks", () => {
+    const source = readFileSync(auditor, "utf8")
+    expect(source).toContain("componentReuse")
+    expect(source).toContain("data-driven reusable component")
+  })
 })
