@@ -38,4 +38,10 @@ describe("Phase 5 governance auditor", () => {
     expect(source).toContain("componentReuse")
     expect(source).toContain("data-driven reusable component")
   })
+
+  it("includes the shared UI boundary check", () => {
+    const source = readFileSync(auditor, "utf8")
+    expect(source).toContain("SHARED UI BOUNDARY")
+    expect(source).toContain("Use Button from @workspace/ui")
+  })
 })

@@ -12,6 +12,9 @@
 ## Ownership
 
 - `audit-rules.mjs` orchestrates source checks and retains the collector registry.
+- Its `SHARED UI BOUNDARY` check reports raw form controls in `apps/` when the
+  matching `@workspace/ui` primitive is not imported. Findings are advisory so
+  domain-specific controls can be migrated incrementally without blocking CI.
 - `audit-theme-tokens.mjs` checks required light/dark tokens, Tailwind color
   mappings, duplicate declarations, direct self-references, and text contrast.
 - `audit-research-ui.mjs` checks literal classes in the migrated public home,

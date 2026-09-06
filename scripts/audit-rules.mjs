@@ -83,6 +83,7 @@ const VIOLATIONS = {
   // Pillar I & II: Frontend & Topology
   maxLines: [],
   componentReuse: [],
+  uiConsistency: [],
   ghostFolders: [],
   legacyHudNaming: [],
   legacyCoreImports: [],
@@ -363,6 +364,27 @@ function auditFile(filePath) {
   const isDoc = isDocumentation(filePath)
   const isActive = isActiveImplementation(filePath)
 
+  // Application code should consume the shared UI contract instead of cloning
+  // primitive controls. Domain-specific canvas interactions remain exempt.
+  if (isActive && relativePath.startsWith("apps/") && /\.tsx$/.test(filePath)) {
+    const primitiveImports = new Set()
+    for (const match of content.matchAll(/(?:import|export)\s+\{([^}]+)\}\s+from\s+["']@workspace\/ui["']/g)) {
+      for (const name of match[1].split(",").map((item) => item.trim().split(/\s+as\s+/)[0])) primitiveImports.add(name)
+    }
+    const primitiveRules = [
+      [/<button\b/g, "Button", "Use Button from @workspace/ui or document a semantic control exception"],
+      [/<input\b/g, "Input", "Use Input from @workspace/ui"],
+      [/<textarea\b/g, "Textarea", "Use a shared form primitive from @workspace/ui"],
+      [/<select\b/g, "Select", "Use Select from @workspace/ui"],
+    ]
+    for (const [pattern, primitive, fix] of primitiveRules) {
+      const matches = [...content.matchAll(pattern)]
+      if (matches.length > 0 && !primitiveImports.has(primitive) && !relativePath.includes("/components/ui/")) {
+        VIOLATIONS.uiConsistency.push({ file: relativePath, line: 1, issue: `${matches.length} raw <${primitive.toLowerCase()}> element(s); ${fix}` })
+      }
+    }
+  }
+
   // Reuse guard: keep view files thin and surface repeated local UI patterns.
   if (isActive && /\.tsx$/.test(filePath)) {
     const localComponents = [...content.matchAll(/(?:export\s+)?function\s+([A-Z][A-Za-z0-9_]*)\s*\(/g)]
@@ -617,6 +639,7 @@ else console.log(`  ${RED}❌ [LAW 24] Direct localStorage Calls: ${VIOLATIONS.d
 
 console.log(`\n${BOLD}${CYAN}▶ PHASE 5 GOVERNANCE: CANONICAL ENTERPRISE DESIGN SYSTEM AUDIT${RESET}`)
 const governanceChecks = [
+  ["SHARED UI BOUNDARY", VIOLATIONS.uiConsistency],
   ["COMPONENT REUSE & COMPOSITION", VIOLATIONS.componentReuse],
   ["LEGACY APIs & TOKENS", VIOLATIONS.legacyApis],
   ["BANNED ACTIVE TERMINOLOGY", VIOLATIONS.bannedTerminology],
