@@ -13,6 +13,7 @@ import {
   forge,
   registry,
   type DbConfig,
+  isSqlite,
 } from '@moon/orm'
 import { defineEndpoint, type EndpointDef } from '@moon/protocol'
 import { authenticateRequest, AuthError, issueJwt } from './utils/auth.js'
@@ -288,9 +289,13 @@ export class FastifyAdapter {
   }
 
   private async verifySchema() {
-    if (process.env.MOON_AUTO_SYNC === 'true') {
+    if (process.env.MOON_AUTO_SYNC === 'true' || isSqlite()) {
       const { applied, summary } = await forge()
-      logger.info('moon.schema', `Schema auto-sync complete: ${applied.length} changes across ${summary.totalModels} models`)
+      if (applied.length > 0) {
+        logger.info('moon.schema', `Schema auto-sync complete: ${applied.length} changes across ${summary.totalModels} models`)
+      } else {
+        logger.info('moon.schema', `Schema verified: ${summary.totalModels} models / ${summary.totalColumns} fields`)
+      }
       return
     }
     const { migrations, summary } = await forge({ dryRun: true })

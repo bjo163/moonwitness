@@ -31,7 +31,7 @@ import mailAddons, { views as mailViews, loadDemoData as loadMailDemoData } from
 import geoAddons, { views as geoViews, loadDemoData as loadGeoDemoData } from "@moon/geo"
 import cronAddons, { views as cronViews, globalCronRunner, loadDemoData as loadCronDemoData } from "@moon/cron"
 import { trackSystem } from "@moon/performance"
-import { getModel, createCtx, SUPERUSER_ID, checkDbConnection } from "@moon/orm"
+import { getModel, createCtx, SUPERUSER_ID, checkDbConnection, isSqlite } from "@moon/orm"
 
 async function requireAdmin(req: any, res: any, jwtSecret: string): Promise<boolean> {
   try {
@@ -151,10 +151,16 @@ const apiPort = Number(process.env.API_PORT || process.env.PORT) || 4000
 const demoSeedEnabled =
   process.env.NODE_ENV !== "production" || process.env.MOON_ENABLE_DEMO_SEED === "true"
 
-const rawDatabaseUrl = process.env.DATABASE_URL
-if (!rawDatabaseUrl || rawDatabaseUrl.trim() === "") {
-  throw new Error(
-    "[moon.security] Fatal: DATABASE_URL is required. Set it in the environment before starting the API."
+let rawDatabaseUrl = process.env.DATABASE_URL?.trim()
+if (!rawDatabaseUrl) {
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "[moon.security] Fatal: DATABASE_URL is required in production. Set it in the environment before starting the API."
+    )
+  }
+  rawDatabaseUrl = "sqlite://./data/moonwitness.dev.db"
+  console.log(
+    "[moon.orm] Local-First: DATABASE_URL not set in dev environment. Defaulting to local SQLite (./data/moonwitness.dev.db)."
   )
 }
 
@@ -525,7 +531,11 @@ server.start().then(async () => {
     )
   }
 
-  if (process.env.MOON_BOOTSTRAP_ON_START !== "true") {
+  const shouldBootstrap =
+    process.env.MOON_BOOTSTRAP_ON_START === "true" ||
+    (isSqlite() && process.env.NODE_ENV !== "production")
+
+  if (!shouldBootstrap) {
     console.log("[App] Automatic seed disabled; use pnpm db:install or pnpm db:seed.")
     return
   }

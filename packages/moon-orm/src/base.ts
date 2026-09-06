@@ -1,4 +1,5 @@
 import { getDb } from './config.js'
+import { isSqlite, supportsVectors } from './dialect.js'
 import { QueryBuilder } from './query.js'
 import type { FieldDef, InferFieldType } from './fields.js'
 import { isFieldDef as isFieldDefFn, fields } from './fields.js'
@@ -816,6 +817,10 @@ export class Vertex {
     queryVector: number[],
     options?: { limit?: number; domain?: unknown[] }
   ): Promise<Recordset<M>> {
+    if (!supportsVectors()) {
+      console.warn(`[ORM] similarityScan is not supported on SQLite — pgvector required. Returning empty result.`)
+      return new Recordset(modelClass, env, [])
+    }
     await checkAccessRights(modelClass, env, 'permRead')
     const table = this.tableName(modelClass)
     const db = getDb()
@@ -1540,7 +1545,12 @@ function applyClause(query: any, clause: [string, string, unknown], tableName?: 
   
   switch (String(operator).toLowerCase()) {
     case 'ilike':
-      query.where(col, 'ilike', `%${value}%`)
+      if (isSqlite()) {
+        // SQLite LIKE is already case-insensitive for ASCII
+        query.where(col, 'like', `%${value}%`)
+      } else {
+        query.where(col, 'ilike', `%${value}%`)
+      }
       break
     case 'like':
       query.where(col, 'like', `%${value}%`)

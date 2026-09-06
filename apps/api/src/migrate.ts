@@ -82,7 +82,11 @@ async function run() {
   }
 
   new NativeServer({
-    database: process.env.DATABASE_URL || "postgres://localhost/moonwitness",
+    database:
+      process.env.DATABASE_URL ||
+      (process.env.NODE_ENV === "production"
+        ? "postgres://localhost/moonwitness"
+        : "sqlite://./data/moonwitness.dev.db"),
     jwtSecret,
     addons: [
       ...baseAddons.models,
