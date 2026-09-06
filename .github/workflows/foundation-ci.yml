@@ -41,6 +41,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Constitutional & Enterprise UI Audit
         run: pnpm audit:rules
+      - name: Universal Contract Drift Verification
+        run: pnpm contracts:verify
       - name: UMBRELLA v6 Contract Validation
         run: pnpm audit:umbrella:validate
 
@@ -120,11 +122,35 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
 
+  python-services:
+    name: Python Microservices
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install fastapi uvicorn pydantic pytest httpx
+      - name: Test Celestial Engine
+        run: |
+          cd services/celestial-engine
+          PYTHONPATH=. pytest tests/
+      - name: Test AI Agent
+        run: |
+          cd services/ai-agent
+          PYTHONPATH=. pytest tests/
+
   report:
     name: Report
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [audit, lint, typecheck, test, build]
+    needs: [audit, lint, typecheck, test, build, python-services]
     if: always() && github.event_name == 'pull_request'
     steps:
       - name: Post PR Comment
@@ -137,6 +163,7 @@ jobs:
               'Typecheck': '${{ needs.typecheck.result }}',
               'Test': '${{ needs.test.result }}',
               'Build': '${{ needs.build.result }}',
+              'Python Microservices': '${{ needs.python-services.result }}',
             };
             const icon = (result) => result === 'success' ? '✅ passed' : result === 'cancelled' ? '⛔ cancelled' : '❌ failed';
             const allPassed = Object.values(checks).every((result) => result === 'success');
@@ -148,3 +175,4 @@ jobs:
               issue_number: context.issue.number,
               body,
             });
+

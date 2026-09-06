@@ -248,6 +248,56 @@ export const PrayerTimesResponseSchema = z.object({
   times: PrayerTimesSchema,
 })
 
+export const QiblaCalculationResultSchema = z.object({
+  latitude: z.number(),
+  longitude: z.number(),
+  qibla_bearing_deg: z.number(),
+  cardinal_direction: z.string(),
+  distance_to_kabah_km: z.number(),
+  target: z.string().default("Ka'bah, Makkah al-Mukarramah"),
+})
+
+export const MabimsCriterionSchema = z.object({
+  status: z.enum(['PASS', 'FAIL']),
+  description: z.string(),
+  passed: z.boolean(),
+})
+
+export const OdehCriterionSchema = z.object({
+  category: z.string(),
+  description: z.string(),
+  v_value: z.number(),
+})
+
+export const HilalVisibilityEvaluationSchema = z.object({
+  altitude_deg: z.number(),
+  elongation_deg: z.number(),
+  crescent_width_arcmin: z.number().nullable().optional(),
+  mabims_criterion: MabimsCriterionSchema,
+  odeh_criterion: OdehCriterionSchema,
+  overall_verdict: z.string(),
+})
+
+export const SemanticSearchHitSchema = z.object({
+  id: z.string(),
+  collection: z.string(),
+  text_ar: z.string(),
+  text_en: z.string(),
+  score: z.number(),
+})
+
+export const SemanticSearchRequestSchema = z.object({
+  query: z.string(),
+  top_k: z.number().optional().default(5),
+})
+
+export const SemanticSearchResultSchema = z.object({
+  query: z.string(),
+  normalized_query: z.string(),
+  total_hits: z.number(),
+  results: z.array(SemanticSearchHitSchema),
+})
+
 // ═══════════════════════════════════════════
 // 📌 BOOKMARK & HISTORY SCHEMAS
 // ═══════════════════════════════════════════
@@ -331,3 +381,12 @@ export type ReadingHistory = z.infer<typeof ReadingHistorySchema>
 export type EngineModule = z.infer<typeof EngineModuleSchema>
 export type EngineRunInput = z.infer<typeof EngineRunInputSchema>
 export type EngineRunResult = z.infer<typeof EngineRunResultSchema>
+
+export type QiblaCalculationResult = z.infer<typeof QiblaCalculationResultSchema>
+export type MabimsCriterion = z.infer<typeof MabimsCriterionSchema>
+export type OdehCriterion = z.infer<typeof OdehCriterionSchema>
+export type HilalVisibilityEvaluation = z.infer<typeof HilalVisibilityEvaluationSchema>
+export type SemanticSearchHit = z.infer<typeof SemanticSearchHitSchema>
+export type SemanticSearchRequest = z.infer<typeof SemanticSearchRequestSchema>
+export type SemanticSearchResult = z.infer<typeof SemanticSearchResultSchema>
+

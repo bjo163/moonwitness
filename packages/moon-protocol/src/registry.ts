@@ -30,6 +30,13 @@ import {
   MetaModelsResponseSchema,
 } from './contracts/system.js'
 import { RpcRequestSchema, RpcResponseSchema } from './contracts/rpc.js'
+import {
+  QiblaCalculationResultSchema,
+  HilalVisibilityEvaluationSchema,
+  SemanticSearchRequestSchema,
+  SemanticSearchResultSchema,
+} from './contracts/witness.js'
+
 
 // ── REGISTRY ──────────────────────────────────────────────────────
 const endpointRegistry: EndpointDef[] = []
@@ -218,6 +225,42 @@ function registerBuiltInEndpoints(): void {
     tags: ['Core Engine'],
     description: 'Interactive Swagger UI for this API.',
     auth: 'none',
+  })
+
+  // Polyglot Engine & AI Microservices
+  defineEndpoint({
+    method: 'GET',
+    path: '/api/services/celestial/qibla',
+    tags: ['Celestial Engine'],
+    description: "Calculate Great Circle Qibla bearing and distance to Ka'bah.",
+    auth: 'none',
+    query: z.object({
+      lat: z.string().optional(),
+      lon: z.string().optional(),
+    }),
+    response: QiblaCalculationResultSchema,
+  })
+  defineEndpoint({
+    method: 'GET',
+    path: '/api/services/celestial/hilal-visibility',
+    tags: ['Celestial Engine'],
+    description: 'Evaluate crescent moon visibility under MABIMS and Odeh criteria.',
+    auth: 'none',
+    query: z.object({
+      alt: z.string().optional(),
+      elong: z.string().optional(),
+      width: z.string().optional(),
+    }),
+    response: HilalVisibilityEvaluationSchema,
+  })
+  defineEndpoint({
+    method: 'POST',
+    path: '/api/services/ai/semantic/search',
+    tags: ['AI Agent'],
+    description: 'Perform BM25 search with Arabic text normalization across scriptures and hadiths.',
+    auth: 'none',
+    body: SemanticSearchRequestSchema,
+    response: SemanticSearchResultSchema,
   })
 }
 

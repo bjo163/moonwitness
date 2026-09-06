@@ -14,12 +14,36 @@ import { KitabHero } from "../components/kitab/kitab-hero"
 import { KitabCanonicalGrid, type CanonicalScriptureCard } from "../components/kitab/kitab-canonical-grid"
 import { KitabAdditionalGrid, type AdditionalScriptureItem } from "../components/kitab/kitab-additional-grid"
 import { KitabLeftSidebar, KitabRightTimeline } from "../components/kitab/kitab-sidebar-timeline"
+import { searchSemanticPassages } from "@moon/client"
+import type { SemanticSearchHit } from "@workspace/types"
 
 export function KitabPortalView() {
   const [scriptures, setScriptures] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
   const [activeCollection, setActiveCollection] = useState<"all" | "canonical" | "additional">("all")
+  const [semanticHits, setSemanticHits] = useState<SemanticSearchHit[]>([])
+  const [isSearchingSemantic, setIsSearchingSemantic] = useState(false)
+
+  useEffect(() => {
+    if (searchQuery.trim().length < 2) {
+      setSemanticHits([])
+      return
+    }
+
+    const timer = setTimeout(() => {
+      setIsSearchingSemantic(true)
+      searchSemanticPassages(searchQuery.trim())
+        .then((res) => {
+          setSemanticHits(res.results || [])
+        })
+        .catch(() => setSemanticHits([]))
+        .finally(() => setIsSearchingSemantic(false))
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [searchQuery])
+
 
   useEffect(() => {
     fetch("/api/scriptures")
@@ -172,6 +196,34 @@ export function KitabPortalView() {
                 </button>
               )}
             </div>
+
+            {/* AI Semantic Scripture Matches */}
+            {semanticHits.length > 0 && (
+              <div className="rounded-xl border border-primary/20 bg-card p-4 shadow-sm">
+                <div className="flex items-center justify-between pb-3 border-b border-border">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-primary" />
+                    <span className="font-mono text-xs font-semibold text-foreground uppercase">
+                      Semantic Search Results ({semanticHits.length})
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-muted-foreground font-mono">BM25 Normalized</span>
+                </div>
+                <div className="mt-3 space-y-3">
+                  {semanticHits.map((hit) => (
+                    <div key={hit.id} className="rounded-lg border border-border/60 bg-muted/20 p-3">
+                      <div className="flex items-center justify-between text-[10px] font-mono text-primary font-bold">
+                        <span>{hit.collection.toUpperCase()} · {hit.id}</span>
+                        <span>Score: {hit.score.toFixed(2)}</span>
+                      </div>
+                      <p className="arabic-text mt-1 text-base text-right text-foreground">{hit.text_ar}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">{hit.text_en}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {visibleCanonicalCards.length > 0 && <KitabCanonicalGrid cards={visibleCanonicalCards} />}
             {visibleAdditionalScriptures.length > 0 && (
               <KitabAdditionalGrid scriptures={visibleAdditionalScriptures} totalProphets={totalProphets} />

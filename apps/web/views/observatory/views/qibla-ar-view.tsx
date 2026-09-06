@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from "react"
 import { Camera, Compass, MapPin, AlertTriangle } from "lucide-react"
 import { ContextBlock } from "@workspace/ui"
 import { CelestialQiblaCompass } from "@workspace/ui"
+import { fetchQiblaDirection } from "@moon/client"
 
 const FULL_CIRCLE_DEGREES = 360
 const ALIGNMENT_TOLERANCE_DEGREES = 5
@@ -47,6 +48,9 @@ export function QiblaArView() {
   useEffect(() => {
     if (!location) return
 
+    let isMounted = true
+
+    // Compute locally first as immediate fallback
     try {
       const phi1 = (location.lat * Math.PI) / 180
       const phi2 = (21.4225 * Math.PI) / 180
@@ -56,10 +60,30 @@ export function QiblaArView() {
       const qiblaAngle = (Math.atan2(y, x) * 180) / Math.PI
       const normalizedAngle = (qiblaAngle + 360) % 360
 
-      setQiblaTarget(Number(normalizedAngle.toFixed(1)))
-      setStatusMsg("QIBLA VECTOR ACQUIRED. CALIBRATING GYROSCOPE...")
+      if (isMounted) {
+        setQiblaTarget(Number(normalizedAngle.toFixed(1)))
+        setStatusMsg("QIBLA VECTOR ACQUIRED. CALIBRATING GYROSCOPE...")
+      }
     } catch {
       setError("FAILED TO CALCULATE QIBLA VECTOR")
+    }
+
+    // Enhance with authoritative celestial microservice
+    fetchQiblaDirection(location.lat, location.lng)
+      .then((res) => {
+        if (isMounted && res?.qibla_bearing_deg !== undefined) {
+          setQiblaTarget(Number(res.qibla_bearing_deg.toFixed(1)))
+          setStatusMsg(
+            `QIBLA VECTOR ACQUIRED (${res.distance_to_kabah_km} KM TO KA'BAH). CALIBRATING GYROSCOPE...`
+          )
+        }
+      })
+      .catch(() => {
+        // Retain local spherical trigonometry calculation
+      })
+
+    return () => {
+      isMounted = false
     }
   }, [location])
 

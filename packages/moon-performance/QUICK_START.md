@@ -98,22 +98,14 @@ for (const req of slowRequests) {
 
 ## ✅ Step 5: Verify Installation
 
-Run the test:
+Verify the build and integration:
 
 ```bash
-cd apps/api
-pnpm tsx test-performance.ts
-```
+# Build the performance package
+pnpm --filter @moon/performance build
 
-Expected output:
-```
-✅ Request tracked successfully
-✅ Query tracked successfully
-✅ System metrics tracked successfully
-✅ Found X request records
-✅ Found X query records
-✅ Found X system records
-✅ All tests passed!
+# Run repository tests
+pnpm test
 ```
 
 ## 🎯 Common Use Cases

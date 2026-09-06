@@ -36,6 +36,19 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.ruff_cache/
+
+# rust / go / compiled
+target/
+
 # env files (can opt-in for committing if needed)
 .env*
 !.env.example
