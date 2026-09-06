@@ -3,7 +3,7 @@ import { consistencyFindings } from "./audit-consistency.mjs"
 
 describe("cross-file consistency audit", () => {
   it("detects mixed UI imports and missing button type", () => {
-    const findings = consistencyFindings("apps/web/components/example.tsx", `import { Button } from "@workspace/ui"\nimport { Card } from "@workspace/ui/components/card"\nexport function Example() { return <button>Save</button> }`)
+    const findings = consistencyFindings("apps/web/components/example.tsx", `import { Button } from "@workspace/ui"\nimport { Card } from "@workspace/ui/components/card"\nexport function Example() { return <form><button>Save</button></form> }`)
     expect(findings.map((item) => item.category)).toEqual(["ui-import", "button-contract"])
   })
 
