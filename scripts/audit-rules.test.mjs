@@ -18,6 +18,7 @@ describe("Phase 5 governance auditor", () => {
       "CYBER VARIABLE MISUSE",
       "RAW UI COLORS",
       "DECORATIVE UTILITIES",
+      "RESEARCH UI SPECIFICATION",
       "FORCED DARK MODE",
       "ACCESSIBILITY",
       "PACKAGE BOUNDARIES",

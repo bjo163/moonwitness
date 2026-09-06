@@ -181,7 +181,7 @@ export function GlobalMonitoringDashboard() {
   const status = data.isLoading ? "Syncing sources" : "Sources current"
 
   return (
-    <div className="min-h-screen bg-background pb-12 text-foreground">
+    <div className="min-h-screen bg-background pb-8 text-foreground">
       <div className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
         <header className="flex flex-col gap-5 border-b border-border pb-6 lg:flex-row lg:items-end lg:justify-between">
           <div><p className="text-sm font-medium text-primary">MoonWitness Observatory</p><h1 className="mt-2 text-3xl font-semibold tracking-tight">Global monitoring</h1><p className="mt-2 max-w-2xl text-sm text-muted-foreground">A live view of publicly available environmental, mobility, and space-weather observations.</p></div>

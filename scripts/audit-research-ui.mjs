@@ -26,8 +26,9 @@ export function researchUiFindings(file, content) {
     // 4. Decorative surface effects: avoid blur, gradients, and drop shadows
     [/^(?:.*:)?(?:backdrop-blur.*|blur-.*|bg-gradient-.*|bg-linear-.*|bg-radial-.*|shadow-(?:sm|md|lg|xl|2xl))$/, 'Remove decorative surface effects, gradients, and drop shadows'],
 
-    // 5. Text density & section rhythm: py-6 or py-8 for compact document rhythm
-    [/^(?:.*:)?(?:py|pb|pt)-(?:14|16|20|24|28|32|36|40|48)$/, 'Use compact section spacing (py-6 or py-8) for dense research text'],
+    // 5. Text density & section rhythm: py-6 or py-8 for compact document rhythm (allow navbar top clearance)
+    [/^(?:.*:)?(?:py|pb)-(?:12|14|16|20|24|28|32|36|40|48)$/, 'Use compact section spacing (py-6 or py-8) for dense research text'],
+    [/^(?:.*:)?pt-(?:28|32|36|40|48)$/, 'Use compact section top spacing (allowing max navbar clearance pt-16..pt-24)'],
 
     // 6. Layout gaps: gap-3 to gap-6 for high information density
     [/^(?:.*:)?gap-(?:12|14|16|20|24|28|32)$/, 'Use compact gaps (gap-3 to gap-6) for high information density'],

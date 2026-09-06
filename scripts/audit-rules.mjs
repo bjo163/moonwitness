@@ -56,7 +56,7 @@ const LEGACY_COMPONENT_RE = /\b(?:CosmicDataTable|CosmicFormModal|CosmicPivotGri
 
 const DECORATIVE_UTILITY_RE = /(?:^|[\s"'`])(?:clip-(?:card|hero|btn|tag|rune)|card-clip|hero-clip|btn-clip|tag-clip|rune-clip|hud-clip-(?:card|hero|btn|tag|rune)|panel-glass|military-box|corner-(?:cyan|green|yellow|purple|pink)|glow-(?:cyan|emerald|amber|purple|pink)|holo-glow|laser-conduit-(?:cyan|green|yellow|purple)|bg-(?:cosmic-grid|dense-grid|space))/i
 
-const BANNED_TERMINOLOGY_RE = /\b(?:cyber-(?:cyan|green|yellow|purple|pink|dark|panel)|bg-space|clip-(?:card|hero|btn|tag|rune)|card-clip|hero-clip|btn-clip|tag-clip|rune-clip|panel-glass|corner-box|laser-conduit|holo-glow|font-orbitron|operator clearance|command shell|mission control|commit morph|initialize instance|telemetry aesthetic)\b/i
+const BANNED_TERMINOLOGY_RE = /\b(?:cyber-(?:cyan|green|yellow|purple|pink|dark|panel)|bg-space|clip-(?:card|hero|btn|tag|rune)|card-clip|hero-clip|btn-clip|tag-clip|rune-clip|panel-glass|corner-box|laser-conduit|holo-glow|font-orbitron|operator clearance|command shell|dev command shell|mission control|commit morph|initialize instance|quick directives|live diagnostic|secure link|signal active|retro terminal|holographic|telemetry aesthetic)\b/i
 
 const LEGACY_API_RE = /(?:from\s+["']next\/router["']|\bReactDOM\.render\b|\bfindDOMNode\b|\b(?:componentWillMount|componentWillReceiveProps|componentWillUpdate)\b|\bgetInitialProps\b|\bUNSAFE_component|\b(?:useClipPath|useCornerBrackets|usePanelGlass|useCosmicGrid|useLaserConduit|useCyberColor|useGlow|CyberColors|CyberColorVars|CyberColorKey|GlowClasses|ClipPathClasses|GridClasses|LaserConduitClasses|PanelGlass|ChamferSizes|GlowDepths|BackdropBlurs|GridSizes|CornerClasses|SemanticCorners)\b)/
 
@@ -623,6 +623,7 @@ const governanceChecks = [
   ["CYBER VARIABLE MISUSE", VIOLATIONS.cyberVarMisuse],
   ["RAW UI COLORS", VIOLATIONS.rawUiColors],
   ["DECORATIVE UTILITIES", VIOLATIONS.decorativeUtilities],
+  ["RESEARCH UI SPECIFICATION", VIOLATIONS.researchUi],
   ["FORCED DARK MODE", VIOLATIONS.forcedDarkMode],
   ["ACCESSIBILITY & CONTRAST", VIOLATIONS.accessibility],
   ["PACKAGE BOUNDARIES", VIOLATIONS.packageBoundaryIssues],
@@ -667,8 +668,9 @@ const criticalViolations =
   VIOLATIONS.accessibility.length +
   VIOLATIONS.packageBoundaryIssues.length +
   VIOLATIONS.themeParity.length +
-  VIOLATIONS.bannedTerminology.length
-  // Composition and visual-density findings are advisory; they guide refactors
+  VIOLATIONS.bannedTerminology.length +
+  VIOLATIONS.researchUi.length
+  // Composition findings are advisory; they guide refactors
   // without blocking security or architectural certification.
 
 if (criticalViolations === 0) {
