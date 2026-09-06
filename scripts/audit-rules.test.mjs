@@ -50,4 +50,10 @@ describe("Phase 5 governance auditor", () => {
     expect(source).toContain("utility class pattern repeated")
     expect(source).toContain("classCounts")
   })
+
+  it("checks duplicate component definitions across workspace files", () => {
+    const source = readFileSync(auditor, "utf8")
+    expect(source).toContain("DUPLICATE COMPONENT DEFINITIONS")
+    expect(source).toContain("consolidate the canonical implementation")
+  })
 })

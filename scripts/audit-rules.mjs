@@ -83,6 +83,7 @@ const VIOLATIONS = {
   // Pillar I & II: Frontend & Topology
   maxLines: [],
   componentReuse: [],
+  duplicateComponents: [],
   uiConsistency: [],
   ghostFolders: [],
   legacyHudNaming: [],
@@ -123,6 +124,19 @@ const VIOLATIONS = {
 
 let totalFilesScanned = 0
 let totalPackagesAudited = 0
+const componentDefinitions = new Map()
+
+function auditDuplicateComponents() {
+  for (const [name, files] of componentDefinitions) {
+    const unique = [...new Set(files)]
+    if (unique.length < 2 || /^(Button|Card|Dialog|Input|Label|Badge|Table|Modal|Panel)$/.test(name)) continue
+    VIOLATIONS.duplicateComponents.push({
+      file: unique.join(", "),
+      line: 1,
+      issue: `${name} is defined in ${unique.length} files; consolidate the canonical implementation or rename by domain`,
+    })
+  }
+}
 
 // Check Sovereign Package Genesis Contract
 function auditPackageGenesisContracts() {
@@ -364,6 +378,15 @@ function auditFile(filePath) {
   const isDoc = isDocumentation(filePath)
   const isActive = isActiveImplementation(filePath)
 
+  if (isActive && /\.tsx$/.test(filePath)) {
+    for (const match of content.matchAll(/(?:export\s+)?function\s+([A-Z][A-Za-z0-9_]*)\s*\(/g)) {
+      const name = match[1]
+      const files = componentDefinitions.get(name) || []
+      files.push(relativePath)
+      componentDefinitions.set(name, files)
+    }
+  }
+
   // Application code should consume the shared UI contract instead of cloning
   // primitive controls. Domain-specific canvas interactions remain exempt.
   if (isActive && relativePath.startsWith("apps/") && /\.tsx$/.test(filePath)) {
@@ -597,6 +620,7 @@ auditThemeInfrastructure()
 for (const dir of TARGET_DIRS) {
   scanDirectory(path.join(ROOT_DIR, dir))
 }
+auditDuplicateComponents()
 
 // ═════════════════════════════════════════════════════════════════════════════
 // REPORT GENERATION
@@ -657,6 +681,7 @@ console.log(`\n${BOLD}${CYAN}▶ PHASE 5 GOVERNANCE: CANONICAL ENTERPRISE DESIGN
 const governanceChecks = [
   ["SHARED UI BOUNDARY", VIOLATIONS.uiConsistency],
   ["COMPONENT REUSE & COMPOSITION", VIOLATIONS.componentReuse],
+  ["DUPLICATE COMPONENT DEFINITIONS", VIOLATIONS.duplicateComponents],
   ["LEGACY APIs & TOKENS", VIOLATIONS.legacyApis],
   ["BANNED ACTIVE TERMINOLOGY", VIOLATIONS.bannedTerminology],
   ["CYBER VARIABLE MISUSE", VIOLATIONS.cyberVarMisuse],
