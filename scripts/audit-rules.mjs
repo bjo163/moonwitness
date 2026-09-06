@@ -113,6 +113,7 @@ const VIOLATIONS = {
   cyberVarMisuse: [],
   rawUiColors: [],
   decorativeUtilities: [],
+  researchUi: [],
   forcedDarkMode: [],
   accessibility: [],
   packageBoundaryIssues: [],
@@ -356,7 +357,7 @@ function auditFile(filePath) {
   const relativePath = path.relative(ROOT_DIR, filePath)
   const content = fs.readFileSync(filePath, "utf-8")
   const lines = content.split("\n")
-  VIOLATIONS.decorativeUtilities.push(...researchUiFindings(relativePath, content))
+  VIOLATIONS.researchUi.push(...researchUiFindings(relativePath, content))
 
   const isTest = /(?:\.test|\.spec)\.[cm]?[jt]sx?$/.test(filePath)
   const isDoc = isDocumentation(filePath)
@@ -666,7 +667,7 @@ const criticalViolations =
   VIOLATIONS.accessibility.length +
   VIOLATIONS.packageBoundaryIssues.length +
   VIOLATIONS.themeParity.length +
-  VIOLATIONS.bannedTerminology.length +
+  VIOLATIONS.bannedTerminology.length
   // Composition and visual-density findings are advisory; they guide refactors
   // without blocking security or architectural certification.
 
