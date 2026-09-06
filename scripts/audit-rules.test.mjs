@@ -44,4 +44,10 @@ describe("Phase 5 governance auditor", () => {
     expect(source).toContain("SHARED UI BOUNDARY")
     expect(source).toContain("Use Button from @workspace/ui")
   })
+
+  it("checks repeated utility patterns as hidden components", () => {
+    const source = readFileSync(auditor, "utf8")
+    expect(source).toContain("utility class pattern repeated")
+    expect(source).toContain("classCounts")
+  })
 })

@@ -411,6 +411,22 @@ function auditFile(filePath) {
         })
       }
     }
+
+    // Long repeated utility strings are usually a hidden local component.
+    const classCounts = new Map()
+    for (const match of content.matchAll(/className\s*=\s*["`]([^"`]{48,})["`]/g)) {
+      const classes = match[1].replace(/\s+/g, " ").trim()
+      classCounts.set(classes, (classCounts.get(classes) || 0) + 1)
+    }
+    for (const [classes, count] of classCounts) {
+      if (count >= 3) {
+        VIOLATIONS.componentReuse.push({
+          file: relativePath,
+          line: 1,
+          issue: `utility class pattern repeated ${count} times; extract a named component or shared variant (${classes.slice(0, 64)}…)`,
+        })
+      }
+    }
   }
 
   // Fail on Legacy APIs & forbidden token classes

@@ -15,6 +15,10 @@
 - Its `SHARED UI BOUNDARY` check reports raw form controls in `apps/` when the
   matching `@workspace/ui` primitive is not imported. Findings are advisory so
   domain-specific controls can be migrated incrementally without blocking CI.
+- `COMPONENT REUSE & COMPOSITION` also reports oversized local component counts,
+  repeated custom JSX, and long utility-class strings repeated three or more
+  times. Treat each finding as a refactor queue: extract a named component,
+  data-driven row, or shared variant before adding another copy.
 - `audit-theme-tokens.mjs` checks required light/dark tokens, Tailwind color
   mappings, duplicate declarations, direct self-references, and text contrast.
 - `audit-research-ui.mjs` checks literal classes in the migrated public home,
