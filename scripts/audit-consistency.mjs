@@ -9,6 +9,16 @@ export function consistencyFindings(file, source) {
     findings.push({ file, line: 1, category: "ui-import", issue: "Mixed @workspace/ui barrel and subpath imports; use one canonical import style per file" })
   }
 
+  // Dynamic inline colors must be resolved through the shared color contract.
+  // Static domain visualization files are reviewed separately by their owner.
+  if (source.includes("style={{") && /style=\{\{\s*(?:color|background|backgroundColor|borderColor)\s*:/.test(source)) {
+    const hasResolver = /resolveSemanticColor|resolveVisualizationColor/.test(source)
+    const domainFile = /(?:chart|seismix|tajweed|celestial|spectrogram|map|waveform)/i.test(normalized)
+    if (!hasResolver && !domainFile) {
+      findings.push({ file, line: 1, category: "color-contract", issue: "Dynamic inline color bypasses @workspace/ui color resolver" })
+    }
+  }
+
   if (/^apps\//.test(normalized) && /<button\b[^>]*>/i.test(source)) {
     for (const match of source.matchAll(/<button\b([^>]*)>/gi)) {
       if (!/\btype\s*=/.test(match[1])) findings.push({ file, line: source.slice(0, match.index).split("\n").length, category: "button-contract", issue: "Button is missing an explicit type (button, submit, or reset)" })

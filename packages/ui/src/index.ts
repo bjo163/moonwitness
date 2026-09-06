@@ -95,6 +95,7 @@ export * from "./components/matrix/model-copilot-widget"
 export * from "./components/audio/audio-spectrogram"
 export * from "./components/offline-status-indicator"
 export * from "./lib/utils"
+export * from "./lib/semantic-color"
 export * from "./lib/sanitize-html"
 export * from "./lib/offline-sync"
 

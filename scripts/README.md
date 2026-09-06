@@ -29,6 +29,10 @@
   contract at the source; do not silence it with aliases or wrapper exports.
   Use the public `@workspace/ui` entrypoint for feature code unless a documented
   package-level subpath is required.
+- Its `color-contract` finding covers dynamic inline colors in ordinary UI.
+  Resolve them with `resolveSemanticColor()` from `@workspace/ui`; chart,
+  map, seismix, Tajweed, and celestial files remain explicit domain exceptions
+  until their visual token registries are migrated.
 - `audit-theme-tokens.mjs` checks required light/dark tokens, Tailwind color
   mappings, duplicate declarations, direct self-references, and text contrast.
 - `audit-research-ui.mjs` checks literal classes in the migrated public home,

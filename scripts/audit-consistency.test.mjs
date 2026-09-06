@@ -11,4 +11,9 @@ describe("cross-file consistency audit", () => {
     expect(consistencyFindings("apps/web/components/example.test.tsx", "<button>Save</button>")).toEqual([])
     expect(consistencyFindings("apps/web/components/example.tsx", "export function Example() { return <button type=\"button\">Save</button> }")).toEqual([])
   })
+
+  it("flags dynamic UI color styles without the resolver", () => {
+    const findings = consistencyFindings("apps/web/components/example.tsx", "export function Example() { return <span style={{ color: item.color }}>x</span> }")
+    expect(findings.some((item) => item.category === "color-contract")).toBe(true)
+  })
 })
