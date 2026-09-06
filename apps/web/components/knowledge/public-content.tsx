@@ -8,16 +8,16 @@ export { field }
 
 export function PublicHeader({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
   return (
-    <header className="space-y-3 border-b border-border pb-8">
-      <p className="font-mono text-xs font-semibold tracking-[0.2em] text-primary uppercase">{eyebrow}</p>
-      <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-5xl">{title}</h1>
+    <header className="space-y-2 border-b border-border pb-4">
+      <p className="text-xs font-medium text-muted-foreground">{eyebrow}</p>
+      <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">{title}</h1>
       <p className="max-w-3xl leading-7 text-muted-foreground">{description}</p>
     </header>
   )
 }
 
 export function PublicFrame({ children }: { children: ReactNode }) {
-  return <div className="min-h-screen bg-background px-4 pb-20 pt-24 text-foreground sm:px-8"><div className="mx-auto max-w-6xl">{children}</div></div>
+  return <div className="min-h-screen bg-background px-4 pb-8 pt-24 text-foreground sm:px-8"><div className="mx-auto max-w-6xl">{children}</div></div>
 }
 
 export function ErrorNotice({ message = "Content is temporarily unavailable." }: { message?: string }) {
@@ -41,9 +41,9 @@ export function SourceSummary({ source }: { source: WitnessContent | null }) {
 export function ContentBlock({ content, label }: { content: WitnessContent; label: string }) {
   const language = contentLanguage(content)
   const isArabic = language === "ar" || field(content, "script") === "Arab"
-  return <section className="space-y-3 rounded-xl border border-border bg-card p-5 shadow-sm" aria-labelledby={`content-${label}`}>
+  return <section className="space-y-3 border-b border-border py-4" aria-labelledby={`content-${label}`}>
     <div className="flex flex-wrap items-center justify-between gap-2"><h2 id={`content-${label}`} className="text-sm font-semibold text-foreground">{label}</h2><span className="rounded-full border border-border px-2 py-1 font-mono text-[11px] text-muted-foreground">{language || "language unavailable"}</span></div>
-    <p lang={isArabic ? "ar" : language || undefined} dir={isArabic ? "rtl" : undefined} className={isArabic ? "font-arabic text-right text-2xl leading-[2.2] sm:text-4xl" : "leading-8"}>{contentText(content)}</p>
+    <p lang={isArabic ? "ar" : language || undefined} dir={isArabic ? "rtl" : undefined} className={isArabic ? "arabic-text text-2xl" : "max-w-prose text-base leading-relaxed"}>{contentText(content)}</p>
   </section>
 }
 

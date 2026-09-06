@@ -16,6 +16,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
+import { researchUiFindings } from "./audit-research-ui.mjs"
 import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
@@ -498,6 +499,7 @@ function auditFile(filePath) {
   const relativePath = path.relative(ROOT_DIR, filePath)
   const content = fs.readFileSync(filePath, "utf-8")
   const lines = content.split("\n")
+  VIOLATIONS.decorativeUtilities.push(...researchUiFindings(relativePath, content))
 
   const isTest = /(?:\.test|\.spec)\.[cm]?[jt]sx?$/.test(filePath)
   const isDoc = isDocumentation(filePath)

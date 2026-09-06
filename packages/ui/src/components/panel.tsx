@@ -36,10 +36,10 @@ const VARIANT_TEXT_CLASSES: Record<PanelVariant, string> = {
 
 const PADDING_CLASSES: Record<PanelPadding, string> = {
   none: "p-0",
-  sm: "p-3 sm:p-4",
-  md: "p-4 sm:p-5",
-  lg: "p-6 sm:p-8",
-  xl: "p-8 sm:p-10",
+  sm: "p-3",
+  md: "p-4",
+  lg: "p-5 sm:p-6",
+  xl: "p-6 sm:p-8",
 }
 
 function resolveVariant(variant?: PanelVariant, accentColor?: string): PanelVariant {
@@ -125,7 +125,7 @@ export function Panel({
   return (
     <div
       className={cn(
-        "relative rounded-xl border bg-card text-card-foreground shadow-sm transition-colors",
+        "relative rounded-md border bg-card text-card-foreground transition-colors",
         PADDING_CLASSES[padding],
         VARIANT_BORDER_CLASSES[effectiveVariant],
         className

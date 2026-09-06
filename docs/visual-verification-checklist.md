@@ -24,3 +24,12 @@ Verify each route in light, dark, and system modes at desktop and mobile widths.
 - [ ] Loading, empty, error, dialog, dropdown, table, and chart states remain usable.
 - [ ] Motion is purposeful and respects reduced-motion preferences.
 - [ ] Tajweed colors appear only in Quranic visualization contexts.
+
+## Research publication layout
+
+- [ ] Titles use sentence case; paragraphs remain readable at a bounded measure.
+- [ ] Sections are compact without tiny prose or clipped Arabic diacritics.
+- [ ] Sources and translations are clearly distinguished with nearby references.
+- [ ] No decorative hero blur, oversized headings, or nested card framing.
+- [ ] Text links and controls have visible keyboard focus.
+- [ ] At 320px and 200% zoom, prose reflows without page-level horizontal scrolling.

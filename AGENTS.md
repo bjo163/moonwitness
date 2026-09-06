@@ -200,7 +200,20 @@ ErrorBoundary
 Avoid decorative or themed prefixes.
 
 ## 13. Visual Design
-Use restrained enterprise presentation:
+Use a compact, text-first research publication presentation. The canonical specification is
+[Research UI guidelines](docs/RESEARCH-UI.md). Apply it to new UI and touched views.
+
+- Page titles: text-2xl, optionally sm:text-3xl; section titles: text-lg or text-xl.
+- Reading text: text-base with leading-relaxed and a measure around 65–75 characters.
+- UI text: text-sm; metadata: text-xs. Do not shrink prose to increase density.
+- Prefer document sections, reference lists, and tables separated by thin borders.
+- Use section padding py-6 or py-8 and gaps of 3–6 spacing units.
+- Avoid promotional heroes, uppercase headings, decorative blur, gradients, and oversized whitespace.
+- Cards are for distinct interactive or status groups; use rounded-md and no default shadow.
+- Keep source, edition, revision, and citations near the content they qualify.
+- Preserve legible Arabic line height, touch targets, keyboard focus, and runtime themes.
+
+Use restrained shared primitives:
 
 - standard Tailwind radius utilities
 - standard border and shadow utilities
