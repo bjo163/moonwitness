@@ -12,6 +12,7 @@ import {
   BookOpen,
   ArrowRight,
 } from "lucide-react"
+import { Button, resolveSemanticColor, type SemanticColorToken } from "@workspace/ui"
 
 const STAT_ITEMS = [
   {
@@ -19,42 +20,42 @@ const STAT_ITEMS = [
     v: "1,842",
     s: "Across all time",
     icon: Book,
-    c: "#F59E0B",
+    c: "warning" as SemanticColorToken,
   },
   {
     n: "Prophets & Messengers",
     v: "124",
     s: "Sent to guide humanity",
     icon: Users,
-    c: "#10B981",
+    c: "success" as SemanticColorToken,
   },
   {
     n: "Major Civilizations",
     v: "96",
     s: "That shaped the world",
     icon: Map,
-    c: "#A855F7",
+    c: "info" as SemanticColorToken,
   },
   {
     n: "Powerful Empires",
     v: "47",
     s: "Rise and fall of powers",
     icon: Swords,
-    c: "#F97316",
+    c: "warning" as SemanticColorToken,
   },
   {
     n: "Astronomy Discoveries",
     v: "128",
     s: "Milestones of knowledge",
     icon: Telescope,
-    c: "#3B82F6",
+    c: "primary" as SemanticColorToken,
   },
   {
     n: "Future Major Events",
     v: "23",
     s: "Awaiting to unfold",
     icon: Clock,
-    c: "#10B981",
+    c: "success" as SemanticColorToken,
   },
 ]
 
@@ -63,25 +64,25 @@ const INSIGHT_ITEMS = [
     n: "History repeats in patterns",
     d: "Similar events occurred 3 times in different eras.",
     icon: History,
-    c: "#3B82F6",
+    c: "primary" as SemanticColorToken,
   },
   {
     n: "Knowledge evolves continuously",
     d: "Astronomy discoveries increased 400% in last 200 years.",
     icon: BookOpen,
-    c: "#A855F7",
+    c: "info" as SemanticColorToken,
   },
   {
     n: "Divine guidance is consistent",
     d: "124 messengers were sent across all civilizations.",
     icon: Users,
-    c: "#10B981",
+    c: "success" as SemanticColorToken,
   },
   {
     n: "The end is certain",
     d: "Future events are mentioned in 27% of verses.",
     icon: Clock,
-    c: "#F59E0B",
+    c: "warning" as SemanticColorToken,
   },
 ]
 
@@ -102,7 +103,7 @@ export function PropheticTimelineStatsInsights() {
                 key={i}
                 className="bg-background flex flex-col items-center justify-center rounded-lg border border-border p-2 text-center"
               >
-                <st.icon className="mb-2 h-5 w-5" style={{ color: st.c }} />
+                <st.icon className="mb-2 h-5 w-5" style={{ color: resolveSemanticColor(st.c) }} />
                 <div className="mb-1 font-mono text-lg leading-none font-black text-foreground">
                   {st.v}
                 </div>
@@ -171,9 +172,9 @@ export function PropheticTimelineStatsInsights() {
             >
               <div
                 className="bg-background flex h-8 w-8 shrink-0 items-center justify-center rounded-full border"
-                style={{ borderColor: `${ins.c}50` }}
+                style={{ borderColor: resolveSemanticColor(ins.c) }}
               >
-                <ins.icon className="h-4 w-4" style={{ color: ins.c }} />
+                <ins.icon className="h-4 w-4" style={{ color: resolveSemanticColor(ins.c) }} />
               </div>
               <div>
                 <div className="mb-0.5 text-[10px] font-bold text-foreground">
@@ -187,9 +188,9 @@ export function PropheticTimelineStatsInsights() {
           ))}
         </div>
 
-        <button className="mt-2 flex w-full items-center justify-center gap-1 rounded border border-border py-2 text-center text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:bg-muted/30 hover:text-foreground">
+        <Button type="button" variant="outline" size="sm" className="mt-2 w-full text-[8px] font-bold tracking-widest uppercase">
           VIEW ALL INSIGHTS <ArrowRight className="h-2.5 w-2.5" />
-        </button>
+        </Button>
       </div>
     </>
   )

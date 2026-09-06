@@ -214,31 +214,31 @@ export function TaskCenterTable() {
       <div className="mt-4 flex items-center justify-between border-t border-border pt-3 text-[9px] text-primary">
         <div>Showing 1 to 8 of 238 tasks</div>
         <div className="flex items-center gap-1">
-          <button className="p-1 hover:text-foreground">
+          <Button type="button" variant="ghost" size="icon-xs">
             <ChevronLeft className="h-3.5 w-3.5" />
-          </button>
-          <button className="flex h-5 w-5 items-center justify-center rounded border border-primary/50 bg-primary/20 text-primary">
+          </Button>
+          <Button type="button" variant="outline" size="icon-xs" className="border-primary/50 bg-primary/20 text-primary">
             1
-          </button>
-          <button className="flex h-5 w-5 items-center justify-center rounded hover:bg-muted/30">
+          </Button>
+          <Button type="button" variant="ghost" size="icon-xs">
             2
-          </button>
-          <button className="flex h-5 w-5 items-center justify-center rounded hover:bg-muted/30">
+          </Button>
+          <Button type="button" variant="ghost" size="icon-xs">
             3
-          </button>
+          </Button>
           <span>...</span>
-          <button className="flex h-5 w-5 items-center justify-center rounded hover:bg-muted/30">
+          <Button type="button" variant="ghost" size="icon-xs">
             30
-          </button>
+          </Button>
           <button className="p-1 hover:text-foreground">
             <ChevronRight className="h-3.5 w-3.5" />
           </button>
         </div>
         <div className="flex items-center gap-2">
           <span>Rows per page:</span>
-          <button className="bg-background flex items-center gap-1 rounded border border-border px-2 py-1 text-foreground">
+          <Button type="button" variant="outline" size="sm" className="bg-background text-foreground">
             10 <ChevronDown className="h-3 w-3" />
-          </button>
+          </Button>
         </div>
       </div>
     </div>
