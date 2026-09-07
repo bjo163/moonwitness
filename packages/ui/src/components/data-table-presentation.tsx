@@ -7,7 +7,7 @@ import { CardDescription, CardHeader, CardTitle } from "./card"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog"
 import { Input } from "./input"
 import { Label } from "./label"
-import type { CrudColumn } from "./data-table"
+import type { CrudColumn } from "./data-table.types"
 
 type DataTableHeaderProps = {
   title: string

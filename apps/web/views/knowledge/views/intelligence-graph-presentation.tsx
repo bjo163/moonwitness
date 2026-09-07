@@ -1,23 +1,8 @@
 import { Network } from "lucide-react"
 import { ContextBlock } from "@workspace/ui"
 import { IntelligenceGraphCanvas } from "./intelligence-graph-canvas"
-
-export type GraphNode = {
-  id: string
-  label: string
-  type: "person" | "place" | "event" | "concept" | "book"
-  x: number
-  y: number
-  vx: number
-  vy: number
-  radius: number
-}
-
-export type GraphEdge = {
-  source: string
-  target: string
-  strength: number
-}
+export type { GraphEdge, GraphNode } from "./intelligence-graph.types"
+import type { GraphEdge, GraphNode } from "./intelligence-graph.types"
 
 type IntelligenceGraphPresentationProps = {
   nodes: GraphNode[]

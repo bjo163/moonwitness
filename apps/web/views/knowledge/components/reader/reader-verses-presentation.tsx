@@ -1,16 +1,7 @@
 import { Bookmark, Pause, PlayCircle } from "lucide-react"
 import { sanitizeHtml } from "@workspace/ui"
-import type { VerseItem } from "./reader-verses-grid"
-
-export type ReaderBook = {
-  id: string | number
-  name: string
-  original_name?: string
-  summary?: string
-  meaning?: string
-  audio_url?: string
-  chapters_count?: number
-}
+import type { ReaderBook, VerseItem } from "./reader.types"
+export type { ReaderBook, VerseItem } from "./reader.types"
 
 export function ReaderTabs() {
   return (

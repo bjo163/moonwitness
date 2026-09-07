@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import type { GraphEdge, GraphNode } from "./intelligence-graph-presentation"
+import type { GraphEdge, GraphNode } from "./intelligence-graph.types"
 
 type IntelligenceGraphCanvasProps = {
   nodes: GraphNode[]

@@ -1,43 +1,14 @@
 "use client"
 
-import { useEffect, useState, type Dispatch, type SetStateAction } from "react"
+import { useEffect, useState } from "react"
 import { toPng } from "html-to-image"
 import { useLanguage, useGlobalAudio } from "@workspace/state"
 import { useLocalStorage } from "@workspace/hooks"
 import { ASMAUL_HUSNA_EN, SURAH_TRANSLATIONS_EN, type DailyData } from "../lib/daily-inspiration-data"
 import { buildImagePrompt, buildTransmissionText, calculateNextPrayer, formatBilingualDate, playFuturisticZapAudio } from "../lib/daily-inspiration-helpers"
 import { DailyInspirationContent } from "./daily-inspiration-content"
-
-type NextPrayer = { name: string; formattedCountdown: string; percentage: number } | null
-
-export type DailyInspirationState = {
-  t: (english: string, indonesian: string) => string
-  lang: string
-  data: DailyData | null
-  loading: boolean
-  mounted: boolean
-  copied: boolean
-  copiedPrompt: boolean
-  copiedUrl: boolean
-  isPlayingAudio: boolean
-  isZapping: boolean
-  liveTime: string
-  isExporting: boolean
-  nextPrayer: NextPrayer
-  rotationPercentFormatted: string
-  activeAyahTranslation: string
-  customTafsirNote: string
-  hadithGradeText: string
-  asmaulSurahMeaning?: string
-  asmaulAyahMeaning?: string
-  setIsPlayingAudio: Dispatch<SetStateAction<boolean>>
-  triggerZapEffect: () => void
-  toggleAudio: () => void
-  copyDynamicShareUrl: () => void
-  copyVerseForWhatsApp: () => void
-  copyImagePrompt: () => void
-  exportDashboardPNG: () => Promise<void>
-}
+import type { DailyInspirationState, NextPrayer } from "./daily-inspiration.types"
+export type { DailyInspirationState } from "./daily-inspiration.types"
 
 function useDailyInspirationState(): DailyInspirationState {
   const { t, lang } = useLanguage()

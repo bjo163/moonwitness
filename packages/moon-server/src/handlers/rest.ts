@@ -5,6 +5,7 @@ import { parseBody, sendJson, parseUrl } from '../utils/http.js'
 import { logger } from '../logger.js'
 import { authenticateRequest, AuthError } from '../utils/auth.js'
 import { getOdooSession, OdooClient } from '@moon/odoo-bridge'
+import { isMutationRateLimited } from './mutation-rate-limit.js'
 import {
   MAX_LIMIT,
   DEFAULT_LIMIT,
@@ -122,9 +123,6 @@ function denormalizeOdooValues(model: string, body: unknown): unknown {
   if (model === 'vx.user') { if (values.is_active !== undefined && values.active === undefined) values.active = values.is_active; delete values.is_active; delete values.isActive }
   return values
 }
-const mutationWindows = new Map<string, { started: number; count: number }>()
-const MUTATION_LIMIT = 120
-
 export async function handleMizanEvaluate(req: IncomingMessage, res: ServerResponse, assessmentId: string, jwtSecret: string, odoo?: { baseUrl: string; database: string; username: string; password: string }): Promise<void> {
   try {
     const auth = await authenticateRequest(req, jwtSecret, { allowAnonymous: false })
@@ -220,6 +218,67 @@ function applyRelations(query: any, rawWith: string | null, fieldDefs: Record<st
   return { ok: true }
 }
 
+async function handleOdooModelRequest(
+  req: IncomingMessage,
+  res: ServerResponse,
+  model: string,
+  odooModel: string,
+  session: { sessionId: string },
+  client: OdooClient,
+  id: number | undefined,
+): Promise<void> {
+  const { searchParams } = parseUrl(req)
+  let domain: unknown[] = []
+  const rawDomain = searchParams.get('domain')
+  if (rawDomain) {
+    try {
+      const parsed = JSON.parse(rawDomain)
+      if (!Array.isArray(parsed)) throw new Error()
+      domain = parsed
+    } catch {
+      return sendJson(res, 400, { error: 'Invalid JSON domain syntax', code: 'INVALID_DOMAIN' }, req)
+    }
+  }
+
+  if (req.method === 'GET') {
+    const rows = id === undefined
+      ? await client.callWithSession<Record<string, unknown>[]>(session.sessionId, {
+        model: odooModel,
+        method: 'search_read',
+        args: [domain],
+        kwargs: odooReadKwargs(odooModel, { limit: Number(searchParams.get('limit') || 100), offset: Number(searchParams.get('offset') || 0) }),
+      })
+      : await client.callWithSession<Record<string, unknown>[]>(session.sessionId, {
+        model: odooModel,
+        method: 'read',
+        args: [[id]],
+        kwargs: odooReadKwargs(odooModel),
+      })
+    const normalized = rows.map((row) => normalizeOdooRecord(model, row))
+    if (id !== undefined && normalized.length === 0) return sendJson(res, 404, { error: 'Record not found', code: 'RECORD_NOT_FOUND' }, req)
+    return sendJson(res, 200, id === undefined
+      ? { data: normalized, pagination: { page: 1, limit: normalized.length, total: normalized.length } }
+      : { data: normalized[0] }, req)
+  }
+
+  const body = denormalizeOdooValues(model, await parseBody(req))
+  if (req.method === 'POST') {
+    const created = await client.callWithSession<number>(session.sessionId, { model: odooModel, method: 'create', args: [body] })
+    const rows = await client.callWithSession<Record<string, unknown>[]>(session.sessionId, { model: odooModel, method: 'read', args: [[created]], kwargs: odooReadKwargs(odooModel) })
+    return sendJson(res, 201, { data: normalizeOdooRecord(model, rows[0] ?? { id: created }) }, req)
+  }
+  if ((req.method === 'PUT' || req.method === 'PATCH') && id !== undefined) {
+    await client.callWithSession(session.sessionId, { model: odooModel, method: 'write', args: [[id], body] })
+    const rows = await client.callWithSession<Record<string, unknown>[]>(session.sessionId, { model: odooModel, method: 'read', args: [[id]], kwargs: odooReadKwargs(odooModel) })
+    return sendJson(res, 200, { data: normalizeOdooRecord(model, rows[0] ?? {}) }, req)
+  }
+  if (req.method === 'DELETE' && id !== undefined) {
+    await client.callWithSession(session.sessionId, { model: odooModel, method: 'unlink', args: [[id]] })
+    return sendJson(res, 200, { success: true }, req)
+  }
+  return sendJson(res, 405, { error: 'Method not allowed', code: 'METHOD_NOT_ALLOWED' }, req)
+}
+
 export async function handleRest(
   req: IncomingMessage,
   res: ServerResponse,
@@ -228,12 +287,8 @@ export async function handleRest(
   odoo?: { baseUrl: string; database: string; username: string; password: string }
 ): Promise<void> {
   try {
-    if (req.method !== 'GET') {
-      const key = `${req.socket?.remoteAddress || 'unknown'}:${req.method}`
-      const now = Date.now()
-      const window = mutationWindows.get(key)
-      if (!window || now - window.started >= 60_000) mutationWindows.set(key, { started: now, count: 1 })
-      else if (++window.count > MUTATION_LIMIT) return sendJson(res, 429, { error: 'Mutation rate limit exceeded', code: 'RATE_LIMITED' }, req)
+    if (isMutationRateLimited(req.socket?.remoteAddress, req.method)) {
+      return sendJson(res, 429, { error: 'Mutation rate limit exceeded', code: 'RATE_LIMITED' }, req)
     }
     const auth = await authenticateRequest(req, jwtSecret, { allowAnonymous: true })
     const uid = auth.uid
@@ -258,23 +313,10 @@ export async function handleRest(
       const session = getOdooSession(odooSessionKey)
       if (!session) return sendJson(res, 401, { error: 'Odoo session expired', code: 'AUTH_SESSION_EXPIRED' }, req)
       const client = new OdooClient(odoo)
-      const { searchParams } = parseUrl(req)
       const idStr = match[2]
       const id = idStr ? Number(idStr) : undefined
       if (idStr && (!Number.isSafeInteger(id) || (id as number) <= 0)) return sendJson(res, 400, { error: 'Record ID must be a positive integer', code: 'INVALID_RECORD_ID' }, req)
-      let domain: unknown[] = []
-      const rawDomain = searchParams.get('domain')
-      if (rawDomain) { try { const parsed = JSON.parse(rawDomain); if (!Array.isArray(parsed)) throw new Error(); domain = parsed } catch { return sendJson(res, 400, { error: 'Invalid JSON domain syntax', code: 'INVALID_DOMAIN' }, req) } }
-      if (req.method === 'GET') {
-        const rows = id === undefined ? await client.callWithSession<Record<string, unknown>[]>(session.sessionId, { model: odooModel, method: 'search_read', args: [domain], kwargs: odooReadKwargs(odooModel, { limit: Number(searchParams.get('limit') || 100), offset: Number(searchParams.get('offset') || 0) }) }) : await client.callWithSession<Record<string, unknown>[]>(session.sessionId, { model: odooModel, method: 'read', args: [[id]], kwargs: odooReadKwargs(odooModel) })
-        const normalized = rows.map((row) => normalizeOdooRecord(model, row))
-        if (id !== undefined && normalized.length === 0) return sendJson(res, 404, { error: 'Record not found', code: 'RECORD_NOT_FOUND' }, req)
-        return sendJson(res, 200, id === undefined ? { data: normalized, pagination: { page: 1, limit: normalized.length, total: normalized.length } } : { data: normalized[0] }, req)
-      }
-      const body = denormalizeOdooValues(model, await parseBody(req))
-      if (req.method === 'POST') { const created = await client.callWithSession<number>(session.sessionId, { model: odooModel, method: 'create', args: [body] }); const rows = await client.callWithSession<Record<string, unknown>[]>(session.sessionId, { model: odooModel, method: 'read', args: [[created]], kwargs: odooReadKwargs(odooModel) }); return sendJson(res, 201, { data: normalizeOdooRecord(model, rows[0] ?? { id: created }) }, req) }
-      if ((req.method === 'PUT' || req.method === 'PATCH') && id !== undefined) { await client.callWithSession(session.sessionId, { model: odooModel, method: 'write', args: [[id], body] }); const rows = await client.callWithSession<Record<string, unknown>[]>(session.sessionId, { model: odooModel, method: 'read', args: [[id]], kwargs: odooReadKwargs(odooModel) }); return sendJson(res, 200, { data: normalizeOdooRecord(model, rows[0] ?? {}) }, req) }
-      if (req.method === 'DELETE' && id !== undefined) { await client.callWithSession(session.sessionId, { model: odooModel, method: 'unlink', args: [[id]] }); return sendJson(res, 200, { success: true }, req) }
+      return handleOdooModelRequest(req, res, model, odooModel, session, client, id)
     }
 
     const ModelClass = getModel(model) as any

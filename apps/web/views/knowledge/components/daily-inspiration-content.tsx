@@ -1,7 +1,7 @@
 import type { DailyData } from "../lib/daily-inspiration-data"
 import { DailyInspirationCard } from "./daily-inspiration-card"
 import { DailyInspirationHeaderBar } from "./daily-inspiration-header-bar"
-import type { DailyInspirationState } from "./daily-inspiration-client"
+import type { DailyInspirationState } from "./daily-inspiration.types"
 
 export function DailyInspirationContent({ state }: { state: DailyInspirationState }) {
   if (!state.mounted || (state.loading && !state.data)) {

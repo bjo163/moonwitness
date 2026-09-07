@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Activity, Moon, Users } from "lucide-react"
-import type { PolyglotService } from "./dashboard-sections"
+import type { PolyglotService } from "./dashboard.types"
 import { DashboardPanel } from "./dashboard-panel"
 
 export function DashboardSidebar({ moon, services }: { moon: Record<string, any>; services: PolyglotService[] }) {

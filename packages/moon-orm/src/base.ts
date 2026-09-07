@@ -7,6 +7,9 @@ import type { Ctx } from './env.js'
 import { createCtx } from './env.js'
 import { checkAccessRights, getRecordRulesDomain, AuthorizationError } from './security.js'
 import type { PermissionOperation } from './security.js'
+import { applyDomain } from './domain-query.js'
+import { applyComputedFields } from './computed-fields.js'
+import { hydrateRelations } from './relation-hydration.js'
 
 export type ModelFields<M extends typeof Vertex> = {
   [K in keyof InstanceType<M> as InstanceType<M>[K] extends FieldDef<any> ? K : never]: InferFieldType<InstanceType<M>[K]>
@@ -995,75 +998,8 @@ export class Vertex {
        env.cache?.set(`${table}_${row.id}`, row)
     }
 
-    // Eager Loading (.with)
-    if (options?.with && options.with.length > 0 && env.getModel) {
-      for (const relation of options.with) {
-        const camelRel = Object.keys(fieldDefs).find(f => f === relation || toSnakeCase(f) === toSnakeCase(relation))
-        if (!camelRel) continue
-        const def = fieldDefs[camelRel]
-        if (!def || !def.comodel) continue
-
-        const Comodel = env.getModel(def.comodel)
-        if (!Comodel) continue
-
-        if (def.type === 'many2one') {
-          const colName = toSnakeCase(camelRel)
-          const idsToFetch = new Set<number>()
-          for (const row of rows) {
-            if (row[colName]) {
-               const val = Array.isArray(row[colName]) ? row[colName][0] : row[colName]
-               if (val) idsToFetch.add(val)
-            }
-          }
-          if (idsToFetch.size > 0) {
-            try {
-              const relatedRows = await Comodel.fetch(Comodel, env, [['id', 'in', Array.from(idsToFetch)]])
-              const relatedMap = new Map(relatedRows.map((r: any) => [r.id, r]))
-              for (const row of rows) {
-                 const val = row[colName]
-                 const id = Array.isArray(val) ? val[0] : val
-                 if (id && relatedMap.has(id)) {
-                   row[`$${camelRel}`] = relatedMap.get(id)
-                 } else {
-                   row[`$${camelRel}`] = null
-                 }
-              }
-            } catch (e: any) {
-              if (e instanceof AuthorizationError) {
-                for (const row of rows) {
-                  row[`$${camelRel}`] = null
-                }
-              } else {
-                throw e
-              }
-            }
-          }
-        }
-        else if (def.type === 'one2many' && def.inverse) {
-          const ids = rows.map((r: any) => r.id)
-          const inverseCol = toSnakeCase(def.inverse)
-          try {
-            const relatedRows = await Comodel.fetch(Comodel, env, [[def.inverse, 'in', ids]])
-            const grouped = new Map<number, any[]>()
-            for (const r of relatedRows as any[]) {
-              const pid = Array.isArray(r[inverseCol]) ? r[inverseCol][0] : (r[def.inverse] || r[inverseCol])
-              if (!grouped.has(pid)) grouped.set(pid, [])
-              grouped.get(pid)!.push(r)
-            }
-            for (const row of rows) {
-               row[`$${camelRel}`] = grouped.get(row.id) || []
-            }
-          } catch (e: any) {
-            if (e instanceof AuthorizationError) {
-              for (const row of rows) {
-                row[`$${camelRel}`] = []
-              }
-            } else {
-              throw e
-            }
-          }
-        }
-      }
+    if (options?.with && env.getModel) {
+      await hydrateRelations(rows, fieldDefs, options.with, env)
     }
 
     // Auto-Hydration for many2one fields
@@ -1118,37 +1054,7 @@ export class Vertex {
       }
     }
 
-    // Auto-Compute fields
-    const computeFields = Object.entries(fieldDefs).filter(([_, v]) => typeof v.compute === 'function')
-    const fieldsToCompute = computeFields.filter(([k]) => {
-      if (!fields || fields.length === 0) return true
-      const snake = k.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`)
-      return fields.includes(k) || fields.includes(snake)
-    })
-
-    if (fieldsToCompute.length > 0) {
-      for (const row of rows) {
-        const proxyRow = new Proxy(row, {
-          get(target, prop) {
-            if (typeof prop === 'string') {
-              if (prop in target) return target[prop]
-              const snake = prop.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`)
-              if (snake in target) return target[snake]
-            }
-            return target[prop]
-          }
-        })
-        
-        for (const [k, v] of fieldsToCompute) {
-          try {
-            row[k.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`)] = v.compute!(proxyRow)
-          } catch(e: any) {
-            console.warn(`Compute field error on ${k}:`, e.message)
-            row[k.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`)] = null
-          }
-        }
-      }
-    }
+    applyComputedFields(rows, fieldDefs, fields)
 
     // Temporal Time-Travel (asOf)
     if (options?.asOf && env.getModel) {
@@ -1455,144 +1361,6 @@ export class Vertex {
       }
       return result
     })
-  }
-}
-
-type ASTNode = 
-  | { type: 'AND', left: ASTNode, right: ASTNode }
-  | { type: 'OR', left: ASTNode, right: ASTNode }
-  | { type: 'NOT', child: ASTNode }
-  | { type: 'LEAF', clause: [string, string, unknown] }
-
-function parseDomainToAST(domain: unknown[]): ASTNode[] {
-  if (!domain || domain.length === 0) return []
-  
-  let i = 0
-  function parseNode(): ASTNode | null {
-    if (i >= domain.length) return null
-    const current = domain[i]
-    i++
-    
-    if (current === '|') {
-      const left = parseNode()
-      const right = parseNode()
-      if (left && right) return { type: 'OR', left, right }
-      return left || right
-    } else if (current === '&') {
-      const left = parseNode()
-      const right = parseNode()
-      if (left && right) return { type: 'AND', left, right }
-      return left || right
-    } else if (current === '!') {
-      const child = parseNode()
-      if (child) return { type: 'NOT', child }
-      return null
-    } else if (Array.isArray(current) && current.length === 3) {
-      return { type: 'LEAF', clause: current as [string, string, unknown] }
-    }
-    return null
-  }
-  
-  const nodes: ASTNode[] = []
-  while (i < domain.length) {
-    const node = parseNode()
-    if (node) nodes.push(node)
-  }
-  return nodes
-}
-
-function applyAST(query: any, nodes: ASTNode[], tableName?: string, parentTables?: Record<string, string[]>) {
-  for (const node of nodes) {
-    applyNode(query, node, tableName, parentTables)
-  }
-}
-
-function applyNode(query: any, node: ASTNode, tableName?: string, parentTables?: Record<string, string[]>) {
-  if (node.type === 'LEAF') {
-    applyClause(query, node.clause, tableName, parentTables)
-  } else if (node.type === 'AND') {
-    query.where((qb: any) => {
-      applyNode(qb, node.left, tableName, parentTables)
-      qb.andWhere((qb2: any) => applyNode(qb2, node.right, tableName, parentTables))
-    })
-  } else if (node.type === 'OR') {
-    query.where((qb: any) => {
-      applyNode(qb, node.left, tableName, parentTables)
-      qb.orWhere((qb2: any) => applyNode(qb2, node.right, tableName, parentTables))
-    })
-  } else if (node.type === 'NOT') {
-    query.whereNot((qb: any) => applyNode(qb, node.child, tableName, parentTables))
-  }
-}
-
-function applyDomain(query: any, domain: unknown[], tableName?: string, parentTables?: Record<string, string[]>) {
-  const ast = parseDomainToAST(domain)
-  applyAST(query, ast, tableName, parentTables)
-}
-
-function applyClause(query: any, clause: [string, string, unknown], tableName?: string, parentTables?: Record<string, string[]>) {
-  const [field, operator, value] = clause
-  let col = toSnakeCase(String(field))
-  if (tableName) {
-     let belongsToParent = false
-     if (parentTables) {
-        for (const [pt, pFields] of Object.entries(parentTables)) {
-           if (pFields.includes(col)) {
-              col = `${pt}.${col}`
-              belongsToParent = true
-              break
-           }
-        }
-     }
-     if (!belongsToParent) {
-        col = `${tableName}.${col}`
-     }
-  }
-  
-  switch (String(operator).toLowerCase()) {
-    case 'ilike':
-      if (isSqlite()) {
-        // SQLite LIKE is already case-insensitive for ASCII
-        query.where(col, 'like', `%${value}%`)
-      } else {
-        query.where(col, 'ilike', `%${value}%`)
-      }
-      break
-    case 'like':
-      query.where(col, 'like', `%${value}%`)
-      break
-    case '=':
-    case '==':
-      query.where(col, value)
-      break
-    case '!=':
-    case '<>':
-      query.whereNot(col, value)
-      break
-    case '>':
-      query.where(col, '>', value)
-      break
-    case '<':
-      query.where(col, '<', value)
-      break
-    case '>=':
-      query.where(col, '>=', value)
-      break
-    case '<=':
-      query.where(col, '<=', value)
-      break
-    case 'in':
-      query.whereIn(col, value as any[])
-      break
-    case 'not in':
-      query.whereNotIn(col, value as any[])
-      break
-    case 'child_of':
-      query.where('parent_path', 'like', `%/${value}/%`)
-      break
-    case 'parent_of':
-      query.whereRaw(`? like parent_path || '%'`, [value])
-      break
   }
 }
 

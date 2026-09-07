@@ -4,33 +4,8 @@ import React from "react"
 import { Card, CardContent } from "./card"
 import { useDataTableController } from "./data-table-controller"
 import { DataTableBody, DataTableFormDialog, DataTableHeader } from "./data-table-presentation"
-
-export type CrudColumn = {
-  name: string
-  label: string
-  type?: "text" | "email" | "password" | "number" | "boolean" | "select"
-  required?: boolean
-  hideInTable?: boolean
-  hideInForm?: boolean
-  render?: (val: any, row: any) => React.ReactNode
-}
-
-export type DataTableProps<T = any> = {
-  modelName: string
-  title: string
-  description: string
-  columns: CrudColumn[]
-  icon?: React.ReactNode
-
-  topWidgets?: React.ReactNode
-  sideWidgets?: React.ReactNode
-  tabs?: { id: string; label: string }[]
-  activeTab?: string
-  onTabChange?: (tabId: string) => void
-  filters?: Record<string, any>
-  filterWidgets?: React.ReactNode
-  customActions?: React.ReactNode
-}
+import type { DataTableProps } from "./data-table.types"
+export type { CrudColumn, DataTableProps } from "./data-table.types"
 
 export function DataTable<T = any>({
   modelName,

@@ -6,17 +6,9 @@ import {
   ReaderTabs,
   ReaderToolbar,
   ReaderVerses,
-  type ReaderBook,
 } from "./reader-verses-presentation"
-
-export interface VerseItem {
-  id: string | number
-  verse_number: number | string
-  text_transliteration?: string
-  text_translated?: string
-  text_original?: string
-  text_tajweed?: string
-}
+import type { ReaderBook, VerseItem } from "./reader.types"
+export type { ReaderBook, VerseItem } from "./reader.types"
 
 export interface ReaderVersesGridProps {
   book: ReaderBook
