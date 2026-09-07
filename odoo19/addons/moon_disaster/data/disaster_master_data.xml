@@ -1,0 +1,58 @@
+<odoo>
+    <!-- Initial seed data for Master Hazard Types (Dynamic, editable by user) -->
+    <record id="hazard_karhutla" model="moon.disaster.type">
+        <field name="name">Kebakaran Hutan &amp; Lahan (Karhutla)</field>
+        <field name="code">WILDFIRE</field>
+        <field name="scientific_domain">Lingkungan &amp; Antropogenik</field>
+        <field name="official_authority">KLHK / BNPB / BMKG</field>
+        <field name="scientific_mechanism">Kebakaran vegetasi akibat kekeringan musim kemarau, kelembaban udara rendah, atau pembukaan lahan oleh aktivitas manusia.</field>
+        <field name="common_myths">Sering dikaitkan dengan kemarahan penunggu hutan adat atau pertanda buruk gaib.</field>
+    </record>
+
+    <record id="hazard_gempa_tektonik" model="moon.disaster.type">
+        <field name="name">Gempa Bumi Tektonik</field>
+        <field name="code">EQ-TECTONIC</field>
+        <field name="scientific_domain">Seismologi &amp; Geofisika</field>
+        <field name="official_authority">BMKG</field>
+        <field name="scientific_mechanism">Pelepasan energi elastis yang terakumulasi akibat deformasi dan pergeseran lempeng tektonik di sepanjang zona sesar/patahan aktif.</field>
+        <field name="common_myths">Mitos bumi diguncang oleh lembu raksasa (mitos kuno), atau kutukan karena pelanggaran pantangan leluhur.</field>
+    </record>
+
+    <record id="hazard_erupsi_vulkanik" model="moon.disaster.type">
+        <field name="name">Erupsi Gunung Api</field>
+        <field name="code">VOLC-ERUPT</field>
+        <field name="scientific_domain">Vulkanologi</field>
+        <field name="official_authority">PVMBG / Badan Geologi</field>
+        <field name="scientific_mechanism">Kenaikan magma dari dapur magma ke permukaan bumi akibat akumulasi tekanan gas terlarut dan pergerakan densitas batuan.</field>
+        <field name="common_myths">Kemarahan makhluk gaib penjaga kawah gunung karena kurang sesaji atau masuknya orang luar ke area sakral.</field>
+    </record>
+
+    <record id="hazard_tsunami" model="moon.disaster.type">
+        <field name="name">Tsunami &amp; Gelombang Pasang</field>
+        <field name="code">TSUNAMI</field>
+        <field name="scientific_domain">Oseanografi &amp; Geofisika</field>
+        <field name="official_authority">BMKG / BNPB</field>
+        <field name="scientific_mechanism">Perpindahan volume air laut skala besar yang dipicu oleh gempa bumi dangkal di dasar laut (megathrust), longsor bawah laut, atau letusan gunung api laut.</field>
+        <field name="common_myths">Dihubungkan dengan kemurkaan penguasa laut selatan (Nyi Roro Kidul) atau kutukan pantai.</field>
+    </record>
+
+    <!-- Seed Disaster Event from August 2026 Baseline -->
+    <record id="dis_2026_08_babel_001" model="moon.disaster">
+        <field name="dis_code">DIS-2026-08-BABEL-001</field>
+        <field name="name">Karhutla Desa Air Kelik, Belitung Timur</field>
+        <field name="disaster_type_id" ref="hazard_karhutla"/>
+        <field name="date_start">2026-08-02 12:20:00</field>
+        <field name="date_end">2026-08-02 23:59:00</field>
+        <field name="location">Belitung Timur</field>
+        <field name="admin_area">Desa Air Kelik, Kecamatan Damar</field>
+        <field name="province">Bangka Belitung Islands</field>
+        <field name="island">Belitung</field>
+        <field name="latitude">-2.821000</field>
+        <field name="longitude">108.126000</field>
+        <field name="severity">Lokal</field>
+        <field name="evidence_score">98</field>
+        <field name="natural_or_human_cause">Kebakaran vegetasi pada periode musim kemarau; tidak ada mekanisme ritual yang dilaporkan oleh sumber penanganan bencana.</field>
+        <field name="source_publisher">BNPB</field>
+        <field name="source_url">https://www.bnpb.go.id/berita/perkembangan-situasi-dan-penanganan-bencana-di-tanah-air-3-agustus-2026</field>
+    </record>
+</odoo>

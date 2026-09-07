@@ -1,0 +1,51 @@
+<odoo>
+    <!-- Top-level MoonMyth Menu -->
+    <menuitem id="menu_moon_myth_root" 
+              name="Moon Myth" 
+              sequence="55" 
+              groups="base.group_user"
+              web_icon="moon_myth,static/description/icon.png"/>
+
+    <!-- Submenus -->
+    <menuitem id="menu_moon_myth_database" 
+              name="Mythos Database" 
+              parent="menu_moon_myth_root" 
+              action="action_moon_myth" 
+              sequence="10"/>
+
+    <menuitem id="menu_moon_myth_observations" 
+              name="Observations Ledger" 
+              parent="menu_moon_myth_root" 
+              action="action_moon_myth_observation" 
+              sequence="20"/>
+
+    <menuitem id="menu_moon_myth_candidates" 
+              name="Scout Pipeline (AI)" 
+              parent="menu_moon_myth_root" 
+              action="action_moon_myth_candidate" 
+              sequence="25"/>
+
+    <menuitem id="menu_moon_myth_disasters" 
+              name="Disasters Ledger" 
+              parent="menu_moon_myth_root" 
+              action="action_moon_myth_disaster" 
+              sequence="30"/>
+
+    <menuitem id="menu_moon_myth_correlations" 
+              name="Correlation Engine" 
+              parent="menu_moon_myth_root" 
+              action="action_moon_myth_correlation" 
+              sequence="35"/>
+
+    <menuitem id="menu_moon_myth_issues" 
+              name="Tauhid Register" 
+              parent="menu_moon_myth_root" 
+              action="action_moon_myth_issue" 
+              sequence="40"/>
+
+    <menuitem id="menu_moon_myth_evidence" 
+              name="Evidence Ledger" 
+              parent="menu_moon_myth_root" 
+              action="action_moon_myth_evidence" 
+              sequence="50"/>
+</odoo>

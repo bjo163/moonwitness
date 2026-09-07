@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_moon_myth_user,moon.myth.user,model_moon_myth,base.group_user,1,1,1,1
+access_moon_myth_observation_user,moon.myth.observation.user,model_moon_myth_observation,base.group_user,1,1,1,1
+access_moon_myth_issue_user,moon.myth.issue.user,model_moon_myth_issue,base.group_user,1,1,1,1
+access_moon_myth_evidence_user,moon.myth.evidence.user,model_moon_myth_evidence,base.group_user,1,1,1,1
+access_moon_myth_candidate_user,moon.myth.candidate.user,model_moon_myth_candidate,base.group_user,1,1,1,1
+access_moon_myth_disaster_user,moon.myth.disaster.user,model_moon_myth_disaster,base.group_user,1,1,1,1
+access_moon_myth_correlation_user,moon.myth.correlation.user,model_moon_myth_correlation,base.group_user,1,1,1,1

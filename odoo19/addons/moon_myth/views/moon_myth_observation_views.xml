@@ -1,0 +1,80 @@
+<odoo>
+    <record id="view_moon_myth_observation_tree" model="ir.ui.view">
+        <field name="name">moon.myth.observation.tree</field>
+        <field name="model">moon.myth.observation</field>
+        <field name="arch" type="xml">
+            <list string="Field Observations">
+                <field name="obs_code"/>
+                <field name="name"/>
+                <field name="myth_id"/>
+                <field name="month"/>
+                <field name="date_display"/>
+                <field name="location"/>
+                <field name="province"/>
+                <field name="evidence_score"/>
+                <field name="tauhid_gap"/>
+                <field name="causality"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_moon_myth_observation_form" model="ir.ui.view">
+        <field name="name">moon.myth.observation.form</field>
+        <field name="model">moon.myth.observation</field>
+        <field name="arch" type="xml">
+            <form string="Field Observation">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Observation Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Nyadran / Karo di Tengger"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Core Reference">
+                            <field name="obs_code" placeholder="e.g. OBS-2026-08-001"/>
+                            <field name="myth_id"/>
+                            <field name="month"/>
+                            <field name="date_display"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                        <group string="Location &amp; Community">
+                            <field name="location"/>
+                            <field name="actor"/>
+                            <field name="province"/>
+                            <field name="island"/>
+                            <field name="latitude"/>
+                            <field name="longitude"/>
+                            <field name="precision"/>
+                        </group>
+                    </group>
+                    <group string="Observatory Assessment Metrics">
+                        <group>
+                            <field name="evidence_score"/>
+                            <field name="tauhid_gap"/>
+                        </group>
+                        <group>
+                            <field name="causality"/>
+                            <field name="source_url" widget="url"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Observation Summary">
+                            <field name="summary" placeholder="Detailed summary of the ritual observation..."/>
+                        </page>
+                        <page string="Research &amp; Causality Notes">
+                            <field name="note" placeholder="Notes on temporal/geographic proximity vs real scientific causality..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_moon_myth_observation" model="ir.actions.act_window">
+        <field name="name">Observations Ledger</field>
+        <field name="res_model">moon.myth.observation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,152 @@
+<odoo>
+    <!-- Disaster Views -->
+    <record id="view_moon_myth_disaster_tree" model="ir.ui.view">
+        <field name="name">moon.myth.disaster.tree</field>
+        <field name="model">moon.myth.disaster</field>
+        <field name="arch" type="xml">
+            <list string="Disasters Ledger">
+                <field name="dis_code"/>
+                <field name="name"/>
+                <field name="disaster_type"/>
+                <field name="severity"/>
+                <field name="date_start"/>
+                <field name="location"/>
+                <field name="province"/>
+                <field name="source_publisher"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_moon_myth_disaster_form" model="ir.ui.view">
+        <field name="name">moon.myth.disaster.form</field>
+        <field name="model">moon.myth.disaster</field>
+        <field name="arch" type="xml">
+            <form string="Disaster Event">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Event Name"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Basic Information">
+                            <field name="dis_code"/>
+                            <field name="disaster_type"/>
+                            <field name="severity"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                        <group string="Geography &amp; Coordinates">
+                            <field name="location"/>
+                            <field name="admin_area"/>
+                            <field name="province"/>
+                            <field name="island"/>
+                            <field name="latitude"/>
+                            <field name="longitude"/>
+                        </group>
+                    </group>
+                    <group string="Scientific Cause &amp; Source">
+                        <field name="natural_or_human_cause"/>
+                        <field name="source_publisher"/>
+                        <field name="source_url" widget="url"/>
+                    </group>
+                    <notebook>
+                        <page string="Correlated Ritual Observations">
+                            <field name="correlation_ids">
+                                <list>
+                                    <field name="rel_code"/>
+                                    <field name="observation_id"/>
+                                    <field name="temporal_relation"/>
+                                    <field name="geographic_relation"/>
+                                    <field name="distance_km"/>
+                                    <field name="proximity_score"/>
+                                    <field name="status"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Correlation Views -->
+    <record id="view_moon_myth_correlation_tree" model="ir.ui.view">
+        <field name="name">moon.myth.correlation.tree</field>
+        <field name="model">moon.myth.correlation</field>
+        <field name="arch" type="xml">
+            <list string="Correlation Reviews">
+                <field name="rel_code"/>
+                <field name="name"/>
+                <field name="temporal_relation"/>
+                <field name="geographic_relation"/>
+                <field name="distance_km"/>
+                <field name="proximity_score" widget="progressbar"/>
+                <field name="repository_causality_score"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_moon_myth_correlation_form" model="ir.ui.view">
+        <field name="name">moon.myth.correlation.form</field>
+        <field name="model">moon.myth.correlation</field>
+        <field name="arch" type="xml">
+            <form string="Correlation Review">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="rel_code" string="Relation ID"/>
+                        <h1>
+                            <field name="rel_code"/>
+                        </h1>
+                        <h3>
+                            <field name="name" readonly="1"/>
+                        </h3>
+                    </div>
+                    <group>
+                        <group string="Entities">
+                            <field name="observation_id"/>
+                            <field name="disaster_id"/>
+                        </group>
+                        <group string="Space-Time Measurements">
+                            <field name="temporal_relation"/>
+                            <field name="delta_hours"/>
+                            <field name="geographic_relation"/>
+                            <field name="distance_km"/>
+                        </group>
+                    </group>
+                    <group string="Observatory Scientific Scoring">
+                        <group>
+                            <field name="proximity_score"/>
+                            <field name="repository_causality_score"/>
+                        </group>
+                        <group>
+                            <field name="status"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Competing Scientific Explanations">
+                            <field name="competing_explanations" placeholder="e.g. Dry season risk, meteorological records, seismic plate movement..."/>
+                        </page>
+                        <page string="Finding &amp; Anti-Superstition Proof">
+                            <field name="finding" placeholder="e.g. Reviewed evidence shows no ritual-to-disaster mechanism..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_moon_myth_disaster" model="ir.actions.act_window">
+        <field name="name">Disasters Ledger</field>
+        <field name="res_model">moon.myth.disaster</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_moon_myth_correlation" model="ir.actions.act_window">
+        <field name="name">Correlation &amp; Causality Engine</field>
+        <field name="res_model">moon.myth.correlation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

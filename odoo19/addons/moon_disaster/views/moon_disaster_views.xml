@@ -1,0 +1,74 @@
+<odoo>
+    <record id="view_moon_disaster_tree" model="ir.ui.view">
+        <field name="name">moon.disaster.tree</field>
+        <field name="model">moon.disaster</field>
+        <field name="arch" type="xml">
+            <list string="Disaster Events">
+                <field name="dis_code"/>
+                <field name="name"/>
+                <field name="disaster_type_id"/>
+                <field name="date_start"/>
+                <field name="location"/>
+                <field name="province"/>
+                <field name="severity"/>
+                <field name="evidence_score"/>
+                <field name="source_publisher"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_moon_disaster_form" model="ir.ui.view">
+        <field name="name">moon.disaster.form</field>
+        <field name="model">moon.disaster</field>
+        <field name="arch" type="xml">
+            <form string="Disaster Event">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Event Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Karhutla Desa Air Kelik"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Classification &amp; Date">
+                            <field name="dis_code" placeholder="e.g. DIS-2026-08-BABEL-001"/>
+                            <field name="disaster_type_id"/>
+                            <field name="severity"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                        <group string="Geography &amp; Coordinates">
+                            <field name="location"/>
+                            <field name="admin_area"/>
+                            <field name="province"/>
+                            <field name="island"/>
+                            <field name="latitude"/>
+                            <field name="longitude"/>
+                        </group>
+                    </group>
+                    <group string="Scientific Documentation">
+                        <group>
+                            <field name="magnitude_display"/>
+                            <field name="evidence_score"/>
+                        </group>
+                        <group>
+                            <field name="source_publisher"/>
+                            <field name="source_url" widget="url"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Scientific &amp; Objective Cause">
+                            <field name="natural_or_human_cause" placeholder="Official cause according to BMKG/BNPB..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_moon_disaster" model="ir.actions.act_window">
+        <field name="name">Disaster Events</field>
+        <field name="res_model">moon.disaster</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,21 @@
+<odoo>
+    <!-- Scheduled Cron Job: Autonomous Mythos Scout & AI Extractor -->
+    <record id="ir_cron_autonomous_myth_scout" model="ir.cron">
+        <field name="name">MoonMyth: Autonomous Scout &amp; AI Analysis</field>
+        <field name="model_id" ref="model_moon_myth_candidate"/>
+        <field name="state">code</field>
+        <field name="code">
+# 1. Scout latest ritual / mythos news
+candidates = model.autonomous_scout_news(limit=10)
+# 2. Automatically run AI analysis on newly discovered candidates
+for cand in candidates:
+    try:
+        cand.action_analyze_with_ai()
+    except Exception:
+        pass
+        </field>
+        <field name="interval_number">6</field>
+        <field name="interval_type">hours</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

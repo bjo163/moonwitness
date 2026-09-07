@@ -1,0 +1,9 @@
+<odoo>
+  <record id="group_mizan_assessor" model="res.groups"><field name="name">Mizan Assessor</field></record>
+  <record id="group_mizan_reviewer" model="res.groups"><field name="name">Mizan Reviewer</field></record>
+  <record id="group_mizan_manager" model="res.groups"><field name="name">Mizan Manager</field><field name="implied_ids" eval="[(4, ref('group_mizan_assessor')), (4, ref('group_mizan_reviewer'))]"/></record>
+  <record id="group_mizan_integration" model="res.groups"><field name="name">Mizan Integration</field></record>
+  <record id="rule_mizan_company" model="ir.rule"><field name="name">Mizan company isolation</field><field name="model_id" ref="model_moon_mizan_assessment"/><field name="domain_force">['|', ('company_id','=',False), ('company_id','in', company_ids)]</field></record>
+  <record id="rule_mizan_case_company" model="ir.rule"><field name="name">Mizan case company isolation</field><field name="model_id" ref="model_moon_mizan_case"/><field name="domain_force">[('company_id','in', company_ids)]</field></record>
+  <record id="rule_mizan_regulation_company" model="ir.rule"><field name="name">Mizan regulation company isolation</field><field name="model_id" ref="model_moon_mizan_regulation"/><field name="domain_force">[('company_id','in', company_ids)]</field></record>
+</odoo>

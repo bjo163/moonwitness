@@ -1,0 +1,8 @@
+<odoo>
+  <record id="rule_moon_witness_source_company" model="ir.rule">
+    <field name="name">Witness sources company scope</field>
+    <field name="model_id" ref="model_moon_witness_source"/>
+    <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+  </record>
+</odoo>

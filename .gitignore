@@ -77,3 +77,12 @@ apps/web/public/swe-worker-*.js
 *.db-shm
 data/*.db
 data/*.db-*
+
+# Local Odoo runtime/upstream sources and generated recovery artifacts
+odoo19/enterprise-addons/
+odoo19/postgresql/
+odoo19/screenshots/
+.pnpm-store-recovery/
+.audit-output.txt
+.audit-worktree-baseline.txt
+JUST-PROMT-DONT-READ/

@@ -1,0 +1,70 @@
+<odoo>
+    <record id="view_moon_disaster_type_tree" model="ir.ui.view">
+        <field name="name">moon.disaster.type.tree</field>
+        <field name="model">moon.disaster.type</field>
+        <field name="arch" type="xml">
+            <list string="Master Hazard Classifications">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="scientific_domain"/>
+                <field name="official_authority"/>
+                <field name="event_count"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_moon_disaster_type_form" model="ir.ui.view">
+        <field name="name">moon.disaster.type.form</field>
+        <field name="model">moon.disaster.type</field>
+        <field name="arch" type="xml">
+            <form string="Master Hazard Type">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Hazard / Disaster Classification"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Gempa Bumi Tektonik"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code" placeholder="e.g. EQ-TECTONIC"/>
+                            <field name="scientific_domain"/>
+                            <field name="official_authority"/>
+                        </group>
+                        <group>
+                            <field name="event_count"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Scientific Mechanism">
+                            <field name="scientific_mechanism" placeholder="Detailed physical / geological mechanism..."/>
+                        </page>
+                        <page string="Cultural &amp; Superstitious Links">
+                            <field name="common_myths" placeholder="Folkloric beliefs or myths locally linked to this disaster..."/>
+                        </page>
+                        <page string="Historical Recorded Events">
+                            <field name="event_ids">
+                                <list>
+                                    <field name="dis_code"/>
+                                    <field name="name"/>
+                                    <field name="date_start"/>
+                                    <field name="location"/>
+                                    <field name="province"/>
+                                    <field name="severity"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_moon_disaster_type" model="ir.actions.act_window">
+        <field name="name">Master Hazard Types</field>
+        <field name="res_model">moon.disaster.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
