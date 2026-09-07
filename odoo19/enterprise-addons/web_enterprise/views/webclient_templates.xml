@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="webclient_login" inherit_id="web.login_layout">
+        <xpath expr="//t[@t-call='web.frontend_layout']/t[last()]" position="after">
+            <t t-set="body_classname" t-value="'o_home_menu_background'"/>
+            <t t-set="login_card_classes" t-value="'rounded-3 shadow-lg border bg-card'"/>
+        </xpath>
+        <xpath expr="//a[contains(@href, 'odoo.com')]" position="replace">
+            <span class="text-muted small">MoonWitness Operating System</span>
+        </xpath>
+    </template>
+
+    <template id="webclient_bootstrap" inherit_id="web.webclient_bootstrap">
+        <xpath expr="//meta[@name='theme-color']" position="replace">
+            <meta name="theme-color" t-att-content="'#090d16' if color_scheme == 'dark' else '#0284c7'"/>
+        </xpath>
+        <xpath expr="//t[@t-set='body_classname']" position="replace">
+            <t t-set="body_classname" t-value="'o_web_client o_dark_theme' if color_scheme == 'dark' else 'o_web_client'"/>
+            <t t-set="html_data" t-value="{'data-color-scheme': color_scheme, 'data-bs-theme': color_scheme}"/>
+        </xpath>
+    </template>
+
+    <template id="webclient_frontend_layout" inherit_id="web.frontend_layout">
+        <xpath expr="//title" position="replace">
+            <title t-esc="title or 'MoonWitness'"/>
+        </xpath>
+    </template>
+</odoo>

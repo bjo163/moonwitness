@@ -1,0 +1,11 @@
+// = Home Menu Background
+// ============================================================================
+// No CSS hacks, variables overrides only
+
+.o_home_menu_background {
+    --homeMenu-bg-color: #09090b;
+    --homeMenu-bg-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255, 255, 255, 0.025), transparent 70%), #09090b;
+    --homeMenuCaption-color: #f4f4f5;
+    --homeMenuCaption-shadow: none;
+}
+

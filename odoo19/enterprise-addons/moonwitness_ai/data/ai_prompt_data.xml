@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- MoonWitness-specific quick prompt suggestions -->
+
+        <!-- Project Management prompts -->
+        <record id="ai_prompt_overdue_tasks" model="ai.prompt.button">
+            <field name="name">Show me overdue project tasks</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="ai_prompt_project_progress" model="ai.prompt.button">
+            <field name="name">What's the progress on my active projects?</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="ai_prompt_my_tasks_today" model="ai.prompt.button">
+            <field name="name">What tasks are assigned to me today?</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <!-- Helpdesk prompts -->
+        <record id="ai_prompt_open_tickets" model="ai.prompt.button">
+            <field name="name">How many open helpdesk tickets are there?</field>
+            <field name="sequence">40</field>
+        </record>
+
+        <record id="ai_prompt_ticket_priority" model="ai.prompt.button">
+            <field name="name">Show high priority tickets</field>
+            <field name="sequence">50</field>
+        </record>
+
+        <!-- CRM prompts -->
+        <record id="ai_prompt_pipeline_summary" model="ai.prompt.button">
+            <field name="name">Summarize my sales pipeline</field>
+            <field name="sequence">60</field>
+        </record>
+
+        <record id="ai_prompt_won_deals_month" model="ai.prompt.button">
+            <field name="name">How many deals were won this month?</field>
+            <field name="sequence">70</field>
+        </record>
+
+        <!-- Accounting prompts -->
+        <record id="ai_prompt_unpaid_invoices" model="ai.prompt.button">
+            <field name="name">List overdue unpaid invoices</field>
+            <field name="sequence">80</field>
+        </record>
+
+        <record id="ai_prompt_revenue_this_month" model="ai.prompt.button">
+            <field name="name">What's our total revenue this month?</field>
+            <field name="sequence">90</field>
+        </record>
+
+        <!-- Register prompts with the MoonWitness agent's systray composer -->
+        <!-- Override the default Ask AI systray composer to use our custom agent and prompts -->
+        <record id="ai.ai_systray_action" model="ai.composer">
+            <field name="ai_agent" ref="moonwitness_ai_agent"/>
+            <field name="available_prompts" eval="[
+                (4, ref('ai_prompt_my_tasks_today')),
+                (4, ref('ai_prompt_overdue_tasks')),
+                (4, ref('ai_prompt_project_progress')),
+                (4, ref('ai_prompt_open_tickets')),
+                (4, ref('ai_prompt_ticket_priority')),
+                (4, ref('ai_prompt_pipeline_summary')),
+                (4, ref('ai_prompt_won_deals_month')),
+                (4, ref('ai_prompt_unpaid_invoices')),
+                (4, ref('ai_prompt_revenue_this_month')),
+                (4, ref('ai.ai_prompt_agenda_today')),
+                (4, ref('ai.ai_prompt_top_sales_reps')),
+                (4, ref('ai.ai_prompt_cash_flow_status')),
+                (4, ref('ai.ai_prompt_top_ticket_cause'))
+            ]"/>
+        </record>
+    </data>
+</odoo>

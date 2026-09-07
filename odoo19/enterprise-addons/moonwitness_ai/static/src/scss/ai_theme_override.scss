@@ -1,0 +1,14 @@
+// ◈ MOONWITNESS AI — Minimal overrides
+// Only layout/density adjustments. Colors inherited from Odoo's variable system.
+
+// Home menu app grid — dense, no card wrappers
+.o_home_menu .o_app {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+
+    &:hover {
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+}

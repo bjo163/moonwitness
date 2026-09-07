@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="whatsapp_qr_wizard_form" model="ir.ui.view">
+    <field name="name">whatsapp.qr.wizard.form</field>
+    <field name="model">whatsapp.qr.wizard</field>
+    <field name="arch" type="xml">
+      <form string="QR Preview" class="o_form_binary_field">
+        <sheet>
+          <div class="o_form_sheet_bg">
+            <group>
+              <field name="qr_html" nolabel="1"/>
+            </group>
+          </div>
+        </sheet>
+        <footer>
+          <button string="Close" class="btn-primary" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+</odoo>

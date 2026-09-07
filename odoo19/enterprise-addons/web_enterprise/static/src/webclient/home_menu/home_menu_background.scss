@@ -1,0 +1,9 @@
+// Shared with web client and login screen
+.o_home_menu_background, .o_web_client.o_home_menu_background {
+    background: {
+        size: cover;
+        attachment: fixed;
+        color: var(--homeMenu-bg-color, #f8fafc);
+        image: var(--homeMenu-bg-image, radial-gradient(ellipse 80% 50% at 50% -10%, rgba(2, 132, 199, 0.06), transparent 70%), linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%));  
+    }
+}
