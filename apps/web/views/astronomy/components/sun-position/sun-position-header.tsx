@@ -2,6 +2,7 @@
 
 import React from "react"
 import { Sun, Target, ArrowRight } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 export function SunPositionHeader() {
   return (
@@ -108,10 +109,10 @@ export function SunPositionHeader() {
             </div>
           ))}
 
-          <button className="group mt-4 flex w-full items-center justify-center gap-2 rounded border border-border bg-transparent px-4 py-3 text-[8px] tracking-widest text-primary uppercase transition-colors hover:bg-primary/10">
+          <Button type="button" variant="ghost" className="group mt-4 flex w-full items-center justify-center gap-2 rounded border border-border bg-transparent px-4 py-3 text-[8px] tracking-widest text-primary uppercase transition-colors hover:bg-primary/10">
             VIEW FULL BRIEFING{" "}
             <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
-          </button>
+          </Button>
         </div>
 
         {/* Sub-col 2: Arabic Verse */}

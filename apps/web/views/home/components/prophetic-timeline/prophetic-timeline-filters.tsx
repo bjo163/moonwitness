@@ -10,6 +10,7 @@ import {
   Clock,
   Filter,
 } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 export function PropheticTimelineFilters() {
   return (
@@ -119,9 +120,9 @@ export function PropheticTimelineFilters() {
         </div>
       </div>
 
-      <button className="mt-4 flex w-full items-center justify-center gap-2 rounded border border-primary/30 bg-primary/10 py-2 text-[9px] font-bold tracking-widest text-primary uppercase transition-colors hover:bg-primary/20">
+      <Button type="button" variant="ghost" className="mt-4 flex w-full items-center justify-center gap-2 rounded border border-primary/30 bg-primary/10 py-2 text-[9px] font-bold tracking-widest text-primary uppercase transition-colors hover:bg-primary/20">
         APPLY FILTERS <Filter className="h-3 w-3" />
-      </button>
+      </Button>
     </div>
   )
 }

@@ -21,7 +21,8 @@ export const server = new NativeServer({
   jwtSecret: config.jwtSecret,
   port: config.port,
   email: config.email,
-  addons: allAddonModels,
+  odoo: config.odoo,
+  addons: config.odoo ? [] : allAddonModels,
   cors: config.cors,
 })
 

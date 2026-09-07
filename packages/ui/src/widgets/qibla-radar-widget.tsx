@@ -172,163 +172,86 @@ export function QiblaRadarWidget() {
 
   return (
     <div className="rounded-xl border border-border/40 bg-card bg-background/90 space-y-4 border border-primary/40 p-4 font-mono shadow-sm sm:p-5">
-      <div className="flex items-center justify-between border-b border-primary/20 pb-2.5">
-        <div className="flex items-center gap-2">
-          {isSyncing ? (
-            <Loader2 className="h-4 w-4 animate-spin text-primary" />
-          ) : (
-            <Compass
-              className="h-4 w-4 animate-spin text-primary"
-              style={{ animationDuration: "12s" }}
-            />
-          )}
-          <span className="font-sans text-xs font-black tracking-widest text-primary uppercase">
-            // QIBLA VECTOR & TEMPORAL COUNTDOWN
-          </span>
-        </div>
-        <span
-          className={`rounded-md border px-2 py-0.5 font-mono text-[8px] font-bold ${
-            isSyncing
-              ? "border-amber-500/40 bg-amber-500/10 text-amber-500 animate-pulse"
-              : errorMsg
-                ? "border-rose-500/40 bg-rose-500/10 text-rose-500"
-                : "border-emerald-500/40 bg-emerald-500/10 text-emerald-500"
-          }`}
-        >
-          {isSyncing
-            ? "SCANNING..."
-            : errorMsg
-              ? "SYNC ERROR"
-              : "LIVE TELEMETRY"}
-        </span>
-      </div>
+      <QiblaRadarHeader syncing={isSyncing} hasError={Boolean(errorMsg)} />
 
       <div className="grid grid-cols-1 items-center gap-4 md:grid-cols-2">
-        {/* Left: Radar Visual Scanner */}
-        <div className="bg-panel rounded-md flex items-center gap-4 border border-primary/20 p-3">
-          {/* Animated SVG Radar Scope */}
-          <div className="relative flex h-20 w-20 shrink-0 items-center justify-center">
-            <svg
-              className="h-full w-full -rotate-90 transform"
-              viewBox="0 0 100 100"
-            >
-              {/* Outer Radar Ring */}
-              <circle
-                cx="50"
-                cy="50"
-                r="46"
-                fill="none"
-                stroke="rgba(0, 240, 255, 0.3)"
-                strokeWidth="1.5"
-                strokeDasharray="3 3"
-              />
-              <circle
-                cx="50"
-                cy="50"
-                r="30"
-                fill="none"
-                stroke="rgba(0, 240, 255, 0.2)"
-                strokeWidth="1"
-              />
-              <circle
-                cx="50"
-                cy="50"
-                r="14"
-                fill="none"
-                stroke="rgba(0, 240, 255, 0.15)"
-                strokeWidth="1"
-              />
+        <QiblaRadarVisual
+          degrees={radarDegrees}
+          locationName={locationName}
+          syncing={isSyncing}
+        />
 
-              {/* Crosshairs */}
-              <line
-                x1="50"
-                y1="4"
-                x2="50"
-                y2="96"
-                stroke="rgba(0, 240, 255, 0.25)"
-                strokeWidth="1"
-              />
-              <line
-                x1="4"
-                y1="50"
-                x2="96"
-                y2="50"
-                stroke="rgba(0, 240, 255, 0.25)"
-                strokeWidth="1"
-              />
+        <QiblaNextPrayerCard nextPrayerName={nextPrayerName} countdown={countdownText} syncing={isSyncing} hasError={Boolean(errorMsg)} />
+      </div>
+    </div>
+  )
+}
 
-              {/* Qibla Direction Vector Arrow */}
-              <g
-                transform={`rotate(${radarDegrees}, 50, 50)`}
-                className="transition-transform duration-1000 ease-in-out"
-              >
-                <line
-                  x1="50"
-                  y1="50"
-                  x2="50"
-                  y2="10"
-                  stroke="#00FF66"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                />
-                <polygon points="50,6 46,14 54,14" fill="#00FF66" />
-              </g>
-            </svg>
+function QiblaNextPrayerCard({
+  nextPrayerName,
+  countdown,
+  syncing,
+  hasError,
+}: {
+  nextPrayerName: string
+  countdown: string
+  syncing: boolean
+  hasError: boolean
+}) {
+  return <div className="space-y-1.5 rounded-md border border-primary/20 bg-panel p-3">
+    <div className="flex items-center justify-between"><span className="flex items-center gap-1 text-[9px] font-bold uppercase text-primary"><Clock className="h-3 w-3 text-accent" /> NEXT CYCLE: <span className="text-accent">{nextPrayerName}</span></span><span className="rounded-md border border-amber-500/40 bg-amber-500/10 px-1.5 py-0 font-mono text-[8px] text-amber-500">COUNTDOWN</span></div>
+    <div className="rounded border border-accent/30 bg-background py-1 text-center font-sans text-xl font-black tracking-widest text-accent sm:text-2xl" style={{ textShadow: "0 0 10px rgba(255,230,0,0.3)" }}>{syncing ? "--:--:--" : countdown}</div>
+    <div className="flex items-center justify-between text-[8px] text-primary"><span>SYSTEM CHRONO ACCURACY</span><span className={`font-bold ${syncing ? "text-accent" : hasError ? "text-danger" : "text-success"}`}>{syncing ? "SYNCING..." : hasError ? "LOCAL OFFLINE MODE" : "ATOMIC SYNC 100%"}</span></div>
+  </div>
+}
 
-            {/* Pulsing Kaaba Center Point */}
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <span className="bg-success h-2 w-2 animate-ping rounded-full opacity-75" />
-            </div>
-          </div>
+function QiblaRadarHeader({
+  syncing,
+  hasError,
+}: {
+  syncing: boolean
+  hasError: boolean
+}) {
+  return (
+    <div className="flex items-center justify-between border-b border-primary/20 pb-2.5">
+      <div className="flex items-center gap-2">
+        {syncing ? <Loader2 className="h-4 w-4 animate-spin text-primary" /> : <Compass className="h-4 w-4 animate-spin text-primary" style={{ animationDuration: "12s" }} />}
+        <span className="font-sans text-xs font-black tracking-widest text-primary uppercase">// QIBLA VECTOR & TEMPORAL COUNTDOWN</span>
+      </div>
+      <span className={`rounded-md border px-2 py-0.5 font-mono text-[8px] font-bold ${syncing ? "animate-pulse border-amber-500/40 bg-amber-500/10 text-amber-500" : hasError ? "border-rose-500/40 bg-rose-500/10 text-rose-500" : "border-emerald-500/40 bg-emerald-500/10 text-emerald-500"}`}>{syncing ? "SCANNING..." : hasError ? "SYNC ERROR" : "LIVE TELEMETRY"}</span>
+    </div>
+  )
+}
 
-          <div className="space-y-1">
-            <div className="flex items-center gap-1 text-[9px] text-primary uppercase">
-              <Navigation className="h-3 w-3 text-primary" />
-              <span className="max-w-[120px] truncate">
-                KAABA ({locationName})
-              </span>
-            </div>
-            <div className="text-success font-sans text-sm font-black tracking-wider">
-              {isSyncing ? "---.--°" : `${radarDegrees.toFixed(2)}° N`}
-            </div>
-            <p className="text-[9px] text-primary italic">
-              // SATELLITE BEAM LOCKED TO MECCA
-            </p>
-          </div>
-        </div>
-
-        {/* Right: Next Prayer Countdown */}
-        <div className="bg-panel rounded-md space-y-1.5 border border-primary/20 p-3">
-          <div className="flex items-center justify-between">
-            <span className="flex items-center gap-1 text-[9px] font-bold text-primary uppercase">
-              <Clock className="h-3 w-3 text-accent" />
-              NEXT CYCLE: <span className="text-accent">{nextPrayerName}</span>
-            </span>
-            <span className="rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-500 px-1.5 py-0 font-mono text-[8px]">
-              COUNTDOWN
-            </span>
-          </div>
-
-          <div
-            className="font-sans bg-background rounded border border-accent/30 py-1 text-center text-xl font-black tracking-widest text-accent sm:text-2xl"
-            style={{ textShadow: "0 0 10px rgba(255,230,0,0.3)" }}
-          >
-            {isSyncing ? "--:--:--" : countdownText}
-          </div>
-
-          <div className="flex items-center justify-between text-[8px] text-primary">
-            <span>SYSTEM CHRONO ACCURACY</span>
-            <span
-              className={`font-bold ${isSyncing ? "text-accent" : errorMsg ? "text-danger" : "text-success"}`}
-            >
-              {isSyncing
-                ? "SYNCING..."
-                : errorMsg
-                  ? "LOCAL OFFLINE MODE"
-                  : "ATOMIC SYNC 100%"}
-            </span>
-          </div>
-        </div>
+function QiblaRadarVisual({
+  degrees,
+  locationName,
+  syncing,
+}: {
+  degrees: number
+  locationName: string
+  syncing: boolean
+}) {
+  return (
+    <div className="flex items-center gap-4 rounded-md border border-primary/20 bg-panel p-3">
+      <div className="relative flex h-20 w-20 shrink-0 items-center justify-center">
+        <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 100 100" aria-label="Qibla direction radar">
+          <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(0, 240, 255, 0.3)" strokeWidth="1.5" strokeDasharray="3 3" />
+          <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(0, 240, 255, 0.2)" strokeWidth="1" />
+          <circle cx="50" cy="50" r="14" fill="none" stroke="rgba(0, 240, 255, 0.15)" strokeWidth="1" />
+          <line x1="50" y1="4" x2="50" y2="96" stroke="rgba(0, 240, 255, 0.25)" strokeWidth="1" />
+          <line x1="4" y1="50" x2="96" y2="50" stroke="rgba(0, 240, 255, 0.25)" strokeWidth="1" />
+          <g transform={`rotate(${degrees}, 50, 50)`} className="transition-transform duration-1000 ease-in-out">
+            <line x1="50" y1="50" x2="50" y2="10" stroke="#00FF66" strokeWidth="2.5" strokeLinecap="round" />
+            <polygon points="50,6 46,14 54,14" fill="#00FF66" />
+          </g>
+        </svg>
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center"><span className="h-2 w-2 animate-ping rounded-full bg-success opacity-75" /></div>
+      </div>
+      <div className="space-y-1">
+        <div className="flex items-center gap-1 text-[9px] uppercase text-primary"><Navigation className="h-3 w-3" /><span className="max-w-[120px] truncate">KAABA ({locationName})</span></div>
+        <div className="font-sans text-sm font-black tracking-wider text-success">{syncing ? "---.--°" : `${degrees.toFixed(2)}° N`}</div>
+        <p className="text-[9px] italic text-primary">// SATELLITE BEAM LOCKED TO MECCA</p>
       </div>
     </div>
   )

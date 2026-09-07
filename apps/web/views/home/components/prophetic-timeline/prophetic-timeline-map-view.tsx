@@ -2,6 +2,7 @@
 
 import React from "react"
 import { Plus, Minus, Target } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 const MAP_LEGEND = [
   { n: "Prophets", c: "#F59E0B" },
@@ -92,15 +93,15 @@ export function PropheticTimelineMapView() {
 
         {/* Zoom Controls */}
         <div className="bg-background absolute top-1/2 right-3 flex -translate-y-1/2 flex-col rounded border border-border text-primary">
-          <button className="border-b border-border p-2 hover:bg-muted/30 hover:text-foreground">
+          <Button type="button" variant="ghost" size="icon" aria-label="Zoom in" className="border-b border-border p-2 hover:bg-muted/30 hover:text-foreground">
             <Plus className="h-3 w-3" />
-          </button>
-          <button className="border-b border-border p-2 hover:bg-muted/30 hover:text-foreground">
+          </Button>
+          <Button type="button" variant="ghost" size="icon" aria-label="Zoom out" className="border-b border-border p-2 hover:bg-muted/30 hover:text-foreground">
             <Minus className="h-3 w-3" />
-          </button>
-          <button className="p-2 hover:bg-muted/30 hover:text-foreground">
+          </Button>
+          <Button type="button" variant="ghost" size="icon" aria-label="Recenter map" className="p-2 hover:bg-muted/30 hover:text-foreground">
             <Target className="h-3 w-3" />
-          </button>
+          </Button>
         </div>
       </div>
 

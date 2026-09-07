@@ -2,6 +2,7 @@
 
 import React from "react"
 import { BookOpen, Star, Check } from "lucide-react"
+import { Button, NativeSelect, NativeSelectOption } from "@workspace/ui"
 
 interface KitabLeftSidebarProps {
   activeCollection: "all" | "canonical" | "additional"
@@ -12,8 +13,8 @@ export function KitabLeftSidebar({ activeCollection, onCollectionChange }: Kitab
   return (
     <div className="w-full flex-shrink-0 space-y-6 lg:w-48">
       <div>
-        <h3 className="mb-3 px-2 text-[9px] font-black tracking-widest text-blue-400 uppercase">
-          Knowledge Menu
+        <h3 className="mb-3 px-2 text-sm font-semibold text-foreground">
+          Knowledge menu
         </h3>
         <div className="space-y-1">
           {[
@@ -27,25 +28,26 @@ export function KitabLeftSidebar({ activeCollection, onCollectionChange }: Kitab
             const collection = i === 0 ? "all" : i === 5 ? "additional" : "canonical"
             const isActive = activeCollection === collection
             return (
-            <button
+            <Button
+              variant="ghost"
               key={i}
               type="button"
               onClick={() => onCollectionChange(collection as "all" | "canonical" | "additional")}
-              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-xs font-bold transition-all ${isActive ? "border border-primary/30 bg-primary/10 text-primary" : "text-muted-foreground hover:bg-accent hover:text-foreground"}`}
+              className={`flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ${isActive ? "border border-primary/30 bg-primary/10 text-primary" : "text-muted-foreground hover:bg-accent hover:text-foreground"}`}
             >
               <BookOpen
                 className={`h-3.5 w-3.5 ${i === 0 ? "text-blue-400" : "text-foreground/30"}`}
               />
               {item}
-            </button>
+            </Button>
             )
           })}
         </div>
       </div>
 
       <div>
-        <h3 className="mb-3 px-2 text-[9px] font-black tracking-widest text-blue-400 uppercase">
-          Quick Access
+        <h3 className="mb-3 px-2 text-sm font-semibold text-foreground">
+          Quick access
         </h3>
         <div className="space-y-1">
           {[
@@ -56,30 +58,30 @@ export function KitabLeftSidebar({ activeCollection, onCollectionChange }: Kitab
             "Comparative Study",
             "Research Lab",
           ].map((item, i) => (
-            <button
+            <Button type="button" variant="ghost"
               key={i}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-[11px] font-medium text-foreground/50 transition-all hover:bg-muted/30 hover:text-foreground"
+              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               <div className="flex h-4 w-4 items-center justify-center rounded-full bg-blue-500/10">
                 <Star className="h-2 w-2 text-blue-400/50" />
               </div>
               {item}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
 
       <div className="space-y-3">
-        <h3 className="mb-3 px-2 text-[9px] font-black tracking-widest text-blue-400 uppercase">
+        <h3 className="mb-3 px-2 text-sm font-semibold text-foreground">
           Filter
         </h3>
         {["All Languages", "All Topics", "All Periods", "All Traditions"].map((f, i) => (
-          <select
+          <NativeSelect
             key={i}
-            className="w-full appearance-none rounded-lg border border-border bg-card px-3 py-2 text-[10px] text-muted-foreground transition-colors outline-none focus:border-primary/50"
+            className="w-full appearance-none rounded-md border border-border bg-card px-3 py-2 text-sm text-muted-foreground transition-colors outline-none focus:border-primary/50"
           >
-            <option>{f}</option>
-          </select>
+            <NativeSelectOption>{f}</NativeSelectOption>
+          </NativeSelect>
         ))}
       </div>
     </div>
@@ -117,9 +119,9 @@ export function KitabRightTimeline() {
 
   return (
     <div className="w-full flex-shrink-0 space-y-4 lg:w-56">
-      <div className="rounded-xl border border-border bg-card p-5 shadow-lg">
-        <h3 className="mb-5 text-[9px] font-black tracking-widest text-primary uppercase">
-          Revelation Timeline
+      <div className="rounded-md border border-border bg-card p-5">
+        <h3 className="mb-5 text-sm font-semibold text-foreground">
+          Revelation timeline
         </h3>
 
         <div className="relative space-y-4 before:absolute before:inset-0 before:ml-[15px] before:w-0.5 before:bg-border">
@@ -161,21 +163,20 @@ export function KitabRightTimeline() {
               <Check className="h-3 w-3 shrink-0 text-success" /> Preserved Eternally by Allah SWT
             </li>
           </ul>
-          <button className="w-full rounded border border-border bg-muted/40 py-1.5 text-[9px] font-black text-foreground uppercase transition-colors hover:bg-muted">
+          <Button type="button" variant="ghost" className="w-full rounded border border-border bg-muted/40 py-1.5 text-[9px] font-black text-foreground uppercase transition-colors hover:bg-muted">
             Learn More
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Arabic Quote */}
-      <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-xl border border-warning/20 bg-card p-5 text-center shadow-lg">
-        <div className="absolute inset-0 bg-gradient-to-t from-amber-500/10 to-transparent opacity-50" />
-        <div className="font-arabic relative z-10 mb-2 text-xl text-warning drop-shadow-md">
+      <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-md border border-border bg-card p-5 text-center">
+        <div className="arabic-text relative z-10 mb-2 text-xl text-warning">
           كُلُّ نَفْسٍ ذَائِقَةُ الْمَوْتِ
         </div>
-        <p className="relative z-10 text-[9px] text-foreground/60 italic">
+        <p className="relative z-10 text-sm text-muted-foreground italic">
           &ldquo;Every soul will taste death.&rdquo;
-          <span className="mt-1 block text-[8px] text-foreground/30 not-italic">
+          <span className="mt-1 block text-xs text-muted-foreground not-italic">
             (QS. Ali Imran 3:185)
           </span>
         </p>

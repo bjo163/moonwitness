@@ -22,25 +22,25 @@ import {
 import { resolveVisualizationColor } from "@workspace/ui"
 
 const SOURCES = [
-  { name: "QUR'AN", value: "6,236 Ayat", icon: BookOpen, color: "#10B981" },
-  { name: "HADITH", value: "75,234 Riwayat", icon: Scroll, color: "#F59E0B" },
-  { name: "TAFSIR", value: "2,541 Kitab", icon: Book, color: "#3B82F6" },
+  { name: "Qur'an", value: "6,236 ayat", icon: BookOpen, color: "#10B981" },
+  { name: "Hadith", value: "75,234 riwayat", icon: Scroll, color: "#F59E0B" },
+  { name: "Tafsir", value: "2,541 kitab", icon: Book, color: "#3B82F6" },
   {
-    name: "SIRAH",
+    name: "Sirah",
     value: "1,256 Peristiwa",
     icon: Navigation,
     color: "#EC4899",
   },
-  { name: "ASMAUL HUSNA", value: "99 Nama", icon: Activity, color: "#00F0FF" },
+  { name: "Asmaul Husna", value: "99 names", icon: Activity, color: "#00F0FF" },
   {
-    name: "ROOT WORDS",
+    name: "Root words",
     value: "3,012 Kata",
     icon: GitBranch,
     color: "#10B981",
   },
-  { name: "TOPICS", value: "1,248 Topik", icon: Database, color: "#3B82F6" },
+  { name: "Topics", value: "1,248 topics", icon: Database, color: "#3B82F6" },
   {
-    name: "CHRONOLOGY",
+    name: "Chronology",
     value: "2,100 Timeline",
     icon: FileText,
     color: "#A855F7",
@@ -103,18 +103,18 @@ export function ScriptureHeader() {
   return (
     <div className="flex flex-col justify-between gap-6 border-b border-border pb-6 xl:flex-row xl:items-start">
       <div className="max-w-2xl space-y-4">
-        <div className="inline-flex items-center gap-3 rounded-sm border-2 border-border bg-background px-3.5 py-1.5 text-xs font-black tracking-[0.25em] text-primary uppercase shadow-sm">
+        <div className="inline-flex items-center gap-3 rounded-md border border-border bg-card px-3.5 py-1.5 text-sm font-medium text-primary">
           <span className="rounded-xs bg-primary px-1.5 py-0.5 font-black text-foreground">
             08
           </span>
-          <span>SCRIPTURE INTELLIGENCE</span>
+          <span>Scripture intelligence</span>
         </div>
-        <h2 className="font-mono text-xl font-black tracking-widest text-foreground uppercase drop-shadow-sm sm:text-3xl">
-          THE LIVING KNOWLEDGE DATABASE
+        <h2 className="text-xl font-semibold text-foreground sm:text-3xl">
+          The living knowledge database
         </h2>
       </div>
 
-      <div className="max-w-lg border-l-2 border-primary bg-gradient-to-r from-primary to-transparent p-4 text-center xl:text-left">
+      <div className="max-w-lg border-l-2 border-primary bg-card p-4 text-center xl:text-left">
         <div
           className="mb-2 font-arabic text-sm font-bold text-foreground"
           dir="rtl"
@@ -131,8 +131,8 @@ export function ScriptureHeader() {
       </div>
 
       <div className="hidden shrink-0 rounded-xl border border-primary/30 bg-background p-4 md:block">
-        <div className="mb-3 text-center text-[9px] font-black tracking-widest text-primary uppercase">
-          INTELLIGENCE TOOLS
+        <div className="mb-3 text-center text-xs font-medium text-primary">
+          Intelligence tools
         </div>
         <div className="flex items-center gap-4 text-center text-[9px] font-bold text-primary">
           {[

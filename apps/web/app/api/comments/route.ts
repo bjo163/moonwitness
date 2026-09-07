@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { MoonClient } from "@moon/client"
 import { APP_PORTS } from "@workspace/types"
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || `http://127.0.0.1:${APP_PORTS.API_BACKEND}`
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || process.env.MOON_API_URL || `http://api:${APP_PORTS.API_BACKEND}`
 const commentRateWindowMs = 60_000
 const commentRateLimit = 10
 const commentRate = new Map<number, { count: number; startedAt: number }>()

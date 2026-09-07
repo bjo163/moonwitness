@@ -23,14 +23,19 @@ export interface ModelKanbanBoardProps {
   onCardStageChange?: (record: any, newStageKey: string | number) => Promise<void>
 }
 
-export function ModelKanbanBoard({
+type KanbanColumn = { key: string | number; label: string }
+
+interface ModelKanbanBoardControllerProps {
+  schema: ModelSchema
+  records: any[]
+  onCardStageChange?: (record: any, newStageKey: string | number) => Promise<void>
+}
+
+function useModelKanbanBoardController({
   schema,
   records,
-  loading = false,
-  onCardClick,
-  onCreateInColumn,
   onCardStageChange,
-}: ModelKanbanBoardProps) {
+}: ModelKanbanBoardControllerProps) {
   const kanbanConfig = schema.views?.kanban
   const groupField = kanbanConfig?.groupBy || "stageId"
   const groupFieldDef = schema.fields[groupField]
@@ -122,6 +127,51 @@ export function ModelKanbanBoard({
     setDraggedRecord(null)
   }
 
+  return {
+    kanbanConfig,
+    columns,
+    groupedData,
+    draggedRecord,
+    dragOverColumn,
+    handleDragStart,
+    handleDragOver,
+    handleDragLeave,
+    handleDrop,
+  }
+}
+
+interface ModelKanbanBoardPresentationProps {
+  schema: ModelSchema
+  loading: boolean
+  kanbanConfig: ModelSchema["views"]["kanban"]
+  columns: KanbanColumn[]
+  groupedData: Map<string | number, any[]>
+  draggedRecord: any | null
+  dragOverColumn: string | number | null
+  onCardClick?: (record: any) => void
+  onCreateInColumn?: (columnKey: string | number) => void
+  onDragStart: (event: React.DragEvent, record: any) => void
+  onDragOver: (event: React.DragEvent, columnKey: string | number) => void
+  onDragLeave: (event: React.DragEvent, columnKey: string | number) => void
+  onDrop: (event: React.DragEvent, columnKey: string | number) => Promise<void>
+}
+
+function ModelKanbanBoardPresentation({
+  schema,
+  loading,
+  kanbanConfig,
+  columns,
+  groupedData,
+  draggedRecord,
+  dragOverColumn,
+  onCardClick,
+  onCreateInColumn,
+  onDragStart,
+  onDragOver,
+  onDragLeave,
+  onDrop,
+}: ModelKanbanBoardPresentationProps) {
+
   const renderPriorityBadge = (priorityVal: string) => {
     if (!priorityVal) return null
     const isCritical = priorityVal === "critical" || priorityVal === "urgent" || priorityVal === "high"
@@ -155,9 +205,9 @@ export function ModelKanbanBoard({
         return (
           <div
             key={col.key}
-            onDragOver={(e) => handleDragOver(e, col.key)}
-            onDragLeave={(e) => handleDragLeave(e, col.key)}
-            onDrop={(e) => handleDrop(e, col.key)}
+            onDragOver={(e) => onDragOver(e, col.key)}
+            onDragLeave={(e) => onDragLeave(e, col.key)}
+            onDrop={(e) => onDrop(e, col.key)}
             className={`w-80 flex-shrink-0 bg-card border rounded-xl flex flex-col max-h-[75vh] shadow-sm transition-all ${
               isTarget
                 ? "border-primary bg-primary/5 shadow-md"
@@ -203,7 +253,7 @@ export function ModelKanbanBoard({
                     <div
                       key={card.id}
                       draggable={true}
-                      onDragStart={(e) => handleDragStart(e, card)}
+                      onDragStart={(e) => onDragStart(e, card)}
                       onClick={() => onCardClick?.(card)}
                       className={`p-3 bg-background border rounded-lg cursor-grab active:cursor-grabbing transition-all group relative select-none shadow-sm ${
                         isDragging
@@ -249,5 +299,38 @@ export function ModelKanbanBoard({
         )
       })}
     </div>
+  )
+}
+
+export function ModelKanbanBoard({
+  schema,
+  records,
+  loading = false,
+  onCardClick,
+  onCreateInColumn,
+  onCardStageChange,
+}: ModelKanbanBoardProps) {
+  const controller = useModelKanbanBoardController({
+    schema,
+    records,
+    onCardStageChange,
+  })
+
+  return (
+    <ModelKanbanBoardPresentation
+      schema={schema}
+      loading={loading}
+      kanbanConfig={controller.kanbanConfig}
+      columns={controller.columns}
+      groupedData={controller.groupedData}
+      draggedRecord={controller.draggedRecord}
+      dragOverColumn={controller.dragOverColumn}
+      onCardClick={onCardClick}
+      onCreateInColumn={onCreateInColumn}
+      onDragStart={controller.handleDragStart}
+      onDragOver={controller.handleDragOver}
+      onDragLeave={controller.handleDragLeave}
+      onDrop={controller.handleDrop}
+    />
   )
 }

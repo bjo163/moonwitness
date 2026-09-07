@@ -2,6 +2,7 @@
 
 import React from "react"
 import { Bookmark, Link as LinkIcon, CheckCircle2, ShieldCheck, Quote, BookOpen } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 export interface FormattedHadithItem {
   id: string
@@ -66,9 +67,9 @@ export function HaditsItemCard({ hadith, isActive, onClick }: HaditsItemCardProp
             <ShieldCheck className="h-2.5 w-2.5" />
             {hadith.grade}
           </span>
-          <button className="text-foreground/30 transition-colors hover:text-foreground">
+          <Button type="button" variant="ghost" size="icon" aria-label={`Bookmark hadith ${hadith.id}`} className="text-foreground/30 transition-colors hover:text-foreground">
             <Bookmark className="h-3.5 w-3.5" />
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -89,14 +90,14 @@ export function HaditsItemCard({ hadith, isActive, onClick }: HaditsItemCardProp
           <span>Universal Wisdom Corpus</span>
         </div>
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-1 font-mono hover:text-primary">
+          <Button type="button" variant="ghost" className="flex items-center gap-1 font-mono hover:text-primary">
             <BookOpen className="h-3 w-3" />
             <span>Takhrij</span>
-          </button>
-          <button className="flex items-center gap-1 font-mono hover:text-primary">
+          </Button>
+          <Button type="button" variant="ghost" className="flex items-center gap-1 font-mono hover:text-primary">
             <LinkIcon className="h-3 w-3" />
             <span>Sanad Graph</span>
-          </button>
+          </Button>
         </div>
       </div>
     </article>

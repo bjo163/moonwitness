@@ -2,6 +2,7 @@
 
 import React from "react"
 import { Star, ChevronRight, Search, Network, Book, Sparkles, ArrowRight } from "lucide-react"
+import { Button, Input } from "@workspace/ui"
 
 const SUGGESTED_QUESTIONS = [
   "What are the signs of the Day of Judgment?",
@@ -70,29 +71,29 @@ export function KhidraConversationSidebar() {
         {/* Chat Input & Action Chips */}
         <div className="space-y-2">
           <div className="relative">
-            <input
+            <Input
               type="text"
               placeholder="Ask anything..."
               className="bg-background w-full rounded-lg border border-border p-3 pr-10 font-sans text-sm text-foreground transition-colors outline-none hover:border-success/50 focus:border-success"
             />
-            <button className="absolute top-1/2 right-3 -translate-y-1/2 text-success hover:text-success/80">
+            <Button type="button" variant="ghost" size="icon" aria-label="Send question" className="absolute top-1/2 right-3 -translate-y-1/2 text-success hover:text-success/80">
               <ChevronRight className="h-5 w-5" />
-            </button>
+            </Button>
           </div>
 
           <div className="flex flex-wrap gap-2 text-[9px] font-bold tracking-wider text-muted-foreground uppercase">
-            <button className="flex items-center gap-1 rounded border border-border bg-muted/30 px-2 py-1 hover:border-success/50">
+            <Button type="button" variant="ghost" className="flex items-center gap-1 rounded border border-border bg-muted/30 px-2 py-1 hover:border-success/50">
               <Search className="h-3 w-3" /> Deep Search
-            </button>
-            <button className="flex items-center gap-1 rounded border border-border bg-muted/30 px-2 py-1 hover:border-success/50">
+            </Button>
+            <Button type="button" variant="ghost" className="flex items-center gap-1 rounded border border-border bg-muted/30 px-2 py-1 hover:border-success/50">
               <Network className="h-3 w-3 text-primary" /> Cross Reference
-            </button>
-            <button className="flex items-center gap-1 rounded border border-border bg-muted/30 px-2 py-1 hover:border-success/50">
+            </Button>
+            <Button type="button" variant="ghost" className="flex items-center gap-1 rounded border border-border bg-muted/30 px-2 py-1 hover:border-success/50">
               <Book className="h-3 w-3 text-warning" /> Sources
-            </button>
-            <button className="flex items-center gap-1 rounded border border-border bg-muted/30 px-2 py-1 hover:border-success/50">
+            </Button>
+            <Button type="button" variant="ghost" className="flex items-center gap-1 rounded border border-border bg-muted/30 px-2 py-1 hover:border-success/50">
               <Sparkles className="h-3 w-3 text-primary" /> Explain More
-            </button>
+            </Button>
           </div>
         </div>
       </div>

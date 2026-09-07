@@ -2,6 +2,7 @@
 
 import React from "react"
 import { Target, ArrowRight } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 export function CurrentFocus() {
   return (
@@ -32,9 +33,9 @@ export function CurrentFocus() {
           </div>
 
           <div className="text-right">
-            <button className="inline-flex items-center gap-1.5 font-sans text-xs font-medium text-primary hover:underline">
+            <Button type="button" variant="link" className="inline-flex items-center gap-1.5 font-sans text-xs font-medium text-primary hover:underline">
               View Details <ArrowRight className="h-3.5 w-3.5" />
-            </button>
+            </Button>
           </div>
         </div>
       </div>

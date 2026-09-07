@@ -18,6 +18,7 @@ import WxRoot from '../models/wx-root.js'
 import WxLexeme from '../models/wx-lexeme.js'
 import WxEntity from '../models/wx-entity.js'
 import WxSourceSnapshot from '../models/wx-source-snapshot.js'
+import type { OdooClient } from '@moon/odoo-bridge'
 
 export interface SearchOptions {
   query: string
@@ -50,6 +51,89 @@ export interface ReferenceLookupResult {
   tradition?: Record<string, unknown> | null
   root?: Record<string, unknown> | null
   lexeme?: Record<string, unknown> | null
+}
+
+/** Production retrieval projection backed by Odoo's canonical Witness models. */
+export async function searchOdooWitness(
+  client: OdooClient,
+  sessionId: string,
+  options: SearchOptions,
+): Promise<{ total: number; results: SearchResult[] }> {
+  const query = (options.query || '').trim()
+  const filter = options.filter || 'ALL'
+  const limit = Math.min(Math.max(options.limit || 20, 1), 100)
+  const page = Math.max(options.page || 1, 1)
+  if (query.length < 2) return { total: 0, results: [] }
+
+  const results: SearchResult[] = []
+  if (filter === 'ALL' || filter === 'SCRIPTURE') {
+    const verses = await client.callWithSession<any[]>(sessionId, {
+      model: 'moon.witness.scripture.verse', method: 'search_read',
+      args: [[['active', '=', true], '|', ['text_original', 'ilike', query], ['text_translation', 'ilike', query]]],
+      kwargs: { fields: ['id', 'number', 'text_original', 'text_translation', 'canonical_reference'], limit: 200, order: 'id asc' },
+    })
+    for (const verse of verses) results.push({
+      id: `verse:${verse.id}`, type: 'SCRIPTURE', title: `Scripture Verse ${verse.canonical_reference || verse.number}`,
+      reference: verse.canonical_reference || String(verse.number), link: `/scripture/1?ref=${encodeURIComponent(verse.canonical_reference || '')}`,
+      snippet: extractSnippet(verse.text_translation || verse.text_original || '', query), language: 'ar',
+    })
+  }
+  if (filter === 'ALL' || filter === 'HADITH') {
+    const items = await client.callWithSession<any[]>(sessionId, {
+      model: 'moon.witness.tradition.item', method: 'search_read',
+      args: [[['active', '=', true], '|', ['text_original', 'ilike', query], ['text_translation', 'ilike', query]]],
+      kwargs: { fields: ['id', 'number', 'text_original', 'text_translation', 'canonical_reference'], limit: 200, order: 'id asc' },
+    })
+    for (const item of items) results.push({
+      id: `hadith:${item.id}`, type: 'HADITH', title: `Hadith ${item.canonical_reference || item.number}`,
+      reference: item.canonical_reference || String(item.number), link: `/hadiths?item=${item.id}`,
+      snippet: extractSnippet(item.text_translation || item.text_original || '', query),
+    })
+  }
+  const unique = [...new Map(results.map((item) => [item.id, item])).values()]
+  return { total: unique.length, results: unique.slice((page - 1) * limit, page * limit) }
+}
+
+export async function lookupOdooWitness(
+  client: OdooClient,
+  sessionId: string,
+  rawReference: string,
+): Promise<ReferenceLookupResult> {
+  const reference = rawReference.trim()
+  if (!reference) return { reference: rawReference, resolved: false }
+  const quran = reference.match(/^(?:quran:|q:|surah\s+)?(\d+)[:\s]+(\d+)$/i)
+  if (quran) {
+    const verses = await client.callWithSession<any[]>(sessionId, {
+      model: 'moon.witness.scripture.verse', method: 'search_read',
+      args: [[['canonical_reference', 'in', [reference, `quran:${quran[1]}:${quran[2]}`]]]],
+      kwargs: { fields: ['id', 'number', 'text_original', 'text_translation', 'canonical_reference'], limit: 1 },
+    })
+    const verse = verses[0]
+    if (verse) return { reference, resolved: true, type: 'SCRIPTURE', passage: verse }
+  }
+  const hadith = reference.replace(/^hadith:/i, '')
+  const items = await client.callWithSession<any[]>(sessionId, {
+    model: 'moon.witness.tradition.item', method: 'search_read',
+    args: [[['canonical_reference', '=', hadith]]],
+    kwargs: { fields: ['id', 'number', 'text_original', 'text_translation', 'canonical_reference', 'tradition_id'], limit: 1 },
+  })
+  if (items[0]) return { reference, resolved: true, type: 'HADITH', tradition: items[0] }
+  return { reference, resolved: false }
+}
+
+export async function getOdooSearchIndexDiagnostics(client: OdooClient, sessionId: string) {
+  const models = [
+    ['moon.witness.scripture.verse', 'scripturePassages'],
+    ['moon.witness.tradition.item', 'traditionItems'],
+    ['moon.witness.source', 'sources'],
+    ['moon.witness.snapshot', 'snapshots'],
+  ] as const
+  const counts = await Promise.all(models.map(async ([model, key]) => [key, await client.callWithSession<number>(sessionId, { model, method: 'search_count', args: [[model === 'moon.witness.snapshot' ? ['status', '=', 'completed'] : ['active', '=', true]]], kwargs: {} })] as const))
+  const values = Object.fromEntries(counts)
+  return {
+    indexStatus: 'HEALTHY', indexVersion: 'odoo-1.0.0', totalIndexedRecords: Object.values(values).reduce((sum, value) => sum + Number(value), 0),
+    countsByDomain: values, activeSnapshotsCount: Number(values.snapshots || 0), lastSnapshotRevision: null,
+  }
 }
 
 /**

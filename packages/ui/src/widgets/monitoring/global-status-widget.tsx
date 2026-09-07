@@ -10,6 +10,7 @@ import {
   Crosshair,
   ArrowRight,
 } from "lucide-react"
+import { Button } from "../../components/button"
 
 export function GlobalStatusWidget() {
   return (
@@ -100,9 +101,9 @@ export function GlobalStatusWidget() {
           </div>
         ))}
       </div>
-      <button className="mt-3 flex w-full items-center justify-center gap-1 border-t border-border pt-3 text-center text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
+      <Button type="button" variant="ghost" className="mt-3 flex w-full items-center justify-center gap-1 border-t border-border pt-3 text-center text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
         VIEW DETAILED STATUS <ArrowRight className="h-3 w-3" />
-      </button>
+      </Button>
     </div>
   )
 }

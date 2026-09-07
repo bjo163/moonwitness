@@ -2,6 +2,7 @@
 
 import React from "react"
 import { Layers, ArrowRight } from "lucide-react"
+import { Button } from "./button"
 
 export function HeroBanner({
   profile,
@@ -46,10 +47,10 @@ export function HeroBanner({
           <p className="mb-3 font-sans text-xs text-foreground leading-relaxed">
             Stay curious, keep observing, and let knowledge lead you closer to the Creator.
           </p>
-          <button className="group inline-flex items-center gap-1.5 font-sans text-xs font-medium text-primary hover:underline">
+          <Button type="button" variant="ghost" className="group inline-flex items-center gap-1.5 font-sans text-xs font-medium text-primary hover:underline">
             View Knowledge Insights
             <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
-          </button>
+          </Button>
         </div>
       </div>
     </div>

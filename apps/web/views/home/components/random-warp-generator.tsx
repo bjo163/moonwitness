@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { playClickSound, playWarpSound, fetchSurahDetail } from "@moon/client"
 import { useLanguage } from "@workspace/state"
+import { Button } from "@workspace/ui"
 import { RandomWarpGeneratorModal } from "./random-warp-generator-modal"
 import {
   SAMPLE_VERSES,
@@ -116,7 +117,7 @@ export function RandomWarpGenerator() {
 
   return (
     <>
-      <button type="button"
+      <Button type="button" variant="ghost"
         onClick={triggerWarp}
         className="btn-primary btn-primary-purple group flex items-center justify-center gap-2 px-3.5 py-1.5 text-[10px] shadow-sm transition-all hover:border-primary"
         suppressHydrationWarning
@@ -135,7 +136,7 @@ export function RandomWarpGenerator() {
             ? t("<< EXECUTE RANDOM WISDOM >>", "<< EXECUTE RANDOM HIKMAH >>")
             : "<< EXECUTE RANDOM WISDOM >>"}
         </span>
-      </button>
+      </Button>
       <RandomWarpGeneratorModal
         mounted={mounted}
         isOpen={isOpen}

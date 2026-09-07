@@ -1,0 +1,133 @@
+{
+  "source_root": "packages/moon-mizan",
+  "record_count": 14,
+  "duplicate_check": "checksum-and-external-identity-required-at-import",
+  "records": [
+    {
+      "path": "packages/moon-mizan/dist/demo-data.js",
+      "checksum": "586a57fac95bdb4a6309fdfb454faa8ddc6798ab0723ffdbe8e3ab12bc7fd6fa",
+      "status": "unresolved",
+      "warnings": [
+        "Legacy source requires explicit field mapping and Witness provenance review."
+      ],
+      "raw_payload_preserved": true
+    },
+    {
+      "path": "packages/moon-mizan/dist/models/mz-assessment.js",
+      "checksum": "571c984afb2a3778eb771518609cc988b2ad8e44db36624dcf52c9bf5e0a8673",
+      "status": "unresolved",
+      "warnings": [
+        "Legacy source requires explicit field mapping and Witness provenance review."
+      ],
+      "raw_payload_preserved": true
+    },
+    {
+      "path": "packages/moon-mizan/dist/models/mz-case.js",
+      "checksum": "62f393a2085676bb96acbe7d0928ad74dd1e3f9a3cc8ceac97ad91529db43f2e",
+      "status": "unresolved",
+      "warnings": [
+        "Legacy source requires explicit field mapping and Witness provenance review."
+      ],
+      "raw_payload_preserved": true
+    },
+    {
+      "path": "packages/moon-mizan/dist/models/mz-filter.js",
+      "checksum": "01598f7f392ed58d97808eb7881385c0434868a6412c3f2dda7535208d565e42",
+      "status": "unresolved",
+      "warnings": [
+        "Legacy source requires explicit field mapping and Witness provenance review."
+      ],
+      "raw_payload_preserved": true
+    },
+    {
+      "path": "packages/moon-mizan/dist/models/mz-reference.js",
+      "checksum": "9c32433d46c27a5c1d7fb2147a13a6ef27fd0d18611dc5f582b751951b77f297",
+      "status": "unresolved",
+      "warnings": [
+        "Legacy source requires explicit field mapping and Witness provenance review."
+      ],
+      "raw_payload_preserved": true
+    },
+    {
+      "path": "packages/moon-mizan/dist/routes.js",
+      "checksum": "021770549a9ade1ed81b305080cf50d34b36a37ab1279da9dcc088d084cbad1a",
+      "status": "unresolved",
+      "warnings": [
+        "Legacy source requires explicit field mapping and Witness provenance review."
+      ],
+      "raw_payload_preserved": true
+    },
+    {
+      "path": "packages/moon-mizan/dist/views.js",
+      "checksum": "c3f12b607c5cb5a5cc6d35166d34aa1c688cf7861c8e04608ebacd6fe5398aba",
+      "status": "unresolved",
+      "warnings": [
+        "Legacy source requires explicit field mapping and Witness provenance review."
+      ],
+      "raw_payload_preserved": true
+    },
+    {
+      "path": "packages/moon-mizan/src/demo-data.ts",
+      "checksum": "ac0a0816e6261b1dccae2cc9e37a3768b918b9fb595a8dccc20c9c3ec7bad40e",
+      "status": "unresolved",
+      "warnings": [
+        "Legacy source requires explicit field mapping and Witness provenance review."
+      ],
+      "raw_payload_preserved": true
+    },
+    {
+      "path": "packages/moon-mizan/src/models/mz-assessment.ts",
+      "checksum": "fc02f8cd531b07e1fea0a7d0a81f1aab454d53c004752bb93255d8ba389de10b",
+      "status": "unresolved",
+      "warnings": [
+        "Legacy source requires explicit field mapping and Witness provenance review."
+      ],
+      "raw_payload_preserved": true
+    },
+    {
+      "path": "packages/moon-mizan/src/models/mz-case.ts",
+      "checksum": "23c4b2dd77cae97579ad524b5f295113b32bad8f827a7a8cef2f57b9a38a1eac",
+      "status": "unresolved",
+      "warnings": [
+        "Legacy source requires explicit field mapping and Witness provenance review."
+      ],
+      "raw_payload_preserved": true
+    },
+    {
+      "path": "packages/moon-mizan/src/models/mz-filter.ts",
+      "checksum": "cdf9bdb8c75a9790b637920193e67c404989eb6e1c48d86baacecdb2ae61065d",
+      "status": "unresolved",
+      "warnings": [
+        "Legacy source requires explicit field mapping and Witness provenance review."
+      ],
+      "raw_payload_preserved": true
+    },
+    {
+      "path": "packages/moon-mizan/src/models/mz-reference.ts",
+      "checksum": "1506628512721793518e8ae6cfb893228bf01523b1e29b96d210a18a17045b88",
+      "status": "unresolved",
+      "warnings": [
+        "Legacy source requires explicit field mapping and Witness provenance review."
+      ],
+      "raw_payload_preserved": true
+    },
+    {
+      "path": "packages/moon-mizan/src/routes.ts",
+      "checksum": "a335de497468d6dbee44da8e02ab506d367fad410b457033e92706b921bbb9fb",
+      "status": "unresolved",
+      "warnings": [
+        "Legacy source requires explicit field mapping and Witness provenance review."
+      ],
+      "raw_payload_preserved": true
+    },
+    {
+      "path": "packages/moon-mizan/src/views.ts",
+      "checksum": "b2ebb817933252b8731f8e82fc18a23c47a3781e3f7603cd8f812f543a2acd15",
+      "status": "unresolved",
+      "warnings": [
+        "Legacy source requires explicit field mapping and Witness provenance review."
+      ],
+      "raw_payload_preserved": true
+    }
+  ]
+}

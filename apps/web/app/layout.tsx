@@ -11,7 +11,7 @@ import {
   CommandPalette,
   AudioToggle,
 } from "@workspace/ui"
-import { cn } from "@workspace/ui/lib/utils"
+import { cn } from "@workspace/ui"
 
 const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],

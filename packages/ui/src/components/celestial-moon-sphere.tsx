@@ -204,20 +204,40 @@ export function CelestialMoonSphere({
         )}
       </div>
 
-      {/* Telemetry Readout */}
-      {showTelemetry && (
-        <div className="mt-4 flex flex-col items-center gap-1 font-mono">
-          <div className="flex items-center gap-2 text-[10px] tracking-widest text-primary uppercase">
-            <Orbit className="h-3 w-3 animate-spin [animation-duration:12s]" />
-            <span>{getPhaseName(phase)}</span>
-          </div>
-          <div className="flex items-center gap-3 text-xs text-zinc-400">
-            <span>DAY • {hijriDay} HIJRI</span>
-            <span className="text-zinc-600">|</span>
-            <span className="text-emerald-400 font-bold">{illuminationPercent}% LIT</span>
-          </div>
-        </div>
-      )}
+      <MoonSphereTelemetry
+        visible={showTelemetry}
+        phaseName={getPhaseName(phase)}
+        hijriDay={hijriDay}
+        illuminationPercent={illuminationPercent}
+      />
+    </div>
+  )
+}
+
+function MoonSphereTelemetry({
+  visible,
+  phaseName,
+  hijriDay,
+  illuminationPercent,
+}: {
+  visible: boolean
+  phaseName: string
+  hijriDay: number
+  illuminationPercent: number
+}) {
+  if (!visible) return null
+
+  return (
+    <div className="mt-4 flex flex-col items-center gap-1 font-mono">
+      <div className="flex items-center gap-2 text-[10px] tracking-widest text-primary uppercase">
+        <Orbit className="h-3 w-3 animate-spin [animation-duration:12s]" />
+        <span>{phaseName}</span>
+      </div>
+      <div className="flex items-center gap-3 text-xs text-zinc-400">
+        <span>DAY • {hijriDay} HIJRI</span>
+        <span className="text-zinc-600">|</span>
+        <span className="font-bold text-emerald-400">{illuminationPercent}% LIT</span>
+      </div>
     </div>
   )
 }

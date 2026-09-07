@@ -19,6 +19,7 @@ export interface ApiConfig {
     pass?: string
     from?: string
   }
+  odoo?: { baseUrl: string; database: string; username: string; password: string }
 }
 
 function resolveDatabaseUrl(): string {
@@ -85,8 +86,8 @@ export const config: ApiConfig = {
   autoSyncIntervalSeconds: Number(process.env.AUTO_SYNC_INTERVAL_SECONDS) || 300,
   demoSeedEnabled:
     process.env.NODE_ENV !== "production" || process.env.MOON_ENABLE_DEMO_SEED === "true",
-  celestialEngineUrl: process.env.CELESTIAL_ENGINE_URL || "http://127.0.0.1:8001",
-  aiAgentUrl: process.env.AI_AGENT_URL || "http://127.0.0.1:8002",
+  celestialEngineUrl: process.env.CELESTIAL_ENGINE_URL || "http://celestial-engine:8001",
+  aiAgentUrl: process.env.AI_AGENT_URL || "http://ai-agent:8002",
   cors: {
     allowedOrigins: resolveCorsOrigins(),
     allowCredentials: true,
@@ -97,4 +98,7 @@ export const config: ApiConfig = {
     pass: process.env.SMTP_PASS || process.env.EMAIL_PASS,
     from: process.env.SMTP_FROM || process.env.EMAIL_FROM,
   },
+  odoo: process.env.ODOO_BASE_URL && process.env.ODOO_DATABASE && process.env.ODOO_USERNAME && process.env.ODOO_PASSWORD
+    ? { baseUrl: process.env.ODOO_BASE_URL, database: process.env.ODOO_DATABASE, username: process.env.ODOO_USERNAME, password: process.env.ODOO_PASSWORD }
+    : undefined,
 }

@@ -35,7 +35,7 @@ import {
   handleLiveness,
   handleReadiness,
 } from './handlers/meta.js'
-import { handleRest } from './handlers/rest.js'
+import { handleRest, handleMizanEvaluate } from './handlers/rest.js'
 import { handleRpc } from './handlers/rpc.js'
 import { handleSSE, getActiveClientCount, closeAllSSEConnections } from './handlers/sse.js'
 import { sendJson, setCorsConfig, handleCorsPreflight, type CorsConfig } from './utils/http.js'
@@ -55,6 +55,7 @@ export interface FastifyAdapterConfig {
   cors?: CorsConfig
   onBoot?: () => Promise<void>
   email?: { service?: string; user?: string; pass?: string; from?: string }
+  odoo?: { baseUrl: string; database: string; username: string; password: string }
 }
 
 type MoonMiddleware = (
@@ -262,6 +263,7 @@ export class FastifyAdapter {
       emailUser: this.config.email?.user,
       emailPass: this.config.email?.pass,
       emailFrom: this.config.email?.from,
+      odoo: this.config.odoo,
     }
 
     this.addRawRoute(app, 'GET', '/', async (req, res) => {
@@ -296,6 +298,7 @@ export class FastifyAdapter {
     this.addRawRoute(app, 'GET', '/auth/me', (req, res) => handleGetSession(req, res, authConfig))
     this.addRawRoute(app, 'GET', '/auth/session', (req, res) => handleGetSession(req, res, authConfig))
     this.addRawRoute(app, 'POST', '/rpc', (req, res) => handleRpc(req, res, this.config.jwtSecret))
+    this.addRawRoute(app, 'POST', '/api/mz/assessment/:id/evaluate', (req, res) => handleMizanEvaluate(req, res, String((req as any).params?.id), this.config.jwtSecret, this.config.odoo))
     for (const path of ['/health/live', '/livez']) this.addRawRoute(app, 'GET', path, handleLiveness)
     for (const path of ['/health/ready', '/readyz']) this.addRawRoute(app, 'GET', path, handleReadiness)
     for (const path of ['/health', '/healthz', '/api/health', '/api/system/health']) this.addRawRoute(app, 'GET', path, handleHealth)
@@ -310,7 +313,7 @@ export class FastifyAdapter {
     const rest = (withId: boolean): HttpHandler => (req, res) => {
       const params = (req as any).params ?? {}
       const match = ['', params.model, ...(withId ? [String(params.id)] : [])] as unknown as RegExpMatchArray
-      return handleRest(req, res, match, this.config.jwtSecret)
+      return handleRest(req, res, match, this.config.jwtSecret, this.config.odoo)
     }
     for (const method of ['GET', 'POST']) this.addRawRoute(app, method, '/api/:model', rest(false))
     for (const method of ['GET', 'PUT', 'DELETE']) this.addRawRoute(app, method, '/api/:model/:id', rest(true))

@@ -1,6 +1,7 @@
 "use client"
 
 import { FileText, Gavel, Scale } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 export function LawJusticeHero() {
   return (
@@ -32,12 +33,12 @@ export function LawJusticeHero() {
         </p>
 
         <div className="flex gap-4">
-          <button type="button" className="flex items-center gap-2 rounded bg-emerald-500 px-6 py-3 text-[10px] font-bold tracking-widest text-foreground uppercase transition-colors hover:bg-emerald-400">
+          <Button type="button" variant="default" className="flex items-center gap-2 rounded bg-emerald-500 px-6 py-3 text-[10px] font-bold tracking-widest text-foreground uppercase transition-colors hover:bg-emerald-400">
             <Gavel className="h-4 w-4" /> INITIATE ADVOCACY
-          </button>
-          <button type="button" className="flex items-center gap-2 rounded border border-border bg-transparent px-6 py-3 text-[10px] font-bold tracking-widest text-foreground uppercase transition-colors hover:border-emerald-500/50 hover:bg-success/10">
+          </Button>
+          <Button type="button" variant="outline" className="flex items-center gap-2 rounded border border-border bg-transparent px-6 py-3 text-[10px] font-bold tracking-widest text-foreground uppercase transition-colors hover:border-emerald-500/50 hover:bg-success/10">
             <FileText className="h-4 w-4" /> LEGAL MANIFESTO
-          </button>
+          </Button>
         </div>
       </div>
 

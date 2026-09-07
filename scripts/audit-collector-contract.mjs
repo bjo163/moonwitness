@@ -14,9 +14,9 @@ export const COLLECTOR_RESOLUTIONS = Object.freeze({
     reason: "Raw inline/palette color detection is owned by rawUiColors.",
   },
   inlineMocks: {
-    status: "SUPPRESSED_WITH_REASON",
+    status: "IMPLEMENTED_SUPPLEMENTAL",
     issue: 159,
-    reason: "Operational synthetic-data classification is tracked by #159 and will be generalized by #157.",
+    reason: "Production synthetic-data paths are governed by docs/DATA-CLASSIFICATION.md and source-backed fallbacks are rejected.",
   },
   packageHierarchyViolations: {
     status: "SUPERSEDED",
@@ -158,10 +158,7 @@ export function scanHardcodedLocalhost(rootDir, sources = readSources(rootDir)) 
   for (const { relativePath, content } of sources) {
     assessedFiles += 1
 
-    for (const match of content.matchAll(/127\.0\.0\.1/g)) {
-      const start = Math.max(0, match.index - 280)
-      const context = content.slice(start, match.index + 80)
-      if (!/process\.env\.[A-Z0-9_]+[\s\S]{0,220}\|\|/m.test(context)) continue
+    for (const match of content.matchAll(/(?:process\.env\.[A-Z0-9_]+|process\.env\[['"][A-Z0-9_]+['"]\])[\t ]*\|\|[\t ]*(?:["'`][^"'`]*127\.0\.0\.1|`[^`]*127\.0\.0\.1)/g)) {
 
       findings.push({
         file: relativePath,

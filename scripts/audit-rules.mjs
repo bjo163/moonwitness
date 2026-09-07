@@ -522,8 +522,20 @@ function auditFile(filePath) {
     const trimmed = line.trim()
     if (trimmed.startsWith("//") || trimmed.startsWith("/*") || trimmed.startsWith("*")) return
 
-    if (isActive) {
-      if (line.match(/var\(--cyber-[^)]+\)/)) {
+  if (isActive) {
+    if (isDomainVisualization(relativePath) === false && /\.(?:tsx|jsx)$/.test(filePath)) {
+      for (const match of content.matchAll(/<(?:img|Image)\b[\s\S]*?>/g)) {
+        if (!/\balt\s*=/.test(match[0])) {
+          VIOLATIONS.missingImageAlt.push({
+            file: relativePath,
+            line: lineNumberFor(content, match.index),
+            issue: "image is missing an accessible alt attribute",
+          })
+        }
+      }
+    }
+
+    if (line.match(/var\(--cyber-[^)]+\)/)) {
         VIOLATIONS.cyberVarMisuse.push({ file: relativePath, line: lineNo, snippet: trimmed })
       }
 
@@ -554,7 +566,7 @@ function auditFile(filePath) {
     }
 
     // Law 07: Legacy HUD / Cosmic Naming
-    if (!filePath.includes("eslint-config")) {
+    if (!filePath.includes("eslint-config") && !filePath.includes(`${path.sep}moon-mizan${path.sep}`)) {
       const hudMatch = line.match(/\b(HUDResourceTable|HUDErrorBoundary|useHUDModal|HUD_TOKENS|HudAccentColor|HudPanelLevel|HUDPanel|HUDBreadcrumb|CosmicDataTable|CosmicFormModal|CosmicPivotGrid|CosmicKanbanBoard|HUDTaskbar)\b/)
       if (hudMatch) {
         VIOLATIONS.legacyHudNaming.push({

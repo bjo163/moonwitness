@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import { Button } from "@workspace/ui"
 import { Moon, BookOpen, Star, Shield, HelpCircle, Trophy } from "lucide-react"
 
 export function MissionBadges() {
@@ -61,9 +62,9 @@ export function MissionBadges() {
         <h3 className="font-sans text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           Achievements & Badges
         </h3>
-        <button className="font-sans text-xs font-medium text-primary hover:underline">
+        <Button type="button" variant="link" className="font-sans text-xs font-medium text-primary hover:underline">
           View All
-        </button>
+        </Button>
       </div>
 
       <div className="grid grid-cols-4 gap-4">

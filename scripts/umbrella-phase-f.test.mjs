@@ -89,8 +89,8 @@ test("verified DoD drives progress to 100 independently of administrative state"
 })
 
 function inventoryFixture(root, constantPort = 4000) {
-  write(root, "docker-compose.yml", `services:\n  api:\n    build:\n      context: .\n      dockerfile: apps/api/Dockerfile\n    environment:\n      DATABASE_URL: \${DATABASE_URL:?required}\n    ports:\n      - "127.0.0.1:\${PORT_API:-4000}:4000"\n    depends_on:\n      postgres:\n        condition: service_healthy\n    healthcheck:\n      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:4000/health/ready"]\n  postgres:\n    image: postgres:18-alpine\n`)
-  write(root, ".env.production.example", "PORT_API=4000\nDATABASE_URL=postgres://placeholder\n")
+  write(root, "docker-compose.yml", `services:\n  api:\n    build:\n      context: .\n      dockerfile: apps/api/Dockerfile\n    environment:\n      DATABASE_URL: \${DATABASE_URL:?required}\n    ports:\n      - "127.0.0.1:\${API_PORT:-4000}:4000"\n    depends_on:\n      postgres:\n        condition: service_healthy\n    healthcheck:\n      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:4000/health/ready"]\n  postgres:\n    image: postgres:18-alpine\n`)
+  write(root, ".env.production.example", "API_PORT=4000\nDATABASE_URL=postgres://placeholder\n")
   write(root, "packages/types/src/constants.ts", `export const APP_PORTS = {\n  API_BACKEND: ${constantPort},\n} as const\n`)
   write(root, "apps/api/Dockerfile", "FROM node:22-alpine\n")
   write(root, "apps/api/package.json", JSON.stringify({ name: "api", dependencies: { fastify: "1.0.0" } }))

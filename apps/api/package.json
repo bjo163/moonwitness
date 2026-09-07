@@ -28,6 +28,7 @@
     "@moon/client": "workspace:*",
     "@moon/compute": "workspace:*",
     "@moon/orm": "workspace:*",
+    "@moon/odoo-bridge": "workspace:*",
     "@moon/performance": "workspace:*",
     "@moon/project": "workspace:*",
     "@moon/helpdesk": "workspace:*",

@@ -22,7 +22,7 @@ export function registerSystemRoutes(server: NativeServer): void {
     tags: ["System"],
     summary: "Get the Command Center operational dashboard read model",
     response: DashboardResponseSchema,
-    handler: async ({ env, uid }) => buildCommandCenterDashboard(env, uid),
+    handler: async ({ env, uid, req }) => buildCommandCenterDashboard(env, uid, config.odoo, (req as any).__moonSession?.odooSessionKey),
   })
   // Direct in-process database status & model introspection (eliminates HTTP loopback)
   server.get("/api/external/db/status", handleDbStatus, "user")

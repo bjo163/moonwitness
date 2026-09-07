@@ -14,6 +14,7 @@ import {
   FileCode2,
   Target,
 } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 export function TaskCenterSidebar() {
   return (
@@ -68,18 +69,18 @@ export function TaskCenterSidebar() {
           QUICK CREATE
         </div>
         <div className="grid grid-cols-2 gap-2">
-          <button className="flex items-center justify-center gap-1.5 rounded border border-primary/30 bg-primary/10 p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-primary/20">
+          <Button type="button" variant="ghost" className="flex items-center justify-center gap-1.5 rounded border border-primary/30 bg-primary/10 p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-primary/20">
             <Plus className="h-3 w-3" /> New Task
-          </button>
-          <button className="bg-background flex items-center justify-center gap-1.5 rounded border border-border p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-muted/30 hover:text-foreground">
+          </Button>
+          <Button type="button" variant="ghost" className="bg-background flex items-center justify-center gap-1.5 rounded border border-border p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-muted/30 hover:text-foreground">
             <Upload className="h-3 w-3" /> Import Tasks
-          </button>
-          <button className="bg-background flex items-center justify-center gap-1.5 rounded border border-border p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-muted/30 hover:text-foreground">
+          </Button>
+          <Button type="button" variant="ghost" className="bg-background flex items-center justify-center gap-1.5 rounded border border-border p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-muted/30 hover:text-foreground">
             <Repeat className="h-3 w-3" /> Recurring Task
-          </button>
-          <button className="bg-background flex items-center justify-center gap-1.5 rounded border border-border p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-muted/30 hover:text-foreground">
+          </Button>
+          <Button type="button" variant="ghost" className="bg-background flex items-center justify-center gap-1.5 rounded border border-border p-2 text-[8px] font-bold text-primary uppercase transition-colors hover:bg-muted/30 hover:text-foreground">
             <FileCode2 className="h-3 w-3" /> Task Template
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -114,9 +115,9 @@ export function TaskCenterSidebar() {
             </div>
           </div>
         </div>
-        <button className="mt-3 flex w-full items-center justify-center rounded border border-primary/50 bg-transparent py-2 text-[9px] font-bold tracking-widest text-primary uppercase transition-colors hover:bg-primary/20">
+        <Button type="button" variant="ghost" className="mt-3 flex w-full items-center justify-center rounded border border-primary/50 bg-transparent py-2 text-[9px] font-bold tracking-widest text-primary uppercase transition-colors hover:bg-primary/20">
           ASK KHIDRA
-        </button>
+        </Button>
       </div>
 
       {/* Task Insights */}

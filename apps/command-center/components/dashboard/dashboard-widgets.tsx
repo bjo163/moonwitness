@@ -62,11 +62,11 @@ export function SpiritualReportWidget() {
   return (
     <div className="rounded-md border border-border bg-card p-6 shadow-xs">
       <div className="flex items-center justify-between border-b border-border pb-3">
-        <div className="flex items-center gap-2 text-primary font-bold text-sm uppercase">
+        <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
           <Sparkles className="h-4 w-4" />
           <span>Spiritual Health & Reflection Analytics</span>
         </div>
-        <StatusBadge status="warning" label="DEMO DATA" size="sm" />
+        <StatusBadge status="warning" label="Demo data" size="sm" />
       </div>
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs">
         <MetricCard
@@ -102,9 +102,9 @@ export function RightSidebar({
       {/* Moon Phase Box */}
       <div className="rounded-md border border-border bg-card p-5 shadow-xs">
         <div className="flex items-center justify-between border-b border-border pb-2">
-          <div className="flex items-center gap-2 text-primary font-bold">
+          <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
             <Orbit className="h-4 w-4 animate-spin [animation-duration:20s]" />
-            <span className="text-[10px] uppercase">Celestial Telemetry</span>
+            <span>Celestial telemetry</span>
           </div>
           <StatusBadge status="warning" label={`${moon?.illumination || "87%"} LIT`} size="sm" />
         </div>
@@ -116,7 +116,7 @@ export function RightSidebar({
 
       {/* Global Monitoring List */}
       <div className="rounded-md border border-border bg-card p-5 shadow-xs space-y-3">
-        <div className="flex items-center gap-2 text-primary font-bold text-[10px] uppercase border-b border-border pb-2">
+        <div className="flex items-center gap-2 border-b border-border pb-2 text-sm font-semibold text-foreground">
           <Globe2 className="h-4 w-4" />
           <span>Global Monitoring</span>
         </div>

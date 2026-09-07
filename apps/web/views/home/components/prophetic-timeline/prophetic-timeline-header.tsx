@@ -2,6 +2,7 @@
 
 import React from "react"
 import { Calendar } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 export function PropheticTimelineHeader() {
   return (
@@ -47,18 +48,18 @@ export function PropheticTimelineHeader() {
             TIMELINE VIEW
           </div>
           <div className="bg-background flex overflow-hidden rounded border border-border">
-            <button className="border-b-2 border-primary bg-primary/20 px-3 py-1.5 text-[9px] font-bold text-primary">
+            <Button type="button" variant="ghost" className="border-b-2 border-primary bg-primary/20 px-3 py-1.5 text-[9px] font-bold text-primary">
               Linear
-            </button>
-            <button className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
+            </Button>
+            <Button type="button" variant="ghost" className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
               Galaxy
-            </button>
-            <button className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
+            </Button>
+            <Button type="button" variant="ghost" className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
               Map
-            </button>
-            <button className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
+            </Button>
+            <Button type="button" variant="ghost" className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
               Tree
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -67,21 +68,21 @@ export function PropheticTimelineHeader() {
             TIME SCALE
           </div>
           <div className="bg-background flex overflow-hidden rounded border border-border">
-            <button className="border-b-2 border-primary bg-primary/20 px-3 py-1.5 text-[9px] font-bold text-primary">
+            <Button type="button" variant="ghost" className="border-b-2 border-primary bg-primary/20 px-3 py-1.5 text-[9px] font-bold text-primary">
               All Time
-            </button>
-            <button className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
+            </Button>
+            <Button type="button" variant="ghost" className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
               Century
-            </button>
-            <button className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
+            </Button>
+            <Button type="button" variant="ghost" className="px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
               Decade
-            </button>
-            <button className="border-r border-border px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
+            </Button>
+            <Button type="button" variant="ghost" className="border-r border-border px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-muted/30">
               Year
-            </button>
-            <button className="px-3 py-1.5 text-primary transition-colors hover:bg-muted/30">
+            </Button>
+            <Button type="button" variant="ghost" size="icon" aria-label="Choose calendar date" className="px-3 py-1.5 text-primary transition-colors hover:bg-muted/30">
               <Calendar className="h-3.5 w-3.5" />
-            </button>
+            </Button>
           </div>
         </div>
       </div>

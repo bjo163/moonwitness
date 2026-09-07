@@ -2,6 +2,7 @@
 
 import React from "react"
 import { Sun, Bell, Sunrise } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 export function SunPositionFooter() {
   return (
@@ -16,9 +17,9 @@ export function SunPositionFooter() {
             Don't forget to get 15-30 minutes of sunlight every morning. Your
             body, mind, and soul need it.
           </p>
-          <button className="flex items-center gap-1 text-[8px] font-bold tracking-widest text-success uppercase transition-colors hover:text-success">
+          <Button type="button" variant="ghost" className="flex items-center gap-1 text-[8px] font-bold tracking-widest text-success uppercase transition-colors hover:text-success">
             <Bell className="h-3 w-3" /> SET REMINDER
-          </button>
+          </Button>
         </div>
       </div>
 

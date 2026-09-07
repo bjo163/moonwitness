@@ -24,65 +24,65 @@ export function DailyInspirationLoreCards({
       <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
         {/* Next Verse Pair */}
         <div
-          className={`flex flex-col justify-between rounded-2xl border border-success/20 bg-card p-6 backdrop-blur-xl transition-colors hover:border-emerald-500/40 ${!data.asmaulSurah ? "opacity-50" : ""}`}
+          className={`flex flex-col justify-between rounded-md border border-border bg-card p-4 transition-colors hover:border-success/50 ${!data.asmaulSurah ? "opacity-50" : ""}`}
         >
           <div className="mb-4 flex items-start justify-between">
-            <h4 className="text-[10px] tracking-[0.2em] text-success uppercase">
+            <h4 className="text-sm font-medium text-success">
               Next Verse Pair
             </h4>
             {data.asmaulSurah && (
-              <span className="rounded-full border border-success/20 bg-success/10 px-3 py-1 text-[9px] text-success">
+              <span className="rounded-md border border-success/20 bg-success/10 px-2 py-1 text-xs text-success">
                 #{data.asmaulSurah.number}
               </span>
             )}
           </div>
           <div className="flex items-end justify-between">
             <div>
-              <h3 className="text-xl font-medium text-foreground drop-shadow-sm">
+              <h3 className="text-xl font-medium text-foreground">
                 {data.asmaulSurah?.nameLatin || "—"}
               </h3>
-              <p className="mt-1 text-[11px] text-success">
+              <p className="mt-1 text-sm text-success">
                 {data.asmaulSurah ? asmaulSurahMeaning : "No pair"}
               </p>
             </div>
-            <div className="font-serif text-3xl font-bold text-success drop-shadow-sm">
+            <div className="arabic-text text-3xl font-bold text-success">
               {data.asmaulSurah?.nameArabic || ""}
             </div>
           </div>
           <div className="relative mt-2 h-4 w-full overflow-hidden border-b border-emerald-500/10">
-            <div className="absolute bottom-0 h-[1px] w-full bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent"></div>
+            <div className="absolute bottom-0 h-px w-full bg-success/30"></div>
           </div>
         </div>
 
         {/* Ayah Pair */}
         <div
-          className={`flex flex-col justify-between rounded-2xl border border-fuchsia-500/20 bg-card p-6 backdrop-blur-xl transition-colors hover:border-fuchsia-500/40 ${!data.asmaulAyah ? "opacity-50" : ""}`}
+          className={`flex flex-col justify-between rounded-md border border-border bg-card p-4 transition-colors hover:border-primary/50 ${!data.asmaulAyah ? "opacity-50" : ""}`}
         >
           <div className="mb-4 flex items-start justify-between">
-            <h4 className="text-[10px] tracking-[0.2em] text-fuchsia-400 uppercase">
+            <h4 className="text-sm font-medium text-primary">
               Ayah Pair
             </h4>
             {data.asmaulAyah && (
-              <span className="rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-3 py-1 text-[9px] text-fuchsia-300">
+              <span className="rounded-md border border-primary/20 bg-primary/10 px-2 py-1 text-xs text-primary">
                 #{data.asmaulAyah.number}
               </span>
             )}
           </div>
           <div className="flex items-end justify-between">
             <div>
-              <h3 className="text-xl font-medium text-foreground drop-shadow-sm">
+              <h3 className="text-xl font-medium text-foreground">
                 {data.asmaulAyah?.nameLatin || "—"}
               </h3>
-              <p className="mt-1 text-[11px] text-fuchsia-300">
+              <p className="mt-1 text-sm text-primary">
                 {data.asmaulAyah ? asmaulAyahMeaning : "No pair"}
               </p>
             </div>
-            <div className="font-serif text-3xl font-bold text-fuchsia-400 drop-shadow-sm">
+            <div className="arabic-text text-3xl font-bold text-primary">
               {data.asmaulAyah?.nameArabic || ""}
             </div>
           </div>
           <div className="relative mt-2 h-4 w-full overflow-hidden border-b border-fuchsia-500/10">
-            <div className="absolute bottom-0 h-[1px] w-full bg-gradient-to-r from-transparent via-fuchsia-500/50 to-transparent"></div>
+            <div className="absolute bottom-0 h-px w-full bg-primary/30"></div>
           </div>
         </div>
       </div>
@@ -90,19 +90,19 @@ export function DailyInspirationLoreCards({
       {/* ROW 3: Lore & Wisdom */}
       <div className="mt-2 grid grid-cols-1 gap-6 md:grid-cols-2">
         {data.hadith ? (
-          <div className="rounded-2xl border border-warning/20 bg-gradient-to-br -background to-background/80 p-8 shadow-lg backdrop-blur-xl transition-colors hover:border-amber-500/40">
+          <div className="rounded-md border border-border bg-card p-6 transition-colors hover:border-warning/50">
             <div className="mb-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-base text-warning">👑</span>
-                <h4 className="text-[11px] tracking-[0.2em] text-warning uppercase">
-                  Legendary Lore Channel
+                <h4 className="text-sm font-medium text-warning">
+                  Hadith source
                 </h4>
               </div>
-              <span className="rounded border border-warning/20 bg-warning/10 px-3 py-1 text-[9px] tracking-widest text-amber-300">
-                {hadithGradeText.toUpperCase()}
+              <span className="rounded-md border border-warning/20 bg-warning/10 px-2 py-1 text-xs text-warning">
+                {hadithGradeText}
               </span>
             </div>
-            <h3 className="mb-6 text-[12px] font-medium tracking-[0.1em] text-amber-300 uppercase drop-shadow-sm">
+            <h3 className="mb-6 text-sm font-medium text-warning">
               {data.hadith.bookName} • RECORD_NO. {data.hadith.number}
             </h3>
             <div className="flex gap-6">
@@ -117,22 +117,21 @@ export function DailyInspirationLoreCards({
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-center rounded-2xl border border-border bg-card p-8 text-xs text-foreground/20 backdrop-blur-xl">
-            NO LORE DETECTED
+          <div className="flex items-center justify-center rounded-md border border-border bg-card p-8 text-sm text-muted-foreground">
+            No hadith available
           </div>
         )}
 
         {data.wisdom ? (
-          <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br -background to-background/80 p-8 shadow-lg backdrop-blur-xl transition-colors hover:border-border">
-            <div className="pointer-events-none absolute top-[10%] right-[-10%] h-40 w-40 rounded-full border border-border bg-primary/10 blur-2xl" />
-            <div className="relative z-10 mb-8 flex items-center gap-3">
+          <div className="relative overflow-hidden rounded-md border border-border bg-card p-6 transition-colors hover:border-primary/50">
+            <div className="relative mb-6 flex items-center gap-3">
               <span className="text-base text-primary">🪐</span>
-              <h4 className="text-[11px] tracking-[0.2em] text-primary uppercase">
-                Sacred Scripture Reflection
+              <h4 className="text-sm font-medium text-primary">
+                Scripture reflection
               </h4>
             </div>
-            <div className="relative z-10 mb-6 rounded-xl border border-border bg-card p-6">
-              <p className="text-base leading-relaxed font-light text-foreground italic drop-shadow-md">
+            <div className="relative mb-6 rounded-md border border-border bg-background p-4">
+              <p className="text-base leading-relaxed text-foreground italic">
                 "
                 {lang === "en"
                   ? data.wisdom.quoteEn || data.wisdom.quote
@@ -140,16 +139,16 @@ export function DailyInspirationLoreCards({
                 "
               </p>
             </div>
-            <p className="relative z-10 text-[9px] tracking-[0.2em] text-primary uppercase">
-              SOURCE KEY:{" "}
+            <p className="relative text-xs text-muted-foreground">
+              Source: {" "}
               {lang === "en"
                 ? data.wisdom.sourceEn || data.wisdom.source
                 : data.wisdom.source}
             </p>
           </div>
         ) : (
-          <div className="flex items-center justify-center rounded-2xl border border-border bg-card p-8 text-xs text-foreground/20 backdrop-blur-xl">
-            NO SCRIPTURE DETECTED
+          <div className="flex items-center justify-center rounded-md border border-border bg-card p-8 text-sm text-muted-foreground">
+            No scripture available
           </div>
         )}
       </div>

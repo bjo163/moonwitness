@@ -104,6 +104,7 @@ export function OSGlobalKnowledgeNetworkCenterColumn() {
             <div className="mb-3 h-16 w-16 overflow-hidden rounded-full shadow-sm">
               <img
                 src="/assets/cam_moon.png"
+                alt="Moon knowledge network"
                 className="h-full w-full object-cover"
               />
             </div>

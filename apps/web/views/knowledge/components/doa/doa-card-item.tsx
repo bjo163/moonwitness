@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import { Bookmark, Share2, PlayCircle, ShieldCheck, Check } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 export interface FormattedDoaItem {
   id: string | number
@@ -40,9 +41,9 @@ export function DoaCardItem({ item }: DoaCardItemProps) {
               {item.source}
             </span>
           )}
-          <button className="text-foreground/30 transition-colors hover:text-foreground">
+          <Button type="button" variant="ghost" size="icon" aria-label={`Bookmark ${item.title}`} className="text-foreground/30 transition-colors hover:text-foreground">
             <Bookmark className="h-3.5 w-3.5" />
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -65,7 +66,9 @@ export function DoaCardItem({ item }: DoaCardItemProps) {
 
       {/* Bottom Counter & Action Bar */}
       <div className="flex items-center justify-between border-t border-border pt-3">
-        <button
+        <Button
+          type="button"
+          variant="outline"
           onClick={() => setCount((prev) => Math.min(prev + 1, target))}
           className={`flex items-center gap-2 rounded-lg border px-3 py-1.5 font-mono text-xs font-bold transition-all ${
             count >= target
@@ -81,17 +84,17 @@ export function DoaCardItem({ item }: DoaCardItemProps) {
           ) : (
             <span>COUNT: {count} / {target}</span>
           )}
-        </button>
+        </Button>
 
         <div className="flex items-center gap-2 text-foreground/40">
-          <button className="flex items-center gap-1 font-mono text-[10px] hover:text-success">
+          <Button type="button" variant="ghost" className="flex items-center gap-1 font-mono text-[10px] hover:text-success">
             <PlayCircle className="h-3.5 w-3.5" />
             <span>Audio</span>
-          </button>
-          <button className="flex items-center gap-1 font-mono text-[10px] hover:text-success">
+          </Button>
+          <Button type="button" variant="ghost" className="flex items-center gap-1 font-mono text-[10px] hover:text-success">
             <Share2 className="h-3.5 w-3.5" />
             <span>Share</span>
-          </button>
+          </Button>
         </div>
       </div>
     </div>

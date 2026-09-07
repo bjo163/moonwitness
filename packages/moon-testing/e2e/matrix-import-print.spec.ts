@@ -1,9 +1,19 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from "@playwright/test"
 
-test.describe('Scenario 3: Bulk CSV Import & Print Report', () => {
-  const COMMAND_CENTER_URL = process.env.PLAYWRIGHT_CC_URL || 'http://localhost:3001'
+test.describe("Scenario 3: Bulk CSV Import & Print Report", () => {
+  const COMMAND_CENTER_URL =
+    process.env.PLAYWRIGHT_CC_URL || "http://localhost:3001"
+  const authenticated = Boolean(
+    process.env.PLAYWRIGHT_ADMIN_EMAIL && process.env.PLAYWRIGHT_ADMIN_PASSWORD
+  )
 
-  test('should open Bulk CSV Ingestion Wizard modal on table view', async ({ page }) => {
+  test("should open Bulk CSV Ingestion Wizard modal on table view", async ({
+    page,
+  }) => {
+    test.skip(
+      !authenticated,
+      "Authenticated matrix flow requires PLAYWRIGHT_ADMIN_EMAIL/PASSWORD"
+    )
     await page.goto(`${COMMAND_CENTER_URL}/matrix/pj.task`)
 
     const importBtn = page.locator('button:has-text("IMPORT CSV")')
@@ -15,11 +25,17 @@ test.describe('Scenario 3: Bulk CSV Import & Print Report', () => {
     await expect(modalTitle).toBeVisible()
   })
 
-  test('should open record modal and provide Print Report action', async ({ page }) => {
+  test("should open record modal and provide Print Report action", async ({
+    page,
+  }) => {
+    test.skip(
+      !authenticated,
+      "Authenticated matrix flow requires PLAYWRIGHT_ADMIN_EMAIL/PASSWORD"
+    )
     await page.goto(`${COMMAND_CENTER_URL}/matrix/pj.task`)
 
     // Click first row
-    const firstRow = page.locator('tbody tr').first()
+    const firstRow = page.locator("tbody tr").first()
     if (await firstRow.isVisible()) {
       await firstRow.click()
 

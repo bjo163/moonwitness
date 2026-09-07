@@ -49,32 +49,35 @@ export function IntelBriefingWidget() {
   return (
     <>
       <button
+        type="button"
         onClick={generateBriefing}
-        className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-primary/50 bg-primary/10 p-4 font-black tracking-widest text-primary uppercase shadow-sm transition-all hover:scale-[1.02] hover:bg-primary/20"
+        className="flex w-full items-center justify-center gap-2 rounded-md border border-border bg-card p-4 text-sm font-semibold text-primary transition-colors hover:bg-muted"
       >
-        <Radio className="h-5 w-5 animate-pulse" />
-        GENERATE DAILY TRANSMISSION
+        <Radio className="h-5 w-5" />
+        Generate daily briefing
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-card p-4 backdrop-blur-sm">
-          <div className="bg-background relative flex h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border-2 border-primary/50 shadow-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4">
+          <div className="relative flex h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-md border border-border bg-card">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-border bg-card p-4">
               <div className="flex items-center gap-3">
-                <Radio className="h-5 w-5 animate-pulse text-primary" />
+                <Radio className="h-5 w-5 text-primary" />
                 <div>
-                  <div className="text-xs font-black tracking-[0.2em] text-primary">
-                    KHIDRA INTELLIGENCE NETWORK
+                  <div className="text-sm font-semibold text-foreground">
+                    Khidra intelligence network
                   </div>
-                  <div className="mt-0.5 text-[9px] tracking-widest text-foreground/50 uppercase">
+                  <div className="mt-0.5 text-xs text-muted-foreground">
                     Eschatological Daily Briefing
                   </div>
                 </div>
               </div>
               <button
+                type="button"
+                aria-label="Close briefing"
                 onClick={() => setIsOpen(false)}
-                className="text-foreground/50 transition-colors hover:text-foreground"
+                className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -84,27 +87,27 @@ export function IntelBriefingWidget() {
             <div className="hide-scrollbar flex-1 overflow-y-auto bg-card/90">
               <div
                 ref={contentRef}
-                className="min-h-full bg-card p-6 font-mono"
+                className="min-h-full bg-card p-6"
               >
                 {isLoading ? (
                   <div className="flex h-full flex-col items-center justify-center gap-4 pt-20 text-primary">
                     <Loader2 className="h-8 w-8 animate-spin" />
-                    <div className="animate-pulse text-center text-xs font-bold tracking-widest uppercase">
-                      Aggregating Global Sensors...
+                    <div className="text-center text-sm font-medium">
+                      Preparing briefing…
                       <br />
-                      <span className="text-[10px] text-foreground/50">
+                      <span className="text-xs text-muted-foreground">
                         Processing Climate, Economy, & Seismic Data
                       </span>
                     </div>
                   </div>
                 ) : error ? (
-                  <div className="flex h-full flex-col items-center justify-center pt-20 text-center text-sm font-bold tracking-widest text-destructive">
-                    [SYSTEM MALFUNCTION]
+                  <div className="flex h-full flex-col items-center justify-center pt-20 text-center text-sm font-medium text-destructive">
+                    Unable to load briefing
                     <br />
                     {error}
                   </div>
                 ) : (
-                  <div className="prose prose-invert max-w-none text-[11px] leading-loose whitespace-pre-wrap text-foreground">
+                  <div className="prose max-w-prose text-base leading-relaxed whitespace-pre-wrap text-foreground">
                     {imageUrl && (
                       <div className="mb-6 overflow-hidden rounded-lg border-2 border-primary/30 shadow-sm">
                         <img
@@ -112,8 +115,8 @@ export function IntelBriefingWidget() {
                           alt="Intel Briefing Infographic"
                           className="w-full object-cover"
                         />
-                        <div className="border-t border-border bg-muted/40 p-2 text-center text-[10px] tracking-wider text-muted-foreground uppercase">
-                          KHIDRA GENERATED INFOGRAPHIC — ACCESS LEVEL 5
+                        <div className="border-t border-border bg-muted/40 p-2 text-center text-xs text-muted-foreground">
+                          Khidra-generated infographic
                         </div>
                       </div>
                     )}
@@ -126,19 +129,21 @@ export function IntelBriefingWidget() {
             {/* Footer */}
             {!isLoading && briefing && (
               <div className="flex items-center justify-between border-t border-border bg-card p-4">
-                <div className="text-success flex items-center gap-2 text-[10px] font-bold tracking-widest">
-                  <div className="bg-success h-2 w-2 animate-pulse rounded-full" />
-                  TRANSMISSION COMPLETE
+                <div className="text-success flex items-center gap-2 text-sm font-medium">
+                  <div className="bg-success h-2 w-2 rounded-full" />
+                  Briefing ready
                 </div>
                 <div className="flex items-center gap-2">
                   <button
-                    className="flex items-center gap-2 rounded border border-primary/30 px-3 py-1.5 text-[10px] font-bold tracking-widest text-primary transition-colors hover:bg-primary/10"
+                    type="button"
+                    className="flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm font-medium text-primary transition-colors hover:bg-muted"
                     onClick={captureSnapshot}
                   >
-                    <Camera className="h-3 w-3" /> CAPTURE INFOGRAPHIC
+                    <Camera className="h-3.5 w-3.5" /> Capture image
                   </button>
                   <button
-                    className="flex items-center gap-2 rounded border border-primary/30 px-3 py-1.5 text-[10px] font-bold tracking-widest text-primary transition-colors hover:bg-primary/10"
+                    type="button"
+                    className="flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm font-medium text-primary transition-colors hover:bg-muted"
                     onClick={() => {
                       const blob = new Blob([briefing], {
                         type: "text/markdown",
@@ -150,7 +155,7 @@ export function IntelBriefingWidget() {
                       a.click()
                     }}
                   >
-                    <Download className="h-3 w-3" /> EXPORT LOG
+                    <Download className="h-3.5 w-3.5" /> Export markdown
                   </button>
                 </div>
               </div>

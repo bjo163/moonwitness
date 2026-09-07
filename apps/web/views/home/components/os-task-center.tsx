@@ -12,7 +12,7 @@ import {
   Moon,
   Activity,
 } from "lucide-react"
-import { resolveVisualizationColor } from "@workspace/ui"
+import { Button, resolveVisualizationColor } from "@workspace/ui"
 import { TaskCenterSidebar } from "./task-center-sidebar"
 import { TaskCenterSummary } from "./task-center-summary"
 import { TaskCenterTable } from "./task-center-table"
@@ -83,22 +83,22 @@ export function OSTaskCenter() {
                   <CheckSquare className="h-4 w-4" /> TASK OVERVIEW
                 </div>
                 <div className="flex gap-2">
-                  <button type="button" className="bg-background flex items-center gap-1 rounded border border-border px-2 py-1 text-[8px] text-primary transition-colors hover:bg-muted/30">
+                  <Button type="button" variant="ghost" className="bg-background flex items-center gap-1 rounded border border-border px-2 py-1 text-[8px] text-primary transition-colors hover:bg-muted/30">
                     <Filter className="h-3 w-3" /> Filters ∨
-                  </button>
-                  <button type="button" className="bg-background flex items-center gap-1 rounded border border-border px-2 py-1 text-[8px] text-primary transition-colors hover:bg-muted/30">
+                  </Button>
+                  <Button type="button" variant="ghost" className="bg-background flex items-center gap-1 rounded border border-border px-2 py-1 text-[8px] text-primary transition-colors hover:bg-muted/30">
                     Group by: <span className="text-primary">Status</span> ∨
-                  </button>
-                  <button type="button" className="bg-background flex items-center gap-1 rounded border border-border px-2 py-1 text-[8px] text-primary transition-colors hover:bg-muted/30">
+                  </Button>
+                  <Button type="button" variant="ghost" className="bg-background flex items-center gap-1 rounded border border-border px-2 py-1 text-[8px] text-primary transition-colors hover:bg-muted/30">
                     Sort by: <span className="text-primary">Priority</span> ∨
-                  </button>
+                  </Button>
                   <div className="bg-background ml-2 flex overflow-hidden rounded border border-border">
-                    <button type="button" className="bg-muted/30 px-2 py-1 text-foreground">
+                    <Button type="button" variant="ghost" size="icon" aria-label="List view" className="bg-muted/30 px-2 py-1 text-foreground">
                       <List className="h-3 w-3" />
-                    </button>
-                    <button type="button" className="px-2 py-1 text-primary hover:bg-muted/30">
+                    </Button>
+                    <Button type="button" variant="ghost" size="icon" aria-label="Calendar view" className="px-2 py-1 text-primary hover:bg-muted/30">
                       <Calendar className="h-3 w-3" />
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>

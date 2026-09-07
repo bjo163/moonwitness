@@ -32,7 +32,7 @@ const nextConfig: NextConfig = {
     const apiUrl =
       process.env.MOON_API_URL ||
       process.env.NEXT_PUBLIC_API_URL ||
-      "http://127.0.0.1:4000"
+      "http://api:4000"
     return [
       {
         source: "/health/:path*",

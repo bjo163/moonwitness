@@ -11,6 +11,7 @@ import {
   Book,
   FileText,
 } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 export function LearningMetricsRow() {
   return (
@@ -45,10 +46,10 @@ export function LearningMetricsRow() {
           ))}
         </div>
 
-        <button className="flex w-full items-center gap-1 border-t border-border pt-4 text-left text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
+        <Button type="button" variant="ghost" className="flex w-full items-center gap-1 border-t border-border pt-4 text-left text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
           <Calendar className="h-3.5 w-3.5" /> VIEW CALENDAR{" "}
           <ArrowRight className="ml-auto h-3 w-3" />
-        </button>
+        </Button>
       </div>
 
       {/* Panel 2: Time Investment */}
@@ -99,9 +100,9 @@ export function LearningMetricsRow() {
           </div>
         </div>
 
-        <button className="mt-6 flex w-full items-center justify-between border-t border-border pt-4 text-center text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
+        <Button type="button" variant="ghost" className="mt-6 flex w-full items-center justify-between border-t border-border pt-4 text-center text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
           VIEW TIME ANALYTICS <ArrowRight className="h-3 w-3" />
-        </button>
+        </Button>
       </div>
 
       {/* Panel 3: Weekly Goal */}
@@ -142,9 +143,9 @@ export function LearningMetricsRow() {
           </div>
         </div>
 
-        <button className="mt-6 flex w-full items-center justify-between border-t border-border pt-4 text-center text-[9px] font-bold tracking-widest text-success uppercase hover:text-foreground">
+        <Button type="button" variant="ghost" className="mt-6 flex w-full items-center justify-between border-t border-border pt-4 text-center text-[9px] font-bold tracking-widest text-success uppercase hover:text-foreground">
           ADJUST GOAL <ArrowRight className="h-3 w-3" />
-        </button>
+        </Button>
       </div>
 
       {/* Panel 4: Knowledge Impact */}
@@ -204,9 +205,9 @@ export function LearningMetricsRow() {
           </div>
         </div>
 
-        <button className="mt-4 flex w-full items-center justify-between border-t border-border pt-4 text-center text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
+        <Button type="button" variant="ghost" className="mt-4 flex w-full items-center justify-between border-t border-border pt-4 text-center text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
           VIEW IMPACT REPORT <ArrowRight className="h-3 w-3" />
-        </button>
+        </Button>
       </div>
     </div>
   )

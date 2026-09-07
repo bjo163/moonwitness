@@ -1,6 +1,7 @@
 import { getDailyPrayerTimes } from "@moon/compute"
 import { getModel } from "@moon/orm"
 import type { DashboardData, DashboardResponse } from "@moon/protocol"
+import { getOdooSession, OdooClient } from "@moon/odoo-bridge"
 
 type Env = any
 type SourceStatus = Record<string, "success" | "unavailable" | "not_configured">
@@ -13,7 +14,7 @@ function withTimeout<T>(promise: Promise<T>, ms = 2500): Promise<T> {
   return Promise.race([promise, timeout]).finally(() => clearTimeout(timer!))
 }
 
-export async function buildCommandCenterDashboard(env: Env, uid: number): Promise<DashboardResponse & { generatedAt: string; sources: SourceStatus }> {
+export async function buildCommandCenterDashboard(env: Env, uid: number, odoo?: { baseUrl: string; database: string; username: string; password: string }, odooSessionKey?: string): Promise<DashboardResponse & { generatedAt: string; sources: SourceStatus }> {
   const sources: SourceStatus = {}
   const data: DashboardData = {
     missionStatus: null,
@@ -28,6 +29,16 @@ export async function buildCommandCenterDashboard(env: Env, uid: number): Promis
   }
 
   const read = async (name: string, limit: number, order?: string, domain: unknown[] = []) => {
+    const odooMap: Record<string, string> = { "pj.project": "project.project", "pj.task": "project.task", "vx.user": "res.users" }
+    if (odoo && odooSessionKey && odooMap[name]) {
+      const session = getOdooSession(odooSessionKey)
+      if (!session) { sources[name] = "unavailable"; return [] }
+      try {
+        const rows = await withTimeout(new OdooClient(odoo).callWithSession<any[]>(session.sessionId, { model: odooMap[name]!, method: "search_read", args: [domain], kwargs: { limit } }))
+        sources[name] = "success"
+        return rows
+      } catch { sources[name] = "unavailable"; return [] }
+    }
     const Model = getModel(name) as any
     if (!Model) { sources[name] = "not_configured"; return [] }
     try {

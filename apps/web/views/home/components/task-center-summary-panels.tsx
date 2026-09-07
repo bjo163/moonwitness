@@ -171,9 +171,9 @@ function TaskCenterSuggestedActions() {
           <TaskCenterSuggestionRow key={suggestion.message} suggestion={suggestion} />
         ))}
       </div>
-      <button type="button" className="mt-2 flex items-center justify-center gap-1 text-[8px] font-bold text-primary transition-colors hover:text-foreground">
+      <Button type="button" variant="ghost" className="mt-2 flex items-center justify-center gap-1 text-[8px] font-bold text-primary transition-colors hover:text-foreground">
         View All Suggestions <ArrowRight className="h-2.5 w-2.5" />
-      </button>
+      </Button>
     </TaskCenterSummaryPanel>
   )
 }

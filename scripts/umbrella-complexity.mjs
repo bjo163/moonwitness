@@ -34,7 +34,7 @@ function listSourceFiles(rootDir, config) {
     }
     walk(rootDir)
   }
-  return files.map(normalize).filter((file) => extensions.has(path.extname(file).toLowerCase()) && !excludes.some((re) => re.test(file))).sort((a, b) => a.localeCompare(b))
+  return files.map(normalize).filter((file) => extensions.has(path.extname(file).toLowerCase()) && fs.existsSync(path.join(rootDir, file)) && !excludes.some((re) => re.test(file))).sort((a, b) => a.localeCompare(b))
 }
 
 function isFunctionNode(node) {

@@ -2,6 +2,7 @@
 
 import React from "react"
 import { Hexagon, ArrowRight } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 const PROGRESS_ITEMS = [
   { n: "QUR'AN", p: 76, lvl: "Advanced", colorClass: "text-primary", bgClass: "bg-primary" },
@@ -78,9 +79,9 @@ export function KnowledgeProgressPanel() {
         </div>
       </div>
 
-      <button className="mt-4 flex w-full items-center justify-center gap-2 rounded border border-border bg-transparent py-3 text-[10px] font-black tracking-widest text-primary uppercase transition-colors hover:bg-primary/10">
+      <Button type="button" variant="ghost" className="mt-4 flex w-full items-center justify-center gap-2 rounded border border-border bg-transparent py-3 text-[10px] font-black tracking-widest text-primary uppercase transition-colors hover:bg-primary/10">
         VIEW DETAILED ANALYTICS <ArrowRight className="h-3.5 w-3.5" />
-      </button>
+      </Button>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import React from "react"
 import { Globe2, Moon, Users, Target, Clock, ArrowRight } from "lucide-react"
 import { resolveSemanticColor, type SemanticColorToken } from "../../lib/semantic-color"
+import { Button } from "../../components/button"
 
 export function RootCauseWidget() {
   return (
@@ -72,9 +73,9 @@ export function RootCauseWidget() {
         </div>
       </div>
 
-      <button type="button" className="mt-3 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
+      <Button type="button" variant="ghost" className="mt-3 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
         VIEW FULL ANALYSIS <ArrowRight className="h-2.5 w-2.5" />
-      </button>
+      </Button>
     </div>
   )
 }

@@ -2,6 +2,7 @@
 
 import React from "react"
 import { Network, Moon, Book, Flame, ArrowRight } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 const DISCOVERIES = [
   {
@@ -44,15 +45,15 @@ export function ActivityOverviewPanel() {
         </div>
 
         <div className="mb-6 flex gap-2 text-[9px] font-bold tracking-wider">
-          <button className="flex-1 rounded border border-border bg-primary/20 py-1.5 text-primary">
+          <Button type="button" variant="ghost" className="flex-1 rounded border border-border bg-primary/20 py-1.5 text-primary">
             7 DAYS
-          </button>
-          <button className="flex-1 rounded border border-border bg-transparent py-1.5 text-muted-foreground transition-colors hover:text-foreground">
+          </Button>
+          <Button type="button" variant="ghost" className="flex-1 rounded border border-border bg-transparent py-1.5 text-muted-foreground transition-colors hover:text-foreground">
             30 DAYS
-          </button>
-          <button className="flex-1 rounded border border-border bg-transparent py-1.5 text-muted-foreground transition-colors hover:text-foreground">
+          </Button>
+          <Button type="button" variant="ghost" className="flex-1 rounded border border-border bg-transparent py-1.5 text-muted-foreground transition-colors hover:text-foreground">
             90 DAYS
-          </button>
+          </Button>
         </div>
 
         {/* Chart Visual Simulation */}
@@ -138,9 +139,9 @@ export function ActivityOverviewPanel() {
           ))}
         </div>
 
-        <button className="mt-3 flex w-full items-center justify-end gap-1 text-right text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
+        <Button type="button" variant="ghost" className="mt-3 flex w-full items-center justify-end gap-1 text-right text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
           VIEW ALL ACTIVITY <ArrowRight className="h-3 w-3" />
-        </button>
+        </Button>
       </div>
     </div>
   )

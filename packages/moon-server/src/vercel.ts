@@ -13,6 +13,16 @@ let initialized = false;
 
 export function createVercelAdapter(config: VercelAdapterConfig) {
   return async function moonHandler(req: Request): Promise<Response> {
+    // The Vercel compatibility adapter is legacy-ORM based. Refuse to run it
+    // when Odoo is configured, otherwise a deployment could accidentally split
+    // writes between the legacy store and Odoo's source of truth.
+    if (process.env.ODOO_BASE_URL?.trim() && process.env.ODOO_DATABASE?.trim()) {
+      return Response.json(
+        { error: 'This adapter is disabled in Odoo mode; use the Odoo-aware NativeServer.', code: 'ODOO_ADAPTER_REQUIRED' },
+        { status: 503, headers: { 'Content-Type': 'application/json' } },
+      )
+    }
+
     if (!initialized) {
       setupOrm(config.database);
       if (config.addons) {

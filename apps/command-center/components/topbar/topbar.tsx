@@ -41,7 +41,7 @@ export function CommandCenterTopbar({ onMenu }: { onMenu: () => void }) {
   }
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/95 px-4 backdrop-blur-md sm:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background px-4 sm:px-6">
       {/* Left Title & Mobile Menu */}
       <div className="flex min-w-0 items-center gap-3">
         <Button
@@ -55,7 +55,7 @@ export function CommandCenterTopbar({ onMenu }: { onMenu: () => void }) {
           <Menu className="h-5 w-5" />
         </Button>
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="text-xs font-medium text-muted-foreground">
             Operations
           </p>
           <h1 className="truncate text-base font-bold capitalize text-foreground sm:text-lg">
@@ -110,9 +110,9 @@ export function CommandCenterTopbar({ onMenu }: { onMenu: () => void }) {
           </Button>
 
           {notificationsOpen && (
-            <div className="absolute right-0 top-12 w-80 rounded-xl border border-border bg-popover p-4 shadow-xl z-50 text-popover-foreground">
+          <div className="absolute right-0 top-12 z-50 w-80 rounded-md border border-border bg-popover p-4 text-popover-foreground shadow-lg">
               <div className="mb-3 flex items-center justify-between border-b border-border pb-2">
-                <p className="text-xs font-bold uppercase tracking-wider text-foreground">
+                <p className="text-sm font-semibold text-foreground">
                   Notifications
                 </p>
                 <Button

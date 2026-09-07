@@ -29,17 +29,17 @@ jobs:
     timeout-minutes: 40
     steps:
       - name: Checkout exact candidate SHA
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@f520eceda224fe1a4aed5a2a27a194379a409996 # v6
         with:
           version: 10.33.4
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
           cache: pnpm
@@ -47,7 +47,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Collect exact-SHA GitHub evidence
-        uses: actions/github-script@v7
+        uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         env:
           CANDIDATE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         with:

@@ -49,6 +49,79 @@ export interface DomainImportStats {
   provenanceId: number
 }
 
+async function importToOdoo(normalized: NormalizedArtifact, ctx: ImportContext): Promise<DomainImportStats> {
+  const client = ctx.odooClient
+  const sessionId = ctx.odooSessionId
+  if (!client || !sessionId) throw new Error('Odoo persistence lane requires an authenticated session')
+  const first = normalized.records[0]?.fields || {}
+  const manifestRows = await client.callWithSession<any[]>(sessionId, { model: 'moon.witness.source.manifest', method: 'search_read', args: [[['code', '=', ctx.manifestCode]]], kwargs: { fields: ['id'], limit: 1 } })
+  if (!manifestRows[0]?.id) await client.callWithSession(sessionId, { model: 'moon.witness.source.manifest', method: 'create', args: [{ name: ctx.manifestCode, code: ctx.manifestCode, source_kind: ctx.sourceKind, parser_version: ctx.parserVersion, normalization_version: ctx.normalizationVersion, policy_version: String(first.policyVersion || '1.0.0'), manifest_checksum: normalized.checksum }], kwargs: {} })
+  const policyVersion = String(first.policyVersion || '1.0.0')
+  const policyRows = await client.callWithSession<any[]>(sessionId, { model: 'moon.witness.source.policy', method: 'search_read', args: [[['name', '=', ctx.manifestCode], ['version', '=', policyVersion]]], kwargs: { fields: ['id'], limit: 1 } })
+  if (!policyRows[0]?.id) await client.callWithSession(sessionId, { model: 'moon.witness.source.policy', method: 'create', args: [{ name: ctx.manifestCode, version: policyVersion, authority_class: ctx.authorityClass, allowed_engine_use: 'CONTEXTUAL', source_kind: ctx.sourceKind, rules: {} }], kwargs: {} })
+  const sourceKey = `source:${String(first.sourceCode || ctx.manifestCode || 'corpus-source')}`
+  const sourceRows = await client.callWithSession(sessionId, { model: 'moon.witness.source', method: 'search_read', args: [[['stable_key', '=', sourceKey]]], kwargs: { fields: ['id', 'name'] } }) as Array<Record<string, unknown>>
+  const sourceId = sourceRows[0]?.id ? Number(sourceRows[0].id) : Number(await client.callWithSession(sessionId, { model: 'moon.witness.source', method: 'create', args: [{ name: String(first.sourceName || ctx.manifestCode || 'Corpus Source'), stable_key: sourceKey, source_class: ctx.sourceKind === 'tradition' ? 'HADITH' : 'OTHER', corpus: String(first.corpusCode || 'moonwitness-corpus'), revision: String(first.corpusVersion || '1.0.0') }], kwargs: {} }))
+  if (!sourceId) throw new Error('Odoo source creation returned no id')
+  const provenanceRows = await client.callWithSession(sessionId, { model: 'moon.witness.provenance', method: 'search_read', args: [[['source_id', '=', sourceId], ['checksum', '=', normalized.checksum], ['revision', '=', ctx.normalizationVersion]]], kwargs: { fields: ['id'], limit: 1 } }) as Array<Record<string, unknown>>
+  const provenanceId = provenanceRows[0]?.id ? Number(provenanceRows[0].id) : Number(await client.callWithSession(sessionId, { model: 'moon.witness.provenance', method: 'create', args: [{ name: `Import ${ctx.manifestCode}`, source_id: sourceId, revision: ctx.normalizationVersion, checksum: normalized.checksum, method: 'canonical-corpus-importer' }], kwargs: {} }))
+  if (ctx.sourceKind === 'tradition') {
+    const compendium = String(first.compendium || first.sourceCode || ctx.manifestCode)
+    const corpusName = String(first.compendiumName || first.sourceName || compendium)
+    const corpusKey = `tradition:corpus:${compendium}`
+    const corpusRows = await client.callWithSession<any[]>(sessionId, { model: 'moon.witness.tradition.corpus', method: 'search_read', args: [[['slug', '=', compendium]]], kwargs: { fields: ['id'], limit: 1 } })
+    const corpusId = corpusRows[0]?.id ? Number(corpusRows[0].id) : Number(await client.callWithSession(sessionId, { model: 'moon.witness.tradition.corpus', method: 'create', args: [{ name: corpusName, slug: compendium, source_id: sourceId, language: normalized.records[0]?.language || 'ar' }], kwargs: {} }))
+    let created = 0; let updated = 0
+    for (let i = 0; i < normalized.records.length; i++) {
+      const record = normalized.records[i]!
+      const unitKey = `tradition:unit:${compendium}:${record.sourceLocalId}`
+      const rows = await client.callWithSession<any[]>(sessionId, { model: 'moon.witness.tradition.unit', method: 'search_read', args: [[['stable_key', '=', unitKey]]], kwargs: { fields: ['id'], limit: 1 } })
+      const values = { name: `${corpusName} #${record.sourceLocalId}`, corpus_id: corpusId, stable_key: unitKey, sequence: i + 1, text: record.sourceText || '', provenance_id: provenanceId }
+      if (rows[0]?.id) { await client.callWithSession(sessionId, { model: 'moon.witness.tradition.unit', method: 'write', args: [[Number(rows[0].id)], values], kwargs: {} }); updated++ }
+      else { await client.callWithSession(sessionId, { model: 'moon.witness.tradition.unit', method: 'create', args: [values], kwargs: {} }); created++ }
+    }
+    return { created, updated, skipped: 0, sourceId, provenanceId }
+  }
+  if (ctx.sourceKind === 'lexical') {
+    let created = 0; let updated = 0
+    for (const record of normalized.records) {
+      const rootKey = `root:${record.language}:${record.sourceText}`
+      const entityRows = await client.callWithSession<any[]>(sessionId, { model: 'moon.witness.entity', method: 'search_read', args: [[['canonical_key', '=', `entity:${rootKey}`]]], kwargs: { fields: ['id'], limit: 1 } })
+      const entityId = entityRows[0]?.id ? Number(entityRows[0].id) : Number(await client.callWithSession(sessionId, { model: 'moon.witness.entity', method: 'create', args: [{ name: record.sourceText, canonical_key: `entity:${rootKey}`, entity_type: 'CONCEPT' }], kwargs: {} }))
+      const roots = await client.callWithSession<any[]>(sessionId, { model: 'moon.witness.root', method: 'search_read', args: [[['stable_key', '=', rootKey]]], kwargs: { fields: ['id'], limit: 1 } })
+      const rootValues = { name: record.sourceText, entity_id: entityId, stable_key: rootKey, language_code: record.language, script: record.script || 'Arab', written_form: record.sourceText, source_id: sourceId, provenance_id: provenanceId }
+      const rootId = roots[0]?.id ? Number(roots[0].id) : Number(await client.callWithSession(sessionId, { model: 'moon.witness.root', method: 'create', args: [rootValues], kwargs: {} }))
+      if (roots[0]?.id) updated++; else created++
+      for (const lemma of (record.fields?.lemmas as Array<{ lemma: string }> || [])) {
+        const key = `lexeme:${record.language}:${lemma.lemma}`
+        const lexRows = await client.callWithSession<any[]>(sessionId, { model: 'moon.witness.lexeme', method: 'search_read', args: [[['stable_key', '=', key]]], kwargs: { fields: ['id'], limit: 1 } })
+        if (lexRows[0]?.id) { updated++; continue }
+        const lexEntity = await client.callWithSession(sessionId, { model: 'moon.witness.entity', method: 'create', args: [{ name: lemma.lemma, canonical_key: `entity:${key}`, entity_type: 'CONCEPT' }], kwargs: {} })
+        await client.callWithSession(sessionId, { model: 'moon.witness.lexeme', method: 'create', args: [{ name: lemma.lemma, entity_id: Number(lexEntity), stable_key: key, language_code: record.language, script: record.script || 'Arab', lemma: lemma.lemma, root_id: rootId, source_id: sourceId, provenance_id: provenanceId }], kwargs: {} }); created++
+      }
+    }
+    return { created, updated, skipped: 0, sourceId, provenanceId }
+  }
+  const editionKey = `edition:${String(first.editionCode || first.sourceCode || ctx.manifestCode)}:${String(first.corpusVersion || '1.0.0')}`
+  const editionRows = await client.callWithSession<any[]>(sessionId, { model: 'moon.witness.text.edition', method: 'search_read', args: [[['revision', '=', editionKey]]], kwargs: { fields: ['id'], limit: 1 } })
+  const editionId = editionRows[0]?.id ? Number(editionRows[0].id) : Number(await client.callWithSession(sessionId, { model: 'moon.witness.text.edition', method: 'create', args: [{ name: String(first.editionName || first.sourceName || ctx.manifestCode), source_id: sourceId, language: normalized.records[0]?.language || 'ar', revision: editionKey, checksum: normalized.checksum }], kwargs: {} }))
+  let created = 0
+  let updated = 0
+  for (const record of normalized.records) {
+    const reference = record.sourceLocalId
+    const existing = await client.callWithSession(sessionId, { model: 'moon.witness.passage', method: 'search_read', args: [[['source_id', '=', sourceId], ['canonical_reference', '=', reference]]], kwargs: { fields: ['id'] } }) as Array<Record<string, unknown>>
+    const values = { name: reference, source_id: sourceId, passage_type: record.hierarchy.length > 2 ? 'verse' : 'section', sequence: Number(record.fields.sequence || 0), canonical_reference: reference, content: record.sourceText || '', source_revision: String(first.corpusVersion || '1.0.0') }
+    const passageId = existing[0]?.id ? Number(existing[0].id) : Number(await client.callWithSession(sessionId, { model: 'moon.witness.passage', method: 'create', args: [values], kwargs: {} }))
+    if (existing[0]?.id) { await client.callWithSession(sessionId, { model: 'moon.witness.passage', method: 'write', args: [[passageId], values], kwargs: {} }); updated++ }
+    else created++
+    const contentRows = await client.callWithSession(sessionId, { model: 'moon.witness.content', method: 'search_read', args: [[['passage_id', '=', passageId], ['content_type', '=', 'original'], ['language', '=', record.language]]], kwargs: { fields: ['id'], limit: 1 } }) as Array<Record<string, unknown>>
+    const contentValues = { name: `${reference} (${record.language})`, passage_id: passageId, content_type: 'original', language: record.language, edition_id: editionId, text: record.sourceText || '' }
+    if (contentRows[0]?.id) await client.callWithSession(sessionId, { model: 'moon.witness.content', method: 'write', args: [[Number(contentRows[0].id)], contentValues], kwargs: {} })
+    else await client.callWithSession(sessionId, { model: 'moon.witness.content', method: 'create', args: [contentValues], kwargs: {} })
+  }
+  return { created, updated, skipped: 0, sourceId, provenanceId }
+}
+
 function idOf(row: any): number | null {
   const id = Number(row?.id)
   return Number.isInteger(id) && id > 0 ? id : null
@@ -58,6 +131,7 @@ export async function importCanonicalCorpus(
   normalized: NormalizedArtifact,
   ctx: ImportContext
 ): Promise<DomainImportStats> {
+  if (ctx.odooClient || ctx.odooSessionId) return importToOdoo(normalized, ctx)
   const env = ctx.env
   const getModel = env.getModel
   if (!getModel) {

@@ -11,6 +11,8 @@ import {
   Book,
 } from "lucide-react"
 import { useKnowledgeGraph } from "@workspace/hooks"
+import { Button } from "../../components/button"
+import { Input } from "../../components/input"
 
 // Helper to map string icon names to Lucide components
 const iconMap: Record<string, React.ElementType> = {
@@ -43,7 +45,7 @@ export function GraphSidebarWidget() {
         </div>
         <div className="relative">
           <Search className="absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-primary" />
-          <input
+          <Input
             type="text"
             placeholder="Search anything..."
             className="bg-background w-full rounded-md border border-border py-2 pr-8 pl-9 text-[10px] text-foreground transition-colors focus:border-primary focus:outline-none"
@@ -98,24 +100,24 @@ export function GraphSidebarWidget() {
           QUICK FILTERS
         </div>
         <div className="grid grid-cols-2 gap-1.5">
-          <button className="rounded border border-primary/50 bg-primary/20 px-2 py-1.5 text-[9px] font-bold text-primary">
+          <Button type="button" variant="ghost" className="rounded border border-primary/50 bg-primary/20 px-2 py-1.5 text-[9px] font-bold text-primary">
             Show All
-          </button>
-          <button className="bg-background rounded border border-border px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-border hover:text-foreground">
+          </Button>
+          <Button type="button" variant="ghost" className="bg-background rounded border border-border px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-border hover:text-foreground">
             Revelation
-          </button>
-          <button className="bg-background rounded border border-border px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-border hover:text-foreground">
+          </Button>
+          <Button type="button" variant="ghost" className="bg-background rounded border border-border px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-border hover:text-foreground">
             Timeline
-          </button>
-          <button className="bg-background rounded border border-border px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-border hover:text-foreground">
+          </Button>
+          <Button type="button" variant="ghost" className="bg-background rounded border border-border px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-border hover:text-foreground">
             Science
-          </button>
-          <button className="bg-background rounded border border-border px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-border hover:text-foreground">
+          </Button>
+          <Button type="button" variant="ghost" className="bg-background rounded border border-border px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-border hover:text-foreground">
             People
-          </button>
-          <button className="bg-background rounded border border-border px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-border hover:text-foreground">
+          </Button>
+          <Button type="button" variant="ghost" className="bg-background rounded border border-border px-2 py-1.5 text-[9px] font-bold text-primary transition-colors hover:border-border hover:text-foreground">
             Places
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -144,21 +146,21 @@ export function GraphSidebarWidget() {
           DEPTH LEVEL
         </div>
         <div className="flex overflow-hidden rounded border border-border text-[9px] font-bold">
-          <button className="bg-background flex-1 py-1.5 text-primary hover:bg-muted/30">
+          <Button type="button" variant="ghost" className="bg-background flex-1 py-1.5 text-primary hover:bg-muted/30">
             1
-          </button>
-          <button className="bg-background flex-1 border-l border-border py-1.5 text-primary hover:bg-muted/30">
+          </Button>
+          <Button type="button" variant="ghost" className="bg-background flex-1 border-l border-border py-1.5 text-primary hover:bg-muted/30">
             2
-          </button>
-          <button className="flex-1 border-l border-primary/30 bg-primary/20 py-1.5 text-primary">
+          </Button>
+          <Button type="button" variant="ghost" className="flex-1 border-l border-primary/30 bg-primary/20 py-1.5 text-primary">
             3
-          </button>
-          <button className="bg-background flex-1 border-l border-border py-1.5 text-primary hover:bg-muted/30">
+          </Button>
+          <Button type="button" variant="ghost" className="bg-background flex-1 border-l border-border py-1.5 text-primary hover:bg-muted/30">
             4
-          </button>
-          <button className="bg-background flex-1 border-l border-border py-1.5 text-primary hover:bg-muted/30">
+          </Button>
+          <Button type="button" variant="ghost" className="bg-background flex-1 border-l border-border py-1.5 text-primary hover:bg-muted/30">
             5
-          </button>
+          </Button>
         </div>
       </div>
     </div>

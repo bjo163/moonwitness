@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react"
 import { Grid3X3, ArrowRight, X, Eye } from "lucide-react"
 import type { ModelSchema, ModelRecord } from "@workspace/types"
+import { Button } from "../button"
 
 export interface ModelPivotGridProps {
   schema: ModelSchema
@@ -10,11 +11,23 @@ export interface ModelPivotGridProps {
   onRecordClick?: (rec: ModelRecord) => void
 }
 
-export function ModelPivotGrid({
+type PivotCandidateField = { key: string; label: string }
+
+type SelectedPivotCell = {
+  rowVal: string
+  colVal: string
+  records: ModelRecord[]
+}
+
+interface ModelPivotGridControllerProps {
+  schema: ModelSchema
+  records: ModelRecord[]
+}
+
+function useModelPivotGridController({
   schema,
   records,
-  onRecordClick,
-}: ModelPivotGridProps) {
+}: ModelPivotGridControllerProps) {
   // Extract categorizable fields (selection, many2one, string, status)
   const candidateFields = useMemo(() => {
     return Object.entries(schema.fields)
@@ -24,11 +37,7 @@ export function ModelPivotGrid({
 
   const [rowField, setRowField] = useState<string>(candidateFields[0]?.key || "stageId")
   const [colField, setColField] = useState<string>(candidateFields[1]?.key || "state")
-  const [selectedCell, setSelectedCell] = useState<{
-    rowVal: string
-    colVal: string
-    records: ModelRecord[]
-  } | null>(null)
+  const [selectedCell, setSelectedCell] = useState<SelectedPivotCell | null>(null)
 
   // Extract unique row values
   const rowValues = useMemo(() => {
@@ -93,6 +102,57 @@ export function ModelPivotGrid({
     return totals
   }, [matrix, rowValues, colValues])
 
+  return {
+    candidateFields,
+    rowField,
+    setRowField,
+    colField,
+    setColField,
+    selectedCell,
+    setSelectedCell,
+    rowValues,
+    colValues,
+    matrix,
+    colTotals,
+  }
+}
+
+interface ModelPivotGridPresentationProps {
+  schema: ModelSchema
+  records: ModelRecord[]
+  candidateFields: PivotCandidateField[]
+  rowField: string
+  colField: string
+  rowValues: string[]
+  colValues: string[]
+  matrix: Map<string, ModelRecord[]>
+  colTotals: Record<string, number>
+  selectedCell: SelectedPivotCell | null
+  onRowFieldChange: (field: string) => void
+  onColFieldChange: (field: string) => void
+  onSelectCell: (cell: SelectedPivotCell) => void
+  onCloseCell: () => void
+  onRecordClick?: (rec: ModelRecord) => void
+}
+
+function ModelPivotGridPresentation({
+  schema,
+  records,
+  candidateFields,
+  rowField,
+  colField,
+  rowValues,
+  colValues,
+  matrix,
+  colTotals,
+  selectedCell,
+  onRowFieldChange,
+  onColFieldChange,
+  onSelectCell,
+  onCloseCell,
+  onRecordClick,
+}: ModelPivotGridPresentationProps) {
+
   return (
     <div className="space-y-6">
       {/* Pivot Controls Header */}
@@ -109,7 +169,7 @@ export function ModelPivotGrid({
             <span className="text-muted-foreground uppercase text-[10px] font-semibold">Row Axis (Y):</span>
             <select
               value={rowField}
-              onChange={(e) => setRowField(e.target.value)}
+              onChange={(e) => onRowFieldChange(e.target.value)}
               className="bg-background border border-border rounded-lg px-3 py-1.5 text-foreground text-xs focus:border-primary focus:outline-none"
             >
               {candidateFields.map((f) => (
@@ -126,7 +186,7 @@ export function ModelPivotGrid({
             <span className="text-muted-foreground uppercase text-[10px] font-semibold">Column Axis (X):</span>
             <select
               value={colField}
-              onChange={(e) => setColField(e.target.value)}
+              onChange={(e) => onColFieldChange(e.target.value)}
               className="bg-background border border-border rounded-lg px-3 py-1.5 text-foreground text-xs focus:border-primary focus:outline-none"
             >
               {candidateFields.map((f) => (
@@ -173,7 +233,7 @@ export function ModelPivotGrid({
                     return (
                       <td
                         key={cVal}
-                        onClick={() => hasItems && setSelectedCell({ rowVal: rVal, colVal: cVal, records: items })}
+                        onClick={() => hasItems && onSelectCell({ rowVal: rVal, colVal: cVal, records: items })}
                         className={`py-3 px-4 text-center transition-all ${
                           hasItems
                             ? "cursor-pointer hover:bg-primary/10 text-primary font-bold"
@@ -227,16 +287,16 @@ export function ModelPivotGrid({
                   {selectedCell.colVal}
                 </h3>
               </div>
-              <button onClick={() => setSelectedCell(null)} className="p-1 text-muted-foreground hover:text-foreground">
+              <Button type="button" variant="ghost" onClick={onCloseCell} aria-label="Close drilldown" className="p-1 text-muted-foreground hover:text-foreground">
                 <X className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
             <div className="p-4 max-h-80 overflow-y-auto space-y-2">
               {selectedCell.records.map((rec) => (
                 <div
                   key={rec.id}
                   onClick={() => {
-                    setSelectedCell(null)
+                    onCloseCell()
                     onRecordClick?.(rec)
                   }}
                   className="flex items-center justify-between p-2.5 bg-background border border-border hover:border-primary/50 rounded-lg cursor-pointer transition-colors group"
@@ -252,5 +312,33 @@ export function ModelPivotGrid({
         </div>
       )}
     </div>
+  )
+}
+
+export function ModelPivotGrid({
+  schema,
+  records,
+  onRecordClick,
+}: ModelPivotGridProps) {
+  const controller = useModelPivotGridController({ schema, records })
+
+  return (
+    <ModelPivotGridPresentation
+      schema={schema}
+      records={records}
+      candidateFields={controller.candidateFields}
+      rowField={controller.rowField}
+      colField={controller.colField}
+      rowValues={controller.rowValues}
+      colValues={controller.colValues}
+      matrix={controller.matrix}
+      colTotals={controller.colTotals}
+      selectedCell={controller.selectedCell}
+      onRowFieldChange={controller.setRowField}
+      onColFieldChange={controller.setColField}
+      onSelectCell={controller.setSelectedCell}
+      onCloseCell={() => controller.setSelectedCell(null)}
+      onRecordClick={onRecordClick}
+    />
   )
 }

@@ -129,13 +129,7 @@ export function KitabPortalView() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-card pb-10 font-sans text-foreground selection:bg-blue-500/30">
-      {/* Background Ambience */}
-      <div className="pointer-events-none fixed inset-0 z-0">
-        <div className="absolute top-0 left-1/2 h-[400px] w-full max-w-[1000px] -translate-x-1/2 rounded-full bg-blue-600/10 blur-[150px]" />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] mix-blend-overlay" />
-      </div>
-
-      <div className="relative z-10 mx-auto max-w-[1800px] space-y-4 px-4 pt-2 lg:px-6">
+      <div className="mx-auto max-w-[1800px] space-y-4 px-4 pt-2 lg:px-6">
         {/* 1. Hero & Stats Strip */}
         <KitabHero
           totalScriptures={totalScriptures}

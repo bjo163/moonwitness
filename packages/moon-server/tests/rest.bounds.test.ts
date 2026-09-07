@@ -207,6 +207,7 @@ describe('REST Query Controls & Input Validation (#17)', () => {
     )
   })
 
+
   it('rejects invalid order parameter containing SQL injection syntax', async () => {
     const req = createReq('GET', '/api/sample.item?order=id;DROP+TABLE+users')
     const { res, getStatus, getBody } = createRes()

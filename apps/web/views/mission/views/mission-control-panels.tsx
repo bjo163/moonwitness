@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic"
 import { Globe, Info, ShieldAlert, Target } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 const Map = dynamic(
   () => import("react-leaflet").then((mod) => mod.MapContainer),
@@ -164,10 +165,10 @@ export function MissionControlIntelligence({
               {activeTarget.description}
             </p>
 
-            <button type="button" className="mt-4 flex w-full items-center justify-center gap-2 border border-primary bg-primary/20 py-2 text-xs font-bold text-primary transition-colors hover:bg-primary/40">
+            <Button type="button" variant="ghost" className="mt-4 flex w-full items-center justify-center gap-2 border border-primary bg-primary/20 py-2 text-xs font-bold text-primary transition-colors hover:bg-primary/40">
               <ShieldAlert className="h-4 w-4" />
               INITIATE RELIEF PROTOCOL
-            </button>
+            </Button>
           </div>
         ) : (
           <div className="py-12 text-center opacity-50">

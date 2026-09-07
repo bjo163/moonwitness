@@ -12,6 +12,7 @@ import {
   Sun,
   Waves,
 } from "lucide-react"
+import { Button } from "@workspace/ui"
 import type { LucideIcon } from "lucide-react"
 import { useGlobalMonitoring, type EarthquakeFeature } from "@moon/client"
 import { MetricCard } from "@workspace/ui"
@@ -178,7 +179,7 @@ export function GlobalMonitoringDashboard() {
         </header>
 
         <nav className="flex flex-wrap gap-2" aria-label="Monitoring filters">
-          {FILTERS.map(({ id, label, icon: Icon }) => <button key={id} type="button" onClick={() => setFilter(id)} aria-pressed={filter === id} className={`inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors ${filter === id ? "border-primary bg-primary/10 text-primary" : "border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground"}`}><Icon className="size-4" aria-hidden="true" />{label}</button>)}
+          {FILTERS.map(({ id, label, icon: Icon }) => <Button key={id} type="button" variant="ghost" onClick={() => setFilter(id)} aria-pressed={filter === id} className={`inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors ${filter === id ? "border-primary bg-primary/10 text-primary" : "border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground"}`}><Icon className="size-4" aria-hidden="true" />{label}</Button>)}
         </nav>
 
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Monitoring summary">

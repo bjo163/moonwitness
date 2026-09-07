@@ -10,7 +10,7 @@ import {
   Camera,
 } from "lucide-react"
 import { AutoAvatar } from "@workspace/auto-avatar"
-import { PropertyRow } from "@workspace/ui"
+import { Button, PropertyRow } from "@workspace/ui"
 
 export function ProfileCard({
   profileData,
@@ -46,9 +46,9 @@ export function ProfileCard({
             />
           </div>
           {isOwnProfile && (
-            <button className="absolute right-0 bottom-0 rounded-full border border-primary/50 bg-card p-1.5 text-primary hover:bg-primary/20">
+            <Button type="button" variant="ghost" size="icon" aria-label="Change profile photo" className="absolute right-0 bottom-0 rounded-full border border-primary/50 bg-card p-1.5 text-primary hover:bg-primary/20">
               <Camera className="h-4 w-4" />
-            </button>
+            </Button>
           )}
         </div>
 

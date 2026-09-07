@@ -6,6 +6,7 @@ import {
   type UserProfile,
 } from "../../auth/components/modals/user-profile-modal"
 import type { UserProfile as WorkspaceUserProfile } from "@workspace/types"
+import { Button, Textarea } from "@workspace/ui"
 
 export type CommentItem = {
   id: string
@@ -63,39 +64,12 @@ export function InspirationCommentsPresentation({
         onSaveProfile={onSaveProfile}
       />
 
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="rounded-md text-[10px]">
-            💬 HOLOGRAM COMMUNITY CHAT
-          </span>
-          <span className="text-[10px] font-black text-primary">
-            ({comments.length})
-          </span>
-        </div>
-        {!userProfile ? (
-          <button
-            type="button"
-            onClick={onOpenProfile}
-            className="btn-primary btn-primary-ghost flex items-center gap-1 px-3 py-1 text-[10px]"
-          >
-            <span className="text-primary">⎔</span>
-            <span>{t("SETUP USER ID", "PROFILKAN NAMA")}</span>
-          </button>
-        ) : (
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-success">
-              ● ACTIVE: {userProfile.avatar} {userProfile.name}
-            </span>
-            <button
-              type="button"
-              onClick={onOpenProfile}
-              className="text-[9px] font-bold text-primary underline hover:text-foreground"
-            >
-              [{t("EDIT", "UBAH")}]
-            </button>
-          </div>
-        )}
-      </div>
+      <InspirationCommentsHeader
+        commentCount={comments.length}
+        userProfile={userProfile}
+        t={t}
+        onOpenProfile={onOpenProfile}
+      />
 
       <form
         onSubmit={onSubmitComment}
@@ -110,7 +84,8 @@ export function InspirationCommentsPresentation({
                 "// TULISKAN TADABBUR, PERENUNGAN HIKMAH, ATAU DOA ANDA UNTUK DIPILIH DI ROTASI GLOBAL."
               )}
             </p>
-            <button
+            <Button
+              variant="ghost"
               type="button"
               onClick={onOpenProfile}
               className="btn-primary mt-1 px-5 py-2 text-xs"
@@ -120,7 +95,7 @@ export function InspirationCommentsPresentation({
                 "SET UP YOUR USER ID FIRST",
                 "PROFILKAN NAMA / USER ID ANDA DULU"
               )}
-            </button>
+            </Button>
           </div>
         ) : (
           <>
@@ -136,7 +111,7 @@ export function InspirationCommentsPresentation({
                   : "👥 JAMAAH (PUBLIC)"}
               </span>
             </div>
-            <textarea
+            <Textarea
               placeholder={t(
                 `Write your reflection, contemplation, or prayer regarding ${itemTitle}...`,
                 `Tuliskan perenungan, tadabbur, atau doa terkait ${itemTitle}...`
@@ -160,7 +135,8 @@ export function InspirationCommentsPresentation({
                   )}
                 </span>
               )}
-              <button
+              <Button
+                variant="default"
                 type="submit"
                 disabled={submitting || !commentText.trim()}
                 className="btn-primary px-4 py-2 text-[10px] disabled:opacity-50"
@@ -168,7 +144,7 @@ export function InspirationCommentsPresentation({
                 {submitting
                   ? t("💬 SENDING...", "💬 MENGIRIM...")
                   : t("💬 SEND HIKMAH REFLECTION", "💬 KIRIM REFLEKSI HIKMAH")}
-              </button>
+              </Button>
             </div>
           </>
         )}
@@ -202,45 +178,84 @@ export function InspirationCommentsPresentation({
                 "linear-gradient(to bottom, black 85%, transparent 100%)",
             }}
           >
-            {comments.map((comment) => {
-              const isAdmin =
-                comment.user_role === "admin" || comment.user_avatar === "👑"
-              return (
-                <div
-                  key={comment.id}
-                  className={`space-y-1.5 rounded-xl border border-border/40 bg-card/90 p-3.5 ${isAdmin ? "border-secondary/40 bg-secondary/10" : "bg-panel border-primary/20"}`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="badge-clip flex h-6 w-6 shrink-0 items-center justify-center bg-primary/20 text-xs">
-                        {comment.user_avatar || (isAdmin ? "👑" : "🌙")}
-                      </span>
-                      <span className="text-xs font-bold text-foreground">
-                        {comment.user_name}
-                      </span>
-                      {isAdmin && (
-                        <span className="rounded-md border border-border bg-muted px-1.5 py-0 font-mono text-[8px] text-primary">
-                          👑 ADMIN
-                        </span>
-                      )}
-                    </div>
-                    <span className="text-[9px] text-primary">
-                      {new Date(comment.created_at).toLocaleTimeString(
-                        "id-ID",
-                        { hour: "2-digit", minute: "2-digit" }
-                      )}{" "}
-                      WIB
-                    </span>
-                  </div>
-                  <p className="pl-8 font-mono text-xs leading-relaxed text-foreground/90">
-                    &quot;{comment.comment_text}&quot;
-                  </p>
-                </div>
-              )
-            })}
+            {comments.map((comment) => (
+              <InspirationCommentCard key={comment.id} comment={comment} />
+            ))}
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+function InspirationCommentsHeader({
+  commentCount,
+  userProfile,
+  t,
+  onOpenProfile,
+}: {
+  commentCount: number
+  userProfile: WorkspaceUserProfile | null | undefined
+  t: Translate
+  onOpenProfile: () => void
+}) {
+  return (
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <span className="rounded-md text-[10px]">💬 HOLOGRAM COMMUNITY CHAT</span>
+        <span className="text-[10px] font-black text-primary">({commentCount})</span>
+      </div>
+      {!userProfile ? (
+        <Button variant="ghost" type="button" onClick={onOpenProfile} className="btn-primary btn-primary-ghost flex items-center gap-1 px-3 py-1 text-[10px]">
+          <span className="text-primary">⎔</span><span>{t("SETUP USER ID", "PROFILKAN NAMA")}</span>
+        </Button>
+      ) : (
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-bold text-success">● ACTIVE: {userProfile.avatar} {userProfile.name}</span>
+          <Button variant="ghost" type="button" onClick={onOpenProfile} className="text-[9px] font-bold text-primary underline hover:text-foreground">[{t("EDIT", "UBAH")}]</Button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function InspirationCommentCard({
+  comment,
+}: {
+  comment: CommentItem
+}) {
+  const isAdmin =
+    comment.user_role === "admin" || comment.user_avatar === "👑"
+
+  return (
+    <div
+      className={`space-y-1.5 rounded-xl border border-border/40 bg-card/90 p-3.5 ${isAdmin ? "border-secondary/40 bg-secondary/10" : "bg-panel border-primary/20"}`}
+    >
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="badge-clip flex h-6 w-6 shrink-0 items-center justify-center bg-primary/20 text-xs">
+            {comment.user_avatar || (isAdmin ? "👑" : "🌙")}
+          </span>
+          <span className="text-xs font-bold text-foreground">
+            {comment.user_name}
+          </span>
+          {isAdmin && (
+            <span className="rounded-md border border-border bg-muted px-1.5 py-0 font-mono text-[8px] text-primary">
+              👑 ADMIN
+            </span>
+          )}
+        </div>
+        <span className="text-[9px] text-primary">
+          {new Date(comment.created_at).toLocaleTimeString("id-ID", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })} {" "}
+          WIB
+        </span>
+      </div>
+      <p className="pl-8 font-mono text-xs leading-relaxed text-foreground/90">
+        &quot;{comment.comment_text}&quot;
+      </p>
     </div>
   )
 }

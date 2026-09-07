@@ -149,6 +149,9 @@ export function defineRoute(def: RouteDefinition): void {
           try {
             const session = await authenticateRequest(req, jwtSecret, { allowAnonymous: false })
             uid = session.uid
+            // Keep the authenticated session available to domain adapters (for
+            // example the Odoo bridge) without exposing credentials to handlers.
+            ;(req as any).__moonSession = session
 
             if (authLevel === 'admin' && uid !== SUPERUSER_ID) {
               // Allow users with admin/superadmin role (clearance >= 2) in addition to SUPERUSER_ID

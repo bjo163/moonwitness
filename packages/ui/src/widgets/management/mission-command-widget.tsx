@@ -8,6 +8,7 @@ import {
   ChevronRight,
   ArrowRight,
 } from "lucide-react"
+import { Button } from "../../components/button"
 
 export function MissionCommandWidget() {
   return (
@@ -22,9 +23,9 @@ export function MissionCommandWidget() {
               Today&apos;s Priority Actions
             </div>
           </div>
-          <button className="flex cursor-pointer items-center gap-1 text-xs font-medium text-primary hover:underline">
+          <Button type="button" variant="ghost" className="flex cursor-pointer items-center gap-1 text-xs font-medium text-primary hover:underline">
             View All <ChevronRight className="h-3 w-3" />
-          </button>
+          </Button>
         </div>
 
         <div className="grid flex-1 grid-cols-2 sm:grid-cols-5 items-center gap-2.5">
@@ -127,9 +128,9 @@ export function MissionCommandWidget() {
           </div>
         </div>
 
-        <button className="flex items-center gap-1 text-xs font-medium text-primary hover:underline">
+        <Button type="button" variant="ghost" className="flex items-center gap-1 text-xs font-medium text-primary hover:underline">
           View Report <ArrowRight className="h-3 w-3" />
-        </button>
+        </Button>
       </div>
     </div>
   )

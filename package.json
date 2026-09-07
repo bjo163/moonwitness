@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "turbo dev --filter=web --filter=command-center --filter=api --parallel",
-    "dev:all": "turbo dev --filter=web --filter=command-center --filter=api --parallel",
     "dev:web": "turbo dev --filter=web",
     "dev:admin": "turbo dev --filter=command-center",
     "dev:api": "turbo dev --filter=api",
@@ -18,7 +17,6 @@
     "db:sync-up": "node scripts/db-sync.mjs --up",
     "db:sync-down": "node scripts/db-sync.mjs --down",
     "build": "turbo build",
-    "build:all": "turbo build",
     "clean": "turbo clean && rimraf node_modules",
     "lint": "turbo lint",
     "format": "turbo format",
@@ -33,7 +31,6 @@
     "contracts:verify": "pnpm --filter=api exec tsx ../../scripts/verify-contracts.ts",
     "contracts:generate:python": "pnpm --filter=api exec tsx ../../scripts/generate-python-contracts.ts",
     "audit:rules": "node scripts/audit.mjs",
-    "audit:packages": "node scripts/audit.mjs",
     "audit:collectors": "node scripts/audit.mjs --collector-json",
     "audit:umbrella": "node scripts/umbrella-audit.mjs --write",
     "audit:umbrella:json": "node scripts/umbrella-audit.mjs --json",
@@ -47,6 +44,15 @@
     "audit:umbrella:ci": "node scripts/umbrella-audit.mjs --ci-evidence=.audit/runtime/ci-evidence.json --write --validate",
     "audit:ci": "node scripts/audit.mjs && node scripts/umbrella-audit.mjs --validate && turbo typecheck && vitest run",
     "test:scripts": "vitest run scripts",
+    "test:e2e": "pnpm --filter=@moon/testing test:e2e",
+    "repo:map": "node scripts/repository-map.mjs",
+    "repo:impact": "node scripts/repository-impact.mjs",
+    "testability:check": "node scripts/testability-check.mjs",
+    "workflow:check": "node scripts/workflow-policy.mjs",
+    "governance:validate": "node tools/validate-governance.mjs",
+    "prompt:validate": "node tools/validate-prompt-packets.mjs",
+    "verify:foundation": "pnpm workflow:check && pnpm testability:check && pnpm audit:rules && pnpm contracts:verify && pnpm typecheck && pnpm test && pnpm build",
+    "runtime:evidence": "node scripts/runtime-evidence.mjs",
     "deploy:docker": "node scripts/deploy-docker.mjs",
     "deploy:docker:build": "node scripts/deploy-docker.mjs --build-only",
     "deploy:docker:down": "node scripts/deploy-docker.mjs --down",
@@ -66,6 +72,6 @@
   },
   "packageManager": "pnpm@10.33.4",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   }
 }

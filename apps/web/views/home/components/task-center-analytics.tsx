@@ -2,6 +2,7 @@
 
 import React from "react"
 import { ArrowRight } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 export function TaskCenterAnalytics() {
   return (
@@ -180,9 +181,9 @@ export function TaskCenterAnalytics() {
             </div>
           ))}
         </div>
-        <button className="mt-2 flex items-center justify-center gap-1 text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:text-foreground">
+        <Button type="button" variant="ghost" className="mt-2 flex items-center justify-center gap-1 text-[8px] font-bold tracking-widest text-primary uppercase transition-colors hover:text-foreground">
           View All Projects <ArrowRight className="h-2.5 w-2.5" />
-        </button>
+        </Button>
       </div>
     </div>
   )

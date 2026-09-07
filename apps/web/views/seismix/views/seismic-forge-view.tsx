@@ -52,6 +52,8 @@ type WaveformPoint = {
   amplitude: number
 }
 
+type WaveType = "pWave" | "sWave" | "surface"
+
 // ── CANONICAL FALLBACK SEISMIC DATA ──────────────────────
 const DEFAULT_RECENT_EVENTS: SeismicEvent[] = [
   {
@@ -240,23 +242,35 @@ function SeismographCanvas({
 function MagnitudeBadge({ magnitude }: { magnitude: number }) {
   const getLevel = () => {
     if (magnitude >= MAGNITUDE_THRESHOLD.strong)
-      return { label: "SEVERE", color: "#FF0055", highlight: "rgba(255,0,85,0.4)" }
+      return {
+        label: "SEVERE",
+        color: "#FF0055",
+        highlight: "rgba(255,0,85,0.4)",
+      }
     if (magnitude >= MAGNITUDE_THRESHOLD.moderate)
-      return { label: "STRONG", color: "#FFE600", highlight: "rgba(255,230,0,0.3)" }
+      return {
+        label: "STRONG",
+        color: "#FFE600",
+        highlight: "rgba(255,230,0,0.3)",
+      }
     if (magnitude >= MAGNITUDE_THRESHOLD.minor)
       return {
         label: "MODERATE",
         color: "#FF9900",
         highlight: "rgba(255,153,0,0.25)",
       }
-    return { label: "MINOR", color: "#00FF66", highlight: "rgba(0,255,102,0.2)" }
+    return {
+      label: "MINOR",
+      color: "#00FF66",
+      highlight: "rgba(0,255,102,0.2)",
+    }
   }
 
   const level = getLevel()
 
   return (
     <div
-      className="rounded-md flex items-center gap-1.5 border px-2 py-1 font-mono text-[9px] font-bold tracking-widest"
+      className="flex items-center gap-1.5 rounded-md border px-2 py-1 font-mono text-[9px] font-bold tracking-widest"
       style={{
         color: level.color,
         borderColor: `${level.color}50`,
@@ -286,7 +300,7 @@ function EventCard({ event }: { event: SeismicEvent }) {
 
   return (
     <div
-      className="rounded-xl border border-border/40 bg-card/90 bg-background/80 group border p-4 transition-all duration-300 hover:-translate-y-0.5"
+      className="group rounded-xl border border-border/40 bg-background/80 bg-card/90 p-4 transition-all duration-300 hover:-translate-y-0.5"
       style={{
         borderColor: `${color}25`,
       }}
@@ -294,7 +308,7 @@ function EventCard({ event }: { event: SeismicEvent }) {
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div
-            className="rounded-md flex h-6 w-6 items-center justify-center border"
+            className="flex h-6 w-6 items-center justify-center rounded-md border"
             style={{
               borderColor: `${color}50`,
               background: `${color}15`,
@@ -358,7 +372,7 @@ function PulseRing() {
         />
       ))}
       <div
-        className="rounded-md flex h-14 w-14 items-center justify-center border-2"
+        className="flex h-14 w-14 items-center justify-center rounded-md border-2"
         style={{
           borderColor: "rgba(255, 230, 0, 0.6)",
           background: "rgba(255, 230, 0, 0.1)",
@@ -367,6 +381,302 @@ function PulseRing() {
       >
         <Activity className="h-6 w-6 text-warning" />
       </div>
+    </div>
+  )
+}
+
+function TelemetryStats({
+  totalEvents24h,
+  avgMagnitude,
+}: {
+  totalEvents24h: number
+  avgMagnitude: number
+}) {
+  return (
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+      <Stat
+        label="EVENTS 24H"
+        value={totalEvents24h}
+        trend="+12%"
+        icon={Activity}
+        accentColor="accent"
+      />
+      <Stat
+        label="AVG MAGNITUDE"
+        value={avgMagnitude}
+        icon={BarChart3}
+        accentColor="accent"
+      />
+      <Stat
+        label="MAX DEPTH"
+        value={`${TECTONIC_STATS.maxDepth} km`}
+        icon={Layers}
+        accentColor="primary"
+      />
+      <Stat
+        label="ACTIVE ZONES"
+        value={TECTONIC_STATS.activeZones}
+        trend="+3"
+        icon={Globe}
+        accentColor="warning"
+      />
+      <Stat
+        label="P-WAVE VEL"
+        value={TECTONIC_STATS.pWaveVelocity}
+        icon={Zap}
+        accentColor="primary"
+      />
+      <Stat
+        label="S-WAVE VEL"
+        value={TECTONIC_STATS.sWaveVelocity}
+        icon={Waves}
+        accentColor="accent"
+      />
+    </div>
+  )
+}
+
+function LiveSeismographPanel({
+  activeWave,
+  isMonitoring,
+  systemTime,
+  onWaveChange,
+  onMonitoringToggle,
+}: {
+  activeWave: WaveType
+  isMonitoring: boolean
+  systemTime: string
+  onWaveChange: (wave: WaveType) => void
+  onMonitoringToggle: () => void
+}) {
+  const waveTabs = [
+    { id: "pWave", label: "P-WAVE", icon: Zap },
+    { id: "sWave", label: "S-WAVE", icon: Waves },
+    { id: "surface", label: "SURFACE", icon: Radio },
+  ]
+
+  const waveInfo = [
+    {
+      key: "pWave",
+      label: "P-WAVE (PRIMARY)",
+      desc: "Compressional longitudinal wave — fastest seismic wave, travels through all media",
+      color: WAVE_COLORS.pWave,
+      vel: "6-8 km/s",
+    },
+    {
+      key: "sWave",
+      label: "S-WAVE (SECONDARY)",
+      desc: "Transverse shear wave — cannot propagate through liquids, slower than P-wave",
+      color: WAVE_COLORS.sWave,
+      vel: "3-5 km/s",
+    },
+    {
+      key: "surface",
+      label: "SURFACE WAVE",
+      desc: "Rayleigh & Love waves — most destructive, largest amplitude near surface",
+      color: WAVE_COLORS.surface,
+      vel: "2-4 km/s",
+    },
+  ] as const
+
+  return (
+    <Panel level="level1" accentColor="accent">
+      <PanelHeader
+        title="LIVE SEISMOGRAPH"
+        icon={Activity}
+        status={isMonitoring ? "RECORDING" : "PAUSED"}
+        accentColor="accent"
+        subtitle="Real-time waveform capture from global seismic network sensors"
+      />
+
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <SimpleTabs
+          tabs={waveTabs}
+          activeTab={activeWave}
+          onChange={(id: string) => onWaveChange(id as WaveType)}
+          accentColor="accent"
+        />
+        <button
+          onClick={onMonitoringToggle}
+          className="flex items-center gap-2 border px-3 py-1.5 font-mono text-[10px] font-bold tracking-widest transition-all"
+          style={{
+            borderColor: isMonitoring
+              ? "rgba(0, 255, 102, 0.4)"
+              : "rgba(255, 0, 85, 0.4)",
+            color: isMonitoring ? "#00FF66" : "#FF0055",
+            background: isMonitoring
+              ? "rgba(0, 255, 102, 0.08)"
+              : "rgba(255, 0, 85, 0.08)",
+          }}
+        >
+          <span
+            className="h-1.5 w-1.5 rounded-full"
+            style={{
+              background: isMonitoring ? "#00FF66" : "#FF0055",
+              animation: isMonitoring ? "pulse 2s infinite" : "none",
+            }}
+          />
+          {isMonitoring ? "● LIVE" : "○ PAUSED"}
+        </button>
+      </div>
+
+      <div
+        className="relative overflow-hidden border"
+        style={{
+          borderColor: `${WAVE_COLORS[activeWave]}20`,
+          background: "rgba(5, 7, 10, 0.8)",
+        }}
+      >
+        <SeismographCanvas isActive={isMonitoring} waveType={activeWave} />
+
+        <div className="absolute bottom-2 left-3 flex items-center gap-3 font-mono text-[8px] font-bold tracking-widest">
+          <span style={{ color: WAVE_COLORS[activeWave] }}>
+            ◉{" "}
+            {activeWave === "pWave"
+              ? "PRIMARY WAVE"
+              : activeWave === "sWave"
+                ? "SECONDARY WAVE"
+                : "SURFACE WAVE"}
+          </span>
+          <span className="text-primary">SYS.TIME: {systemTime}</span>
+        </div>
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+        {waveInfo.map((wave) => (
+          <div
+            key={wave.key}
+            className="rounded-xl border border-border/40 bg-card/90 p-3 transition-all duration-300 hover:-translate-y-0.5"
+            style={{
+              borderColor:
+                activeWave === wave.key
+                  ? `${wave.color}50`
+                  : "rgba(0,240,255,0.1)",
+              background:
+                activeWave === wave.key ? `${wave.color}08` : "transparent",
+              boxShadow:
+                activeWave === wave.key ? `0 0 20px ${wave.color}15` : "none",
+            }}
+          >
+            <div className="mb-1 flex items-center gap-2">
+              <span
+                className="h-2 w-2 rounded-full"
+                style={{ background: wave.color }}
+              />
+              <span
+                className="font-mono text-[9px] font-bold tracking-widest"
+                style={{ color: wave.color }}
+              >
+                {wave.label}
+              </span>
+            </div>
+            <p className="mb-1 font-mono text-[8px] leading-relaxed text-primary">
+              {wave.desc}
+            </p>
+            <span
+              className="font-mono text-[9px] font-bold"
+              style={{ color: wave.color }}
+            >
+              VELOCITY: {wave.vel}
+            </span>
+          </div>
+        ))}
+      </div>
+    </Panel>
+  )
+}
+
+function RecentEventsPanel({ events }: { events: SeismicEvent[] }) {
+  return (
+    <Panel level="level2" accentColor="warning">
+      <PanelHeader
+        title="RECENT SEISMIC EVENTS"
+        icon={AlertTriangle}
+        status="LIVE"
+        accentColor="warning"
+        subtitle="Latest detected earthquake and volcanic activity worldwide"
+      />
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        {events.map((event) => (
+          <EventCard key={event.id} event={event} />
+        ))}
+      </div>
+    </Panel>
+  )
+}
+
+function SeismicStatusPanels({ systemTime }: { systemTime: string }) {
+  const magnitudeDistribution = [
+    { range: "0.0 — 2.9", count: 87, pct: 61, color: "#00FF66" },
+    { range: "3.0 — 4.9", count: 38, pct: 27, color: "#FFE600" },
+    { range: "5.0 — 6.9", count: 14, pct: 10, color: "#FF9900" },
+    { range: "7.0+", count: 3, pct: 2, color: "#FF0055" },
+  ]
+
+  return (
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <Panel level="level3" accentColor="accent" className="lg:col-span-1">
+        <PanelHeader
+          title="SEISMIC PULSE"
+          icon={Radio}
+          status="BROADCASTING"
+          accentColor="accent"
+        />
+        <div className="flex flex-col items-center justify-center py-6">
+          <PulseRing />
+          <p className="mt-4 text-center font-mono text-[9px] leading-relaxed text-primary">
+            GLOBAL SEISMIC NETWORK
+            <br />
+            <span className="font-bold text-foreground">
+              347 STATIONS ONLINE
+            </span>
+          </p>
+        </div>
+      </Panel>
+
+      <Panel level="level3" accentColor="primary" className="lg:col-span-2">
+        <PanelHeader
+          title="CRUSTAL DYNAMICS MONITOR"
+          icon={TrendingUp}
+          status="ANALYZING"
+          accentColor="primary"
+        />
+
+        <div className="space-y-3">
+          {magnitudeDistribution.map((row) => (
+            <div key={row.range} className="space-y-1">
+              <div className="flex items-center justify-between font-mono text-[9px]">
+                <span className="font-bold tracking-widest text-foreground">
+                  M {row.range}
+                </span>
+                <span style={{ color: row.color }}>
+                  {row.count} EVENTS ({row.pct}%)
+                </span>
+              </div>
+              <div className="h-2 w-full overflow-hidden bg-muted/30">
+                <div
+                  className="h-full transition-all duration-1000"
+                  style={{
+                    width: `${row.pct}%`,
+                    background: `linear-gradient(90deg, ${row.color}60, ${row.color})`,
+                    boxShadow: `0 0 10px ${row.color}40`,
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-4 border-t border-primary/10 pt-3">
+          <p className="font-mono text-[8px] text-primary">
+            DATA SOURCE: USGS EARTHQUAKE HAZARDS PROGRAM • IRIS DMC • GEOSCOPE
+            NETWORK
+            <br />
+            <span className="text-foreground">LAST SYNC: {systemTime}</span>
+          </p>
+        </div>
+      </Panel>
     </div>
   )
 }
@@ -382,7 +692,9 @@ function getTimeAgo(timestamp: string): string {
 
 // ── MAIN VIEW ────────────────────────────────────────────
 export function SeismicForgeView() {
-  const { data: earthquakeData } = useResource(fetchEarthquakes, { storageKey: "mw_seismic_forge" })
+  const { data: earthquakeData } = useResource(fetchEarthquakes, {
+    storageKey: "mw_seismic_forge",
+  })
 
   const liveEvents: SeismicEvent[] = earthquakeData?.features?.length
     ? earthquakeData.features.slice(0, 6).map((f: any, idx: number) => {
@@ -403,7 +715,8 @@ export function SeismicForgeView() {
       })
     : DEFAULT_RECENT_EVENTS
 
-  const totalEvents24h = earthquakeData?.features?.length || TECTONIC_STATS.totalEvents24h
+  const totalEvents24h =
+    earthquakeData?.features?.length || TECTONIC_STATS.totalEvents24h
   const avgMagnitude = earthquakeData?.features?.length
     ? Number(
         (
@@ -431,12 +744,6 @@ export function SeismicForgeView() {
     return () => clearInterval(interval)
   }, [])
 
-  const waveTabs = [
-    { id: "pWave", label: "P-WAVE", icon: Zap },
-    { id: "sWave", label: "S-WAVE", icon: Waves },
-    { id: "surface", label: "SURFACE", icon: Radio },
-  ]
-
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 pb-20 sm:px-6">
       {/* ── CONTEXT BLOCK (H1) ─────────────────────────── */}
@@ -448,265 +755,19 @@ export function SeismicForgeView() {
         accentColor="accent"
       />
 
-      {/* ── ZONE A: TELEMETRY STATS ────────────────────── */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-        <Stat
-          label="EVENTS 24H"
-          value={totalEvents24h}
-          trend="+12%"
-          icon={Activity}
-          accentColor="accent"
-        />
-        <Stat
-          label="AVG MAGNITUDE"
-          value={avgMagnitude}
-          icon={BarChart3}
-          accentColor="accent"
-        />
-        <Stat
-          label="MAX DEPTH"
-          value={`${TECTONIC_STATS.maxDepth} km`}
-          icon={Layers}
-          accentColor="primary"
-        />
-        <Stat
-          label="ACTIVE ZONES"
-          value={TECTONIC_STATS.activeZones}
-          trend="+3"
-          icon={Globe}
-          accentColor="warning"
-        />
-        <Stat
-          label="P-WAVE VEL"
-          value={TECTONIC_STATS.pWaveVelocity}
-          icon={Zap}
-          accentColor="primary"
-        />
-        <Stat
-          label="S-WAVE VEL"
-          value={TECTONIC_STATS.sWaveVelocity}
-          icon={Waves}
-          accentColor="accent"
-        />
-      </div>
-
-      {/* ── ZONE B: LIVE SEISMOGRAPH ───────────────────── */}
-      <Panel level="level1" accentColor="accent">
-        <PanelHeader
-          title="LIVE SEISMOGRAPH"
-          icon={Activity}
-          status={isMonitoring ? "RECORDING" : "PAUSED"}
-          accentColor="accent"
-          subtitle="Real-time waveform capture from global seismic network sensors"
-        />
-
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <SimpleTabs
-            tabs={waveTabs}
-            activeTab={activeWave}
-            onChange={(id: string) =>
-              setActiveWave(id as "pWave" | "sWave" | "surface")
-            }
-            accentColor="accent"
-          />
-          <button
-            onClick={() => setIsMonitoring(!isMonitoring)}
-            className="flex items-center gap-2 border px-3 py-1.5 font-mono text-[10px] font-bold tracking-widest transition-all "
-            style={{
-              borderColor: isMonitoring
-                ? "rgba(0, 255, 102, 0.4)"
-                : "rgba(255, 0, 85, 0.4)",
-              color: isMonitoring ? "#00FF66" : "#FF0055",
-              background: isMonitoring
-                ? "rgba(0, 255, 102, 0.08)"
-                : "rgba(255, 0, 85, 0.08)",
-            }}
-          >
-            <span
-              className="h-1.5 w-1.5 rounded-full"
-              style={{
-                background: isMonitoring ? "#00FF66" : "#FF0055",
-                animation: isMonitoring ? "pulse 2s infinite" : "none",
-              }}
-            />
-            {isMonitoring ? "● LIVE" : "○ PAUSED"}
-          </button>
-        </div>
-
-        {/* Canvas waveform */}
-        <div
-          className="relative overflow-hidden border"
-          style={{
-            borderColor: `${WAVE_COLORS[activeWave]}20`,
-            background: "rgba(5, 7, 10, 0.8)",
-          }}
-        >
-          <SeismographCanvas isActive={isMonitoring} waveType={activeWave} />
-
-          {/* Waveform legend overlay */}
-          <div className="absolute bottom-2 left-3 flex items-center gap-3 font-mono text-[8px] font-bold tracking-widest">
-            <span style={{ color: WAVE_COLORS[activeWave] }}>
-              ◉{" "}
-              {activeWave === "pWave"
-                ? "PRIMARY WAVE"
-                : activeWave === "sWave"
-                  ? "SECONDARY WAVE"
-                  : "SURFACE WAVE"}
-            </span>
-            <span className="text-primary">SYS.TIME: {systemTime}</span>
-          </div>
-        </div>
-
-        {/* Wave info cards */}
-        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-          {[
-            {
-              key: "pWave",
-              label: "P-WAVE (PRIMARY)",
-              desc: "Compressional longitudinal wave — fastest seismic wave, travels through all media",
-              color: WAVE_COLORS.pWave,
-              vel: "6-8 km/s",
-            },
-            {
-              key: "sWave",
-              label: "S-WAVE (SECONDARY)",
-              desc: "Transverse shear wave — cannot propagate through liquids, slower than P-wave",
-              color: WAVE_COLORS.sWave,
-              vel: "3-5 km/s",
-            },
-            {
-              key: "surface",
-              label: "SURFACE WAVE",
-              desc: "Rayleigh & Love waves — most destructive, largest amplitude near surface",
-              color: WAVE_COLORS.surface,
-              vel: "2-4 km/s",
-            },
-          ].map((w) => (
-            <div
-              key={w.key}
-              className="rounded-xl border border-border/40 bg-card/90 border p-3 transition-all duration-300 hover:-translate-y-0.5"
-              style={{
-                borderColor:
-                  activeWave === w.key ? `${w.color}50` : "rgba(0,240,255,0.1)",
-                background:
-                  activeWave === w.key ? `${w.color}08` : "transparent",
-                boxShadow:
-                  activeWave === w.key ? `0 0 20px ${w.color}15` : "none",
-              }}
-            >
-              <div className="mb-1 flex items-center gap-2">
-                <span
-                  className="h-2 w-2 rounded-full"
-                  style={{ background: w.color }}
-                />
-                <span
-                  className="font-mono text-[9px] font-bold tracking-widest"
-                  style={{ color: w.color }}
-                >
-                  {w.label}
-                </span>
-              </div>
-              <p className="mb-1 font-mono text-[8px] leading-relaxed text-primary">
-                {w.desc}
-              </p>
-              <span
-                className="font-mono text-[9px] font-bold"
-                style={{ color: w.color }}
-              >
-                VELOCITY: {w.vel}
-              </span>
-            </div>
-          ))}
-        </div>
-      </Panel>
-
-      {/* ── ZONE C: RECENT SEISMIC EVENTS ──────────────── */}
-      <Panel level="level2" accentColor="warning">
-        <PanelHeader
-          title="RECENT SEISMIC EVENTS"
-          icon={AlertTriangle}
-          status="LIVE"
-          accentColor="warning"
-          subtitle="Latest detected earthquake and volcanic activity worldwide"
-        />
-
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          {liveEvents.map((event) => (
-            <EventCard key={event.id} event={event} />
-          ))}
-        </div>
-      </Panel>
-
-      {/* ── ZONE D: PULSE RING + SYSTEM STATUS ─────────── */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <Panel level="level3" accentColor="accent" className="lg:col-span-1">
-          <PanelHeader
-            title="SEISMIC PULSE"
-            icon={Radio}
-            status="BROADCASTING"
-            accentColor="accent"
-          />
-          <div className="flex flex-col items-center justify-center py-6">
-            <PulseRing />
-            <p className="mt-4 text-center font-mono text-[9px] leading-relaxed text-primary">
-              GLOBAL SEISMIC NETWORK
-              <br />
-              <span className="font-bold text-foreground">
-                347 STATIONS ONLINE
-              </span>
-            </p>
-          </div>
-        </Panel>
-
-        <Panel level="level3" accentColor="primary" className="lg:col-span-2">
-          <PanelHeader
-            title="CRUSTAL DYNAMICS MONITOR"
-            icon={TrendingUp}
-            status="ANALYZING"
-            accentColor="primary"
-          />
-
-          {/* Simplified magnitude distribution bars */}
-          <div className="space-y-3">
-            {[
-              { range: "0.0 — 2.9", count: 87, pct: 61, color: "#00FF66" },
-              { range: "3.0 — 4.9", count: 38, pct: 27, color: "#FFE600" },
-              { range: "5.0 — 6.9", count: 14, pct: 10, color: "#FF9900" },
-              { range: "7.0+", count: 3, pct: 2, color: "#FF0055" },
-            ].map((row) => (
-              <div key={row.range} className="space-y-1">
-                <div className="flex items-center justify-between font-mono text-[9px]">
-                  <span className="font-bold tracking-widest text-foreground">
-                    M {row.range}
-                  </span>
-                  <span style={{ color: row.color }}>
-                    {row.count} EVENTS ({row.pct}%)
-                  </span>
-                </div>
-                <div className="h-2 w-full overflow-hidden bg-muted/30">
-                  <div
-                    className="h-full transition-all duration-1000"
-                    style={{
-                      width: `${row.pct}%`,
-                      background: `linear-gradient(90deg, ${row.color}60, ${row.color})`,
-                      boxShadow: `0 0 10px ${row.color}40`,
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-4 border-t border-primary/10 pt-3">
-            <p className="font-mono text-[8px] text-primary">
-              DATA SOURCE: USGS EARTHQUAKE HAZARDS PROGRAM • IRIS DMC • GEOSCOPE
-              NETWORK
-              <br />
-              <span className="text-foreground">LAST SYNC: {systemTime}</span>
-            </p>
-          </div>
-        </Panel>
-      </div>
+      <TelemetryStats
+        totalEvents24h={totalEvents24h}
+        avgMagnitude={avgMagnitude}
+      />
+      <LiveSeismographPanel
+        activeWave={activeWave}
+        isMonitoring={isMonitoring}
+        systemTime={systemTime}
+        onWaveChange={setActiveWave}
+        onMonitoringToggle={() => setIsMonitoring(!isMonitoring)}
+      />
+      <RecentEventsPanel events={liveEvents} />
+      <SeismicStatusPanels systemTime={systemTime} />
 
       {/* ── KEYFRAME INJECTION ─────────────────────────── */}
       <style jsx>{`

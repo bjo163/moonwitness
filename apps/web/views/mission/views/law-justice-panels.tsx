@@ -1,6 +1,7 @@
 "use client"
 
 import { ArrowRight, CheckCircle2, Scale, Shield, Users } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 const PILLARS = [
   {
@@ -83,11 +84,11 @@ export function JusticePillars() {
           <p className="mb-6 text-[11px] leading-relaxed text-muted-foreground">
             {description}
           </p>
-          <button type="button"
+          <Button type="button" variant="ghost"
             className={`group/btn flex items-center gap-1 text-[9px] font-bold tracking-widest uppercase ${color}`}
           >
             EXPLORE INITIATIVE <ArrowRight className="h-3 w-3 transition-transform group-hover/btn:translate-x-1" />
-          </button>
+          </Button>
         </div>
       ))}
     </div>
@@ -132,9 +133,9 @@ export function LiberationFronts() {
                 />
               </div>
             </div>
-            <button type="button" className="rounded border border-border px-4 py-2 text-[8px] font-bold tracking-widest text-foreground uppercase transition-colors hover:bg-muted/30">
+            <Button type="button" variant="outline" className="rounded border border-border px-4 py-2 text-[8px] font-bold tracking-widest text-foreground uppercase transition-colors hover:bg-muted/30">
               View Docket
-            </button>
+            </Button>
           </div>
         ))}
       </div>

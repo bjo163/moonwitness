@@ -13,6 +13,7 @@
  *   - Source-local identifiers preserved verbatim
  */
 import type { Ctx } from '@moon/orm'
+import type { OdooClient } from '@moon/odoo-bridge'
 
 // ═══════════════════════════════════════════
 // SOURCE POLICY
@@ -71,6 +72,9 @@ export interface ImportContext {
   parserVersion: string
   /** Normalization schema version */
   normalizationVersion: string
+  /** Optional Odoo persistence lane for canonical imports. */
+  odooClient?: OdooClient
+  odooSessionId?: string
 }
 
 // ═══════════════════════════════════════════

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { useChat } from "ai/react"
 import {
   Send,
@@ -24,6 +24,8 @@ import {
   type ChatMessage,
   QUICK_PROMPTS,
 } from "./types"
+import { Button } from "../button"
+import { Input } from "../input"
 
 export function PropheticAIChatTerminal({
   maxHeight = "h-[500px]",
@@ -177,174 +179,112 @@ export function PropheticAIChatTerminal({
           }
         >
           {messages.length === 0 ? (
-            /* Welcome Box */
-            <div className="space-y-3 rounded-xl border border-border bg-muted/20 p-4 font-sans text-xs leading-relaxed text-foreground sm:text-sm">
-              <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-semibold">
-                <div className="flex items-center gap-2 text-foreground">
-                  <Sparkles className="h-4 w-4 text-primary" />
-                  <span>Knowledge Assistant Ready</span>
-                </div>
-                {speechSupported && (
-                  <span className="flex items-center gap-1 rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
-                    <Mic className="h-3 w-3 text-primary" />
-                    <span>Voice Input Available</span>
-                  </span>
-                )}
-              </div>
+            <ChatWelcome speechSupported={speechSupported} onPrompt={handleQuickPrompt} />
+          ) : <ChatMessageList messages={messages} speakingMessageId={speakingMessageId} onSpeak={speakText} />}
 
-              <div className="pt-2">
-                <span className="mb-2 block text-xs font-semibold text-muted-foreground">
-                  Suggested inquiries:
-                </span>
-                <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                  {QUICK_PROMPTS.map((item, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => handleQuickPrompt(item.prompt)}
-                      className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1 text-left font-sans text-xs text-foreground transition-colors hover:bg-accent hover:text-accent-foreground sm:px-3 sm:py-1.5"
-                    >
-                      <span>{item.label}</span>
-                      <ArrowRight className="h-3 w-3 shrink-0 text-muted-foreground" />
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ) : (
-            messages.map((m: unknown) => {
-              const msg = m as ChatMessage
-              return (
-                <div
-                  key={msg.id}
-                  className={`flex flex-col gap-1.5 ${msg.role === "user" ? "items-end" : "items-start"}`}
-                >
-                  <div className="flex w-full max-w-[96%] items-center justify-between px-1 text-[11px] font-medium text-muted-foreground sm:max-w-[85%]">
-                    {msg.role === "user" ? (
-                      <span className="ml-auto flex items-center gap-1 text-foreground">
-                        <UserIcon className="h-3.5 w-3.5 text-primary" /> You
-                      </span>
-                    ) : (
-                      <div className="flex w-full items-center justify-between">
-                        <span className="flex items-center gap-1 text-foreground font-semibold">
-                          <Sparkles className="h-3.5 w-3.5 text-primary" /> Knowledge Assistant
-                        </span>
-
-                        <button
-                          type="button"
-                          onClick={() => speakText(msg.id, msg.content)}
-                          className="flex cursor-pointer items-center gap-1 rounded-md border border-border bg-card px-2 py-0.5 text-[10px] text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-                          title={
-                            speakingMessageId === msg.id
-                              ? "Stop audio playback"
-                              : "Listen to answer"
-                          }
-                        >
-                          {speakingMessageId === msg.id ? (
-                            <>
-                              <VolumeX className="h-3 w-3 text-destructive" />
-                              <span className="text-destructive font-medium">
-                                Stop Audio
-                              </span>
-                            </>
-                          ) : (
-                            <>
-                              <Volume2 className="h-3 w-3 text-primary" />
-                              <span>Listen</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  <div
-                    className={`max-w-[96%] rounded-xl p-3.5 text-xs leading-relaxed sm:max-w-[85%] sm:text-sm ${
-                      msg.role === "user"
-                        ? "border border-border bg-primary text-primary-foreground font-sans shadow-sm"
-                        : "border border-border bg-card text-card-foreground font-sans shadow-sm"
-                    }`}
-                  >
-                    <div className="whitespace-pre-wrap">{msg.content}</div>
-                  </div>
-                </div>
-              )
-            })
-          )}
-
-          {isListening && (
-            <div className="flex w-fit items-center gap-2 rounded-lg border border-warning/30 bg-warning/10 px-3 py-1.5 font-sans text-xs text-warning">
-              <Activity className="h-3.5 w-3.5 animate-pulse" />
-              <span className="font-medium">Listening to speech...</span>
-            </div>
-          )}
-
-          {isLoading && (
-            <div className="flex w-fit items-center gap-2 rounded-lg border border-border bg-muted/40 px-3 py-1.5 font-sans text-xs text-muted-foreground">
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
-              <span>Analyzing knowledge repository...</span>
-            </div>
-          )}
+          <ChatStatusIndicators listening={isListening} loading={isLoading} />
 
           <div ref={bottomRef} />
         </div>
       </div>
 
-      {/* Input Area */}
-      <div className="shrink-0 border-t border-border bg-card p-2.5 sm:p-3">
-        <div className={fullWorkspace ? "mx-auto w-full max-w-4xl" : "w-full"}>
-          <form onSubmit={handleSubmit} className="relative flex items-center">
-            <input
-              ref={inputRef}
-              value={input || ""}
-              onChange={handleInputChange}
-              placeholder={
-                isListening
-                  ? "Listening... speak now..."
-                  : "Ask a question or enter a topic..."
-              }
-              className={`w-full rounded-lg border border-input bg-background py-2 pr-20 pl-3 font-sans text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:py-2.5 sm:pr-24 sm:pl-3.5 sm:text-sm ${
-                isListening ? "border-warning ring-2 ring-warning/30" : ""
-              }`}
-              disabled={isLoading}
-              autoFocus
-            />
+      <ChatComposer
+        fullWorkspace={fullWorkspace}
+        inputRef={inputRef}
+        input={input || ""}
+        loading={isLoading}
+        listening={isListening}
+        speechSupported={speechSupported}
+        onInputChange={handleInputChange}
+        onSubmit={handleSubmit}
+        onToggleListen={toggleListen}
+      />
+    </div>
+  )
+}
 
-            <div className="absolute right-1.5 flex items-center gap-1">
-              {speechSupported && (
-                <button
-                  type="button"
-                  onClick={toggleListen}
-                  className={`cursor-pointer rounded-md p-1.5 transition-colors sm:p-2 ${
-                    isListening
-                      ? "bg-destructive text-destructive-foreground"
-                      : "text-muted-foreground hover:bg-accent hover:text-foreground"
-                  }`}
-                  title={isListening ? "Stop listening" : "Voice input"}
-                >
-                  {isListening ? (
-                    <MicOff className="h-4 w-4" />
-                  ) : (
-                    <Mic className="h-4 w-4" />
-                  )}
-                </button>
-              )}
+function ChatStatusIndicators({ listening, loading }: { listening: boolean; loading: boolean }) {
+  return <>
+    {listening && <div className="flex w-fit items-center gap-2 rounded-lg border border-warning/30 bg-warning/10 px-3 py-1.5 font-sans text-xs text-warning"><Activity className="h-3.5 w-3.5 animate-pulse" /><span className="font-medium">Listening to speech...</span></div>}
+    {loading && <div className="flex w-fit items-center gap-2 rounded-lg border border-border bg-muted/40 px-3 py-1.5 font-sans text-xs text-muted-foreground"><Loader2 className="h-3.5 w-3.5 animate-spin" /><span>Analyzing knowledge repository...</span></div>}
+  </>
+}
 
-              <button
-                type="submit"
-                disabled={isLoading || (!input?.trim() && !isListening)}
-                className="cursor-pointer rounded-md bg-primary p-1.5 text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40 sm:p-2"
-                title="Send message"
-              >
-                {isLoading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Send className="h-4 w-4" />
-                )}
-              </button>
-            </div>
-          </form>
+function ChatMessageList({
+  messages,
+  speakingMessageId,
+  onSpeak,
+}: {
+  messages: unknown[]
+  speakingMessageId: string | null
+  onSpeak: (id: string, content: string) => void
+}) {
+  return <>{messages.map((value) => {
+    const msg = value as ChatMessage
+    const isUser = msg.role === "user"
+    return <div key={msg.id} className={`flex flex-col gap-1.5 ${isUser ? "items-end" : "items-start"}`}>
+      <div className="flex w-full max-w-[96%] items-center justify-between px-1 text-[11px] font-medium text-muted-foreground sm:max-w-[85%]">
+        {isUser ? <span className="ml-auto flex items-center gap-1 text-foreground"><UserIcon className="h-3.5 w-3.5 text-primary" /> You</span> : <div className="flex w-full items-center justify-between"><span className="flex items-center gap-1 font-semibold text-foreground"><Sparkles className="h-3.5 w-3.5 text-primary" /> Knowledge Assistant</span><Button variant="ghost" type="button" onClick={() => onSpeak(msg.id, msg.content)} aria-label={speakingMessageId === msg.id ? "Stop audio playback" : "Listen to answer"} className="flex cursor-pointer items-center gap-1 rounded-md border border-border bg-card px-2 py-0.5 text-[10px] text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">{speakingMessageId === msg.id ? <><VolumeX className="h-3 w-3 text-destructive" /><span className="font-medium text-destructive">Stop Audio</span></> : <><Volume2 className="h-3 w-3 text-primary" /><span>Listen</span></>}</Button></div>}
+      </div>
+      <div className={`max-w-[96%] rounded-xl p-3.5 text-xs leading-relaxed sm:max-w-[85%] sm:text-sm ${isUser ? "border border-border bg-primary font-sans text-primary-foreground shadow-sm" : "border border-border bg-card font-sans text-card-foreground shadow-sm"}`}><div className="whitespace-pre-wrap">{msg.content}</div></div>
+    </div>
+  })}</>
+}
+
+function ChatWelcome({
+  speechSupported,
+  onPrompt,
+}: {
+  speechSupported: boolean
+  onPrompt: (prompt: string) => void
+}) {
+  return (
+    <div className="space-y-3 rounded-xl border border-border bg-muted/20 p-4 font-sans text-xs leading-relaxed text-foreground sm:text-sm">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-semibold">
+        <div className="flex items-center gap-2 text-foreground"><Sparkles className="h-4 w-4 text-primary" /><span>Knowledge Assistant Ready</span></div>
+        {speechSupported && <span className="flex items-center gap-1 rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] text-muted-foreground"><Mic className="h-3 w-3 text-primary" /><span>Voice Input Available</span></span>}
+      </div>
+      <div className="pt-2">
+        <span className="mb-2 block text-xs font-semibold text-muted-foreground">Suggested inquiries:</span>
+        <div className="flex flex-wrap gap-1.5 sm:gap-2">
+          {QUICK_PROMPTS.map((item) => <Button variant="ghost" key={item.prompt} type="button" onClick={() => onPrompt(item.prompt)} className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1 text-left font-sans text-xs text-foreground transition-colors hover:bg-accent hover:text-accent-foreground sm:px-3 sm:py-1.5"><span>{item.label}</span><ArrowRight className="h-3 w-3 shrink-0 text-muted-foreground" /></Button>)}
         </div>
+      </div>
+    </div>
+  )
+}
+
+function ChatComposer({
+  fullWorkspace,
+  inputRef,
+  input,
+  loading,
+  listening,
+  speechSupported,
+  onInputChange,
+  onSubmit,
+  onToggleListen,
+}: {
+  fullWorkspace: boolean
+  inputRef: React.RefObject<HTMLInputElement | null>
+  input: string
+  loading: boolean
+  listening: boolean
+  speechSupported: boolean
+  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
+  onToggleListen: (event: React.MouseEvent) => void
+}) {
+  return (
+    <div className="shrink-0 border-t border-border bg-card p-2.5 sm:p-3">
+      <div className={fullWorkspace ? "mx-auto w-full max-w-4xl" : "w-full"}>
+        <form onSubmit={onSubmit} className="relative flex items-center">
+          <Input ref={inputRef} value={input} onChange={onInputChange} placeholder={listening ? "Listening... speak now..." : "Ask a question or enter a topic..."} className={`w-full rounded-lg border border-input bg-background py-2 pr-20 pl-3 font-sans text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:py-2.5 sm:pr-24 sm:pl-3.5 sm:text-sm ${listening ? "border-warning ring-2 ring-warning/30" : ""}`} disabled={loading} autoFocus />
+          <div className="absolute right-1.5 flex items-center gap-1">
+            {speechSupported && <Button variant="ghost" type="button" onClick={onToggleListen} aria-label={listening ? "Stop listening" : "Voice input"} className={`cursor-pointer rounded-md p-1.5 transition-colors sm:p-2 ${listening ? "bg-destructive text-destructive-foreground" : "text-muted-foreground hover:bg-accent hover:text-foreground"}`}>{listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}</Button>}
+            <Button variant="default" type="submit" disabled={loading || (!input.trim() && !listening)} aria-label="Send message" className="cursor-pointer rounded-md bg-primary p-1.5 text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40 sm:p-2">{loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}</Button>
+          </div>
+        </form>
       </div>
     </div>
   )

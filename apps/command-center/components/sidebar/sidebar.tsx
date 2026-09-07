@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { ChevronDown, ChevronRight, LogOut, ShieldCheck, X } from "lucide-react"
 import { useState } from "react"
 import { navigationItems, utilityItems } from "../navigation/navigation-items"
-import { cn } from "@workspace/ui/lib/utils"
+import { cn } from "@workspace/ui"
 
 function active(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`)

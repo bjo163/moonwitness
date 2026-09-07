@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import { Rewind, Pause, Play, FastForward, Settings } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 export function PropheticTimelinePlaybackBar() {
   const [isPlaying, setIsPlaying] = useState(false)
@@ -38,10 +39,14 @@ export function PropheticTimelinePlaybackBar() {
       {/* Controls */}
       <div className="flex shrink-0 items-center gap-4">
         <div className="flex items-center gap-2">
-          <button className="rounded p-2 text-primary transition-colors hover:bg-muted/30 hover:text-foreground">
+          <Button type="button" variant="ghost" size="icon" aria-label="Rewind timeline" className="rounded p-2 text-primary transition-colors hover:bg-muted/30 hover:text-foreground">
             <Rewind className="h-4 w-4" />
-          </button>
-          <button
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            aria-label={isPlaying ? "Pause timeline" : "Play timeline"}
             className="rounded-full border border-primary/50 bg-primary/20 p-3 text-primary shadow-sm transition-colors hover:bg-muted hover:text-foreground"
             onClick={() => setIsPlaying(!isPlaying)}
           >
@@ -50,19 +55,19 @@ export function PropheticTimelinePlaybackBar() {
             ) : (
               <Play className="ml-0.5 h-4 w-4 fill-current" />
             )}
-          </button>
-          <button className="rounded p-2 text-primary transition-colors hover:bg-muted/30 hover:text-foreground">
+          </Button>
+          <Button type="button" variant="ghost" size="icon" aria-label="Fast-forward timeline" className="rounded p-2 text-primary transition-colors hover:bg-muted/30 hover:text-foreground">
             <FastForward className="h-4 w-4" />
-          </button>
+          </Button>
         </div>
 
-        <button className="rounded border border-success/30 px-4 py-2 text-[9px] font-bold tracking-widest text-success uppercase transition-colors hover:bg-emerald-950/40">
+        <Button type="button" variant="ghost" className="rounded border border-success/30 px-4 py-2 text-[9px] font-bold tracking-widest text-success uppercase transition-colors hover:bg-emerald-950/40">
           AUTO PLAY
-        </button>
+        </Button>
 
-        <button className="rounded p-2 text-primary transition-colors hover:bg-muted/30 hover:text-foreground">
+        <Button type="button" variant="ghost" size="icon" aria-label="Timeline settings" className="rounded p-2 text-primary transition-colors hover:bg-muted/30 hover:text-foreground">
           <Settings className="h-4 w-4" />
-        </button>
+        </Button>
       </div>
     </div>
   )

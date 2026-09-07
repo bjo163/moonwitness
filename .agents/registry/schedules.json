@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "registry_type": "schedules",
+  "entries": [
+    {"id":"schedule.quality.postgres-certification","version":"1.0.0","status":"active","owner":"repository-maintainers","scope":"repository","trigger":"17 3 * * 1 UTC","source":".github/workflows/witness-postgres-certification.yml","purpose":"Run production PostgreSQL certification weekly.","concurrency":"production-pg-cert-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}","timeout_minutes":45,"verification":["pnpm audit:rules","pnpm test","pnpm typecheck"]}
+  ]
+}

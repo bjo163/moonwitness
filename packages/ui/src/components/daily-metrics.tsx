@@ -10,6 +10,7 @@ import {
   History,
   Moon,
 } from "lucide-react"
+import { Button } from "./button"
 
 // Types
 type Mission = {
@@ -93,9 +94,9 @@ function MissionCard({ missions }: { missions: Mission[] }) {
           </div>
         ))}
       </div>
-      <button className="mt-4 flex items-center justify-center gap-1.5 font-sans text-xs font-medium text-primary hover:underline">
+      <Button type="button" variant="ghost" className="mt-4 flex items-center justify-center gap-1.5 font-sans text-xs font-medium text-primary hover:underline">
         View All Tasks <ArrowRight className="h-3 w-3" />
-      </button>
+      </Button>
     </div>
   )
 }
@@ -142,9 +143,9 @@ function PrayerCard({ prayers }: { prayers: Prayer[] }) {
         <span className="flex items-center gap-1 font-mono text-[10px] text-success">
           <Circle className="h-2 w-2 fill-success" /> Sync: Online
         </span>
-        <button className="flex items-center gap-1.5 font-sans text-xs font-medium text-primary hover:underline">
+        <Button type="button" variant="ghost" className="flex items-center gap-1.5 font-sans text-xs font-medium text-primary hover:underline">
           View Schedule <ArrowRight className="h-3 w-3" />
-        </button>
+        </Button>
       </div>
     </div>
   )
@@ -190,9 +191,9 @@ function AIBriefingCard({ briefings }: { briefings: Briefing[] }) {
           </div>
         ))}
       </div>
-      <button className="mt-4 flex items-center justify-center gap-1.5 font-sans text-xs font-medium text-primary hover:underline">
+      <Button type="button" variant="ghost" className="mt-4 flex items-center justify-center gap-1.5 font-sans text-xs font-medium text-primary hover:underline">
         Open Knowledge Feed <ArrowRight className="h-3 w-3" />
-      </button>
+      </Button>
     </div>
   )
 }
@@ -235,9 +236,9 @@ function MoonObservatoryCard({ moon }: { moon: MoonData }) {
           <span className="text-success font-semibold">{moon.visibility}</span>
         </div>
       </div>
-      <button className="mt-4 flex items-center justify-center gap-1.5 font-sans text-xs font-medium text-primary hover:underline">
+      <Button type="button" variant="ghost" className="mt-4 flex items-center justify-center gap-1.5 font-sans text-xs font-medium text-primary hover:underline">
         Open Observatory <ArrowRight className="h-3 w-3" />
-      </button>
+      </Button>
     </div>
   )
 }

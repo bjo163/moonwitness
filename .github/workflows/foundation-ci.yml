@@ -28,19 +28,27 @@ jobs:
     runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@f520eceda224fe1a4aed5a2a27a194379a409996 # v6
         with:
           version: 10.33.4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Constitutional & Enterprise UI Audit
         run: pnpm audit:rules
+      - name: Critical package testability policy
+        run: pnpm testability:check
+      - name: Workflow reproducibility policy
+        run: pnpm workflow:check
+      - name: Governance registry validation
+        run: pnpm governance:validate
+      - name: Prompt packet validation
+        run: pnpm prompt:validate
       - name: Universal Contract Drift Verification
         run: pnpm contracts:verify
       - name: UMBRELLA v6 Contract Validation
@@ -51,13 +59,13 @@ jobs:
     runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@f520eceda224fe1a4aed5a2a27a194379a409996 # v6
         with:
           version: 10.33.4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
           cache: pnpm
@@ -69,13 +77,13 @@ jobs:
     runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@f520eceda224fe1a4aed5a2a27a194379a409996 # v6
         with:
           version: 10.33.4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
           cache: pnpm
@@ -89,13 +97,13 @@ jobs:
     runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@f520eceda224fe1a4aed5a2a27a194379a409996 # v6
         with:
           version: 10.33.4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
           cache: pnpm
@@ -109,13 +117,13 @@ jobs:
     runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@f520eceda224fe1a4aed5a2a27a194379a409996 # v6
         with:
           version: 10.33.4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
           cache: pnpm
@@ -127,10 +135,10 @@ jobs:
     runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.12'
       - name: Install dependencies
@@ -146,15 +154,66 @@ jobs:
           cd services/ai-agent
           PYTHONPATH=. pytest tests/
 
+  e2e:
+    name: Critical browser flows
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 30
+    needs: [build]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: pnpm/action-setup@f520eceda224fe1a4aed5a2a27a194379a409996 # v6
+        with:
+          version: 10.33.4
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter=@moon/testing exec playwright install --with-deps chromium
+      - name: Start public and admin portals
+        shell: bash
+        run: |
+          BOOTSTRAP_ADMIN_EMAIL=playwright-admin@invalid.example \
+          BOOTSTRAP_ADMIN_PASSWORD=playwright-admin-password \
+          pnpm dev:local > /tmp/moonwitness-stack.log 2>&1 &
+          for url in http://127.0.0.1:3000 http://127.0.0.1:3001 http://127.0.0.1:4000/health/ready; do
+            for attempt in {1..60}; do curl --fail --silent "$url" >/dev/null && break; sleep 2; done
+            curl --fail --silent "$url" >/dev/null
+          done
+      - name: Run critical browser flows
+        env:
+          CI: 'true'
+          PLAYWRIGHT_WEB_URL: http://127.0.0.1:3000
+          PLAYWRIGHT_CC_URL: http://127.0.0.1:3001
+          PLAYWRIGHT_ADMIN_EMAIL: playwright-admin@invalid.example
+          PLAYWRIGHT_ADMIN_PASSWORD: playwright-admin-password
+        run: pnpm test:e2e
+      - name: Capture runtime evidence
+        if: always()
+        run: |
+          mkdir -p .audit/runtime
+          pnpm runtime:evidence > .audit/runtime/e2e-runtime-evidence.json || true
+      - name: Upload browser artifacts
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: playwright-report
+          path: |
+            packages/moon-testing/test-results
+            .audit/runtime/e2e-runtime-evidence.json
+          if-no-files-found: ignore
+
   report:
     name: Report
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [audit, lint, typecheck, test, build, python-services]
+    needs: [audit, lint, typecheck, test, build, python-services, e2e]
     if: always() && github.event_name == 'pull_request'
     steps:
       - name: Post PR Comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         with:
           script: |
             const checks = {
@@ -164,6 +223,7 @@ jobs:
               'Test': '${{ needs.test.result }}',
               'Build': '${{ needs.build.result }}',
               'Python Microservices': '${{ needs.python-services.result }}',
+              'Critical browser flows': '${{ needs.e2e.result }}',
             };
             const icon = (result) => result === 'success' ? '✅ passed' : result === 'cancelled' ? '⛔ cancelled' : '❌ failed';
             const allPassed = Object.values(checks).every((result) => result === 'success');
@@ -175,4 +235,3 @@ jobs:
               issue_number: context.issue.number,
               body,
             });
-

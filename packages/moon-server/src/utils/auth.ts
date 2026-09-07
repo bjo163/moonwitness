@@ -2,6 +2,7 @@ import type { IncomingMessage } from 'node:http'
 import jwt from 'jsonwebtoken'
 import { randomInt, createHash } from 'node:crypto'
 import { ANONYMOUS_ID, SUPERUSER_ID, createCtx, getModel, getDb, authSecurityContext, type Ctx } from '@moon/orm'
+import { getOdooSession } from '@moon/odoo-bridge'
 
 export const ALLOWED_JWT_ALGORITHMS = ['HS256', 'HS384', 'HS512'] as const
 export type AllowedJwtAlgorithm = (typeof ALLOWED_JWT_ALGORITHMS)[number]
@@ -84,6 +85,7 @@ export type AuthErrorCode =
   | 'AUTH_ISSUER_INVALID'
   | 'AUTH_AUDIENCE_INVALID'
   | 'AUTH_SESSION_REVOKED'
+  | 'AUTH_SESSION_EXPIRED'
   | 'AUTH_USER_INACTIVE'
   | 'AUTH_USER_NOT_FOUND'
 
@@ -115,6 +117,8 @@ export interface AuthenticateRequestOptions {
 
 export interface JwtClaims {
   sub: number
+  odooUid?: number
+  odooSessionKey?: string
   email?: string
   tokenVersion?: number
   role?: string
@@ -327,7 +331,7 @@ export async function authenticateRequest(
   req: IncomingMessage,
   jwtSecret: string,
   options: AuthenticateRequestOptions = {}
-): Promise<{ uid: number; email?: string; name?: string; tokenVersion?: number; partnerId?: number }> {
+): Promise<{ uid: number; odooUid?: number; odooSessionKey?: string; email?: string; name?: string; tokenVersion?: number; partnerId?: number }> {
   const decoded = verifyToken(req, jwtSecret, options.verifyOptions)
   const uid = decoded.sub as number
 
@@ -339,10 +343,28 @@ export async function authenticateRequest(
   }
 
   const authCtx = options.env ?? createCtx(ANONYMOUS_ID, authSecurityContext('login'), getModel as any)
+  const odooSessionKey = typeof decoded.odooSessionKey === 'string' ? decoded.odooSessionKey : undefined
+  if (odooSessionKey) {
+    const odoo = getOdooSession(odooSessionKey)
+    if (!odoo) throw new AuthError('AUTH_SESSION_EXPIRED', 'Odoo session expired', 401)
+    if (typeof decoded.odooUid === 'number' && decoded.odooUid !== odoo.uid) {
+      throw new AuthError('AUTH_INVALID', 'Odoo identity mismatch', 401)
+    }
+    return {
+      uid: odoo.uid,
+      odooUid: odoo.uid,
+      odooSessionKey,
+      email: odoo.email || odoo.login,
+      name: odoo.name || odoo.login,
+      tokenVersion: 1,
+    }
+  }
   const session = await validateUserSession(authCtx, uid, decoded.tokenVersion)
 
   return {
     uid: session.id,
+    odooUid: typeof decoded.odooUid === 'number' ? decoded.odooUid : undefined,
+    odooSessionKey: typeof decoded.odooSessionKey === 'string' ? decoded.odooSessionKey : undefined,
     email: session.email,
     name: session.name,
     tokenVersion: session.tokenVersion,

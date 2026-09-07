@@ -46,8 +46,8 @@ function AdhkarCounterModal({
   if (!activeDzikir) return null
 
   return (
-    <div className="fixed inset-0 z-[100] flex animate-in items-center justify-center bg-card p-2 backdrop-blur-md duration-300 fade-in zoom-in sm:p-4">
-      <div className="hide-scrollbar relative max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-border bg-background/95 p-6 shadow-sm sm:p-8">
+    <div className="fixed inset-0 z-[100] flex animate-in items-center justify-center bg-background/80 p-2 duration-300 fade-in zoom-in sm:p-4">
+      <div className="hide-scrollbar relative max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-md border border-border bg-card p-6 sm:p-8">
         <button
           type="button"
           onClick={onClose}
@@ -60,14 +60,14 @@ function AdhkarCounterModal({
           <h2 className="mb-2 font-sans text-xl font-bold text-foreground">
             {activeDzikir.title}
           </h2>
-          <p className="font-mono text-xs tracking-widest text-primary uppercase">
+          <p className="text-sm text-muted-foreground">
             Target: {targetCount}
           </p>
         </div>
 
         <div className="mb-10 text-center">
           <p
-            className="font-arabic text-4xl leading-relaxed text-foreground drop-shadow-sm sm:text-5xl"
+            className="arabic-text text-4xl leading-relaxed text-foreground sm:text-5xl"
             dir="rtl"
           >
             {activeDzikir.text_arabic}
@@ -96,7 +96,7 @@ function AdhkarCounterModal({
 
           <div className="mt-6 h-2 w-64 overflow-hidden rounded-full bg-muted/30">
             <div
-              className="h-full bg-gradient-to-r from-primary/10 to-emerald-400 transition-all duration-300"
+              className="h-full bg-primary transition-all duration-300"
               style={{
                 width: `${Math.min((count / targetCount) * 100, 100)}%`,
               }}
@@ -123,13 +123,13 @@ export function AdhkarCommandPresentation({
   return (
     <div className="mx-auto w-full max-w-7xl px-4 pt-6 pb-20 font-sans sm:px-6 lg:px-8">
       <div className="mb-10 text-center">
-        <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-card shadow-sm backdrop-blur-xl">
-          <Shield className="h-8 w-8 text-primary drop-shadow-sm" />
+        <div className="inline-flex h-14 w-14 items-center justify-center rounded-md border border-border bg-card">
+          <Shield className="h-7 w-7 text-primary" />
         </div>
-        <h1 className="mt-6 text-3xl font-black tracking-widest text-foreground uppercase drop-shadow-md sm:text-4xl">
+        <h1 className="mt-6 text-2xl font-bold text-foreground sm:text-3xl">
           Adhkar Command Center
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl font-mono text-xs tracking-widest text-primary uppercase">
+        <p className="mx-auto mt-4 max-w-2xl text-sm text-muted-foreground">
           Spiritual Armor • Divine Remembrance • Inner Peace
         </p>
       </div>
@@ -143,7 +143,7 @@ export function AdhkarCommandPresentation({
               key={category.id}
               type="button"
               onClick={() => onCategoryChange(category.id)}
-              className={`flex shrink-0 snap-center items-center gap-2 rounded-full border px-5 py-2.5 text-[10px] font-bold tracking-widest uppercase transition-all ${
+              className={`flex shrink-0 snap-center items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium transition-colors ${
                 isActive
                   ? "border-border bg-primary/10 text-primary shadow-sm"
                   : "border-border bg-card text-muted-foreground hover:border-border hover:text-primary"
@@ -166,13 +166,13 @@ export function AdhkarCommandPresentation({
 
       {loading ? (
         <div className="flex h-64 items-center justify-center">
-          <div className="h-12 w-12 animate-spin rounded-full border-2 border-border border-t-transparent" />
+            <div className="h-10 w-10 animate-spin rounded-full border-2 border-border border-t-transparent" />
         </div>
       ) : data.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center opacity-50">
           <Shield className="mb-4 h-12 w-12 text-primary" />
           <h3 className="font-mono text-sm tracking-widest text-foreground">
-            NO DATA IN DATABASE
+            No adhkar records found
           </h3>
           <p className="mt-2 text-xs text-muted-foreground">
             Please seed the database with adhkar records.
@@ -183,19 +183,19 @@ export function AdhkarCommandPresentation({
           {data.map((item) => (
             <div
               key={item.id}
-              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all hover:border-border hover:bg-card hover:shadow-sm"
+              className="group relative flex flex-col justify-between overflow-hidden rounded-md border border-border bg-card p-5 transition-colors hover:border-primary"
             >
               <div>
                 <div className="mb-4 flex items-start justify-between">
                   <h3 className="font-sans text-lg font-bold text-foreground group-hover:text-primary">
                     {item.title}
                   </h3>
-                  <span className="rounded bg-muted/30 px-2 py-1 font-mono text-[8px] tracking-widest text-foreground uppercase">
+                  <span className="rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground">
                     {item.timing}
                   </span>
                 </div>
                 <p
-                  className="mb-4 line-clamp-3 text-right font-arabic text-2xl leading-relaxed text-foreground"
+                  className="arabic-text mb-4 line-clamp-3 text-2xl leading-relaxed text-foreground"
                   dir="rtl"
                 >
                   {item.text_arabic}
@@ -206,15 +206,15 @@ export function AdhkarCommandPresentation({
               </div>
 
               <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
-                <span className="font-mono text-[9px] tracking-widest text-primary/70 uppercase">
+                <span className="text-xs text-muted-foreground">
                   {item.source}
                 </span>
                 <button
                   type="button"
                   onClick={() => onStartDzikir(item)}
-                  className="flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 font-mono text-[10px] font-bold tracking-widest text-primary transition-colors hover:bg-primary hover:text-foreground"
+                  className="flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                 >
-                  START <ArrowRight className="h-3 w-3" />
+                  Start <ArrowRight className="h-3.5 w-3.5" />
                 </button>
               </div>
             </div>

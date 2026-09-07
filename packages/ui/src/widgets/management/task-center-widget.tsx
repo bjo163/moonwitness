@@ -1,6 +1,7 @@
 import React from "react"
 import { ArrowRight } from "lucide-react"
 import { resolveSemanticColor, type SemanticColorToken } from "../../lib/semantic-color"
+import { Button } from "../../components/button"
 
 export function TaskCenterWidget() {
   return (
@@ -69,9 +70,9 @@ export function TaskCenterWidget() {
         </div>
       </div>
 
-      <button type="button" className="mt-2 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
+      <Button type="button" variant="ghost" className="mt-2 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
         VIEW ALL TASKS <ArrowRight className="h-2.5 w-2.5" />
-      </button>
+      </Button>
     </div>
   )
 }

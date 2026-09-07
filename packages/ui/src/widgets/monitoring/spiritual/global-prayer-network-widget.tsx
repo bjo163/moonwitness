@@ -1,6 +1,7 @@
 import React from "react"
 import { Moon, Clock, ArrowRight } from "lucide-react"
 import { GlobalCityPrayer } from "@moon/client"
+import { Button } from "../../../components/button"
 
 export function GlobalPrayerNetworkWidget({
   globalPrayers = [],
@@ -65,9 +66,9 @@ export function GlobalPrayerNetworkWidget({
         )}
       </div>
 
-      <button className="mt-2 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
+      <Button type="button" variant="ghost" className="mt-2 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
         VIEW FULL NETWORK <ArrowRight className="h-2.5 w-2.5" />
-      </button>
+      </Button>
     </div>
   )
 }

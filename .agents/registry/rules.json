@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "registry_type": "rules",
+  "entries": [
+    {"id":"rule.governance.atomicity","version":"1.0.0","status":"active","owner":"repository-maintainers","scope":"repository","severity":"error","statement":"Each governance entity has one primary responsibility and an explicit contract.","validation":"registry-schema"},
+    {"id":"rule.governance.least-privilege","version":"1.0.0","status":"active","owner":"repository-maintainers","scope":"agent","severity":"error","statement":"Agents receive only the permissions required by their declared responsibility.","validation":"registry-schema"},
+    {"id":"rule.governance.source-of-truth","version":"1.0.0","status":"active","owner":"repository-maintainers","scope":"repository","severity":"error","statement":"Registries index canonical definitions and must not duplicate their contents.","validation":"reference-integrity"},
+    {"id":"rule.architecture.genesis-contract","version":"1.0.0","status":"active","owner":"repository-maintainers","scope":"package","severity":"error","statement":"Every workspace package must strictly adhere to the 10 Sovereign Genesis Mandates.","validation":"registry-schema"},
+    {"id":"rule.design-system.semantic-tokens","version":"1.0.0","status":"active","owner":"repository-maintainers","scope":"ui","severity":"error","statement":"All UI components must use canonical semantic theme tokens with zero raw hex or legacy utilities.","validation":"registry-schema"},
+    {"id":"rule.compute.pure-isomorphism","version":"1.0.0","status":"active","owner":"repository-maintainers","scope":"compute","severity":"error","statement":"Celestial and mathematical algorithms must remain 100% pure functions with zero DB, network, or file I/O.","validation":"registry-schema"},
+    {"id":"rule.protocol.single-source","version":"1.0.0","status":"active","owner":"repository-maintainers","scope":"protocol","severity":"error","statement":"All API parameters, response shapes, and RPC contracts must originate exclusively from @moon/protocol.","validation":"registry-schema"},
+    {"id":"rule.orm.transactional-atomicity","version":"1.0.0","status":"active","owner":"repository-maintainers","scope":"database","severity":"error","statement":"Multi-step persistence mutations must run inside managed transactions with automatic rollback guarantees.","validation":"registry-schema"},
+    {"id":"rule.server.declarative-routing","version":"1.0.0","status":"active","owner":"repository-maintainers","scope":"server","severity":"error","statement":"HTTP and RPC endpoints must use declarative route builders with runtime schema validation.","validation":"registry-schema"},
+    {"id":"rule.corpus.provenance-preservation","version":"1.0.0","status":"active","owner":"repository-maintainers","scope":"witness","severity":"error","statement":"Primary canonical source text and provenance must never be mutated or replaced with synthetic AI output.","validation":"registry-schema"}
+  ]
+}

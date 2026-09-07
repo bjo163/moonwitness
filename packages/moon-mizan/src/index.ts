@@ -9,6 +9,7 @@ export { loadDemoData } from './demo-data.js'
 export { views } from './views.js'
 
 export { chooseMethod, PRIMARY_FILTERS, SECONDARY_FILTERS, validateAssessment }
+export { adaptCosmicResult, CosmicAnalyticalResultSchema } from './cosmic-adapter.js'
 export type { AssessmentDecision, AssessmentInput, AssessmentMethod, MethodDecision, MethodInput } from './engine.js'
 export { MzCase, MzAssessment, MzFilter, MzReference }
 

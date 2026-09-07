@@ -71,6 +71,9 @@ importers:
       '@moon/mizan':
         specifier: workspace:*
         version: link:../../packages/moon-mizan
+      '@moon/odoo-bridge':
+        specifier: workspace:*
+        version: link:../../packages/moon-odoo-bridge
       '@moon/orm':
         specifier: workspace:*
         version: link:../../packages/moon-orm
@@ -746,6 +749,18 @@ importers:
         specifier: ^1.6.1
         version: 1.6.1(@types/node@26.1.2)(lightningcss@1.32.0)
 
+  packages/moon-odoo-bridge:
+    devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.19.41
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      typescript:
+        specifier: ^5.5.4
+        version: 5.9.3
+
   packages/moon-orm:
     dependencies:
       '@opentelemetry/api':
@@ -834,6 +849,9 @@ importers:
       '@moon/base':
         specifier: workspace:*
         version: link:../moon-base
+      '@moon/odoo-bridge':
+        specifier: workspace:*
+        version: link:../moon-odoo-bridge
       '@moon/orm':
         specifier: workspace:*
         version: link:../moon-orm
@@ -973,6 +991,9 @@ importers:
       '@moon/compute':
         specifier: workspace:*
         version: link:../moon-compute
+      '@moon/odoo-bridge':
+        specifier: workspace:*
+        version: link:../moon-odoo-bridge
       '@moon/orm':
         specifier: workspace:*
         version: link:../moon-orm

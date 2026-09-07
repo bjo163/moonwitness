@@ -1,6 +1,7 @@
 import React from "react"
 import { Target, ArrowRight } from "lucide-react"
 import { resolveSemanticColor, type SemanticColorToken } from "../../lib/semantic-color"
+import { Button } from "../../components/button"
 
 export function ActionCenterWidget() {
   return (
@@ -91,9 +92,9 @@ export function ActionCenterWidget() {
         ))}
       </div>
 
-      <button type="button" className="mt-2 flex w-full items-center justify-center gap-1 border-t border-border pt-2 text-center text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
+      <Button type="button" variant="ghost" className="mt-2 flex w-full items-center justify-center gap-1 border-t border-border pt-2 text-center text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
         VIEW ALL ACTIONS <ArrowRight className="h-2.5 w-2.5" />
-      </button>
+      </Button>
     </div>
   )
 }

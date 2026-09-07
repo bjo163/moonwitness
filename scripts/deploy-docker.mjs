@@ -372,11 +372,11 @@ async function fullDeploy(flags) {
 
   banner('DEPLOYMENT COMPLETE');
   console.log(`${c.dim}  Endpoints:${c.reset}`);
-  console.log(`    Web:            http://localhost:\${PORT_WEB:-3000}`);
-  console.log(`    Command Center: http://localhost:\${PORT_COMMAND_CENTER:-3001}`);
-  console.log(`    API:            http://localhost:\${PORT_API:-4000}`);
-  console.log(`    Celestial:      http://localhost:\${PORT_CELESTIAL_ENGINE:-8001}`);
-  console.log(`    AI Agent:       http://localhost:\${PORT_AI_AGENT:-8002}`);
+  console.log(`    Web:            http://localhost:\${WEB_PORT:-3000}`);
+  console.log(`    Command Center: http://localhost:\${COMMAND_CENTER_PORT:-3001}`);
+  console.log(`    API:            http://localhost:\${API_PORT:-4000}`);
+  console.log(`    Celestial:      http://localhost:\${CELESTIAL_ENGINE_PORT:-8001}`);
+  console.log(`    AI Agent:       http://localhost:\${AI_AGENT_PORT:-8002}`);
   console.log('');
 }
 

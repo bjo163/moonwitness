@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense, useRef } from "react"
 import { BookOpen } from "lucide-react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useGlobalAudio } from "@workspace/state"
+import { Button } from "@workspace/ui"
 import { moonClientInstance, useAuthSession } from "@moon/client"
 import { ReaderTopHeader } from "../components/reader/reader-top-header"
 import { ReaderNavSidebar } from "../components/reader/reader-nav-sidebar"
@@ -134,8 +135,8 @@ function ReaderContent({ id }: { id: string }) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center space-y-4 bg-card text-foreground/50">
         <BookOpen className="h-8 w-8 animate-pulse text-blue-500/50" />
-        <div className="text-xs font-bold tracking-widest uppercase">
-          Unlocking Divine Codex...
+        <div className="text-sm text-muted-foreground">
+          Loading scripture…
         </div>
       </div>
     )
@@ -145,12 +146,13 @@ function ReaderContent({ id }: { id: string }) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center space-y-4 bg-card text-foreground">
         <p>{error || 'Error loading scripture.'}</p>
-        <button
+        <Button
           onClick={() => router.back()}
-          className="rounded bg-muted/30 px-4 py-2"
+          type="button"
+          variant="outline"
         >
           Go Back
-        </button>
+        </Button>
       </div>
     )
   }

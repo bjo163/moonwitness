@@ -1,194 +1,36 @@
+import type { ElementType } from "react"
 import { Users, X, BookOpen, Book, Map, Globe2, Lightbulb } from "lucide-react"
 import { useKnowledgeGraph } from "@workspace/hooks"
+import { Button } from "../../components/button"
 
-const iconMap: Record<string, React.ElementType> = {
-  Users,
-  BookOpen,
-  Book,
-  Map,
-  Globe2,
-  Lightbulb,
-}
-
+const iconMap: Record<string, ElementType> = { Users, BookOpen, Book, Map, Globe2, Lightbulb }
 type ConnectionItem = { i: string; col: string; n: string; c: number | string }
 type VerseItem = { arabic: string; reference: string; translation: string }
 type HadithItem = { text: string; reference: string }
+type EntityData = { name?: string; type?: string; description?: string; connections?: { total?: number | string; breakdown?: ConnectionItem[] }; verses?: VerseItem[]; hadiths?: HadithItem[] }
+
+function GraphEntityHeader({ loading, entity, onClear }: { loading: boolean; entity?: EntityData; onClear: () => void }) {
+  return <div className="flex items-start justify-between border-b border-border p-4"><div><div className="mb-4 text-sm font-medium text-primary">Selected entity</div>{loading ? <div className="text-sm text-muted-foreground">Loading entity…</div> : <div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-full border border-primary bg-primary/10 text-primary"><Users className="h-5 w-5" /></div><div><div className="text-lg font-semibold text-foreground">{entity?.name || "No entity"}</div><div className="text-xs font-medium text-primary">{entity?.type || "-"}</div></div></div>}</div><Button type="button" variant="ghost" onClick={onClear} className="flex items-center gap-1 text-xs text-primary hover:text-foreground"><X className="h-3 w-3" /> Clear</Button></div>
+}
+
+function GraphEntityTabs({ connectionCount }: { connectionCount: number | string }) {
+  return <div className="flex border-b border-border text-xs font-medium text-primary"><Button type="button" variant="ghost" className="flex-1 border-b-2 border-primary py-2.5 text-primary">Overview</Button><Button type="button" variant="ghost" className="flex-1 py-2.5 hover:text-foreground">Connections <span className="ml-1 rounded bg-muted px-1 py-0.5 text-xs">{connectionCount}</span></Button><Button type="button" variant="ghost" className="flex-1 py-2.5 hover:text-foreground">Timeline</Button><Button type="button" variant="ghost" className="flex-1 py-2.5 hover:text-foreground">Insights</Button></div>
+}
+
+function GraphEntityContent({ loading, entity }: { loading: boolean; entity?: EntityData }) {
+  const sections = [
+    { title: "Description", content: loading ? <LoadingText label="Loading description…" /> : <p className="text-sm leading-relaxed text-foreground">{entity?.description || "-"}</p> },
+    { title: "Key connections", content: loading ? <LoadingText label="Loading connections…" /> : <div className="space-y-1.5 text-sm">{entity?.connections?.breakdown?.map((connection, index) => { const Icon = iconMap[connection.i] || Map; return <div key={`${connection.i}-${index}`} className="flex items-center justify-between rounded p-1 hover:bg-muted"><span className="flex items-center gap-2"><Icon className={`h-3.5 w-3.5 ${connection.col}`} />{connection.n}</span><span className="font-mono text-primary">{connection.c}</span></div> })}</div> },
+    { title: "Related verses", content: loading ? <LoadingText label="Loading verses…" /> : <div>{entity?.verses?.map((verse, index) => <article key={`${verse.reference}-${index}`} className="mb-2 space-y-2 rounded-md border border-border bg-background p-3"><div className="arabic-text text-right text-base font-semibold leading-relaxed text-primary" dir="rtl">{verse.arabic}</div><div className="text-xs font-medium text-primary">{verse.reference}</div><p className="text-sm italic leading-relaxed">{verse.translation}</p></article>)}</div> },
+    { title: "Related hadith", content: loading ? <LoadingText label="Loading hadith…" /> : <div>{entity?.hadiths?.map((hadith, index) => <article key={`${hadith.reference}-${index}`} className="mb-2 space-y-2 rounded-md border border-border bg-background p-3"><p className="text-sm italic leading-relaxed">{hadith.text}</p><div className="text-xs font-medium text-primary">{hadith.reference}</div></article>)}</div> },
+  ]
+  return <div className="hide-scrollbar flex-1 space-y-5 overflow-y-auto p-4">{sections.map((section) => <section key={section.title}><h3 className="mb-2 text-sm font-medium text-primary">{section.title}</h3>{section.content}</section>)}</div>
+}
+
+function LoadingText({ label }: { label: string }) { return <div className="text-sm text-muted-foreground">{label}</div> }
 
 export function GraphEntityPanelWidget() {
-  const { data, loading } = useKnowledgeGraph()
-  return (
-    <div className="bg-background flex w-full shrink-0 flex-col overflow-hidden rounded-xl border border-primary/30 shadow-sm lg:w-80">
-      {/* Header */}
-      <div className="flex items-start justify-between border-b border-border p-4">
-        <div>
-          <div className="mb-4 text-[9px] font-black tracking-widest text-primary uppercase">
-            SELECTED ENTITY
-          </div>
-          {loading ? (
-            <div className="animate-pulse text-xs text-foreground/50">
-              Loading entity...
-            </div>
-          ) : (
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-primary bg-primary/10 text-primary">
-                <Users className="h-5 w-5" />
-              </div>
-              <div>
-                <div className="text-lg leading-tight font-bold text-foreground">
-                  {data?.selectedEntity?.name || "No Entity"}
-                </div>
-                <div className="text-[10px] font-bold text-primary uppercase">
-                  {data?.selectedEntity?.type || "-"}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-        <button className="flex items-center gap-1 text-[8px] text-primary hover:text-foreground">
-          <X className="h-3 w-3" /> Clear
-        </button>
-      </div>
-
-      <div className="px-4 pt-2 pb-3">
-        <div className="font-sans text-[9px] leading-relaxed text-primary italic">
-          {loading ? "..." : "One of the greatest prophets of Allah."}
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="flex border-b border-border text-[9px] font-bold text-primary">
-        <button className="flex-1 border-b-2 border-primary py-2.5 text-primary">
-          OVERVIEW
-        </button>
-        <button className="flex-1 py-2.5 transition-colors hover:text-foreground">
-          CONNECTIONS{" "}
-          <span className="ml-1 rounded bg-muted/30 px-1 py-0.5 text-[8px]">
-            {loading ? "0" : data?.selectedEntity?.connections?.total || "0"}
-          </span>
-        </button>
-        <button className="flex-1 py-2.5 transition-colors hover:text-foreground">
-          TIMELINE
-        </button>
-        <button className="flex-1 py-2.5 transition-colors hover:text-foreground">
-          INSIGHTS
-        </button>
-      </div>
-
-      <div className="hide-scrollbar flex-1 space-y-5 overflow-y-auto p-4">
-        {/* Description */}
-        <div>
-          <div className="mb-2 text-[9px] font-black tracking-widest text-primary uppercase">
-            DESCRIPTION
-          </div>
-          <div className="font-sans text-[10px] leading-relaxed text-foreground">
-            {loading ? (
-              <div className="animate-pulse text-xs text-foreground/50">
-                Loading description...
-              </div>
-            ) : (
-              data?.selectedEntity?.description || "-"
-            )}
-          </div>
-        </div>
-
-        {/* Key Connections */}
-        <div>
-          <div className="mb-2 text-[9px] font-black tracking-widest text-primary uppercase">
-            KEY CONNECTIONS
-          </div>
-          <div className="space-y-1.5 text-[9px]">
-            {loading ? (
-              <div className="animate-pulse text-xs text-foreground/50">
-                Loading connections...
-              </div>
-            ) : (
-              (
-                data?.selectedEntity as
-                  | { connections?: { breakdown?: ConnectionItem[] } }
-                  | undefined
-              )?.connections?.breakdown?.map(
-                (conn: ConnectionItem, i: number) => {
-                  const IconComponent = iconMap[conn.i] || Map
-                  return (
-                    <div
-                      key={i}
-                      className="group flex cursor-pointer items-center justify-between rounded p-1 hover:bg-muted/30"
-                    >
-                      <span className="flex items-center gap-2 text-foreground">
-                        <IconComponent className={`h-3.5 w-3.5 ${conn.col}`} />{" "}
-                        {conn.n}
-                      </span>
-                      <span className="font-mono text-primary">{conn.c}</span>
-                    </div>
-                  )
-                }
-              )
-            )}
-          </div>
-        </div>
-
-        {/* Related Verses */}
-        <div>
-          <div className="mb-2 text-[9px] font-black tracking-widest text-primary uppercase">
-            RELATED VERSES
-          </div>
-          {loading ? (
-            <div className="animate-pulse text-xs text-foreground/50">
-              Loading verses...
-            </div>
-          ) : (
-            (
-              data?.selectedEntity as { verses?: VerseItem[] } | undefined
-            )?.verses?.map((verse: VerseItem, i: number) => (
-              <div
-                key={i}
-                className="mb-2 space-y-2 rounded-lg border border-primary/20 bg-primary/10 p-3"
-              >
-                <div
-                  className="font-arabic text-right text-[14px] leading-relaxed font-bold text-primary"
-                  dir="rtl"
-                >
-                  {verse.arabic}
-                </div>
-                <div className="text-[8px] font-bold text-primary uppercase">
-                  {verse.reference}
-                </div>
-                <div className="font-sans text-[9px] leading-relaxed text-foreground italic">
-                  {verse.translation}
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        {/* Related Hadith */}
-        <div>
-          <div className="mb-2 text-[9px] font-black tracking-widest text-primary uppercase">
-            RELATED HADITH
-          </div>
-          {loading ? (
-            <div className="animate-pulse text-xs text-foreground/50">
-              Loading hadith...
-            </div>
-          ) : (
-            (
-              data?.selectedEntity as { hadiths?: HadithItem[] } | undefined
-            )?.hadiths?.map((hadith: HadithItem, i: number) => (
-              <div
-                key={i}
-                className="bg-background mb-2 space-y-2 rounded-lg border border-border p-3"
-              >
-                <div className="font-sans text-[9px] leading-relaxed text-foreground italic">
-                  {hadith.text}
-                </div>
-                <div className="text-[8px] font-bold text-primary uppercase">
-                  {hadith.reference}
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-    </div>
-  )
+  const { data, loading, setSelectedNode } = useKnowledgeGraph()
+  const entity = data?.selectedEntity as EntityData | undefined
+  return <aside className="flex w-full shrink-0 flex-col overflow-hidden rounded-md border border-border bg-card lg:w-80"><GraphEntityHeader loading={loading} entity={entity} onClear={() => setSelectedNode(null)} /><div className="px-4 pt-2 pb-3 text-sm italic leading-relaxed text-muted-foreground">{loading ? "Loading…" : "Selected knowledge graph entity."}</div><GraphEntityTabs connectionCount={loading ? "0" : entity?.connections?.total || "0"} /><GraphEntityContent loading={loading} entity={entity} /></aside>
 }

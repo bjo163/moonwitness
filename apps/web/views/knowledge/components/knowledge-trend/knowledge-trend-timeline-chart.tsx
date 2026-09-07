@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import { Button } from "@workspace/ui"
 
 const TIMELINE_EVENTS = [
   { d: "19 MAY", n: "New Moon\nObservation Surge", c: "#3B82F6" },
@@ -16,12 +17,12 @@ export function KnowledgeTrendTimelineChart() {
           TRENDING TIMELINE
         </div>
         <div className="flex overflow-hidden rounded bg-muted/30">
-          <button className="border border-primary/30 bg-muted px-2 py-1 text-[8px] text-primary">
+          <Button type="button" variant="ghost" className="border border-primary/30 bg-muted px-2 py-1 text-[8px] text-primary">
             Line
-          </button>
-          <button className="border border-transparent px-2 py-1 text-[8px] text-primary">
+          </Button>
+          <Button type="button" variant="ghost" className="border border-transparent px-2 py-1 text-[8px] text-primary">
             Area
-          </button>
+          </Button>
         </div>
       </div>
 
