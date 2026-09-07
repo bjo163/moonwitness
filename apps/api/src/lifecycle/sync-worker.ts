@@ -85,6 +85,10 @@ export async function runSyncCycle(): Promise<SyncStatus> {
  * Start the background sync worker.
  */
 export function startSyncWorker(): void {
+  if (config.odoo) {
+    console.log("[SyncWorker] Odoo Master Mutlak active. Database sync worker skipped.")
+    return
+  }
   if (syncInterval) return
 
   const intervalMs = Math.max(config.autoSyncIntervalSeconds, 30) * 1000

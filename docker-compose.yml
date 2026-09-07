@@ -51,6 +51,10 @@ services:
       REDIS_URL: ${REDIS_URL:?REDIS_URL must be set in .env.production}
       CELESTIAL_ENGINE_URL: ${CELESTIAL_ENGINE_URL:-http://celestial-engine:8001}
       AI_AGENT_URL: ${AI_AGENT_URL:-http://ai-agent:8002}
+      ODOO_BASE_URL: ${ODOO_BASE_URL:-http://odoo19:8069}
+      ODOO_DATABASE: ${ODOO_DATABASE:-odoo}
+      ODOO_USERNAME: ${ODOO_USERNAME:-admin}
+      ODOO_PASSWORD: ${ODOO_PASSWORD:-admin}
     ports:
       - "127.0.0.1:${API_PORT:-4000}:4000"
     healthcheck:

@@ -15,16 +15,17 @@ apps/web + apps/command-center
 @moon/protocol
           |
           v
-@moon/server
-NativeServer public API
-Fastify 5 internal HTTP engine
+FASTIFY API GATEWAY & INTELLIGENCE RUNTIME (@moon/server / apps/api)
+• REST / RPC Routing        • Pure Math Compute (@moon/compute)
+• Redis Hot Caching         • pgvector Semantic RAG Retrieval
+• Public Fallback Service   • Real-Time SSE Telemetry
           |
-          v
-DOMAIN + APPLICATION SERVICES
-@moon/witness + other addons + @moon/orm
-          |
-          v
-PostgreSQL / Redis / application infrastructure
+          +-----------------------------------+
+          | JSON-RPC 2.0 / WAL                | Direct pgvector Connection
+          v                                   v
+CANONICAL MASTER RELATIONAL DATASTORE   VECTOR EMBEDDINGS (pgvector 0.8+)
+Odoo 19 (Python Addons)                 PostgreSQL (postgres:18-pgvector)
+PostgreSQL (postgres:18-pgvector)
 ```
 
 The canonical corpus is maintained separately by:
@@ -33,7 +34,7 @@ The canonical corpus is maintained separately by:
 bjo163/moonwitness-corpus
 ```
 
-The application consumes versioned corpus releases through `@moon/witness` ingestion and represents them in the canonical Witness domain graph.
+The application consumes versioned corpus releases through `@moon/witness` ingestion and registers them directly into the canonical Witness domain graph mastered in Odoo 19.
 
 ## 2. Source and ownership boundaries
 
@@ -45,9 +46,13 @@ Owns canonical corpus authoring, upstream synchronization, source metadata, corp
 
 Owns source-aware ingestion, normalization/validation, application knowledge graph, source/artifact/snapshot records, passages/content, provenance relationships, evidence, and research-domain integration.
 
-### MoonWitness database
+### `Odoo 19 Master Datastore (postgres:18-pgvector)`
 
-The database is operational persistence and query projection of the application domain. It is not the editorial source of the corpus.
+The single canonical relational source of truth for all domain entities, sacred knowledge graph records (`moon.witness.*`), Mizan ethical balance evaluations (`moon.mizan.*`), disaster & myth correlations (`moon.disaster.*`), user security (`res.users`), and enterprise operational modules (projects, tasks, accounting, stock). It replaces duplicate local relational tables.
+
+### `Fastify Gateway & Compute Engine (@moon/server)`
+
+Owns high-speed API routing, authentication token validation, public request caching, pure mathematical celestial computations (`@moon/compute`), and pgvector RAG vector retrieval. It does not maintain competing duplicate relational models.
 
 ### `apps/web`
 
@@ -74,7 +79,13 @@ immutable release / pinned revision
         +--> tradition / research graph where applicable
         |
         v
-MoonWitness API
+@moon/odoo-bridge
+        |
+        v
+Odoo 19 Master Store (moon.witness.*)
+        |
+        v
+Fastify API Gateway (Hot Read Cache)
    +----+----+
    |         |
    v         v
@@ -89,19 +100,19 @@ Web and Command Center never treat raw corpus files as a parallel source of trut
 HTTP / RPC / Worker
         |
         v
-Application Service / Domain Operation
+Fastify Gateway (@moon/server)
         |
         v
-Canonical Model
+@moon/protocol Zod Contract Validation
         |
         v
-Moon ORM transaction + authorization
+@moon/odoo-bridge (Session / System Service Client)
         |
         v
-PostgreSQL
+Odoo 19 Master PostgreSQL (postgres:18-pgvector)
 ```
 
-Corpus ingestion uses the same application boundary through `@moon/witness`.
+Corpus ingestion uses the same application boundary through `@moon/witness` into Odoo 19.
 
 ## 5. Enterprise UI architecture
 
@@ -285,7 +296,9 @@ source data       -> moonwitness-corpus
 application graph -> @moon/witness
 transport         -> @moon/server / Fastify internally
 API contract      -> @moon/protocol
-persistence       -> @moon/orm + PostgreSQL
+master store      -> Odoo 19 + PostgreSQL (postgres:18-pgvector)
+vector search     -> pgvector 0.8+ via @moon/witness RAG
+pure compute      -> @moon/compute (isomorphic mathematical engine)
 public UI         -> apps/web
 admin UI          -> apps/command-center
 shared UI         -> @workspace/ui

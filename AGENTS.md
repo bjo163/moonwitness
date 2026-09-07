@@ -53,14 +53,14 @@ Owns canonical corpus authoring, upstream synchronization, source metadata, corp
 ### `@moon/witness`
 Owns source-aware ingestion, normalization, validation, the application knowledge graph, source/artifact/snapshot records, passages, textual content, provenance, evidence, and research-domain integration.
 
-### `MoonWitness database`
-Provides operational persistence and query support for the application domain. It is not the editorial source of the corpus.
+### `Odoo 19 Master Datastore (postgres:18-pgvector)`
+Provides the single canonical relational source of truth for all domain entities, sacred knowledge graph records (`moon.witness.*`), Mizan ethical evaluations (`moon.mizan.*`), disaster & myth correlations (`moon.disaster.*`), user security (`res.users`), and enterprise operational modules. It eliminates duplicate local relational stores.
 
 ### `@moon/protocol`
 Is the API contract source of truth.
 
 ### `@moon/server`
-Owns backend transport and route infrastructure.
+Owns high-speed backend transport, route infrastructure, Redis hot caching, isomorphic celestial math (`@moon/compute`), and pgvector RAG retrieval.
 
 ### `@workspace/ui`
 Owns the shared enterprise UI primitives and theme system.
@@ -79,10 +79,13 @@ corpus artifact + manifest
 @moon/witness ingestion
         |
         v
-canonical Witness graph
+@moon/odoo-bridge
         |
         v
-MoonWitness API
+Odoo 19 Master Store (moon.witness.*)
+        |
+        v
+MoonWitness API Gateway (Fastify)
         |
    +----+----+
    |         |
@@ -287,6 +290,9 @@ corpus data       -> moonwitness-corpus
 application graph -> @moon/witness
 transport         -> @moon/server
 API contract      -> @moon/protocol
+master store      -> Odoo 19 + PostgreSQL (postgres:18-pgvector)
+vector search     -> pgvector 0.8+ via @moon/witness RAG
+pure compute      -> @moon/compute (isomorphic mathematical engine)
 public UI         -> apps/web
 admin UI          -> apps/command-center
 shared UI         -> @workspace/ui

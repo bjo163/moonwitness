@@ -73,6 +73,14 @@ const ODOO_MODEL_MAP: Record<string, string> = {
   'mz.reference': 'moon.mizan.reference',
   'mz.engine.run': 'moon.mizan.engine.run',
   'mz.engine.result': 'moon.mizan.engine.result',
+  'ds.disaster': 'moon.disaster',
+  'ds.type': 'moon.disaster.type',
+  'my.myth': 'moon.myth',
+  'my.candidate': 'moon.myth.candidate',
+  'my.observation': 'moon.myth.observation',
+  'my.evidence': 'moon.myth.evidence',
+  'my.correlation': 'moon.myth.correlation',
+  'my.issue': 'moon.myth.issue',
 }
 
 const ODOO_READ_FIELDS: Record<string, string[]> = {
@@ -223,7 +231,7 @@ async function handleOdooModelRequest(
   res: ServerResponse,
   model: string,
   odooModel: string,
-  session: { sessionId: string },
+  session: { sessionId: string } | undefined,
   client: OdooClient,
   id: number | undefined,
 ): Promise<void> {
@@ -241,24 +249,23 @@ async function handleOdooModelRequest(
   }
 
   if (req.method === 'GET') {
+    const kwargs = odooReadKwargs(odooModel, id === undefined ? { limit: Number(searchParams.get('limit') || 100), offset: Number(searchParams.get('offset') || 0) } : {})
     const rows = id === undefined
-      ? await client.callWithSession<Record<string, unknown>[]>(session.sessionId, {
-        model: odooModel,
-        method: 'search_read',
-        args: [domain],
-        kwargs: odooReadKwargs(odooModel, { limit: Number(searchParams.get('limit') || 100), offset: Number(searchParams.get('offset') || 0) }),
-      })
-      : await client.callWithSession<Record<string, unknown>[]>(session.sessionId, {
-        model: odooModel,
-        method: 'read',
-        args: [[id]],
-        kwargs: odooReadKwargs(odooModel),
-      })
+      ? (session
+        ? await client.callWithSession<Record<string, unknown>[]>(session.sessionId, { model: odooModel, method: 'search_read', args: [domain], kwargs })
+        : await client.call<Record<string, unknown>[]>({ model: odooModel, method: 'search_read', args: [domain], kwargs }))
+      : (session
+        ? await client.callWithSession<Record<string, unknown>[]>(session.sessionId, { model: odooModel, method: 'read', args: [[id]], kwargs })
+        : await client.call<Record<string, unknown>[]>({ model: odooModel, method: 'read', args: [[id]], kwargs }))
     const normalized = rows.map((row) => normalizeOdooRecord(model, row))
     if (id !== undefined && normalized.length === 0) return sendJson(res, 404, { error: 'Record not found', code: 'RECORD_NOT_FOUND' }, req)
     return sendJson(res, 200, id === undefined
       ? { data: normalized, pagination: { page: 1, limit: normalized.length, total: normalized.length } }
       : { data: normalized[0] }, req)
+  }
+
+  if (!session) {
+    return sendJson(res, 401, { error: 'Odoo session required for mutations', code: 'AUTH_REQUIRED' }, req)
   }
 
   const body = denormalizeOdooValues(model, await parseBody(req))
@@ -300,18 +307,14 @@ export async function handleRest(
 
     const odooModel = ODOO_MODEL_MAP[model]
     const odooSessionKey = (auth as { odooSessionKey?: string }).odooSessionKey
-    if (odoo && model.startsWith('wx.') && !odooModel && req.method !== 'GET') {
-      return sendJson(res, 409, {
-        error: `Model '${model}' is not writable during Odoo migration`,
-        code: 'MIGRATION_PENDING',
-      }, req)
-    }
-    if (odoo && odooModel && !odooSessionKey) {
-      return sendJson(res, 401, { error: 'Odoo session required', code: 'AUTH_REQUIRED' }, req)
-    }
-    if (odoo && odooModel && odooSessionKey) {
-      const session = getOdooSession(odooSessionKey)
-      if (!session) return sendJson(res, 401, { error: 'Odoo session expired', code: 'AUTH_SESSION_EXPIRED' }, req)
+    if (odoo && odooModel) {
+      if (!odooSessionKey && req.method !== 'GET') {
+        return sendJson(res, 401, { error: 'Odoo session required for mutations', code: 'AUTH_REQUIRED' }, req)
+      }
+      const session = odooSessionKey ? getOdooSession(odooSessionKey) : undefined
+      if (odooSessionKey && !session) {
+        return sendJson(res, 401, { error: 'Odoo session expired', code: 'AUTH_SESSION_EXPIRED' }, req)
+      }
       const client = new OdooClient(odoo)
       const idStr = match[2]
       const id = idStr ? Number(idStr) : undefined
