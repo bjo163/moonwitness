@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 /* eslint-disable-next-line no-restricted-imports -- Standard icons for global intelligence dashboard */
 import {
   Activity,
@@ -14,11 +14,15 @@ import {
   Plane,
   ShieldAlert,
   Sun,
-  Users,
   Wifi,
 } from "lucide-react"
 
-import { useGlobalMonitoring } from "@moon/client"
+import {
+  summarizeSourceStatus,
+  useGlobalMonitoring,
+  type SourceMeta,
+  type SourceStatus,
+} from "@moon/client"
 import { useOSStore } from "@workspace/state"
 
 // Monitoring Widgets (Categorized)
@@ -29,7 +33,6 @@ import { DigitalConsciousnessWidget } from "@workspace/ui"
 import { FinancialMarketsWidget } from "@workspace/ui"
 import { GlobalClimateWidget } from "@workspace/ui"
 import { GlobalPrayerNetworkWidget } from "@workspace/ui"
-import { GlobalPopulationWidget } from "@workspace/ui"
 import { GlobalStatusWidget } from "@workspace/ui"
 import { IntelBriefingWidget } from "@workspace/ui"
 import { KhidraCommandWidget } from "@workspace/ui"
@@ -45,8 +48,6 @@ import { SpaceWeatherWidget } from "@workspace/ui"
 import { TaskCenterWidget } from "@workspace/ui"
 import { TrendingTopicsWidget } from "@workspace/ui"
 
-const PROGRESS_SEGMENTS = 20
-
 type MonitoringCategory =
   | "ALL"
   | "SEISMIC"
@@ -55,7 +56,6 @@ type MonitoringCategory =
   | "SPACE_WEATHER"
   | "CLIMATE"
   | "SPIRITUAL"
-  | "DEMOGRAPHIC"
   | "INTERNET"
   | "CYBER"
   | "ECONOMY"
@@ -70,6 +70,7 @@ type MonitoringDataProps = Pick<
   | "trends"
   | "cyberAttacks"
   | "ships"
+  | "sourceMeta"
 >
 
 const MONITORING_CATEGORIES = [
@@ -80,7 +81,6 @@ const MONITORING_CATEGORIES = [
   { id: "SPACE_WEATHER", label: "SPACE WEATHER", icon: Sun },
   { id: "CLIMATE", label: "CLIMATE", icon: Cloud },
   { id: "SPIRITUAL", label: "SPIRITUAL", icon: Moon },
-  { id: "DEMOGRAPHIC", label: "DEMOGRAPHIC", icon: Users },
   { id: "INTERNET", label: "INTERNET", icon: Wifi },
   { id: "SECURITY", label: "SECURITY THREATS", icon: ShieldAlert },
   { id: "ECONOMY", label: "ECONOMY", icon: DollarSign },
@@ -89,9 +89,10 @@ const MONITORING_CATEGORIES = [
 type MonitoringHeaderProps = {
   clockWIB: string
   isLoading: boolean
+  status: SourceStatus
 }
 
-function MonitoringHeader({ clockWIB, isLoading }: MonitoringHeaderProps) {
+function MonitoringHeader({ clockWIB, isLoading, status }: MonitoringHeaderProps) {
   return (
     <div className="flex flex-col items-center justify-between gap-4 border-b border-border pb-4 xl:flex-row">
       <div className="flex items-center gap-4">
@@ -131,9 +132,29 @@ function MonitoringHeader({ clockWIB, isLoading }: MonitoringHeaderProps) {
               SYNCHRONIZING...
             </div>
           ) : (
-            <div className="text-success mt-1 flex items-center gap-2 text-[10px] font-black">
-              <div className="bg-success h-2 w-2 animate-pulse rounded-full shadow-sm" />
-              CONNECTED
+            <div
+              className={`mt-1 flex items-center gap-2 text-[10px] font-black ${
+                status === "LIVE"
+                  ? "text-success"
+                  : status === "STALE"
+                    ? "text-warning"
+                    : status === "SIMULATED"
+                      ? "text-primary"
+                      : "text-destructive"
+              }`}
+            >
+              <div
+                className={`h-2 w-2 rounded-full shadow-sm ${
+                  status === "LIVE"
+                    ? "bg-success animate-pulse"
+                    : status === "STALE"
+                      ? "bg-warning"
+                      : status === "SIMULATED"
+                        ? "bg-primary"
+                        : "bg-destructive"
+                }`}
+              />
+              {status}
             </div>
           )}
         </div>
@@ -175,15 +196,18 @@ function MonitoringCategorySelector({
 
 type MonitoringPrimaryGridProps = MonitoringDataProps & {
   activeCategory: MonitoringCategory
+  onSourceMeta: (source: SourceMeta) => void
   mapEarthquakes: GlobalMonitoringData["earthquakes"]
   mapFlights: GlobalMonitoringData["flights"]
   mapIss: GlobalMonitoringData["issPosition"]
   mapCyber: GlobalMonitoringData["cyberAttacks"]
   mapShips: GlobalMonitoringData["ships"]
+  sourceStatus: Record<string, SourceStatus>
 }
 
 function MonitoringPrimaryGrid({
   activeCategory,
+  onSourceMeta,
   earthquakes,
   globalPrayers,
   spaceWeather,
@@ -196,63 +220,66 @@ function MonitoringPrimaryGrid({
   mapIss,
   mapCyber,
   mapShips,
+  sourceMeta,
+  sourceStatus,
 }: MonitoringPrimaryGridProps) {
   return (
     <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-12">
       <div className="flex flex-col gap-4 lg:col-span-3 xl:col-span-2">
-        <GlobalStatusWidget />
+        <GlobalStatusWidget sources={sourceMeta} />
       </div>
-
-      {activeCategory === "DEMOGRAPHIC" && (
-        <div className="grid grid-cols-1 gap-4 lg:col-span-9 lg:grid-cols-2 xl:col-span-10">
-          <GlobalPopulationWidget />
-        </div>
-      )}
 
       {activeCategory === "INTERNET" && (
         <div className="grid grid-cols-1 gap-4 lg:col-span-9 lg:grid-cols-12 xl:col-span-10">
           <div className="flex flex-col gap-4 lg:col-span-8 xl:col-span-8">
-            <SocialMediaTrendsWidget />
-            <DigitalConsciousnessWidget />
+            <SocialMediaTrendsWidget
+              status={sourceStatus["social-media"] ?? "UNAVAILABLE"}
+            />
+            <DigitalConsciousnessWidget onSourceMeta={onSourceMeta} />
           </div>
           <div className="lg:col-span-4 xl:col-span-4">
-            <TrendingTopicsWidget trends={trends} />
+            <TrendingTopicsWidget
+              trends={trends}
+              status={sourceStatus["google-trends"] ?? "UNAVAILABLE"}
+            />
           </div>
         </div>
       )}
 
       {activeCategory === "MARITIME" && (
         <div className="lg:col-span-9 xl:col-span-10">
-          <MaritimeTrafficWidget ships={ships} />
+          <MaritimeTrafficWidget
+            ships={ships}
+            status={sourceStatus["maritime-ships"] ?? "UNAVAILABLE"}
+          />
         </div>
       )}
 
       {activeCategory === "CLIMATE" && (
         <div className="lg:col-span-9 xl:col-span-10">
-          <GlobalClimateWidget />
+          <GlobalClimateWidget onSourceMeta={onSourceMeta} />
         </div>
       )}
 
       {activeCategory === "ECONOMY" && (
         <div className="lg:col-span-9 xl:col-span-10">
-          <FinancialMarketsWidget />
+          <FinancialMarketsWidget onSourceMeta={onSourceMeta} />
         </div>
       )}
 
       <div
-        className={`${activeCategory === "DEMOGRAPHIC" || activeCategory === "INTERNET" || activeCategory === "CLIMATE" || activeCategory === "ECONOMY" ? "hidden" : "block"} lg:col-span-9 xl:col-span-10`}
-      >
+        className={`${activeCategory === "INTERNET" || activeCategory === "CLIMATE" || activeCategory === "ECONOMY" ? "hidden" : "block"} lg:col-span-9 xl:col-span-10`}>
         <LiveWorldMapWidget
           earthquakes={mapEarthquakes}
           issPosition={mapIss}
           flights={mapFlights}
           cyberAttacks={mapCyber}
           ships={mapShips}
+          sourceMeta={sourceMeta}
         />
       </div>
 
-      {activeCategory !== "DEMOGRAPHIC" &&
-        activeCategory !== "INTERNET" &&
+      {activeCategory !== "INTERNET" &&
         activeCategory !== "CYBER" &&
         activeCategory !== "MARITIME" &&
         activeCategory !== "CLIMATE" &&
@@ -260,10 +287,16 @@ function MonitoringPrimaryGrid({
           <div className="flex flex-col gap-4 lg:col-span-3 xl:col-span-2">
             {(activeCategory === "ALL" ||
               activeCategory === "SPACE_WEATHER") && (
-              <SpaceWeatherWidget spaceWeather={spaceWeather} />
+              <SpaceWeatherWidget
+                spaceWeather={spaceWeather}
+                status={sourceStatus["nasa-donki"] ?? "UNAVAILABLE"}
+              />
             )}
             {(activeCategory === "ALL" || activeCategory === "SPIRITUAL") && (
-              <GlobalPrayerNetworkWidget globalPrayers={globalPrayers} />
+              <GlobalPrayerNetworkWidget
+                globalPrayers={globalPrayers}
+                sourceMeta={sourceMeta}
+              />
             )}
           </div>
         )}
@@ -273,36 +306,57 @@ function MonitoringPrimaryGrid({
 
 type MonitoringSecondaryGridProps = MonitoringDataProps & {
   activeCategory: MonitoringCategory
+  onSourceMeta: (source: SourceMeta) => void
+  sourceStatus: Record<string, SourceStatus>
 }
 
 function MonitoringSecondaryGrid({
   activeCategory,
+  onSourceMeta,
   earthquakes,
   flights,
   cyberAttacks,
   trends,
   ships,
+  sourceMeta,
+  sourceStatus,
 }: MonitoringSecondaryGridProps) {
   return (
     <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-12">
       {(activeCategory === "ALL" || activeCategory === "AVIATION") && (
-        <AviationTrafficWidget flights={flights} />
+        <AviationTrafficWidget
+          flights={flights}
+          status={sourceStatus["opensky-flights"] ?? "UNAVAILABLE"}
+        />
       )}
       {(activeCategory === "ALL" || activeCategory === "SEISMIC") && (
-        <PlanetarySeismicWidget earthquakes={earthquakes} />
+        <PlanetarySeismicWidget
+          earthquakes={earthquakes}
+          status={sourceStatus["usgs-earthquakes"] ?? "UNAVAILABLE"}
+        />
       )}
       {(activeCategory === "ALL" || activeCategory === "CYBER") && (
-        <CyberThreatMonitorWidget cyberAttacks={cyberAttacks} />
+        <CyberThreatMonitorWidget
+          cyberAttacks={cyberAttacks}
+          status={sourceStatus["cyber-attacks"] ?? "UNAVAILABLE"}
+        />
       )}
       {activeCategory === "ALL" && (
         <>
-          <GlobalPopulationWidget />
-          <SocialMediaTrendsWidget />
-          <DigitalConsciousnessWidget />
-          <TrendingTopicsWidget trends={trends} />
-          <GlobalClimateWidget />
-          <FinancialMarketsWidget />
-          <MaritimeTrafficWidget ships={ships} />
+          <SocialMediaTrendsWidget
+            status={sourceStatus["social-media"] ?? "UNAVAILABLE"}
+          />
+          <DigitalConsciousnessWidget onSourceMeta={onSourceMeta} />
+          <TrendingTopicsWidget
+            trends={trends}
+            status={sourceStatus["google-trends"] ?? "UNAVAILABLE"}
+          />
+          <GlobalClimateWidget onSourceMeta={onSourceMeta} />
+          <FinancialMarketsWidget onSourceMeta={onSourceMeta} />
+          <MaritimeTrafficWidget
+            ships={ships}
+            status={sourceStatus["maritime-ships"] ?? "UNAVAILABLE"}
+          />
         </>
       )}
       {activeCategory === "ALL" && <RootCauseWidget />}
@@ -323,11 +377,13 @@ function MonitoringManagementRows() {
 
 function MonitoringFooter({
   clockWIB,
-  systemStatus,
+  sourceSummary,
 }: {
   clockWIB: string
-  systemStatus: string
+  sourceSummary: ReturnType<typeof summarizeSourceStatus>
 }) {
+  const StatusIcon = sourceSummary.status === "LIVE" ? CheckCircle2 : ShieldAlert
+
   return (
     <div className="mt-6 flex flex-col items-center justify-between gap-4 border-t border-border pt-4 font-mono text-[9px] text-primary md:flex-row">
       <div className="flex items-center gap-3">
@@ -335,37 +391,34 @@ function MonitoringFooter({
           GLOBAL INTELLIGENCE CENTER
         </span>
         <div className="hidden border-l border-border pl-3 font-sans text-foreground/50 normal-case italic lg:block">
-          &quot;Knowledge without action is potential. Action without knowledge
-          is risk. Together, they create a better world.&quot;
+          "Knowledge without action is potential. Action without knowledge
+          is risk. Together, they create a better world."
         </div>
       </div>
 
       <div className="flex items-center gap-6 font-bold tracking-widest uppercase">
         <div className="flex items-center gap-2">
-          <CheckCircle2 className="text-success h-4 w-4" />
+          <StatusIcon
+            className={`h-4 w-4 ${
+              sourceSummary.status === "LIVE" ? "text-success" : "text-warning"
+            }`}
+          />
           <span>
-            DATA SOURCES <span className="text-success">ACTIVE</span>
+            DATA SOURCES <span className="text-foreground">{sourceSummary.status}</span>
           </span>
-          <div className="ml-2 flex h-1.5 w-20 gap-0.5 bg-background">
-            {[...Array(PROGRESS_SEGMENTS)].map((_, i) => (
-              <div key={i} className="bg-success h-full flex-1" />
-            ))}
+          <div className="ml-2 text-[8px] text-muted-foreground">
+            {sourceSummary.live} live · {sourceSummary.stale} stale · {sourceSummary.unavailable} unavailable
           </div>
         </div>
 
         <div className="hidden xl:block">
           <span>LAST UPDATED</span>
           <br />
-          <span className="text-foreground">26 May 2025 {clockWIB}</span>
+          <span className="text-foreground">{clockWIB}</span>
         </div>
 
-        <div>
-          <span className="text-foreground">SYSTEM {systemStatus}</span>
-          <br />
-          <span className="text-success mt-0.5 flex items-center gap-1.5">
-            <span className="bg-success h-1.5 w-1.5 animate-pulse rounded-full" />{" "}
-            All systems operational
-          </span>
+        <div className="text-foreground">
+          SOURCE CHECKS {sourceSummary.live}/{sourceSummary.total}
         </div>
 
         <div className="text-right">
@@ -381,6 +434,7 @@ function MonitoringFooter({
 
 export function GlobalMonitoringView() {
   const [clockWIB, setClockWIB] = useState("00:00:00")
+  const [externalSourceMeta, setExternalSourceMeta] = useState<SourceMeta[]>([])
   const [activeCategory, setActiveCategory] =
     useState<MonitoringCategory>("ALL")
   const {
@@ -393,8 +447,15 @@ export function GlobalMonitoringView() {
     cyberAttacks,
     ships,
     isLoading,
+    sourceMeta,
   } = useGlobalMonitoring()
-  const { tickClock, systemStatus } = useOSStore()
+  const { tickClock } = useOSStore()
+  const reportSourceMeta = useCallback((metadata: SourceMeta) => {
+    setExternalSourceMeta((current) => [
+      ...current.filter((entry) => entry.source !== metadata.source),
+      metadata,
+    ])
+  }, [])
 
   useEffect(() => {
     const tick = () => {
@@ -425,6 +486,19 @@ export function GlobalMonitoringView() {
   const mapShips =
     activeCategory === "ALL" || activeCategory === "MARITIME" ? ships : []
 
+  const allSourceMeta = Array.from(
+    new Map(
+      [...sourceMeta, ...externalSourceMeta].map((source) => [
+        source.source,
+        source,
+      ])
+    ).values()
+  )
+  const sourceSummary = summarizeSourceStatus(allSourceMeta)
+  const sourceStatus = Object.fromEntries(
+    allSourceMeta.map((source) => [source.source, source.status])
+  ) as Record<string, SourceStatus>
+
   return (
     <section
       id="monitoring"
@@ -436,13 +510,18 @@ export function GlobalMonitoringView() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1600px] space-y-4 px-4">
-        <MonitoringHeader clockWIB={clockWIB} isLoading={isLoading} />
+        <MonitoringHeader
+          clockWIB={clockWIB}
+          isLoading={isLoading}
+          status={sourceSummary.status}
+        />
         <MonitoringCategorySelector
           activeCategory={activeCategory}
           onCategoryChange={setActiveCategory}
         />
         <MonitoringPrimaryGrid
           activeCategory={activeCategory}
+          onSourceMeta={reportSourceMeta}
           earthquakes={earthquakes}
           globalPrayers={globalPrayers}
           spaceWeather={spaceWeather}
@@ -450,14 +529,17 @@ export function GlobalMonitoringView() {
           trends={trends}
           cyberAttacks={cyberAttacks}
           ships={ships}
+          sourceMeta={allSourceMeta}
           mapEarthquakes={mapEarthquakes}
           mapFlights={mapFlights}
           mapIss={mapIss}
           mapCyber={mapCyber}
           mapShips={mapShips}
+          sourceStatus={sourceStatus}
         />
         <MonitoringSecondaryGrid
           activeCategory={activeCategory}
+          onSourceMeta={reportSourceMeta}
           earthquakes={earthquakes}
           globalPrayers={globalPrayers}
           spaceWeather={spaceWeather}
@@ -465,6 +547,8 @@ export function GlobalMonitoringView() {
           trends={trends}
           cyberAttacks={cyberAttacks}
           ships={ships}
+          sourceMeta={allSourceMeta}
+          sourceStatus={sourceStatus}
         />
         {activeCategory === "ALL" && <MonitoringManagementRows />}
         {activeCategory === "ALL" && (
@@ -480,7 +564,7 @@ export function GlobalMonitoringView() {
         )}
         <MonitoringFooter
           clockWIB={clockWIB}
-          systemStatus={systemStatus}
+          sourceSummary={sourceSummary}
         />
       </div>
     </section>

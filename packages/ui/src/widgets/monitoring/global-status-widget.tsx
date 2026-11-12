@@ -1,109 +1,103 @@
-import React from "react"
+import { Activity } from "lucide-react"
 import {
-  BookOpen,
-  Heart,
-  Moon,
-  Activity,
-  Globe2,
-  Users,
-  Zap,
-  Crosshair,
-  ArrowRight,
-} from "lucide-react"
-import { Button } from "../../components/button"
+  resolveSourceStatus,
+  summarizeSourceStatus,
+  type SourceMeta,
+  type SourceStatus,
+} from "@moon/client"
 
-export function GlobalStatusWidget() {
+const STATUS_CLASSES: Record<SourceStatus, string> = {
+  LIVE: "border-success/30 bg-success/10 text-success",
+  CACHED: "border-info/30 bg-info/10 text-info",
+  STALE: "border-warning/30 bg-warning/10 text-warning",
+  UNAVAILABLE: "border-destructive/30 bg-destructive/10 text-destructive",
+  SIMULATED: "border-secondary/30 bg-secondary/10 text-secondary",
+}
+
+function formatCheckTime(timestamp: number): string {
+  return new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    timeZone: "Asia/Jakarta",
+  }).format(new Date(timestamp))
+}
+
+export function GlobalStatusWidget({
+  sources = [],
+}: {
+  sources?: SourceMeta[]
+}) {
+  const summary = summarizeSourceStatus(sources)
+
   return (
-    <div className="bg-background flex flex-1 flex-col justify-between rounded-xl border border-primary/30 p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <div className="text-[9px] font-black tracking-widest text-primary uppercase">
-          LIVE GLOBAL STATUS
+    <section
+      className="flex flex-1 flex-col rounded-md border border-border bg-card p-4"
+      aria-label="Monitoring source status"
+    >
+      <div className="mb-3 flex items-center justify-between gap-3 border-b border-border pb-3">
+        <div className="flex items-center gap-2 text-sm font-medium">
+          <Activity className="size-4 text-muted-foreground" aria-hidden="true" />
+          <h2>Data sources</h2>
         </div>
-        <div className="bg-success/20 text-success flex items-center gap-1 rounded px-1.5 py-0.5 text-[8px] font-bold">
-          <span className="bg-success h-1 w-1 animate-pulse rounded-full" />{" "}
-          LIVE
-        </div>
+        <span
+          className={`rounded-md border px-2 py-1 text-xs font-medium ${STATUS_CLASSES[summary.status]}`}
+        >
+          {summary.status}
+        </span>
       </div>
 
-      <div className="grid h-full grid-cols-2 gap-2">
-        {[
-          {
-            l: "KNOWLEDGE",
-            v: "82%",
-            s: "Coverage",
-            icon: BookOpen,
-            c: "text-primary",
-          },
-          {
-            l: "PEACE INDEX",
-            v: "68%",
-            s: "Stable",
-            icon: Heart,
-            c: "text-success",
-          },
-          {
-            l: "MOON STATUS",
-            v: "Good",
-            s: "Visibility",
-            icon: Moon,
-            c: "text-secondary",
-          },
-          {
-            l: "PRAYER SYNC",
-            v: "98.7%",
-            s: "Global Sync",
-            icon: Activity,
-            c: "text-success",
-          },
-          {
-            l: "ENVIRONMENT",
-            v: "72",
-            s: "Air Quality",
-            icon: Globe2,
-            c: "text-success",
-          },
-          {
-            l: "HUMANITY",
-            v: "7.83B",
-            s: "Population",
-            icon: Users,
-            c: "text-knowledge",
-          },
-          {
-            l: "TECHNOLOGY",
-            v: "76%",
-            s: "Progress",
-            icon: Zap,
-            c: "text-knowledge",
-          },
-          {
-            l: "RESEARCH",
-            v: "1,248",
-            s: "Active Projects",
-            icon: Crosshair,
-            c: "text-primary",
-          },
-        ].map((st, i) => (
+      <dl className="grid grid-cols-2 gap-2 text-xs">
+        {(
+          [
+            ["Live", summary.live, "text-success"],
+            ["Cached", summary.cached, "text-info"],
+            ["Stale", summary.stale, "text-warning"],
+            ["Unavailable", summary.unavailable, "text-destructive"],
+            ["Simulated", summary.simulated, "text-secondary"],
+            ["Total", summary.total, "text-foreground"],
+          ] as const
+        ).map(([label, count, color]) => (
           <div
-            key={i}
-            className="bg-background flex cursor-pointer flex-col justify-between rounded border border-border p-2 transition-colors hover:bg-muted/30"
+            key={label}
+            className="flex items-center justify-between rounded border border-border px-2 py-1.5"
           >
-            <div className="text-[7px] font-bold text-primary uppercase">
-              {st.l}
-            </div>
-            <div className="mt-1 flex items-end justify-between">
-              <st.icon className={`mb-0.5 h-3.5 w-3.5 ${st.c}`} />
-              <div className="text-right">
-                <div className="text-xs font-black text-foreground">{st.v}</div>
-                <div className="text-[7px] text-primary">{st.s}</div>
-              </div>
-            </div>
+            <dt className="text-muted-foreground">{label}</dt>
+            <dd className={`font-mono font-medium ${color}`}>{count}</dd>
           </div>
         ))}
-      </div>
-      <Button type="button" variant="ghost" className="mt-3 flex w-full items-center justify-center gap-1 border-t border-border pt-3 text-center text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
-        VIEW DETAILED STATUS <ArrowRight className="h-3 w-3" />
-      </Button>
-    </div>
+      </dl>
+
+      <ul className="mt-3 max-h-52 space-y-1 overflow-y-auto border-t border-border pt-3">
+        {sources.length === 0 ? (
+          <li className="text-xs text-muted-foreground">
+            No source responses have been recorded.
+          </li>
+        ) : (
+          sources.map((source) => {
+            const status = resolveSourceStatus(source.status, source.timestamp)
+            return (
+              <li
+                key={source.source}
+                className="flex items-center justify-between gap-2 text-xs"
+              >
+                <span className="truncate text-foreground">
+                  {source.source.replaceAll("-", " ")}
+                </span>
+                <span className="flex shrink-0 items-center gap-2">
+                  <span className={STATUS_CLASSES[status]}>{status}</span>
+                  <time
+                    className="font-mono text-[10px] text-muted-foreground"
+                    dateTime={new Date(source.timestamp).toISOString()}
+                  >
+                    {formatCheckTime(source.timestamp)}
+                  </time>
+                </span>
+              </li>
+            )
+          })
+        )}
+      </ul>
+    </section>
   )
 }

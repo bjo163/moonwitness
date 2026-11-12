@@ -32,6 +32,7 @@ export async function searchScriptureContent(
       language: content.language || content.language_code,
       script: content.script,
       edition: String(content.editionId || content.edition_id || ''),
+      sourceRevision: content.revision || content.sourceRevision || content.source_revision,
       provenanceId: content.provenanceId || content.provenance_id || null,
     } satisfies SearchResult]
   })

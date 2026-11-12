@@ -1,48 +1,144 @@
-"""
-Unit tests for Arabic normalization and semantic passage search.
-"""
-from src.search import normalize_arabic, compute_bm25_similarity
+import asyncio
+
+import pytest
+
+from src.search import (
+    EMBEDDING_CONTRACT_VERSION,
+    compute_bm25_similarity,
+    compute_concept_heuristic_search,
+    compute_embedding_similarity,
+    compute_hybrid_search,
+    normalize_arabic,
+)
 
 
-def test_arabic_normalization():
-    # Strip diacritics and standardize alef
-    raw = "يَسْأَلُونَكَ عَنِ الْأَهِلَّةِ"
-    normalized = normalize_arabic(raw)
-    assert "َ" not in normalized  # No fathah
-    assert "ْ" not in normalized  # No sukoon
+PASSAGES = [
+    {
+        "id": "quran:2:189",
+        "source_type": "SCRIPTURE",
+        "reference": "Quran 2:189",
+        "arabic": "يَسْأَلُونَكَ عَنِ الْأَهِلَّةِ",
+        "translation": "They ask about the new moons.",
+        "keywords": ["hilal", "moon"],
+        "provenance_id": 41,
+        "source_revision": "corpus-2026-01",
+    },
+    {
+        "id": "hadith:bukhari:1909",
+        "source_type": "HADITH",
+        "reference": "Sahih Bukhari 1909",
+        "arabic": "صُومُوا لِرُؤْيَتِهِ",
+        "translation": "Fast when you see it.",
+        "keywords": ["fasting", "rukyah"],
+        "provenance_id": 72,
+        "source_revision": "corpus-2026-01",
+    },
+]
+
+
+class FixtureEmbeddingProvider:
+    contract = {
+        "contract_version": EMBEDDING_CONTRACT_VERSION,
+        "provider": "test-provider",
+        "model": "fixture-embedding",
+        "model_version": "fixture-embedding-v1",
+        "dimensions": 2,
+        "text_normalization_version": "arabic-normalization.v1",
+    }
+
+    async def embed(self, texts):
+        return [
+            [1.0, 0.0] if index == 0 or "new moons" in text else [0.0, 1.0]
+            for index, text in enumerate(texts)
+        ]
+
+
+class InvalidDimensionProvider(FixtureEmbeddingProvider):
+    async def embed(self, texts):
+        return [[1.0] for _ in texts]
+
+
+def test_arabic_normalization_removes_diacritics_and_standardizes_letters():
+    normalized = normalize_arabic("يَسْأَلُونَكَ عَنِ الْأَهِلَّةِ")
+    assert "َ" not in normalized
+    assert "ْ" not in normalized
     assert "اهله" in normalized or "الاهله" in normalized
 
 
-def test_search_hilal_query():
-    results = compute_bm25_similarity("hilal bulan sabit")
-    assert len(results) >= 1
-    # First result should be Al-Baqarah 2:189 or Bukhari rukyah hadith
-    assert any("hilal" in r["excerpt"].lower() or "bulan sabit" in r["excerpt"].lower() for r in results)
-    assert results[0]["similarity_score"] > 0.0
+def test_bm25_lexical_ranking_is_deterministic_and_source_aware():
+    results = compute_bm25_similarity("hilal moon", PASSAGES)
+
+    assert [result["id"] for result in results] == ["quran:2:189"]
+    assert results[0]["match_type"] == "LEXICAL_BM25"
+    assert results[0]["provenance_id"] == 41
+    assert results[0]["source_revision"] == "corpus-2026-01"
 
 
-def test_search_sun_celestial():
-    results = compute_bm25_similarity("matahari dan orbit")
-    assert len(results) >= 1
-    assert "10:5" in results[0]["id"] or "36:39" in results[0]["id"]
+def test_embedding_similarity_reports_model_contract_and_cosine():
+    results = asyncio.run(compute_embedding_similarity(
+        "moon query",
+        PASSAGES,
+        provider=FixtureEmbeddingProvider(),
+    ))
+
+    assert results[0]["id"] == "quran:2:189"
+    assert results[0]["similarity_score"] == 1.0
+    assert results[0]["match_type"] == "SEMANTIC_EMBEDDING"
+    assert results[0]["embedding_model"] == "fixture-embedding"
+    assert results[0]["embedding_version"] == "fixture-embedding-v1"
+    assert results[0]["embedding_contract_version"] == EMBEDDING_CONTRACT_VERSION
+    assert results[0]["embedding_dim"] == 2
 
 
-def test_hybrid_search_scoring():
-    from src.search import compute_hybrid_search
-    res = compute_hybrid_search(query="waktu hisab perhitungan bulan", top_k=3, alpha=0.6)
-    assert res["total_hits"] >= 1
-    assert res["alpha"] == 0.6
-    top = res["results"][0]
-    assert top["similarity_score"] > 0.0
-    assert top["bm25_score"] >= 0.0
-    assert top["dense_score"] >= 0.0
-    assert top["match_type"] in ["HYBRID", "SEMANTIC", "LEXICAL"]
+def test_embedding_provider_dimension_mismatch_fails_explicitly():
+    with pytest.raises(ValueError, match="invalid dimensions"):
+        asyncio.run(compute_embedding_similarity(
+            "moon query",
+            PASSAGES,
+            provider=InvalidDimensionProvider(),
+        ))
 
 
-def test_hybrid_concept_matching():
-    from src.search import compute_hybrid_search
-    # Query with celestial concepts
-    res = compute_hybrid_search(query="celestial cosmology sun moon calculation", top_k=2, alpha=0.3)
-    assert res["total_hits"] >= 1
-    assert res["results"][0]["dense_score"] > 0.0
+def test_unconfigured_embedding_provider_does_not_return_empty_success():
+    with pytest.raises(RuntimeError, match="No production embedding provider"):
+        asyncio.run(compute_hybrid_search("moon query", PASSAGES))
 
+
+def test_hybrid_ranking_is_reproducible_and_preserves_provenance():
+    first = asyncio.run(compute_hybrid_search(
+        "moon query",
+        PASSAGES,
+        top_k=2,
+        alpha=0.5,
+        provider=FixtureEmbeddingProvider(),
+    ))
+    second = asyncio.run(compute_hybrid_search(
+        "moon query",
+        PASSAGES,
+        top_k=2,
+        alpha=0.5,
+        provider=FixtureEmbeddingProvider(),
+    ))
+
+    assert first == second
+    assert first["results"][0]["id"] == "quran:2:189"
+    assert first["results"][0]["match_type"] == "HYBRID_FUSION"
+    assert first["results"][0]["provenance_id"] == 41
+    assert first["results"][0]["embedding_version"] == "fixture-embedding-v1"
+
+
+def test_concept_heuristic_is_not_reported_as_an_embedding():
+    result = compute_concept_heuristic_search(
+        "moon crescent lunar",
+        PASSAGES,
+        top_k=2,
+    )
+
+    assert result["total_hits"] > 0
+    assert result["results"][0]["concept_score"] > 0
+    assert "dense_score" not in result["results"][0]
+    assert result["results"][0]["match_type"] in {
+        "LEXICAL_CONCEPT",
+        "CONCEPT_HEURISTIC",
+        "LEXICAL_BM25",
+    }

@@ -821,8 +821,9 @@ export class Vertex {
     options?: { limit?: number; domain?: unknown[] }
   ): Promise<Recordset<M>> {
     if (!supportsVectors()) {
-      console.warn(`[ORM] similarityScan is not supported on SQLite — pgvector required. Returning empty result.`)
-      return new Recordset(modelClass, env, [])
+      throw new Error(
+        'Vector similarity search requires PostgreSQL with pgvector; SQLite does not provide vector operations.'
+      )
     }
     await checkAccessRights(modelClass, env, 'permRead')
     const table = this.tableName(modelClass)

@@ -1,7 +1,15 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import { apiGet } from "../api-client"
+import {
+  resolveSourceStatus,
+  sourceFailureMeta,
+  type SourceMeta,
+  type SourceStatus,
+} from "../source-status"
+
+export type { SourceMeta, SourceStatus } from "../source-status"
 
 export type EarthquakeFeature = {
   id: string
@@ -13,7 +21,7 @@ export type EarthquakeFeature = {
     sig: number
   }
   geometry: {
-    coordinates: [number, number, number] // [longitude, latitude, depth]
+    coordinates: [number, number, number]
   }
 }
 
@@ -27,8 +35,6 @@ export type GlobalCityPrayer = {
     Maghrib: string
     Isha: string
   }
-  currentPrayer: string
-  nextPrayer: string
 }
 
 export type ISSPosition = {
@@ -65,7 +71,7 @@ export type TrendingTopic = {
 
 export type CyberAttack = {
   id: string
-  source: [number, number] // [lat, lng]
+  source: [number, number]
   target: [number, number]
   type: "DDoS" | "Malware" | "Phishing" | "Exploit"
   timestamp: number
@@ -82,6 +88,91 @@ export type MaritimeShip = {
   destination: string
 }
 
+const PRAYER_CITIES = [
+  { city: "Makkah", country: "Saudi Arabia" },
+  { city: "Jakarta", country: "Indonesia" },
+  { city: "London", country: "United Kingdom" },
+  { city: "New York", country: "United States" },
+  { city: "Tokyo", country: "Japan" },
+] as const
+
+const EMPTY_CYBER_ATTACKS: CyberAttack[] = []
+const EMPTY_SHIPS: MaritimeShip[] = []
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null
+}
+
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error)
+}
+
+function requireRecord(value: unknown, source: string): Record<string, unknown> {
+  if (!isRecord(value)) throw new Error(`${source} returned an invalid response`)
+  return value
+}
+
+function requireString(value: unknown, field: string): string {
+  if (typeof value !== "string" || value.length === 0) {
+    throw new Error(`Response is missing ${field}`)
+  }
+  return value
+}
+
+function parseTrendFeed(xmlText: string): TrendingTopic[] {
+  const items: TrendingTopic[] = []
+  const itemRegex = /<item>([\s\S]*?)<\/item>/g
+  let match: RegExpExecArray | null
+
+  while ((match = itemRegex.exec(xmlText)) !== null) {
+    const itemContent = match[1]
+    if (!itemContent) continue
+
+    const title = /<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>/.exec(itemContent)
+    if (!title?.[1]) continue
+    const traffic = /<ht:approx_traffic>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/ht:approx_traffic>/.exec(itemContent)
+    const pubDate = /<pubDate>(.*?)<\/pubDate>/.exec(itemContent)
+
+    items.push({
+      title: title[1],
+      traffic: traffic?.[1] || "Unknown",
+      pubDate: pubDate?.[1] || "",
+    })
+  }
+
+  return items.slice(0, 10)
+}
+
+function parseFlights(states: unknown[]): FlightInfo[] {
+  return states.flatMap((state) => {
+    if (!Array.isArray(state)) return []
+
+    const [icao24, callsign, originCountry, , , longitude, latitude, altitude, , velocity, trueTrack] =
+      state
+    if (
+      typeof icao24 !== "string" ||
+      typeof originCountry !== "string" ||
+      typeof longitude !== "number" ||
+      typeof latitude !== "number" ||
+      !Number.isFinite(longitude) ||
+      !Number.isFinite(latitude)
+    ) {
+      return []
+    }
+
+    return [{
+      icao24,
+      callsign: typeof callsign === "string" ? callsign.trim() || "UNKNOWN" : "UNKNOWN",
+      origin_country: originCountry,
+      longitude,
+      latitude,
+      altitude: typeof altitude === "number" ? altitude : 0,
+      velocity: typeof velocity === "number" ? velocity : 0,
+      true_track: typeof trueTrack === "number" ? trueTrack : 0,
+    }]
+  }).slice(0, 150)
+}
+
 export function useGlobalMonitoring() {
   const [earthquakes, setEarthquakes] = useState<EarthquakeFeature[]>([])
   const [globalPrayers, setGlobalPrayers] = useState<GlobalCityPrayer[]>([])
@@ -89,256 +180,222 @@ export function useGlobalMonitoring() {
   const [spaceWeather, setSpaceWeather] = useState<SpaceWeatherEvent[]>([])
   const [flights, setFlights] = useState<FlightInfo[]>([])
   const [trends, setTrends] = useState<TrendingTopic[]>([])
-  const [cyberAttacks, setCyberAttacks] = useState<CyberAttack[]>([])
-  const [ships, setShips] = useState<MaritimeShip[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [sourceMeta, setSourceMeta] = useState<SourceMeta[]>([])
 
   useEffect(() => {
     let isMounted = true
+    let initialLoadComplete = false
+    const sourceMetadata = new Map<string, SourceMeta>()
+    const successfulAt = new Map<string, number>()
+    const prayerCache = new Map<string, GlobalCityPrayer>()
 
-    const fetchAllData = async () => {
-      try {
-        setIsLoading(true)
-
-        // 1. Fetch USGS Earthquakes
-        const usgsPromise = apiGet<any>("/api/external/usgs/earthquakes")
-          .then((data: any) => data.features || [])
-          .catch(() => [])
-
-        // 2. Fetch Aladhan
-        const cities = [
-          { city: "Makkah", country: "Saudi Arabia" },
-          { city: "Jakarta", country: "Indonesia" },
-          { city: "London", country: "United Kingdom" },
-          { city: "New York", country: "United States" },
-          { city: "Tokyo", country: "Japan" },
-        ]
-        const prayerPromises = Promise.all(
-          cities.map(async (c) => {
-            try {
-              const res = await fetch(
-                `/api/prayer-times?city=${encodeURIComponent(c.city)}&country=${encodeURIComponent(c.country)}`
-              )
-              const json = await res.json()
-              if (!json || !json.schedule) return null
-              return {
-                city: c.city,
-                country: c.country,
-                prayerTimes: {
-                  Fajr: json.schedule.subuh,
-                  Dhuhr: json.schedule.dzuhur,
-                  Asr: json.schedule.ashar,
-                  Maghrib: json.schedule.maghrib,
-                  Isha: json.schedule.isya,
-                },
-                currentPrayer: "Checking...",
-                nextPrayer: "Checking...",
-              }
-            } catch {
-              return null
-            }
-          })
-        ).then((res) => res.filter(Boolean) as GlobalCityPrayer[])
-
-        // 3. Fetch ISS Tracker
-        const issPromise = apiGet<any>("/api/external/iss").catch(() => null)
-
-        // 4. Fetch NASA Space Weather DONKI CME
-        const date = new Date()
-        date.setDate(date.getDate() - 30)
-        const startDate = date.toISOString().split("T")[0]
-        const nasaPromise = apiGet<any[]>(
-          `/api/external/nasa/donki/cme?startDate=${startDate}`
-        ).catch(() => [])
-
-        // 5. Fetch OpenSky Flights
-        const openskyPromise = apiGet<any>("/api/external/opensky")
-          .then((data: any) => {
-            if (!data.states) return []
-            return data.states
-              .slice(0, 150)
-              .map((s: any) => ({
-                icao24: s[0],
-                callsign: s[1]?.trim() || "UNKNOWN",
-                origin_country: s[2],
-                longitude: s[5],
-                latitude: s[6],
-                altitude: s[7],
-                velocity: s[9],
-                true_track: s[10],
-              }))
-              .filter((f: FlightInfo) => f.longitude && f.latitude)
-          })
-          .catch(() => [])
-
-        // 6. Fetch Humanity Trends
-        const trendsPromise = apiGet<string>("/api/external/trends")
-          .then((xmlText: string) => {
-            const items = []
-            const itemRegex = /<item>([\s\S]*?)<\/item>/g
-            let match
-
-            while ((match = itemRegex.exec(xmlText)) !== null) {
-              const itemContent = match[1]
-              if (!itemContent) continue
-
-              const titleMatch =
-                /<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>/.exec(
-                  itemContent
-                )
-              const trafficMatch =
-                /<ht:approx_traffic>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/ht:approx_traffic>/.exec(
-                  itemContent
-                )
-              const pubDateMatch = /<pubDate>(.*?)<\/pubDate>/.exec(itemContent)
-
-              if (titleMatch) {
-                items.push({
-                  title: titleMatch[1] || "Unknown",
-                  traffic:
-                    trafficMatch && trafficMatch[1]
-                      ? trafficMatch[1]
-                      : "Unknown",
-                  pubDate:
-                    pubDateMatch && pubDateMatch[1] ? pubDateMatch[1] : "",
-                })
-              }
-            }
-
-            return items.slice(0, 10)
-          })
-          .catch(() => [])
-
-        const [
-          usgsData,
-          prayerData,
-          issData,
-          nasaData,
-          openskyData,
-          trendsData,
-        ] = await Promise.all([
-          usgsPromise,
-          prayerPromises,
-          issPromise,
-          nasaPromise,
-          openskyPromise,
-          trendsPromise,
-        ])
-
-        if (isMounted) {
-          setEarthquakes(usgsData)
-          setGlobalPrayers(prayerData)
-          if (issData && !issData.error) setIssPosition(issData)
-          setSpaceWeather(Array.isArray(nasaData) ? nasaData.slice(0, 5) : [])
-          setFlights(openskyData)
-          setTrends(trendsData)
-          setIsLoading(false)
-        }
-      } catch (error) {
-        console.error("Global Monitoring API Error:", error)
-        if (isMounted) setIsLoading(false)
-      }
+    const publishSourceMetadata = () => {
+      if (isMounted) setSourceMeta(Array.from(sourceMetadata.values()))
     }
 
-    fetchAllData()
-    const intervalId = setInterval(fetchAllData, 5 * 60 * 1000)
-
-    const issInterval = setInterval(async () => {
-      try {
-        const issData = await apiGet<any>("/api/external/iss")
-        if (isMounted && issData && !issData.error) setIssPosition(issData)
-      } catch {}
-    }, 10000)
-
-    // Simulated digital Attacks Generator
-    const generateCyberAttack = () => {
-      const types: CyberAttack["type"][] = [
-        "DDoS",
-        "Malware",
-        "Phishing",
-        "Exploit",
-      ]
-      const randomLat = () => Math.random() * 140 - 70
-      const randomLng = () => Math.random() * 360 - 180
-
-      const newAttack: CyberAttack = {
-        id: Math.random().toString(36).substring(2, 9),
-        source: [randomLat(), randomLng()],
-        target: [randomLat(), randomLng()],
-        type: types[Math.floor(Math.random() * types.length)] || "DDoS",
-        timestamp: Date.now(),
-      }
-
-      if (isMounted) {
-        setCyberAttacks((prev) => {
-          const updated = [newAttack, ...prev]
-          return updated.slice(0, 20)
-        })
-      }
-    }
-
-    let attackTimer: ReturnType<typeof setTimeout>
-    const scheduleNextAttack = () => {
-      attackTimer = setTimeout(
-        () => {
-          generateCyberAttack()
-          scheduleNextAttack()
-        },
-        Math.random() * 2500 + 1500
-      )
-    }
-    scheduleNextAttack()
-
-    const MOCK_SHIPS: MaritimeShip[] = Array.from({ length: 40 }).map(
-      (_, i) => ({
-        id: `ship-${i}`,
-        name: `VESSEL-${Math.floor(Math.random() * 9000) + 1000}`,
-        type: ["Cargo", "Tanker", "Passenger"][
-          Math.floor(Math.random() * 3)
-        ] as any,
-        lat: Math.random() * 100 - 50,
-        lng: Math.random() * 360 - 180,
-        heading: Math.random() * 360,
-        speed: Math.random() * 20 + 10,
-        destination:
-          ["Rotterdam", "Singapore", "Shanghai", "Los Angeles", "Dubai"][
-            Math.floor(Math.random() * 5)
-          ] || "Unknown",
+    const recordSuccess = (
+      source: string,
+      latencyMs: number,
+      timestamp = Date.now()
+    ) => {
+      successfulAt.set(source, timestamp)
+      sourceMetadata.set(source, {
+        source,
+        status: "LIVE",
+        timestamp,
+        checkedAt: Date.now(),
+        latencyMs,
       })
-    )
+      publishSourceMetadata()
+    }
 
-    setShips(MOCK_SHIPS)
+    const recordFailure = (
+      source: string,
+      error: unknown,
+      latencyMs?: number
+    ) => {
+      const checkedAt = Date.now()
+      sourceMetadata.set(
+        source,
+        sourceFailureMeta(
+          source,
+          successfulAt.get(source),
+          errorMessage(error),
+          checkedAt,
+          latencyMs
+        )
+      )
+      publishSourceMetadata()
+    }
 
-    const moveShips = () => {
-      setShips((prev) =>
-        prev.map((ship) => {
-          const headingRad = (ship.heading * Math.PI) / 180
-          const delta = (ship.speed / 3600) * 0.1
-          let newLat = ship.lat + Math.cos(headingRad) * delta
-          let newLng = ship.lng + Math.sin(headingRad) * delta
+    const loadSource = async <Value>(
+      source: string,
+      fetchValue: () => Promise<Value>,
+      applyValue: (value: Value) => void
+    ) => {
+      const startedAt = Date.now()
+      try {
+        const value = await fetchValue()
+        if (!isMounted) return
+        applyValue(value)
+        recordSuccess(source, Date.now() - startedAt)
+      } catch (error) {
+        if (isMounted) {
+          recordFailure(source, error, Date.now() - startedAt)
+        }
+      }
+    }
 
-          if (newLng > 180) newLng -= 360
-          if (newLng < -180) newLng += 360
-          if (newLat > 90 || newLat < -90) {
-            return { ...ship, heading: (ship.heading + 180) % 360 }
-          }
-
+    const loadPrayers = async () => {
+      await Promise.all(PRAYER_CITIES.map(async ({ city, country }) => {
+        const source = `prayer-${city}`
+        await loadSource(source, async () => {
+          const response = await fetch(
+            `/api/prayer-times?city=${encodeURIComponent(city)}&country=${encodeURIComponent(country)}`
+          )
+          if (!response.ok) throw new Error(`HTTP ${response.status}`)
+          const payload = requireRecord(await response.json(), source)
+          const schedule = requireRecord(payload.schedule, `${source} schedule`)
           return {
-            ...ship,
-            lat: newLat,
-            lng: newLng,
+            city,
+            country,
+            prayerTimes: {
+              Fajr: requireString(schedule.subuh, "subuh"),
+              Dhuhr: requireString(schedule.dzuhur, "dzuhur"),
+              Asr: requireString(schedule.ashar, "ashar"),
+              Maghrib: requireString(schedule.maghrib, "maghrib"),
+              Isha: requireString(schedule.isya, "isya"),
+            },
           }
+        }, (prayer) => {
+          prayerCache.set(city, prayer)
+          setGlobalPrayers(Array.from(prayerCache.values()))
         })
+      }))
+    }
+
+    const loadIss = () => loadSource("iss-tracker", async () => {
+      const payload = requireRecord(await apiGet<unknown>("/api/external/iss"), "ISS tracker")
+      const latitude = payload.latitude
+      const longitude = payload.longitude
+      const altitude = payload.altitude
+      const velocity = payload.velocity
+      const timestamp = payload.timestamp
+      if (![latitude, longitude, altitude, velocity, timestamp].every(
+        (value) => typeof value === "number" && Number.isFinite(value)
+      )) {
+        throw new Error("ISS tracker returned incomplete position data")
+      }
+      return {
+        latitude: latitude as number,
+        longitude: longitude as number,
+        altitude: altitude as number,
+        velocity: velocity as number,
+        timestamp: timestamp as number,
+      }
+    }, setIssPosition)
+
+    const refreshAll = async () => {
+      const date = new Date()
+      date.setDate(date.getDate() - 30)
+      const startDate = date.toISOString().slice(0, 10)
+
+      await Promise.all([
+        loadSource("usgs-earthquakes", async () => {
+          const payload = requireRecord(
+            await apiGet<unknown>("/api/external/usgs/earthquakes"),
+            "USGS earthquakes"
+          )
+          if (!Array.isArray(payload.features)) {
+            throw new Error("USGS response is missing event features")
+          }
+          return payload.features as EarthquakeFeature[]
+        }, setEarthquakes),
+        loadPrayers(),
+        loadIss(),
+        loadSource("nasa-donki", async () => {
+          const payload = await apiGet<unknown[]>(
+            `/api/external/nasa/donki/cme?startDate=${startDate}`
+          )
+          if (!Array.isArray(payload)) {
+            throw new Error("NASA DONKI response is not an event list")
+          }
+          return payload.slice(0, 5) as SpaceWeatherEvent[]
+        }, setSpaceWeather),
+        loadSource("opensky-flights", async () => {
+          const payload = requireRecord(
+            await apiGet<unknown>("/api/external/opensky"),
+            "OpenSky"
+          )
+          if (!("states" in payload) || (
+            payload.states !== null && !Array.isArray(payload.states)
+          )) {
+            throw new Error("OpenSky response is missing state records")
+          }
+          return parseFlights((payload.states ?? []) as unknown[])
+        }, setFlights),
+        loadSource("google-trends", async () => {
+          const response = await apiGet<unknown>("/api/external/trends")
+          if (typeof response !== "string") {
+            throw new Error("Trends response is not an RSS document")
+          }
+          return parseTrendFeed(response)
+        }, setTrends),
+      ])
+
+      if (isMounted && !initialLoadComplete) {
+        initialLoadComplete = true
+        setIsLoading(false)
+      }
+    }
+
+    const expectedSources = [
+      "usgs-earthquakes",
+      "iss-tracker",
+      "nasa-donki",
+      "opensky-flights",
+      "google-trends",
+      "social-media",
+      "cyber-attacks",
+      "maritime-ships",
+      ...PRAYER_CITIES.map(({ city }) => `prayer-${city}`),
+    ]
+    for (const source of expectedSources) {
+      recordFailure(
+        source,
+        new Error(
+          source === "social-media"
+            ? "No production social media source is configured"
+            : source === "cyber-attacks"
+              ? "No production SIEM source is configured"
+              : source === "maritime-ships"
+                ? "No production AIS source is configured"
+                : "No successful source response has been received"
+        )
       )
     }
-    const shipInterval = setInterval(moveShips, 2000)
+
+    void refreshAll()
+    const refreshInterval = window.setInterval(() => void refreshAll(), 5 * 60 * 1000)
+    const issInterval = window.setInterval(() => void loadIss(), 10 * 1000)
+    const freshnessInterval = window.setInterval(() => {
+      if (!isMounted) return
+      const now = Date.now()
+      for (const [source, meta] of sourceMetadata) {
+        sourceMetadata.set(source, {
+          ...meta,
+          status: resolveSourceStatus(meta.status, meta.timestamp, { now }),
+        })
+      }
+      publishSourceMetadata()
+    }, 60 * 1000)
 
     return () => {
       isMounted = false
-      clearInterval(intervalId)
-      clearInterval(issInterval)
-      clearTimeout(attackTimer)
-      clearInterval(shipInterval)
+      window.clearInterval(refreshInterval)
+      window.clearInterval(issInterval)
+      window.clearInterval(freshnessInterval)
     }
   }, [])
 
@@ -349,8 +406,9 @@ export function useGlobalMonitoring() {
     spaceWeather,
     flights,
     trends,
-    cyberAttacks,
-    ships,
+    cyberAttacks: EMPTY_CYBER_ATTACKS,
+    ships: EMPTY_SHIPS,
     isLoading,
+    sourceMeta,
   }
 }

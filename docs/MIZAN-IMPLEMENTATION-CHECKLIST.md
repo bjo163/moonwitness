@@ -1,8 +1,15 @@
 # Checklist implementasi Revelation–Mizan
 
-Status awal: **belum dimulai**  
-Tanggal: 6 September 2026  
-Dokumen acuan: [MIZAN-REVIEW.md](MIZAN-REVIEW.md)
+Status: **Active specification; verification remains open**
+Updated: November 13, 2026
+Implementation authority: `packages/moon-mizan/src/engine.ts`, its tests, and
+`packages/moon-protocol/src/contracts/mizan.ts`.
+
+The September 6, 2026 [review](MIZAN-REVIEW.md) is archived historical context,
+not the current implementation authority. Current limits are Power Right 10,
+Power Left 7, General maximum 17, and Prophetic reference contribution maximum
+4. `chooseMethod()` is a preview; `validateAssessment()` determines the final
+method.
 
 Gunakan checklist ini sebagai urutan kerja. Item tidak boleh ditandai selesai hanya karena model atau view sudah dibuat; setiap item perlu bukti tes atau review yang disebutkan.
 
@@ -11,7 +18,7 @@ Gunakan checklist ini sebagai urutan kerja. Item tidak boleh ditandai selesai ha
 - [ ] Tetapkan `mizan_weighted@1.0.0` sebagai profil resmi pertama.
 - [ ] Bekukan empat primary filter dengan `criterion_code` dan definisi kanonik.
 - [ ] Bekukan empat secondary filter, termasuk aturan `N/A` yang sesuai metode.
-- [ ] Bekukan empat Power Right dan tujuh Power Left beserta unit skor, anchor, dan rumus agregasi.
+- [ ] Bekukan **sepuluh Power Right** dan **tujuh Power Left** beserta unit skor, anchor, dan rumus agregasi.
 - [ ] Putuskan apakah skor per kriteria berupa integer atau basis points; samakan engine TS, JSON agent, kontrak API, dan native Moon ORM.
 - [ ] Tulis tabel kompatibilitas `mizan/app.js` versus `@moon/mizan` untuk: primary fail, secondary N/A, reference weight nol, preview method, dan rating.
 - [ ] Tegaskan perbedaan `eligible_for_prophetic` dan `final_method`.
@@ -103,7 +110,7 @@ Gunakan checklist ini sebagai urutan kerja. Item tidak boleh ditandai selesai ha
 - [ ] Tampilkan unknown, provisional, insufficient evidence, reserved, blocked, dan deferred dengan teks jelas.
 - [ ] Tombol Evaluate/Retry/Submit/Accept/Request changes/Create revision mengikuti state dan role.
 - [ ] Sediakan tautan provenance dekat teks sumber yang dirujuk.
-- [ ] Jangan tampilkan klaim “divine verdict”, keputusan akhirat, atau kesempurnaan hukum.
+- [ ] Jangan tampilkan klaim "divine verdict", keputusan akhirat, atau kesempurnaan hukum.
 - [ ] Pastikan keyboard navigation, label field, focus state, dan layout Arabic reading tetap layak.
 
 **Selesai jika:** assessor dapat memahami alasan dan keterbatasan hasil tanpa membuka log internal atau chain-of-thought.

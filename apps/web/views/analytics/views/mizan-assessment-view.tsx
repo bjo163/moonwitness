@@ -82,6 +82,7 @@ export function MizanAssessmentView() {
         />
         <MizanAssessmentOutput
           method={method}
+          eligibleForProphetic={decision?.eligible_for_prophetic}
           limitation={limitation}
           isResolving={isResolving}
           accent={accent as "cyan" | "purple" | "amber"}

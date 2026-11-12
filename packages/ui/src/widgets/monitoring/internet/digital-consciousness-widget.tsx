@@ -2,6 +2,12 @@
 
 import React, { useEffect, useState } from "react"
 import { Globe, BookOpen, Clock, Activity } from "lucide-react"
+import {
+  resolveSourceStatus,
+  sourceFailureMeta,
+  type SourceMeta,
+  type SourceStatus,
+} from "@moon/client"
 
 export type WikiEdit = {
   id: string
@@ -12,22 +18,50 @@ export type WikiEdit = {
   comment: string
 }
 
-export function DigitalConsciousnessWidget() {
+export function DigitalConsciousnessWidget({
+  onSourceMeta,
+}: {
+  onSourceMeta?: (source: SourceMeta) => void
+}) {
   const [edits, setEdits] = useState<WikiEdit[]>([])
-  const [isConnected, setIsConnected] = useState(false)
+  const [status, setStatus] = useState<SourceStatus>("UNAVAILABLE")
 
   useEffect(() => {
     let eventSource: EventSource | null = null
     let isMounted = true
+    let lastSuccessAt: number | undefined
+    const reportSource = (metadata: SourceMeta) => {
+      if (!isMounted) return
+      setStatus(metadata.status)
+      onSourceMeta?.(metadata)
+    }
+    const reportLive = () => {
+      const timestamp = Date.now()
+      lastSuccessAt = timestamp
+      reportSource({
+        source: "wikipedia-recent-changes",
+        status: "LIVE",
+        timestamp,
+        checkedAt: timestamp,
+      })
+    }
+    const reportFailure = () => {
+      reportSource(
+        sourceFailureMeta(
+          "wikipedia-recent-changes",
+          lastSuccessAt,
+          "Wikimedia recent-changes stream disconnected"
+        )
+      )
+    }
 
     try {
-      // Connect to Wikimedia Recent Changes Stream
       eventSource = new EventSource(
         "https://stream.wikimedia.org/v2/stream/recentchange"
       )
 
       eventSource.onopen = () => {
-        if (isMounted) setIsConnected(true)
+        reportLive()
       }
 
       eventSource.onmessage = (event) => {
@@ -35,8 +69,6 @@ export function DigitalConsciousnessWidget() {
 
         try {
           const data = JSON.parse(event.data)
-          // Filter for only wikipedia edits (ignore wikidata, wikibooks, etc for noise reduction)
-          // and only edits that actually change content (type === 'edit')
           if (
             data.type === "edit" &&
             data.server_name.includes("wikipedia.org")
@@ -54,28 +86,41 @@ export function DigitalConsciousnessWidget() {
 
             setEdits((prev) => {
               const updated = [newEdit, ...prev]
-              return updated.slice(0, 15) // Keep last 15 edits
+              return updated.slice(0, 15)
             })
+            reportLive()
           }
-        } catch (e) {
-          // parse error
+        } catch {
+          reportFailure()
         }
       }
 
       eventSource.onerror = () => {
-        if (isMounted) setIsConnected(false)
+        reportFailure()
       }
-    } catch (e) {
-      if (isMounted) setIsConnected(false)
+    } catch {
+      reportFailure()
     }
+
+    reportFailure()
+    const freshnessInterval = window.setInterval(() => {
+      if (lastSuccessAt === undefined) return
+      reportSource({
+        source: "wikipedia-recent-changes",
+        status: resolveSourceStatus("CACHED", lastSuccessAt),
+        timestamp: lastSuccessAt,
+        checkedAt: Date.now(),
+      })
+    }, 60 * 1000)
 
     return () => {
       isMounted = false
+      window.clearInterval(freshnessInterval)
       if (eventSource) {
         eventSource.close()
       }
     }
-  }, [])
+  }, [onSourceMeta])
 
   return (
     <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-8 xl:col-span-6">
@@ -83,18 +128,18 @@ export function DigitalConsciousnessWidget() {
         <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-primary uppercase">
           <BookOpen className="h-4 w-4" />
           DIGITAL CONSCIOUSNESS
-          <span className="rounded-[2px] border border-primary/50 bg-primary/20 px-1.5 py-0.5 text-[8px] text-primary">
-            WIKIPEDIA LIVE
+          <span className="rounded-md border border-border bg-muted px-2 py-1 text-[8px] text-muted-foreground">
+            {status}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <span
-            className={`text-[8px] font-bold tracking-widest uppercase ${isConnected ? "text-success" : "text-warning"}`}
+            className={`text-[8px] font-bold tracking-widest uppercase ${status === "LIVE" ? "text-success" : "text-warning"}`}
           >
-            {isConnected ? "STREAM CONNECTED" : "CONNECTING..."}
+            {status === "LIVE" ? "STREAM CONNECTED" : "STREAM UNAVAILABLE"}
           </span>
           <div
-            className={`h-2 w-2 rounded-full ${isConnected ? "bg-success animate-pulse" : "bg-warning"}`}
+            className={`h-2 w-2 rounded-full ${status === "LIVE" ? "bg-success animate-pulse" : "bg-warning"}`}
           ></div>
         </div>
       </div>
@@ -111,7 +156,9 @@ export function DigitalConsciousnessWidget() {
           {edits.length === 0 ? (
             <div className="flex flex-col items-center gap-2 py-10 text-center font-mono text-[10px] text-primary/50">
               <Activity className="h-6 w-6 animate-pulse" />
-              Tuning into global knowledge stream...
+              {status === "UNAVAILABLE"
+                ? "The Wikimedia recent-changes stream is unavailable."
+                : "No Wikipedia edit records have been received."}
             </div>
           ) : (
             edits.map((edit) => {

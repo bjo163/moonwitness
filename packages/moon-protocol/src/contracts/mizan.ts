@@ -1,5 +1,22 @@
 import { z } from 'zod'
 
+export const MizanMethodPreviewQuerySchema = z.object({
+  generalSufficient: z.enum(['true', 'false']),
+  balanceSatisfied: z.enum(['true', 'false']),
+  internalReferenceVerified: z.enum(['true', 'false']),
+})
+
+export const MizanMethodPreviewSchema = z.object({
+  method: z.enum(['general', 'general_limited', 'prophetic']),
+  phase: z.literal('preview'),
+  eligible_for_prophetic: z.boolean(),
+  limitation: z.string().optional(),
+})
+
+export const MizanMethodPreviewResponseSchema = z.object({
+  decision: MizanMethodPreviewSchema,
+})
+
 export const MizanEvaluateRequestSchema = z.object({
   request_key: z.string().min(1),
   assessment_id: z.string().min(1),
@@ -32,3 +49,7 @@ export const MizanEvaluateResponseSchema = z.object({
 
 export type MizanEvaluateRequest = z.infer<typeof MizanEvaluateRequestSchema>
 export type MizanEvaluateResponse = z.infer<typeof MizanEvaluateResponseSchema>
+export type MizanMethodPreviewQuery = z.infer<
+  typeof MizanMethodPreviewQuerySchema
+>
+export type MizanMethodPreview = z.infer<typeof MizanMethodPreviewSchema>

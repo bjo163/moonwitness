@@ -1,36 +1,53 @@
 import React from "react"
 import { Plane, ArrowRight } from "lucide-react"
-import { FlightInfo } from "@moon/client"
+import type { FlightInfo, SourceStatus } from "@moon/client"
 import { Button } from "../../../components/button"
 
 export function AviationTrafficWidget({
   flights = [],
+  status = "UNAVAILABLE",
 }: {
   flights?: FlightInfo[]
+  status?: SourceStatus
 }) {
-  // Sort by altitude (highest first) for the list
   const displayFlights = [...flights]
     .sort((a, b) => b.altitude - a.altitude)
     .slice(0, 10)
+  const statusClass =
+    status === "LIVE"
+      ? "border-success/30 bg-success/10 text-success"
+      : status === "CACHED"
+        ? "border-info/30 bg-info/10 text-info"
+        : status === "STALE"
+          ? "border-warning/30 bg-warning/10 text-warning"
+          : status === "SIMULATED"
+            ? "border-secondary/30 bg-secondary/10 text-secondary"
+            : "border-destructive/30 bg-destructive/10 text-destructive"
 
   return (
     <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-3 xl:col-span-2">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2 text-[9px] font-black tracking-widest text-primary uppercase">
           AVIATION NETWORK
-          <span className="animate-pulse rounded-[2px] border border-secondary/30 bg-secondary/20 px-1.5 py-0.5 text-[8px] text-secondary">
-            OPENSKY LIVE
+          <span className={`rounded-md border px-2 py-1 text-[8px] ${statusClass}`}>
+            {status}
           </span>
         </div>
         <div className="text-[12px] font-bold text-secondary">
-          {flights.length}
+          {status === "UNAVAILABLE" && flights.length === 0
+            ? "—"
+            : flights.length}
         </div>
       </div>
 
       <div className="hide-scrollbar flex-1 space-y-3 overflow-y-auto">
         {flights.length === 0 ? (
-          <div className="py-10 text-center text-[10px] text-primary/50">
-            Scanning Transponders...
+          <div className="py-10 text-center text-sm text-muted-foreground">
+            {status === "UNAVAILABLE"
+              ? "OpenSky data is unavailable; an aircraft count cannot be reported."
+              : status === "SIMULATED"
+                ? "Flight data is simulated for demonstration only."
+                : "No aircraft records were returned by the source."}
           </div>
         ) : (
           displayFlights.map((f, i) => (

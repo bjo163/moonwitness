@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { Hexagon, Activity } from "lucide-react"
+import { Layers3, Signal } from "lucide-react"
 import dynamic from "next/dynamic"
 import {
   EarthquakeFeature,
@@ -9,6 +9,9 @@ import {
   FlightInfo,
   CyberAttack,
   MaritimeShip,
+  resolveSourceStatus,
+  type SourceMeta,
+  type SourceStatus,
 } from "@moon/client"
 
 const LeafletMap = dynamic(
@@ -63,36 +66,58 @@ export function LiveWorldMapWidget({
   flights = [],
   cyberAttacks = [],
   ships = [],
+  sourceMeta = [],
 }: {
   earthquakes?: EarthquakeFeature[]
   issPosition?: ISSPosition | null
   flights?: FlightInfo[]
   cyberAttacks?: CyberAttack[]
   ships?: MaritimeShip[]
+  sourceMeta?: SourceMeta[]
 }) {
+  const sourceStatus = (source: string): SourceStatus => {
+    const metadata = sourceMeta.find((entry) => entry.source === source)
+    return metadata
+      ? resolveSourceStatus(metadata.status, metadata.timestamp)
+      : "UNAVAILABLE"
+  }
+  const earthquakeStatus = sourceStatus("usgs-earthquakes")
+  const earthquakeCount =
+    earthquakeStatus === "UNAVAILABLE" && earthquakes.length === 0
+      ? "—"
+      : earthquakes.length
+  const mapLayers = [
+    ["Earthquakes", "usgs-earthquakes"],
+    ["ISS position", "iss-tracker"],
+    ["Aircraft", "opensky-flights"],
+    ["Security events", "cyber-attacks"],
+    ["Vessels", "maritime-ships"],
+  ] as const
+
   return (
     <div className="bg-background relative flex flex-col overflow-hidden rounded-xl border-2 border-primary/20 p-4 lg:col-span-6 xl:col-span-5">
       <div className="relative z-20 flex items-center justify-between">
         <div>
           <div className="mb-0.5 flex items-center gap-2 text-[10px] font-black tracking-widest text-foreground uppercase">
-            LIVE WORLD MAP
-            <span className="animate-pulse rounded-[2px] border border-destructive/30 bg-destructive/20 px-1.5 py-0.5 text-[8px] text-destructive">
-              LIVE
+            Global monitoring map
+            <span className="rounded-md border border-border bg-muted px-2 py-1 text-[8px] text-muted-foreground">
+              USGS {earthquakeStatus}
             </span>
           </div>
-          <div className="text-[8px] text-primary">
-            Real-time planetary seismic monitoring (USGS Network)
+          <div className="text-xs text-muted-foreground">
+            Map layers reflect their individual source status.
           </div>
         </div>
         <div className="text-right">
-          <div className="text-[12px] font-bold text-destructive">
-            {earthquakes.length}
+          <div className="text-sm font-bold text-foreground">
+            {earthquakeCount}
           </div>
-          <div className="text-[7px] text-primary uppercase">Active Events</div>
+          <div className="text-[10px] text-muted-foreground">
+            Earthquake records
+          </div>
         </div>
       </div>
 
-      {/* Map Interactive Simulation */}
       <div className="relative z-10 mt-4 min-h-[300px] flex-1">
         <MapErrorBoundary>
           <LeafletMap
@@ -105,27 +130,25 @@ export function LiveWorldMapWidget({
         </MapErrorBoundary>
       </div>
 
-      {/* Map Legends */}
-      <div className="relative z-20 mt-4 flex items-center justify-between border-t border-border pt-3">
-        {[
-          { l: "Seismic Sensors", v: "4,210", c: "#FF0055" },
-          { l: "Observation Nodes", v: "318", c: "#00F0FF" },
-          { l: "Research Centers", v: "124", c: "#A100FF" },
-          { l: "Active Missions", v: "24", c: "#FF9900" },
-        ].map((lg, i) => (
-          <div key={i} className="flex items-center gap-1.5">
-            <div
-              className="flex h-5 w-5 items-center justify-center rounded border border-border bg-primary/10"
-              style={{ borderColor: `${lg.c}40` }}
+      <div className="relative z-20 mt-4 border-t border-border pt-3">
+        <div className="mb-2 flex items-center gap-2 text-xs font-medium">
+          <Layers3 className="size-4 text-muted-foreground" aria-hidden="true" />
+          Data layers
+        </div>
+        <ul className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-3">
+          {mapLayers.map(([label, source]) => (
+            <li
+              key={source}
+              className="flex items-center justify-between gap-2 rounded border border-border px-2 py-1.5"
             >
-              <Hexagon className="h-3 w-3" style={{ color: lg.c }} />
-            </div>
-            <div>
-              <div className="text-[7px] text-primary uppercase">{lg.l}</div>
-              <div className="text-[10px] font-black text-foreground">{lg.v}</div>
-            </div>
-          </div>
-        ))}
+              <span className="truncate text-muted-foreground">{label}</span>
+              <span className="inline-flex shrink-0 items-center gap-1">
+                <Signal className="size-3" aria-hidden="true" />
+                {sourceStatus(source)}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   )

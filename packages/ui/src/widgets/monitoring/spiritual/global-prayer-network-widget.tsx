@@ -1,74 +1,86 @@
-import React from "react"
-import { Moon, Clock, ArrowRight } from "lucide-react"
-import { GlobalCityPrayer } from "@moon/client"
-import { Button } from "../../../components/button"
+import { Moon } from "lucide-react"
+import type {
+  GlobalCityPrayer,
+  SourceMeta,
+  SourceStatus,
+} from "@moon/client"
+
+const STATUS_CLASSES: Record<SourceStatus, string> = {
+  LIVE: "border-success/30 bg-success/10 text-success",
+  CACHED: "border-info/30 bg-info/10 text-info",
+  STALE: "border-warning/30 bg-warning/10 text-warning",
+  UNAVAILABLE: "border-destructive/30 bg-destructive/10 text-destructive",
+  SIMULATED: "border-secondary/30 bg-secondary/10 text-secondary",
+}
 
 export function GlobalPrayerNetworkWidget({
   globalPrayers = [],
+  sourceMeta = [],
 }: {
   globalPrayers?: GlobalCityPrayer[]
+  sourceMeta?: SourceMeta[]
 }) {
+  const prayerSources = sourceMeta.filter((source) =>
+    source.source.startsWith("prayer-")
+  )
+  const prayersByCity = new Map(
+    globalPrayers.map((prayer) => [prayer.city, prayer])
+  )
+
   return (
-    <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-3 xl:col-span-3">
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-[9px] font-black tracking-widest text-foreground uppercase">
-          GLOBAL PRAYER NETWORK
-          <span className="animate-pulse rounded-[2px] border border-primary/30 bg-primary/20 px-1.5 py-0.5 text-[8px] text-primary">
-            ALADHAN SYNC
-          </span>
-        </div>
+    <section className="flex flex-col rounded-md border border-border bg-card p-4">
+      <div className="mb-3 flex items-center gap-2 border-b border-border pb-3 text-sm font-medium">
+        <Moon className="size-4 text-muted-foreground" aria-hidden="true" />
+        <h2>Calculated prayer times</h2>
       </div>
 
-      <div className="hide-scrollbar min-h-[250px] flex-1 space-y-3 overflow-y-auto">
-        {globalPrayers.length === 0 ? (
-          <div className="py-10 text-center text-[10px] text-primary/50">
-            Synchronizing with Aladhan Network...
-          </div>
+      <div className="max-h-80 flex-1 space-y-3 overflow-y-auto">
+        {prayerSources.length === 0 ? (
+          <p className="py-8 text-center text-sm text-muted-foreground">
+            No prayer-time source responses have been recorded.
+          </p>
         ) : (
-          globalPrayers.map((gp, idx) => (
-            <div
-              key={idx}
-              className="relative flex gap-3 overflow-hidden rounded-lg border border-primary/30 bg-primary/10 p-3"
-            >
-              <div className="absolute top-0 bottom-0 left-0 w-1 bg-primary" />
-              <Moon className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-              <div className="w-full">
-                <div className="mb-1 flex items-start justify-between">
-                  <div className="text-[10px] font-black text-primary uppercase">
-                    {gp.city}, {gp.country}
-                  </div>
+          prayerSources.map((source) => {
+            const city = source.source.slice("prayer-".length)
+            const prayer = prayersByCity.get(city)
+            const statusClass = STATUS_CLASSES[source.status]
+
+            return (
+              <article
+                key={source.source}
+                className="rounded border border-border p-3"
+              >
+                <div className="mb-2 flex items-center justify-between gap-2">
+                  <h3 className="text-xs font-semibold">
+                    {prayer ? `${prayer.city}, ${prayer.country}` : city}
+                  </h3>
+                  <span
+                    className={`rounded-md border px-2 py-1 text-[10px] ${statusClass}`}
+                  >
+                    {source.status}
+                  </span>
                 </div>
-                <div className="mt-2 grid grid-cols-5 gap-1 text-center font-mono text-[8px] text-foreground">
-                  <div className="flex flex-col">
-                    <span className="text-primary">Fajr</span>
-                    <span>{gp.prayerTimes.Fajr}</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-primary">Dhuhr</span>
-                    <span>{gp.prayerTimes.Dhuhr}</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-primary">Asr</span>
-                    <span>{gp.prayerTimes.Asr}</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-primary">Maghrib</span>
-                    <span>{gp.prayerTimes.Maghrib}</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-primary">Isha</span>
-                    <span>{gp.prayerTimes.Isha}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))
+                {prayer ? (
+                  <dl className="grid grid-cols-5 gap-1 text-center font-mono text-[10px]">
+                    {Object.entries(prayer.prayerTimes).map(([name, time]) => (
+                      <div key={name}>
+                        <dt className="text-muted-foreground">{name}</dt>
+                        <dd className="mt-1 text-foreground">{time}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                ) : (
+                  <p className="text-xs text-muted-foreground">
+                    {source.status === "UNAVAILABLE"
+                      ? "Prayer-time data is unavailable for this location."
+                      : "No prayer-time data is available for this location."}
+                  </p>
+                )}
+              </article>
+            )
+          })
         )}
       </div>
-
-      <Button type="button" variant="ghost" className="mt-2 flex w-full items-center justify-end gap-1 text-right text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
-        VIEW FULL NETWORK <ArrowRight className="h-2.5 w-2.5" />
-      </Button>
-    </div>
+    </section>
   )
 }

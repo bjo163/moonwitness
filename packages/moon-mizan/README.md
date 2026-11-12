@@ -19,28 +19,28 @@
 
 | Function / Model | Parameters | Description |
 |---|---|---|
-| `evaluateCase()` | `caseData: CaseInput` | Runs weighted diagnostic scoring across 4 ethical filters |
-| `chooseMethod()` | `assessment: Assessment` | Enforces General-first vs Prophetic/Divine decision paths |
+| `chooseMethod()` | `MethodInput` | Returns a preview candidate and Prophetic eligibility; it does not finalize an assessment |
+| `validateAssessment()` | `AssessmentInput` | Validates filters and returns the final method and bounded weights |
 | `registerMizanRoutes()` | `() => void` | Injects Mizan `/api/mizan/*` REST routes into the backend |
 
 ---
 
-## 🚀 Usage
+## Method bounds
 
-```typescript
-import { evaluateCase, chooseMethod } from "@moon/mizan"
+| Measure | Maximum |
+|---|---:|
+| Power Right | 10 |
+| Power Left | 7 |
+| General total | 17 |
+| Prophetic reference contribution | 4 |
+| Prophetic total | 21 |
 
-// 1. Evaluate Ethical Case
-const result = evaluateCase({
-  title: "Diplomatic Treaty Verification",
-  filterAnswers: [true, true, true, false],
-  referenceVerified: true,
-})
+The General total is the sum of Power Right and Power Left. Prophetic
+eligibility is a preview; final Prophetic method selection requires a positive,
+verified, relevant reference contribution and a material balance condition.
 
-// 2. Select Decision Resolution Method
-const method = chooseMethod(result)
-console.log(`Resolution Method: ${method.selectedMethod} (Confidence: ${method.confidence * 100}%)`)
-```
+`chooseMethod()` returns `phase: "preview"` and `eligibleForProphetic`.
+`validateAssessment()` returns `phase: "final"` and the finalized method.
 
 ---
 

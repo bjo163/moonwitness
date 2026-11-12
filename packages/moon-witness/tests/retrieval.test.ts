@@ -210,6 +210,7 @@ describe('Phase 12 — Knowledge Retrieval & Search Architecture', () => {
       contentType: 'TRANSLATION',
       language: 'id',
       text: 'Dengan nama Allah Yang Maha Pengasih, Maha Penyayang.',
+      revision: 'corpus-r1',
       active: true
     })
 
@@ -311,6 +312,7 @@ describe('Phase 12 — Knowledge Retrieval & Search Architecture', () => {
       const resId = await searchWitnessGraph(env, { query: 'Pengasih' })
       expect(resId.total).toBeGreaterThanOrEqual(1)
       expect(resId.results[0]?.snippet).toContain('Pengasih')
+      expect(resId.results[0]?.sourceRevision).toBe('corpus-r1')
     })
 
     it('filters by domain properly', async () => {

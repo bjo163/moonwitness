@@ -6,9 +6,17 @@ import {
   calculateLunarPhaseCycle,
 } from "@moon/compute"
 import {
-  computeBm25Similarity,
-  computeHybridSearch,
+  searchWitnessGraph,
+} from "@moon/witness"
+import {
+  mapCanonicalSearchResponse,
+  normalizeSearchLimit,
+} from "../services/canonical-search-response.js"
+import {
+  EmbeddingProviderUnavailableError,
+  setEmbeddingProvider,
 } from "../services/semantic-search.js"
+import { createEmbeddingProviderFromEnvironment } from "../services/openai-compatible-embedding-provider.js"
 
 /**
  * ◈ Native Services Bridge (@moon/compute & @moon/witness)
@@ -17,6 +25,9 @@ import {
  * in-process natively in Node.js, eliminating external Python microservice dependencies.
  */
 export function registerPolyglotBridge(_server?: NativeServer): void {
+  const embeddingProvider = createEmbeddingProviderFromEnvironment()
+  if (embeddingProvider) setEmbeddingProvider(embeddingProvider)
+
   // ── Celestial Engine (@moon/compute) ──────────────────────────────────────
   defineRoute({
     method: "GET",
@@ -46,8 +57,20 @@ export function registerPolyglotBridge(_server?: NativeServer): void {
   })
 
   const handleQibla = async (ctx: any) => {
-    const lat = Number(ctx.query?.lat ?? ctx.query?.latitude ?? ctx.body?.latitude ?? ctx.body?.lat ?? 0.0)
-    const lon = Number(ctx.query?.lon ?? ctx.query?.longitude ?? ctx.body?.longitude ?? ctx.body?.lon ?? 0.0)
+    const lat = Number(
+      ctx.query?.lat ??
+        ctx.query?.latitude ??
+        ctx.body?.latitude ??
+        ctx.body?.lat ??
+        0.0
+    )
+    const lon = Number(
+      ctx.query?.lon ??
+        ctx.query?.longitude ??
+        ctx.body?.longitude ??
+        ctx.body?.lon ??
+        0.0
+    )
     return calculateQiblaBearing(lat, lon)
   }
 
@@ -70,9 +93,27 @@ export function registerPolyglotBridge(_server?: NativeServer): void {
   })
 
   const handleHilal = async (ctx: any) => {
-    const alt = Number(ctx.query?.alt ?? ctx.query?.altitude_degrees ?? ctx.body?.altitude_degrees ?? ctx.body?.alt ?? 0.0)
-    const elong = Number(ctx.query?.elong ?? ctx.query?.elongation_degrees ?? ctx.body?.elongation_degrees ?? ctx.body?.elong ?? 0.0)
-    const width = Number(ctx.query?.width ?? ctx.query?.crescent_width_arcmin ?? ctx.body?.crescent_width_arcmin ?? ctx.body?.width ?? 0.5)
+    const alt = Number(
+      ctx.query?.alt ??
+        ctx.query?.altitude_degrees ??
+        ctx.body?.altitude_degrees ??
+        ctx.body?.alt ??
+        0.0
+    )
+    const elong = Number(
+      ctx.query?.elong ??
+        ctx.query?.elongation_degrees ??
+        ctx.body?.elongation_degrees ??
+        ctx.body?.elong ??
+        0.0
+    )
+    const width = Number(
+      ctx.query?.width ??
+        ctx.query?.crescent_width_arcmin ??
+        ctx.body?.crescent_width_arcmin ??
+        ctx.body?.width ??
+        0.5
+    )
     return evaluateHilalVisibility(alt, elong, width)
   }
 
@@ -95,11 +136,33 @@ export function registerPolyglotBridge(_server?: NativeServer): void {
   })
 
   const handlePrayerTimes = async (ctx: any) => {
-    const lat = Number(ctx.query?.lat ?? ctx.query?.latitude ?? ctx.body?.latitude ?? ctx.body?.lat ?? -6.2088)
-    const lon = Number(ctx.query?.lon ?? ctx.query?.longitude ?? ctx.body?.longitude ?? ctx.body?.lon ?? 106.8456)
-    const date = String(ctx.query?.date ?? ctx.body?.date ?? "2026-09-06")
-    const tz = Number(ctx.query?.tz ?? ctx.query?.timezone_offset ?? ctx.body?.timezone_offset ?? ctx.body?.tz ?? 7.0)
-    const rawConv = String(ctx.query?.convention ?? ctx.body?.convention ?? "KEMENAG")
+    const lat = Number(
+      ctx.query?.lat ??
+        ctx.query?.latitude ??
+        ctx.body?.latitude ??
+        ctx.body?.lat ??
+        -6.2088
+    )
+    const lon = Number(
+      ctx.query?.lon ??
+        ctx.query?.longitude ??
+        ctx.body?.longitude ??
+        ctx.body?.lon ??
+        106.8456
+    )
+    const date = String(
+      ctx.query?.date ?? ctx.body?.date ?? "2026-09-06"
+    )
+    const tz = Number(
+      ctx.query?.tz ??
+        ctx.query?.timezone_offset ??
+        ctx.body?.timezone_offset ??
+        ctx.body?.tz ??
+        7.0
+    )
+    const rawConv = String(
+      ctx.query?.convention ?? ctx.body?.convention ?? "KEMENAG"
+    )
     const allowed = ["KEMENAG", "MWL", "ISNA", "UMM_AL_QURA"]
     const conv = (allowed.includes(rawConv) ? rawConv : "KEMENAG") as any
     return calculateDetailedPrayerTimes(lat, lon, date, tz, conv)
@@ -110,7 +173,8 @@ export function registerPolyglotBridge(_server?: NativeServer): void {
     path: "/api/services/celestial/prayer-times",
     auth: "none",
     tags: ["Celestial Engine"],
-    summary: "Calculate precise Islamic prayer times using solar declination and Spencer EqT formula",
+    summary:
+      "Calculate precise Islamic prayer times using solar declination and Spencer EqT formula",
     handler: handlePrayerTimes,
   })
 
@@ -119,7 +183,8 @@ export function registerPolyglotBridge(_server?: NativeServer): void {
     path: "/api/services/celestial/prayer-times",
     auth: "none",
     tags: ["Celestial Engine"],
-    summary: "Calculate precise Islamic prayer times using solar declination and Spencer EqT formula",
+    summary:
+      "Calculate precise Islamic prayer times using solar declination and Spencer EqT formula",
     handler: handlePrayerTimes,
   })
 
@@ -144,11 +209,17 @@ export function registerPolyglotBridge(_server?: NativeServer): void {
     path: "/api/services/ai/semantic/search",
     auth: "none",
     tags: ["AI Agent"],
-    summary: "Perform BM25 search with Arabic text normalization across scriptures and hadiths",
+    summary:
+      "Search the canonical Witness corpus with source provenance",
     handler: async (ctx) => {
       const query = String(ctx.body?.query || "")
-      const topK = Number(ctx.body?.top_k || 5)
-      return computeBm25Similarity(query, topK)
+      const topK = normalizeSearchLimit(ctx.body?.top_k)
+      const canonical = await searchWitnessGraph(ctx.env, {
+        query,
+        filter: "ALL",
+        limit: topK,
+      })
+      return mapCanonicalSearchResponse(query, canonical)
     },
   })
 
@@ -157,12 +228,12 @@ export function registerPolyglotBridge(_server?: NativeServer): void {
     path: "/api/services/ai/semantic/hybrid-search",
     auth: "none",
     tags: ["AI Agent"],
-    summary: "Execute hybrid search combining BM25 term matching with dense semantic concept embeddings",
-    handler: async (ctx) => {
-      const query = String(ctx.body?.query || "")
-      const topK = Number(ctx.body?.top_k || 5)
-      const alpha = Number(ctx.body?.alpha ?? 0.5)
-      return computeHybridSearch(query, topK, alpha)
+    summary:
+      "Hybrid vector retrieval is unavailable until a canonical embedding index is configured",
+    handler: async () => {
+      throw new EmbeddingProviderUnavailableError(
+        "Hybrid retrieval is unavailable: no production embedding provider or canonical vector index is configured."
+      )
     },
   })
 }

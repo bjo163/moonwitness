@@ -1,5 +1,9 @@
 import { getModel } from '@moon/orm'
 import { defineRoute } from '@moon/server'
+import {
+  MizanMethodPreviewQuerySchema,
+  MizanMethodPreviewResponseSchema,
+} from '@moon/protocol'
 import { chooseMethod, type MethodInput } from './engine.js'
 
 function parseBoolean(value: string | undefined): boolean {
@@ -10,6 +14,10 @@ function parseBoolean(value: string | undefined): boolean {
 defineRoute({
   method: 'GET',
   path: '/api/mizan/decision',
+  schema: {
+    query: MizanMethodPreviewQuerySchema,
+  },
+  response: MizanMethodPreviewResponseSchema,
   handler: async ({ query }) => {
     const input: MethodInput = {
       generalSufficient: parseBoolean(query.generalSufficient),
@@ -17,7 +25,15 @@ defineRoute({
       internalReferenceVerified: parseBoolean(query.internalReferenceVerified),
     }
 
-    return { decision: chooseMethod(input) }
+    const preview = chooseMethod(input)
+    return {
+      decision: {
+        method: preview.method,
+        phase: preview.phase,
+        eligible_for_prophetic: preview.eligibleForProphetic,
+        limitation: preview.limitation,
+      },
+    }
   },
 })
 

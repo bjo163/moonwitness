@@ -39,6 +39,7 @@ export interface SearchResult {
   script?: string
   source?: string
   edition?: string
+  sourceRevision?: string
   provenanceId?: number | null
 }
 
@@ -229,6 +230,10 @@ export async function searchWitnessGraph(
       link: `/scripture/1?ref=${encodeURIComponent(p.canonicalReference || p.canonical_reference)}`,
       snippet: tr || orig,
       language: (exactLookup.content?.[0] as any)?.language || 'ar',
+      sourceRevision:
+        p.sourceRevision ||
+        p.source_revision ||
+        (exactLookup.content?.[0] as any)?.revision,
       provenanceId: p.provenanceId || p.provenance_id || null
     })
   }

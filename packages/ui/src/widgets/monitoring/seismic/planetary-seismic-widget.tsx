@@ -1,32 +1,47 @@
 import React from "react"
 import { Activity } from "lucide-react"
-import { EarthquakeFeature } from "@moon/client"
+import type { EarthquakeFeature, SourceStatus } from "@moon/client"
 import { resolveSemanticColor, type SemanticColorToken } from "../../../lib/semantic-color"
 
 export function PlanetarySeismicWidget({
   earthquakes = [],
+  status = "UNAVAILABLE",
 }: {
   earthquakes?: EarthquakeFeature[]
+  status?: SourceStatus
 }) {
-  // Sort by magnitude, or just take the most recent 6
   const recentEvents = earthquakes.slice(0, 6)
+  const statusClass =
+    status === "LIVE"
+      ? "border-success/30 bg-success/10 text-success"
+      : status === "CACHED"
+        ? "border-info/30 bg-info/10 text-info"
+        : status === "STALE"
+          ? "border-warning/30 bg-warning/10 text-warning"
+          : status === "SIMULATED"
+            ? "border-secondary/30 bg-secondary/10 text-secondary"
+            : "border-destructive/30 bg-destructive/10 text-destructive"
 
   return (
     <div className="bg-background flex flex-col rounded-xl border border-border p-4 lg:col-span-6 xl:col-span-7">
-      <div className="mb-4 flex items-center gap-2 text-[9px] font-black tracking-widest text-primary uppercase">
+      <div className="mb-4 flex items-center justify-between gap-2 text-[9px] font-black tracking-widest text-primary uppercase">
         PLANETARY SEISMIC ACTIVITY
-        <span className="animate-pulse rounded-[2px] border border-destructive/30 bg-destructive/20 px-1.5 py-0.5 text-[8px] text-destructive">
-          USGS LIVE
+        <span className={`rounded-md border px-2 py-1 text-[8px] ${statusClass}`}>
+          USGS {status}
         </span>
       </div>
 
       <div className="grid flex-1 grid-cols-2 gap-3 md:grid-cols-3">
         {recentEvents.length === 0 ? (
-          <div className="col-span-full py-10 text-center text-[10px] text-primary/50">
-            Synchronizing with USGS Network...
+          <div className="col-span-full py-10 text-center text-sm text-muted-foreground">
+            {status === "UNAVAILABLE"
+              ? "The USGS source is unavailable; an event count cannot be reported."
+              : status === "SIMULATED"
+                ? "Seismic data is simulated for demonstration only."
+                : "No earthquake records were returned by the source."}
           </div>
         ) : (
-          recentEvents.map((eq, i) => {
+          recentEvents.map((eq) => {
             const mag = eq.properties.mag
             let sev = "Low"
             let color: SemanticColorToken = "success"
@@ -81,23 +96,6 @@ export function PlanetarySeismicWidget({
                     {new Date(eq.properties.time).toLocaleString()}
                   </div>
 
-                  {/* Sparkline simulation */}
-                  <div className="mt-3 flex items-end gap-[1px]">
-                    {Array.from({ length: 15 }).map((_, sparkIdx) => {
-                      const maxH = mag > 4.5 ? 15 : 8
-                      const height = 2 + Math.random() * maxH
-                      return (
-                        <div
-                          key={sparkIdx}
-                          className="w-1.5 opacity-30"
-                          style={{
-                            height: `${height}px`,
-                            backgroundColor: resolveSemanticColor(color),
-                          }}
-                        />
-                      )
-                    })}
-                  </div>
                 </div>
               </div>
             )

@@ -2529,8 +2529,8 @@
         "tags": [
           "AI Agent"
         ],
-        "summary": "Perform BM25 search with Arabic text normalization across scriptures and hadiths.",
-        "description": "Perform BM25 search with Arabic text normalization across scriptures and hadiths.",
+        "summary": "Search source-backed records from the canonical Witness corpus and return retrieval provenance.",
+        "description": "Search source-backed records from the canonical Witness corpus and return retrieval provenance.",
         "security": [],
         "requestBody": {
           "required": true,
@@ -2570,6 +2570,9 @@
                     "total_hits": {
                       "type": "number"
                     },
+                    "total_found": {
+                      "type": "number"
+                    },
                     "results": {
                       "type": "array",
                       "items": {
@@ -2581,22 +2584,52 @@
                           "collection": {
                             "type": "string"
                           },
-                          "text_ar": {
+                          "source_type": {
                             "type": "string"
                           },
-                          "text_en": {
+                          "reference": {
                             "type": "string"
                           },
-                          "score": {
-                            "type": "number"
+                          "excerpt": {
+                            "type": "string"
+                          },
+                          "language": {
+                            "type": "string"
+                          },
+                          "source": {
+                            "type": "string"
+                          },
+                          "edition": {
+                            "type": "string"
+                          },
+                          "source_revision": {
+                            "type": "string"
+                          },
+                          "provenance_id": {
+                            "type": "number",
+                            "nullable": true
+                          },
+                          "match_type": {
+                            "type": "string",
+                            "enum": [
+                              "LEXICAL_CANONICAL"
+                            ]
+                          },
+                          "retrieval_version": {
+                            "type": "string",
+                            "enum": [
+                              "witness-search.v1"
+                            ]
                           }
                         },
                         "required": [
                           "id",
                           "collection",
-                          "text_ar",
-                          "text_en",
-                          "score"
+                          "source_type",
+                          "reference",
+                          "excerpt",
+                          "match_type",
+                          "retrieval_version"
                         ]
                       }
                     }
@@ -2605,6 +2638,7 @@
                     "query",
                     "normalized_query",
                     "total_hits",
+                    "total_found",
                     "results"
                   ]
                 }
@@ -2855,8 +2889,8 @@
         "tags": [
           "AI Agent"
         ],
-        "summary": "Execute hybrid search combining BM25 term matching with dense semantic concept embeddings.",
-        "description": "Execute hybrid search combining BM25 term matching with dense semantic concept embeddings.",
+        "summary": "Hybrid retrieval requiring a configured embedding model and canonical vector index; unavailable until both are provisioned.",
+        "description": "Hybrid retrieval requiring a configured embedding model and canonical vector index; unavailable until both are provisioned.",
         "security": [],
         "requestBody": {
           "required": true,
@@ -2926,7 +2960,35 @@
                             "type": "number"
                           },
                           "match_type": {
+                            "type": "string",
+                            "enum": [
+                              "LEXICAL_BM25",
+                              "SEMANTIC_EMBEDDING",
+                              "HYBRID_FUSION"
+                            ]
+                          },
+                          "provenance_id": {
+                            "type": "number",
+                            "nullable": true
+                          },
+                          "source_revision": {
                             "type": "string"
+                          },
+                          "embedding_model": {
+                            "type": "string"
+                          },
+                          "embedding_version": {
+                            "type": "string"
+                          },
+                          "embedding_contract_version": {
+                            "type": "string",
+                            "enum": [
+                              "moonwitness.embedding.v1"
+                            ]
+                          },
+                          "embedding_dim": {
+                            "type": "integer",
+                            "minimum": 0
                           }
                         },
                         "required": [

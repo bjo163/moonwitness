@@ -12,6 +12,7 @@
       "@moon/client": ["../../packages/moon-client/src/index.ts"],
       "@moon/client/*": ["../../packages/moon-client/src/*"],
       "@moon/khidra": ["../../packages/moon-khidra/src/index.ts"],
+      "@moon/protocol": ["../../packages/moon-protocol/src/index.ts"],
       "@moon/time": ["../../packages/moon-time/src/index.ts"],
       "@moon/witness": ["../../packages/moon-witness/src/index.ts"]
     },

@@ -2,17 +2,19 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:18-alpine
+    image: pgvector/pgvector:0.8.7-pg18
     container_name: mw_postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER must be set in .env.production}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in .env.production}
       POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB must be set in .env.production}
+      PGDATA: /var/lib/postgresql/data
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-pgvector.sql:/docker-entrypoint-initdb.d/01-init-pgvector.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\" && psql -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\" -Atc \"SELECT 1 FROM pg_available_extensions WHERE name='vector'\" | grep -qx 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -90,6 +92,8 @@ services:
       dockerfile: services/ai-agent/Dockerfile
     container_name: mw_ai_agent
     restart: unless-stopped
+    environment:
+      MOONWITNESS_API_URL: http://api:4000
     ports:
       - "127.0.0.1:${AI_AGENT_PORT:-8002}:8002"
     healthcheck:

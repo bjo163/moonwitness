@@ -1,7 +1,7 @@
 [project]
 name = "ai-agent"
-version = "0.1.0"
-description = "MoonWitness Vector Search, Embeddings & RAG Knowledge Agent Service"
+version = "0.2.0"
+description = "MoonWitness source-backed retrieval bridge to the canonical Witness API"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

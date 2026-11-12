@@ -127,14 +127,11 @@ export function KitabPortalResults({
                   <span>
                     {hit.collection.toUpperCase()} · {hit.id}
                   </span>
-                  <span>Score: {hit.score.toFixed(2)}</span>
+                  <span className="text-muted-foreground">Lexical match</span>
                 </div>
-                <p className="arabic-text mt-1 text-right text-base text-foreground">
-                  {hit.text_ar}
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {hit.text_en}
-                </p>
+                    <p className="arabic-text mt-1 text-right text-base text-foreground">
+                      {hit.excerpt}
+                    </p>
               </div>
             ))}
           </div>

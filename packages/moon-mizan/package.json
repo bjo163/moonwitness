@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@moon/orm": "workspace:*",
+    "@moon/protocol": "workspace:*",
     "@moon/server": "workspace:*"
   },
   "devDependencies": {

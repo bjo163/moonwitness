@@ -1,4 +1,12 @@
-# Review mendalam Revelation–Mizan dan kesiapan Odoo
+# Archived historical review: Revelation–Mizan
+
+> Superseded as an implementation authority on November 13, 2026. This review
+> records observations from September 6, 2026 against a local working tree and
+> is not deployment certification. Use `packages/moon-mizan/src/engine.ts`,
+> its tests, and `packages/moon-protocol/src/contracts/mizan.ts` for current
+> behavior and limits. Current bounds are Power Right 10, Power Left 7,
+> General maximum 17, and Prophetic reference contribution maximum 4. The
+> preview candidate is not the final method.
 
 6 September 2026. Review terhadap working tree lokal, bukan sertifikasi deployment.
 

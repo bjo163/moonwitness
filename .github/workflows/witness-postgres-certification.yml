@@ -54,7 +54,7 @@ jobs:
             exit 1
           }
 
-      - name: Start isolated PostgreSQL 18
+      - name: Start isolated PostgreSQL 18 with pgvector
         shell: bash
         run: |
           set -euo pipefail
@@ -67,11 +67,24 @@ jobs:
             -e POSTGRES_USER=postgres \
             -e POSTGRES_PASSWORD=postgres \
             -e POSTGRES_DB="$CERT_DB" \
-            postgres:18-alpine
+            -v "$(pwd)/scripts/init-pgvector.sql:/docker-entrypoint-initdb.d/01-init-pgvector.sql:ro" \
+            pgvector/pgvector:0.8.7-pg18
 
           for attempt in $(seq 1 60); do
             if docker exec "$CERT_PG_CONTAINER" pg_isready -U postgres -d "$CERT_DB" >/dev/null 2>&1; then
               echo "PostgreSQL is healthy inside $CERT_NETWORK."
+              if docker exec "$CERT_PG_CONTAINER" psql -U postgres -d "$CERT_DB" -Atc "SELECT 1 FROM pg_available_extensions WHERE name='vector';" | grep -qx 1; then
+                echo "vector extension files are available."
+              else
+                echo "vector extension files NOT found."
+                docker logs "$CERT_PG_CONTAINER" || true
+                exit 1
+              fi
+              if ! docker exec "$CERT_PG_CONTAINER" psql -U postgres -d "$CERT_DB" -Atc "SELECT 1 FROM pg_extension WHERE extname='vector';" | grep -qx 1; then
+                echo "vector extension is not installed in the certification database."
+                docker logs "$CERT_PG_CONTAINER" || true
+                exit 1
+              fi
               exit 0
             fi
             sleep 1
@@ -110,6 +123,22 @@ jobs:
             -e TEST_DATABASE_URL="postgres://postgres:postgres@postgres:5432/$CERT_DB" \
             "$CERT_IMAGE" \
             sh -lc 'pnpm --filter api certify:witness-graph-pg'
+
+      - name: pgvector vector operations certification
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            --network "$CERT_NETWORK" \
+            -e CI=true \
+            -e NODE_ENV=production \
+            -e JWT_SECRET="$JWT_SECRET" \
+            -e BOOTSTRAP_ADMIN_EMAIL="$BOOTSTRAP_ADMIN_EMAIL" \
+            -e BOOTSTRAP_ADMIN_PASSWORD="$BOOTSTRAP_ADMIN_PASSWORD" \
+            -e DATABASE_URL="postgres://postgres:postgres@postgres:5432/$CERT_DB" \
+            -e TEST_DATABASE_URL="postgres://postgres:postgres@postgres:5432/$CERT_DB" \
+            "$CERT_IMAGE" \
+            sh -lc 'pnpm --filter api test:vector'
 
       - name: Backup and restore smoke
         shell: bash

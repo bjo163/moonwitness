@@ -281,9 +281,16 @@ export const HilalVisibilityEvaluationSchema = z.object({
 export const SemanticSearchHitSchema = z.object({
   id: z.string(),
   collection: z.string(),
-  text_ar: z.string(),
-  text_en: z.string(),
-  score: z.number(),
+  source_type: z.string(),
+  reference: z.string(),
+  excerpt: z.string(),
+  language: z.string().optional(),
+  source: z.string().optional(),
+  edition: z.string().optional(),
+  source_revision: z.string().optional(),
+  provenance_id: z.number().nullable().optional(),
+  match_type: z.literal('LEXICAL_CANONICAL'),
+  retrieval_version: z.literal('witness-search.v1'),
 })
 
 export const SemanticSearchRequestSchema = z.object({
@@ -295,7 +302,17 @@ export const SemanticSearchResultSchema = z.object({
   query: z.string(),
   normalized_query: z.string(),
   total_hits: z.number(),
+  total_found: z.number(),
   results: z.array(SemanticSearchHitSchema),
+})
+
+export const EmbeddingContractSchema = z.object({
+  contract_version: z.literal('moonwitness.embedding.v1'),
+  provider: z.string().min(1),
+  model: z.string().min(1),
+  model_version: z.string().min(1),
+  dimensions: z.number().int().positive(),
+  text_normalization_version: z.string().min(1),
 })
 
 export const CelestialPrayerTimesRequestSchema = z.object({
@@ -329,7 +346,13 @@ export const HybridSearchHitSchema = z.object({
   similarity_score: z.number(),
   bm25_score: z.number(),
   dense_score: z.number(),
-  match_type: z.string(),
+  match_type: z.enum(['LEXICAL_BM25', 'SEMANTIC_EMBEDDING', 'HYBRID_FUSION']),
+  provenance_id: z.number().nullable().optional(),
+  source_revision: z.string().optional(),
+  embedding_model: z.string().optional(),
+  embedding_version: z.string().optional(),
+  embedding_contract_version: z.literal('moonwitness.embedding.v1').optional(),
+  embedding_dim: z.number().int().positive().optional(),
 })
 
 export const HybridSearchRequestSchema = z.object({
@@ -437,6 +460,7 @@ export type HilalVisibilityEvaluation = z.infer<typeof HilalVisibilityEvaluation
 export type SemanticSearchHit = z.infer<typeof SemanticSearchHitSchema>
 export type SemanticSearchRequest = z.infer<typeof SemanticSearchRequestSchema>
 export type SemanticSearchResult = z.infer<typeof SemanticSearchResultSchema>
+export type EmbeddingContract = z.infer<typeof EmbeddingContractSchema>
 
 export type CelestialPrayerTimesRequest = z.infer<typeof CelestialPrayerTimesRequestSchema>
 export type CelestialPrayerTimesResult = z.infer<typeof CelestialPrayerTimesResultSchema>

@@ -8,6 +8,8 @@ export interface MethodInput {
 
 export interface MethodDecision {
   method: AssessmentMethod
+  phase: 'preview'
+  eligibleForProphetic: boolean
   limitation?: string
 }
 
@@ -21,7 +23,10 @@ export interface AssessmentInput extends MethodInput {
   rating: number
 }
 
-export interface AssessmentDecision extends MethodDecision {
+export interface AssessmentDecision {
+  method: AssessmentMethod
+  phase: 'final'
+  limitation?: string
   generalWeight: number
   propheticReferenceWeight: number
   totalWeight: number
@@ -42,14 +47,26 @@ export const SECONDARY_FILTERS = [
 ] as const
 
 export function chooseMethod(input: MethodInput): MethodDecision {
-  if (input.generalSufficient) return { method: 'general' }
+  if (input.generalSufficient) {
+    return {
+      method: 'general',
+      phase: 'preview',
+      eligibleForProphetic: false
+    }
+  }
 
   if (input.balanceSatisfied && input.internalReferenceVerified) {
-    return { method: 'prophetic' }
+    return {
+      method: 'prophetic',
+      phase: 'preview',
+      eligibleForProphetic: true
+    }
   }
 
   return {
     method: 'general_limited',
+    phase: 'preview',
+    eligibleForProphetic: false,
     limitation: input.balanceSatisfied
       ? 'Internal reference is not verified.'
       : 'A material balance condition is not established.'
@@ -93,6 +110,7 @@ export function validateAssessment(input: AssessmentInput): AssessmentDecision {
   if (input.generalSufficient) {
     return {
       method: 'general',
+      phase: 'final',
       generalWeight,
       propheticReferenceWeight: 0,
       totalWeight: generalWeight
@@ -102,6 +120,7 @@ export function validateAssessment(input: AssessmentInput): AssessmentDecision {
   if (input.propheticReferenceWeight > 0) {
     return {
       method: 'prophetic',
+      phase: 'final',
       generalWeight,
       propheticReferenceWeight: input.propheticReferenceWeight,
       totalWeight: generalWeight + input.propheticReferenceWeight
@@ -110,6 +129,7 @@ export function validateAssessment(input: AssessmentInput): AssessmentDecision {
 
   return {
     method: 'general_limited',
+    phase: 'final',
     generalWeight,
     propheticReferenceWeight: 0,
     totalWeight: generalWeight,

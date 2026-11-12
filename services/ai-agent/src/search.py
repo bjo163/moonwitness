@@ -1,11 +1,37 @@
-"""
-◈ MoonWitness AI Knowledge Agent — Semantic & Lexical Search Engine
-Multilingual text normalization (Arabic, Indonesian, English), BM25 term weighting,
-and vector similarity scoring.
-"""
-from typing import List, Dict, Any, TypedDict
-import re
+"""Source-aware lexical, concept-heuristic, and embedding retrieval helpers."""
+
+from typing import Any, Dict, List, Optional, Protocol, TypedDict
 import math
+import re
+
+EMBEDDING_CONTRACT_VERSION = "moonwitness.embedding.v1"
+
+
+class Passage(TypedDict, total=False):
+    id: str
+    source_type: str
+    reference: str
+    arabic: str
+    translation: str
+    keywords: List[str]
+    provenance_id: Optional[int]
+    source_revision: str
+
+
+class EmbeddingContract(TypedDict):
+    contract_version: str
+    provider: str
+    model: str
+    model_version: str
+    dimensions: int
+    text_normalization_version: str
+
+
+class EmbeddingProvider(Protocol):
+    contract: EmbeddingContract
+
+    async def embed(self, texts: List[str]) -> List[List[float]]:
+        ...
 
 
 class ScoredPassage(TypedDict):
@@ -14,115 +40,18 @@ class ScoredPassage(TypedDict):
     reference: str
     similarity_score: float
     excerpt: str
+    match_type: str
+    provenance_id: Optional[int]
+    source_revision: Optional[str]
+    embedding_model: Optional[str]
+    embedding_version: Optional[str]
+    embedding_contract_version: Optional[str]
+    embedding_dim: Optional[int]
 
 
-# Canonical sample passages for in-memory semantic indexing
-CANONICAL_INDEX: List[Dict[str, Any]] = [
-    {
-        "id": "quran:2:189",
-        "source_type": "SCRIPTURE",
-        "reference": "QS Al-Baqarah 2:189",
-        "arabic": "يَسْأَلُونَكَ عَنِ الْأَهِلَّةِ قُلْ هِيَ مَوَاقِيتُ لِلنَّاسِ وَالْحَجِّ",
-        "translation": "Mereka bertanya kepadamu tentang bulan sabit. Katakanlah: Bulan sabit itu adalah tanda-tanda waktu bagi manusia dan (bagi ibadah) haji.",
-        "keywords": ["hilal", "bulan", "sabit", "waktu", "haji", "ahillah", "crescent", "moon"],
-    },
-    {
-        "id": "quran:10:5",
-        "source_type": "SCRIPTURE",
-        "reference": "QS Yunus 10:5",
-        "arabic": "هُوَ الَّذِي جَعَلَ الشَّمْسَ ضِيَاءً وَالْقَمَرَ نُورًا وَقَدَّرَهُ مَنَازِلَ لِتَعْلَمُوا عَدَدَ السِّنِينَ وَالْحِسَابَ",
-        "translation": "Dialah yang menjadikan matahari bersinar dan bulan bercahaya dan ditetapkan-Nya manzilah-manzilah (tempat-tempat) bagi perjalanan bulan itu, supaya kamu mengetahui bilangan tahun dan perhitungan (waktu).",
-        "keywords": ["matahari", "bulan", "manzilah", "orbit", "tahun", "hisab", "perhitungan", "sun", "celestial"],
-    },
-    {
-        "id": "quran:36:39",
-        "source_type": "SCRIPTURE",
-        "reference": "QS Yasin 36:39",
-        "arabic": "وَالْقَمَرَ قَدَّرْنَاهُ مَنَازِلَ حَتَّىٰ عَادَ كَالْعُرْجُونِ الْقَدِيمِ",
-        "translation": "Dan telah Kami tetapkan bagi bulan manzilah-manzilah, sehingga (setelah dia sampai ke manzilah yang terakhir) kembalilah dia sebagai bentuk tandan yang tua.",
-        "keywords": ["bulan", "manzilah", "urjun", "fase", "lunar", "cycle"],
-    },
-    {
-        "id": "hadith:bukhari:1909",
-        "source_type": "HADITH",
-        "reference": "Shahih Bukhari No. 1909",
-        "arabic": "صُومُوا لِرُؤْيَتِهِ وَأَفْطِرُوا لِرُؤْيَتِهِ",
-        "translation": "Berpuasalah kalian karena melihat hilal (rukyah), dan berbukalah (berhari raya) karena melihatnya.",
-        "keywords": ["puasa", "rukyah", "hilal", "ramadhan", "syawal", "bukhari"],
-    },
-]
-
-
-def normalize_arabic(text: str) -> str:
-    """Normalize Arabic text by stripping diacritics (tashkeel) and standardizing glyphs."""
-    # Remove harakat / diacritics
-    tashkeel = re.compile(r'[\u064B-\u0652\u0670\u0640]')
-    text = tashkeel.sub('', text)
-    # Standardize Alef
-    text = re.sub(r'[إأآا]', 'ا', text)
-    # Standardize Yaa & Alef Maqsura
-    text = re.sub(r'[يى]', 'ي', text)
-    # Standardize Taa Marbuta & Haa
-    text = re.sub(r'ة', 'ه', text)
-    return text.strip()
-
-
-def tokenize(text: str) -> List[str]:
-    """Tokenize and lowercase text, stripping punctuation."""
-    norm = normalize_arabic(text.lower())
-    words = re.findall(r'\b\w+\b', norm)
-    return [w for w in words if len(w) > 1]
-
-
-def compute_bm25_similarity(query: str, top_k: int = 5) -> List[ScoredPassage]:
-    """
-    Search indexed canonical passages using term-frequency and keyword relevance scoring.
-    """
-    query_tokens = set(tokenize(query))
-    if not query_tokens:
-        return []
-
-    scored: List[ScoredPassage] = []
-
-    for doc in CANONICAL_INDEX:
-        doc_tokens = set(
-            tokenize(doc["translation"]) +
-            tokenize(doc["arabic"]) +
-            [k.lower() for k in doc.get("keywords", [])]
-        )
-
-        intersection = query_tokens.intersection(doc_tokens)
-        if not intersection:
-            continue
-
-        # Jaccard + token overlap weighted score
-        overlap_score = len(intersection) / math.sqrt(len(query_tokens) * len(doc_tokens))
-        score = min(0.99, round(overlap_score + 0.25 * (len(intersection) / len(query_tokens)), 3))
-
-        scored.append(
-            ScoredPassage(
-                id=doc["id"],
-                source_type=doc["source_type"],
-                reference=doc["reference"],
-                similarity_score=score,
-                excerpt=doc["translation"],
-            )
-        )
-
-    # Sort descending by similarity score
-    scored.sort(key=lambda p: p["similarity_score"], reverse=True)
-    return scored[:top_k]
-
-
-class HybridSearchHit(TypedDict):
-    id: str
-    source_type: str
-    reference: str
-    excerpt: str
-    similarity_score: float
+class HybridSearchHit(ScoredPassage):
     bm25_score: float
     dense_score: float
-    match_type: str
 
 
 class HybridSearchResult(TypedDict):
@@ -132,113 +61,372 @@ class HybridSearchResult(TypedDict):
     results: List[HybridSearchHit]
 
 
-# Semantic concept dimensions for dense vector representation
+class ConceptHeuristicHit(TypedDict):
+    id: str
+    source_type: str
+    reference: str
+    similarity_score: float
+    lexical_score: float
+    concept_score: float
+    excerpt: str
+    match_type: str
+    provenance_id: Optional[int]
+    source_revision: Optional[str]
+
+
+class ConceptHeuristicResult(TypedDict):
+    query: str
+    total_hits: int
+    alpha: float
+    results: List[ConceptHeuristicHit]
+
+
+class NullEmbeddingProvider:
+    contract: EmbeddingContract = {
+        "contract_version": EMBEDDING_CONTRACT_VERSION,
+        "provider": "unconfigured",
+        "model": "none",
+        "model_version": "none",
+        "dimensions": 0,
+        "text_normalization_version": "arabic-normalization.v1",
+    }
+
+    async def embed(self, texts: List[str]) -> List[List[float]]:
+        raise RuntimeError("No production embedding provider is configured")
+
+
+_active_embedding_provider: EmbeddingProvider = NullEmbeddingProvider()
+
+
+def set_embedding_provider(provider: EmbeddingProvider) -> None:
+    contract = provider.contract
+    if (
+        contract.get("contract_version") != EMBEDDING_CONTRACT_VERSION
+        or not contract.get("provider")
+        or not contract.get("model")
+        or not contract.get("model_version")
+        or not isinstance(contract.get("dimensions"), int)
+        or contract["dimensions"] <= 0
+        or not contract.get("text_normalization_version")
+    ):
+        raise ValueError("Embedding provider does not satisfy the versioned embedding contract")
+    global _active_embedding_provider
+    _active_embedding_provider = provider
+
+
+def reset_embedding_provider() -> None:
+    global _active_embedding_provider
+    _active_embedding_provider = NullEmbeddingProvider()
+
+
+def get_embedding_provider() -> EmbeddingProvider:
+    return _active_embedding_provider
+
+
+def normalize_arabic(text: str) -> str:
+    text = re.sub(r"[\u064B-\u0652\u0670\u0640]", "", text)
+    text = re.sub(r"[إأآا]", "ا", text)
+    text = re.sub(r"[يى]", "ي", text)
+    text = re.sub(r"ة", "ه", text)
+    return text.strip()
+
+
+def tokenize(text: str) -> List[str]:
+    normalized = normalize_arabic(text.lower())
+    return [
+        token for token in re.findall(r"[\w]+", normalized, flags=re.UNICODE)
+        if len(token) > 1
+    ]
+
+
+def _passage_text(passage: Passage) -> str:
+    return " ".join(
+        [
+            passage.get("arabic", ""),
+            passage.get("translation", ""),
+            *passage.get("keywords", []),
+        ]
+    )
+
+
+def _passage_excerpt(passage: Passage) -> str:
+    return passage.get("translation") or passage.get("arabic") or ""
+
+
+def _base_hit(passage: Passage, score: float, match_type: str) -> ScoredPassage:
+    return ScoredPassage(
+        id=passage["id"],
+        source_type=passage["source_type"],
+        reference=passage["reference"],
+        similarity_score=score,
+        excerpt=_passage_excerpt(passage),
+        match_type=match_type,
+        provenance_id=passage.get("provenance_id"),
+        source_revision=passage.get("source_revision"),
+        embedding_model=None,
+        embedding_version=None,
+        embedding_contract_version=None,
+        embedding_dim=None,
+    )
+
+
+def compute_bm25_similarity(
+    query: str, passages: List[Passage], top_k: int = 5
+) -> List[ScoredPassage]:
+    query_terms = set(tokenize(query))
+    if not query_terms or not passages:
+        return []
+
+    documents = [
+        (passage, tokenize(_passage_text(passage)))
+        for passage in passages
+    ]
+    average_length = sum(len(tokens) for _, tokens in documents) / len(documents)
+    k1 = 1.2
+    b = 0.75
+    scored: List[ScoredPassage] = []
+
+    for passage, tokens in documents:
+        frequencies: Dict[str, int] = {}
+        for token in tokens:
+            frequencies[token] = frequencies.get(token, 0) + 1
+        score = 0.0
+        for term in query_terms:
+            frequency = frequencies.get(term, 0)
+            if not frequency:
+                continue
+            document_frequency = sum(
+                1 for _, candidate_tokens in documents if term in candidate_tokens
+            )
+            inverse_document_frequency = math.log(
+                1 + (len(documents) - document_frequency + 0.5)
+                / (document_frequency + 0.5)
+            )
+            length_normalization = k1 * (
+                1 - b + b * len(tokens) / average_length
+            )
+            score += inverse_document_frequency * (
+                frequency * (k1 + 1) / (frequency + length_normalization)
+            )
+        if score > 0:
+            scored.append(_base_hit(passage, score, "LEXICAL_BM25"))
+
+    scored = [hit for hit in scored if hit["similarity_score"] > 0]
+    scored.sort(key=lambda hit: (-hit["similarity_score"], hit["id"]))
+    return scored[: max(0, top_k)]
+
+
+def _validate_embeddings(
+    embeddings: List[List[float]], expected_count: int, dimensions: int
+) -> None:
+    if len(embeddings) != expected_count:
+        raise ValueError("Embedding provider returned an unexpected number of vectors")
+    for vector in embeddings:
+        if len(vector) != dimensions or any(not math.isfinite(value) for value in vector):
+            raise ValueError("Embedding provider returned a vector with invalid dimensions or values")
+
+
+def _cosine_similarity(left: List[float], right: List[float]) -> float:
+    dot = sum(left_value * right_value for left_value, right_value in zip(left, right))
+    left_norm = math.sqrt(sum(value * value for value in left))
+    right_norm = math.sqrt(sum(value * value for value in right))
+    return dot / (left_norm * right_norm) if left_norm and right_norm else 0.0
+
+
+async def compute_embedding_similarity(
+    query: str,
+    passages: List[Passage],
+    top_k: int = 5,
+    provider: Optional[EmbeddingProvider] = None,
+) -> List[ScoredPassage]:
+    active_provider = provider or get_embedding_provider()
+    contract = active_provider.contract
+    if contract["provider"] == "unconfigured" or contract["dimensions"] <= 0:
+        raise RuntimeError("No production embedding provider is configured")
+    if not query.strip() or not passages:
+        return []
+
+    vectors = await active_provider.embed(
+        [query, *[_passage_text(passage) for passage in passages]]
+    )
+    _validate_embeddings(vectors, len(passages) + 1, contract["dimensions"])
+    query_vector = vectors[0]
+    scored: List[ScoredPassage] = []
+
+    for passage, vector in zip(passages, vectors[1:]):
+        hit = _base_hit(
+            passage,
+            _cosine_similarity(query_vector, vector),
+            "SEMANTIC_EMBEDDING",
+        )
+        hit["embedding_model"] = contract["model"]
+        hit["embedding_version"] = contract["model_version"]
+        hit["embedding_contract_version"] = contract["contract_version"]
+        hit["embedding_dim"] = contract["dimensions"]
+        scored.append(hit)
+
+    scored.sort(key=lambda hit: (-hit["similarity_score"], hit["id"]))
+    return scored[: max(0, top_k)]
+
+
+async def compute_hybrid_search(
+    query: str,
+    passages: List[Passage],
+    top_k: int = 5,
+    alpha: float = 0.5,
+    provider: Optional[EmbeddingProvider] = None,
+) -> HybridSearchResult:
+    if not math.isfinite(alpha) or not 0 <= alpha <= 1:
+        raise ValueError("Hybrid lexical weight alpha must be between 0 and 1")
+    active_provider = provider or get_embedding_provider()
+    lexical_hits = compute_bm25_similarity(query, passages, top_k * 2)
+    semantic_hits = await compute_embedding_similarity(
+        query, passages, top_k * 2, active_provider
+    )
+    maximum_lexical_score = max(
+        (hit["similarity_score"] for hit in lexical_hits), default=0.0
+    )
+    hit_map: Dict[str, HybridSearchHit] = {}
+
+    for hit in lexical_hits:
+        hit_map[hit["id"]] = HybridSearchHit(
+            **hit,
+            bm25_score=(
+                hit["similarity_score"] / maximum_lexical_score
+                if maximum_lexical_score
+                else 0.0
+            ),
+            dense_score=0.0,
+        )
+
+    for hit in semantic_hits:
+        existing = hit_map.get(hit["id"])
+        if existing is None:
+            existing = HybridSearchHit(
+                **hit,
+                bm25_score=0.0,
+                dense_score=0.0,
+            )
+            hit_map[hit["id"]] = existing
+        existing["dense_score"] = hit["similarity_score"]
+        existing["embedding_model"] = hit["embedding_model"]
+        existing["embedding_version"] = hit["embedding_version"]
+        existing["embedding_contract_version"] = hit["embedding_contract_version"]
+        existing["embedding_dim"] = hit["embedding_dim"]
+
+    results = list(hit_map.values())
+    for hit in results:
+        has_lexical = hit["bm25_score"] > 0
+        has_embedding = hit["dense_score"] != 0
+        hit["similarity_score"] = (
+            alpha * hit["bm25_score"] + (1 - alpha) * hit["dense_score"]
+        )
+        hit["match_type"] = (
+            "HYBRID_FUSION" if has_lexical and has_embedding
+            else "SEMANTIC_EMBEDDING" if has_embedding
+            else "LEXICAL_BM25"
+        )
+
+    results = [hit for hit in results if hit["similarity_score"] > 0]
+    results.sort(key=lambda hit: (-hit["similarity_score"], hit["id"]))
+    selected = results[: max(0, top_k)]
+    return {
+        "query": query,
+        "total_hits": len(selected),
+        "alpha": alpha,
+        "results": selected,
+    }
+
+
 CONCEPT_VOCABULARY: Dict[str, List[str]] = {
-    "LUNAR_CALENDAR": ["hilal", "crescent", "bulan", "sabit", "manzilah", "ahillah", "orbit", "fase", "urjun", "lunar", "moon"],
-    "CELESTIAL_COSMOLOGY": ["matahari", "bulan", "bintang", "astronomi", "falak", "shams", "qamar", "celestial", "sun", "syams", "kosmos"],
-    "FASTING_RAMADHAN": ["puasa", "ramadhan", "shaum", "sawm", "iftar", "sahur", "syawal", "rukyah", "berpuasa", "fasting"],
-    "PRAYER_DEVOTION": ["salat", "sholat", "prayer", "qibla", "kiblat", "sujud", "ruku", "fajr", "maghrib", "dhuhr", "asr", "isha", "ibadah"],
-    "PILGRIMAGE_HAJJ": ["haji", "hajj", "umrah", "makkah", "kaaba", "tawaf", "arafah", "ihram", "pilgrimage"],
-    "TIME_CALCULATION": ["waktu", "tahun", "hisab", "perhitungan", "bilangan", "time", "calendar", "calculation", "years"],
+    "LUNAR_CALENDAR": [
+        "hilal", "crescent", "bulan", "sabit", "manzilah", "ahillah",
+        "orbit", "fase", "urjun", "lunar", "moon",
+    ],
+    "CELESTIAL_COSMOLOGY": [
+        "matahari", "bulan", "bintang", "astronomi", "falak", "shams",
+        "qamar", "celestial", "sun", "syams", "kosmos",
+    ],
+    "FASTING_RAMADHAN": [
+        "puasa", "ramadhan", "shaum", "sawm", "iftar", "sahur",
+        "syawal", "rukyah", "berpuasa", "fasting",
+    ],
+    "PRAYER_DEVOTION": [
+        "salat", "sholat", "prayer", "qibla", "kiblat", "sujud",
+        "ruku", "fajr", "maghrib", "dhuhr", "asr", "isha", "ibadah",
+    ],
+    "PILGRIMAGE_HAJJ": [
+        "haji", "hajj", "umrah", "makkah", "kaaba", "tawaf",
+        "arafah", "ihram", "pilgrimage",
+    ],
+    "TIME_CALCULATION": [
+        "waktu", "tahun", "hisab", "perhitungan", "bilangan", "time",
+        "calendar", "calculation", "years",
+    ],
 }
 
 
-def encode_concept_vector(tokens: List[str]) -> List[float]:
-    """
-    Project text tokens into a dense normalized vector space based on semantic concept dimensions.
-    """
+def _concept_vector(tokens: List[str]) -> List[float]:
     token_set = set(tokens)
-    vector: List[float] = []
-
-    for _, keywords in CONCEPT_VOCABULARY.items():
-        overlap = len(token_set.intersection(set(keywords)))
-        vector.append(float(overlap))
-
-    # Calculate L2 norm
-    norm = math.sqrt(sum(x * x for x in vector))
-    if norm > 0.0:
-        return [round(x / norm, 4) for x in vector]
-    return [0.0] * len(CONCEPT_VOCABULARY)
+    vector = [
+        float(any(term in token_set for term in vocabulary))
+        for vocabulary in CONCEPT_VOCABULARY.values()
+    ]
+    norm = math.sqrt(sum(component * component for component in vector))
+    return [component / norm for component in vector] if norm else vector
 
 
-def cosine_similarity(v1: List[float], v2: List[float]) -> float:
-    """Compute cosine similarity between two unit vectors."""
-    dot = sum(a * b for a, b in zip(v1, v2))
-    return max(0.0, min(1.0, dot))
-
-
-def compute_hybrid_search(
+def compute_concept_heuristic_search(
     query: str,
+    passages: List[Passage],
     top_k: int = 5,
     alpha: float = 0.5,
-) -> HybridSearchResult:
-    """
-    Execute hybrid search fusing BM25 lexical term overlap with dense semantic concept embeddings:
-    Score = alpha * BM25 + (1 - alpha) * CosineSimilarity(Dense)
-    """
+) -> ConceptHeuristicResult:
+    if not math.isfinite(alpha) or not 0 <= alpha <= 1:
+        raise ValueError("Concept lexical weight alpha must be between 0 and 1")
     query_tokens = tokenize(query)
-    if not query_tokens:
-        return HybridSearchResult(query=query, total_hits=0, alpha=alpha, results=[])
+    query_vector = _concept_vector(query_tokens)
+    lexical_hits = compute_bm25_similarity(query, passages, top_k=len(passages))
+    lexical_scores = {
+        hit["id"]: hit["similarity_score"] for hit in lexical_hits
+    }
+    lexical_max = max(lexical_scores.values(), default=0.0)
+    lexical_scores = {
+        key: value / lexical_max if lexical_max else 0.0
+        for key, value in lexical_scores.items()
+    }
 
-    query_vector = encode_concept_vector(query_tokens)
-    query_token_set = set(query_tokens)
-
-    hits: List[HybridSearchHit] = []
-
-    for doc in CANONICAL_INDEX:
-        doc_tokens = (
-            tokenize(doc["translation"])
-            + tokenize(doc["arabic"])
-            + [k.lower() for k in doc.get("keywords", [])]
-        )
-        doc_token_set = set(doc_tokens)
-        doc_vector = encode_concept_vector(doc_tokens)
-
-        # 1. Lexical BM25 component
-        intersection = query_token_set.intersection(doc_token_set)
-        if intersection:
-            overlap = len(intersection) / math.sqrt(len(query_token_set) * len(doc_token_set))
-            bm25_score = min(0.99, round(overlap + 0.25 * (len(intersection) / len(query_token_set)), 3))
-        else:
-            bm25_score = 0.0
-
-        # 2. Dense Semantic component
-        dense_score = round(cosine_similarity(query_vector, doc_vector), 3)
-
-        # 3. Hybrid fusion
-        if bm25_score == 0.0 and dense_score == 0.0:
+    scored: List[ConceptHeuristicHit] = []
+    for passage in passages:
+        passage_vector = _concept_vector(tokenize(_passage_text(passage)))
+        concept_score = _cosine_similarity(query_vector, passage_vector)
+        lexical_score = lexical_scores.get(passage["id"], 0.0)
+        if lexical_score == 0 and concept_score == 0:
             continue
-
-        fused_score = round(alpha * bm25_score + (1.0 - alpha) * dense_score, 3)
-
-        if bm25_score > 0.0 and dense_score > 0.0:
-            match_type = "HYBRID"
-        elif dense_score > bm25_score:
-            match_type = "SEMANTIC"
-        else:
-            match_type = "LEXICAL"
-
-        hits.append(
-            HybridSearchHit(
-                id=doc["id"],
-                source_type=doc["source_type"],
-                reference=doc["reference"],
-                excerpt=doc["translation"],
-                similarity_score=fused_score,
-                bm25_score=bm25_score,
-                dense_score=dense_score,
-                match_type=match_type,
-            )
+        match_type = (
+            "LEXICAL_CONCEPT"
+            if lexical_score > 0 and concept_score > 0
+            else "CONCEPT_HEURISTIC" if concept_score > 0
+            else "LEXICAL_BM25"
         )
+        scored.append(ConceptHeuristicHit(
+            id=passage["id"],
+            source_type=passage["source_type"],
+            reference=passage["reference"],
+            similarity_score=alpha * lexical_score + (1 - alpha) * concept_score,
+            lexical_score=lexical_score,
+            concept_score=concept_score,
+            excerpt=_passage_excerpt(passage),
+            match_type=match_type,
+            provenance_id=passage.get("provenance_id"),
+            source_revision=passage.get("source_revision"),
+        ))
 
-    # Sort descending by fused similarity score
-    hits.sort(key=lambda h: h["similarity_score"], reverse=True)
-    selected_hits = hits[:top_k]
-
-    return HybridSearchResult(
-        query=query,
-        total_hits=len(selected_hits),
-        alpha=alpha,
-        results=selected_hits,
-    )
-
+    scored.sort(key=lambda hit: (-hit["similarity_score"], hit["id"]))
+    selected = scored[: max(0, top_k)]
+    return {
+        "query": query,
+        "total_hits": len(selected),
+        "alpha": alpha,
+        "results": selected,
+    }

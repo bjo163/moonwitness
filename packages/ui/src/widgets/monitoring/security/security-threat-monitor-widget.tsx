@@ -2,25 +2,29 @@
 
 import React from "react"
 import { ShieldAlert, Crosshair } from "lucide-react"
-import { type CyberAttack } from "@moon/client"
+import { type CyberAttack, type SourceStatus } from "@moon/client"
 
 export function SecurityThreatMonitorWidget({
   cyberAttacks = [],
+  status = "UNAVAILABLE",
 }: {
   cyberAttacks?: CyberAttack[]
+  status?: SourceStatus
 }) {
+  const noKnownEvents = status === "UNAVAILABLE" && cyberAttacks.length === 0
+
   return (
     <div className="bg-background flex flex-col rounded-xl border border-destructive/30 p-4 shadow-sm lg:col-span-12 xl:col-span-8 font-sans">
       <div className="mb-4 flex items-center justify-between border-b border-destructive/20 pb-2">
         <div className="flex items-center gap-2 text-xs font-semibold text-destructive">
           <ShieldAlert className="h-4 w-4" />
           <span>Security Threat Monitor</span>
-          <span className="rounded-md border border-destructive/50 bg-destructive/10 px-1.5 py-0.5 text-[10px]">
-            Alert Active
+          <span className="rounded-md border border-border bg-muted/30 px-1.5 py-0.5 text-[10px] text-muted-foreground">
+            {status}
           </span>
         </div>
         <div className="text-xs text-muted-foreground">
-          Events Detected: {cyberAttacks.length}
+          Events detected: {noKnownEvents ? "—" : cyberAttacks.length}
         </div>
       </div>
 
@@ -36,12 +40,16 @@ export function SecurityThreatMonitorWidget({
         <div className="hide-scrollbar flex h-[200px] flex-col space-y-1 overflow-y-auto">
           {cyberAttacks.length === 0 ? (
             <div className="py-10 text-center text-xs text-muted-foreground">
-              Monitoring network activity...
+              {status === "UNAVAILABLE"
+                ? "Security event source unavailable. No event count is available."
+                : status === "SIMULATED"
+                  ? "Security event source is simulated for demonstration only."
+                  : "No verified security events were returned."}
             </div>
           ) : (
-            cyberAttacks.map((attack, index) => (
+            cyberAttacks.map((attack) => (
               <div
-                key={index}
+                key={attack.id}
                 className="grid grid-cols-12 items-center gap-4 rounded-lg bg-card/60 px-2 py-1.5 font-mono text-[10px] text-foreground hover:bg-muted/40 transition-colors"
               >
                 <div className="col-span-2 text-muted-foreground">
@@ -59,7 +67,7 @@ export function SecurityThreatMonitorWidget({
                 </div>
                 <div className="col-span-2 text-right">
                   <span className="rounded-md border border-destructive/30 bg-destructive/10 px-1.5 py-0.5 text-[9px] text-destructive">
-                    INTERCEPTED
+                    EVENT
                   </span>
                 </div>
               </div>

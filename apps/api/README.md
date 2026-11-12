@@ -34,10 +34,21 @@ pnpm db:verify
 
 | Variable | Description | Default |
 |---|---|---|
-| `DATABASE_URL` | PostgreSQL connection string with pgvector | `postgres://localhost:5432/moonwitness` |
+| `DATABASE_URL` | PostgreSQL connection string; SQLite remains available for local development | `postgres://localhost:5432/moonwitness` |
 | `JWT_SECRET` | Secret key for signing and verifying tokens | `your-secret-key` |
 | `API_PORT` | Port for the HTTP / SSE API | `4000` |
 | `BOOTSTRAP_ADMIN_EMAIL` | Superuser bootstrap email | `operator@moonwitness.org` |
+| `EMBEDDING_API_URL` | OpenAI-compatible embeddings endpoint; optional | Unset |
+| `EMBEDDING_API_KEY` | Credential for the configured embedding provider; optional | Unset |
+| `EMBEDDING_PROVIDER` | Provider identifier recorded in embedding metadata | `openai-compatible` |
+| `EMBEDDING_MODEL` | Embedding model identifier | Unset |
+| `EMBEDDING_MODEL_VERSION` | Immutable model/version identifier recorded with results | Unset |
+| `EMBEDDING_DIMENSIONS` | Expected vector dimension | Unset |
+| `EMBEDDING_TEXT_NORMALIZATION_VERSION` | Text preprocessing contract version | `arabic-normalization.v1` |
+
+Canonical lexical search reads the Witness graph. Hybrid/vector search remains
+unavailable until a canonical vector index is provisioned and certified; setting
+an embedding provider alone does not enable production RAG.
 
 ---
 

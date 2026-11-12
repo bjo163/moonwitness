@@ -11,6 +11,7 @@
       "@workspace/ui": ["../../packages/ui/src/index.ts"],
       "@moon/client": ["../../packages/moon-client/src/index.ts"],
       "@moon/client/*": ["../../packages/moon-client/src/*"],
+      "@moon/protocol": ["../../packages/moon-protocol/src/index.ts"],
       "@moon/time": ["../../packages/moon-time/src/index.ts"]
     },
     "plugins": [

@@ -1,127 +1,198 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
-import { TrendingUp, TrendingDown, DollarSign, Activity } from "lucide-react"
-import { apiGet } from "@moon/client"
+import { useEffect, useRef, useState } from "react"
+import { TrendingUp, TrendingDown, DollarSign } from "lucide-react"
+import {
+  apiGet,
+  sourceFailureMeta,
+  summarizeSourceStatus,
+  type SourceMeta,
+  type SourceStatus,
+} from "@moon/client"
 
-type CryptoAsset = {
+type MarketAsset = {
   symbol: string
   name: string
+}
+
+type MarketQuote = MarketAsset & {
   price: number
   change24h: number
 }
 
-const ASSETS = [
+const ASSETS: readonly MarketAsset[] = [
   { symbol: "BTCUSDT", name: "Bitcoin" },
   { symbol: "ETHUSDT", name: "Ethereum" },
   { symbol: "SOLUSDT", name: "Solana" },
-  { symbol: "BNBUSDT", name: "Binance Coin" },
-  { symbol: "XRPUSDT", name: "Ripple" },
+  { symbol: "BNBUSDT", name: "BNB" },
+  { symbol: "XRPUSDT", name: "XRP" },
 ]
 
-export function FinancialMarketsWidget() {
-  const [markets, setMarkets] = useState<CryptoAsset[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+const STATUS_CLASSES: Record<SourceStatus, string> = {
+  LIVE: "border-success/30 bg-success/10 text-success",
+  CACHED: "border-info/30 bg-info/10 text-info",
+  STALE: "border-warning/30 bg-warning/10 text-warning",
+  UNAVAILABLE: "border-destructive/30 bg-destructive/10 text-destructive",
+  SIMULATED: "border-secondary/30 bg-secondary/10 text-secondary",
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null
+}
+
+export function FinancialMarketsWidget({
+  onSourceMeta,
+}: {
+  onSourceMeta?: (source: SourceMeta) => void
+}) {
+  const [quotesBySymbol, setQuotesBySymbol] = useState<
+    Record<string, MarketQuote>
+  >({})
+  const [sourceMeta, setSourceMeta] = useState<SourceMeta[]>([])
+  const successfulAt = useRef(new Map<string, number>())
 
   useEffect(() => {
     let isMounted = true
+    const updateSource = (metadata: SourceMeta) => {
+      if (!isMounted) return
+      setSourceMeta((current) => [
+        ...current.filter((entry) => entry.source !== metadata.source),
+        metadata,
+      ])
+      onSourceMeta?.(metadata)
+    }
 
-    const fetchMarkets = async () => {
+    const loadQuote = async (asset: MarketAsset) => {
+      const source = `market-${asset.symbol.toLowerCase()}`
       try {
-        const promises = ASSETS.map(async (asset) => {
-          const data = await apiGet<any>(
-            `/api/external/binance/ticker?symbol=${asset.symbol}`
-          )
-          return {
-            symbol: asset.symbol,
-            name: asset.name,
-            price: parseFloat(data.lastPrice),
-            change24h: parseFloat(data.priceChangePercent),
-          }
-        })
-
-        const results = await Promise.all(promises)
-        if (isMounted) {
-          setMarkets(results)
-          setIsLoading(false)
+        const payload = await apiGet<unknown>(
+          `/api/external/binance/ticker?symbol=${asset.symbol}`
+        )
+        if (!isRecord(payload)) {
+          throw new Error("Market response is not an object")
         }
-      } catch (e) {
-        console.error("Failed to fetch market data", e)
+        const price = Number(payload.lastPrice)
+        const change24h = Number(payload.priceChangePercent)
+        if (!Number.isFinite(price) || !Number.isFinite(change24h)) {
+          throw new Error("Market response contains invalid quote values")
+        }
+
+        const timestamp = Date.now()
+        successfulAt.current.set(source, timestamp)
+        setQuotesBySymbol((current) => ({
+          ...current,
+          [asset.symbol]: { ...asset, price, change24h },
+        }))
+        updateSource({
+          source,
+          status: "LIVE",
+          timestamp,
+          checkedAt: timestamp,
+        })
+      } catch (error) {
+        updateSource(
+          sourceFailureMeta(
+            source,
+            successfulAt.current.get(source),
+            error instanceof Error ? error.message : String(error),
+            Date.now()
+          )
+        )
       }
     }
 
-    fetchMarkets()
-    const interval = setInterval(fetchMarkets, 10000) // Update every 10 seconds
+    const refresh = () => Promise.all(ASSETS.map(loadQuote))
+    for (const asset of ASSETS) {
+      updateSource({
+        source: `market-${asset.symbol.toLowerCase()}`,
+        status: "UNAVAILABLE",
+        timestamp: Date.now(),
+        error: "No successful source response has been received",
+      })
+    }
+    void refresh()
+    const interval = window.setInterval(() => void refresh(), 10 * 1000)
 
     return () => {
       isMounted = false
-      clearInterval(interval)
+      window.clearInterval(interval)
     }
-  }, [])
+  }, [onSourceMeta])
+
+  const summary = summarizeSourceStatus(sourceMeta)
 
   return (
-    <div className="bg-background flex h-full flex-col rounded-xl border border-yellow-500/30 p-4 lg:col-span-12 xl:col-span-4">
-      <div className="mb-4 flex items-center justify-between border-b border-border pb-2">
-        <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-warning uppercase">
-          <DollarSign className="h-4 w-4" />
-          FINANCIAL MARKETS
-          <span className="rounded-[2px] border border-yellow-400/50 bg-yellow-400/20 px-1.5 py-0.5 text-[8px] text-warning">
-            LIVE
-          </span>
+    <section className="flex h-full flex-col rounded-md border border-border bg-card p-4">
+      <div className="mb-3 flex items-center justify-between gap-3 border-b border-border pb-3">
+        <div className="flex items-center gap-2 text-sm font-medium">
+          <DollarSign className="size-4 text-muted-foreground" aria-hidden="true" />
+          <h2>Financial markets · Binance</h2>
         </div>
+        <span
+          className={`rounded-md border px-2 py-1 text-xs ${STATUS_CLASSES[summary.status]}`}
+        >
+          {summary.status}
+        </span>
       </div>
 
-      <div className="flex-1 overflow-hidden">
-        <div className="mb-2 grid grid-cols-12 gap-4 border-b border-border pb-2 text-[8px] font-bold tracking-widest text-foreground/50">
-          <div className="col-span-4">ASSET</div>
-          <div className="col-span-4 text-right">PRICE (USD)</div>
-          <div className="col-span-4 text-right">24H CHANGE</div>
-        </div>
+      <div className="grid grid-cols-3 gap-3 border-b border-border pb-2 text-xs font-medium text-muted-foreground">
+        <span>Asset</span>
+        <span className="text-right">Price (USDT)</span>
+        <span className="text-right">24-hour change</span>
+      </div>
 
-        <div className="hide-scrollbar flex h-[250px] flex-col space-y-1 overflow-y-auto">
-          {isLoading ? (
-            <div className="flex flex-col items-center gap-2 py-10 text-center font-mono text-[10px] text-warning/50">
-              <Activity className="h-6 w-6 animate-pulse" />
-              Connecting to global exchanges...
-            </div>
-          ) : (
-            markets.map((asset, idx) => (
-              <div
-                key={idx}
-                className="group grid grid-cols-12 items-center gap-4 rounded border border-transparent bg-muted/30 px-2 py-2 text-[9px] transition-colors hover:border-yellow-500/30 hover:bg-muted/30"
-              >
-                <div className="col-span-4 font-bold text-foreground transition-colors group-hover:text-warning">
-                  {asset.name}
-                  <div className="text-[7px] text-foreground/40">
-                    {asset.symbol.replace("USDT", "")}
-                  </div>
-                </div>
-                <div className="col-span-4 text-right font-mono font-bold text-foreground">
-                  $
-                  {asset.price > 1000
-                    ? asset.price.toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })
-                    : asset.price.toPrecision(4)}
-                </div>
-                <div className="col-span-4 flex items-center justify-end gap-1 text-right font-mono">
-                  <span
-                    className={`flex items-center gap-1 rounded-sm px-2 py-0.5 font-black ${asset.change24h >= 0 ? "bg-success/20 text-success" : "bg-destructive/20 text-destructive"}`}
-                  >
-                    {asset.change24h >= 0 ? (
-                      <TrendingUp className="h-3 w-3" />
+      <ul className="flex-1 divide-y divide-border">
+        {ASSETS.map((asset) => {
+          const quote = quotesBySymbol[asset.symbol]
+          const source = sourceMeta.find(
+            (entry) =>
+              entry.source === `market-${asset.symbol.toLowerCase()}`
+          )
+          const status = source?.status ?? "UNAVAILABLE"
+
+          return (
+            <li
+              key={asset.symbol}
+              className="grid grid-cols-3 items-center gap-3 py-3 text-xs"
+            >
+              <span className="font-medium">
+                {asset.name}
+                <span className="mt-1 block font-mono text-[10px] text-muted-foreground">
+                  {asset.symbol.replace("USDT", "")} · {status}
+                </span>
+              </span>
+              <span className="text-right font-mono">
+                {quote
+                  ? quote.price.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 6,
+                    })
+                  : "—"}
+              </span>
+              <span className="flex items-center justify-end gap-1 font-mono">
+                {quote ? (
+                  <>
+                    {quote.change24h >= 0 ? (
+                      <TrendingUp
+                        className="size-3 text-success"
+                        aria-hidden="true"
+                      />
                     ) : (
-                      <TrendingDown className="h-3 w-3" />
+                      <TrendingDown
+                        className="size-3 text-destructive"
+                        aria-hidden="true"
+                      />
                     )}
-                    {Math.abs(asset.change24h).toFixed(2)}%
-                  </span>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-    </div>
+                    {quote.change24h.toFixed(2)}%
+                  </>
+                ) : (
+                  "—"
+                )}
+              </span>
+            </li>
+          )
+        })}
+      </ul>
+    </section>
   )
 }

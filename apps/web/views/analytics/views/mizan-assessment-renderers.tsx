@@ -1,11 +1,9 @@
 "use client"
 
 import { Activity, Cpu, Scale, ShieldAlert, Sparkles } from "lucide-react"
+import type { MizanMethodPreview } from "@moon/protocol"
 
-export type MethodDecision = {
-  method: "general" | "general_limited" | "prophetic"
-  limitation?: string
-}
+export type MethodDecision = MizanMethodPreview
 
 type AssessmentOption = {
   label: string
@@ -49,7 +47,8 @@ export function MizanAssessmentParameters({
         <h3 className="text-sm font-black tracking-wider text-foreground uppercase">Assessment Parameters</h3>
       </div>
       <p className="text-xs text-muted-foreground">
-        Toggle the parameters below to observe how the Mizan engine determines the final assessment method for a given case.
+        Toggle the parameters to preview method eligibility. This does not
+        finalize an assessment or replace evidence review.
       </p>
       <div className="mt-2 flex flex-col gap-4">
         {ASSESSMENT_OPTIONS.map((option, index) => {
@@ -88,11 +87,13 @@ type AccentName = keyof typeof ACCENT_COLORS
 
 export function MizanAssessmentOutput({
   method,
+  eligibleForProphetic,
   limitation,
   isResolving,
   accent,
 }: {
   method?: MethodDecision["method"]
+  eligibleForProphetic?: MethodDecision["eligible_for_prophetic"]
   limitation?: string
   isResolving: boolean
   accent: AccentName
@@ -111,7 +112,7 @@ export function MizanAssessmentOutput({
           <div className={`absolute inset-0 animate-ping rounded-full ${currentAccent.border}/50 opacity-20`} />
           <Scale className={`h-12 w-12 ${currentAccent.text}`} />
         </div>
-        <h4 className="mb-2 font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">Selected Method</h4>
+        <h4 className="mb-2 font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">Preview Candidate</h4>
         <div className={`mb-4 text-center font-sans text-3xl font-black tracking-wider uppercase transition-colors duration-300 ${currentAccent.text}`}>
           {isResolving ? "resolving" : method?.replace("_", " ") || "unavailable"}
         </div>
@@ -122,16 +123,22 @@ export function MizanAssessmentOutput({
           </div>
         ) : isResolving ? (
           <div className="mt-4 rounded-full border border-border bg-card/50 px-6 py-2 font-mono text-xs tracking-widest text-muted-foreground uppercase">Resolving through Mizan engine</div>
+        ) : method ? (
+          <div className="mt-4 max-w-sm rounded-md border border-info/30 bg-info/10 px-4 py-3 text-center text-xs leading-relaxed text-info">
+            {eligibleForProphetic
+              ? "Eligible for Prophetic review. Final method still requires a verified, relevant reference contribution."
+              : "Preview only. No final assessment has been produced."}
+          </div>
         ) : (
-          <div className="mt-4 flex items-center gap-2 rounded-full border border-success/30 bg-success/10 px-6 py-2 font-mono text-xs tracking-widest text-success uppercase">
-            <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500 shadow-emerald-500/30" /> Optimal Path
+          <div className="mt-4 rounded-md border border-destructive/30 bg-destructive/10 px-4 py-3 text-xs text-destructive">
+            Preview unavailable.
           </div>
         )}
       </div>
       <div className="relative z-10 mt-auto border-t border-border pt-4">
         <div className="flex items-center justify-between font-mono text-[10px] text-muted-foreground">
-          <span className="flex items-center gap-1.5"><span className={`h-1.5 w-1.5 rounded-full ${currentAccent.bg} shadow-sm`} />STATUS: RESOLVED</span>
-          <span>CONFIDENCE: HIGH</span>
+          <span className="flex items-center gap-1.5"><span className={`h-1.5 w-1.5 rounded-full ${currentAccent.bg}`} />STATUS: {isResolving ? "RESOLVING" : method ? "PREVIEW ONLY" : "UNAVAILABLE"}</span>
+          <span>NOT FINALIZED</span>
         </div>
       </div>
     </div>

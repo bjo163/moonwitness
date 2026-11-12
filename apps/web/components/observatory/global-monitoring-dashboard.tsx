@@ -14,7 +14,12 @@ import {
 } from "lucide-react"
 import { Button } from "@workspace/ui"
 import type { LucideIcon } from "lucide-react"
-import { useGlobalMonitoring, type EarthquakeFeature } from "@moon/client"
+import {
+  summarizeSourceStatus,
+  useGlobalMonitoring,
+  type EarthquakeFeature,
+  type SourceStatus,
+} from "@moon/client"
 import { MetricCard } from "@workspace/ui"
 
 type MonitoringFilter =
@@ -168,14 +173,25 @@ export function GlobalMonitoringDashboard() {
 
   const latestEarthquakes = useMemo(() => [...data.earthquakes].sort((a, b) => b.properties.time - a.properties.time).slice(0, 8), [data.earthquakes])
   const severeEarthquakes = data.earthquakes.filter(({ properties }) => properties.mag >= 5).length
-  const status = data.isLoading ? "Syncing sources" : "Sources current"
+  const sourceSummary = summarizeSourceStatus(data.sourceMeta)
+  const sourceStatuses = new Map(
+    data.sourceMeta.map(({ source, status }) => [source, status])
+  )
+  const statusLabel = data.isLoading
+    ? "Checking sources"
+    : `${sourceSummary.status} · ${sourceSummary.live}/${sourceSummary.total} live`
+  const sourceStatus = (source: string): SourceStatus =>
+    sourceStatuses.get(source) ?? "UNAVAILABLE"
+  const prayerSummary = summarizeSourceStatus(
+    data.sourceMeta.filter(({ source }) => source.startsWith("prayer-"))
+  )
 
   return (
     <div className="min-h-screen bg-background pb-8 text-foreground">
       <div className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
         <header className="flex flex-col gap-5 border-b border-border pb-6 lg:flex-row lg:items-end lg:justify-between">
           <div><p className="text-sm font-medium text-primary">MoonWitness Observatory</p><h1 className="mt-2 text-3xl font-semibold tracking-tight">Global monitoring</h1><p className="mt-2 max-w-2xl text-sm text-muted-foreground">A live view of publicly available environmental, mobility, and space-weather observations.</p></div>
-          <div className="flex items-center gap-3 text-sm text-muted-foreground"><span className={`size-2 rounded-full ${data.isLoading ? "bg-warning" : "bg-success"}`} />{status}<span className="hidden text-border sm:inline">|</span><span>{now ? `${formatTime(now.getTime())} WIB` : "—"}</span></div>
+          <div className="flex items-center gap-3 text-sm text-muted-foreground"><span className={`size-2 rounded-full ${sourceSummary.status === "LIVE" ? "bg-success" : sourceSummary.status === "SIMULATED" ? "bg-primary" : "bg-warning"}`} />{statusLabel}<span className="hidden text-border sm:inline">|</span><span>{now ? `${formatTime(now.getTime())} WIB` : "—"}</span></div>
         </header>
 
         <nav className="flex flex-wrap gap-2" aria-label="Monitoring filters">
@@ -183,10 +199,10 @@ export function GlobalMonitoringDashboard() {
         </nav>
 
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Monitoring summary">
-          <MetricCard label="Earthquakes" value={data.earthquakes.length.toLocaleString()} detail={`${severeEarthquakes} events at M5.0+`} icon={Activity} />
-          <MetricCard label="Aircraft tracked" value={data.flights.length.toLocaleString()} detail="OpenSky positions received" icon={Plane} />
-          <MetricCard label="Prayer stations" value={data.globalPrayers.length.toLocaleString()} detail="Cities with current timings" icon={Waves} />
-          <MetricCard label="Space events" value={data.spaceWeather.length.toLocaleString()} detail={data.issPosition ? "ISS position available" : "ISS position unavailable"} icon={Satellite} />
+          <MetricCard label="Earthquakes" value={data.earthquakes.length.toLocaleString()} detail={`${severeEarthquakes} events at M5.0+ · USGS ${sourceStatus("usgs-earthquakes")}`} icon={Activity} />
+          <MetricCard label="Aircraft tracked" value={data.flights.length.toLocaleString()} detail={`OpenSky positions · ${sourceStatus("opensky-flights")}`} icon={Plane} />
+          <MetricCard label="Prayer stations" value={data.globalPrayers.length.toLocaleString()} detail={`Cities with timings · ${prayerSummary.status}`} icon={Waves} />
+          <MetricCard label="Space events" value={data.spaceWeather.length.toLocaleString()} detail={`DONKI ${sourceStatus("nasa-donki")} · ISS ${sourceStatus("iss-tracker")}`} icon={Satellite} />
         </section>
 
         <section className="grid gap-6 xl:grid-cols-[minmax(0,1.7fr)_minmax(320px,0.8fr)]">
@@ -196,7 +212,7 @@ export function GlobalMonitoringDashboard() {
 
         <section className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(320px,0.9fr)]">
           <article className="rounded-md border border-border bg-card p-5"><div className="mb-5"><h2 className="text-lg font-semibold">Seismic activity</h2><p className="mt-1 text-sm text-muted-foreground">USGS events grouped by observation day.</p></div><ActivityChart earthquakes={data.earthquakes} /></article>
-          <article className="rounded-md border border-border bg-card p-5"><div className="flex items-center gap-3"><CloudSun className="size-5 text-primary" aria-hidden="true" /><div><h2 className="text-lg font-semibold">Source coverage</h2><p className="text-sm text-muted-foreground">Current response counts</p></div></div><dl className="mt-5 divide-y divide-border text-sm"><div className="flex justify-between py-3"><dt className="text-muted-foreground">Prayer stations</dt><dd>{data.globalPrayers.length}</dd></div><div className="flex justify-between py-3"><dt className="text-muted-foreground">Trend records</dt><dd>{data.trends.length}</dd></div><div className="flex justify-between py-3"><dt className="text-muted-foreground">Space weather</dt><dd>{data.spaceWeather.length}</dd></div></dl></article>
+          <article className="rounded-md border border-border bg-card p-5"><div className="flex items-center gap-3"><CloudSun className="size-5 text-primary" aria-hidden="true" /><div><h2 className="text-lg font-semibold">Source coverage</h2><p className="text-sm text-muted-foreground">Response counts with source state</p></div></div><dl className="mt-5 divide-y divide-border text-sm"><div className="flex justify-between py-3"><dt className="text-muted-foreground">Prayer stations · {prayerSummary.status}</dt><dd>{data.globalPrayers.length}</dd></div><div className="flex justify-between py-3"><dt className="text-muted-foreground">Trend records · {sourceStatus("google-trends")}</dt><dd>{data.trends.length}</dd></div><div className="flex justify-between py-3"><dt className="text-muted-foreground">Space weather · {sourceStatus("nasa-donki")}</dt><dd>{data.spaceWeather.length}</dd></div></dl></article>
         </section>
 
         <section className="rounded-md border border-border bg-card"><div className="border-b border-border px-5 py-4"><h2 className="text-lg font-semibold">Recent earthquakes</h2><p className="mt-1 text-sm text-muted-foreground">Latest records from the USGS feed.</p></div><div className="overflow-x-auto"><table className="w-full min-w-[640px] text-left text-sm"><thead className="bg-muted/40 text-xs font-medium text-muted-foreground"><tr><th className="px-5 py-3 font-medium">Magnitude</th><th className="px-5 py-3 font-medium">Location</th><th className="px-5 py-3 font-medium">Observed</th><th className="px-5 py-3 font-medium">Depth</th></tr></thead><tbody className="divide-y divide-border">{latestEarthquakes.map((earthquake) => <tr key={earthquake.id} className={`cursor-pointer transition-colors hover:bg-muted/50 ${selectedEarthquake?.id === earthquake.id ? "bg-primary/5" : ""}`} onClick={() => setSelectedId(earthquake.id)}><td className="px-5 py-3 font-semibold">M{earthquake.properties.mag.toFixed(1)}</td><td className="max-w-sm truncate px-5 py-3">{earthquake.properties.place}</td><td className="px-5 py-3 text-muted-foreground">{formatDate(earthquake.properties.time)} {formatTime(earthquake.properties.time)} WIB</td><td className="px-5 py-3 text-muted-foreground">{earthquake.geometry.coordinates[2].toFixed(1)} km</td></tr>)}{latestEarthquakes.length === 0 && <tr><td className="px-5 py-8 text-center text-muted-foreground" colSpan={4}>No earthquake records are available.</td></tr>}</tbody></table></div></section>

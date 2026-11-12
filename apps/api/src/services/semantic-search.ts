@@ -1,36 +1,36 @@
-/**
- * ◈ MoonWitness AI Knowledge & Semantic Agent Engine (Native TypeScript)
- *
- * Implements Arabic text normalization, tokenization, BM25 term weighting,
- * and lexical/hybrid semantic search across canonical Islamic scriptures & Hadiths.
- */
+export const EMBEDDING_CONTRACT_VERSION = "moonwitness.embedding.v1"
 
 export interface SemanticPassage {
   id: string
   source_type: string
   reference: string
-  arabic: string
-  translation: string
-  keywords: string[]
+  arabic?: string
+  translation?: string
+  keywords?: string[]
+  provenance_id?: number | null
+  source_revision?: string
 }
 
 export interface SemanticSearchHit {
   id: string
   collection: string
-  source_type?: string
-  reference?: string
-  text_ar: string
-  text_en: string
-  excerpt?: string
+  source_type: string
+  reference: string
+  excerpt: string
   score: number
-  similarity_score?: number
+  match_type: "LEXICAL_BM25" | "SEMANTIC_EMBEDDING" | "HYBRID_FUSION"
+  provenance_id?: number | null
+  source_revision?: string
+  embedding_model?: string
+  embedding_version?: string
+  embedding_contract_version?: string
+  embedding_dim?: number
 }
 
 export interface SemanticSearchResult {
   query: string
   normalized_query: string
   total_hits: number
-  total_found?: number
   results: SemanticSearchHit[]
 }
 
@@ -42,7 +42,13 @@ export interface HybridSearchHit {
   similarity_score: number
   bm25_score: number
   dense_score: number
-  match_type: string
+  match_type: "LEXICAL_BM25" | "SEMANTIC_EMBEDDING" | "HYBRID_FUSION"
+  provenance_id?: number | null
+  source_revision?: string
+  embedding_model?: string
+  embedding_version?: string
+  embedding_contract_version?: string
+  embedding_dim?: number
 }
 
 export interface HybridSearchResult {
@@ -52,210 +58,351 @@ export interface HybridSearchResult {
   results: HybridSearchHit[]
 }
 
-// Canonical sample passages for in-memory semantic indexing
-export const CANONICAL_INDEX: SemanticPassage[] = [
-  {
-    id: "quran:2:189",
-    source_type: "SCRIPTURE",
-    reference: "QS Al-Baqarah 2:189",
-    arabic: "يَسْأَلُونَكَ عَنِ الْأَهِلَّةِ قُلْ هِيَ مَوَاقِيتُ لِلنَّاسِ وَالْحَجِّ",
-    translation:
-      "Mereka bertanya kepadamu tentang bulan sabit. Katakanlah: Bulan sabit itu adalah tanda-tanda waktu bagi manusia dan (bagi ibadah) haji.",
-    keywords: ["hilal", "bulan", "sabit", "waktu", "haji", "ahillah", "crescent", "moon", "rukyah"],
-  },
-  {
-    id: "quran:10:5",
-    source_type: "SCRIPTURE",
-    reference: "QS Yunus 10:5",
-    arabic:
-      "هُوَ الَّذِي جَعَلَ الشَّمْسَ ضِيَاءً وَالْقَمَرَ نُورًا وَقَدَّرَهُ مَنَازِلَ لِتَعْلَمُوا عَدَدَ السِّنِينَ وَالْحِسَابَ",
-    translation:
-      "Dialah yang menjadikan matahari bersinar dan bulan bercahaya dan ditetapkan-Nya manzilah-manzilah (tempat-tempat) bagi perjalanan bulan itu, supaya kamu mengetahui bilangan tahun dan perhitungan (waktu).",
-    keywords: ["matahari", "bulan", "manzilah", "orbit", "tahun", "hisab", "perhitungan", "sun", "celestial"],
-  },
-  {
-    id: "quran:36:39",
-    source_type: "SCRIPTURE",
-    reference: "QS Yasin 36:39",
-    arabic: "وَالْقَمَرَ قَدَّرْنَاهُ مَنَازِلَ حَتَّىٰ عَادَ كَالْعُرْجُونِ الْقَدِيمِ",
-    translation:
-      "Dan telah Kami tetapkan bagi bulan manzilah-manzilah, sehingga (setelah dia sampai ke manzilah yang terakhir) kembalilah dia sebagai bentuk tandan yang tua.",
-    keywords: ["bulan", "manzilah", "urjun", "fase", "lunar", "cycle", "orbit"],
-  },
-  {
-    id: "quran:55:5",
-    source_type: "SCRIPTURE",
-    reference: "QS Ar-Rahman 55:5",
-    arabic: "الشَّمْسُ وَالْقَمَرُ بِحُسْبَانٍ",
-    translation: "Matahari dan bulan beredar menurut perhitungan yang pasti.",
-    keywords: ["matahari", "bulan", "hisab", "bihusban", "perhitungan", "presisi", "astronomi"],
-  },
-  {
-    id: "quran:6:96",
-    source_type: "SCRIPTURE",
-    reference: "QS Al-An'am 6:96",
-    arabic: "فَالِقُ الْإِصْبَاحِ وَجَعَلَ اللَّيْلَ سَكَنًا وَالشَّمْسَ وَالْقَمَرَ حُسْبَانًا",
-    translation:
-      "Dia menyingsingkan pagi dan menjadikan malam untuk beristirahat, dan (menjadikan) matahari dan bulan untuk perhitungan.",
-    keywords: ["fajar", "pagi", "malam", "matahari", "bulan", "hisab", "kalender"],
-  },
-  {
-    id: "hadith:bukhari:1909",
-    source_type: "HADITH",
-    reference: "Shahih Bukhari No. 1909",
-    arabic: "صُومُوا لِرُؤْيَتِهِ وَأَفْطِرُوا لِرُؤْيَتِهِ",
-    translation:
-      "Berpuasalah kalian karena melihat hilal (rukyah), dan berbukalah (berhari raya) karena melihatnya.",
-    keywords: ["puasa", "rukyah", "hilal", "ramadhan", "syawal", "bukhari", "sighting"],
-  },
-  {
-    id: "hadith:muslim:1081",
-    source_type: "HADITH",
-    reference: "Shahih Muslim No. 1081",
-    arabic: "إِذَا رَأَيْتُمُ الْهِلاَلَ فَصُومُوا وَإِذَا رَأَيْتُمُوهُ فَأَفْطِرُوا فَإِنْ غُمَّ عَلَيْكُمْ فَاقْدُرُوا لَهُ",
-    translation:
-      "Jika kalian melihat hilal, maka berpuasalah; dan jika kalian melihatnya lagi, berbukalah. Apabila tertutup awan bagi kalian, maka perkirakanlah (hitunglah).",
-    keywords: ["hilal", "rukyah", "puasa", "awan", "hisab", "istiqmal", "muslim"],
-  },
-]
+export interface EmbeddingContract {
+  contractVersion: typeof EMBEDDING_CONTRACT_VERSION
+  provider: string
+  model: string
+  modelVersion: string
+  dimensions: number
+  textNormalizationVersion: string
+}
 
-/**
- * Normalizes Arabic text by removing diacritics (tashkeel/harakat) and standardizing glyph variants.
- */
+export interface EmbeddingProvider {
+  contract: EmbeddingContract
+  embed(texts: string[]): Promise<number[][]>
+}
+
+export class EmbeddingProviderUnavailableError extends Error {
+  readonly statusCode = 503
+
+  constructor(message = "No production embedding provider is configured") {
+    super(message)
+    this.name = "EmbeddingProviderUnavailableError"
+  }
+}
+
+export const NullEmbeddingProvider: EmbeddingProvider = {
+  contract: {
+    contractVersion: EMBEDDING_CONTRACT_VERSION,
+    provider: "unconfigured",
+    model: "none",
+    modelVersion: "none",
+    dimensions: 0,
+    textNormalizationVersion: "arabic-normalization.v1",
+  },
+  async embed() {
+    throw new EmbeddingProviderUnavailableError()
+  },
+}
+
+let activeEmbeddingProvider: EmbeddingProvider = NullEmbeddingProvider
+
+export function setEmbeddingProvider(provider: EmbeddingProvider): void {
+  if (
+    provider.contract.contractVersion !== EMBEDDING_CONTRACT_VERSION ||
+    !provider.contract.provider ||
+    !provider.contract.model ||
+    !provider.contract.modelVersion ||
+    !Number.isInteger(provider.contract.dimensions) ||
+    provider.contract.dimensions <= 0 ||
+    !provider.contract.textNormalizationVersion
+  ) {
+    throw new Error("Embedding provider does not satisfy the versioned embedding contract")
+  }
+  activeEmbeddingProvider = provider
+}
+
+export function resetEmbeddingProvider(): void {
+  activeEmbeddingProvider = NullEmbeddingProvider
+}
+
+export function getEmbeddingProvider(): EmbeddingProvider {
+  return activeEmbeddingProvider
+}
+
 export function normalizeArabic(text: string): string {
   if (!text) return ""
   return text
-    .replace(/[\u064B-\u0652\u0670\u0640]/g, "") // remove harakat / tatweel
-    .replace(/[إأآا]/g, "ا") // standardize Alef
-    .replace(/[يى]/g, "ي") // standardize Yaa
-    .replace(/ة/g, "ه") // standardize Taa Marbuta
+    .replace(/[\u064B-\u0652\u0670\u0640]/g, "")
+    .replace(/[إأآا]/g, "ا")
+    .replace(/[يى]/g, "ي")
+    .replace(/ة/g, "ه")
     .trim()
 }
 
-/**
- * Tokenizes multilingual text (Arabic, Indonesian, English), removing punctuation.
- */
 export function tokenize(text: string): string[] {
   if (!text) return []
-  const norm = normalizeArabic(text.toLowerCase())
-  const words = norm.match(/[\p{L}\p{N}]+/gu) || []
-  return words.filter((w) => w.length > 1)
+  return normalizeArabic(text.toLowerCase())
+    .match(/[\p{L}\p{N}]+/gu)
+    ?.filter((token) => token.length > 1) ?? []
 }
 
-/**
- * Searches indexed canonical passages using term-frequency and keyword relevance scoring.
- */
-export function computeBm25Similarity(
-  query: string,
-  topK = 5
-): SemanticSearchResult {
-  const queryTokens = new Set(tokenize(query))
-  const normQuery = normalizeArabic(query)
+function passageText(passage: SemanticPassage): string {
+  return [
+    passage.arabic ?? "",
+    passage.translation ?? "",
+    ...(passage.keywords ?? []),
+  ].join(" ")
+}
 
-  if (queryTokens.size === 0) {
-    return {
-      query,
-      normalized_query: normQuery,
-      total_hits: 0,
-      total_found: 0,
-      results: [],
-    }
-  }
+function excerpt(passage: SemanticPassage): string {
+  return passage.translation || passage.arabic || ""
+}
 
-  const scored: Array<{ passage: SemanticPassage; score: number }> = []
-
-  for (const doc of CANONICAL_INDEX) {
-    const docTokens = new Set([
-      ...tokenize(doc.translation),
-      ...tokenize(doc.arabic),
-      ...doc.keywords.map((k) => k.toLowerCase()),
-    ])
-
-    const intersection = [...queryTokens].filter((t) => docTokens.has(t))
-    if (intersection.length === 0) continue
-
-    // Jaccard + token overlap weighted score
-    const overlapScore =
-      intersection.length / Math.sqrt(queryTokens.size * docTokens.size)
-    const score = Math.min(
-      0.99,
-      parseFloat(
-        (overlapScore + 0.25 * (intersection.length / queryTokens.size)).toFixed(3)
-      )
-    )
-
-    scored.push({ passage: doc, score })
-  }
-
-  scored.sort((a, b) => b.score - a.score)
-  const topHits = scored.slice(0, topK)
-
-  const results: SemanticSearchHit[] = topHits.map(({ passage, score }) => ({
+function toSearchHit(
+  passage: SemanticPassage,
+  score: number,
+  matchType: SemanticSearchHit["match_type"],
+  embedding?: EmbeddingContract
+): SemanticSearchHit {
+  return {
     id: passage.id,
     collection: passage.source_type.toLowerCase(),
     source_type: passage.source_type,
     reference: passage.reference,
-    text_ar: passage.arabic,
-    text_en: passage.translation,
-    excerpt: `${passage.reference} — "${passage.translation}"`,
+    excerpt: excerpt(passage),
     score,
-    similarity_score: score,
-  }))
+    match_type: matchType,
+    provenance_id: passage.provenance_id,
+    source_revision: passage.source_revision,
+    embedding_model: embedding?.model,
+    embedding_version: embedding?.modelVersion,
+    embedding_contract_version: embedding?.contractVersion,
+    embedding_dim: embedding?.dimensions,
+  }
+}
 
+export function computeBm25Similarity(
+  query: string,
+  passages: SemanticPassage[],
+  topK = 5
+): SemanticSearchResult {
+  const queryTerms = new Set(tokenize(query))
+  const normalizedQuery = normalizeArabic(query)
+  if (queryTerms.size === 0 || passages.length === 0) {
+    return {
+      query,
+      normalized_query: normalizedQuery,
+      total_hits: 0,
+      results: [],
+    }
+  }
+
+  const documents = passages.map((passage) => {
+    const tokens = tokenize(passageText(passage))
+    const frequencies = new Map<string, number>()
+    for (const token of tokens) {
+      frequencies.set(token, (frequencies.get(token) ?? 0) + 1)
+    }
+    return { passage, tokens, frequencies }
+  })
+  const averageLength =
+    documents.reduce((total, document) => total + document.tokens.length, 0) /
+    documents.length
+  const k1 = 1.2
+  const b = 0.75
+  const scored = documents.flatMap((document) => {
+    let score = 0
+    for (const term of queryTerms) {
+      const frequency = document.frequencies.get(term) ?? 0
+      if (frequency === 0) continue
+      const documentFrequency = documents.reduce(
+        (total, candidate) =>
+          total + Number(candidate.frequencies.has(term)),
+        0
+      )
+      const inverseDocumentFrequency = Math.log(
+        1 + (documents.length - documentFrequency + 0.5) /
+          (documentFrequency + 0.5)
+      )
+      const lengthNormalization =
+        k1 * (1 - b + b * document.tokens.length / averageLength)
+      score += inverseDocumentFrequency *
+        (frequency * (k1 + 1)) /
+        (frequency + lengthNormalization)
+    }
+    return score > 0 ? [{ passage: document.passage, score }] : []
+  })
+  scored.sort(
+    (left, right) =>
+      right.score - left.score || left.passage.id.localeCompare(right.passage.id)
+  )
+
+  const results = scored.slice(0, Math.max(0, topK)).map(({ passage, score }) =>
+    toSearchHit(passage, score, "LEXICAL_BM25")
+  )
   return {
     query,
-    normalized_query: normQuery,
+    normalized_query: normalizedQuery,
     total_hits: results.length,
-    total_found: results.length,
     results,
   }
 }
 
-/**
- * Executes hybrid semantic + lexical search, combining keyword BM25 scoring with simulated dense vector rank.
- */
-export function computeHybridSearch(
+function validateEmbeddings(
+  embeddings: number[][],
+  expectedCount: number,
+  dimensions: number
+): void {
+  if (embeddings.length !== expectedCount) {
+    throw new Error("Embedding provider returned an unexpected number of vectors")
+  }
+  if (embeddings.some((vector) =>
+    vector.length !== dimensions ||
+    vector.some((component) => !Number.isFinite(component))
+  )) {
+    throw new Error("Embedding provider returned a vector with invalid dimensions or values")
+  }
+}
+
+function cosineSimilarity(left: number[], right: number[]): number {
+  let dotProduct = 0
+  let leftNorm = 0
+  let rightNorm = 0
+  for (let index = 0; index < left.length; index += 1) {
+    const leftComponent = left[index] ?? 0
+    const rightComponent = right[index] ?? 0
+    dotProduct += leftComponent * rightComponent
+    leftNorm += leftComponent * leftComponent
+    rightNorm += rightComponent * rightComponent
+  }
+  return leftNorm > 0 && rightNorm > 0
+    ? dotProduct / (Math.sqrt(leftNorm) * Math.sqrt(rightNorm))
+    : 0
+}
+
+export async function computeEmbeddingSimilarity(
   query: string,
-  topK = 5,
-  alpha = 0.5
-): HybridSearchResult {
-  const bm25Result = computeBm25Similarity(query, topK * 2)
+  passages: SemanticPassage[],
+  topK = 5
+): Promise<SemanticSearchResult> {
+  const provider = getEmbeddingProvider()
+  if (provider === NullEmbeddingProvider) {
+    throw new EmbeddingProviderUnavailableError()
+  }
 
-  const hits: HybridSearchHit[] = bm25Result.results.map((hit) => {
-    const bm25Score = hit.score
-    // Simulated dense similarity derived from term intersection stability
-    const denseScore = Math.min(
-      0.98,
-      parseFloat((bm25Score * 0.85 + 0.12).toFixed(3))
-    )
-    const hybridScore = parseFloat(
-      (alpha * bm25Score + (1.0 - alpha) * denseScore).toFixed(3)
-    )
-
+  const contract = provider.contract
+  if (!query.trim() || passages.length === 0) {
     return {
-      id: hit.id,
-      source_type: hit.source_type || "SCRIPTURE",
-      reference: hit.reference || hit.id,
-      excerpt: hit.excerpt || hit.text_en,
-      similarity_score: hybridScore,
-      bm25_score: bm25Score,
-      dense_score: denseScore,
-      match_type:
-        alpha > 0.7
-          ? "LEXICAL_BM25"
-          : alpha < 0.3
-            ? "DENSE_SEMANTIC"
-            : "HYBRID_FUSION",
+      query,
+      normalized_query: normalizeArabic(query),
+      total_hits: 0,
+      results: [],
+    }
+  }
+  const vectors = await provider.embed([
+    query,
+    ...passages.map(passageText),
+  ])
+  validateEmbeddings(vectors, passages.length + 1, contract.dimensions)
+  const queryVector = vectors[0]
+  if (!queryVector) throw new Error("Embedding provider omitted the query vector")
+
+  const scored = passages.map((passage, index) => {
+    const vector = vectors[index + 1]
+    if (!vector) throw new Error("Embedding provider omitted a passage vector")
+    return {
+      passage,
+      score: cosineSimilarity(queryVector, vector),
     }
   })
+  scored.sort(
+    (left, right) =>
+      right.score - left.score || left.passage.id.localeCompare(right.passage.id)
+  )
 
-  hits.sort((a, b) => b.similarity_score - a.similarity_score)
-  const sliced = hits.slice(0, topK)
-
+  const results = scored
+    .filter(({ score }) => score > 0)
+    .slice(0, Math.max(0, topK))
+    .map(({ passage, score }) =>
+      toSearchHit(passage, score, "SEMANTIC_EMBEDDING", contract)
+    )
   return {
     query,
-    total_hits: sliced.length,
+    normalized_query: normalizeArabic(query),
+    total_hits: results.length,
+    results,
+  }
+}
+
+export async function computeHybridSearch(
+  query: string,
+  passages: SemanticPassage[],
+  topK = 5,
+  alpha = 0.5
+): Promise<HybridSearchResult> {
+  if (!Number.isFinite(alpha) || alpha < 0 || alpha > 1) {
+    throw new Error("Hybrid lexical weight alpha must be between 0 and 1")
+  }
+  const [lexical, semantic] = await Promise.all([
+    computeBm25Similarity(query, passages, topK * 2),
+    computeEmbeddingSimilarity(query, passages, topK * 2),
+  ])
+  const embeddingContract = getEmbeddingProvider().contract
+  const lexicalMax = Math.max(0, ...lexical.results.map((hit) => hit.score))
+  const hitById = new Map<string, HybridSearchHit>()
+
+  for (const hit of lexical.results) {
+    hitById.set(hit.id, {
+      id: hit.id,
+      source_type: hit.source_type,
+      reference: hit.reference,
+      excerpt: hit.excerpt,
+      similarity_score: 0,
+      bm25_score: lexicalMax > 0 ? hit.score / lexicalMax : 0,
+      dense_score: 0,
+      match_type: "LEXICAL_BM25",
+      provenance_id: hit.provenance_id,
+      source_revision: hit.source_revision,
+    })
+  }
+
+  for (const hit of semantic.results) {
+    const existing = hitById.get(hit.id)
+    const target = existing ?? {
+      id: hit.id,
+      source_type: hit.source_type,
+      reference: hit.reference,
+      excerpt: hit.excerpt,
+      similarity_score: 0,
+      bm25_score: 0,
+      dense_score: 0,
+      match_type: "SEMANTIC_EMBEDDING" as const,
+      provenance_id: hit.provenance_id,
+      source_revision: hit.source_revision,
+    }
+    target.dense_score = hit.score
+    target.embedding_model = embeddingContract.model
+    target.embedding_version = embeddingContract.modelVersion
+    target.embedding_contract_version = embeddingContract.contractVersion
+    target.embedding_dim = embeddingContract.dimensions
+    hitById.set(hit.id, target)
+  }
+
+  const results = Array.from(hitById.values())
+  for (const hit of results) {
+    const hasLexicalMatch = hit.bm25_score > 0
+    const hasEmbeddingMatch = hit.dense_score !== 0
+    hit.similarity_score =
+      alpha * hit.bm25_score + (1 - alpha) * hit.dense_score
+    hit.match_type = hasLexicalMatch && hasEmbeddingMatch
+      ? "HYBRID_FUSION"
+      : hasEmbeddingMatch
+        ? "SEMANTIC_EMBEDDING"
+        : "LEXICAL_BM25"
+  }
+
+  const matchedResults = results
+    .filter((hit) => hit.similarity_score > 0)
+    .sort(
+      (left, right) =>
+        right.similarity_score - left.similarity_score ||
+        left.id.localeCompare(right.id)
+    )
+  return {
+    query,
+    total_hits: Math.min(matchedResults.length, Math.max(0, topK)),
     alpha,
-    results: sliced,
+    results: matchedResults.slice(0, Math.max(0, topK)),
   }
 }

@@ -732,6 +732,9 @@ importers:
       '@moon/orm':
         specifier: workspace:*
         version: link:../moon-orm
+      '@moon/protocol':
+        specifier: workspace:*
+        version: link:../moon-protocol
       '@moon/server':
         specifier: workspace:*
         version: link:../moon-server
