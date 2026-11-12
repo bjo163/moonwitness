@@ -9,10 +9,6 @@ import { seedBaseData, loadBaseData, seedWitnessGraphCore } from "../addons/inde
  * or when MOON_BOOTSTRAP_ON_START is explicitly requested.
  */
 export async function bootstrapSystemData(): Promise<void> {
-  if (process.env.ODOO_BASE_URL && process.env.ODOO_DATABASE) {
-    console.log("[Odoo] Odoo-only mode enabled; skipping legacy ORM bootstrap.")
-    return
-  }
   const shouldBootstrap =
     process.env.MOON_BOOTSTRAP_ON_START === "true" ||
     (isSqlite() && process.env.NODE_ENV !== "production")

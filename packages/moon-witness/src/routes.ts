@@ -8,40 +8,13 @@ import { defineRoute } from '@moon/server'
 import { getModel, SUPERUSER_ID } from '@moon/orm'
 import { getMoonData, getIslamicData, getDailyPrayerTimes } from '@moon/compute'
 import { cache } from '@moon/cache'
-import { OdooClient, getOdooSession } from '@moon/odoo-bridge'
 import { registerWitnessGraphRoutes } from './graph/routes.js'
 import { registerWitnessEngineRoutes } from './engine-routes.js'
 import {
   searchWitnessGraph,
-  searchOdooWitness,
-  lookupOdooWitness,
-  getOdooSearchIndexDiagnostics,
   lookupReference,
   getSearchIndexDiagnostics
 } from './services/retrieval.js'
-
-function odooWitnessClient(req: any): { client: OdooClient; sessionId: string } | null {
-  const sessionKey = req?.__moonSession?.odooSessionKey
-  const baseUrl = process.env.ODOO_BASE_URL?.trim()
-  const database = process.env.ODOO_DATABASE?.trim()
-  // Odoo mode is authoritative. Never silently fall back to the legacy ORM
-  // when a browser request has lost its per-user Odoo session.
-  if (!baseUrl || !database) return null
-  if (!sessionKey) {
-    const error = new Error('Odoo session is unavailable')
-    ;(error as any).statusCode = 401
-    ;(error as any).code = 'AUTH_UNAUTHORIZED'
-    throw error
-  }
-  const session = getOdooSession(sessionKey)
-  if (!session) {
-    const error = new Error('Odoo session has expired')
-    ;(error as any).statusCode = 401
-    ;(error as any).code = 'AUTH_UNAUTHORIZED'
-    throw error
-  }
-  return { client: new OdooClient({ baseUrl, database }), sessionId: session.sessionId }
-}
 
 // ═══════════════════════════════════════════
 // 📖 SCRIPTURE ROUTES
@@ -64,15 +37,7 @@ defineRoute({
   method: 'GET',
   path: '/api/witness/quran/surahs',
   auth: 'user',
-  handler: async ({ env, req }) => {
-    const odoo = odooWitnessClient(req)
-    if (odoo) {
-      const scriptures = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.scripture', method: 'search_read', args: [[['canonical_code', 'in', ['quran', 'al-quran']]]], kwargs: { fields: ['id', 'name', 'canonical_code'], limit: 1 } })
-      const quran = scriptures[0]
-      if (!quran) { const err = new Error('Quran scripture not found'); ;(err as any).statusCode = 404; throw err }
-      const books = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.scripture.book', method: 'search_read', args: [[['scripture_id', '=', quran.id]]], kwargs: { fields: ['number', 'name', 'name_original', 'verses_count', 'revelation_type', 'description'], order: 'number asc' } })
-      return { scripture: { id: quran.id, name: quran.name }, surahs: books.map((s: any) => ({ number: s.number, name: s.name, nameOriginal: s.name_original, versesCount: s.verses_count, revelationType: s.revelation_type, description: s.description })) }
-    }
+  handler: async ({ env }) => {
     const Scripture = getModel('wx.scripture')
     const Book = getModel('wx.scripture.book')
     if (!Scripture || !Book) throw new Error('Models not found')
@@ -104,7 +69,7 @@ defineRoute({
   method: 'GET',
   path: '/api/witness/quran/surah',
   auth: 'user',
-  handler: async ({ query, env, req }) => {
+  handler: async ({ query, env }) => {
     const surahNumber = parseInt(query.number || '0', 10)
     if (surahNumber < 1 || surahNumber > 114) {
       const err = new Error('Surah number must be 1-114')
@@ -112,17 +77,6 @@ defineRoute({
       throw err
     }
 
-    const odoo = odooWitnessClient(req)
-    if (odoo) {
-      const scriptures = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.scripture', method: 'search_read', args: [[['canonical_code', 'in', ['quran', 'al-quran']]]], kwargs: { fields: ['id', 'name'], limit: 1 } })
-      const quran = scriptures[0]
-      if (!quran) { const err = new Error('Quran not found'); ;(err as any).statusCode = 404; throw err }
-      const books = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.scripture.book', method: 'search_read', args: [[['scripture_id', '=', quran.id], ['number', '=', surahNumber]]], kwargs: { fields: ['id', 'number', 'name', 'name_original', 'verses_count', 'revelation_type', 'description', 'audio_url'], limit: 1 } })
-      const surah = books[0]
-      if (!surah) { const err = new Error(`Surah ${surahNumber} not found`); ;(err as any).statusCode = 404; throw err }
-      const ayahs = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.scripture.verse', method: 'search_read', args: [[['book_id', '=', surah.id]]], kwargs: { fields: ['number', 'text_original', 'text_translation', 'audio_url', 'canonical_reference'], order: 'number asc' } })
-      return { surah: { number: surah.number, name: surah.name, nameOriginal: surah.name_original, versesCount: surah.verses_count, revelationType: surah.revelation_type, description: surah.description, audioUrl: surah.audio_url }, ayahs: ayahs.map((a: any) => ({ number: a.number, textArabic: a.text_original, translationId: a.text_translation, audioUrl: a.audio_url, reference: a.canonical_reference })) }
-    }
     const Scripture = getModel('wx.scripture')
     const Book = getModel('wx.scripture.book')
     const Verse = getModel('wx.scripture.verse')
@@ -175,21 +129,13 @@ defineRoute({
   method: 'GET',
   path: '/api/witness/search',
   auth: 'user',
-  handler: async ({ query, env, req }) => {
+  handler: async ({ query, env }) => {
     const q = query.q || ''
     const filter = (query.filter || 'ALL') as any
     const limit = Math.min(parseInt(query.limit || '20', 10), 100)
     const page = Math.max(parseInt(query.page || '1', 10), 1)
 
-    const odoo = odooWitnessClient(req)
-    const searchResult = odoo
-      ? await searchOdooWitness(odoo.client, odoo.sessionId, {
-        query: q,
-        filter,
-        limit,
-        page
-      })
-      : await searchWitnessGraph(env, {
+    const searchResult = await searchWitnessGraph(env, {
       query: q,
       filter,
       limit,
@@ -212,7 +158,7 @@ defineRoute({
   method: 'GET',
   path: '/api/witness/lookup',
   auth: 'user',
-  handler: async ({ query, env, req }) => {
+  handler: async ({ query, env }) => {
     const ref = query.ref || query.reference || ''
     if (!ref) {
       const err = new Error('Reference query parameter required')
@@ -220,10 +166,7 @@ defineRoute({
       throw err
     }
 
-    const odoo = odooWitnessClient(req)
-    const resolved = odoo
-      ? await lookupOdooWitness(odoo.client, odoo.sessionId, ref)
-      : await lookupReference(env, ref)
+    const resolved = await lookupReference(env, ref)
     return resolved
   },
 })
@@ -233,11 +176,8 @@ defineRoute({
   method: 'GET',
   path: '/api/witness/search/diagnostics',
   auth: 'user',
-  handler: async ({ env, req }) => {
-    const odoo = odooWitnessClient(req)
-    return odoo
-      ? await getOdooSearchIndexDiagnostics(odoo.client, odoo.sessionId)
-      : await getSearchIndexDiagnostics(env)
+  handler: async ({ env }) => {
+    return await getSearchIndexDiagnostics(env)
   },
 })
 
@@ -246,19 +186,13 @@ defineRoute({
   method: 'GET',
   path: '/api/witness/quran/search',
   auth: 'user',
-  handler: async ({ query, env, req }) => {
+  handler: async ({ query, env }) => {
     const q = query.q || ''
     const limit = Math.min(parseInt(query.limit || '20', 10), 100)
     if (!q || q.length < 2) {
       const err = new Error('Query must be at least 2 characters')
       ;(err as any).statusCode = 400
       throw err
-    }
-
-    const odoo = odooWitnessClient(req)
-    if (odoo) {
-      const results = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.scripture.verse', method: 'search_read', args: [[['text_original', 'ilike', q]]], kwargs: { fields: ['id', 'number', 'text_original', 'text_translation', 'canonical_reference', 'book_id'], limit, order: 'id asc' } })
-      return { query: q, count: results.length, results: results.map((item: any) => ({ verseNumber: item.canonical_reference ?? item.number, translationId: item.text_translation, textOriginal: item.text_original, bookId: item.book_id?.[0] ?? item.book_id })) }
     }
 
     // Try canonical search first
@@ -306,22 +240,7 @@ defineRoute({
   method: 'GET',
   path: '/api/witness/provenance',
   auth: 'user',
-  handler: async ({ query, env, req }) => {
-    const odoo = odooWitnessClient(req)
-    if (odoo) {
-      const domain: any[] = [['active', '=', true]]
-      if (query.id) domain.push(['id', '=', parseInt(query.id, 10)])
-      if (query.stableKey) domain.push(['stable_key', '=', query.stableKey])
-      const rows = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.provenance', method: 'search_read', args: [domain], kwargs: { fields: ['id', 'name', 'stable_key', 'source_id', 'revision', 'checksum', 'method', 'note'], limit: 1 } })
-      const prov = rows[0]
-      if (!prov) { const err = new Error('Provenance record not found'); ;(err as any).statusCode = 404; throw err }
-      let source = null
-      if (prov.source_id?.[0]) {
-        const sources = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.source', method: 'read', args: [[prov.source_id[0]]], kwargs: { fields: ['id', 'name', 'stable_key', 'revision', 'edition', 'source_url'] } })
-        source = sources[0] ?? null
-      }
-      return { provenance: { id: prov.id, stableKey: prov.stable_key ?? prov.name, sourceRevision: prov.revision, artifactChecksum: prov.checksum, method: prov.method, evidenceNote: prov.note, source } }
-    }
+  handler: async ({ query, env }) => {
     const Provenance = getModel('wx.provenance')
     const Source = getModel('wx.source')
     if (!Provenance) throw new Error('Model wx.provenance not found')
@@ -422,12 +341,7 @@ defineRoute({
   method: 'GET',
   path: '/api/witness/hadith/books',
   auth: 'user',
-  handler: async ({ env, req }) => {
-    const odoo = odooWitnessClient(req)
-    if (odoo) {
-      const books = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.tradition', method: 'search_read', args: [[]], kwargs: { fields: ['id', 'name', 'slug', 'description', 'item_count'], order: 'name asc' } })
-      return { books: books.map((book: any) => ({ ...book, itemCount: book.item_count })) }
-    }
+  handler: async ({ env }) => {
     const M = getModel('wx.tradition')
     if (!M) throw new Error('Model not found')
     const books = await (M as any).fetch(M, env, [], undefined, { order: 'id ASC' })
@@ -440,7 +354,7 @@ defineRoute({
   method: 'GET',
   path: '/api/witness/hadith',
   auth: 'user',
-  handler: async ({ query, env, req }) => {
+  handler: async ({ query, env }) => {
     const slug = query.slug
     const page = parseInt(query.page || '1', 10)
     const limit = Math.min(parseInt(query.limit || '20', 10), 100)
@@ -452,14 +366,6 @@ defineRoute({
       throw err
     }
 
-    const odoo = odooWitnessClient(req)
-    if (odoo) {
-      const books = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.tradition', method: 'search_read', args: [[['slug', '=', slug]]], kwargs: { fields: ['id', 'name', 'slug', 'description'], limit: 1 } })
-      const book = books[0]
-      if (!book) { const err = new Error(`Hadith book '${slug}' not found`); ;(err as any).statusCode = 404; throw err }
-      const items = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.tradition.item', method: 'search_read', args: [[['tradition_id', '=', book.id]]], kwargs: { fields: ['number', 'name', 'text_original', 'text_translation', 'narrator', 'canonical_reference', 'grade'], limit, offset, order: 'number asc' } })
-      return { book: { id: book.id, name: book.name, slug: book.slug, description: book.description }, hadiths: items.map((item: any) => ({ number: item.number, title: item.name, textOriginal: item.text_original, translation: item.text_translation, narrator: item.narrator, reference: item.canonical_reference, grade: item.grade })), pagination: { page, limit, total: items.length } }
-    }
     const Tradition = getModel('wx.tradition')
     const Item = getModel('wx.tradition.item')
     if (!Tradition || !Item) throw new Error('Models not found')
@@ -488,17 +394,7 @@ defineRoute({
   method: 'GET',
   path: '/api/witness/traditions',
   auth: 'user',
-  handler: async ({ env, req }) => {
-    const odoo = odooWitnessClient(req)
-    if (odoo) {
-      const collections = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.tradition', method: 'search_read', args: [[['name', 'ilike', 'Prophetic']]], kwargs: { fields: ['id', 'name', 'slug', 'description'], order: 'id asc' } })
-      const result = []
-      for (const collection of collections) {
-        const items = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.tradition.item', method: 'search_read', args: [[['tradition_id', '=', collection.id]]], kwargs: { fields: ['id', 'name', 'number', 'text_original', 'text_translation', 'canonical_reference'], order: 'number asc' } })
-        result.push({ collection, items })
-      }
-      return { traditions: result }
-    }
+  handler: async ({ env }) => {
     const Tradition = getModel('wx.tradition')
     const Item = getModel('wx.tradition.item')
     if (!Tradition || !Item) throw new Error('Models not found')
@@ -523,12 +419,7 @@ defineRoute({
   method: 'GET',
   path: '/api/witness/asmaul-husna',
   auth: 'user',
-  handler: async ({ env, req }) => {
-    const odoo = odooWitnessClient(req)
-    if (odoo) {
-      const names = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.asmaul.husna', method: 'search_read', args: [[]], kwargs: { fields: ['id', 'name', 'number', 'name_arabic', 'name_latin', 'translation_id', 'translation_en', 'meaning', 'quran_reference'], order: 'number asc' } })
-      return { count: names.length, names: names.map((item: any) => ({ ...item, nameArabic: item.name_arabic, nameLatin: item.name_latin, translationId: item.translation_id, translationEn: item.translation_en, quranReference: item.quran_reference })) }
-    }
+  handler: async ({ env }) => {
     const M = getModel('wx.asmaul.husna')
     if (!M) throw new Error('Model not found')
     const names = await (M as any).fetch(M, env, [], undefined, { order: 'number ASC' })
@@ -545,15 +436,7 @@ defineRoute({
   method: 'GET',
   path: '/api/witness/devotions',
   auth: 'user',
-  handler: async ({ query, env, req }) => {
-    const odoo = odooWitnessClient(req)
-    if (odoo) {
-      const domain: any[] = []
-      if (query.type) domain.push(['devotion_type', '=', query.type])
-      if (query.category) domain.push(['category', '=', query.category])
-      const devotions = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.devotion', method: 'search_read', args: [domain], kwargs: { fields: ['id', 'name', 'devotion_type', 'category', 'text_original', 'translation', 'reference'], order: 'category asc, name asc' } })
-      return { count: devotions.length, devotions: devotions.map((item: any) => ({ ...item, type: item.devotion_type, textOriginal: item.text_original })) }
-    }
+  handler: async ({ query, env }) => {
     const M = getModel('wx.devotion')
     if (!M) throw new Error('Model not found')
 
@@ -614,12 +497,7 @@ defineRoute({
   method: 'GET',
   path: '/api/witness/bookmarks',
   auth: 'user',
-  handler: async ({ query, env, req, uid }) => {
-    const odoo = odooWitnessClient(req)
-    if (odoo) {
-      const rows = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.bookmark', method: 'search_read', args: [[['user_id', '=', uid]]], kwargs: { fields: ['id', 'user_id', 'book_id', 'verse_id', 'note', 'create_date'], order: 'create_date desc' } })
-      return rows.map((row: any) => ({ ...row, userId: row.user_id?.[0] ?? row.user_id, bookId: row.book_id?.[0] ?? row.book_id, verseId: row.verse_id?.[0] ?? row.verse_id }))
-    }
+  handler: async ({ query, env, uid }) => {
     const userId = parseInt(query.userId || '0', 10)
     if (!userId) {
       const err = new Error('User ID required')
@@ -638,12 +516,7 @@ defineRoute({
   method: 'GET',
   path: '/api/witness/history',
   auth: 'user',
-  handler: async ({ query, env, req, uid }) => {
-    const odoo = odooWitnessClient(req)
-    if (odoo) {
-      const rows = await odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.history', method: 'search_read', args: [[['user_id', '=', uid]]], kwargs: { fields: ['id', 'user_id', 'book_id', 'last_verse_id', 'duration', 'write_date'], order: 'write_date desc' } })
-      return rows.map((row: any) => ({ ...row, userId: row.user_id?.[0] ?? row.user_id, bookId: row.book_id?.[0] ?? row.book_id, lastVerseId: row.last_verse_id?.[0] ?? row.last_verse_id, updatedAt: row.write_date }))
-    }
+  handler: async ({ query, env, uid }) => {
     const userId = parseInt(query.userId || '0', 10)
     if (!userId) {
       const err = new Error('User ID required')
@@ -667,18 +540,7 @@ defineRoute({
   method: 'GET',
   path: '/api/witness/corpus/status',
   auth: 'user',
-  handler: async ({ env, req }) => {
-    const odoo = odooWitnessClient(req)
-    if (odoo) {
-      const [snapshots, sources, passages, contents] = await Promise.all([
-        odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.snapshot', method: 'search_read', args: [[['status', '=', 'completed']]], kwargs: { fields: ['id', 'name', 'normalized_checksum', 'normalization_version', 'completed_at'], order: 'completed_at desc' } }),
-        odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.source', method: 'search_count', args: [[['active', '=', true]]] }),
-        odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.passage', method: 'search_count', args: [[['active', '=', true]]] }),
-        odoo.client.callWithSession<any[]>(odoo.sessionId, { model: 'moon.witness.content', method: 'search_count', args: [[['active', '=', true]]] }),
-      ])
-      const latest = snapshots[0]
-      return { status: latest ? 'HEALTHY' : 'UNAVAILABLE', corpusRelease: latest?.name ?? null, activeRevision: latest?.normalization_version ?? null, artifactChecksum: latest?.normalized_checksum ?? null, snapshotsCount: snapshots.length, sourcesCount: sources, passagesCount: passages, contentsCount: contents, lastImportAt: latest?.completed_at ?? null }
-    }
+  handler: async ({ env }) => {
     const Snapshot = getModel('wx.source.snapshot')
     const Source = getModel('wx.source')
     const Passage = getModel('wx.passage')
@@ -712,18 +574,7 @@ defineRoute({
   method: 'GET',
   path: '/api/witness/corpus/health',
   auth: 'user',
-  handler: async ({ env, req }) => {
-    const odoo = odooWitnessClient(req)
-    if (odoo) {
-      const [sources, passages, contents, provenances] = await Promise.all([
-        odoo.client.callWithSession<number>(odoo.sessionId, { model: 'moon.witness.source', method: 'search_count', args: [[['active', '=', true]]] }),
-        odoo.client.callWithSession<number>(odoo.sessionId, { model: 'moon.witness.passage', method: 'search_count', args: [[['active', '=', true]]] }),
-        odoo.client.callWithSession<number>(odoo.sessionId, { model: 'moon.witness.content', method: 'search_count', args: [[['active', '=', true]]] }),
-        odoo.client.callWithSession<number>(odoo.sessionId, { model: 'moon.witness.provenance', method: 'search_count', args: [[['active', '=', true]]] }),
-      ])
-      const available = sources + passages + contents + provenances > 0
-      return { status: available ? 'HEALTHY' : 'UNAVAILABLE', checks: { totalSources: sources, totalPassages: passages, totalContents: contents, totalProvenances: provenances, orphanContentsCount: null, missingProvenanceCount: null, duplicateIdentitiesCount: null, indexIntegrity: available ? 'SYNCHRONIZED' : 'NOT_AVAILABLE' } }
-    }
+  handler: async ({ env }) => {
     const Passage = getModel('wx.passage')
     const Content = getModel('wx.content')
     const Source = getModel('wx.source')
@@ -761,13 +612,7 @@ defineRoute({
   method: 'POST',
   path: '/api/witness/corpus/sync',
   auth: 'admin',
-  handler: async ({ body, env, req }) => {
-    if (odooWitnessClient(req)) {
-      const err = new Error('Corpus sync must use the Odoo ingestion worker')
-      ;(err as any).statusCode = 409
-      ;(err as any).code = 'MIGRATION_PENDING'
-      throw err
-    }
+  handler: async ({ body, env }) => {
     if (env.uid && env.uid !== SUPERUSER_ID && (env.context as any)?.user?.role !== 'admin') {
       const err = new Error('Unauthorized: administrator clearance required')
       ;(err as any).statusCode = 403
@@ -807,13 +652,7 @@ defineRoute({
   method: 'POST',
   path: '/api/witness/corpus/reindex',
   auth: 'admin',
-  handler: async ({ env, req }) => {
-    if (odooWitnessClient(req)) {
-      const err = new Error('Corpus reindex must use the Odoo search projection')
-      ;(err as any).statusCode = 409
-      ;(err as any).code = 'MIGRATION_PENDING'
-      throw err
-    }
+  handler: async ({ env }) => {
     if (env.uid && env.uid !== SUPERUSER_ID && (env.context as any)?.user?.role !== 'admin') {
       const err = new Error('Unauthorized: administrator clearance required')
       ;(err as any).statusCode = 403

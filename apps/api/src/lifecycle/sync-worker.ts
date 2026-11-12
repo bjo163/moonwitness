@@ -24,10 +24,6 @@ export function getSyncStatus(): SyncStatus {
  * Execute a non-blocking sync cycle between local SQLite and remote PostgreSQL.
  */
 export async function runSyncCycle(): Promise<SyncStatus> {
-  if (config.odoo) {
-    currentStatus = { remoteOnline: false, message: "Odoo-only mode enabled; legacy database sync disabled." }
-    return currentStatus
-  }
   const remoteUrl = config.remoteDatabaseUrl
   if (!remoteUrl) {
     currentStatus = {
@@ -85,10 +81,6 @@ export async function runSyncCycle(): Promise<SyncStatus> {
  * Start the background sync worker.
  */
 export function startSyncWorker(): void {
-  if (config.odoo) {
-    console.log("[SyncWorker] Odoo Master Mutlak active. Database sync worker skipped.")
-    return
-  }
   if (syncInterval) return
 
   const intervalMs = Math.max(config.autoSyncIntervalSeconds, 30) * 1000

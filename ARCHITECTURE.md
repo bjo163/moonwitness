@@ -20,12 +20,9 @@ FASTIFY API GATEWAY & INTELLIGENCE RUNTIME (@moon/server / apps/api)
 • Redis Hot Caching         • pgvector Semantic RAG Retrieval
 • Public Fallback Service   • Real-Time SSE Telemetry
           |
-          +-----------------------------------+
-          | JSON-RPC 2.0 / WAL                | Direct pgvector Connection
-          v                                   v
-CANONICAL MASTER RELATIONAL DATASTORE   VECTOR EMBEDDINGS (pgvector 0.8+)
-Odoo 19 (Python Addons)                 PostgreSQL (postgres:18-pgvector)
-PostgreSQL (postgres:18-pgvector)
+          v
+CANONICAL MASTER RELATIONAL DATASTORE
+PostgreSQL 18 + pgvector (postgres:18-pgvector)
 ```
 
 The canonical corpus is maintained separately by:
@@ -34,7 +31,7 @@ The canonical corpus is maintained separately by:
 bjo163/moonwitness-corpus
 ```
 
-The application consumes versioned corpus releases through `@moon/witness` ingestion and registers them directly into the canonical Witness domain graph mastered in Odoo 19.
+The application consumes versioned corpus releases through `@moon/witness` ingestion and registers them directly into the canonical Witness domain graph mastered in PostgreSQL 18 + pgvector.
 
 ## 2. Source and ownership boundaries
 
@@ -46,9 +43,9 @@ Owns canonical corpus authoring, upstream synchronization, source metadata, corp
 
 Owns source-aware ingestion, normalization/validation, application knowledge graph, source/artifact/snapshot records, passages/content, provenance relationships, evidence, and research-domain integration.
 
-### `Odoo 19 Master Datastore (postgres:18-pgvector)`
+### `PostgreSQL 18 + pgvector (postgres:18-pgvector)`
 
-The single canonical relational source of truth for all domain entities, sacred knowledge graph records (`moon.witness.*`), Mizan ethical balance evaluations (`moon.mizan.*`), disaster & myth correlations (`moon.disaster.*`), user security (`res.users`), and enterprise operational modules (projects, tasks, accounting, stock). It replaces duplicate local relational tables.
+The single canonical relational source of truth for all domain entities, sacred knowledge graph records (`moon.witness.*`), Mizan ethical balance evaluations (`moon.mizan.*`), disaster & myth correlations (`moon.disaster.*`), user security (`vx.user`), and enterprise operational modules (projects, tasks, accounting, stock). It replaces duplicate local relational tables.
 
 ### `Fastify Gateway & Compute Engine (@moon/server)`
 
@@ -79,10 +76,7 @@ immutable release / pinned revision
         +--> tradition / research graph where applicable
         |
         v
-@moon/odoo-bridge
-        |
-        v
-Odoo 19 Master Store (moon.witness.*)
+PostgreSQL 18 + pgvector (moon.witness.*)
         |
         v
 Fastify API Gateway (Hot Read Cache)
@@ -106,13 +100,13 @@ Fastify Gateway (@moon/server)
 @moon/protocol Zod Contract Validation
         |
         v
-@moon/odoo-bridge (Session / System Service Client)
+Moon ORM (Native Transaction)
         |
         v
-Odoo 19 Master PostgreSQL (postgres:18-pgvector)
+PostgreSQL 18 + pgvector (postgres:18-pgvector)
 ```
 
-Corpus ingestion uses the same application boundary through `@moon/witness` into Odoo 19.
+Corpus ingestion uses the same application boundary through `@moon/witness` into PostgreSQL 18 + pgvector.
 
 ## 5. Enterprise UI architecture
 
@@ -296,7 +290,7 @@ source data       -> moonwitness-corpus
 application graph -> @moon/witness
 transport         -> @moon/server / Fastify internally
 API contract      -> @moon/protocol
-master store      -> Odoo 19 + PostgreSQL (postgres:18-pgvector)
+master store      -> PostgreSQL 18 + pgvector (postgres:18-pgvector)
 vector search     -> pgvector 0.8+ via @moon/witness RAG
 pure compute      -> @moon/compute (isomorphic mathematical engine)
 public UI         -> apps/web

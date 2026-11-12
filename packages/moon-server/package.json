@@ -13,7 +13,6 @@
   "dependencies": {
     "@moon/base": "workspace:*",
     "@moon/orm": "workspace:*",
-    "@moon/odoo-bridge": "workspace:*",
     "@moon/protocol": "workspace:*",
     "@opentelemetry/api": "^1.1.0",
     "bcryptjs": "^3.0.2",

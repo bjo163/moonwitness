@@ -9,7 +9,6 @@ import { hashPassword, comparePassword } from "@moon/server"
  * This runs on server startup so changing credentials in .env takes effect immediately.
  */
 export async function syncSuperuserFromEnv(): Promise<void> {
-  if (process.env.ODOO_BASE_URL && process.env.ODOO_DATABASE) return
   const adminEmail = process.env.BOOTSTRAP_ADMIN_EMAIL?.trim()
   const adminPassword = process.env.BOOTSTRAP_ADMIN_PASSWORD?.trim()
 

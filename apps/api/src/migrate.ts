@@ -21,26 +21,11 @@ import mailAddons from "@moon/mail"
 import geoAddons from "@moon/geo"
 import cronAddons from "@moon/cron"
 
-const odooPersistenceEnabled = Boolean(
-  process.env.ODOO_BASE_URL?.trim() &&
-  process.env.ODOO_DATABASE?.trim() &&
-  process.env.ODOO_USERNAME?.trim() &&
-  process.env.ODOO_PASSWORD?.trim(),
-)
-
 async function seedLegacyWitnessIfEnabled(): Promise<void> {
-  if (odooPersistenceEnabled) {
-    console.log("[Odoo] Witness persistence enabled; skipping legacy ORM Witness seed.")
-    return
-  }
   await seedWitnessGraphCore()
 }
 
 async function loadAllDemoData() {
-  if (odooPersistenceEnabled) {
-    console.log("[Odoo] Odoo-only mode enabled; skipping all legacy ORM demo data.")
-    return
-  }
   console.log("=== Loading Demo Data across all 16 Addon Packages ===")
 
   console.log("[Level 0] Seeding @moon/base demo data...")
@@ -59,7 +44,8 @@ async function loadAllDemoData() {
     import("@moon/cron"),
   ])
   const legacyDemoLoads = [
-    ...(odooPersistenceEnabled ? [] : [witnessM.loadDemoData(), projectM.loadDemoData()]),
+    witnessM.loadDemoData(),
+    projectM.loadDemoData(),
     productM.loadDemoData(),
     accountM.loadDemoData(),
     mailM.loadDemoData(),
@@ -148,7 +134,7 @@ async function run() {
   } else if (cmd === "seed") {
     const integrity = verifySeedIntegrity()
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
-    if (!odooPersistenceEnabled) await loadBaseData()
+    await loadBaseData()
     await seedLegacyWitnessIfEnabled()
     console.log("Canonical seed completed.")
     if (isDemo || withExternal) {
@@ -157,14 +143,14 @@ async function run() {
   } else if (cmd === "demo") {
     const integrity = verifySeedIntegrity()
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
-    if (!odooPersistenceEnabled) await loadBaseData()
+    await loadBaseData()
     await seedLegacyWitnessIfEnabled()
     await loadAllDemoData()
   } else if (cmd === "install") {
     await up()
     const integrity = verifySeedIntegrity()
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
-    if (!odooPersistenceEnabled) await loadBaseData()
+    await loadBaseData()
     await seedLegacyWitnessIfEnabled()
     console.log("Database install completed.")
     if (isDemo || withExternal) {

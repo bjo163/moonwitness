@@ -19,7 +19,6 @@ export interface ApiConfig {
     pass?: string
     from?: string
   }
-  odoo?: { baseUrl: string; database: string; username: string; password: string }
 }
 
 function resolveDatabaseUrl(): string {
@@ -98,7 +97,4 @@ export const config: ApiConfig = {
     pass: process.env.SMTP_PASS || process.env.EMAIL_PASS,
     from: process.env.SMTP_FROM || process.env.EMAIL_FROM,
   },
-  odoo: process.env.ODOO_BASE_URL && process.env.ODOO_DATABASE && process.env.ODOO_USERNAME && process.env.ODOO_PASSWORD
-    ? { baseUrl: process.env.ODOO_BASE_URL, database: process.env.ODOO_DATABASE, username: process.env.ODOO_USERNAME, password: process.env.ODOO_PASSWORD }
-    : undefined,
 }

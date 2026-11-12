@@ -53,8 +53,8 @@ Owns canonical corpus authoring, upstream synchronization, source metadata, corp
 ### `@moon/witness`
 Owns source-aware ingestion, normalization, validation, the application knowledge graph, source/artifact/snapshot records, passages, textual content, provenance, evidence, and research-domain integration.
 
-### `Odoo 19 Master Datastore (postgres:18-pgvector)`
-Provides the single canonical relational source of truth for all domain entities, sacred knowledge graph records (`moon.witness.*`), Mizan ethical evaluations (`moon.mizan.*`), disaster & myth correlations (`moon.disaster.*`), user security (`res.users`), and enterprise operational modules. It eliminates duplicate local relational stores.
+### `PostgreSQL 18 + pgvector (postgres:18-pgvector)`
+Provides the single canonical relational source of truth for all domain entities, sacred knowledge graph records (`moon.witness.*`), Mizan ethical evaluations (`moon.mizan.*`), disaster & myth correlations (`moon.disaster.*`), user security (`vx.user`), and enterprise operational modules. It eliminates duplicate local relational stores.
 
 ### `@moon/protocol`
 Is the API contract source of truth.

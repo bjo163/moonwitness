@@ -20,11 +20,9 @@ import {
 } from '../utils/auth.js'
 import { withDomainSpan } from '../telemetry.js'
 import { SpanStatusCode } from '@opentelemetry/api'
-import { OdooClient, storeOdooSession, getOdooSession, invalidateOdooSession } from '@moon/odoo-bridge'
 
 export interface AuthConfig {
   jwtSecret: string
-  odoo?: { baseUrl: string; database: string; username: string; password: string }
   emailFrom?: string
   emailService?: string
   emailUser?: string
@@ -73,34 +71,6 @@ export async function handleLogin(
         return sendJson(res, 400, { error: 'Email and password required' }, req)
       }
 
-      let odooAuthenticated = false
-      let odooUid: number | undefined
-      let odooSessionKey: string | undefined
-      if (config.odoo) {
-        try {
-          const client = new OdooClient(config.odoo)
-          const identity = await client.authenticateSession(String(email).trim(), String(password))
-          odooAuthenticated = true
-          odooUid = identity.uid
-          odooSessionKey = storeOdooSession(identity)
-          logger.info('moon.auth', `User ${identity.login} authenticated via Odoo`, { uid: identity.uid })
-          const token = issueJwt({ sub: identity.uid, odooUid: identity.uid, odooSessionKey, email: identity.email || identity.login, tokenVersion: 1 }, config.jwtSecret)
-          return sendJson(res, 200, {
-            token,
-            user: {
-              id: identity.uid,
-              email: identity.email || identity.login,
-              name: identity.name || identity.login,
-              role: 'USER',
-              clearanceLevel: 1,
-              title: 'Staff Member',
-            },
-          }, req)
-        } catch {
-          return sendJson(res, 401, { error: 'Invalid credentials' }, req)
-        }
-      }
-
       const VxUser = getModel('vx.user')
       if (!VxUser) {
         span?.setStatus({ code: SpanStatusCode.OK })
@@ -127,14 +97,14 @@ export async function handleLogin(
         return sendJson(res, 401, { error: 'Invalid credentials' }, req)
       }
 
-      const valid = odooAuthenticated || await bcrypt.compare(password, user.password)
+      const valid = await bcrypt.compare(password, user.password)
       if (!valid) {
         span?.setStatus({ code: SpanStatusCode.OK })
         return sendJson(res, 401, { error: 'Invalid credentials' }, req)
       }
 
       const token = issueJwt(
-        { sub: user.id, odooUid, odooSessionKey, email: user.email || user.login, tokenVersion: user.token_version || user.tokenVersion || 1 },
+        { sub: user.id, email: user.email || user.login, tokenVersion: user.token_version || user.tokenVersion || 1 },
         config.jwtSecret
       )
 
@@ -538,11 +508,6 @@ export async function handleLogout(
   return withDomainSpan('auth.logout', async (span) => {
     try {
       const auth = await authenticateRequest(req, config.jwtSecret, { allowAnonymous: false })
-      if (config.odoo && auth.odooSessionKey) {
-        const session = getOdooSession(auth.odooSessionKey)
-        if (session) await new OdooClient(config.odoo).logoutSession(session.sessionId)
-        invalidateOdooSession(auth.odooSessionKey)
-      }
       await revokeUserSessions(auth.uid)
       span?.setAttribute('auth.user_id', auth.uid)
       span?.setStatus({ code: SpanStatusCode.OK })
@@ -572,9 +537,6 @@ export async function handleGetSession(
 ): Promise<void> {
   try {
     const session = await authenticateRequest(req, config.jwtSecret, { allowAnonymous: false })
-    if (config.odoo && session.odooSessionKey && !getOdooSession(session.odooSessionKey)) {
-      return sendJson(res, 401, { error: 'Odoo session expired', code: 'AUTH_SESSION_EXPIRED' }, req)
-    }
     return sendJson(res, 200, { user: session }, req)
   } catch (err: any) {
     if (err instanceof AuthError) {
