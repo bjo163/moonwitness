@@ -319,7 +319,7 @@ export async function handleRest(
       const idStr = match[2]
       const id = idStr ? Number(idStr) : undefined
       if (idStr && (!Number.isSafeInteger(id) || (id as number) <= 0)) return sendJson(res, 400, { error: 'Record ID must be a positive integer', code: 'INVALID_RECORD_ID' }, req)
-      return handleOdooModelRequest(req, res, model, odooModel, session, client, id)
+      return handleOdooModelRequest(req, res, model, odooModel, session ? { sessionId: session.sessionId } : undefined, client, id)
     }
 
     const ModelClass = getModel(model) as any

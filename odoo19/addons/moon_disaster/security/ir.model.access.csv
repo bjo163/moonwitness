@@ -1,3 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_moon_disaster_type_user,moon.disaster.type.user,model_moon_disaster_type,base.group_user,1,1,1,1
-access_moon_disaster_user,moon.disaster.user,model_moon_disaster,base.group_user,1,1,1,1

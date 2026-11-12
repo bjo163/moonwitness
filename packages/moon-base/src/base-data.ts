@@ -180,7 +180,7 @@ export async function loadBaseData() {
       }
 
       if (partnerId) {
-        const userRows = await User.fetch(User, env, [['email', '=', u.email]])
+        const userRows = await User.fetch(User, env, [['login', '=', u.email]])
         let userId: number
         if (!userRows.length) {
           const hashedPassword = await bcrypt.hash(u.password, BCRYPT_ROUNDS)
