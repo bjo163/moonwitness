@@ -12,6 +12,7 @@ import {
   AudioToggle,
 } from "@workspace/ui"
 import { cn } from "@workspace/ui"
+import { commandCenterUrl } from "../lib/app-urls"
 
 const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -50,7 +51,7 @@ export default function WebRootLayout({
 }>) {
   return (
     <html
-      lang="id"
+      lang="en"
       suppressHydrationWarning
       className={cn(
         "antialiased",
@@ -92,7 +93,7 @@ export default function WebRootLayout({
           </Suspense>
           <PwaRegister />
         </MoonProvider>
-        <CommandPalette />
+        <CommandPalette commandCenterUrl={commandCenterUrl} />
         <div className="fixed right-4 bottom-14 z-40 hidden sm:block">
           <AudioToggle />
         </div>

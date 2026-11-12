@@ -19,7 +19,7 @@ export default function CommandCenterRootLayout({
 }) {
   return (
     <html
-      lang="id"
+      lang="en"
       className={`${geist.variable}`}
       suppressHydrationWarning
     >

@@ -27,19 +27,21 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       const saved = safeGetStorage("mw_language") as Language
       if (["en", "id", "ar", "fr"].includes(saved)) {
         setLangState(saved)
-        if (saved === "ar") document.documentElement.dir = "rtl"
-        else document.documentElement.dir = "ltr"
       } else {
         safeSetStorage("mw_language", "en")
       }
     }
   }, [])
 
+  useEffect(() => {
+    document.documentElement.lang = lang
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr"
+  }, [lang])
+
   const setLang = (newLang: Language) => {
     setLangState(newLang)
     if (typeof window !== "undefined") {
       safeSetStorage("mw_language", newLang)
-      document.documentElement.dir = newLang === "ar" ? "rtl" : "ltr"
     }
   }
 

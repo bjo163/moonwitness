@@ -1,11 +1,12 @@
 "use client"
 
 import Link from "next/link"
-import { Bell, Database, Menu, Search, X } from "lucide-react"
+import { Database, Menu, Search } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
+import type { RefObject } from "react"
 import { apiPost } from "@moon/client"
-import { Button, ThemeToggle } from "@workspace/ui"
+import { Button, NotificationBell, ThemeToggle } from "@workspace/ui"
 
 const titles: Record<string, string> = {
   "/dashboard": "Dashboard",
@@ -17,9 +18,16 @@ const titles: Record<string, string> = {
   "/cab": "CAB Governance",
 }
 
-export function CommandCenterTopbar({ onMenu }: { onMenu: () => void }) {
+export function CommandCenterTopbar({
+  onMenu,
+  sidebarOpen,
+  menuButtonRef,
+}: {
+  onMenu: () => void
+  sidebarOpen: boolean
+  menuButtonRef: RefObject<HTMLButtonElement | null>
+}) {
   const pathname = usePathname()
-  const [notificationsOpen, setNotificationsOpen] = useState(false)
   const [seeding, setSeeding] = useState(false)
   const title =
     titles[pathname] ??
@@ -44,16 +52,17 @@ export function CommandCenterTopbar({ onMenu }: { onMenu: () => void }) {
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background px-4 sm:px-6">
       {/* Left Title & Mobile Menu */}
       <div className="flex min-w-0 items-center gap-3">
-        <Button
+        <button
+          ref={menuButtonRef}
           type="button"
-          variant="ghost"
-          size="icon"
           onClick={onMenu}
-          aria-label="Open navigation"
-          className="rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground lg:hidden"
+          aria-label={sidebarOpen ? "Close navigation" : "Open navigation"}
+          aria-expanded={sidebarOpen}
+          aria-controls="command-center-navigation"
+          className="flex h-11 w-11 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
         >
-          <Menu className="h-5 w-5" />
-        </Button>
+          <Menu aria-hidden="true" className="h-5 w-5" />
+        </button>
         <div>
           <p className="text-xs font-medium text-muted-foreground">
             Operations
@@ -95,43 +104,7 @@ export function CommandCenterTopbar({ onMenu }: { onMenu: () => void }) {
           <span>{seeding ? "Seeding..." : "Seed Demo"}</span>
         </Button>
 
-        {/* Notifications */}
-        <div className="relative">
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            onClick={() => setNotificationsOpen((value) => !value)}
-            aria-label="Notifications"
-            className="relative rounded-lg border border-border bg-card p-2 text-muted-foreground shadow-sm hover:bg-accent hover:text-accent-foreground"
-          >
-            <Bell className="h-4 w-4" />
-            <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-primary animate-pulse" />
-          </Button>
-
-          {notificationsOpen && (
-          <div className="absolute right-0 top-12 z-50 w-80 rounded-md border border-border bg-popover p-4 text-popover-foreground shadow-lg">
-              <div className="mb-3 flex items-center justify-between border-b border-border pb-2">
-                <p className="text-sm font-semibold text-foreground">
-                  Notifications
-                </p>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon-xs"
-                  onClick={() => setNotificationsOpen(false)}
-                  aria-label="Close notifications"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  <X className="h-3.5 w-3.5" />
-                </Button>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Background workers and services are operating normally.
-              </p>
-            </div>
-          )}
-        </div>
+        <NotificationBell />
 
         {/* Theme Toggle */}
         <ThemeToggle />

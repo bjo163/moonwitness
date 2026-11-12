@@ -33,7 +33,7 @@ const hadiths: CommandPaletteItemData[] = [
   { label: "Jami' At-Tirmidzi", href: "/knowledge/hadits?book=tirmidzi", category: "Hadith Compendiums" },
 ]
 
-export function getCommandPaletteItems(commandCenterUrl: string): CommandPaletteItemData[] {
+export function getCommandPaletteItems(commandCenterUrl?: string): CommandPaletteItemData[] {
   const portalLinks = NAVIGATION_MESH.portal.flatMap((portal) => {
     const subLinks = "subLinks" in portal ? portal.subLinks : []
     return [
@@ -41,11 +41,16 @@ export function getCommandPaletteItems(commandCenterUrl: string): CommandPalette
       ...subLinks.map((link) => ({ label: link.label, href: link.href, category: portal.label })),
     ]
   })
-  const commandCenterLinks = NAVIGATION_MESH.commandCenter.map((command) => ({
-    label: command.label,
-    href: `${commandCenterUrl}${command.href}`,
-    category: "Command Center (Admin)",
-    isExternal: true,
-  }))
+  const commandCenterLinks =
+    commandCenterUrl === undefined
+      ? []
+      : NAVIGATION_MESH.commandCenter.map((command) => ({
+          label: command.label,
+          href: commandCenterUrl
+            ? `${commandCenterUrl}${command.href}`
+            : command.href,
+          category: "Command Center (Admin)",
+          isExternal: Boolean(commandCenterUrl),
+        }))
   return [...portalLinks, ...commandCenterLinks, ...matrixModels, ...scriptures, ...hadiths]
 }
