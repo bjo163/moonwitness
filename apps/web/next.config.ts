@@ -17,6 +17,24 @@ const withSerwist = withSerwistInit({
   disable: process.env.NODE_ENV === "development",
 })
 
+const isDevelopment = process.env.NODE_ENV === "development"
+
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'self'",
+  "form-action 'self'",
+  // Next.js development uses React Refresh, which requires eval-based code
+  // generation. Production bundles never evaluate strings as JavaScript.
+  `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""}`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' data:",
+  "connect-src 'self' https: http:",
+  "worker-src 'self' blob:",
+].join("; ")
+
 const nextConfig: NextConfig = {
   transpilePackages: ["@workspace/ui", "@moon/compute", "@moon/time", "@moon/protocol"],
 
@@ -67,8 +85,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Content-Security-Policy",
-            value:
-              "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https: http:; worker-src 'self' blob:",
+            value: contentSecurityPolicy,
           },
         ],
       },
