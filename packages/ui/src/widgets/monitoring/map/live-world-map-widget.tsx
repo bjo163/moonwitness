@@ -1,14 +1,16 @@
 "use client"
 
 import React from "react"
-import { Hexagon, Activity } from "lucide-react"
+import { Hexagon } from "lucide-react"
 import dynamic from "next/dynamic"
-import {
+import type {
   EarthquakeFeature,
   ISSPosition,
   FlightInfo,
   CyberAttack,
   MaritimeShip,
+  SourceStatus,
+  SourceMeta,
 } from "@moon/client"
 
 const LeafletMap = dynamic(
@@ -57,38 +59,103 @@ class MapErrorBoundary extends React.Component<
   }
 }
 
+export type LiveWorldMapWidgetProps = {
+  earthquakes?: EarthquakeFeature[]
+  issPosition?: ISSPosition | null
+  flights?: FlightInfo[]
+  cyberAttacks?: CyberAttack[]
+  ships?: MaritimeShip[]
+  status?: SourceStatus
+  sourceSummary?: SourceMeta
+}
+
+function statusLabel(status: SourceStatus): string {
+  if (status === "LIVE") return "LIVE"
+  if (status === "CACHED") return "CACHED"
+  if (status === "STALE") return "STALE"
+  if (status === "SIMULATED") return "SIMULATED"
+  return "UNAVAILABLE"
+}
+
+function statusClasses(status: SourceStatus): string {
+  if (status === "LIVE") return "animate-pulse border-success/30 bg-success/20 text-success"
+  if (status === "STALE") return "border-warning/30 bg-warning/20 text-warning"
+  if (status === "CACHED") return "border-info/30 bg-info/20 text-info"
+  if (status === "SIMULATED") return "border-secondary/30 bg-secondary/20 text-secondary"
+  return "border-border bg-muted/30 text-muted-foreground"
+}
+
+function formatCount(
+  count: number,
+  status: SourceStatus | undefined,
+): string | number {
+  const effective = status ?? "UNAVAILABLE"
+  if (effective === "UNAVAILABLE") return "—"
+  return count
+}
+
+function mapX(longitude: number): number {
+  return ((longitude + 180) / 360) * 100
+}
+
+function mapY(latitude: number): number {
+  return ((90 - latitude) / 180) * 100
+}
+
 export function LiveWorldMapWidget({
   earthquakes = [],
   issPosition,
   flights = [],
   cyberAttacks = [],
   ships = [],
-}: {
-  earthquakes?: EarthquakeFeature[]
-  issPosition?: ISSPosition | null
-  flights?: FlightInfo[]
-  cyberAttacks?: CyberAttack[]
-  ships?: MaritimeShip[]
-}) {
+  status = "UNAVAILABLE",
+  sourceSummary,
+}: LiveWorldMapWidgetProps) {
+  const resolvedStatus = status
+  const showEventCount = resolvedStatus !== "UNAVAILABLE"
+  const legends = [
+    {
+      label: "Seismic Events",
+      value: formatCount(earthquakes.length, resolvedStatus),
+      color: "hsl(var(--destructive))",
+    },
+    {
+      label: "Tracked Flights",
+      value: formatCount(flights.length, resolvedStatus),
+      color: "hsl(var(--secondary))",
+    },
+    {
+      label: "Cyber Events",
+      value: formatCount(cyberAttacks.length, resolvedStatus),
+      color: "hsl(var(--warning))",
+    },
+    {
+      label: "Maritime Vessels",
+      value: formatCount(ships.length, resolvedStatus),
+      color: "hsl(var(--info))",
+    },
+  ]
   return (
     <div className="bg-background relative flex flex-col overflow-hidden rounded-xl border-2 border-primary/20 p-4 lg:col-span-6 xl:col-span-5">
       <div className="relative z-20 flex items-center justify-between">
         <div>
           <div className="mb-0.5 flex items-center gap-2 text-[10px] font-black tracking-widest text-foreground uppercase">
             LIVE WORLD MAP
-            <span className="animate-pulse rounded-[2px] border border-destructive/30 bg-destructive/20 px-1.5 py-0.5 text-[8px] text-destructive">
-              LIVE
+            <span className={`rounded-[2px] border px-1.5 py-0.5 text-[8px] ${statusClasses(resolvedStatus)}`}>
+              {statusLabel(resolvedStatus)}
             </span>
           </div>
-          <div className="text-[8px] text-primary">
-            Real-time planetary seismic monitoring (USGS Network)
+          <div className="text-[8px] text-muted-foreground">
+            {sourceSummary?.source
+              ? `Source: ${sourceSummary.source}`
+              : "Aggregated monitoring sources"}
           </div>
         </div>
         <div className="text-right">
           <div className="text-[12px] font-bold text-destructive">
-            {earthquakes.length}
+            {showEventCount ? earthquakes.length : "—"}
           </div>
-          <div className="text-[7px] text-primary uppercase">Active Events</div>
+          <div className="text-[7px] text-muted-foreground uppercase">Active Events</div>
         </div>
       </div>
 
@@ -107,22 +174,17 @@ export function LiveWorldMapWidget({
 
       {/* Map Legends */}
       <div className="relative z-20 mt-4 flex items-center justify-between border-t border-border pt-3">
-        {[
-          { l: "Seismic Sensors", v: "4,210", c: "#FF0055" },
-          { l: "Observation Nodes", v: "318", c: "#00F0FF" },
-          { l: "Research Centers", v: "124", c: "#A100FF" },
-          { l: "Active Missions", v: "24", c: "#FF9900" },
-        ].map((lg, i) => (
+        {legends.map((lg, i) => (
           <div key={i} className="flex items-center gap-1.5">
             <div
               className="flex h-5 w-5 items-center justify-center rounded border border-border bg-primary/10"
-              style={{ borderColor: `${lg.c}40` }}
+              style={{ borderColor: lg.color }}
             >
-              <Hexagon className="h-3 w-3" style={{ color: lg.c }} />
+              <Hexagon className="h-3 w-3" style={{ color: lg.color }} />
             </div>
             <div>
-              <div className="text-[7px] text-primary uppercase">{lg.l}</div>
-              <div className="text-[10px] font-black text-foreground">{lg.v}</div>
+              <div className="text-[7px] text-muted-foreground uppercase">{lg.label}</div>
+              <div className="text-[10px] font-black text-foreground">{lg.value}</div>
             </div>
           </div>
         ))}

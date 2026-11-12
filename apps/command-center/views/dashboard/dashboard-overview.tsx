@@ -2,54 +2,111 @@
 
 import { useEffect, useState } from "react"
 import { apiClient } from "@moon/client"
-import { DashboardHeader, DashboardLoading, DashboardMainPanels, DashboardMetrics, DashboardSidebar, DashboardUnavailable, type DashboardData, type PolyglotService } from "./dashboard-sections"
-type Response = { success: boolean; status: "success" | "partial" | "unavailable"; data: DashboardData }
+import {
+  DashboardHeader,
+  DashboardLoading,
+  DashboardMainPanels,
+  DashboardMetrics,
+  DashboardSidebar,
+  DashboardUnavailable,
+  type DashboardData,
+  type PolyglotService,
+} from "./dashboard-sections"
+
+type DashboardResponse = {
+  success: boolean
+  status: "success" | "partial" | "unavailable"
+  data: DashboardData
+  generatedAt: string
+}
+
+const SERVICE_CHECKS: Omit<PolyglotService, "status">[] = [
+  { name: "API Gateway", url: "/health/live", port: 4000 },
+  {
+    name: "Celestial Engine",
+    url: "/api/services/celestial/health",
+    port: 4000,
+  },
+  {
+    name: "AI Knowledge Agent",
+    url: "/api/services/ai/health",
+    port: 4000,
+  },
+  {
+    name: "PostgreSQL Database",
+    url: "/api/external/db/status",
+    port: 5432,
+  },
+]
 
 export function DashboardOverview() {
   const [data, setData] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [dashboardStatus, setDashboardStatus] =
+    useState<DashboardResponse["status"]>("unavailable")
+  const [generatedAt, setGeneratedAt] = useState<string | null>(null)
   const [polyglotServices, setPolyglotServices] = useState<PolyglotService[]>([
-    { name: "API Gateway (Node.js)", url: "/health/live", port: 4000, status: "checking" },
-    { name: "Celestial Engine (@moon/compute)", url: "/api/services/celestial/health", port: 4000, status: "checking" },
-    { name: "AI Knowledge Agent (@moon/witness)", url: "/api/services/ai/health", port: 4000, status: "checking" },
-    { name: "PostgreSQL Database", url: "/db/status", port: 5432, status: "checking" },
+    ...SERVICE_CHECKS.map((service): PolyglotService => ({ ...service, status: "checking" })),
   ])
 
   useEffect(() => {
-    apiClient
-      .get<Response>("/api/command-center/dashboard")
-      .then((response) => {
-        if (response.data?.success) setData(response.data.data)
-      })
-      .catch((error) => console.error("Failed to load dashboard", error))
-      .finally(() => setLoading(false))
+    let isActive = true
+
+    const loadDashboard = async () => {
+      try {
+        const response = await apiClient.get<DashboardResponse>(
+          "/api/command-center/dashboard"
+        )
+        if (!isActive) return
+
+        if (response.data?.success && response.data.data) {
+          setData(response.data.data)
+          setDashboardStatus(response.data.status)
+          setGeneratedAt(response.data.generatedAt)
+        } else {
+          setData(null)
+          setDashboardStatus("unavailable")
+          setGeneratedAt(null)
+        }
+      } catch {
+        if (isActive) {
+          setData(null)
+          setDashboardStatus("unavailable")
+          setGeneratedAt(null)
+        }
+      } finally {
+        if (isActive) setLoading(false)
+      }
+    }
 
     const checkServices = async () => {
-      const updated = await Promise.all(
-        polyglotServices.map(async (svc) => {
-          const t0 = performance.now()
+      const updated: PolyglotService[] = await Promise.all(
+        SERVICE_CHECKS.map(async (service) => {
+          const startedAt = performance.now()
           try {
-            const res = await apiClient.get(svc.url, { timeout: 4000 })
-            const latencyMs = Math.round(performance.now() - t0)
-            const isOk = res.status >= 200 && res.status < 300
+            await apiClient.get(service.url, { timeout: 4000 })
             return {
-              ...svc,
-              status: isOk ? ("online" as const) : ("offline" as const),
-              latencyMs,
+              ...service,
+              status: "online" as const,
+              latencyMs: Math.round(performance.now() - startedAt),
             }
           } catch {
-            return { ...svc, status: "offline" as const }
+            const latencyMs = Math.round(performance.now() - startedAt)
+            return { ...service, status: "unavailable" as const, latencyMs }
           }
         })
       )
-      setPolyglotServices(updated)
+      if (isActive) setPolyglotServices(updated)
     }
 
-    checkServices()
-    const interval = setInterval(checkServices, 20000)
-    return () => clearInterval(interval)
+    void loadDashboard()
+    void checkServices()
+    const interval = setInterval(() => void checkServices(), 20_000)
+    return () => {
+      isActive = false
+      clearInterval(interval)
+    }
   }, [])
-
 
   if (loading) {
     return <DashboardLoading />
@@ -63,14 +120,18 @@ export function DashboardOverview() {
   const prayers = data.todayPrayer ?? []
   const feed = data.knowledgeFeed ?? []
   const projects = data.activeProjects ?? []
-  const monitoring = data.globalMonitoring ?? []
   const moon = data.moonObservatory ?? {}
-  const completed = missions.filter((mission) => mission.status === "done").length
 
   return (
     <div className="mx-auto max-w-[1600px] space-y-6 font-sans">
-      <DashboardHeader />
-      <DashboardMetrics data={data} missions={missions} projects={projects} prayers={prayers} completed={completed} />
+      <DashboardHeader status={dashboardStatus} generatedAt={generatedAt} />
+      <DashboardMetrics
+        data={data}
+        missions={missions}
+        projects={projects}
+        prayers={prayers}
+        services={polyglotServices}
+      />
 
       {/* Main Content Grid */}
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">

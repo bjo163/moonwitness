@@ -10,7 +10,7 @@ export type DashboardData = {
   globalMonitoring: Array<Record<string, any>> | null
 }
 
-export type ServiceStatus = 'online' | 'offline' | 'checking'
+export type ServiceStatus = "online" | "unavailable" | "checking"
 
 export type PolyglotService = {
   name: string

@@ -19,8 +19,8 @@ export function DashboardSidebar({ moon, services }: { moon: Record<string, any>
       <DashboardPanel title="Polyglot Services & Telemetry">
         <div className="space-y-3">
           {services.map((service) => (
-            <div key={service.name} className="flex items-center justify-between border-b border-border/40 pb-2 last:border-0 last:pb-0">
-              <div className="flex items-center gap-2"><span className={`h-2 w-2 rounded-full ${service.status === "online" ? "bg-success" : service.status === "checking" ? "bg-warning" : "bg-destructive"}`} /><div><p className="text-xs font-medium text-foreground">{service.name}</p><p className="font-mono text-[10px] text-muted-foreground">Port :{service.port}</p></div></div>
+              <div key={service.name} className="flex items-center justify-between border-b border-border/40 pb-2 last:border-0 last:pb-0">
+              <div className="flex items-center gap-2"><span aria-hidden="true" className={`h-2 w-2 rounded-full ${service.status === "online" ? "bg-success" : service.status === "checking" ? "bg-warning" : "bg-destructive"}`} /><div><p className="text-xs font-medium text-foreground">{service.name}</p><p className="font-mono text-[10px] text-muted-foreground">Port :{service.port}</p></div></div>
               <div className="text-right"><span className={`font-mono text-[10px] font-bold uppercase ${service.status === "online" ? "text-success" : service.status === "checking" ? "text-warning" : "text-destructive"}`}>{service.status}</span>{service.latencyMs !== undefined && <p className="font-mono text-[10px] text-muted-foreground">{service.latencyMs}ms</p>}</div>
             </div>
           ))}

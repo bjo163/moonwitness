@@ -8,102 +8,100 @@ import {
   Users,
   Zap,
   Crosshair,
-  ArrowRight,
+  type LucideIcon,
 } from "lucide-react"
-import { Button } from "../../components/button"
+import type { SourceStatus } from "@moon/client"
 
-export function GlobalStatusWidget() {
+export type GlobalStatusCard = {
+  label: string
+  value?: string | number | null
+  sublabel?: string
+  status?: SourceStatus
+  icon: LucideIcon
+  colorClass?: string
+}
+
+export type GlobalStatusWidgetProps = {
+  status?: SourceStatus
+  cards?: GlobalStatusCard[]
+}
+
+function statusLabel(status: SourceStatus): string {
+  if (status === "LIVE") return "LIVE"
+  if (status === "CACHED") return "CACHED"
+  if (status === "STALE") return "STALE"
+  if (status === "SIMULATED") return "SIMULATED"
+  return "UNAVAILABLE"
+}
+
+function statusClasses(status: SourceStatus): string {
+  if (status === "LIVE") return "bg-success/20 text-success"
+  if (status === "STALE") return "bg-warning/20 text-warning"
+  if (status === "CACHED") return "bg-info/20 text-info"
+  if (status === "SIMULATED") return "bg-secondary/20 text-secondary"
+  return "bg-muted/30 text-muted-foreground"
+}
+
+const DEFAULT_CARDS: GlobalStatusCard[] = [
+  { label: "KNOWLEDGE", icon: BookOpen, colorClass: "text-primary", status: "UNAVAILABLE" },
+  { label: "PEACE INDEX", icon: Heart, colorClass: "text-success", status: "UNAVAILABLE" },
+  { label: "MOON STATUS", icon: Moon, colorClass: "text-secondary", status: "UNAVAILABLE" },
+  { label: "PRAYER SYNC", icon: Activity, colorClass: "text-success", status: "UNAVAILABLE" },
+  { label: "ENVIRONMENT", icon: Globe2, colorClass: "text-success", status: "UNAVAILABLE" },
+  { label: "HUMANITY", icon: Users, colorClass: "text-foreground", status: "UNAVAILABLE" },
+  { label: "TECHNOLOGY", icon: Zap, colorClass: "text-foreground", status: "UNAVAILABLE" },
+  { label: "RESEARCH", icon: Crosshair, colorClass: "text-primary", status: "UNAVAILABLE" },
+]
+
+export function GlobalStatusWidget({
+  status = "UNAVAILABLE",
+  cards = DEFAULT_CARDS,
+}: GlobalStatusWidgetProps) {
+  const resolvedStatus = status
+
   return (
     <div className="bg-background flex flex-1 flex-col justify-between rounded-xl border border-primary/30 p-4">
       <div className="mb-4 flex items-center justify-between">
         <div className="text-[9px] font-black tracking-widest text-primary uppercase">
-          LIVE GLOBAL STATUS
+          GLOBAL STATUS
         </div>
-        <div className="bg-success/20 text-success flex items-center gap-1 rounded px-1.5 py-0.5 text-[8px] font-bold">
-          <span className="bg-success h-1 w-1 animate-pulse rounded-full" />{" "}
-          LIVE
+        <div className={`flex items-center gap-1 rounded px-1.5 py-0.5 text-[8px] font-bold ${statusClasses(resolvedStatus)}`}>
+          <span className="h-1 w-1 rounded-full bg-current" /> {statusLabel(resolvedStatus)}
         </div>
       </div>
 
       <div className="grid h-full grid-cols-2 gap-2">
-        {[
-          {
-            l: "KNOWLEDGE",
-            v: "82%",
-            s: "Coverage",
-            icon: BookOpen,
-            c: "text-primary",
-          },
-          {
-            l: "PEACE INDEX",
-            v: "68%",
-            s: "Stable",
-            icon: Heart,
-            c: "text-success",
-          },
-          {
-            l: "MOON STATUS",
-            v: "Good",
-            s: "Visibility",
-            icon: Moon,
-            c: "text-secondary",
-          },
-          {
-            l: "PRAYER SYNC",
-            v: "98.7%",
-            s: "Global Sync",
-            icon: Activity,
-            c: "text-success",
-          },
-          {
-            l: "ENVIRONMENT",
-            v: "72",
-            s: "Air Quality",
-            icon: Globe2,
-            c: "text-success",
-          },
-          {
-            l: "HUMANITY",
-            v: "7.83B",
-            s: "Population",
-            icon: Users,
-            c: "text-knowledge",
-          },
-          {
-            l: "TECHNOLOGY",
-            v: "76%",
-            s: "Progress",
-            icon: Zap,
-            c: "text-knowledge",
-          },
-          {
-            l: "RESEARCH",
-            v: "1,248",
-            s: "Active Projects",
-            icon: Crosshair,
-            c: "text-primary",
-          },
-        ].map((st, i) => (
-          <div
-            key={i}
-            className="bg-background flex cursor-pointer flex-col justify-between rounded border border-border p-2 transition-colors hover:bg-muted/30"
-          >
-            <div className="text-[7px] font-bold text-primary uppercase">
-              {st.l}
-            </div>
-            <div className="mt-1 flex items-end justify-between">
-              <st.icon className={`mb-0.5 h-3.5 w-3.5 ${st.c}`} />
-              <div className="text-right">
-                <div className="text-xs font-black text-foreground">{st.v}</div>
-                <div className="text-[7px] text-primary">{st.s}</div>
+        {cards.map((card, i) => {
+          const cardStatus = card.status ?? resolvedStatus
+          const displayValue =
+            card.value === null || card.value === undefined || cardStatus === "UNAVAILABLE"
+              ? "—"
+              : String(card.value)
+          const Icon = card.icon
+          return (
+            <div
+              key={`${card.label}-${i}`}
+              className="flex flex-col justify-between rounded-md border border-border bg-background p-2"
+            >
+              <div className="flex items-center justify-between gap-1">
+                <div className="text-[7px] font-bold text-muted-foreground uppercase">{card.label}</div>
+                <div className="text-[6px] font-bold tracking-widest text-muted-foreground">
+                  {statusLabel(cardStatus)}
+                </div>
+              </div>
+              <div className="mt-1 flex items-end justify-between">
+                <Icon className={`mb-0.5 h-3.5 w-3.5 ${card.colorClass ?? "text-primary"}`} />
+                <div className="text-right">
+                  <div className="text-xs font-black text-foreground">{displayValue}</div>
+                  <div className="text-[7px] text-muted-foreground">
+                    {card.sublabel ?? (cardStatus === "UNAVAILABLE" ? "No data" : "")}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
-      <Button type="button" variant="ghost" className="mt-3 flex w-full items-center justify-center gap-1 border-t border-border pt-3 text-center text-[9px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
-        VIEW DETAILED STATUS <ArrowRight className="h-3 w-3" />
-      </Button>
     </div>
   )
 }
