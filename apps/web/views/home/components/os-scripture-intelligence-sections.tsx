@@ -583,7 +583,7 @@ export function ScriptureStatusFooter() {
         <span className="ml-1 font-mono text-primary">Qur&apos;an 38:29</span>
       </div>
       <div className="flex items-center gap-2">
-        DATA INTEGRITY 100% <Shield className="h-4 w-4 text-success" />
+        DATA SOURCES ACTIVE <Shield className="h-4 w-4 text-success" />
       </div>
     </div>
   )

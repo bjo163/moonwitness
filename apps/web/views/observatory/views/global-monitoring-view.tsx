@@ -128,12 +128,12 @@ function MonitoringHeader({ clockWIB, isLoading }: MonitoringHeaderProps) {
           {isLoading ? (
             <div className="text-warning mt-1 flex items-center gap-2 text-[10px] font-black">
               <div className="bg-warning h-2 w-2 animate-pulse rounded-full shadow-sm" />
-              SYNCHRONIZING APIs...
+              SYNCHRONIZING...
             </div>
           ) : (
             <div className="text-success mt-1 flex items-center gap-2 text-[10px] font-black">
               <div className="bg-success h-2 w-2 animate-pulse rounded-full shadow-sm" />
-              API SYNCED
+              CONNECTED
             </div>
           )}
         </div>
@@ -344,7 +344,7 @@ function MonitoringFooter({
         <div className="flex items-center gap-2">
           <CheckCircle2 className="text-success h-4 w-4" />
           <span>
-            DATA INTEGRITY <span className="text-success">100%</span>
+            DATA SOURCES <span className="text-success">ACTIVE</span>
           </span>
           <div className="ml-2 flex h-1.5 w-20 gap-0.5 bg-background">
             {[...Array(PROGRESS_SEGMENTS)].map((_, i) => (

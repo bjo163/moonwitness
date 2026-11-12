@@ -176,4 +176,4 @@ Draft revisi 2 mempertahankan domain regulasi/pasal/kasus dan assessment. Peruba
 - Audit governance diulang setelah revisi: exit 0, tetapi delapan component-health findings dan 29 file di atas 400 baris; exit 0 tidak sama dengan semua temuan bersih.
 - Tidak ada tes database/ACL Odoo live atau full Cosmic pipeline. Tes yang lulus membuktikan perilaku yang diuji, bukan validitas ilmiah/metafisik scoring.
 
-Draft implementasi terbaru: [MIZAN-ODOO-DRAFT.md](MIZAN-ODOO-DRAFT.md).
+Draft implementasi terbaru: [MIZAN-IMPLEMENTATION-CHECKLIST.md](MIZAN-IMPLEMENTATION-CHECKLIST.md).

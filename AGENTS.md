@@ -79,10 +79,7 @@ corpus artifact + manifest
 @moon/witness ingestion
         |
         v
-@moon/odoo-bridge
-        |
-        v
-Odoo 19 Master Store (moon.witness.*)
+PostgreSQL 18 + pgvector (moon.witness.*)
         |
         v
 MoonWitness API Gateway (Fastify)
@@ -290,7 +287,7 @@ corpus data       -> moonwitness-corpus
 application graph -> @moon/witness
 transport         -> @moon/server
 API contract      -> @moon/protocol
-master store      -> Odoo 19 + PostgreSQL (postgres:18-pgvector)
+master store      -> PostgreSQL 18 + pgvector (postgres:18-pgvector)
 vector search     -> pgvector 0.8+ via @moon/witness RAG
 pure compute      -> @moon/compute (isomorphic mathematical engine)
 public UI         -> apps/web
