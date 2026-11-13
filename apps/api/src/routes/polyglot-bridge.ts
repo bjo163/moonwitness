@@ -46,8 +46,20 @@ export function registerPolyglotBridge(_server?: NativeServer): void {
   })
 
   const handleQibla = async (ctx: any) => {
-    const lat = Number(ctx.query?.lat ?? ctx.query?.latitude ?? ctx.body?.latitude ?? ctx.body?.lat ?? 0.0)
-    const lon = Number(ctx.query?.lon ?? ctx.query?.longitude ?? ctx.body?.longitude ?? ctx.body?.lon ?? 0.0)
+    const lat = Number(
+      ctx.query?.lat ??
+        ctx.query?.latitude ??
+        ctx.body?.latitude ??
+        ctx.body?.lat ??
+        0.0
+    )
+    const lon = Number(
+      ctx.query?.lon ??
+        ctx.query?.longitude ??
+        ctx.body?.longitude ??
+        ctx.body?.lon ??
+        0.0
+    )
     return calculateQiblaBearing(lat, lon)
   }
 
@@ -70,9 +82,27 @@ export function registerPolyglotBridge(_server?: NativeServer): void {
   })
 
   const handleHilal = async (ctx: any) => {
-    const alt = Number(ctx.query?.alt ?? ctx.query?.altitude_degrees ?? ctx.body?.altitude_degrees ?? ctx.body?.alt ?? 0.0)
-    const elong = Number(ctx.query?.elong ?? ctx.query?.elongation_degrees ?? ctx.body?.elongation_degrees ?? ctx.body?.elong ?? 0.0)
-    const width = Number(ctx.query?.width ?? ctx.query?.crescent_width_arcmin ?? ctx.body?.crescent_width_arcmin ?? ctx.body?.width ?? 0.5)
+    const alt = Number(
+      ctx.query?.alt ??
+        ctx.query?.altitude_degrees ??
+        ctx.body?.altitude_degrees ??
+        ctx.body?.alt ??
+        0.0
+    )
+    const elong = Number(
+      ctx.query?.elong ??
+        ctx.query?.elongation_degrees ??
+        ctx.body?.elongation_degrees ??
+        ctx.body?.elong ??
+        0.0
+    )
+    const width = Number(
+      ctx.query?.width ??
+        ctx.query?.crescent_width_arcmin ??
+        ctx.body?.crescent_width_arcmin ??
+        ctx.body?.width ??
+        0.5
+    )
     return evaluateHilalVisibility(alt, elong, width)
   }
 
@@ -95,11 +125,33 @@ export function registerPolyglotBridge(_server?: NativeServer): void {
   })
 
   const handlePrayerTimes = async (ctx: any) => {
-    const lat = Number(ctx.query?.lat ?? ctx.query?.latitude ?? ctx.body?.latitude ?? ctx.body?.lat ?? -6.2088)
-    const lon = Number(ctx.query?.lon ?? ctx.query?.longitude ?? ctx.body?.longitude ?? ctx.body?.lon ?? 106.8456)
-    const date = String(ctx.query?.date ?? ctx.body?.date ?? "2026-09-06")
-    const tz = Number(ctx.query?.tz ?? ctx.query?.timezone_offset ?? ctx.body?.timezone_offset ?? ctx.body?.tz ?? 7.0)
-    const rawConv = String(ctx.query?.convention ?? ctx.body?.convention ?? "KEMENAG")
+    const lat = Number(
+      ctx.query?.lat ??
+        ctx.query?.latitude ??
+        ctx.body?.latitude ??
+        ctx.body?.lat ??
+        -6.2088
+    )
+    const lon = Number(
+      ctx.query?.lon ??
+        ctx.query?.longitude ??
+        ctx.body?.longitude ??
+        ctx.body?.lon ??
+        106.8456
+    )
+    const date = String(
+      ctx.query?.date ?? ctx.body?.date ?? "2026-09-06"
+    )
+    const tz = Number(
+      ctx.query?.tz ??
+        ctx.query?.timezone_offset ??
+        ctx.body?.timezone_offset ??
+        ctx.body?.tz ??
+        7.0
+    )
+    const rawConv = String(
+      ctx.query?.convention ?? ctx.body?.convention ?? "KEMENAG"
+    )
     const allowed = ["KEMENAG", "MWL", "ISNA", "UMM_AL_QURA"]
     const conv = (allowed.includes(rawConv) ? rawConv : "KEMENAG") as any
     return calculateDetailedPrayerTimes(lat, lon, date, tz, conv)
@@ -110,7 +162,8 @@ export function registerPolyglotBridge(_server?: NativeServer): void {
     path: "/api/services/celestial/prayer-times",
     auth: "none",
     tags: ["Celestial Engine"],
-    summary: "Calculate precise Islamic prayer times using solar declination and Spencer EqT formula",
+    summary:
+      "Calculate precise Islamic prayer times using solar declination and Spencer EqT formula",
     handler: handlePrayerTimes,
   })
 
@@ -119,7 +172,8 @@ export function registerPolyglotBridge(_server?: NativeServer): void {
     path: "/api/services/celestial/prayer-times",
     auth: "none",
     tags: ["Celestial Engine"],
-    summary: "Calculate precise Islamic prayer times using solar declination and Spencer EqT formula",
+    summary:
+      "Calculate precise Islamic prayer times using solar declination and Spencer EqT formula",
     handler: handlePrayerTimes,
   })
 
@@ -144,7 +198,8 @@ export function registerPolyglotBridge(_server?: NativeServer): void {
     path: "/api/services/ai/semantic/search",
     auth: "none",
     tags: ["AI Agent"],
-    summary: "Perform BM25 search with Arabic text normalization across scriptures and hadiths",
+    summary:
+      "Perform BM25 search with Arabic text normalization across scriptures and hadiths",
     handler: async (ctx) => {
       const query = String(ctx.body?.query || "")
       const topK = Number(ctx.body?.top_k || 5)
@@ -157,7 +212,8 @@ export function registerPolyglotBridge(_server?: NativeServer): void {
     path: "/api/services/ai/semantic/hybrid-search",
     auth: "none",
     tags: ["AI Agent"],
-    summary: "Execute hybrid search combining BM25 term matching with dense semantic concept embeddings",
+    summary:
+      "Execute hybrid search combining BM25 term matching with dense semantic embeddings (requires configured embedding provider)",
     handler: async (ctx) => {
       const query = String(ctx.body?.query || "")
       const topK = Number(ctx.body?.top_k || 5)
