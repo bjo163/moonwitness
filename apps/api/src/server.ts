@@ -23,6 +23,11 @@ export const server = new NativeServer({
   email: config.email,
   addons: allAddonModels,
   cors: config.cors,
+  onBoot: async () => {
+    // Sync superuser from env BEFORE server starts accepting connections
+    // This ensures admin user exists when E2E tests run
+    await syncSuperuserFromEnv()
+  },
 })
 
 // ── 2. Register Middleware & Addons ─────────────────────────────────────────
@@ -48,9 +53,6 @@ server.start().then(async () => {
       `[Database] ✗ Connection failed: ${dbHealth.error} (${dbHealth.latencyMs}ms)`
     )
   }
-
-  // Always synchronize superuser credentials directly from .env
-  await syncSuperuserFromEnv()
 
   // Start background cron scheduler, telemetry, and local-first sync worker
   globalCronRunner.start()
