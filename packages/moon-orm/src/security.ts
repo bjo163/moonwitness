@@ -156,7 +156,7 @@ export async function checkAccessRights(
   }
 }
 
-const ALLOWED_RECORD_RULE_OPERATORS = new Set([
+export const ALLOWED_RECORD_RULE_OPERATORS = new Set([
   '=',
   '==',
   '!=',
