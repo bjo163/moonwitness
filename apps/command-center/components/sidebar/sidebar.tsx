@@ -1,15 +1,12 @@
 "use client"
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { ChevronDown, ChevronRight, LogOut, ShieldCheck, X } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
-import { navigationItems, utilityItems } from "../navigation/navigation-items"
+import { usePathname } from "next/navigation"
 import { cn } from "@workspace/ui"
-
-function active(pathname: string, href: string) {
-  return pathname === href || pathname.startsWith(`${href}/`)
-}
+import { SidebarOverlay } from "./sidebar-overlay"
+import { CommandCenterSidebarHeader } from "./sidebar-header"
+import { SidebarNavigation } from "./sidebar-navigation"
+import { CommandCenterSidebarFooter } from "./sidebar-footer"
 
 export function CommandCenterSidebar({
   onLogout,
@@ -39,14 +36,7 @@ export function CommandCenterSidebar({
 
   return (
     <>
-      {open && (
-        <button
-          type="button"
-          aria-label="Close navigation"
-          className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm lg:hidden"
-          onClick={onClose}
-        />
-      )}
+      <SidebarOverlay open={open} onClose={onClose} isDesktop={isDesktop} />
       <aside
         id="command-center-navigation"
         aria-label="Command Center navigation"
@@ -57,165 +47,21 @@ export function CommandCenterSidebar({
           open ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        {/* Header */}
-        <div className="flex h-16 items-center justify-between border-b border-border px-5">
-          <Link
-            href="/dashboard"
-            className="flex items-center gap-3"
-            onClick={onClose}
-          >
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 text-primary">
-              <ShieldCheck className="h-5 w-5" />
-            </span>
-            <div>
-              <span className="block text-sm font-bold tracking-tight text-foreground">
-                MoonWitness
-              </span>
-              <span className="block text-[11px] text-muted-foreground">
-                Operations & Admin
-              </span>
-            </div>
-          </Link>
-          <button
-            ref={closeButtonRef}
-            type="button"
-            className="rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground lg:hidden"
-            aria-label="Close navigation"
-            onClick={onClose}
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
+        <CommandCenterSidebarHeader isDesktop={isDesktop} onClose={onClose} closeButtonRef={closeButtonRef} />
 
-        {/* Navigation List */}
         <nav
           className="flex-1 overflow-y-auto px-3 py-4"
           aria-label="Primary navigation"
         >
-          <p className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-            Workspace
-          </p>
-          <ul className="space-y-1">
-            {navigationItems.map((item) => {
-              const isActive = active(pathname, item.href)
-              const isOpen = expanded[item.label] ?? isActive
-              const submenuId = `sidebar-submenu-${item.href.replace(/[^a-zA-Z0-9_-]/g, "-")}`
-              return (
-                <li key={item.href}>
-                  <div
-                    className={cn(
-                      "flex items-center rounded-lg transition-colors",
-                      isActive
-                        ? "bg-accent text-accent-foreground font-semibold"
-                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                    )}
-                  >
-                    <Link
-                      href={item.href}
-                      onClick={onClose}
-                      aria-current={isActive ? "page" : undefined}
-                      className="flex min-w-0 flex-1 items-center gap-3 px-3 py-2 text-xs font-medium"
-                    >
-                      <item.icon className="h-4 w-4 shrink-0" />
-                      <span className="truncate">{item.label}</span>
-                    </Link>
-                    {item.children && (
-                      <button
-                        type="button"
-                        aria-label={`${isOpen ? "Collapse" : "Expand"} ${item.label}`}
-                        aria-expanded={isOpen}
-                        aria-controls={submenuId}
-                        onClick={() =>
-                          setExpanded((current) => ({
-                            ...current,
-                            [item.label]: !isOpen,
-                          }))
-                        }
-                        className="flex min-h-11 min-w-11 items-center justify-center rounded-md text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      >
-                        {isOpen ? (
-                          <ChevronDown className="h-4 w-4" />
-                        ) : (
-                          <ChevronRight className="h-4 w-4" />
-                        )}
-                      </button>
-                    )}
-                  </div>
-                  {item.children && (
-                    <ul
-                      id={submenuId}
-                      hidden={!isOpen}
-                      className="ml-5 space-y-0.5 border-l border-border pl-3 pt-1"
-                    >
-                      {item.children.map((sub) => {
-                        const isSubActive = active(pathname, sub.href)
-                        return (
-                          <li key={sub.href}>
-                            <Link
-                              href={sub.href}
-                              onClick={onClose}
-                              aria-current={isSubActive ? "page" : undefined}
-                              className={cn(
-                                "flex min-h-11 items-center gap-2 rounded-lg px-3 text-xs transition-colors",
-                                isSubActive
-                                  ? "bg-accent text-accent-foreground font-semibold"
-                                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                              )}
-                            >
-                              <sub.icon className="h-3.5 w-3.5" />
-                              <span>{sub.label}</span>
-                            </Link>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                  )}
-                </li>
-              )
-            })}
-          </ul>
-
-          <p className="px-3 pb-2 pt-6 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-            Utilities
-          </p>
-          <ul className="space-y-1">
-            {utilityItems.map((item) => (
-              <li key={item.href}>
-                {(() => {
-                  const isActive = active(pathname, item.href)
-                  return (
-                <Link
-                  href={item.href}
-                  onClick={onClose}
-                  aria-current={isActive ? "page" : undefined}
-                  className={cn(
-                    "flex min-h-11 items-center gap-3 rounded-lg px-3 text-xs font-medium transition-colors",
-                    isActive
-                      ? "bg-accent font-semibold text-accent-foreground"
-                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                  )}
-                >
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.label}</span>
-                </Link>
-                  )
-                })()}
-              </li>
-            ))}
-          </ul>
+          <SidebarNavigation
+            pathname={pathname}
+            expanded={expanded}
+            setExpanded={setExpanded}
+            onClose={onClose}
+          />
         </nav>
 
-        {/* Footer */}
-        <div className="border-t border-border p-4">
-          <button
-            type="button"
-            onClick={onLogout}
-            className="flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-xs font-medium text-destructive transition-colors hover:bg-destructive/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <LogOut className="h-4 w-4" />
-            <span>Sign out</span>
-          </button>
-        </div>
+        <CommandCenterSidebarFooter onLogout={onLogout} />
       </aside>
     </>
   )
