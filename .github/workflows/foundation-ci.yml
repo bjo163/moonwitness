@@ -47,6 +47,8 @@ jobs:
         run: pnpm workflow:check
       - name: Governance registry validation
         run: pnpm governance:validate
+      - name: Build contract verification dependencies
+        run: pnpm turbo build --filter=@moon/server^...
       - name: Universal Contract Drift Verification
         run: pnpm contracts:verify
       - name: UMBRELLA v6 Contract Validation
