@@ -47,6 +47,16 @@ describe('Production database guard normalization (T-26)', () => {
       .toThrow(/non-localhost/)
   })
 
+  it('rejects a Knex.Config object with a localhost connection.connectionString', () => {
+    expect(() => construct({ client: 'pg', connection: { connectionString: 'postgres://u:p@localhost/moon' } }))
+      .toThrow(/non-localhost/)
+  })
+
+  it('rejects a Knex.Config object with a localhost connection.uri', () => {
+    expect(() => construct({ client: 'pg', connection: { uri: 'postgres://u:p@localhost/moon' } }))
+      .toThrow(/non-localhost/)
+  })
+
   it('rejects a Knex.Config SQLite object', () => {
     expect(() => construct({ client: 'better-sqlite3', connection: { filename: ':memory:' } }))
       .toThrow(/SQLite/)
@@ -77,9 +87,36 @@ describe('Production database guard normalization (T-26)', () => {
     })).not.toThrow()
   })
 
+  it('accepts a remote Knex.Config object using connection.connectionString', () => {
+    expect(() => construct({ client: 'pg', connection: { connectionString: 'postgres://u:p@db.internal/moon' } }))
+      .not.toThrow()
+  })
+
+  it('accepts a remote Knex.Config object using connection.uri', () => {
+    expect(() => construct({ client: 'pg', connection: { uri: 'postgres://u:p@db.internal/moon' } }))
+      .not.toThrow()
+  })
+
+  it('accepts a connection.connectionString with surrounding whitespace', () => {
+    expect(() => construct({ client: 'pg', connection: { connectionString: '  postgres://u:p@db.internal/moon  ' } }))
+      .not.toThrow()
+  })
+
+  it('accepts a PostgreSQL URL whose database name ends in .db', () => {
+    expect(() => construct('postgres://u:p@db.internal/moon.db')).not.toThrow()
+  })
+
+  it('rejects a real SQLite file path ending in .db', () => {
+    expect(() => construct('./data/moon.db')).toThrow(/SQLite/)
+  })
+
   it('accepts a valid live Knex instance', () => {
     const instance = knex({ client: 'pg', connection: 'postgres://u:p@db.internal:5432/moon' })
-    expect(() => construct(instance)).not.toThrow()
+    try {
+      expect(() => construct(instance)).not.toThrow()
+    } finally {
+      instance.destroy()
+    }
   })
 
   it('still permits localhost outside production', () => {

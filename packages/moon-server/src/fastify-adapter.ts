@@ -113,6 +113,8 @@ function normalizeDatabaseUrl(config: DbConfig): string {
   if (typeof connection === 'string') return connection.trim()
   if (connection && typeof connection === 'object') {
     if (typeof connection.filename === 'string') return `sqlite://${connection.filename}`
+    const connectionString = connection.connectionString ?? connection.uri
+    if (typeof connectionString === 'string' && connectionString.trim()) return connectionString.trim()
     const host = connection.host ? String(connection.host) : ''
     const scheme = PG_CLIENTS.has(client) ? 'postgres' : client
     if (!host) return scheme ? `${scheme}://` : ''
@@ -130,7 +132,10 @@ function assertProductionDatabase(config: DbConfig): void {
   const url = normalizeDatabaseUrl(config)
   if (!url) reject('must be explicit and non-empty.')
   const lower = url.toLowerCase()
-  if (lower.startsWith('sqlite') || lower === ':memory:' || /\.(db|sqlite|sqlite3)$/.test(lower)) {
+  // A PostgreSQL database may legitimately be named e.g. moon.db; the file-suffix
+  // check applies only to filesystem paths, not to URLs judged by their scheme.
+  const isUrl = /^[a-z][a-z0-9+.-]*:\/\//.test(lower)
+  if (lower.startsWith('sqlite') || lower === ':memory:' || (!isUrl && /\.(db|sqlite|sqlite3)$/.test(lower))) {
     reject('must not use SQLite in production.')
   }
   if (!/^(postgres(ql)?|pg):\/\//.test(lower)) reject('must use the PostgreSQL dialect.')
