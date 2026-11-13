@@ -1,0 +1,44 @@
+# MoonWitness — local development infrastructure (Postgres + Redis only).
+# Zero-config: `docker compose -f docker-compose.dev.yml up -d` works without any .env.
+# The app itself runs on the host via `pnpm dev` (see README).
+# Production stack lives in docker-compose.yml (requires .env.production).
+
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.7-pg18
+    container_name: mw_dev_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-moonwitness}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-moonwitness_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-moonwitness}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: mw_dev_redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:-moonwitness_dev}"]
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-moonwitness_dev}
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_dev_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli --no-auth-warning -a \"$$REDIS_PASSWORD\" ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_dev_data:
+  redis_dev_data:

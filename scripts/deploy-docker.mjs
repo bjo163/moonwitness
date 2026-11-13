@@ -39,12 +39,6 @@ const APP_SERVICES = ['api', 'celestial-engine', 'ai-agent', 'web', 'command-cen
 const ALL_SERVICES = [...INFRA_SERVICES, ...APP_SERVICES];
 
 const REQUIRED_ENV_VARS = [
-  'POSTGRES_USER',
-  'POSTGRES_PASSWORD',
-  'POSTGRES_DB',
-  'DATABASE_URL',
-  'REDIS_PASSWORD',
-  'REDIS_URL',
   'JWT_SECRET',
   'PUBLIC_API_URL',
 ];
