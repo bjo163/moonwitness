@@ -1,6 +1,8 @@
 FROM node:22-alpine
 WORKDIR /app
 RUN corepack enable && corepack prepare pnpm@10.33.4 --activate
+# better-sqlite3 has no musl prebuilt binary; node-gyp needs a toolchain
+RUN apk add --no-cache python3 make g++
 
 # Copy all source files
 COPY . .
