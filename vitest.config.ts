@@ -19,6 +19,8 @@ export default defineConfig({
       '@moon/server': path.resolve(__dirname, 'packages/moon-server/src/index.ts'),
       '@moon/protocol': path.resolve(__dirname, 'packages/moon-protocol/src/index.ts'),
       '@moon/compute': path.resolve(__dirname, 'packages/moon-compute/src/index.ts'),
+      '@moon/riot': path.resolve(__dirname, 'packages/moon-riot/src/index.ts'),
+      '@moon/riot-coolify': path.resolve(__dirname, 'packages/moon-riot-coolify/src/index.ts'),
       '@workspace/error': path.resolve(__dirname, 'packages/error/src/index.ts'),
       '@workspace/types': path.resolve(__dirname, 'packages/types/src/index.ts'),
     }

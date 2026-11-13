@@ -829,6 +829,34 @@ importers:
         specifier: ^5
         version: 5.9.3
 
+  packages/moon-riot:
+    devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.19.41
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      typescript:
+        specifier: ^5.5.4
+        version: 5.9.3
+
+  packages/moon-riot-coolify:
+    dependencies:
+      '@moon/riot':
+        specifier: workspace:*
+        version: link:../moon-riot
+    devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.19.41
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      typescript:
+        specifier: ^5.5.4
+        version: 5.9.3
+
   packages/moon-server:
     dependencies:
       '@moon/base':
