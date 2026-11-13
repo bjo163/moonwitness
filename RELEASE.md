@@ -14,24 +14,26 @@ MoonWitness follows semantic versioning:
 
 ## Promotion path
 
-Normal releases follow:
+Normal releases are **fully automatic**:
 
 ```text
 feature branch
 -> pull request + Foundation CI
--> dev
--> Foundation CI + Production PostgreSQL Certification
--> main
--> exact version tag
--> Release workflow
--> GitHub Release
+-> dev (push)
+-> Foundation CI completes successfully
+-> Auto Release workflow (workflow_run trigger):
+   1. promotes dev → main (-X theirs)
+   2. bumps patch version [skip ci]
+   3. creates & pushes version tag (vX.Y.Z)
+   4. creates GitHub Release (auto-generated notes)
+   5. syncs version bump back to dev (fast-forward, [skip ci])
 ```
 
-Do not skip `dev` for ordinary releases.
+Do not skip `dev` for ordinary releases. The automatic pipeline handles promotion, versioning, and release creation.
 
 ## Required candidate checks
 
-For the exact candidate SHA:
+For the exact candidate SHA on `dev` push:
 
 ```bash
 pnpm install --frozen-lockfile
@@ -41,7 +43,14 @@ pnpm test
 pnpm build
 ```
 
-Database/deployment-sensitive candidates additionally require the canonical PostgreSQL certification workflow, including:
+Database/deployment-sensitive candidates **additionally** require manual PostgreSQL certification:
+
+```bash
+# Manual dispatch workflow:
+.github/workflows/witness-postgres-certification.yml
+```
+
+Canonical PostgreSQL certification includes:
 
 ```text
 fresh PostgreSQL 18
@@ -54,16 +63,15 @@ fresh PostgreSQL 18
 -> quality/security regressions
 ```
 
+Run certification manually before promoting sensitive changes, or promote and certify after (the automatic pipeline will not block on it).
+
 ## Version and tag invariant
 
-Before tagging:
+The Auto Release workflow enforces:
 
-1. Update root `package.json` version and `CHANGELOG.md`.
-2. Promote the certified `dev` candidate to `main` through PR flow.
-3. Create tag `v${package.json.version}` on the **exact current `main` commit**.
-4. Never move or reuse an existing release tag.
-
-`.github/workflows/release.yml` rejects a tag when its name does not match the root version or it does not point to exact current `main`.
+1. Bumps root `package.json` **patch** version with commit message `chore(release): vX.Y.Z [skip ci]`.
+2. Creates tag `vX.Y.Z` on the exact current `main` commit (after promote + bump).
+3. Never moves or reuses an existing release tag (idempotent: skips if tag exists).
 
 ## Database invariant
 
@@ -80,4 +88,4 @@ No historical migration may be edited after application. Create a new additive/r
 
 v0.3.1 hardens the production/release path, including deterministic Docker/PostgreSQL certification, exact-candidate promotion, compiled runtime packaging, blocking quality gates, and final Fastify/RPC transport hardening.
 
-A GitHub Release is complete only after the release workflow succeeds for `v0.3.1` (or the current root version at that time).
+The next release (v0.3.2) will be created automatically by the Auto Release workflow upon the next successful Foundation CI run on `dev`.

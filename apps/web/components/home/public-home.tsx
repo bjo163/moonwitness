@@ -100,14 +100,14 @@ export function PublicHome() {
     <div className="bg-background text-foreground">
       <PublicHero />
 
-      <section className="border-b border-border py-20 sm:py-28">
+      <section className="border-b border-border py-8">
         <div className="mx-auto max-w-7xl px-6 sm:px-10">
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <div>
-              <p className="font-mono text-xs font-semibold tracking-widest text-primary">
+              <p className="font-mono text-xs font-semibold tracking-tight text-primary">
                 One observatory, multiple lenses
               </p>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-5xl">
+              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-3xl">
                 Explore the sky, the sources, and the story around them.
               </h2>
             </div>
@@ -122,7 +122,7 @@ export function PublicHome() {
             {pathways.map(({ icon: Icon, title, description, href, action }) => (
               <article
                 key={title}
-                className="group flex min-h-72 flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:border-primary/40 hover:shadow-md sm:p-7"
+                className="group flex min-h-72 flex-col justify-between rounded-2xl border border-border bg-card p-6 transition-all hover:border-primary/40 sm:p-7"
               >
                 <div>
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-background text-primary">
@@ -148,14 +148,14 @@ export function PublicHome() {
         </div>
       </section>
 
-      <section className="border-b border-border bg-muted/30 py-20 sm:py-28">
+      <section className="border-b border-border bg-muted/30 py-8">
         <div className="mx-auto max-w-7xl px-6 sm:px-10">
-          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+          <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
             <div className="lg:sticky lg:top-28">
-              <p className="font-mono text-xs font-semibold tracking-widest text-success">
+              <p className="font-mono text-xs font-semibold tracking-tight text-success">
                 Evidence before certainty
               </p>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-5xl">
+              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-3xl">
                 Built to preserve context, not erase it.
               </h2>
               <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">
@@ -175,14 +175,14 @@ export function PublicHome() {
               {principles.map(({ icon: Icon, title, text }, index) => (
                 <article
                   key={title}
-                  className="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-7"
+                  className="rounded-2xl border border-border bg-card p-6 sm:p-7"
                 >
                   <div className="flex gap-5">
                     <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-background text-primary">
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </div>
                     <div>
-                      <p className="font-mono text-[11px] tracking-widest text-muted-foreground">
+                      <p className="font-mono text-[11px] tracking-tight text-muted-foreground">
                         PRINCIPLE {String(index + 1).padStart(2, "0")}
                       </p>
                       <h3 className="mt-2 text-xl font-semibold text-foreground">
@@ -198,14 +198,14 @@ export function PublicHome() {
         </div>
       </section>
 
-      <section className="border-b border-border py-20 sm:py-28">
+      <section className="border-b border-border py-8">
         <div className="mx-auto max-w-7xl px-6 sm:px-10">
           <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
             <div>
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card text-primary shadow-sm">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card text-primary">
                 <MoonStar className="h-6 w-6" aria-hidden="true" />
               </div>
-              <h2 className="mt-6 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+              <h2 className="mt-6 text-3xl font-semibold tracking-tight text-foreground sm:text-3xl">
                 A daily rhythm for deeper reading.
               </h2>
               <p className="mt-4 max-w-md leading-7 text-muted-foreground">
@@ -217,7 +217,7 @@ export function PublicHome() {
             <div className="grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2">
               {rhythm.map(([number, title, text]) => (
                 <div key={number} className="bg-card p-6 sm:p-7">
-                  <p className="font-mono text-xs font-semibold tracking-widest text-primary">
+                  <p className="font-mono text-xs font-semibold tracking-tight text-primary">
                     {number}
                   </p>
                   <h3 className="mt-8 text-xl font-semibold text-foreground">{title}</h3>
@@ -229,11 +229,11 @@ export function PublicHome() {
         </div>
       </section>
 
-      <section className="border-b border-border bg-muted/30 py-20 sm:py-24">
+      <section className="border-b border-border bg-muted/30 py-8">
         <div className="mx-auto max-w-7xl px-6 sm:px-10">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="font-mono text-xs font-semibold tracking-widest text-primary">
+              <p className="font-mono text-xs font-semibold tracking-tight text-primary">
                 Return points
               </p>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground">
@@ -250,7 +250,7 @@ export function PublicHome() {
               <Link
                 key={title}
                 href={href}
-                className="group rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:border-primary/40 hover:shadow-md"
+                className="group rounded-2xl border border-border bg-card p-6 transition-all hover:border-primary/40"
               >
                 <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
                 <h3 className="mt-8 text-lg font-semibold text-foreground">{title}</h3>
@@ -262,12 +262,12 @@ export function PublicHome() {
         </div>
       </section>
 
-      <section className="py-20 sm:py-28">
+      <section className="py-8">
         <div className="mx-auto max-w-5xl px-6 text-center sm:px-10">
-          <p className="font-mono text-xs font-semibold tracking-widest text-warning">
+          <p className="font-mono text-xs font-semibold tracking-tight text-warning">
             The intention
           </p>
-          <h2 className="mx-auto mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-foreground sm:text-6xl">
+          <h2 className="mx-auto mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-foreground sm:text-3xl">
             Reflect goodness. Spread wisdom. Guide with humility.
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
@@ -277,13 +277,13 @@ export function PublicHome() {
           <div className="mt-9 flex flex-wrap justify-center gap-3">
             <Link
               href="/knowledge"
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
               Begin exploring <ArrowUpRight className="h-4 w-4" />
             </Link>
             <Link
               href="/about"
-              className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-accent"
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
             >
               About MoonWitness
             </Link>
@@ -293,7 +293,7 @@ export function PublicHome() {
 
       <footer className="border-t border-border py-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-10">
-          <span className="font-mono font-semibold tracking-widest text-foreground">
+          <span className="font-mono font-semibold tracking-tight text-foreground">
             MoonWitness
           </span>
           <span>Observe with care. Learn with humility.</span>

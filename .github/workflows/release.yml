@@ -1,187 +1,82 @@
-name: Release
+name: Auto Release
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'
-      - 'v*.*.*-*'
+  workflow_run:
+    workflows: ["Foundation CI"]
+    types: [completed]
+    branches: [dev]
+  workflow_dispatch:
 
 permissions:
   contents: write
-  id-token: write
+  actions: read
 
 concurrency:
-  group: release-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: auto-release
+  cancel-in-progress: false
 
 jobs:
-  verify:
-    name: Verify Release
-    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
-    timeout-minutes: 30
-    env:
-      CI: 'true'
-
+  release:
+    name: Promote, Bump, and Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_branch == 'dev')
     steps:
-      - name: Checkout
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - name: Checkout main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
+          ref: main
           fetch-depth: 0
 
-      - name: Verify tag, version, and main identity
-        shell: bash
+      - name: Setup Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Promote dev into main
         run: |
           set -euo pipefail
-          APP_VERSION=$(node -p "require('./package.json').version")
-          EXPECTED_TAG="v${APP_VERSION}"
-          test "$GITHUB_REF_NAME" = "$EXPECTED_TAG" || {
-            echo "Release tag $GITHUB_REF_NAME does not match package.json version $EXPECTED_TAG."
-            exit 1
-          }
+          git fetch origin main dev
+          git checkout main
+          git reset --hard origin/main
+          git merge --no-ff -X theirs origin/dev -m "chore(promote): merge dev into main"
+          git push origin main
 
-          git fetch origin main --depth=1
-          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" || {
-            echo "Release tag must point at the exact current main commit."
-            exit 1
-          }
-
-      - name: Setup Node.js
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
-        with:
-          node-version: '22'
-
-      - name: Enable pinned pnpm
-        shell: bash
+      - name: Bump patch version and tag
+        id: bump
         run: |
-          corepack enable
-          corepack prepare pnpm@10.33.4 --activate
-          pnpm --version
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build Moon packages
-        run: pnpm --filter "@moon/*" build
-
-      - name: Typecheck
-        run: pnpm typecheck
-
-      - name: Test
-        run: pnpm test
-
-      - name: Build All
-        run: pnpm build
-
-  publish:
-    name: Publish to npm (Dry Run)
-    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
-    timeout-minutes: 20
-    needs: verify
-    env:
-      CI: 'true'
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
-
-      - name: Setup Node.js
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
-        with:
-          node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Enable pinned pnpm
-        shell: bash
-        run: |
-          corepack enable
-          corepack prepare pnpm@10.33.4 --activate
-          pnpm --version
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build All Packages
-        run: pnpm build
-
-      - name: Dry Run Publish
-        shell: bash
-        run: |
-          echo "=== MoonWitness Release Dry Run ==="
-          echo "Tag: ${{ github.ref_name }}"
-          echo ""
-
-          for pkg in packages/*/; do
-            if [ -f "$pkg/package.json" ]; then
-              name=$(node -p "require('./$pkg/package.json').name")
-              version=$(node -p "require('./$pkg/package.json').version")
-              private=$(node -p "require('./$pkg/package.json').private || false")
-
-              if [ "$private" == "true" ]; then
-                echo "SKIP  $name@$version (private)"
-              else
-                echo "DRY   $name@$version"
-                cd "$pkg"
-                pnpm publish --dry-run --no-git-checks 2>&1 | head -20 || true
-                cd -
-              fi
-            fi
-          done
-
-          echo ""
-          echo "=== Dry Run Complete ==="
-          echo "No packages were published. Remove --dry-run flag to enable actual publishing."
-
-  release-notes:
-    name: Generate Release Notes
-    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
-    timeout-minutes: 10
-    needs: verify
-    if: success()
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
-        with:
-          fetch-depth: 0
-
-      - name: Generate Changelog
-        id: changelog
-        shell: bash
-        run: |
-          TAG="${{ github.ref_name }}"
-          PREV_TAG=$(git describe --tags --abbrev=0 "$TAG^" 2>/dev/null || echo "")
-
-          if [ -z "$PREV_TAG" ]; then
-            COMMITS=$(git log --oneline --no-decorate "$TAG" | head -50)
-          else
-            COMMITS=$(git log --oneline --no-decorate "$PREV_TAG..$TAG" | head -50)
+          set -euo pipefail
+          NEW=$(node -e "const v=require('./package.json').version.split('.'); v[2]=Number(v[2])+1; console.log(v.join('.'))")
+          if git rev-parse -q --verify "refs/tags/v${NEW}" >/dev/null; then
+            echo "Tag v${NEW} already exists; skipping release."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
-
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          echo "$COMMITS" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          npm version "${NEW}" -m "chore(release): v%s [skip ci]"
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+          echo "tag=v${NEW}" >> "$GITHUB_OUTPUT"
+          git push origin main
+          git push origin "v${NEW}"
 
       - name: Create GitHub Release
+        if: steps.bump.outputs.skip != 'true'
         uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
-          tag_name: ${{ github.ref_name }}
-          name: "MoonWitness ${{ github.ref_name }}"
-          body: |
-            ## Release ${{ github.ref_name }}
+          tag_name: ${{ steps.bump.outputs.tag }}
+          name: MoonWitness ${{ steps.bump.outputs.tag }}
+          generate_release_notes: true
 
-            ### Changes
-            ${{ steps.changelog.outputs.changelog }}
-
-            ### Verification
-            - ✅ Tag matches package version
-            - ✅ Tag points at exact main
-            - ✅ All packages built
-            - ✅ Typecheck passed
-            - ✅ Tests passed
-
-            ### Promotion Path
-            This release was promoted through: feature → dev → main → tag
-
-            — *MoonWitness CI/CD Pipeline*
-          draft: false
-          prerelease: ${{ contains(github.ref_name, '-') }}
+      - name: Sync release back to dev
+        if: steps.bump.outputs.skip != 'true'
+        run: |
+          set -euo pipefail
+          git push origin main:dev

@@ -1,14 +1,7 @@
 name: UMBRELLA v6 Certification
 
 on:
-  pull_request:
-    branches:
-      - dev
-      - main
-  push:
-    branches:
-      - dev
-      - main
+  workflow_dispatch:
 
 permissions:
   actions: read
@@ -25,7 +18,7 @@ env:
 jobs:
   certify:
     name: UMBRELLA v6 Exact-SHA Certification
-    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
       - name: Checkout exact candidate SHA

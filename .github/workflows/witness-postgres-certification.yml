@@ -1,16 +1,6 @@
 name: Production PostgreSQL Certification
 
 on:
-  pull_request:
-    branches:
-      - dev
-      - main
-  push:
-    branches:
-      - dev
-      - main
-  schedule:
-    - cron: "17 3 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -23,7 +13,7 @@ concurrency:
 jobs:
   certify-postgres:
     name: Production PostgreSQL 18 Certification
-    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
       CI: "true"

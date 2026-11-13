@@ -5,9 +5,9 @@
 ## Branch Architecture
 
 ```text
-feature/*  ──PR──▶  dev  ──PR──▶  main  ──tag──▶  release
+feature/*  ──PR──▶  dev  ──auto──▶  main  ──auto──▶  release
      │                 │                │
-     │                 │                └── Production release branch
+     │                 │                └── Production release branch (auto-promoted)
      │                 └── Integration and certification branch
      └── Ephemeral feature/fix work
 ```
@@ -15,8 +15,8 @@ feature/*  ──PR──▶  dev  ──PR──▶  main  ──tag──▶  
 | Branch | Purpose | CI |
 |---|---|---|
 | `feature/*` | Feature development and fixes | Foundation CI |
-| `dev` | Integration | Foundation CI + PostgreSQL certification when applicable |
-| `main` | Production candidate | Foundation CI + PostgreSQL certification + release-on-tag |
+| `dev` | Integration | Foundation CI (single fast gate) |
+| `main` | Production candidate | Auto Release (promotes from dev, bumps patch, tags, releases) |
 
 ## Stage 1: Feature → Dev
 
@@ -27,57 +27,48 @@ Requirements:
 - Required review is approved.
 - Branch is up to date and conflict free.
 
-Foundation CI uses `CI_RUNNER` when configured and otherwise defaults to `ubuntu-latest`, so promotion does not silently depend on one offline self-hosted machine.
+Foundation CI runs on `ubuntu-latest` (hardcoded) — no runner indirection.
 
-## Stage 2: Dev → Main
+## Stage 2: Dev → Main (Automatic)
+
+Trigger: **Foundation CI completes successfully on `dev` push**.
 
 Requirements:
-
 - Stage 1 requirements remain green on the exact `dev` candidate.
-- Integration/regression checks pass.
-- Production PostgreSQL Certification passes for database, API-runtime, migration, or deployment-sensitive changes.
-- Changelog/versioning are ready where applicable.
+- Integration/regression checks pass (covered by Foundation CI).
 
-The certification path proves:
+The Auto Release workflow (`.github/workflows/release.yml`, triggered by `workflow_run` on Foundation CI success):
+1. Promotes `dev` into `main` (`-X theirs` merge, dev wins on conflicts).
+2. Bumps root `package.json` patch version with `[skip ci]` commit message.
+3. Creates and pushes version tag (e.g., `v0.3.2`).
+4. Creates GitHub Release with auto-generated notes.
+5. Syncs the version bump back to `dev` (fast-forward, `[skip ci]` prevents re-trigger).
 
-```text
-fresh PostgreSQL 18
--> exact-candidate apps/api/Dockerfile
--> db:install
--> db:verify
--> Witness graph certification
--> backup/restore
--> API boot
--> /health/ready
--> quality/security regressions
-```
+No manual tag creation or PR needed for normal releases.
 
-## Stage 3: Main → Release
+## Stage 3: Main → Release (Automatic, part of Stage 2)
 
-Trigger: semantic version tag (`v*.*.*` or prerelease variant).
-
-Requirements:
-
-- Stage 2 requirements are satisfied.
-- Release Verify passes build, typecheck, and tests.
-- Publish remains dry-run until intentional publishing is enabled.
-- Draft GitHub Release is generated for review.
+See Stage 2 — the same Auto Release workflow creates the tag and GitHub Release.
 
 ## CI/CD Workflows
 
 ### Foundation CI — `.github/workflows/foundation-ci.yml`
 
-Triggers on pushes, pull requests, and manual dispatch. Every validation job is blocking.
+Triggers on pushes to `dev`, pull requests to `main`/`dev`, and manual dispatch. Every validation job is blocking. **Single cheap gate** (Audit, Lint, Typecheck, Test, Build + PR report).
+
+Runner: hardcoded `ubuntu-latest`.
 
 ### Production PostgreSQL Certification — `.github/workflows/witness-postgres-certification.yml`
 
-Triggers on pull requests to `dev`/`main`, pushes to `dev`/`main`, weekly schedule, and manual dispatch. This is the authoritative clean-database and production API certification gate.
+**Manual only** (`workflow_dispatch`). Heavy certification (clean PostgreSQL 18, db:install, db:verify, Witness graph, backup/restore, API boot, /health/ready, quality/security regressions) is parked to manual runs per "Thin CI" principle. Run explicitly for database/deployment-sensitive changes.
 
-### Release — `.github/workflows/release.yml`
+### Auto Release — `.github/workflows/release.yml`
 
-Triggers on release tags. Runner selection follows the same `CI_RUNNER` override with `ubuntu-latest` fallback.
+Triggers on `workflow_run` (Foundation CI completed on `dev`) and manual dispatch. Single job handles promote + bump + tag + release + dev sync. Runner: `ubuntu-latest`.
 
-The former duplicate `.github/workflows/ci.yml` is intentionally removed. Foundation CI is the single fast validation authority, preventing duplicate jobs and ambiguous green statuses.
+### Manual Verification — `.github/workflows/manual-verification.yml`
+
+Triggers on manual dispatch only. Python microservices + E2E browser flows (salvaged from old Foundation CI).
 
 ## Deployment Promotion
 
@@ -90,10 +81,12 @@ scripts/deploy-prod.ps1
 
 For Docker Compose they validate configuration, build the deployable artifacts, start PostgreSQL/Redis, execute `db:install`, execute `db:verify`, then start API and portals. The API container is built from the same `apps/api/Dockerfile` used by PostgreSQL certification.
 
+Production deployment is triggered automatically by the owner's webhook on `main` push (after Auto Release promotes and releases).
+
 ## Emergency Hotfix
 
 ```text
-main -> hotfix/* -> PR -> main -> tag
+main -> hotfix/* -> PR -> main -> Auto Release (tag+release) -> dev sync
                   |
                   -> PR -> dev
 ```
@@ -104,10 +97,5 @@ Emergency fixes remain minimal, reviewed, tested, released, and reconciled back 
 
 For both `dev` and `main`:
 
-- require pull request;
-- require review;
-- require branch up to date where practical;
-- require Foundation CI checks: `Constitutional & UI Audit`, `Lint`, `Typecheck`, `Test`, `Build`;
-- block force pushes and branch deletion.
-
-For `dev → main`, additionally require `Production PostgreSQL 18 Certification` when repository settings permit required checks.
+- No branch protection required for the automatic pipeline (GITHUB_TOKEN pushes to unprotected branches).
+- If protection is added later, the Auto Release workflow would need a PAT with `contents: write` to push `main` and trigger the release chain.

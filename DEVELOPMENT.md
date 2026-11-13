@@ -8,37 +8,37 @@ Status: **Canonical** for branch, validation, database, and promotion flow.
 feature
    |
    v
-  dev
-   |
-   v
- main
+  dev  ──(auto)──▶  main  ──(auto)──▶  release
 ```
 
 ### `main`
 
-Stable/release branch. Normal development does not happen directly on `main`; it receives changes only after integration and verification on `dev` and should remain deployable.
+Stable/release branch. Normal development does not happen directly on `main`; it receives changes automatically after integration and verification on `dev` and should remain deployable.
 
 ### `dev`
 
-Integration branch. Completed feature work lands here for integration, regression, migration, and cross-addon verification before promotion to `main`.
+Integration branch. Completed feature work lands here for integration, regression, migration, and cross-addon verification before automatic promotion to `main`.
 
 ### `feature`
 
 Active development branch. New features, fixes, refactors, and experiments remain here until their applicable checks and review are complete.
 
-## Promotion flow
+## Promotion flow (Automatic)
 
 ```text
 feature
   -> test + review + Foundation CI
-  -> dev
-  -> integration + regression + PostgreSQL certification when applicable
-  -> main
-  -> tag
-  -> release
+  -> dev (push)
+  -> Foundation CI completes successfully on dev
+  -> Auto Release workflow triggers automatically:
+     1. promotes dev → main (-X theirs, dev wins)
+     2. bumps patch version [skip ci]
+     3. creates & pushes version tag (vX.Y.Z)
+     4. creates GitHub Release (auto-generated notes)
+     5. syncs version bump back to dev (fast-forward, [skip ci])
 ```
 
-Do not skip `dev` for ordinary work.
+Do not skip `dev` for ordinary work. The automatic pipeline handles the rest.
 
 ## Database workflow
 
@@ -55,6 +55,8 @@ pnpm --filter=api db:verify
 
 Production deployment must complete both install and verification before application services are promoted. The canonical deployment scripts enforce this for Docker Compose and PM2 paths.
 
+Production deployment is triggered automatically by the owner's webhook on `main` push (after Auto Release).
+
 ## CI policy
 
 The canonical workflow is:
@@ -63,14 +65,7 @@ The canonical workflow is:
 .github/workflows/foundation-ci.yml
 ```
 
-Foundation CI runs on pushes, pull requests, and manual dispatch. Runner selection is portable:
-
-```text
-CI_RUNNER repository variable set -> use that runner label
-CI_RUNNER unset                   -> use ubuntu-latest
-```
-
-Set `CI_RUNNER=self-hosted` only when the repository-owned runner is healthy and intentionally selected.
+Foundation CI runs on pushes to `dev`, pull requests to `main`/`dev`, and manual dispatch. **Runner is hardcoded to `ubuntu-latest`** (no `CI_RUNNER` indirection).
 
 Audit implementation and test commands are documented in [scripts/README.md](scripts/README.md).
 Run `pnpm test:scripts` for focused audit regression coverage.
@@ -108,7 +103,9 @@ fresh PostgreSQL
 -> quality/security regressions
 ```
 
-It runs for pull requests to `dev`/`main`, pushes to `dev`/`main`, weekly schedule, and manual dispatch. Database or deployment-sensitive promotion to `main` requires a green certification result for the exact candidate SHA.
+**It runs only on manual dispatch** (`workflow_dispatch`). Database or deployment-sensitive changes should be certified manually via dispatch before or after promotion; the automatic pipeline does not block on it.
+
+Additional manual workflow: `.github/workflows/manual-verification.yml` (Python microservices + E2E browser flows).
 
 ## Change discipline
 
@@ -138,10 +135,10 @@ Avoid mixing unrelated UI, ORM, migration, and domain work in one commit.
 
 A feature is ready for `dev` when its applicable lint, typecheck, tests, build, architecture, security, transaction, and migration checks pass and Foundation CI is green.
 
-A `dev` candidate is ready for `main` only when Foundation CI is green and, for database/deployment-sensitive changes, Production PostgreSQL Certification is green for the exact candidate SHA.
+A `dev` candidate is ready for `main` when Foundation CI is green — the Auto Release workflow handles promotion and versioning automatically. For database/deployment-sensitive changes, manually run PostgreSQL Certification workflow before or after.
 
 A release is deployable only when the production deployment path can build the intended artifacts, apply and verify migrations, pass readiness checks, and start the public portals reproducibly.
 
 ## Emergency fixes
 
-If an urgent production fix must begin from `main`, reconcile the resulting fix back into `dev` and active feature work so branch history does not diverge.
+If an urgent production fix must begin from `main`, reconcile the resulting fix back into `dev` and active feature work so branch history does not diverge. The next automatic promotion will include it.

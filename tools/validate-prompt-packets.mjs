@@ -6,7 +6,10 @@ import { fileURLToPath } from "node:url"
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const packetDir = path.join(root, "JUST-PROMT-DONT-READ")
 const failures = []
-for (const file of fs.readdirSync(packetDir).filter((name) => name.endsWith(".json"))) {
+const packetFiles = fs.existsSync(packetDir)
+  ? fs.readdirSync(packetDir).filter((name) => name.endsWith(".json"))
+  : []
+for (const file of packetFiles) {
   const filePath = path.join(packetDir, file)
   let packet
   try { packet = JSON.parse(fs.readFileSync(filePath, "utf8")) } catch (error) { failures.push(`${file}: invalid JSON (${error.message})`); continue }
