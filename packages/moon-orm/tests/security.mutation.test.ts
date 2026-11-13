@@ -295,10 +295,10 @@ describe('Issue #28: Operation-Specific ORM Authorization', () => {
         },
       ],
       mx_rule_vx_role_rel: [
-        { rule_id: 1, role_id: 10 },
-        { rule_id: 2, role_id: 10 },
-        { rule_id: 3, role_id: 10 },
-        { rule_id: 6, role_id: 10 },
+        { mx_rule_id: 1, vx_role_id: 10 },
+        { mx_rule_id: 2, vx_role_id: 10 },
+        { mx_rule_id: 3, vx_role_id: 10 },
+        { mx_rule_id: 6, vx_role_id: 10 },
       ],
       mx_rule: [
         // Rule 1: Read rule -> anyone in Role 10 can read all published posts
@@ -476,7 +476,7 @@ describe('Issue #28: Operation-Specific ORM Authorization', () => {
       perm_create: false,
       perm_unlink: false,
     })
-    tables.mx_rule_vx_role_rel.push({ rule_id: 4, role_id: 10 })
+    tables.mx_rule_vx_role_rel.push({ mx_rule_id: 4, vx_role_id: 10 })
 
     const aliceEnv = createCtx(42, {}, getModel)
 
@@ -573,7 +573,7 @@ describe('Issue #28: Operation-Specific ORM Authorization', () => {
       perm_create: true,
       perm_unlink: false,
     })
-    tables.mx_rule_vx_role_rel.push({ rule_id: 5, role_id: 10 })
+    tables.mx_rule_vx_role_rel.push({ mx_rule_id: 5, vx_role_id: 10 })
 
     const aliceEnv = createCtx(42, {}, getModel)
 
@@ -679,7 +679,7 @@ describe('Issue #28: Operation-Specific ORM Authorization', () => {
       perm_create: true,
       perm_unlink: false,
     })
-    tables.mx_rule_vx_role_rel.push({ rule_id: 7, role_id: 10 })
+    tables.mx_rule_vx_role_rel.push({ mx_rule_id: 7, vx_role_id: 10 })
 
     const aliceEnv = createCtx(42, {}, getModel)
 

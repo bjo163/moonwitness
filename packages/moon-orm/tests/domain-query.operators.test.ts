@@ -72,7 +72,7 @@ describe('record-rule operator parity (UR-BE-001)', () => {
       for (const operator of ['ilike', 'not ilike', '=ilike']) {
         const recorder = new QueryRecorder()
         applyDomain(recorder, [['name', operator, 'abc']])
-        expect(recorder.clauses[0].args[1]).toBe('ilike')
+        expect(recorder.clauses[0]!.args[1]).toBe('ilike')
       }
     } finally {
       setDialect('sqlite')
@@ -80,18 +80,18 @@ describe('record-rule operator parity (UR-BE-001)', () => {
     for (const operator of ['ilike', 'not ilike', '=ilike']) {
       const recorder = new QueryRecorder()
       applyDomain(recorder, [['name', operator, 'abc']])
-      expect(recorder.clauses[0].args[1]).toBe('like')
+      expect(recorder.clauses[0]!.args[1]).toBe('like')
     }
   })
 
   it('keeps "=like" patterns exact while "like" wraps substrings', () => {
     const exact = new QueryRecorder()
     applyDomain(exact, [['name', '=like', 'a%']])
-    expect(exact.clauses[0].args[2]).toBe('a%')
+    expect(exact.clauses[0]!.args[2]).toBe('a%')
 
     const substring = new QueryRecorder()
     applyDomain(substring, [['name', 'like', 'a']])
-    expect(substring.clauses[0].args[2]).toBe('%a%')
+    expect(substring.clauses[0]!.args[2]).toBe('%a%')
   })
 })
 

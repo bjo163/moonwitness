@@ -139,8 +139,8 @@ describe('Moon ORM fail-closed authorization', () => {
       vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
       mx_model: [{ id: 11, model: 'demo.model' }],
       mx_rule_vx_role_rel: [
-        { rule_id: 1, role_id: 7 },
-        { rule_id: 2, role_id: 7 }
+        { mx_rule_id: 1, vx_role_id: 7 },
+        { mx_rule_id: 2, vx_role_id: 7 }
       ],
       mx_rule: [
         { id: 1, model_id: 11, name: 'Read rule', domain_force: '[["state", "=", "published"]]', perm_read: true, perm_write: false },
@@ -161,7 +161,7 @@ describe('Moon ORM fail-closed authorization', () => {
       vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
       mx_model: [{ id: 11, model: 'demo.model' }],
       mx_rule_vx_role_rel: [
-        { rule_id: 2, role_id: 7 }
+        { mx_rule_id: 2, vx_role_id: 7 }
         // Rule 1 has no links, so it is a GLOBAL rule!
       ],
       mx_rule: [
@@ -183,7 +183,7 @@ describe('Moon ORM fail-closed authorization', () => {
     mocks.getDb.mockReturnValue(makeDb({
       vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
       mx_model: [{ id: 11, model: 'demo.model' }],
-      mx_rule_vx_role_rel: [{ role_id: 7, rule_id: 5 }],
+      mx_rule_vx_role_rel: [{ vx_role_id: 7, mx_rule_id: 5 }],
       mx_rule: [{ id: 5, model_id: 11, name: 'Broken rule', domain_force: '(()' }],
       vx_user: [{ id: 42, name: 'Operator' }],
     }))
@@ -197,7 +197,7 @@ describe('Moon ORM fail-closed authorization', () => {
     mocks.getDb.mockReturnValue(makeDb({
       vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
       mx_model: [{ id: 11, model: 'demo.model' }],
-      mx_rule_vx_role_rel: [{ role_id: 7, rule_id: 5 }],
+      mx_rule_vx_role_rel: [{ vx_role_id: 7, mx_rule_id: 5 }],
       mx_rule: [{
         id: 5,
         model_id: 11,
@@ -218,7 +218,7 @@ describe('Moon ORM fail-closed authorization', () => {
     mocks.getDb.mockReturnValue(makeDb({
       vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
       mx_model: [{ id: 11, model: 'demo.model' }],
-      mx_rule_vx_role_rel: [{ role_id: 7, rule_id: 9 }],
+      mx_rule_vx_role_rel: [{ vx_role_id: 7, mx_rule_id: 9 }],
       mx_rule: [{
         id: 9,
         model_id: 11,
@@ -237,7 +237,7 @@ describe('Moon ORM fail-closed authorization', () => {
     mocks.getDb.mockReturnValue(makeDb({
       vx_user_vx_role_rel: [{ vx_user_id: 42, vx_role_id: 7 }],
       mx_model: [{ id: 11, model: 'demo.model' }],
-      mx_rule_vx_role_rel: [{ role_id: 7, rule_id: 10 }],
+      mx_rule_vx_role_rel: [{ vx_role_id: 7, mx_rule_id: 10 }],
       mx_rule: [{
         id: 10,
         model_id: 11,
