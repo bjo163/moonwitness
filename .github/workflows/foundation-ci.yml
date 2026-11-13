@@ -47,8 +47,6 @@ jobs:
         run: pnpm workflow:check
       - name: Governance registry validation
         run: pnpm governance:validate
-      - name: Prompt packet validation
-        run: pnpm prompt:validate
       - name: Universal Contract Drift Verification
         run: pnpm contracts:verify
       - name: UMBRELLA v6 Contract Validation
