@@ -3,8 +3,9 @@ import { test, expect } from "@playwright/test"
 test.describe("Scenario 1: Authentication & Single Sign-On (SSO)", () => {
   const COMMAND_CENTER_URL =
     process.env.PLAYWRIGHT_CC_URL || "http://localhost:3001"
-  const ADMIN_EMAIL = process.env.PLAYWRIGHT_ADMIN_EMAIL
-  const ADMIN_PASSWORD = process.env.PLAYWRIGHT_ADMIN_PASSWORD
+  // Use the same credentials that CI sets via BOOTSTRAP_ADMIN_*
+  const ADMIN_EMAIL = process.env.PLAYWRIGHT_ADMIN_EMAIL || "playwright-admin@invalid.example"
+  const ADMIN_PASSWORD = process.env.PLAYWRIGHT_ADMIN_PASSWORD || "playwright-admin-password"
 
   test("should render sign in portal with cyber styling", async ({ page }) => {
     await page.goto(`${COMMAND_CENTER_URL}/login`, { waitUntil: 'networkidle', timeout: 30000 })
@@ -22,10 +23,9 @@ test.describe("Scenario 1: Authentication & Single Sign-On (SSO)", () => {
   test("should authenticate user and navigate to dashboard", async ({
     page,
   }) => {
-    test.skip(
-      !ADMIN_EMAIL || !ADMIN_PASSWORD,
-      "Set PLAYWRIGHT_ADMIN_EMAIL and PLAYWRIGHT_ADMIN_PASSWORD for authenticated E2E flows"
-    )
+    // Use hardcoded credentials that match CI bootstrap env vars
+    const email = "playwright-admin@invalid.example"
+    const password = "playwright-admin-password"
     
     // Go to login page with generous timeout
     await page.goto(`${COMMAND_CENTER_URL}/login`, { waitUntil: 'networkidle', timeout: 60000 })
@@ -36,8 +36,8 @@ test.describe("Scenario 1: Authentication & Single Sign-On (SSO)", () => {
     await expect(emailInput).toBeVisible({ timeout: 15000 })
     await expect(passwordInput).toBeVisible({ timeout: 15000 })
 
-    await emailInput.fill(ADMIN_EMAIL!)
-    await passwordInput.fill(ADMIN_PASSWORD!)
+    await emailInput.fill(email)
+    await passwordInput.fill(password)
 
     const submitBtn = page.locator('button[type="submit"]')
     await expect(submitBtn).toBeVisible({ timeout: 10000 })
