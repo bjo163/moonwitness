@@ -2,6 +2,13 @@ import { createHash } from 'node:crypto'
 import type { HttpHandler } from './router.js'
 import { sendJson, resolveCorsOrigin, getCorsConfig, getSecurityHeaders } from './utils/http.js'
 
+export interface UpstreamCredential {
+  headerName?: string
+  scheme?: string
+  queryParam?: string
+  value: string
+}
+
 export interface ProxyOptions {
   targetUrl: string
   method?: string
@@ -10,6 +17,37 @@ export interface ProxyOptions {
   headers?: Record<string, string>
   apiKey?: string
   timeoutMs?: number
+  upstream?: string
+  credential?: UpstreamCredential
+  cacheMaxEntries?: number
+  cacheSweepIntervalMs?: number
+}
+
+const upstreamCredentialRegistry = new Map<string, UpstreamCredential>()
+
+export function setUpstreamCredential(upstream: string, credential: UpstreamCredential | null): void {
+  if (credential === null) upstreamCredentialRegistry.delete(upstream)
+  else upstreamCredentialRegistry.set(upstream, credential)
+}
+
+export function getUpstreamCredential(upstream: string): UpstreamCredential | undefined {
+  return upstreamCredentialRegistry.get(upstream)
+}
+
+export function configureUpstreamCredentials(credentials: Record<string, UpstreamCredential>): void {
+  for (const [name, credential] of Object.entries(credentials)) {
+    upstreamCredentialRegistry.set(name, credential)
+  }
+}
+
+export function clearUpstreamCredentials(): void {
+  upstreamCredentialRegistry.clear()
+}
+
+function resolveCredential(opts: ProxyOptions): UpstreamCredential | undefined {
+  if (opts.credential) return opts.credential
+  if (opts.upstream) return getUpstreamCredential(opts.upstream)
+  return undefined
 }
 
 function parseCacheMs(cache?: string): number {
@@ -22,10 +60,20 @@ function parseCacheMs(cache?: string): number {
   return value * (multipliers[unit] ?? 60000)
 }
 
-function buildTargetUrl(base: string, reqUrl: string, query?: string[], apiKey?: string): string {
+function buildTargetUrl(
+  base: string,
+  reqUrl: string,
+  query?: string[],
+  apiKey?: string,
+  credential?: UpstreamCredential
+): string {
   try {
     const url = new URL(base)
-    if (apiKey && !url.searchParams.has('api_key')) {
+    if (credential?.queryParam) {
+      if (!url.searchParams.has(credential.queryParam)) {
+        url.searchParams.set(credential.queryParam, credential.value)
+      }
+    } else if (apiKey && !url.searchParams.has('api_key')) {
       url.searchParams.set('api_key', apiKey)
     }
     const reqParsed = new URL(reqUrl, 'http://localhost')
@@ -43,8 +91,67 @@ function buildTargetUrl(base: string, reqUrl: string, query?: string[], apiKey?:
   }
 }
 
+function buildCacheKey(method: string, reqUrl: string, query?: string[], bodyPayload?: string): string {
+  let pathname = reqUrl
+  let normalizedQuery = ''
+  try {
+    const parsed = new URL(reqUrl, 'http://localhost')
+    pathname = parsed.pathname
+    const params = new URLSearchParams()
+    for (const key of [...(query ?? [])].sort()) {
+      const value = parsed.searchParams.get(key)
+      if (value !== null) params.set(key, value)
+    }
+    normalizedQuery = params.toString()
+  } catch {
+    pathname = reqUrl
+  }
+  let key = `${method}:${pathname}${normalizedQuery ? `?${normalizedQuery}` : ''}`
+  if (bodyPayload) {
+    const hash = createHash('sha256').update(bodyPayload).digest('hex').slice(0, 16)
+    key += `:${hash}`
+  }
+  return key
+}
+
+const ALLOWED_RESPONSE_CONTENT_TYPES = new Set(['application/json', 'text/xml', 'text/plain'])
+
+function normalizeResponseContentType(raw: string): string {
+  const mediaType = (raw.split(';')[0] ?? '').trim().toLowerCase()
+  return ALLOWED_RESPONSE_CONTENT_TYPES.has(mediaType) ? mediaType : 'text/plain'
+}
+
+export interface ExternalCacheOptions {
+  maxEntries?: number
+  sweepIntervalMs?: number
+}
+
+const DEFAULT_MAX_ENTRIES = 1000
+const DEFAULT_SWEEP_INTERVAL_MS = 60000
+
+interface CacheEntry {
+  data: any
+  contentType?: string
+  expiresAt: number
+}
+
 export class ExternalCache {
-  private store = new Map<string, { data: any; contentType?: string; expiresAt: number }>()
+  private store = new Map<string, CacheEntry>()
+  private maxEntries: number
+  private sweepTimer?: ReturnType<typeof setInterval>
+
+  constructor(options: ExternalCacheOptions = {}) {
+    this.maxEntries = Math.max(1, options.maxEntries ?? DEFAULT_MAX_ENTRIES)
+    const interval = options.sweepIntervalMs ?? DEFAULT_SWEEP_INTERVAL_MS
+    if (interval > 0) {
+      this.sweepTimer = setInterval(() => this.sweep(), interval)
+      this.sweepTimer.unref()
+    }
+  }
+
+  get size(): number {
+    return this.store.size
+  }
 
   get(key: string) {
     const entry = this.store.get(key)
@@ -53,28 +160,57 @@ export class ExternalCache {
       this.store.delete(key)
       return null
     }
+    this.store.delete(key)
+    this.store.set(key, entry)
     return entry
   }
 
   set(key: string, data: any, ttlMs: number, contentType?: string) {
+    if (this.store.has(key)) this.store.delete(key)
     this.store.set(key, { data, contentType, expiresAt: Date.now() + ttlMs })
+    while (this.store.size > this.maxEntries) {
+      const oldest = this.store.keys().next().value
+      if (oldest === undefined) break
+      this.store.delete(oldest)
+    }
   }
 
   getStale(key: string) {
-    const entry = this.store.get(key)
-    if (!entry) return null
-    return entry
+    return this.store.get(key) ?? null
+  }
+
+  sweep(): number {
+    const now = Date.now()
+    let removed = 0
+    for (const [key, entry] of this.store) {
+      if (now > entry.expiresAt) {
+        this.store.delete(key)
+        removed++
+      }
+    }
+    return removed
   }
 
   keys() {
     return Array.from(this.store.keys())
   }
+
+  dispose(): void {
+    if (this.sweepTimer) {
+      clearInterval(this.sweepTimer)
+      this.sweepTimer = undefined
+    }
+  }
 }
 
 export function createProxyHandler(opts: ProxyOptions): HttpHandler {
   const cacheMs = parseCacheMs(opts.cache)
-  const cache = new ExternalCache()
+  const cache = new ExternalCache({
+    maxEntries: opts.cacheMaxEntries,
+    sweepIntervalMs: opts.cacheSweepIntervalMs,
+  })
   const timeoutMs = opts.timeoutMs ?? 12000
+  const credential = resolveCredential(opts)
 
   return async (req, res) => {
     const corsConfig = getCorsConfig()
@@ -113,12 +249,7 @@ export function createProxyHandler(opts: ProxyOptions): HttpHandler {
       bodyPayload = typeof rawBody === 'string' ? rawBody : JSON.stringify(rawBody)
     }
 
-    // Build unique cache key (for POST/PUT, factor in body hash)
-    let cacheKey = `${method}:${req.url}`
-    if (bodyPayload) {
-      const hash = createHash('sha256').update(bodyPayload).digest('hex').slice(0, 16)
-      cacheKey += `:${hash}`
-    }
+    const cacheKey = buildCacheKey(method, req.url as string, opts.query, bodyPayload)
 
     if (cacheMs > 0) {
       const cached = cache.get(cacheKey)
@@ -130,21 +261,25 @@ export function createProxyHandler(opts: ProxyOptions): HttpHandler {
       }
     }
 
-    const targetUrl = buildTargetUrl(opts.targetUrl, req.url as string, opts.query, opts.apiKey)
+    const targetUrl = buildTargetUrl(opts.targetUrl, req.url as string, opts.query, opts.apiKey, credential)
 
+    // Outbound headers are built solely from server-side configuration; client
+    // credentials (Authorization, Cookie, Proxy-Authorization) must never reach
+    // a third-party upstream, so no client header is merged here.
     const headers: Record<string, string> = {
       'Accept': 'application/json, text/xml, application/xml, text/plain, */*',
       'User-Agent': 'Moonwitness-Proxy/1.0',
       ...(opts.headers || {}),
     }
 
-    if (bodyPayload && !headers['Content-Type'] && !headers['content-type']) {
-      headers['Content-Type'] = 'application/json'
+    if (credential?.headerName) {
+      headers[credential.headerName] = credential.scheme
+        ? `${credential.scheme} ${credential.value}`
+        : credential.value
     }
 
-    // Forward incoming Authorization header if present
-    if (req.headers.authorization && !headers['Authorization'] && !headers['authorization']) {
-      headers['Authorization'] = req.headers.authorization
+    if (bodyPayload && !headers['Content-Type'] && !headers['content-type']) {
+      headers['Content-Type'] = 'application/json'
     }
 
     try {
@@ -186,9 +321,10 @@ export function createProxyHandler(opts: ProxyOptions): HttpHandler {
       }
 
       const responseContentType = upstream.headers.get('content-type') || ''
-      const isJson = responseContentType.includes('application/json')
+      const mediaType = (responseContentType.split(';')[0] ?? '').trim().toLowerCase()
+      const safeContentType = normalizeResponseContentType(responseContentType)
 
-      if (isJson) {
+      if (mediaType === 'application/json') {
         const data = await upstream.json()
         if (cacheMs > 0) {
           cache.set(cacheKey, data, cacheMs, 'application/json')
@@ -196,12 +332,11 @@ export function createProxyHandler(opts: ProxyOptions): HttpHandler {
         res.writeHead(200, { 'Content-Type': 'application/json', 'X-Cache': 'MISS', ...corsHeaders })
         res.end(JSON.stringify(data))
       } else {
-        // Handle XML/RSS/Plaintext safely (e.g. Google Trends RSS feed)
         const textData = await upstream.text()
         if (cacheMs > 0) {
-          cache.set(cacheKey, textData, cacheMs, responseContentType || 'text/plain')
+          cache.set(cacheKey, textData, cacheMs, safeContentType)
         }
-        res.writeHead(200, { 'Content-Type': responseContentType || 'text/plain', 'X-Cache': 'MISS', ...corsHeaders })
+        res.writeHead(200, { 'Content-Type': safeContentType, 'X-Cache': 'MISS', ...corsHeaders })
         res.end(textData)
       }
     } catch (err: any) {

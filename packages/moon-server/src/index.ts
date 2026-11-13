@@ -2,7 +2,17 @@ export { NativeServer, publish, type MoonConfig } from './NativeServer.js'
 export { FastifyAdapter, type FastifyAdapterConfig } from './fastify-adapter.js'
 export { defineRoute, type RouteContext, type RouteDefinition } from './route-builder.js'
 export { logger } from './logger.js'
-export { ExternalCache, createProxyHandler, type ProxyOptions } from './proxy.js'
+export {
+  ExternalCache,
+  createProxyHandler,
+  setUpstreamCredential,
+  getUpstreamCredential,
+  configureUpstreamCredentials,
+  clearUpstreamCredentials,
+  type ProxyOptions,
+  type UpstreamCredential,
+  type ExternalCacheOptions,
+} from './proxy.js'
 
 // Telemetry
 export {
