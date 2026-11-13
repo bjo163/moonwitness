@@ -37,7 +37,7 @@ test.describe("Scenario 1: Authentication & Single Sign-On (SSO)", () => {
     const submitBtn = page.locator('button[type="submit"]')
     await submitBtn.click()
 
-    // Expect transition to dashboard
-    await expect(page).toHaveURL(new RegExp(`${COMMAND_CENTER_URL}/?$`))
+    // Wait for navigation after login (redirect from /login to dashboard)
+    await page.waitForURL(new RegExp(`${COMMAND_CENTER_URL}/?$`), { timeout: 15000 })
   })
 })
