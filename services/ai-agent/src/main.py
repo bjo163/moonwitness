@@ -55,6 +55,9 @@ class HybridHitModel(BaseModel):
     bm25_score: float
     dense_score: float
     match_type: str
+    embedding_model: Optional[str] = None
+    embedding_version: Optional[str] = None
+    embedding_dim: Optional[int] = None
 
 
 class HybridSearchResponseModel(BaseModel):
@@ -80,8 +83,8 @@ def search_passages(req: SemanticQueryRequest):
 
 
 @app.post("/semantic/hybrid-search", response_model=HybridSearchResponseModel)
-def hybrid_search_passages(req: HybridQueryRequest):
-    result = compute_hybrid_search(query=req.query, top_k=req.top_k, alpha=req.alpha)
+async def hybrid_search_passages(req: HybridQueryRequest):
+    result = await compute_hybrid_search(query=req.query, top_k=req.top_k, alpha=req.alpha)
     return HybridSearchResponseModel(
         query=result["query"],
         total_hits=result["total_hits"],
