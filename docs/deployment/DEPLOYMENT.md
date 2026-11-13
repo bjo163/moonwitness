@@ -31,7 +31,7 @@ The runner performs:
 3. Typecheck + Tests
 4. Build
 5. Production config validation
-6. Prod-check (ode cli/mw.mjs prod-check)
+6. Prod-check (ode packages/cli/mw.mjs prod-check)
 7. Build deployable containers
 8. Start PostgreSQL + Redis
 9. Database install (pnpm --filter=api db:install)
@@ -47,7 +47,7 @@ pnpm release:check
 pnpm certify:knowledge
 pnpm audit:ci
 pnpm turbo build
-node cli/mw.mjs prod-check
+node packages/cli/mw.mjs prod-check
 \
 
 ## Health Checks

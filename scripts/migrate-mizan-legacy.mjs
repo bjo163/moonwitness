@@ -3,7 +3,7 @@ import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { join, relative } from 'node:path'
 
 const root = process.argv[2] || 'packages/moon-mizan'
-const output = process.argv[3] || 'docs/mizan-legacy-migration-report.json'
+const output = process.argv[3] || '.audit/mizan-legacy-migration-report.json'
 const keys = ['case', 'assessment', 'filter', 'reference']
 const files = []
 async function walk(dir) {

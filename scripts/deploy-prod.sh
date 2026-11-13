@@ -40,7 +40,7 @@ if [[ ${#COMPOSE[@]} -gt 0 ]]; then
 
     echo "▶ Step 5/7: Validating production configuration..."
     dc config --quiet
-    node cli/mw.mjs prod-check
+    node packages/cli/mw.mjs prod-check
 
     echo "▶ Step 6/7: Building deployable artifacts and verifying database state..."
     dc build api celestial-engine ai-agent web command-center

@@ -3,7 +3,7 @@ import { readFileSync, existsSync, writeFileSync, unlinkSync, chmodSync, mkdirSy
 import { join } from 'node:path'
 import { spawnSync } from 'node:child_process'
 
-const CLI_PATH = join(process.cwd(), 'cli/mw.mjs')
+const CLI_PATH = join(process.cwd(), 'packages/cli/mw.mjs')
 
 function runProdCheck(cwd: string) {
   const result = spawnSync(process.execPath, [CLI_PATH, 'prod-check'], {

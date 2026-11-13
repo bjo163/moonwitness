@@ -48,7 +48,7 @@ if ($UseComposeV2 -or $UseComposeV1) {
 
     Write-Host "▶ Step 5/7: Validating production configuration..." -ForegroundColor Yellow
     Invoke-Compose config --quiet
-    node cli/mw.mjs prod-check
+    node packages/cli/mw.mjs prod-check
     if ($LASTEXITCODE -ne 0) { throw "Production readiness check failed." }
 
     Write-Host "▶ Step 6/7: Building deployable artifacts and verifying database state..." -ForegroundColor Yellow

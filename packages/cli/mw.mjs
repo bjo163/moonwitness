@@ -92,7 +92,7 @@ switch (command) {
 }
 
 function printHelp() {
-  console.log('Usage: node cli/mw.mjs <command> [options]\n')
+  console.log('Usage: node packages/cli/mw.mjs <command> [options]\n')
   console.log('Available Commands:')
   console.log('  doctor         Run system diagnostics, port checks, and model checks')
   console.log('  prod-check     Run production pre-flight inspection (Docker, Nginx, PM2, Env)')

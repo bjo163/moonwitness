@@ -149,7 +149,7 @@ pnpm db:install
 pnpm turbo typecheck
 
 # Run system CLI diagnostics
-node cli/mw.mjs doctor
+node packages/cli/mw.mjs doctor
 
 # Run constitutional compliance audit (33 Laws)
 node scripts/audit-rules.mjs
