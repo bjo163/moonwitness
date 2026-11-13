@@ -90,31 +90,79 @@ function deny(code: AuthorizationErrorCode, message: string): never {
   throw new AuthorizationError(code, message)
 }
 
-async function getUserRoleIds(env: Ctx): Promise<number[]> {
-  const db = getDb()
-  const conn = env.trx || db
-  const rows = (await conn('vx_user_vx_role_rel')
-    .where('vx_user_id', env.uid)
-    .select('vx_role_id')) as UserRoleRow[]
+export const ACL_CACHE_TTL_MS = 1000
 
-  return rows.map((row) => row.vx_role_id)
+export const ACL_SENSITIVE_MODELS = new Set(['mx.grant', 'mx.rule', 'vx.role', 'vx.user'])
+
+interface AclCacheEntry {
+  expires: number
+  value: unknown
+}
+
+const aclCache = new Map<string, AclCacheEntry>()
+const dbInstanceIds = new WeakMap<object, number>()
+let nextDbInstanceId = 0
+
+export function invalidateAclCache(): void {
+  aclCache.clear()
+}
+
+// Namespaced per db instance so a swapped connection (tests, reconnect) never shares entries.
+// Transactions bypass the cache: a trx must observe its own uncommitted writes.
+function aclCacheKey(env: Ctx, key: string): string | null {
+  if (env.trx) return null
+  const db = getDb()
+  let id = dbInstanceIds.get(db)
+  if (id === undefined) {
+    id = nextDbInstanceId++
+    dbInstanceIds.set(db, id)
+  }
+  return `${id}:${key}`
+}
+
+async function cachedAcl<T>(env: Ctx, key: string, loader: () => Promise<T>): Promise<T> {
+  const fullKey = aclCacheKey(env, key)
+  if (fullKey === null) return loader()
+  const now = Date.now()
+  const hit = aclCache.get(fullKey)
+  if (hit && hit.expires > now) return hit.value as T
+  const value = await loader()
+  if (aclCache.size > 512) {
+    for (const [k, entry] of aclCache) {
+      if (entry.expires <= now) aclCache.delete(k)
+    }
+  }
+  aclCache.set(fullKey, { expires: now + ACL_CACHE_TTL_MS, value })
+  return value
+}
+
+async function getUserRoleIds(env: Ctx): Promise<number[]> {
+  return cachedAcl(env, `roles:${env.uid}`, async () => {
+    const conn = env.trx || getDb()
+    const rows = (await conn('vx_user_vx_role_rel')
+      .where('vx_user_id', env.uid)
+      .select('vx_role_id')) as UserRoleRow[]
+
+    return rows.map((row) => row.vx_role_id)
+  })
 }
 
 async function getModelMetadata(modelClass: typeof Vertex, env: Ctx): Promise<ModelMetadataRow> {
-  const db = getDb()
-  const conn = env.trx || db
-  const row = (await conn('mx_model')
-    .where('model', modelClass._name)
-    .first()) as ModelMetadataRow | undefined
+  return cachedAcl(env, `model:${modelClass._name}`, async () => {
+    const conn = env.trx || getDb()
+    const row = (await conn('mx_model')
+      .where('model', modelClass._name)
+      .first()) as ModelMetadataRow | undefined
 
-  if (!row) {
-    deny(
-      'SECURITY_METADATA_MISSING',
-      `Access Denied: Security metadata missing for ${modelClass._name}`
-    )
-  }
+    if (!row) {
+      deny(
+        'SECURITY_METADATA_MISSING',
+        `Access Denied: Security metadata missing for ${modelClass._name}`
+      )
+    }
 
-  return row
+    return row
+  })
 }
 
 export async function checkAccessRights(
@@ -134,29 +182,30 @@ export async function checkAccessRights(
     )
   }
 
-  const groupIds = await getUserRoleIds(env)
-  if (groupIds.length === 0) {
-    deny(
-      'ACCESS_DENIED',
-      `Access Denied: No groups assigned to user. Cannot ${operation} on ${modelClass._name}`
-    )
-  }
+  await cachedAcl(env, `access:${modelClass._name}:${env.uid}:${operation}`, async () => {
+    const groupIds = await getUserRoleIds(env)
+    if (groupIds.length === 0) {
+      deny(
+        'ACCESS_DENIED',
+        `Access Denied: No groups assigned to user. Cannot ${operation} on ${modelClass._name}`
+      )
+    }
 
-  const model = await getModelMetadata(modelClass, env)
-  const db = getDb()
-  const conn = env.trx || db
-  const grant = await conn('mx_grant')
-    .where('model_id', model.id)
-    .whereIn('group_id', groupIds)
-    .where(permissionColumn(operation), true)
-    .first()
+    const model = await getModelMetadata(modelClass, env)
+    const conn = env.trx || getDb()
+    const grant = await conn('mx_grant')
+      .where('model_id', model.id)
+      .whereIn('group_id', groupIds)
+      .where(permissionColumn(operation), true)
+      .first()
 
-  if (!grant) {
-    deny('ACCESS_DENIED', `Access Denied: Missing ${operation} on ${modelClass._name}`)
-  }
+    if (!grant) {
+      deny('ACCESS_DENIED', `Access Denied: Missing ${operation} on ${modelClass._name}`)
+    }
+  })
 }
 
-const ALLOWED_RECORD_RULE_OPERATORS = new Set([
+export const ALLOWED_RECORD_RULE_OPERATORS = new Set([
   '=',
   '==',
   '!=',
@@ -323,122 +372,126 @@ export async function getRecordRulesDomain(
   if (modelClass._public && operation === 'permRead') return []
   if (env.uid === 0 && getAuthSecurityScope(env)) return []
 
-  const groupIds = await getUserRoleIds(env)
-  const model = await getModelMetadata(modelClass, env)
-  const db = getDb()
-  const conn = env.trx || db
-  const permCol = permissionColumn(operation)
+  const ruleDomain = await cachedAcl(env, `rules:${modelClass._name}:${env.uid}:${operation}`, async () => {
+    const groupIds = await getUserRoleIds(env)
+    const model = await getModelMetadata(modelClass, env)
+    const conn = env.trx || getDb()
+    const permCol = permissionColumn(operation)
 
-  // Query all active rules for this model
-  let ruleQuery = conn('mx_rule').where('model_id', model.id)
-  
-  // Check active flag if present in schema
-  const allRules = (await ruleQuery) as RuleRow[]
-  if (!allRules || allRules.length === 0) return []
+    // Query all active rules for this model
+    const allRules = (await conn('mx_rule').where('model_id', model.id)) as RuleRow[]
+    if (!allRules || allRules.length === 0) return []
 
-  // Filter rules by active flag and operation permission
-  const activeRules = allRules.filter((r) => {
-    const isActive = r.active !== false && r.is_active !== false
-    const hasPerm = (r as any)[permCol] !== false
-    return isActive && hasPerm
+    // Filter rules by active flag and operation permission
+    const activeRules = allRules.filter((r) => {
+      const isActive = r.active !== false && r.is_active !== false
+      const hasPerm = (r as any)[permCol] !== false
+      return isActive && hasPerm
+    })
+
+    if (activeRules.length === 0) return []
+
+    // Canonical M2M relation: mx_rule_vx_role_rel
+    let relRows: Array<{ rule_id: number; role_id: number }> = []
+    try {
+      const rows = await conn('mx_rule_vx_role_rel').whereIn('mx_rule_id', activeRules.map((r) => r.id))
+      relRows = (rows || []).map((r: any) => ({
+        rule_id: r.mx_rule_id,
+        role_id: r.vx_role_id,
+      }))
+    } catch {
+      deny(
+        'SECURITY_METADATA_MISSING',
+        `Access Denied: Missing canonical record rule relation table 'mx_rule_vx_role_rel'`
+      )
+    }
+
+    // Separate Global Rules (no roles linked) and Group Rules (linked to roles)
+    const globalRules: RuleRow[] = []
+    const groupRules: RuleRow[] = []
+
+    for (const rule of activeRules) {
+      const links = relRows.filter((l) => l.rule_id === rule.id)
+      if (links.length === 0) {
+        globalRules.push(rule)
+      } else {
+        // If user has one of the linked roles, include in groupRules
+        const matchesUserRole = links.some((l) => groupIds.includes(l.role_id))
+        if (matchesUserRole) {
+          groupRules.push(rule)
+        }
+      }
+    }
+
+    const userContext = await cachedAcl(env, `userctx:${env.uid}`, async () => {
+      // Resolve principal user attributes (including partner enrichment)
+      const userRow = (await conn('vx_user').where('id', env.uid).first()) as Record<string, unknown> | undefined
+      if (!userRow) {
+        deny('ACCESS_DENIED', `Access Denied: User ${env.uid} does not exist`)
+      }
+
+      const context = { ...userRow }
+      const partnerId = userRow.partner_id ?? userRow.partnerId
+      if (partnerId) {
+        try {
+          const partnerRow = await conn('vx_node').where('id', partnerId).first()
+          if (partnerRow) {
+            context.name = context.name || partnerRow.name
+            context.email = context.email || partnerRow.email
+            context.company_id = context.company_id ?? partnerRow.company_id
+          }
+        } catch {
+          // Ignored if partner table not available
+        }
+      }
+      return context
+    })
+
+    // 1. Evaluate Global Rules (ALL must match -> AND composition)
+    const evaluatedGlobal: unknown[][] = []
+    for (const rule of globalRules) {
+      if (!rule.domain_force) continue
+      const domain = evaluateRecordRuleDomain(rule.domain_force, userContext)
+      if (domain.length > 0) evaluatedGlobal.push(domain)
+    }
+
+    // 2. Evaluate Group Rules (ANY can match -> OR composition)
+    const evaluatedGroup: unknown[][] = []
+    for (const rule of groupRules) {
+      if (!rule.domain_force) continue
+      const domain = evaluateRecordRuleDomain(rule.domain_force, userContext)
+      if (domain.length > 0) evaluatedGroup.push(domain)
+    }
+
+    let groupDomain: unknown[] = []
+    for (const gd of evaluatedGroup) {
+      if (groupDomain.length === 0) {
+        groupDomain = gd
+      } else {
+        groupDomain = ['|', ...groupDomain, ...gd]
+      }
+    }
+
+    let finalRuleDomain: unknown[] = []
+    for (const gd of evaluatedGlobal) {
+      if (finalRuleDomain.length === 0) {
+        finalRuleDomain = gd
+      } else {
+        finalRuleDomain = ['&', ...finalRuleDomain, ...gd]
+      }
+    }
+
+    if (groupDomain.length > 0) {
+      if (finalRuleDomain.length > 0) {
+        finalRuleDomain = ['&', ...finalRuleDomain, ...groupDomain]
+      } else {
+        finalRuleDomain = groupDomain
+      }
+    }
+
+    return finalRuleDomain
   })
 
-  if (activeRules.length === 0) return []
-
-  // Canonical M2M relation: mx_rule_vx_role_rel
-  let relRows: Array<{ rule_id: number; role_id: number }> = []
-  try {
-    const rows = await conn('mx_rule_vx_role_rel')
-    relRows = (rows || []).map((r: any) => ({
-      rule_id: r.mx_rule_id ?? r.rule_id,
-      role_id: r.vx_role_id ?? r.role_id,
-    }))
-  } catch {
-    deny(
-      'SECURITY_METADATA_MISSING',
-      `Access Denied: Missing canonical record rule relation table 'mx_rule_vx_role_rel'`
-    )
-  }
-
-  // Separate Global Rules (no roles linked) and Group Rules (linked to roles)
-  const globalRules: RuleRow[] = []
-  const groupRules: RuleRow[] = []
-
-  for (const rule of activeRules) {
-    const links = relRows.filter((l) => l.rule_id === rule.id)
-    if (links.length === 0) {
-      globalRules.push(rule)
-    } else {
-      // If user has one of the linked roles, include in groupRules
-      const matchesUserRole = links.some((l) => groupIds.includes(l.role_id))
-      if (matchesUserRole) {
-        groupRules.push(rule)
-      }
-    }
-  }
-
-  // Resolve principal user attributes (including partner enrichment)
-  const userRow = (await conn('vx_user').where('id', env.uid).first()) as Record<string, unknown> | undefined
-  if (!userRow) {
-    deny('ACCESS_DENIED', `Access Denied: User ${env.uid} does not exist`)
-  }
-
-  const userContext = { ...userRow }
-  const partnerId = userRow.partner_id ?? userRow.partnerId
-  if (partnerId) {
-    try {
-      const partnerRow = await conn('vx_node').where('id', partnerId).first()
-      if (partnerRow) {
-        userContext.name = userContext.name || partnerRow.name
-        userContext.email = userContext.email || partnerRow.email
-        userContext.company_id = userContext.company_id ?? partnerRow.company_id
-      }
-    } catch {
-      // Ignored if partner table not available
-    }
-  }
-
-  // 1. Evaluate Global Rules (ALL must match -> AND composition)
-  const evaluatedGlobal: unknown[][] = []
-  for (const rule of globalRules) {
-    if (!rule.domain_force) continue
-    const domain = evaluateRecordRuleDomain(rule.domain_force, userContext)
-    if (domain.length > 0) evaluatedGlobal.push(domain)
-  }
-
-  // 2. Evaluate Group Rules (ANY can match -> OR composition)
-  const evaluatedGroup: unknown[][] = []
-  for (const rule of groupRules) {
-    if (!rule.domain_force) continue
-    const domain = evaluateRecordRuleDomain(rule.domain_force, userContext)
-    if (domain.length > 0) evaluatedGroup.push(domain)
-  }
-
-  let groupDomain: unknown[] = []
-  for (const gd of evaluatedGroup) {
-    if (groupDomain.length === 0) {
-      groupDomain = gd
-    } else {
-      groupDomain = ['|', ...groupDomain, ...gd]
-    }
-  }
-
-  let finalRuleDomain: unknown[] = []
-  for (const gd of evaluatedGlobal) {
-    if (finalRuleDomain.length === 0) {
-      finalRuleDomain = gd
-    } else {
-      finalRuleDomain = ['&', ...finalRuleDomain, ...gd]
-    }
-  }
-
-  if (groupDomain.length > 0) {
-    if (finalRuleDomain.length > 0) {
-      finalRuleDomain = ['&', ...finalRuleDomain, ...groupDomain]
-    } else {
-      finalRuleDomain = groupDomain
-    }
-  }
-
-  return finalRuleDomain
+  // Cached domains are shared across callers; hand out a copy so nobody mutates the cache.
+  return structuredClone(ruleDomain)
 }

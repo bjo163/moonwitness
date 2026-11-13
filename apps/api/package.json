@@ -45,9 +45,12 @@
     "@moon/geo": "workspace:*",
     "@moon/cron": "workspace:*",
     "@moon/protocol": "workspace:*",
+    "@moon/riot": "workspace:*",
+    "@moon/riot-coolify": "workspace:*",
     "dotenv": "^16.4.5",
     "knex": "^3.0.0",
-    "pg": "^8.13.0"
+    "pg": "^8.13.0",
+    "zod": "^3.25.67"
   },
   "devDependencies": {
     "@types/eventsource": "^3.0.0",

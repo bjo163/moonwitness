@@ -86,6 +86,12 @@ importers:
       '@moon/protocol':
         specifier: workspace:*
         version: link:../../packages/moon-protocol
+      '@moon/riot':
+        specifier: workspace:*
+        version: link:../../packages/moon-riot
+      '@moon/riot-coolify':
+        specifier: workspace:*
+        version: link:../../packages/moon-riot-coolify
       '@moon/server':
         specifier: workspace:*
         version: link:../../packages/moon-server
@@ -107,6 +113,9 @@ importers:
       pg:
         specifier: ^8.13.0
         version: 8.22.0
+      zod:
+        specifier: ^3.25.67
+        version: 3.25.76
     devDependencies:
       '@types/eventsource':
         specifier: ^3.0.0
@@ -827,6 +836,34 @@ importers:
         version: link:../typescript-config
       typescript:
         specifier: ^5
+        version: 5.9.3
+
+  packages/moon-riot:
+    devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.19.41
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      typescript:
+        specifier: ^5.5.4
+        version: 5.9.3
+
+  packages/moon-riot-coolify:
+    dependencies:
+      '@moon/riot':
+        specifier: workspace:*
+        version: link:../moon-riot
+    devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.19.41
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      typescript:
+        specifier: ^5.5.4
         version: 5.9.3
 
   packages/moon-server:

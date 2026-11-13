@@ -35,6 +35,9 @@ export * from './contracts/cab.js'
 // ── SYSTEM CONTRACTS (Health, DB, Metrics, Mizan) ─────────────
 export * from './contracts/system.js'
 
+// ── COOLIFY OPS CONTRACTS (Deployment connector read model) ───
+export * from './contracts/coolify-ops.js'
+
 // ── SSE CONTRACTS (Typed Realtime Topics) ─────────────────────
 export * from './contracts/sse.js'
 

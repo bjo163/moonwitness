@@ -1,4 +1,5 @@
 import { isSqlite } from './dialect.js'
+import { AuthorizationError } from './security.js'
 
 type ASTNode =
   | { type: 'AND', left: ASTNode, right: ASTNode }
@@ -79,7 +80,12 @@ function applyClause(query: any, clause: [string, string, unknown], tableName?: 
 
   switch (String(operator).toLowerCase()) {
     case 'ilike': query.where(column, isSqlite() ? 'like' : 'ilike', `%${value}%`); break
+    case 'not ilike': query.whereNot(column, isSqlite() ? 'like' : 'ilike', `%${value}%`); break
     case 'like': query.where(column, 'like', `%${value}%`); break
+    case 'not like': query.whereNot(column, 'like', `%${value}%`); break
+    // The '=' prefix means the caller supplies the whole pattern; adding wildcards would widen the rule.
+    case '=ilike': query.where(column, isSqlite() ? 'like' : 'ilike', value); break
+    case '=like': query.where(column, 'like', value); break
     case '=':
     case '==': query.where(column, value); break
     case '!=':
@@ -92,6 +98,11 @@ function applyClause(query: any, clause: [string, string, unknown], tableName?: 
     case 'not in': query.whereNotIn(column, value as any[]); break
     case 'child_of': query.where('parent_path', 'like', `%/${value}/%`); break
     case 'parent_of': query.whereRaw(`? like parent_path || '%'`, [value]); break
+    default:
+      throw new AuthorizationError(
+        'SECURITY_RULE_INVALID',
+        `Access Denied: Unsupported record rule operator "${operator}"`
+      )
   }
 }
 

@@ -5,7 +5,7 @@ import type { FieldDef, InferFieldType } from './fields.js'
 import { isFieldDef as isFieldDefFn, fields } from './fields.js'
 import type { Ctx } from './env.js'
 import { createCtx } from './env.js'
-import { checkAccessRights, getRecordRulesDomain, AuthorizationError } from './security.js'
+import { checkAccessRights, getRecordRulesDomain, AuthorizationError, invalidateAclCache, ACL_SENSITIVE_MODELS } from './security.js'
 import type { PermissionOperation } from './security.js'
 import { applyDomain } from './domain-query.js'
 import { applyComputedFields } from './computed-fields.js'
@@ -137,6 +137,7 @@ export class Vertex {
   }
 
   private static emitEvent(event: string, payload: any) {
+    if (ACL_SENSITIVE_MODELS.has(payload?.model)) invalidateAclCache()
     // @ts-ignore
     if (globalThis.moonEmitter) {
       // @ts-ignore
