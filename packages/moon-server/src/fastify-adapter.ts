@@ -1,5 +1,5 @@
 import fastify from 'fastify'
-import type { FastifyInstance, FastifyRequest, FastifyReply, HTTPMethods } from 'fastify'
+import type { FastifyInstance, FastifyRequest, FastifyReply, FastifyError, HTTPMethods } from 'fastify'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import {
   setupOrm,
@@ -38,7 +38,7 @@ import {
 import { handleRest } from './handlers/rest.js'
 import { handleRpc } from './handlers/rpc.js'
 import { handleSSE, getActiveClientCount, closeAllSSEConnections } from './handlers/sse.js'
-import { sendJson, setCorsConfig, handleCorsPreflight, type CorsConfig } from './utils/http.js'
+import { sendJson, setCorsConfig, handleCorsPreflight, getSecurityHeaders, type CorsConfig } from './utils/http.js'
 import { logger } from './logger.js'
 import { globalRoutes, type HttpHandler } from './router.js'
 import { createProxyHandler } from './proxy.js'
@@ -102,6 +102,64 @@ function resolveCorsConfig(config?: CorsConfig): CorsConfig {
   }
 }
 
+const PG_CLIENTS = new Set(['pg', 'postgres', 'postgresql'])
+
+function normalizeDatabaseUrl(config: DbConfig): string {
+  if (typeof config === 'string') return config.trim()
+  const knexConfig: any = typeof config === 'function' ? (config as any).client?.config : config
+  if (!knexConfig || typeof knexConfig !== 'object') return ''
+  const client = String(knexConfig.client ?? '').toLowerCase()
+  const connection = knexConfig.connection
+  if (typeof connection === 'string') return connection.trim()
+  if (connection && typeof connection === 'object') {
+    if (typeof connection.filename === 'string') return `sqlite://${connection.filename}`
+    const host = connection.host ? String(connection.host) : ''
+    const scheme = PG_CLIENTS.has(client) ? 'postgres' : client
+    if (!host) return scheme ? `${scheme}://` : ''
+    const port = connection.port ? `:${connection.port}` : ''
+    const database = connection.database ? `/${connection.database}` : ''
+    return `${scheme}://${host}${port}${database}`
+  }
+  return client ? `${PG_CLIENTS.has(client) ? 'postgres' : client}://` : ''
+}
+
+function assertProductionDatabase(config: DbConfig): void {
+  const reject = (reason: string): never => {
+    throw new Error(`[moon.security] Fatal: production DATABASE_URL ${reason}`)
+  }
+  const url = normalizeDatabaseUrl(config)
+  if (!url) reject('must be explicit and non-empty.')
+  const lower = url.toLowerCase()
+  if (lower.startsWith('sqlite') || lower === ':memory:' || /\.(db|sqlite|sqlite3)$/.test(lower)) {
+    reject('must not use SQLite in production.')
+  }
+  if (!/^(postgres(ql)?|pg):\/\//.test(lower)) reject('must use the PostgreSQL dialect.')
+  let parsed: URL
+  try {
+    parsed = new URL(url)
+  } catch {
+    return reject('must be a valid PostgreSQL URL.')
+  }
+  const host = parsed.hostname.toLowerCase()
+  if (!host || host === 'localhost' || host === '127.0.0.1' || host === '::1' || host === '[::1]' || host === '0.0.0.0') {
+    reject('must be explicit and non-localhost.')
+  }
+}
+
+// vue.global.js compiles in-DOM templates via new Function, so the dashboard needs 'unsafe-eval';
+// both views load Vue/Swagger assets from unpkg and use inline scripts/styles.
+const HTML_CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com",
+  "style-src 'self' 'unsafe-inline' https://unpkg.com",
+  "img-src 'self' data:",
+  "connect-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self'",
+].join('; ')
+
 
 export class FastifyAdapter {
   private readonly config: FastifyAdapterConfig
@@ -118,9 +176,7 @@ export class FastifyAdapter {
       if (!config.jwtSecret || config.jwtSecret === 'secret' || config.jwtSecret.trim().length < 16) {
         throw new Error('[moon.security] Fatal: JWT_SECRET must be a strong explicit production secret.')
       }
-      if (!config.database || String(config.database).includes('localhost')) {
-        throw new Error('[moon.security] Fatal: production DATABASE_URL must be explicit and non-localhost.')
-      }
+      assertProductionDatabase(config.database)
     } else if (!config.jwtSecret || config.jwtSecret === 'secret') {
       logger.warn('moon.security', 'Insecure default JWT_SECRET is in use. Set JWT_SECRET for production.')
     }
@@ -137,34 +193,35 @@ export class FastifyAdapter {
   private registerRoute(method: string, path: string, handler: HttpHandler, auth: 'none' | 'user' | 'admin' = 'none') {
     if (this.started) throw new Error('Moon routes must be registered before server.start()')
 
-    let effectiveHandler = handler
-    if (auth !== 'none') {
-      effectiveHandler = async (req: IncomingMessage, res: ServerResponse) => {
-        try {
-          const session = await authenticateRequest(req, this.config.jwtSecret, { allowAnonymous: false })
-          if (auth === 'admin' && session.uid !== SUPERUSER_ID) {
-            // Allow users with admin/superadmin role (clearance >= 2) in addition to SUPERUSER_ID
-            const authCtx = createCtx(session.uid, {}, getModel as any)
-            const { clearanceLevel } = await resolveUserRole(session.uid, authCtx)
-            if (clearanceLevel < 2) {
-              sendJson(res, 403, { error: 'Administrator access required', code: 'AUTH_FORBIDDEN' }, req, this.config.cors)
-              return
-            }
-          }
-          ;(req as any).__moonSession = session
-          return await handler(req, res)
-        } catch (error) {
-          if (error instanceof AuthError) {
-            sendJson(res, error.statusCode, { error: error.message, code: error.code }, req, this.config.cors)
-          } else {
-            sendJson(res, 401, { error: 'Authentication required', code: 'AUTH_REQUIRED' }, req, this.config.cors)
-          }
-        }
-      }
-    }
+    const effectiveHandler = auth === 'none' ? handler : this.withAuth(handler, auth)
 
     globalRoutes.push({ method, path, handler: effectiveHandler })
     defineEndpoint({ method: method as EndpointDef['method'], path, description: `Dynamic route ${method} ${path}`, auth })
+  }
+
+  private withAuth(handler: HttpHandler, auth: 'user' | 'admin'): HttpHandler {
+    return async (req: IncomingMessage, res: ServerResponse) => {
+      try {
+        const session = await authenticateRequest(req, this.config.jwtSecret, { allowAnonymous: false })
+        if (auth === 'admin' && session.uid !== SUPERUSER_ID) {
+          // Allow users with admin/superadmin role (clearance >= 2) in addition to SUPERUSER_ID
+          const authCtx = createCtx(session.uid, {}, getModel as any)
+          const { clearanceLevel } = await resolveUserRole(session.uid, authCtx)
+          if (clearanceLevel < 2) {
+            sendJson(res, 403, { error: 'Administrator access required', code: 'AUTH_FORBIDDEN' }, req, this.config.cors)
+            return
+          }
+        }
+        ;(req as any).__moonSession = session
+        return await handler(req, res)
+      } catch (error) {
+        if (error instanceof AuthError) {
+          sendJson(res, error.statusCode, { error: error.message, code: error.code }, req, this.config.cors)
+        } else {
+          sendJson(res, 401, { error: 'Authentication required', code: 'AUTH_REQUIRED' }, req, this.config.cors)
+        }
+      }
+    }
   }
 
   public get(path: string, handler: HttpHandler, auth: 'none' | 'user' | 'admin' = 'none') {
@@ -223,7 +280,19 @@ export class FastifyAdapter {
       const rawReq = this.bridgeRequest(req)
       reply.raw.setHeader('x-request-id', req.id)
       reply.hijack()
-      await this.runMiddlewares(rawReq, reply.raw, () => handler(rawReq, reply.raw))
+      try {
+        await this.runMiddlewares(rawReq, reply.raw, () => handler(rawReq, reply.raw))
+      } catch (error) {
+        logger.error('moon.http', `Unhandled handler error: ${req.method} ${req.url}`, {
+          requestId: req.id,
+          error: error instanceof Error ? { message: error.message, stack: error.stack } : String(error),
+        })
+        const res = reply.raw
+        if (!res.headersSent) {
+          sendJson(res, 500, { error: 'Internal server error', code: 'INTERNAL_ERROR', requestId: req.id }, rawReq, this.config.cors)
+        }
+        if (!res.writableEnded) res.end()
+      }
       logger.info('moon.http', `${req.method} ${req.url} ${reply.raw.statusCode} (${Date.now() - startedAt}ms)`, { requestId: req.id })
     }
   }
@@ -267,24 +336,32 @@ export class FastifyAdapter {
     this.addRawRoute(app, 'GET', '/', async (req, res) => {
       const session = await this.requireAdmin(req, res)
       if (!session) return
+      const authCtx = createCtx(session.uid, {}, getModel as any)
+      const { role, clearanceLevel } = await resolveUserRole(session.uid, authCtx)
       const token = issueJwt({
         sub: session.uid,
         email: session.email,
         tokenVersion: session.tokenVersion,
-        role: 'superadmin',
-        clearanceLevel: 3,
+        role,
+        clearanceLevel,
       }, this.config.jwtSecret)
       const secure = process.env.NODE_ENV === 'production' ? '; Secure' : ''
       res.writeHead(200, {
         'Content-Type': 'text/html',
         'Cache-Control': 'no-store',
+        ...getSecurityHeaders(),
+        'Content-Security-Policy': HTML_CSP,
         'Set-Cookie': `moon_session=${encodeURIComponent(token)}; HttpOnly; SameSite=Strict; Path=/${secure}`,
       })
       res.end(renderDashboard())
     })
     this.addRawRoute(app, 'GET', '/openapi.json', (req, res) => sendJson(res, 200, generateOpenApi(), req, this.config.cors))
     this.addRawRoute(app, 'GET', '/docs', (_req, res) => {
-      res.writeHead(200, { 'Content-Type': 'text/html' })
+      res.writeHead(200, {
+        'Content-Type': 'text/html',
+        ...getSecurityHeaders(),
+        'Content-Security-Policy': HTML_CSP,
+      })
       res.end(renderSwaggerUI())
     })
     this.addRawRoute(app, 'POST', '/auth/login', (req, res) => handleLogin(req, res, authConfig))
@@ -300,9 +377,9 @@ export class FastifyAdapter {
     for (const path of ['/health/live', '/livez']) this.addRawRoute(app, 'GET', path, handleLiveness)
     for (const path of ['/health/ready', '/readyz']) this.addRawRoute(app, 'GET', path, handleReadiness)
     for (const path of ['/health', '/healthz', '/api/health', '/api/system/health']) this.addRawRoute(app, 'GET', path, handleHealth)
-    this.addRawRoute(app, 'GET', '/db/status', handleDbStatus)
-    this.addRawRoute(app, 'GET', '/meta/models', handleMetaModels)
-    this.addRawRoute(app, 'GET', '/api/meta/model/:model', (req, res) => handleMetaModel(req, res, (req as any).params.model))
+    this.addRawRoute(app, 'GET', '/db/status', this.withAuth(handleDbStatus, 'admin'))
+    this.addRawRoute(app, 'GET', '/meta/models', this.withAuth(handleMetaModels, 'user'))
+    this.addRawRoute(app, 'GET', '/api/meta/model/:model', this.withAuth((req, res) => handleMetaModel(req, res, (req as any).params.model), 'user'))
     this.addRawRoute(app, 'GET', '/live', async (req, res) => {
       if (!(await this.requireAdmin(req, res))) return
       handleSSE(req, res, { cors: this.config.cors, jwtSecret: this.config.jwtSecret })
@@ -336,6 +413,18 @@ export class FastifyAdapter {
     })
     app.addHook('onRequest', async (req, reply) => {
       reply.header('x-request-id', req.id)
+    })
+    app.setErrorHandler<FastifyError>((error, request, reply) => {
+      const statusCode = error.statusCode && error.statusCode >= 400 && error.statusCode < 500 ? error.statusCode : 500
+      if (statusCode >= 500) {
+        logger.error('moon.http', `Unhandled request error: ${request.method} ${request.url}`, {
+          requestId: request.id,
+          error: { message: error.message, stack: error.stack },
+        })
+        reply.status(500).send({ error: 'Internal server error', code: 'INTERNAL_ERROR', requestId: request.id })
+        return
+      }
+      reply.status(statusCode).send({ error: error.message, code: error.code ?? 'BAD_REQUEST' })
     })
     this.registerCustomRoutes(app)
     this.registerBuiltinRoutes(app)
@@ -406,15 +495,25 @@ export class FastifyAdapter {
 
     this.metricInterval = setInterval(async () => {
       try {
-        const MxMetric = getModel('mx.metric')
-        if (MxMetric) {
-          const env = createCtx(SUPERUSER_ID, {}, getModel as any)
-          await MxMetric.spawn(MxMetric as any, env, { name: 'active_connections', value: getActiveClientCount() })
-        }
+        await this.flushConnectionMetric()
       } catch (error) {
         logger.error('moon.metrics', 'Failed to flush active connection metric', error)
       }
     }, 60000)
+    this.metricInterval.unref()
+  }
+
+  private async flushConnectionMetric(): Promise<void> {
+    const MxMetric = getModel('mx.metric')
+    if (!MxMetric) return
+    const env = createCtx(SUPERUSER_ID, {}, getModel as any)
+    const value = getActiveClientCount()
+    const existing = await MxMetric.fetch(MxMetric as any, env, [['name', '=', 'active_connections']], ['id'], { limit: 1 })
+    if (existing.length > 0) {
+      await MxMetric.morph(MxMetric as any, env, existing[0].id, { value })
+    } else {
+      await MxMetric.spawn(MxMetric as any, env, { name: 'active_connections', value })
+    }
   }
 
   public async stop(): Promise<void> {
