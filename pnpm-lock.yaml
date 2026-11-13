@@ -86,6 +86,12 @@ importers:
       '@moon/protocol':
         specifier: workspace:*
         version: link:../../packages/moon-protocol
+      '@moon/riot':
+        specifier: workspace:*
+        version: link:../../packages/moon-riot
+      '@moon/riot-coolify':
+        specifier: workspace:*
+        version: link:../../packages/moon-riot-coolify
       '@moon/server':
         specifier: workspace:*
         version: link:../../packages/moon-server
@@ -107,6 +113,9 @@ importers:
       pg:
         specifier: ^8.13.0
         version: 8.22.0
+      zod:
+        specifier: ^3.25.67
+        version: 3.25.76
     devDependencies:
       '@types/eventsource':
         specifier: ^3.0.0

@@ -1,5 +1,6 @@
-export { createCoolifyProvider } from './provider'
-export type { CoolifyProvider, CoolifyProviderConfig } from './provider'
+export { createCoolifyProvider } from './provider.js'
+export type { CoolifyProvider, CoolifyProviderConfig } from './provider.js'
+export { sanitizeApplication, stripSensitive } from './sanitize.js'
 export type {
   CoolifyApplication,
   CoolifyDeployment,
@@ -11,4 +12,4 @@ export type {
   CoolifyServer,
   DeployResult,
   WaitOptions,
-} from './types'
+} from './types.js'

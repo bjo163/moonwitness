@@ -1,5 +1,5 @@
 import { createHttpClient, RiotError, RiotTimeoutError, type ConnectorProvider, type HttpClient } from '@moon/riot'
-import { sanitizeApplication, stripSensitive } from './sanitize'
+import { sanitizeApplication, stripSensitive } from './sanitize.js'
 import type {
   CoolifyApplication,
   CoolifyDeployment,
@@ -11,7 +11,7 @@ import type {
   CoolifyServer,
   DeployResult,
   WaitOptions,
-} from './types'
+} from './types.js'
 
 export interface CoolifyProviderConfig {
   baseUrl?: string

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
-import { createHttpClient } from './http'
-import { RiotHttpError, RiotTimeoutError } from './errors'
+import { createHttpClient } from './http.js'
+import { RiotHttpError, RiotTimeoutError } from './errors.js'
 
 function jsonResponse(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {

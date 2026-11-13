@@ -1,5 +1,5 @@
-import { RiotHttpError, RiotTimeoutError } from './errors'
-import type { HttpMethod, QueryValue, RequestOptions } from './types'
+import { RiotHttpError, RiotTimeoutError } from './errors.js'
+import type { HttpMethod, QueryValue, RequestOptions } from './types.js'
 
 export interface HttpClientConfig {
   baseUrl: string
