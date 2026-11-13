@@ -172,7 +172,7 @@ Draft revisi 2 mempertahankan domain regulasi/pasal/kasus dan assessment. Peruba
 - 20 file tes / 94 tes lulus: scripts, Mizan engine, Odoo bridge session mocks, Witness research adapters, engine runtime dan revelation query. Menjalankan langsung binary lokal `node node_modules/vitest/vitest.mjs` menghindari pnpm yang sebelumnya mencoba penataan dependencies; tidak mengganti dependencies.
 - 3 tes paket Cosmic mizan-engine lulus melalui `node --test` terhadap package test yang hanya memakai primitive host-neutral.
 - Tambahan 4 file / 21 tes Witness scoring, ingestion, pipeline dan importer Odoo mock lulus. Total tes existing yang dijalankan: 118; tidak termasuk delapan probe diagnostik.
-- 8 probe kasus batas lulus dalam arti berhasil mereproduksi perilaku yang dicatat, bukan menyatakan bug telah diperbaiki. Reproduksi: `node docs/mizan-review-probes.mjs` pada Node 26 dengan repo Cosmic/Mizan sebagai sibling, atau berikan dua path eksplisit.
+- 8 probe kasus batas lulus dalam arti berhasil mereproduksi perilaku yang dicatat, bukan menyatakan bug telah diperbaiki. Reproduksi: `node scripts/mizan-review-probes.mjs` pada Node 26 dengan repo Cosmic/Mizan sebagai sibling, atau berikan dua path eksplisit.
 - Audit governance diulang setelah revisi: exit 0, tetapi delapan component-health findings dan 29 file di atas 400 baris; exit 0 tidak sama dengan semua temuan bersih.
 - Tidak ada tes database/ACL Odoo live atau full Cosmic pipeline. Tes yang lulus membuktikan perilaku yang diuji, bukan validitas ilmiah/metafisik scoring.
 

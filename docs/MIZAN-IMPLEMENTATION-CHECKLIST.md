@@ -128,7 +128,7 @@ Gunakan checklist ini sebagai urutan kerja. Item tidak boleh ditandai selesai ha
 - [ ] Test native models, transaction rollback, ACL, record rules, immutability, dan company isolation.
 - [ ] Test session/API/idempotency/stale result.
 - [ ] Test migrasi idempotent dan unresolved handling.
-- [ ] Jalankan `node docs/mizan-review-probes.mjs` dan perbarui temuan setelah perbaikan.
+- [ ] Jalankan `node scripts/mizan-review-probes.mjs` dan perbarui temuan setelah perbaikan.
 - [ ] Jalankan `node scripts/audit-rules.mjs`.
 - [ ] Jalankan `pnpm test:scripts` dengan dependency state yang bersih.
 - [ ] Jalankan test aplikasi yang relevan dan catat versi Node/pnpm/database.
