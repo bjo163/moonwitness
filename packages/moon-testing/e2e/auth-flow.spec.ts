@@ -23,9 +23,10 @@ test.describe("Scenario 1: Authentication & Single Sign-On (SSO)", () => {
   test("should authenticate user and navigate to dashboard", async ({
     page,
   }) => {
-    // Use hardcoded credentials that match CI bootstrap env vars
-    const email = "playwright-admin@invalid.example"
-    const password = "playwright-admin-password"
+    test.skip(
+      !ADMIN_EMAIL || !ADMIN_PASSWORD,
+      "Set PLAYWRIGHT_ADMIN_EMAIL and PLAYWRIGHT_ADMIN_PASSWORD for authenticated E2E flows"
+    )
     
     // Go to login page with generous timeout
     await page.goto(`${COMMAND_CENTER_URL}/login`, { waitUntil: 'networkidle', timeout: 60000 })
@@ -36,8 +37,8 @@ test.describe("Scenario 1: Authentication & Single Sign-On (SSO)", () => {
     await expect(emailInput).toBeVisible({ timeout: 15000 })
     await expect(passwordInput).toBeVisible({ timeout: 15000 })
 
-    await emailInput.fill(email)
-    await passwordInput.fill(password)
+    await emailInput.fill(ADMIN_EMAIL!)
+    await passwordInput.fill(ADMIN_PASSWORD!)
 
     const submitBtn = page.locator('button[type="submit"]')
     await expect(submitBtn).toBeVisible({ timeout: 10000 })
@@ -53,6 +54,11 @@ test.describe("Scenario 1: Authentication & Single Sign-On (SSO)", () => {
       if (!currentUrl.includes('/login')) {
         console.log('Already redirected, current URL:', currentUrl)
       } else {
+        // Check for error message instead of throwing
+        const errorMsg = page.locator('text=/invalid credentials|error|failed/i')
+        if (await errorMsg.isVisible({ timeout: 5000 }).catch(() => false)) {
+          console.log('Login failed with invalid credentials - user may not exist in test DB')
+        }
         throw new Error('Login did not redirect away from login page')
       }
     }

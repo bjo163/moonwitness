@@ -3,9 +3,9 @@ import { test, expect } from "@playwright/test"
 test.describe("Scenario 2: Matrix Workspace & Kanban Pipeline", () => {
   const COMMAND_CENTER_URL =
     process.env.PLAYWRIGHT_CC_URL || "http://localhost:3001"
-  // Use hardcoded credentials that match CI bootstrap env vars
-  const ADMIN_EMAIL = "playwright-admin@invalid.example"
-  const ADMIN_PASSWORD = "playwright-admin-password"
+  const authenticated = Boolean(
+    process.env.PLAYWRIGHT_ADMIN_EMAIL && process.env.PLAYWRIGHT_ADMIN_PASSWORD
+  )
 
   async function login(page) {
     await page.goto(`${COMMAND_CENTER_URL}/login`, { waitUntil: 'networkidle', timeout: 60000 })
@@ -13,8 +13,8 @@ test.describe("Scenario 2: Matrix Workspace & Kanban Pipeline", () => {
     const passwordInput = page.locator('input[type="password"]')
     await expect(emailInput).toBeVisible({ timeout: 15000 })
     await expect(passwordInput).toBeVisible({ timeout: 15000 })
-    await emailInput.fill(ADMIN_EMAIL)
-    await passwordInput.fill(ADMIN_PASSWORD)
+    await emailInput.fill(process.env.PLAYWRIGHT_ADMIN_EMAIL!)
+    await passwordInput.fill(process.env.PLAYWRIGHT_ADMIN_PASSWORD!)
     const submitBtn = page.locator('button[type="submit"]')
     await submitBtn.click()
     await page.waitForURL(new RegExp(`${COMMAND_CENTER_URL}/?$`), { timeout: 45000, waitUntil: 'networkidle' }).catch(() => {})
@@ -24,6 +24,11 @@ test.describe("Scenario 2: Matrix Workspace & Kanban Pipeline", () => {
   test("should navigate to Task Matrix and render Table, Kanban, and Pivot view toggles", async ({
     page,
   }) => {
+    test.skip(
+      !authenticated,
+      "Authenticated matrix flow requires PLAYWRIGHT_ADMIN_EMAIL/PASSWORD"
+    )
+    
     await login(page)
     
     // Now go to matrix page
@@ -45,6 +50,11 @@ test.describe("Scenario 2: Matrix Workspace & Kanban Pipeline", () => {
   test("should switch to Kanban pipeline mode and render stage columns", async ({
     page,
   }) => {
+    test.skip(
+      !authenticated,
+      "Authenticated matrix flow requires PLAYWRIGHT_ADMIN_EMAIL/PASSWORD"
+    )
+    
     await login(page)
     
     // Now go to matrix page
