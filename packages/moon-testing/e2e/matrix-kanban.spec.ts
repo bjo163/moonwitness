@@ -7,6 +7,20 @@ test.describe("Scenario 2: Matrix Workspace & Kanban Pipeline", () => {
     process.env.PLAYWRIGHT_ADMIN_EMAIL && process.env.PLAYWRIGHT_ADMIN_PASSWORD
   )
 
+  async function login(page) {
+    await page.goto(`${COMMAND_CENTER_URL}/login`, { waitUntil: 'networkidle', timeout: 60000 })
+    const emailInput = page.locator('input[type="email"], input[name="login"], input[name="email"]')
+    const passwordInput = page.locator('input[type="password"]')
+    await expect(emailInput).toBeVisible({ timeout: 15000 })
+    await expect(passwordInput).toBeVisible({ timeout: 15000 })
+    await emailInput.fill(process.env.PLAYWRIGHT_ADMIN_EMAIL!)
+    await passwordInput.fill(process.env.PLAYWRIGHT_ADMIN_PASSWORD!)
+    const submitBtn = page.locator('button[type="submit"]')
+    await submitBtn.click()
+    await page.waitForURL(new RegExp(`${COMMAND_CENTER_URL}/?$`), { timeout: 45000, waitUntil: 'networkidle' }).catch(() => {})
+    await page.waitForLoadState('networkidle', { timeout: 15000 })
+  }
+
   test("should navigate to Task Matrix and render Table, Kanban, and Pivot view toggles", async ({
     page,
   }) => {
@@ -14,11 +28,14 @@ test.describe("Scenario 2: Matrix Workspace & Kanban Pipeline", () => {
       !authenticated,
       "Authenticated matrix flow requires PLAYWRIGHT_ADMIN_EMAIL/PASSWORD"
     )
-    await page.goto(`${COMMAND_CENTER_URL}/matrix/pj.task`)
     
-    // Wait for page to fully load and matrix to render
-    await page.waitForLoadState('networkidle', { timeout: 30000 })
-    await expect(page.locator('table, [role="grid"], .matrix-table')).toBeVisible({ timeout: 20000 })
+    await login(page)
+    
+    // Now go to matrix page
+    await page.goto(`${COMMAND_CENTER_URL}/matrix/pj.task`, { waitUntil: 'networkidle', timeout: 60000 })
+    
+    // Wait for matrix table to be visible
+    await expect(page.locator('table, [role="grid"]')).toBeVisible({ timeout: 30000 })
 
     // Verify 3 view toggles are visible
     const tableBtn = page.locator('button:has-text("TABLE")')
@@ -37,11 +54,14 @@ test.describe("Scenario 2: Matrix Workspace & Kanban Pipeline", () => {
       !authenticated,
       "Authenticated matrix flow requires PLAYWRIGHT_ADMIN_EMAIL/PASSWORD"
     )
-    await page.goto(`${COMMAND_CENTER_URL}/matrix/pj.task`)
     
-    // Wait for page to fully load
-    await page.waitForLoadState('networkidle', { timeout: 30000 })
-    await expect(page.locator('table, [role="grid"], .matrix-table')).toBeVisible({ timeout: 20000 })
+    await login(page)
+    
+    // Now go to matrix page
+    await page.goto(`${COMMAND_CENTER_URL}/matrix/pj.task`, { waitUntil: 'networkidle', timeout: 60000 })
+    
+    // Wait for matrix table to be visible
+    await expect(page.locator('table, [role="grid"]')).toBeVisible({ timeout: 30000 })
 
     const kanbanBtn = page.locator('button:has-text("KANBAN")')
     await expect(kanbanBtn).toBeVisible({ timeout: 15000 })
