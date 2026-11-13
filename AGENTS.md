@@ -53,14 +53,14 @@ Owns canonical corpus authoring, upstream synchronization, source metadata, corp
 ### `@moon/witness`
 Owns source-aware ingestion, normalization, validation, the application knowledge graph, source/artifact/snapshot records, passages, textual content, provenance, evidence, and research-domain integration.
 
-### `MoonWitness database`
-Provides operational persistence and query support for the application domain. It is not the editorial source of the corpus.
+### `PostgreSQL 18 + pgvector (postgres:18-pgvector)`
+Provides the single canonical relational source of truth for all domain entities, sacred knowledge graph records (`moon.witness.*`), Mizan ethical evaluations (`moon.mizan.*`), disaster & myth correlations (`moon.disaster.*`), user security (`vx.user`), and enterprise operational modules. It eliminates duplicate local relational stores.
 
 ### `@moon/protocol`
 Is the API contract source of truth.
 
 ### `@moon/server`
-Owns backend transport and route infrastructure.
+Owns high-speed backend transport, route infrastructure, Redis hot caching, isomorphic celestial math (`@moon/compute`), and pgvector RAG retrieval.
 
 ### `@workspace/ui`
 Owns the shared enterprise UI primitives and theme system.
@@ -79,10 +79,10 @@ corpus artifact + manifest
 @moon/witness ingestion
         |
         v
-canonical Witness graph
+PostgreSQL 18 + pgvector (moon.witness.*)
         |
         v
-MoonWitness API
+MoonWitness API Gateway (Fastify)
         |
    +----+----+
    |         |
@@ -200,7 +200,20 @@ ErrorBoundary
 Avoid decorative or themed prefixes.
 
 ## 13. Visual Design
-Use restrained enterprise presentation:
+Use a compact, text-first research publication presentation. The canonical specification is
+[Research UI guidelines](docs/RESEARCH-UI.md). Apply it to new UI and touched views.
+
+- Page titles: text-2xl, optionally sm:text-3xl; section titles: text-lg or text-xl.
+- Reading text: text-base with leading-relaxed and a measure around 65–75 characters.
+- UI text: text-sm; metadata: text-xs. Do not shrink prose to increase density.
+- Prefer document sections, reference lists, and tables separated by thin borders.
+- Use section padding py-6 or py-8 and gaps of 3–6 spacing units.
+- Avoid promotional heroes, uppercase headings, decorative blur, gradients, and oversized whitespace.
+- Cards are for distinct interactive or status groups; use rounded-md and no default shadow.
+- Keep source, edition, revision, and citations near the content they qualify.
+- Preserve legible Arabic line height, touch targets, keyboard focus, and runtime themes.
+
+Use restrained shared primitives:
 
 - standard Tailwind radius utilities
 - standard border and shadow utilities
@@ -274,10 +287,28 @@ corpus data       -> moonwitness-corpus
 application graph -> @moon/witness
 transport         -> @moon/server
 API contract      -> @moon/protocol
+master store      -> PostgreSQL 18 + pgvector (postgres:18-pgvector)
+vector search     -> pgvector 0.8+ via @moon/witness RAG
+pure compute      -> @moon/compute (isomorphic mathematical engine)
 public UI         -> apps/web
 admin UI          -> apps/command-center
 shared UI         -> @workspace/ui
 ```
 
 No parallel implementation should silently compete with these owners.
+
+## 21. Reuse and component health
+
+- Generic presentation primitives belong in `packages/ui`; feature components
+  that depend on domain models, API clients, or feature state remain in their
+  owning `apps/*` or `packages/moon-*` package.
+- Before adding a component, search `packages/ui` and the feature packages for
+  an existing equivalent. Extend the canonical component with a typed variant
+  or slot when the behavior is genuinely shared.
+- Renaming a duplicate component, moving it to a differently named file, or
+  wrapping the same markup does not satisfy reuse. The audit treats equivalent
+  duplicate definitions as a refactor finding.
+- Use `node scripts/audit-rules.mjs` and `pnpm test:scripts`; inspect component
+  health findings. Components rated `extract-now` need decomposition before
+  adding more behavior. Do not silence a finding by changing its name.
 <!-- END:moonwitness-core-rules -->

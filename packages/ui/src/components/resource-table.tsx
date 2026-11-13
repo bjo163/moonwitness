@@ -2,6 +2,8 @@
 
 import React, { useState, useMemo } from "react"
 import { Search, Loader2 } from "lucide-react"
+import { Input } from "./input"
+import { Button } from "./button"
 
 export interface TableColumn<T> {
   key: string
@@ -142,45 +144,18 @@ export function ResourceTable<T = any>({
 
   return (
     <div className={`relative overflow-hidden rounded-xl border border-border/40 bg-card/90 backdrop-blur-md shadow-sm ${className}`}>
-      {/* Header & Search Toolbar */}
-      {(title || subtitle || searchKeys.length > 0 || headerActions) && (
-        <div className="flex flex-col justify-between gap-4 border-b border-border/40 p-4 sm:p-5 sm:flex-row sm:items-center">
-          <div>
-            {title && (
-              <h3 className="text-sm font-bold tracking-tight text-foreground uppercase">
-                {title}
-              </h3>
-            )}
-            {subtitle && (
-              <p className="mt-1 text-xs text-muted-foreground">
-                {subtitle}
-              </p>
-            )}
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            {filterSlot}
-
-            {searchKeys.length > 0 && (
-              <div className="relative w-full sm:w-60">
-                <Search className="absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder="Filter records..."
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value)
-                    setCurrentPage(1)
-                  }}
-                  className={`w-full rounded-lg border border-border/50 bg-background/60 py-1.5 pr-3 pl-8 text-xs text-foreground placeholder:text-muted-foreground transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20`}
-                />
-              </div>
-            )}
-
-            {headerActions}
-          </div>
-        </div>
-      )}
+      <ResourceTableToolbar
+        title={title}
+        subtitle={subtitle}
+        searchKeys={searchKeys}
+        searchQuery={searchQuery}
+        filterSlot={filterSlot}
+        headerActions={headerActions}
+        onSearchChange={(value) => {
+          setSearchQuery(value)
+          setCurrentPage(1)
+        }}
+      />
 
       {/* Table Container */}
       <div className="overflow-x-auto">
@@ -259,39 +234,7 @@ export function ResourceTable<T = any>({
                       </td>
                     ))}
 
-                    {hasActions && (
-                      <td className="px-4 py-3 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          {actions?.(item)}
-
-                          {onEdit && (
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                onEdit(item)
-                              }}
-                              className="rounded-md border border-primary/40 bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
-                            >
-                              Edit
-                            </button>
-                          )}
-
-                          {onDelete && (
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                onDelete(item)
-                              }}
-                              className="rounded-md border border-destructive/40 bg-destructive/10 px-2.5 py-1 text-xs font-semibold text-destructive transition-colors hover:bg-destructive/20"
-                            >
-                              Delete
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    )}
+                    {hasActions && <ResourceTableRowActions item={item} actions={actions} onEdit={onEdit} onDelete={onDelete} />}
                   </tr>
                 )
               })
@@ -300,37 +243,117 @@ export function ResourceTable<T = any>({
         </table>
       </div>
 
-      {/* Pagination Footer */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between border-t border-border/40 px-5 py-3 font-mono text-xs text-muted-foreground">
-          <span>
-            Showing {filteredData.length > 0 ? (currentPage - 1) * pageSize + 1 : 0} -{" "}
-            {Math.min(currentPage * pageSize, filteredData.length)} of {filteredData.length}
-          </span>
-
-          <div className="flex items-center gap-2">
-            <button
-              disabled={currentPage <= 1}
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              className="rounded-md border border-border/50 bg-secondary/50 px-2.5 py-1 text-xs font-medium text-foreground transition-all hover:bg-secondary disabled:opacity-30"
-            >
-              Previous
-            </button>
-            <span className="px-2 text-xs font-bold text-foreground">
-              {currentPage} / {totalPages}
-            </span>
-            <button
-              disabled={currentPage >= totalPages}
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              className="rounded-md border border-border/50 bg-secondary/50 px-2.5 py-1 text-xs font-medium text-foreground transition-all hover:bg-secondary disabled:opacity-30"
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      )}
+      <ResourceTablePagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        filteredCount={filteredData.length}
+        pageSize={pageSize}
+        onPrevious={() => setCurrentPage((p) => Math.max(1, p - 1))}
+        onNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+      />
     </div>
   )
 }
 
+function ResourceTableRowActions<T>({
+  item,
+  actions,
+  onEdit,
+  onDelete,
+}: {
+  item: T
+  actions?: (item: T) => React.ReactNode
+  onEdit?: (item: T) => void
+  onDelete?: (item: T) => void
+}) {
+  return (
+    <td className="px-4 py-3 text-right">
+      <div className="flex items-center justify-end gap-2">
+        {actions?.(item)}
+        {onEdit && <Button variant="outline" type="button" onClick={(event) => { event.stopPropagation(); onEdit(item) }} className="rounded-md border border-primary/40 bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary/20">Edit</Button>}
+        {onDelete && <Button variant="destructive" type="button" onClick={(event) => { event.stopPropagation(); onDelete(item) }} className="rounded-md border border-destructive/40 bg-destructive/10 px-2.5 py-1 text-xs font-semibold text-destructive transition-colors hover:bg-destructive/20">Delete</Button>}
+      </div>
+    </td>
+  )
+}
 
+function ResourceTableToolbar({
+  title,
+  subtitle,
+  searchKeys,
+  searchQuery,
+  filterSlot,
+  headerActions,
+  onSearchChange,
+}: {
+  title?: string
+  subtitle?: string
+  searchKeys: readonly unknown[]
+  searchQuery: string
+  filterSlot?: React.ReactNode
+  headerActions?: React.ReactNode
+  onSearchChange: (value: string) => void
+}) {
+  if (!title && !subtitle && searchKeys.length === 0 && !headerActions) return null
+
+  return (
+    <div className="flex flex-col justify-between gap-4 border-b border-border/40 p-4 sm:flex-row sm:items-center sm:p-5">
+      <div>
+        {title && <h3 className="text-sm font-bold tracking-tight text-foreground uppercase">{title}</h3>}
+        {subtitle && <p className="mt-1 text-xs text-muted-foreground">{subtitle}</p>}
+      </div>
+      <div className="flex flex-wrap items-center gap-3">
+        {filterSlot}
+        {searchKeys.length > 0 && (
+          <div className="relative w-full sm:w-60">
+            <Search className="absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Filter records..."
+              value={searchQuery}
+              onChange={(event) => onSearchChange(event.target.value)}
+              className="w-full rounded-lg border border-border/50 bg-background/60 py-1.5 pr-3 pl-8 text-xs text-foreground placeholder:text-muted-foreground transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20"
+            />
+          </div>
+        )}
+        {headerActions}
+      </div>
+    </div>
+  )
+}
+
+function ResourceTablePagination({
+  currentPage,
+  totalPages,
+  filteredCount,
+  pageSize,
+  onPrevious,
+  onNext,
+}: {
+  currentPage: number
+  totalPages: number
+  filteredCount: number
+  pageSize: number
+  onPrevious: () => void
+  onNext: () => void
+}) {
+  if (totalPages <= 1) return null
+
+  return (
+    <div className="flex items-center justify-between border-t border-border/40 px-5 py-3 font-mono text-xs text-muted-foreground">
+      <span>
+        Showing {filteredCount > 0 ? (currentPage - 1) * pageSize + 1 : 0} -{" "}
+        {Math.min(currentPage * pageSize, filteredCount)} of {filteredCount}
+      </span>
+      <div className="flex items-center gap-2">
+        <Button type="button" variant="outline" disabled={currentPage <= 1} onClick={onPrevious} className="rounded-md border border-border/50 bg-secondary/50 px-2.5 py-1 text-xs font-medium text-foreground transition-all hover:bg-secondary disabled:opacity-30">
+          Previous
+        </Button>
+        <span className="px-2 text-xs font-bold text-foreground">{currentPage} / {totalPages}</span>
+        <Button type="button" variant="outline" disabled={currentPage >= totalPages} onClick={onNext} className="rounded-md border border-border/50 bg-secondary/50 px-2.5 py-1 text-xs font-medium text-foreground transition-all hover:bg-secondary disabled:opacity-30">
+          Next
+        </Button>
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,244 @@
+{
+  "traditions": [
+    { "name": "Shahih al-Bukhari", "originalName": "صحيح البخاري", "author": "Imam Muhammad bin Ismail al-Bukhari (194–256 H)", "totalItems": 7563, "gradeLevel": "SHAHIH", "category": "Hadits Shahih", "description": "Kitab hadits paling otentik setelah Al-Qur'an.", "slug": "shahih-al-bukhari" },
+    { "name": "Sahih Muslim", "originalName": "صحيح مسلم", "author": "Imam Muslim bin al-Hajjaj (202–261 H)", "totalItems": 7458, "gradeLevel": "SHAHIH", "category": "Hadits Shahih", "description": "Kitab hadits shahih yang kedua paling otentik setelah Sahih Bukhari.", "slug": "sahih-muslim" },
+    { "name": "Sunan Abi Dawud", "originalName": "سنن أبي داود", "author": "Imam Abu Dawud Sulayman bin al-Ash'ath (202–275 H)", "totalItems": 5274, "gradeLevel": "SHAHIH", "category": "Sunan", "description": "Koleksi hadits fikih dan hukum Islam terkemuka.", "slug": "sunan-abi-dawud" },
+    { "name": "Jami' at-Tirmidhi", "originalName": "جامع الترمذي", "author": "Imam Abu Isa Muhammad at-Tirmidhi (209–279 H)", "totalItems": 3956, "gradeLevel": "HASAN", "category": "Sunan & Jami'", "description": "Koleksi hadits komprehensif disertai kajian derajat hadits.", "slug": "jami-at-tirmidhi" },
+    { "name": "Sunan an-Nasa'i", "originalName": "سنن النسائي", "author": "Imam Ahmad bin Shu'ayb an-Nasa'i (214–303 H)", "totalItems": 5761, "gradeLevel": "SHAHIH", "category": "Sunan", "description": "Kitab as-Sunan al-Kubra dan al-Mujtaba.", "slug": "sunan-an-nasai" },
+    { "name": "Sunan Ibn Majah", "originalName": "سنن ابن ماجه", "author": "Imam Muhammad bin Yazid Ibn Majah (209–273 H)", "totalItems": 4341, "gradeLevel": "HASAN", "category": "Sunan", "description": "Koleksi hadits sunan yang melengkapi Kutubus Sittah.", "slug": "sunan-ibn-majah" },
+    { "name": "Muwatta' Malik", "originalName": "موطأ الإمام مالك", "author": "Imam Malik bin Anas (93–179 H)", "totalItems": 1850, "gradeLevel": "SHAHIH", "category": "Hadits & Fiqh Madinah", "description": "Kompilasi hadits dan atsar fuqaha Madinah generasi awal.", "slug": "muwatta-malik" },
+    { "name": "Arba'in An-Nawawiyyah", "originalName": "الأربعون النووية", "author": "Imam An-Nawawi (631–676 H)", "totalItems": 42, "gradeLevel": "SHAHIH", "category": "Kompilasi Tematik", "description": "Kumpulan 42 hadits pokok yang merangkum kaidah-kaidah ajaran Islam.", "slug": "arbain-nawawiyyah" }
+  ],
+  "hadiths": [
+    {
+      "collectionName": "Arba'in An-Nawawiyyah",
+      "number": 1,
+      "title": "Semua Amal Bergantung pada Niat",
+      "textOriginal": "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى",
+      "textTransliteration": "Innamal-a'malu bin-niyyat, wa innama likullimri'in ma nawa",
+      "translationId": "Sesungguhnya setiap amal perbuatan bergantung pada niatnya, dan sesungguhnya setiap orang akan mendapatkan sesuai dengan apa yang dia niatkan.",
+      "translationEn": "Actions are according to intentions, and everyone will get what was intended for.",
+      "narrator": "Umar bin al-Khattab RA",
+      "grade": "SHAHIH"
+    },
+    {
+      "collectionName": "Arba'in An-Nawawiyyah",
+      "number": 2,
+      "title": "Hadits Jibril tentang Islam, Iman, dan Ihsan",
+      "textOriginal": "فَأَخْبِرْنِي عَنِ الإِحْسَانِ قَالَ أَنْ تَعْبُدَ اللَّهَ كَأَنَّكَ تَرَاهُ فَإِنْ لَمْ تَكُنْ تَرَاهُ فَإِنَّهُ يَرَاكَ",
+      "textTransliteration": "Fa akhbirni 'anil-ihsan, qala: an ta'budallaha ka'annaka tarahu, fa in lam takun tarahu fa innahu yarak",
+      "translationId": "Maka beritahukanlah kepadaku tentang Ihsan. Beliau bersabda: 'Hendaklah engkau beribadah kepada Allah seakan-akan engkau melihat-Nya; jika engkau tidak dapat melihat-Nya, maka sesungguhnya Dia melihatmu.'",
+      "translationEn": "Inform me about Ihsan. He replied: 'That you worship Allah as if you see Him, for if you do not see Him, surely He sees you.'",
+      "narrator": "Umar bin al-Khattab RA",
+      "grade": "SHAHIH"
+    },
+    {
+      "collectionName": "Shahih al-Bukhari",
+      "number": 1909,
+      "title": "Pedoman Rukyatul Hilal & Kalender Qamariyah",
+      "textOriginal": "صُومُوا لِرُؤْيَتِهِ وَأَفْطِرُوا لِرُؤْيَتِهِ فَإِنْ غُبِّيَ عَلَيْكُمْ فَأَكْمِلُوا عِدَّةَ شَعْبَانَ ثَلَاثِينَ",
+      "textTransliteration": "Shumu li ru'yatihi wa afthiru li ru'yatihi fa in ghubbiya 'alaikum fa akmilu 'iddata sya'bana tsalatsin",
+      "translationId": "Berpuasalah kalian karena melihat hilal dan berbukalah (berhari raya) karena melihat hilal. Jika hilal tertutup awan bagi kalian, maka genapkanlah bilangan bulan Sya'ban tiga puluh hari.",
+      "translationEn": "Fast when you see the crescent moon and break your fast when you see it; if it is obscured from you, complete thirty days of Sha'ban.",
+      "narrator": "Abu Hurairah RA",
+      "grade": "SHAHIH"
+    },
+    {
+      "collectionName": "Shahih al-Bukhari",
+      "number": 1044,
+      "title": "Gerhana Matahari & Bulan sebagai Tanda Kebesaran Ilahi",
+      "textOriginal": "إِنَّ الشَّمْسَ وَالقَمَرَ آيَتَانِ مِنْ آيَاتِ اللَّهِ، لاَ يَنْخَسِفَانِ لِمَوْتِ أَحَدٍ وَلاَ لِحَيَاتِهِ، فَإِذَا رَأَيْتُمُوهُمَا فَادْعُوا اللَّهَ وَصَلُّوا حَتَّى يَنْجَلِيَ",
+      "textTransliteration": "Innas-syamsa wal-qamara ayatani min ayatillah, la yankhasifani li-mawti ahadin wa la li-hayatih, fa idha ra'aytumu-huma fad'ullaha wa shallu hatta yanjaliya",
+      "translationId": "Sesungguhnya matahari dan bulan adalah dua tanda di antara tanda-tanda kebesaran Allah. Keduanya tidak mengalami gerhana karena mati atau hidupnya seseorang. Maka apabila kalian melihatnya, berdoalah kepada Allah dan dirikanlah shalat hingga gerhana tersebut terang kembali.",
+      "translationEn": "The sun and the moon are two signs among the signs of Allah; they do not eclipse on account of the death or life of anyone. When you see them, supplicate Allah and pray until the eclipse is cleared.",
+      "narrator": "Abu Mas'ud al-Badri RA",
+      "grade": "SHAHIH"
+    },
+    {
+      "collectionName": "Shahih al-Bukhari",
+      "number": 554,
+      "title": "Melihat Rabb Seperti Melihat Bulan Purnama",
+      "textOriginal": "إِنَّكُمْ سَتَرَوْنَ رَبَّكُمْ كَمَا تَرَوْنَ هَذَا القَمَرَ، لاَ تُضَامُّونَ فِي رُؤْيَتِهِ",
+      "textTransliteration": "Innakum satarawna Rabbakum kama tarawna hadhal-qamar, la tudhammuna fi ru'yatih",
+      "translationId": "Sesungguhnya kalian kelak akan melihat Rabb kalian sebagaimana kalian melihat bulan purnama ini, kalian tidak akan berdesak-desakan dalam melihat-Nya.",
+      "translationEn": "You will surely see your Lord as you see this full moon, and you will not have any trouble in seeing Him.",
+      "narrator": "Jarir bin Abdullah RA",
+      "grade": "SHAHIH"
+    },
+    {
+      "collectionName": "Sahih Muslim",
+      "number": 1080,
+      "title": "Bulan Berjumlah 29 atau 30 Hari",
+      "textOriginal": "الشَّهْرُ هَكَذَا وَهَكَذَا وَهَكَذَا وَعَقَدَ إِبْهَامَهُ فِي الثَّالِثَةِ وَالشَّهْرُ هَكَذَا وَهَكَذَا وَهَكَذَا وَتَمَّامَ ثَلَاثِينَ",
+      "textTransliteration": "Asy-syahru hakadha wa hakadha wa hakadha... wa tamam tsalatsin",
+      "translationId": "Bulan (qamariyah) itu ada kalanya 29 hari dan ada kalanya 30 hari.",
+      "translationEn": "The month can be twenty-nine days or thirty days.",
+      "narrator": "Ibnu Umar RA",
+      "grade": "SHAHIH"
+    },
+    {
+      "collectionName": "Sunan Abi Dawud",
+      "number": 2320,
+      "title": "Kesaksian Penglihatan Hilal Individu",
+      "textOriginal": "تَرَاءَى النَّاسُ الْهِلَالَ فَأَخْبَرْتُ رَسُولَ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ أَنِّي رَأَيْتُهُ فَصَامَ وَأَمَرَ النَّاسَ بِصِيَامِهِ",
+      "textTransliteration": "Tara'an-nasu al-hilala fa akhbartu Rasulallahi shallallahu 'alaihi wa sallam anni ra'aytuhu fa shama wa amaran-nasa bi shiyamihi",
+      "translationId": "Masyarakat berusaha melihat hilal, lalu aku mengabarkan kepada Rasulullah SAW bahwa aku telah melihatnya, maka beliau berpuasa dan memerintahkan orang-orang untuk berpuasa.",
+      "translationEn": "The people looked for the crescent moon, and I informed Allah's Messenger that I had sighted it. So he fasted and ordered the people to fast.",
+      "narrator": "Ibnu Umar RA",
+      "grade": "SHAHIH"
+    },
+    {
+      "collectionName": "Sunan an-Nasa'i",
+      "number": 2116,
+      "title": "Kesaksian Dua Saksi Adil dalam Penetapan Hilal",
+      "textOriginal": "فَإِنْ شَهِدَ شَاهِدَانِ عَدْلَانِ فَصُومُوا وَأَفْطِرُوا",
+      "textTransliteration": "Fa in syahida syahidani 'adlani fa shumu wa afthiru",
+      "translationId": "Maka jika dua saksi yang adil telah bersaksi melihat hilal, berpuasalah kalian dan berbukalah (berhari raya) kalian.",
+      "translationEn": "If two just witnesses testify to having sighted it, then fast and break your fast.",
+      "narrator": "Abdurrahman bin Zaid bin al-Khattab RA",
+      "grade": "SHAHIH"
+    },
+    {
+      "collectionName": "Jami' at-Tirmidhi",
+      "number": 3451,
+      "title": "Doa Ketika Melihat Bulan Sabit (Hilal)",
+      "textOriginal": "اللَّهُمَّ أَهِلَّهُ عَلَيْنَا بِالأَمْنِ وَالإِيمَانِ وَالسَّلاَمَةِ وَالإِسْلاَمِ رَبِّي وَرَبُّكَ اللَّهُ هِلاَلُ رُشْدٍ وَخَيْرٍ",
+      "textTransliteration": "Allahumma ahillahu 'alayna bil-amni wal-iman was-salamati wal-islam, rabbi wa rabbukallah, hilalu rusydin wa khayr",
+      "translationId": "Ya Allah, tampakkanlah hilal itu kepada kami dengan membawa keamanan, keimanan, keselamatan, dan keislaman. Rabb-ku dan Rabb-mu (wahai bulan) adalah Allah. Hilal petunjuk dan kebaikan.",
+      "translationEn": "O Allah, bring it upon us with security, faith, safety, and Islam. My Lord and your Lord is Allah. Crescent of guidance and goodness.",
+      "narrator": "Talhah bin Ubaidillah RA",
+      "grade": "HASAN"
+    },
+    {
+      "collectionName": "Sunan Ibn Majah",
+      "number": 224,
+      "title": "Kewajiban Menuntut Ilmu bagi Setiap Muslim",
+      "textOriginal": "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ",
+      "textTransliteration": "Thalabul-'ilmi faridhatun 'ala kulli muslim",
+      "translationId": "Menuntut ilmu adalah kewajiban bagi setiap muslim.",
+      "translationEn": "Seeking knowledge is an obligation upon every Muslim.",
+      "narrator": "Anas bin Malik RA",
+      "grade": "SHAHIH"
+    },
+    {
+      "collectionName": "Muwatta' Malik",
+      "number": 634,
+      "title": "Menjaga Shalat Fajar dan Shalat Ashar",
+      "textOriginal": "يَتَعَاقَبُونَ فِيكُمْ مَلَائِكَةٌ بِاللَّيْلِ وَمَلَائِكَةٌ بِالنَّهَارِ وَيَجْتَمِعُونَ فِي صَلَاةِ الْفَجْرِ وَصَلَاةِ الْعَصْرِ",
+      "textTransliteration": "Yata'aqabuna fikum mala'ikatun bil-layli wa mala'ikatun bin-nahar, wa yajtami'una fi shalatil-fajri wa shalatil-'ashr",
+      "translationId": "Malaikat malam dan malaikat siang silih berganti mengawasi kalian, dan mereka berkumpul pada saat shalat Fajar (Subuh) dan shalat Ashar.",
+      "translationEn": "Angels keep visiting you in succession during the night and the day, and all of them gather together at the time of the Fajr and Asr prayers.",
+      "narrator": "Abu Hurairah RA",
+      "grade": "SHAHIH"
+    },
+    {
+      "collectionName": "Shahih al-Bukhari",
+      "number": 3199,
+      "title": "Sujudnya Matahari di Bawah Arsy",
+      "textOriginal": "أَتَدْرِي أَيْنَ تَذْهَبُ الشَّمْسُ؟ فَإِنَّهَا تَذْهَبُ حَتَّى تَسْجُدَ تَحْتَ العَرْشِ فَتَسْتَأْذِنَ فَيُؤْذَنَ لَهَا",
+      "textTransliteration": "A-tadri ayna tazhabusy-syams? Fa innaha tazhabu hatta tasjuda tahtal-'arsyi fatasta'zhina fa yu'zhana laha",
+      "translationId": "Tahukah engkau ke mana matahari itu pergi? Sesungguhnya ia pergi hingga bersujud di bawah Arsy lalu memohon izin (untuk terbit kembali) maka diizinkan baginya.",
+      "translationEn": "Do you know where the sun goes? It goes until it prostrates under the Throne and asks permission, and it is granted.",
+      "narrator": "Abu Dzarr al-Ghifari RA",
+      "grade": "SHAHIH"
+    }
+  ],
+  "devotions": [
+    {
+      "type": "dua",
+      "number": 1,
+      "title": "Doa Memohon Tambahan Ilmu & Kepahaman",
+      "textOriginal": "رَّبِّ زِدْنِي عِلْمًا وَارْزُقْنِي فَهْمًا",
+      "textTransliteration": "Rabbi zidni 'ilman warzuqni fahma",
+      "translationId": "Ya Rabb-ku, tambahkanlah kepadaku ilmu pengetahuan dan anugerahilah aku pemahaman yang benar.",
+      "translationEn": "My Lord, increase me in knowledge and grant me true understanding.",
+      "category": "Doa Penuntut Ilmu",
+      "source": "",
+      "reference": "QS 20:114"
+    },
+    {
+      "type": "dua",
+      "number": 2,
+      "title": "Doa Kebaikan Dunia dan Akhirat (Rabbana Atina)",
+      "textOriginal": "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+      "textTransliteration": "Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina 'adhaban-nar",
+      "translationId": "Ya Tuhan kami, berilah kami kebaikan di dunia dan kebaikan di akhirat dan peliharalah kami dari siksa neraka.",
+      "translationEn": "Our Lord, give us in this world that which is good and in the Hereafter that which is good and save us from the torment of the Fire.",
+      "category": "Doa Universal",
+      "source": "",
+      "reference": "QS 2:201"
+    },
+    {
+      "type": "dhikr",
+      "number": 3,
+      "title": "Sayyidul Istighfar",
+      "textOriginal": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ",
+      "textTransliteration": "Allahumma anta rabbi la ilaha illa anta khalaqtani wa ana 'abduka wa ana 'ala 'ahdika wa wa'dika mastatha'tu",
+      "translationId": "Ya Allah, Engkau adalah Rabb-ku, tidak ada tuhan selain Engkau. Engkau yang menciptakan aku dan aku adalah hamba-Mu, dan aku berada dalam ikrar serta janji-Mu semampuku.",
+      "translationEn": "O Allah, You are my Lord, none has the right to be worshiped but You. You created me and I am Your slave, and I am faithful to my covenant and my promise as much as I can.",
+      "category": "Dzikir Pagi & Petang",
+      "source": "HR. Bukhari",
+      "reference": ""
+    },
+    {
+      "type": "dua",
+      "number": 4,
+      "title": "Doa Ketetapan Hati dalam Kebenaran",
+      "textOriginal": "يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ",
+      "textTransliteration": "Ya muqallibal-qulub, tsabbit qalbi 'ala dinika",
+      "translationId": "Wahai Dzat yang membolak-balikkan hati, teguhkanlah hatiku di atas agama-Mu.",
+      "translationEn": "O Turner of the hearts, keep my heart firm upon Your religion.",
+      "category": "Doa Hati",
+      "source": "HR. Tirmidhi",
+      "reference": ""
+    },
+    {
+      "type": "dua",
+      "number": 5,
+      "title": "Doa Perlindungan dari Kesesatan & Ilmu yang Tidak Bermanfaat",
+      "textOriginal": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عِلْمٍ لَا يَنْفَعُ وَمِنْ قَلْبٍ لَا يَخْشَعُ وَمِنْ نَفْسٍ لَا تَشْبَعُ وَمِنْ دَعْوَةٍ لَا يُسْتَجَابُ لَهَا",
+      "textTransliteration": "Allahumma inni a'udzu bika min 'ilmin la yanfa' wa min qalbin la yakhsya' wa min nafsin la tasyba' wa min da'watin la yustajabu laha",
+      "translationId": "Ya Allah, sesungguhnya aku berlindung kepada-Mu dari ilmu yang tidak bermanfaat, hati yang tidak khusyuk, jiwa yang tidak pernah puas, dan doa yang tidak dikabulkan.",
+      "translationEn": "O Allah, I seek refuge in You from knowledge that does not benefit, from a heart that does not fear You, from a soul that is never satisfied, and from a prayer that is not answered.",
+      "category": "Doa Penuntut Ilmu",
+      "source": "HR. Muslim",
+      "reference": ""
+    },
+    {
+      "type": "dua",
+      "number": 6,
+      "title": "Doa Memandang Langit & Bertafakkur Ciptaan Allah",
+      "textOriginal": "رَبَّنَا مَا خَلَقْتَ هَذَا بَاطِلاً سُبْحَانَكَ فَقِنَا عَذَابَ النَّارِ",
+      "textTransliteration": "Rabbana ma khalaqta hadha bathila, subhanaka fa-qina 'adhaban-nar",
+      "translationId": "Ya Tuhan kami, tidaklah Engkau menciptakan semua ini sia-sia; Maha Suci Engkau, maka peliharalah kami dari azab neraka.",
+      "translationEn": "Our Lord, You did not create this aimlessly; exalted are You [above such a thing]; then protect us from the punishment of the Fire.",
+      "category": "Tafakkur Alam",
+      "source": "",
+      "reference": "QS 3:191"
+    },
+    {
+      "type": "dhikr",
+      "number": 7,
+      "title": "Tasbih Keagungan Ciptaan Alam Semesta",
+      "textOriginal": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ عَدَدَ خَلْقِهِ وَرِضَا نَفْسِهِ وَزِنَةَ عَرْشِهِ وَمِدَادَ كَلِمَاتِهِ",
+      "textTransliteration": "Subhanallahi wa bihamdihi, 'adada khalqihi, wa ridha nafsihi, wa zinata 'arsyihi, wa midada kalimatih",
+      "translationId": "Maha Suci Allah dan segala puji bagi-Nya, sebanyak bilangan ciptaan-Nya, sejauh keridhaan diri-Nya, seberat timbangan Arsy-Nya, dan sebanyak tinta kalimat-kalimat-Nya.",
+      "translationEn": "Glory be to Allah and praise is due to Him, according to the number of His creation, according to the pleasure of Himself, according to the weight of His Throne, and according to the ink of His words.",
+      "category": "Dzikir Agung",
+      "source": "HR. Muslim",
+      "reference": ""
+    },
+    {
+      "type": "dua",
+      "number": 8,
+      "title": "Doa Memulai Hari & Menghadap Ciptaan Cahaya Fajar",
+      "textOriginal": "أَصْبَحْنَا وَأَصْبَحَ المُلْكُ لِلَّهِ وَالحَمْدُ لِلَّهِ، لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ",
+      "textTransliteration": "Asbahna wa asbahal-mulku lillahi wal-hamdu lillah, la ilaha illallahu wahdahu la syarika lah",
+      "translationId": "Kami telah memasuki waktu pagi dan kerajaan hanya milik Allah, segala puji bagi Allah, tiada tuhan selain Allah semata yang tidak ada sekutu bagi-Nya.",
+      "translationEn": "We have entered upon the morning and the kingdom belongs to Allah, all praise is for Allah, none has the right to be worshiped except Allah alone without partner.",
+      "category": "Dzikir Pagi & Petang",
+      "source": "HR. Muslim",
+      "reference": ""
+    }
+  ]
+}

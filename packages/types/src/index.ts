@@ -63,4 +63,17 @@ export {
   type SSETopicName,
   type SSETopicPayload,
   SSE_TOPIC_MAP,
+  type QiblaCalculationResult,
+  type MabimsCriterion,
+  type OdehCriterion,
+  type HilalVisibilityEvaluation,
+  type SemanticSearchHit,
+  type SemanticSearchRequest,
+  type SemanticSearchResult,
+  type CelestialPrayerTimesRequest,
+  type CelestialPrayerTimesResult,
+  type HybridSearchHit,
+  type HybridSearchRequest,
+  type HybridSearchResult,
 } from "@moon/protocol"
+

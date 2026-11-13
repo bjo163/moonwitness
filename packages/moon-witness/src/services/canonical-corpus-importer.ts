@@ -39,7 +39,6 @@ import WxRoot from '../models/wx-root.js'
 import WxLexeme from '../models/wx-lexeme.js'
 import WxLexicalOccurrence from '../models/wx-lexical-occurrence.js'
 import WxEntity from '../models/wx-entity.js'
-
 export interface DomainImportStats {
   created: number
   updated: number

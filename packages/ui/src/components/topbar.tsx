@@ -108,9 +108,9 @@ export function Topbar({
             <div id="notification-panel" role="region" aria-label="System notifications" className="absolute right-0 mt-2 w-80 bg-card border border-border rounded-xl shadow-xl p-3 z-50 font-sans">
               <div className="flex items-center justify-between border-b border-border pb-2 mb-2">
                 <span className="text-xs font-bold text-foreground uppercase tracking-wider">System Notifications</span>
-                <button type="button" onClick={() => setShowNotifications(false)} aria-label="Close notifications" className="text-muted-foreground hover:text-foreground">
+                <Button type="button" variant="ghost" onClick={() => setShowNotifications(false)} aria-label="Close notifications" className="text-muted-foreground hover:text-foreground">
                   <X className="w-3.5 h-3.5" aria-hidden="true" />
-                </button>
+                </Button>
               </div>
               <div className="space-y-2 max-h-60 overflow-y-auto">
                 {notifications.map((n) => (

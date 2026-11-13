@@ -3,7 +3,6 @@
 import React from "react"
 import Link from "next/link"
 import {
-  Orbit,
   LogOut,
   User as UserIcon,
   ShieldCheck,
@@ -24,7 +23,7 @@ type NavbarProfileMenuProps = {
   userProfile: UserProfileData | null
   profileDropdownOpen: boolean
   setProfileDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>
-  commandCenterUrl: string
+  commandCenterUrl?: string
   onLogout: () => void
 }
 
@@ -39,18 +38,9 @@ export function NavbarProfileMenu({
     return (
       <Link
         href="/auth/login"
-        className="group flex items-center gap-2 text-sm transition-colors hover:text-primary"
+        className="group flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
       >
-        <span className="text-muted-foreground group-hover:text-primary">
-          Session status
-        </span>
-        <span className="text-success flex items-center gap-1.5 font-medium group-hover:text-foreground">
-          <span className="bg-success h-1.5 w-1.5 rounded-full" />
-          Online
-        </span>
-        <span className="ml-2 rounded-md border border-primary/30 bg-primary/10 px-1.5 py-0.5 text-xs text-primary transition-opacity group-hover:opacity-100">
-          Sign in →
-        </span>
+        Sign in
       </Link>
     )
   }
@@ -58,6 +48,9 @@ export function NavbarProfileMenu({
   return (
     <>
       <button
+        type="button"
+        aria-expanded={profileDropdownOpen}
+        aria-controls="navbar-account-actions"
         onClick={() => setProfileDropdownOpen((prev) => !prev)}
         className="group flex items-center gap-3 transition-colors hover:text-primary"
       >
@@ -73,8 +66,11 @@ export function NavbarProfileMenu({
         </div>
       </button>
 
-      {profileDropdownOpen && (
-        <div className="absolute top-full right-0 mt-2 w-56 rounded-lg border border-border bg-card p-2 shadow-md">
+      <div
+        id="navbar-account-actions"
+        hidden={!profileDropdownOpen}
+        className="absolute top-full right-0 mt-2 w-56 rounded-md border border-border bg-card p-2"
+      >
           <div className="mb-2 border-b border-border pb-2 pl-2 text-xs font-medium text-muted-foreground">
             Account actions
           </div>
@@ -86,31 +82,24 @@ export function NavbarProfileMenu({
             >
               <UserIcon className="h-4 w-4" /> Profile
             </Link>
-            <a
-              href={`${commandCenterUrl}/dashboard`}
-              onClick={() => setProfileDropdownOpen(false)}
-              className="text-info hover:bg-info/10 flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-foreground"
-            >
-              <ShieldCheck className="h-4 w-4" /> Command center ↗
-            </a>
-            <a
-              href={`${commandCenterUrl}/terminal`}
-              onClick={() => setProfileDropdownOpen(false)}
-              className="text-success hover:bg-success/10 flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-foreground"
-            >
-              <Terminal className="h-4 w-4" /> Developer terminal ↗
-            </a>
-            <button
-              disabled
-              className="flex cursor-not-allowed items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground opacity-70"
-            >
-              <div className="flex items-center gap-3">
-                <Orbit className="h-4 w-4" /> Universe
-              </div>
-              <span className="rounded border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground">
-                Coming soon
-              </span>
-            </button>
+            {commandCenterUrl && (
+              <>
+                <a
+                  href={`${commandCenterUrl}/dashboard`}
+                  onClick={() => setProfileDropdownOpen(false)}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                >
+                  <ShieldCheck className="h-4 w-4" /> Command Center
+                </a>
+                <a
+                  href={`${commandCenterUrl}/terminal`}
+                  onClick={() => setProfileDropdownOpen(false)}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                >
+                  <Terminal className="h-4 w-4" /> Developer terminal
+                </a>
+              </>
+            )}
             <div className="my-1 border-t border-border" />
             <button
               onClick={onLogout}
@@ -119,8 +108,7 @@ export function NavbarProfileMenu({
               <LogOut className="h-4 w-4" /> Sign out
             </button>
           </div>
-        </div>
-      )}
+      </div>
     </>
   )
 }

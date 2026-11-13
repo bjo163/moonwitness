@@ -1,0 +1,154 @@
+name: UMBRELLA v6 Certification
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - main
+  push:
+    branches:
+      - dev
+      - main
+
+permissions:
+  actions: read
+  contents: read
+  issues: read
+
+concurrency:
+  group: umbrella-v6-cert-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: 'true'
+
+jobs:
+  certify:
+    name: UMBRELLA v6 Exact-SHA Certification
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 40
+    steps:
+      - name: Checkout exact candidate SHA
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@f520eceda224fe1a4aed5a2a27a194379a409996 # v6
+        with:
+          version: 10.33.4
+
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Collect exact-SHA GitHub evidence
+        uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
+        env:
+          CANDIDATE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        with:
+          script: |
+            const fs = require('fs');
+            const config = JSON.parse(fs.readFileSync('.audit/config/evidence.v1.json', 'utf8'));
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const candidateSha = process.env.CANDIDATE_SHA;
+            const expectedEvent = context.eventName === 'pull_request' || context.eventName === 'push'
+              ? context.eventName
+              : null;
+            const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+            async function waitForWorkflow(name) {
+              for (let attempt = 1; attempt <= 100; attempt += 1) {
+                const response = await github.rest.actions.listWorkflowRunsForRepo({
+                  owner,
+                  repo,
+                  head_sha: candidateSha,
+                  per_page: 100,
+                });
+                const matches = response.data.workflow_runs
+                  .filter((run) => run.name === name && run.head_sha === candidateSha)
+                  .filter((run) => !expectedEvent || run.event === expectedEvent)
+                  .sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
+                const completed = matches.find((run) => run.status === 'completed');
+                if (completed) return completed;
+                core.info(`Waiting for ${name} on ${candidateSha} (attempt ${attempt}/100)`);
+                await sleep(15000);
+              }
+              throw new Error(`Timed out waiting for ${name} on ${candidateSha}`);
+            }
+
+            const foundationRun = await waitForWorkflow(config.github.foundation_workflow);
+            if (foundationRun.conclusion !== 'success') {
+              throw new Error(`${config.github.foundation_workflow} concluded ${foundationRun.conclusion}`);
+            }
+
+            const foundationJobsResponse = await github.rest.actions.listJobsForWorkflowRun({
+              owner,
+              repo,
+              run_id: foundationRun.id,
+              per_page: 100,
+            });
+            const conclusionsByName = new Map(
+              foundationJobsResponse.data.jobs.map((job) => [job.name, job.conclusion || 'unknown'])
+            );
+            const foundation = {};
+            for (const [key, jobName] of Object.entries(config.github.foundation_jobs)) {
+              foundation[key] = conclusionsByName.get(jobName) || 'unknown';
+            }
+            const incompleteFoundation = Object.entries(foundation)
+              .filter(([, conclusion]) => conclusion !== 'success');
+            if (incompleteFoundation.length > 0) {
+              throw new Error(`Foundation job evidence incomplete: ${JSON.stringify(incompleteFoundation)}`);
+            }
+
+            const certificationRun = await waitForWorkflow(config.github.certification_workflow);
+            if (certificationRun.conclusion !== 'success') {
+              throw new Error(`${config.github.certification_workflow} concluded ${certificationRun.conclusion}`);
+            }
+
+            const branches = {};
+            for (const branch of config.github.required_branches) {
+              try {
+                const response = await github.rest.repos.getBranch({ owner, repo, branch });
+                branches[branch] = { protected: Boolean(response.data.protected) };
+              } catch (error) {
+                core.warning(`Unable to read branch ${branch}: ${error.message}`);
+                branches[branch] = { protected: null };
+              }
+            }
+
+            const issues = {};
+            for (const tracker of config.github.tracked_issues) {
+              try {
+                const response = await github.rest.issues.get({ owner, repo, issue_number: tracker.number });
+                issues[String(tracker.number)] = { state: response.data.state };
+              } catch (error) {
+                core.warning(`Unable to read issue #${tracker.number}: ${error.message}`);
+                issues[String(tracker.number)] = { state: 'unknown' };
+              }
+            }
+
+            const evidence = {
+              repository: `${owner}/${repo}`,
+              source_revision: candidateSha,
+              foundation,
+              certification: {
+                status: certificationRun.status,
+                conclusion: certificationRun.conclusion,
+              },
+              branches,
+              issues,
+            };
+            fs.mkdirSync('.audit/runtime', { recursive: true });
+            fs.writeFileSync('.audit/runtime/ci-evidence.json', `${JSON.stringify(evidence, null, 2)}\n`);
+
+      - name: Generate and validate UMBRELLA evidence report
+        run: pnpm audit:umbrella:ci
+
+      - name: Certify UMBRELLA determinism, parity, safety, and provenance
+        run: pnpm audit:umbrella:certify --ci-evidence=.audit/runtime/ci-evidence.json --expected-sha=${{ github.event.pull_request.head.sha || github.sha }}

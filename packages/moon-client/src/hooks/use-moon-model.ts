@@ -11,7 +11,7 @@ export function useMoonModel<T = any>(
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<Error | null>(null)
 
-  const basePath = `/api/models/${modelName}`
+  const basePath = `/api/${modelName}`
 
   const fetch = useCallback(
     async (params?: Record<string, any>) => {
@@ -27,7 +27,7 @@ export function useMoonModel<T = any>(
         }
         const qs = queryParams.toString()
         const url = qs ? `${basePath}?${qs}` : basePath
-        const res = await apiGet(url).catch(() => [])
+        const res = await apiGet(url)
 
         const safeData = Array.isArray(res)
           ? res

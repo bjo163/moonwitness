@@ -185,42 +185,33 @@ export function CelestialQiblaCompass({
         </div>
       </div>
 
-      {/* Telemetry display Cards */}
-      <div className="mt-6 w-full max-w-sm grid grid-cols-2 gap-3 text-xs">
-        <div
-          className={`rounded-xl border p-3 flex flex-col items-center justify-center transition-colors ${
-            isLocked
-              ? "border-emerald-500/50 bg-emerald-950/20 text-emerald-300"
-              : "border-border bg-card/80 text-zinc-300"
-          }`}
-        >
-          <div className="flex items-center gap-1.5 text-[10px] text-zinc-500 uppercase tracking-wider">
-            {isLocked ? (
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
-            ) : (
-              <Compass className="h-3.5 w-3.5 text-primary" />
-            )}
-            Status
-          </div>
-          <div className="mt-1 font-bold text-xs tracking-widest uppercase">
-            {isLocked ? "LOCK ENGAGED" : "ALIGNING SCOPE"}
-          </div>
-        </div>
-
-        <div className="rounded-xl border border-border bg-card/80 p-3 flex flex-col items-center justify-center text-zinc-300">
-          <div className="flex items-center gap-1.5 text-[10px] text-zinc-500 uppercase tracking-wider">
-            <MapPin className="h-3.5 w-3.5 text-amber-400" />
-            Distance
-          </div>
-          <div className="mt-1 font-bold text-xs text-amber-300">
-            {distanceKm.toLocaleString()} KM
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-2 text-[10px] text-zinc-500 text-center">
-        LOCATION: <span className="text-zinc-300">{cityName}</span> • TARGET: <span className="text-emerald-400">21.4225° N, 39.8262° E</span>
-      </div>
+      <QiblaTelemetry isLocked={isLocked} distanceKm={distanceKm} cityName={cityName} />
     </div>
+  )
+}
+
+function QiblaTelemetry({
+  isLocked,
+  distanceKm,
+  cityName,
+}: {
+  isLocked: boolean
+  distanceKm: number
+  cityName: string
+}) {
+  return (
+    <>
+      <div className="mt-6 grid w-full max-w-sm grid-cols-2 gap-3 text-xs">
+        <div className={`flex flex-col items-center justify-center rounded-xl border p-3 transition-colors ${isLocked ? "border-emerald-500/50 bg-emerald-950/20 text-emerald-300" : "border-border bg-card/80 text-zinc-300"}`}>
+          <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-zinc-500">{isLocked ? <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" /> : <Compass className="h-3.5 w-3.5 text-primary" />} Status</div>
+          <div className="mt-1 text-xs font-bold uppercase tracking-widest">{isLocked ? "LOCK ENGAGED" : "ALIGNING SCOPE"}</div>
+        </div>
+        <div className="flex flex-col items-center justify-center rounded-xl border border-border bg-card/80 p-3 text-zinc-300">
+          <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-zinc-500"><MapPin className="h-3.5 w-3.5 text-amber-400" /> Distance</div>
+          <div className="mt-1 text-xs font-bold text-amber-300">{distanceKm.toLocaleString()} KM</div>
+        </div>
+      </div>
+      <div className="mt-2 text-center text-[10px] text-zinc-500">LOCATION: <span className="text-zinc-300">{cityName}</span> • TARGET: <span className="text-emerald-400">21.4225° N, 39.8262° E</span></div>
+    </>
   )
 }

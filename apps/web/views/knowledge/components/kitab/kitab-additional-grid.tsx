@@ -4,6 +4,7 @@ import React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Bookmark, ArrowRight, BookOpen, User, Star, Sparkles } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 export interface AdditionalScriptureItem {
   id: number | string
@@ -28,10 +29,10 @@ export function KitabAdditionalGrid({
     <div className="space-y-6">
       {/* Bottom Center 4 Metrics Panels */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="relative flex flex-col justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card p-4 shadow-lg">
+        <div className="relative flex flex-col justify-center gap-2 overflow-hidden rounded-md border border-border bg-card p-4">
           <div className="absolute top-[-10%] right-[-10%] h-16 w-16 rounded-full bg-blue-500/5" />
-          <div className="text-[9px] font-black tracking-widest text-foreground/40 uppercase">
-            KEY VERSES CROSS-REFERENCES
+          <div className="text-xs font-medium text-muted-foreground">
+            Key verse cross-references
           </div>
           <div className="flex items-center gap-3">
             <BookOpen className="h-8 w-8 text-blue-500/40" />
@@ -42,10 +43,10 @@ export function KitabAdditionalGrid({
           </div>
         </div>
 
-        <div className="relative flex flex-col justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card p-4 shadow-lg">
+        <div className="relative flex flex-col justify-center gap-2 overflow-hidden rounded-md border border-border bg-card p-4">
           <div className="absolute top-[-10%] right-[-10%] h-16 w-16 rounded-full bg-primary/10" />
-          <div className="text-[9px] font-black tracking-widest text-foreground/40 uppercase">
-            PROPHETS MENTIONED
+          <div className="text-xs font-medium text-muted-foreground">
+            Prophets mentioned
           </div>
           <div className="flex items-center gap-3">
             <User className="h-8 w-8 text-primary/40" />
@@ -58,11 +59,11 @@ export function KitabAdditionalGrid({
           </div>
         </div>
 
-        <div className="relative flex flex-col justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card p-4 shadow-lg">
+        <div className="relative flex flex-col justify-center gap-2 overflow-hidden rounded-md border border-border bg-card p-4">
           <Star className="absolute right-[-10%] bottom-[-20%] h-20 w-20 rotate-12 text-blue-500/5" />
           <div className="flex items-center justify-between">
-            <div className="text-[9px] font-black tracking-widest text-foreground/40 uppercase">
-              UNIVERSAL THEMES
+            <div className="text-xs font-medium text-muted-foreground">
+              Universal themes
             </div>
             <div className="text-lg leading-none font-black text-foreground">
               18 <span className="text-[8px] font-normal text-foreground/40">Core Values</span>
@@ -80,9 +81,9 @@ export function KitabAdditionalGrid({
           </div>
         </div>
 
-        <div className="flex flex-col justify-center gap-2 rounded-xl border border-border bg-card p-4 shadow-lg">
-          <div className="text-[9px] font-black tracking-widest text-foreground/40 uppercase">
-            STUDY PATH
+        <div className="flex flex-col justify-center gap-2 rounded-md border border-border bg-card p-4">
+          <div className="text-xs font-medium text-muted-foreground">
+            Study path
           </div>
           <div className="mb-1 flex items-center gap-3">
             <div className="flex h-6 w-6 items-center justify-center rounded bg-warning/10">
@@ -93,34 +94,34 @@ export function KitabAdditionalGrid({
               <div className="text-[9px] text-foreground/40">Step-by-step Learning</div>
             </div>
           </div>
-          <button className="mt-1 w-full rounded border border-border bg-muted/30 py-1.5 text-[9px] font-black text-foreground uppercase transition-colors hover:bg-muted/30">
+          <Button type="button" variant="ghost" className="mt-1 w-full rounded border border-border bg-muted/30 py-1.5 text-[9px] font-black text-foreground uppercase transition-colors hover:bg-muted/30">
             OPEN LEARNING HUB
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Other Sacred Scriptures */}
-      <div className="rounded-xl border border-border bg-card p-5 shadow-lg">
+      <div className="rounded-md border border-border bg-card p-5">
         <div className="mb-4 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div className="flex items-center gap-2">
             <Bookmark className="h-3 w-3 text-primary" />
-            <span className="text-[10px] font-black tracking-widest text-foreground uppercase">
-              OTHER SACRED SCRIPTURES <span className="text-foreground/40">(ADDITIONAL)</span>
+            <span className="text-sm font-semibold text-foreground">
+              Other sacred scriptures <span className="font-normal text-muted-foreground">(additional)</span>
             </span>
           </div>
           <div className="hide-scrollbar flex w-full gap-1 overflow-x-auto pb-2 sm:w-auto sm:pb-0">
             {["All Traditions", "Abrahamic", "Eastern", "Indigenous", "Philosophy"].map((t, i) => (
-              <button
+              <Button type="button" variant="ghost"
                 key={i}
-                className={`rounded border px-3 py-1 text-[9px] font-bold whitespace-nowrap ${i === 0 ? "border-border bg-muted/30 text-foreground" : "border-transparent text-foreground/40 hover:text-foreground"}`}
+                className={`rounded-md border px-3 py-1.5 text-sm font-medium whitespace-nowrap ${i === 0 ? "border-border bg-muted text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"}`}
               >
                 {t}
-              </button>
+              </Button>
             ))}
           </div>
-          <button className="flex shrink-0 items-center gap-1 text-[9px] font-bold text-foreground/50 uppercase hover:text-foreground">
-            VIEW COMPARISON TABLE <ArrowRight className="h-3 w-3" />
-          </button>
+          <Button type="button" variant="ghost" className="flex shrink-0 items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground">
+            View comparison table <ArrowRight className="h-3.5 w-3.5" />
+          </Button>
         </div>
 
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8">
@@ -128,7 +129,7 @@ export function KitabAdditionalGrid({
             <Link
               href={`/knowledge/kitab/${s.id || ""}`}
               key={idx}
-              className="group relative flex h-36 cursor-pointer flex-col overflow-hidden rounded-xl border border-border bg-card shadow-lg transition-all hover:border-border"
+              className="group relative flex h-36 cursor-pointer flex-col overflow-hidden rounded-md border border-border bg-card transition-colors hover:border-primary"
             >
               <div className="absolute inset-0 z-0 h-full w-full bg-card">
                 <Image
@@ -137,17 +138,16 @@ export function KitabAdditionalGrid({
                   fill
                   className="object-cover opacity-60 transition-all duration-[2s] group-hover:scale-110 group-hover:opacity-80"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t -background -background to-transparent" />
               </div>
 
               <div className="relative z-10 flex h-full w-full flex-col justify-end p-3">
-                <div className="mb-0.5 w-full truncate text-[10px] font-black tracking-wider text-foreground uppercase drop-shadow-md">
+                <div className="mb-0.5 w-full truncate text-sm font-semibold text-foreground">
                   {s.name}
                 </div>
-                <div className="mb-1 w-full truncate text-[8px] text-foreground drop-shadow-sm">
+                <div className="mb-1 w-full truncate text-xs text-foreground">
                   {s.religion}
                 </div>
-                <div className="font-mono text-[7px] text-foreground/40">{s.texts}</div>
+                <div className="font-mono text-xs text-muted-foreground">{s.texts}</div>
               </div>
             </Link>
           ))}

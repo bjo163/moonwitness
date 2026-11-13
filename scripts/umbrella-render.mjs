@@ -76,6 +76,7 @@ export function renderUmbrellaStatus(report) {
   }
 
   const manifest = buildParityManifest(report)
+  const inventory = report.repositories?.[0]?.inventory
   const lines = [
     "# UMBRELLA Engineering Status",
     "",
@@ -134,16 +135,26 @@ export function renderUmbrellaStatus(report) {
 
   lines.push(
     "",
+    "## Generated Service Inventory",
+    "",
+    `- Drift status: ${escapeCell(inventory?.drift?.status ?? "UNKNOWN")}`,
+    `- Drift findings: ${inventory?.drift?.findings?.length ?? 0}`,
+    `- Services: ${inventory?.services?.length ?? 0}`,
+    `- Workspace packages: ${inventory?.workspaces?.length ?? 0}`,
+    `- Production env keys: ${inventory?.env_example_keys?.length ?? 0}`,
+    `- Canonical app ports: ${Object.keys(inventory?.port_constants || {}).length}`,
+    "",
     "## Evidence Inventory",
     "",
     `- Components: ${report.components?.length ?? 0}`,
+    `- Issues: ${report.issues?.length ?? 0}`,
     `- Evidence records: ${report.evidence?.length ?? 0}`,
     `- Hardcode findings: ${report.hardcodes?.length ?? 0}`,
     `- Hygiene records: ${report.hygiene?.length ?? 0}`,
     `- Complexity records: ${report.complexity?.length ?? 0}`,
     `- Future-tech records: ${report.future_tech?.length ?? 0}`,
     "",
-    "This Markdown is a view of the JSON state only. Scoring, gating, and issue truth are never recalculated here.",
+    "This Markdown is a view of the JSON state only. Scoring, gating, progress, inventory drift, and issue truth are never recalculated here.",
     "",
   )
 
@@ -157,7 +168,7 @@ export function extractParityManifest(markdown) {
 }
 
 export function assertRenderedParity(markdown, report) {
-  assert.deepEqual(extractParityManifest(markdown), buildParityManifest(report))
+  assert.deepEqual(extractParityManifest(markdown), buildParityManifest(report), "Rendered parity manifest diverges from canonical report")
   assert.equal(markdown, renderUmbrellaStatus(report), "Rendered Markdown diverges from canonical report")
   return true
 }

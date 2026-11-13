@@ -1,7 +1,8 @@
 "use client"
 import { useMounted } from "@workspace/hooks"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
+import { Button } from "../../components/button"
 import { useQuestStore } from "@workspace/state"
 import { Target, CheckCircle2, Circle } from "lucide-react"
 
@@ -16,9 +17,9 @@ export function QuestWidget() {
   if (!mounted) return null
 
   return (
-    <div className="bg-background/60 rounded-2xl border border-warning/20 p-5 backdrop-blur-xl">
+    <div className="rounded-md border border-border bg-card p-4">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="font-sans text-xs font-bold tracking-wider text-warning uppercase">
+        <h3 className="font-sans text-sm font-semibold text-foreground">
           Daily Quests
         </h3>
         <Target className="h-4 w-4 text-warning/50" />
@@ -26,12 +27,14 @@ export function QuestWidget() {
 
       <div className="space-y-3">
         {quests.map((q) => (
-          <div
+          <Button
+            type="button"
+            variant="ghost"
             key={q.id}
             onClick={() => {
               if (!q.completed) completeQuest(q.id)
             }}
-            className={`flex cursor-pointer items-center justify-between rounded-xl border p-3 transition-all ${
+            className={`flex h-auto w-full items-center justify-between rounded-md border p-3 text-left transition-colors ${
               q.completed
                 ? "border-success/20 bg-emerald-500/5 opacity-70"
                 : "border-amber-500/10 bg-card hover:border-warning/30 hover:bg-warning/10"
@@ -56,7 +59,7 @@ export function QuestWidget() {
             >
               +{q.rewardXP} XP
             </div>
-          </div>
+          </Button>
         ))}
       </div>
     </div>

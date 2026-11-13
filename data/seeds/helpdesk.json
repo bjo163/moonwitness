@@ -1,0 +1,145 @@
+{
+  "tags": [
+    { "name": "Telemetry", "color": "#00F0FF" },
+    { "name": "Optics", "color": "#0088FF" },
+    { "name": "Hardware", "color": "#FFAA00" },
+    { "name": "Scripture", "color": "#00FF66" },
+    { "name": "Database", "color": "#FF0055" },
+    { "name": "Security", "color": "#A100FF" },
+    { "name": "Infrastructure", "color": "#888888" }
+  ],
+  "teams": [
+    {
+      "code": "OBSERVATORY-SUPPORT",
+      "name": "Observatory Operations & Support",
+      "description": "Handles all physical observatory nodes, dome automation, sensor telemetry, and qibla alignment issues."
+    },
+    {
+      "code": "SCRIPTURE-DESK",
+      "name": "Scripture & Knowledge Desk",
+      "description": "Handles scripture text verification, Uthmani typography, Hadith transmission chains, and semantic linking."
+    },
+    {
+      "code": "EPHEMERIS-DESK",
+      "name": "Ephemeris & Celestial Computation Desk",
+      "description": "Handles high-precision planetary theories (VSOP87, ELP2000), shadow length calculations, and API integrations."
+    }
+  ],
+  "slas": [
+    { "name": "Observatory Critical Emergency", "teamCode": "OBSERVATORY-SUPPORT", "priority": "critical", "responseHours": 1, "resolutionHours": 4 },
+    { "name": "Observatory High Incident", "teamCode": "OBSERVATORY-SUPPORT", "priority": "high", "responseHours": 2, "resolutionHours": 12 },
+    { "name": "Observatory Normal Inquiry", "teamCode": "OBSERVATORY-SUPPORT", "priority": "medium", "responseHours": 6, "resolutionHours": 24 },
+    { "name": "Scripture Urgency Review", "teamCode": "SCRIPTURE-DESK", "priority": "high", "responseHours": 2, "resolutionHours": 8 },
+    { "name": "Scripture General Request", "teamCode": "SCRIPTURE-DESK", "priority": "medium", "responseHours": 12, "resolutionHours": 48 },
+    { "name": "Ephemeris Mathematical Discrepancy", "teamCode": "EPHEMERIS-DESK", "priority": "critical", "responseHours": 1, "resolutionHours": 6 },
+    { "name": "Ephemeris API Rate Limit / Scaling", "teamCode": "EPHEMERIS-DESK", "priority": "high", "responseHours": 2, "resolutionHours": 12 },
+    { "name": "Ephemeris Standard Support", "teamCode": "EPHEMERIS-DESK", "priority": "low", "responseHours": 24, "resolutionHours": 72 }
+  ],
+  "tickets": [
+    {
+      "reference": "TICK-2026-001",
+      "title": "Timau 3.8m primary mirror pneumatic support pressure drop",
+      "teamCode": "OBSERVATORY-SUPPORT",
+      "stage": "In Progress",
+      "priority": "critical"
+    },
+    {
+      "reference": "TICK-2026-002",
+      "title": "Bosscha Schmidt camera filter wheel indexing sensor jitter",
+      "teamCode": "OBSERVATORY-SUPPORT",
+      "stage": "Under Review",
+      "priority": "high"
+    },
+    {
+      "reference": "TICK-2026-003",
+      "title": "Uthmani typography diacritics misaligned in mobile Firefox view",
+      "teamCode": "SCRIPTURE-DESK",
+      "stage": "In Progress",
+      "priority": "high"
+    },
+    {
+      "reference": "TICK-2026-004",
+      "title": "ELP2000-82 lunar topocentric parallax precision drift in southern hemisphere",
+      "teamCode": "EPHEMERIS-DESK",
+      "stage": "Resolved",
+      "priority": "critical"
+    },
+    {
+      "reference": "TICK-2026-005",
+      "title": "Rubidium frequency standard GPS PPS lock lost at Cidaun Station",
+      "teamCode": "OBSERVATORY-SUPPORT",
+      "stage": "New",
+      "priority": "high"
+    },
+    {
+      "reference": "TICK-2026-006",
+      "title": "Kandilli observatory webhook handshake timeout on ephemeris sync",
+      "teamCode": "EPHEMERIS-DESK",
+      "stage": "In Progress",
+      "priority": "medium"
+    },
+    {
+      "reference": "TICK-2026-007",
+      "title": "DIMM seeing monitor dome slit motor overload protection triggered",
+      "teamCode": "OBSERVATORY-SUPPORT",
+      "stage": "Under Review",
+      "priority": "high"
+    },
+    {
+      "reference": "TICK-2026-008",
+      "title": "Hadith isnad narrator linking ambiguity for Abdullah ibn Umar narrations",
+      "teamCode": "SCRIPTURE-DESK",
+      "stage": "Resolved",
+      "priority": "medium"
+    },
+    {
+      "reference": "TICK-2026-009",
+      "title": "PostgreSQL TimescaleDB hypertable chunk compression lagging behind 7 days",
+      "teamCode": "EPHEMERIS-DESK",
+      "stage": "In Progress",
+      "priority": "medium"
+    },
+    {
+      "reference": "TICK-2026-010",
+      "title": "Laser guide star safety interlock aircraft transponder detector false alert",
+      "teamCode": "OBSERVATORY-SUPPORT",
+      "stage": "New",
+      "priority": "medium"
+    },
+    {
+      "reference": "TICK-2026-011",
+      "title": "Cryogenic cooler Peltier thermal runaway on sCMOS sensor at Pelabuhan Ratu",
+      "teamCode": "OBSERVATORY-SUPPORT",
+      "stage": "In Progress",
+      "priority": "critical"
+    },
+    {
+      "reference": "TICK-2026-012",
+      "title": "API rate limiter denying academic researchers during solar eclipse event",
+      "teamCode": "EPHEMERIS-DESK",
+      "stage": "Resolved",
+      "priority": "high"
+    },
+    {
+      "reference": "TICK-2026-013",
+      "title": "Astronomical twilight calculation discrepancy for Reykjavik high latitudes",
+      "teamCode": "EPHEMERIS-DESK",
+      "stage": "Resolved",
+      "priority": "medium"
+    },
+    {
+      "reference": "TICK-2026-014",
+      "title": "All-sky camera dome dew heater power supply ripple voltage",
+      "teamCode": "OBSERVATORY-SUPPORT",
+      "stage": "New",
+      "priority": "low"
+    },
+    {
+      "reference": "TICK-2026-015",
+      "title": "Request for raw FITS calibration files from Tanjung Kodok hilal sighting",
+      "teamCode": "SCRIPTURE-DESK",
+      "stage": "Resolved",
+      "priority": "high"
+    }
+  ]
+}

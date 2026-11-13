@@ -4,6 +4,7 @@ import React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Book, CheckCircle2, Check } from "lucide-react"
+import { Button } from "@workspace/ui"
 
 export interface CanonicalScriptureCard {
   id: number | string
@@ -116,9 +117,9 @@ export function KitabCanonicalGrid({ cards }: KitabCanonicalGridProps) {
               >
                 EXPLORE
               </Link>
-              <button className="flex-1 rounded-lg border border-border bg-transparent py-2 text-[10px] font-black tracking-widest text-foreground transition-colors hover:bg-muted/30">
+              <Button type="button" variant="ghost" className="flex-1 rounded-lg border border-border bg-transparent py-2 text-[10px] font-black tracking-widest text-foreground transition-colors hover:bg-muted/30">
                 STUDY
-              </button>
+              </Button>
             </div>
           </div>
         </div>

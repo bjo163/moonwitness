@@ -26,7 +26,7 @@
   - Connected Command Center Hadiths, Scriptures, and Users views to typed API client.
 - **Next.js 16 App Router & SEO Master Engine**:
   - Migrated legacy `@modules/` views into co-located native App Router pages with dynamic OpenGraph & Twitter cards.
-- **Developer Experience**: Added `pnpm dev` / `pnpm dev:all` for one-click multi-app execution.
+- **Developer Experience**: Added `pnpm dev` for one-click multi-app execution.
 
 ## 0.2.0 - Production Core
 

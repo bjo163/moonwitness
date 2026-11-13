@@ -1,5 +1,7 @@
 import React from "react"
 import { Target, ArrowRight } from "lucide-react"
+import { resolveSemanticColor, type SemanticColorToken } from "../../lib/semantic-color"
+import { Button } from "../../components/button"
 
 export function ActionCenterWidget() {
   return (
@@ -30,7 +32,7 @@ export function ActionCenterWidget() {
             asg: "ARS Team",
             d: "27 May",
             stat: "In Progress",
-            sc: "#0088FF",
+            sc: "primary",
           },
           {
             n: "Upgrade telescope equipment",
@@ -38,7 +40,7 @@ export function ActionCenterWidget() {
             asg: "Tech Dept",
             d: "30 May",
             stat: "Pending",
-            sc: "#FF9900",
+            sc: "warning",
           },
           {
             n: "Translate 25 hadiths",
@@ -46,7 +48,7 @@ export function ActionCenterWidget() {
             asg: "Lia & Team",
             d: "28 May",
             stat: "To Do",
-            sc: "#8B9BB0",
+            sc: "muted",
           },
           {
             n: "Verify historical timeline data",
@@ -54,7 +56,7 @@ export function ActionCenterWidget() {
             asg: "Research Team",
             d: "1 Jun",
             stat: "To Do",
-            sc: "#8B9BB0",
+            sc: "muted",
           },
           {
             n: "Review hilal algorithm v2.1",
@@ -62,7 +64,7 @@ export function ActionCenterWidget() {
             asg: "AI Team",
             d: "25 May",
             stat: "Review",
-            sc: "#A100FF",
+            sc: "info",
           },
         ].map((tsk, i) => (
           <div
@@ -81,7 +83,7 @@ export function ActionCenterWidget() {
             <div className="w-16 text-right">
               <span
                 className="rounded border border-current px-1.5 py-0.5 font-bold"
-                style={{ color: tsk.sc }}
+                style={{ color: resolveSemanticColor(tsk.sc as SemanticColorToken) }}
               >
                 {tsk.stat}
               </span>
@@ -90,9 +92,9 @@ export function ActionCenterWidget() {
         ))}
       </div>
 
-      <button className="mt-2 flex w-full items-center justify-center gap-1 border-t border-border pt-2 text-center text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
+      <Button type="button" variant="ghost" className="mt-2 flex w-full items-center justify-center gap-1 border-t border-border pt-2 text-center text-[8px] font-bold tracking-widest text-primary uppercase hover:text-foreground">
         VIEW ALL ACTIONS <ArrowRight className="h-2.5 w-2.5" />
-      </button>
+      </Button>
     </div>
   )
 }

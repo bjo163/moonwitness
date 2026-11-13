@@ -4,14 +4,12 @@ import { useState, useEffect } from "react"
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
-} from "@workspace/ui/components/dialog"
-import { Input } from "@workspace/ui/components/input"
-import { Label } from "@workspace/ui/components/label"
-import { Button } from "@workspace/ui/components/button"
+} from "@workspace/ui"
 import { useUserProfile } from "@moon/client"
+import { UserProfileForm } from "./user-profile-form"
 
 export type UserProfile = {
   email: string
@@ -25,8 +23,6 @@ type UserProfileModalProps = {
   onClose: () => void
   onSaveProfile: (profile: UserProfile) => void
 }
-
-const AVATAR_OPTIONS = ["🌙", "👑", "✨", "📖", "🕌", "🤲", "⭐", "🌿"]
 
 export function UserProfileModal({
   isOpen,
@@ -120,142 +116,27 @@ export function UserProfileModal({
           </div>
         </DialogHeader>
 
-        {/* Tab Navigation */}
-        <div className="mb-4 flex rounded-xl border border-border/40 bg-muted/60 p-1">
-          <button
-            type="button"
-            onClick={() => {
-              setActiveTab("register")
-              setErrorMsg("")
-            }}
-            className={`flex-1 rounded-lg py-1.5 text-xs font-bold transition-all ${
-              activeTab === "register"
-                ? "bg-background font-extrabold text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            📝 Daftar Akun Baru
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              setActiveTab("login")
-              setErrorMsg("")
-            }}
-            className={`flex-1 rounded-lg py-1.5 text-xs font-bold transition-all ${
-              activeTab === "login"
-                ? "bg-background font-extrabold text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            🔑 Masuk / Login
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-3.5">
-          {errorMsg && (
-            <div className="rounded-xl border border-destructive/20 bg-destructive/10 p-3 text-xs font-bold text-destructive">
-              ⚠️ {errorMsg}
-            </div>
-          )}
-
-          {successMsg && (
-            <div className="rounded-xl border border-success/20 bg-success/10 p-3 text-xs font-bold text-emerald-600 dark:text-success">
-              ✅ {successMsg}
-            </div>
-          )}
-
-          <div>
-            <Label className="mb-1 block">
-              Alamat Email <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              type="email"
-              placeholder="contoh: ahmad@gmail.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          {activeTab === "register" && (
-            <div>
-              <Label className="mb-1 block">
-                Nama Lengkap / Panggilan{" "}
-                <span className="text-destructive">*</span>
-              </Label>
-              <Input
-                type="text"
-                placeholder="contoh: Ahmad Ridwan"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required={activeTab === "register"}
-              />
-            </div>
-          )}
-
-          <div>
-            <Label className="mb-1 block">
-              Kata Sandi / Password <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              type="password"
-              placeholder="Masukkan Kata Sandi Anda"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <span className="mt-0.5 block text-[10px] text-muted-foreground">
-              Password dienkripsi secara aman (SHA-256) di Supabase Cloud DB.
-            </span>
-          </div>
-
-          {activeTab === "register" && (
-            <div>
-              <Label className="mb-1 block">Ikon Profil (Avatar)</Label>
-              <div className="flex flex-wrap items-center gap-1.5">
-                {AVATAR_OPTIONS.map((av) => (
-                  <button
-                    key={av}
-                    type="button"
-                    onClick={() => setAvatar(av)}
-                    className={`flex h-7 w-7 items-center justify-center rounded-xl text-xs transition-all ${
-                      avatar === av
-                        ? "scale-110 bg-primary text-foreground shadow-md"
-                        : "border border-border bg-background hover:bg-muted"
-                    }`}
-                  >
-                    {av}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="flex items-center justify-end gap-2 border-t border-border/40 pt-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              className="rounded-xl px-4 py-2 text-xs font-bold"
-            >
-              Batal
-            </Button>
-
-            <Button
-              type="submit"
-              disabled={saving}
-              className="rounded-xl px-5 py-2 text-xs font-bold shadow-md"
-            >
-              {saving
-                ? "🔐 Memproses..."
-                : activeTab === "login"
-                  ? "🔑 Masuk Akun"
-                  : "📝 Daftar Akun"}
-            </Button>
-          </div>
-        </form>
+        <UserProfileForm
+          activeTab={activeTab}
+          email={email}
+          name={name}
+          password={password}
+          role={role}
+          avatar={avatar}
+          saving={saving}
+          errorMsg={errorMsg}
+          successMsg={successMsg}
+          onTabChange={(tab) => {
+            setActiveTab(tab)
+            setErrorMsg("")
+          }}
+          onEmailChange={setEmail}
+          onNameChange={setName}
+          onPasswordChange={setPassword}
+          onAvatarChange={setAvatar}
+          onSubmit={handleSubmit}
+          onClose={onClose}
+        />
       </DialogContent>
     </Dialog>
   )

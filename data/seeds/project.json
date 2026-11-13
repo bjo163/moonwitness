@@ -1,0 +1,262 @@
+{
+  "tags": [
+    { "name": "Observatory", "color": "#00F0FF" },
+    { "name": "Algorithms", "color": "#0088FF" },
+    { "name": "Scripture", "color": "#00FF66" },
+    { "name": "Security", "color": "#FF0055" },
+    { "name": "Hardware", "color": "#FFAA00" },
+    { "name": "Atmospheric", "color": "#A100FF" },
+    { "name": "Governance", "color": "#7928CA" }
+  ],
+  "projects": [
+    {
+      "code": "PROJECT-LUNAR-SCOPE",
+      "name": "Lunar Crescent Autonomous Sighting Network (LCASN)",
+      "summary": "Multi-station robotic telescope network with synchronized optical acquisition and real-time contrast stretching for thin hilal sighting.",
+      "status": "active"
+    },
+    {
+      "code": "PROJECT-QURAN-GRAPH",
+      "name": "Quran & Hadith Unified Knowledge Graph 3.0",
+      "summary": "Comprehensive Arabic root concordance with lexical occurrence tracking across all 114 Surahs, Hadith sanad trees, and cross-scripture links.",
+      "status": "active"
+    },
+    {
+      "code": "PROJECT-AEQ4-ENGINE",
+      "name": "Celestial Mechanics Engine AEQ4 Upgrade",
+      "summary": "Sub-millisecond planetary theory (VSOP87/ELP2000) ephemeris service with CIO-based precession-nutation and Topocentric shadow formulas.",
+      "status": "active"
+    },
+    {
+      "code": "PROJECT-ALLSKY-SEEING",
+      "name": "Archipelago All-Sky Seeing Sensor Grid",
+      "summary": "Deployment of Differential Image Motion Monitors (DIMM) and Sky Quality Meters (SQM) across 15 high-altitude Indonesian sites.",
+      "status": "planned"
+    }
+  ],
+  "milestones": [
+    {
+      "name": "M1: Multi-Station Optical Calibration",
+      "projectCode": "PROJECT-LUNAR-SCOPE",
+      "status": "in_progress",
+      "targetDate": "2026-10-01"
+    },
+    {
+      "name": "M2: Real-Time Twilight Contrast Pipeline",
+      "projectCode": "PROJECT-LUNAR-SCOPE",
+      "status": "planned",
+      "targetDate": "2026-11-15"
+    },
+    {
+      "name": "M3: Classical Sanad Transmissional Mapping",
+      "projectCode": "PROJECT-QURAN-GRAPH",
+      "status": "in_progress",
+      "targetDate": "2026-10-20"
+    },
+    {
+      "name": "M4: Semantic Vector Search Indexing",
+      "projectCode": "PROJECT-QURAN-GRAPH",
+      "status": "planned",
+      "targetDate": "2026-12-01"
+    },
+    {
+      "name": "M5: VSOP87 Analytical Perturbation Optimization",
+      "projectCode": "PROJECT-AEQ4-ENGINE",
+      "status": "completed",
+      "targetDate": "2026-09-01"
+    },
+    {
+      "name": "M6: Sub-Millisecond Planetary Ephemeris API",
+      "projectCode": "PROJECT-AEQ4-ENGINE",
+      "status": "in_progress",
+      "targetDate": "2026-10-10"
+    }
+  ],
+  "sprints": [
+    {
+      "name": "Sprint 1448-R1: Optical Alignment & Driver Hardening",
+      "projectCode": "PROJECT-LUNAR-SCOPE",
+      "status": "active",
+      "startDate": "2026-08-15",
+      "endDate": "2026-09-15"
+    },
+    {
+      "name": "Sprint 1448-R2: Semantic Linking & Hadith Concordance",
+      "projectCode": "PROJECT-QURAN-GRAPH",
+      "status": "active",
+      "startDate": "2026-08-20",
+      "endDate": "2026-09-20"
+    },
+    {
+      "name": "Sprint 1448-R3: Ephemeris SIMD Vectorization",
+      "projectCode": "PROJECT-AEQ4-ENGINE",
+      "status": "completed",
+      "startDate": "2026-08-01",
+      "endDate": "2026-08-31"
+    },
+    {
+      "name": "Sprint 1448-R4: All-Sky Network Telemetry Integration",
+      "projectCode": "PROJECT-ALLSKY-SEEING",
+      "status": "planned",
+      "startDate": "2026-09-15",
+      "endDate": "2026-10-15"
+    }
+  ],
+  "tasks": [
+    {
+      "title": "Calibrate FLI sCMOS dark frame subtraction curves",
+      "projectCode": "PROJECT-LUNAR-SCOPE",
+      "stage": "In Progress",
+      "priority": "high",
+      "dueDate": "2026-09-10",
+      "estimatedHours": 16
+    },
+    {
+      "title": "Implement sub-pixel plate solving via Gaia DR3 catalogue",
+      "projectCode": "PROJECT-LUNAR-SCOPE",
+      "stage": "In Progress",
+      "priority": "urgent",
+      "dueDate": "2026-09-12",
+      "estimatedHours": 24
+    },
+    {
+      "title": "Build automated dome shutter rain-sensor trigger",
+      "projectCode": "PROJECT-LUNAR-SCOPE",
+      "stage": "Done",
+      "priority": "medium",
+      "dueDate": "2026-08-28",
+      "estimatedHours": 12
+    },
+    {
+      "title": "Develop contrast stretching filter for ultra-thin crescent hilal",
+      "projectCode": "PROJECT-LUNAR-SCOPE",
+      "stage": "In Progress",
+      "priority": "urgent",
+      "dueDate": "2026-09-15",
+      "estimatedHours": 32
+    },
+    {
+      "title": "Deploy remote emergency E-Stop daemon for 10Micron mounts",
+      "projectCode": "PROJECT-LUNAR-SCOPE",
+      "stage": "Done",
+      "priority": "high",
+      "dueDate": "2026-08-30",
+      "estimatedHours": 8
+    },
+
+    {
+      "title": "Normalize Hadith narrator biographical chains across Kutubus Sittah",
+      "projectCode": "PROJECT-QURAN-GRAPH",
+      "stage": "In Progress",
+      "priority": "urgent",
+      "dueDate": "2026-09-14",
+      "estimatedHours": 40
+    },
+    {
+      "title": "Map Qur'anic cosmic verses to modern physical reference entities",
+      "projectCode": "PROJECT-QURAN-GRAPH",
+      "stage": "In Progress",
+      "priority": "high",
+      "dueDate": "2026-09-18",
+      "estimatedHours": 28
+    },
+    {
+      "title": "Construct bidirectional ontology between fiqh rules and hadiths",
+      "projectCode": "PROJECT-QURAN-GRAPH",
+      "stage": "Code Review",
+      "priority": "medium",
+      "dueDate": "2026-09-08",
+      "estimatedHours": 20
+    },
+    {
+      "title": "Generate pgvector embeddings for 6236 verses with multilingual context",
+      "projectCode": "PROJECT-QURAN-GRAPH",
+      "stage": "Backlog",
+      "priority": "high",
+      "dueDate": "2026-09-25",
+      "estimatedHours": 36
+    },
+    {
+      "title": "Create citation export engine supporting BibTeX and RIS formats",
+      "projectCode": "PROJECT-QURAN-GRAPH",
+      "stage": "Done",
+      "priority": "low",
+      "dueDate": "2026-08-25",
+      "estimatedHours": 10
+    },
+
+    {
+      "title": "Refactor VSOP87D series truncation for low-power edge nodes",
+      "projectCode": "PROJECT-AEQ4-ENGINE",
+      "stage": "In Progress",
+      "priority": "urgent",
+      "dueDate": "2026-09-11",
+      "estimatedHours": 20
+    },
+    {
+      "title": "Integrate IAU 2006/2000A precession-nutation CIO-based transformation",
+      "projectCode": "PROJECT-AEQ4-ENGINE",
+      "stage": "Code Review",
+      "priority": "high",
+      "dueDate": "2026-09-07",
+      "estimatedHours": 24
+    },
+    {
+      "title": "Validate solar topocentric parallax against JPL Horizons DE442",
+      "projectCode": "PROJECT-AEQ4-ENGINE",
+      "stage": "In Progress",
+      "priority": "urgent",
+      "dueDate": "2026-09-16",
+      "estimatedHours": 18
+    },
+    {
+      "title": "Write automated unit tests verifying shadow length formula for Asr prayer",
+      "projectCode": "PROJECT-AEQ4-ENGINE",
+      "stage": "Done",
+      "priority": "high",
+      "dueDate": "2026-08-22",
+      "estimatedHours": 12
+    },
+    {
+      "title": "Implement high-latitude twilight approximations for polar regions",
+      "projectCode": "PROJECT-AEQ4-ENGINE",
+      "stage": "Backlog",
+      "priority": "medium",
+      "dueDate": "2026-09-30",
+      "estimatedHours": 16
+    },
+
+    {
+      "title": "Install DIMM turbulence sensor at Bosscha Observatory Lembang",
+      "projectCode": "PROJECT-ALLSKY-SEEING",
+      "stage": "In Progress",
+      "priority": "urgent",
+      "dueDate": "2026-09-22",
+      "estimatedHours": 30
+    },
+    {
+      "title": "Deploy remote SQM light pollution loggers in Timau and Kupang",
+      "projectCode": "PROJECT-ALLSKY-SEEING",
+      "stage": "Done",
+      "priority": "high",
+      "dueDate": "2026-08-29",
+      "estimatedHours": 14
+    },
+    {
+      "title": "Connect IoT meteorological telemetry to central TimescaleDB",
+      "projectCode": "PROJECT-ALLSKY-SEEING",
+      "stage": "In Progress",
+      "priority": "high",
+      "dueDate": "2026-09-19",
+      "estimatedHours": 22
+    },
+    {
+      "title": "Train neural net model on cloud cover patterns over Java Sea",
+      "projectCode": "PROJECT-ALLSKY-SEEING",
+      "stage": "Backlog",
+      "priority": "medium",
+      "dueDate": "2026-10-05",
+      "estimatedHours": 45
+    }
+  ]
+}

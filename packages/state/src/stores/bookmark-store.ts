@@ -1,3 +1,5 @@
+import { safeGetStorage, safeSetStorage } from "@workspace/hooks"
+
 export type BookmarkItem = {
   id: string
   type: "ayah" | "hadith" | "scripture"
@@ -17,7 +19,7 @@ const LEGACY_STORAGE_KEY = "mw_tactical_bookmarks"
 export function getBookmarks(): BookmarkItem[] {
   if (typeof window === "undefined") return []
   try {
-    const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY)
+    const saved = safeGetStorage(STORAGE_KEY) || safeGetStorage(LEGACY_STORAGE_KEY)
     return saved ? JSON.parse(saved) : []
   } catch {
     return []
@@ -42,12 +44,12 @@ export function toggleBookmark(item: BookmarkItem): boolean {
   }
 
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    safeSetStorage(STORAGE_KEY, JSON.stringify(updated))
     window.dispatchEvent(
       new CustomEvent("mw_bookmarks_updated", { detail: updated })
     )
   } catch (e) {
-    console.warn("Failed to update bookmarks in localStorage:", e)
+    console.warn("Failed to update bookmarks in storage:", e)
   }
 
   return !exists

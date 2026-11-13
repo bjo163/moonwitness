@@ -1,4 +1,4 @@
-import { createCtx, getModel, SUPERUSER_ID } from '@moon/orm'
+import { createCtx, getModel, SUPERUSER_ID, loadJsonSeed } from '@moon/orm'
 
 export async function loadDemoData() {
   const Project = getModel('pj.project')
@@ -10,9 +10,19 @@ export async function loadDemoData() {
   if (!Project || !Stage || !Task || !Milestone || !Sprint || !Tag) return
 
   const env = createCtx(SUPERUSER_ID, {}, getModel)
+  const company = await getModel('vx.user')?.fetch(getModel('vx.user') as any, env, [['id', '=', SUPERUSER_ID]])
+  const companyId = company?.[0]?.companyId
+
+  const jsonSeed = loadJsonSeed<{
+    tags?: { name: string; color: string }[]
+    projects?: { code: string; name: string; summary: string; status: string }[]
+    milestones?: { name: string; projectCode: string; deadline: string }[]
+    sprints?: { name: string; projectCode: string; status: string; startDate: string; endDate: string }[]
+    tasks?: { title: string; projectCode: string; stage: string; priority: string; dueDate: string; estimatedHours: number }[]
+  }>('project')
 
   // ── Tags ──
-  const tagSeeds = [
+  const tagSeeds = jsonSeed?.tags || [
     { name: 'Backend', color: '#00F0FF' },
     { name: 'Frontend', color: '#A100FF' },
     { name: 'Algorithm', color: '#00FF66' },
@@ -25,7 +35,7 @@ export async function loadDemoData() {
   }
 
   // ── Projects ──
-  const projectSeeds = [
+  const projectSeeds = jsonSeed?.projects || [
     { code: 'PROJECT-LUNAR-SCOPE', name: 'Cosmic Optical Grid Calibration', summary: 'Upgrade the lunar ephemeris engine to VSOP87 precision and calibrate the optical observation grid across 12 observatory nodes.', status: 'active' },
     { code: 'PROJECT-QURAN-GRAPH', name: 'Universal Root Concordance Mapping', summary: 'Build a comprehensive Arabic root concordance with lexical occurrence tracking across all 114 Surahs and cross-scripture semantic links.', status: 'active' },
     { code: 'PROJECT-AEQ4-ENGINE', name: 'AEQ4 Temporal Engine Deployment', summary: 'Deploy the AEQ4 timestamp engine based on 4-Kitab divine temporal framework with countdown to 1 Muharram 1449H epoch.', status: 'planned' }
@@ -35,7 +45,7 @@ export async function loadDemoData() {
   for (const p of projectSeeds) {
     const rows = await Project.fetch(Project, env, [['code', '=', p.code]])
     if (!rows.length) {
-      const row = await Project.spawn(Project, env, p)
+      const row = await Project.spawn(Project, env, { ...p, companyId })
       projectIds[p.code] = row.id as number
     } else {
       projectIds[p.code] = rows[0].id as number
@@ -71,7 +81,7 @@ export async function loadDemoData() {
   }
 
   // ── Milestones ──
-  const milestoneSeeds = [
+  const milestoneSeeds = jsonSeed?.milestones || [
     { name: 'Alpha Release', projectCode: 'PROJECT-LUNAR-SCOPE', deadline: '2026-09-15' },
     { name: 'Beta Testing', projectCode: 'PROJECT-QURAN-GRAPH', deadline: '2026-10-01' },
     { name: 'Epoch Countdown Go-Live', projectCode: 'PROJECT-AEQ4-ENGINE', deadline: '2027-06-01' }
@@ -97,7 +107,7 @@ export async function loadDemoData() {
   }
 
   // ── Sprints ──
-  const sprintSeeds = [
+  const sprintSeeds = jsonSeed?.sprints || [
     { name: 'Sprint Rajab-01', projectCode: 'PROJECT-LUNAR-SCOPE', status: 'active', startDate: '2026-08-20', endDate: '2026-09-03' },
     { name: 'Sprint Rajab-02', projectCode: 'PROJECT-QURAN-GRAPH', status: 'draft', startDate: '2026-09-03', endDate: '2026-09-17' }
   ]
@@ -124,14 +134,17 @@ export async function loadDemoData() {
   }
 
   // ── Tasks ──
-  const taskSeeds = [
+  const taskSeeds = jsonSeed?.tasks || [
     { title: 'Implement VSOP87 ephemeris algorithm', projectCode: 'PROJECT-LUNAR-SCOPE', stage: 'In Progress', priority: 'high', dueDate: '2026-09-10', estimatedHours: 24 },
     { title: 'Calibrate optical grid node network', projectCode: 'PROJECT-LUNAR-SCOPE', stage: 'Backlog', priority: 'normal', dueDate: '2026-09-12', estimatedHours: 16 },
     { title: 'Setup lunar observation data pipeline', projectCode: 'PROJECT-LUNAR-SCOPE', stage: 'Code Review', priority: 'normal', dueDate: '2026-09-08', estimatedHours: 12 },
+    { title: 'Fine-tune Bosscha CCD camera integration', projectCode: 'PROJECT-LUNAR-SCOPE', stage: 'Testing', priority: 'high', dueDate: '2026-09-14', estimatedHours: 18 },
     { title: 'Design concordance tree visualization', projectCode: 'PROJECT-QURAN-GRAPH', stage: 'In Progress', priority: 'normal', dueDate: '2026-09-20', estimatedHours: 20 },
     { title: 'Integrate root morphology database', projectCode: 'PROJECT-QURAN-GRAPH', stage: 'Backlog', priority: 'high', dueDate: '2026-09-25', estimatedHours: 32 },
-    { title: 'Build countdown widget component', projectCode: 'PROJECT-AEQ4-ENGINE', stage: 'Backlog', priority: 'critical', dueDate: '2027-05-01', estimatedHours: 8 },
-    { title: 'Create epoch configuration panel', projectCode: 'PROJECT-AEQ4-ENGINE', stage: 'Backlog', priority: 'high', dueDate: '2027-05-15', estimatedHours: 12 }
+    { title: 'Benchmark cross-scripture entity linkage', projectCode: 'PROJECT-QURAN-GRAPH', stage: 'Code Review', priority: 'normal', dueDate: '2026-09-18', estimatedHours: 14 },
+    { title: 'Build countdown widget component', projectCode: 'PROJECT-AEQ4-ENGINE', stage: 'In Progress', priority: 'critical', dueDate: '2027-05-01', estimatedHours: 8 },
+    { title: 'Create epoch configuration panel', projectCode: 'PROJECT-AEQ4-ENGINE', stage: 'Backlog', priority: 'high', dueDate: '2027-05-15', estimatedHours: 12 },
+    { title: 'Harmonize 4-Kitab temporal chronology matrices', projectCode: 'PROJECT-AEQ4-ENGINE', stage: 'Backlog', priority: 'critical', dueDate: '2027-05-20', estimatedHours: 40 }
   ]
   for (const t of taskSeeds) {
     const pId = projectIds[t.projectCode]
@@ -145,6 +158,7 @@ export async function loadDemoData() {
       await Task.spawn(Task, env, {
         title: t.title,
         projectId: pId,
+        companyId,
         stageId: stageId || undefined,
         priority: t.priority,
         dueDate: t.dueDate,
@@ -153,5 +167,5 @@ export async function loadDemoData() {
     }
   }
 
-  console.log('[moon-project] Demo data loaded: 3 projects, 15 stages, 3 milestones, 2 sprints, 7 tasks')
+  console.log(`[moon-project] Demo data enriched: ${projectSeeds.length} projects, ${milestoneSeeds.length} milestones, ${sprintSeeds.length} sprints, ${taskSeeds.length} tasks`)
 }

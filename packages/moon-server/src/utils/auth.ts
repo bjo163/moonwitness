@@ -84,6 +84,7 @@ export type AuthErrorCode =
   | 'AUTH_ISSUER_INVALID'
   | 'AUTH_AUDIENCE_INVALID'
   | 'AUTH_SESSION_REVOKED'
+  | 'AUTH_SESSION_EXPIRED'
   | 'AUTH_USER_INACTIVE'
   | 'AUTH_USER_NOT_FOUND'
 
@@ -115,6 +116,8 @@ export interface AuthenticateRequestOptions {
 
 export interface JwtClaims {
   sub: number
+  odooUid?: number
+  odooSessionKey?: string
   email?: string
   tokenVersion?: number
   role?: string

@@ -13,6 +13,8 @@ export function loadUmbrellaConfig(rootDir) {
   const complexityConfig = readJson(path.join(configDir, "complexity.v1.json"))
   const qualityConfig = readJson(path.join(configDir, "quality.v1.json"))
   const futureBaseline = readJson(path.join(configDir, "future-baseline.v1.json"))
+  const progressConfig = readJson(path.join(configDir, "progress.v1.json"))
+  const inventoryConfig = readJson(path.join(configDir, "inventory.v1.json"))
 
   const config = {
     ...scoringConfig,
@@ -22,6 +24,8 @@ export function loadUmbrellaConfig(rootDir) {
       complexity: complexityConfig,
       quality: qualityConfig,
       future_baseline: futureBaseline,
+      progress: progressConfig,
+      inventory: inventoryConfig,
     },
   }
 
@@ -34,5 +38,7 @@ export function loadUmbrellaConfig(rootDir) {
     complexityConfig,
     qualityConfig,
     futureBaseline,
+    progressConfig,
+    inventoryConfig,
   }
 }

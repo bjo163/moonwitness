@@ -1,6 +1,7 @@
 "use client"
 
 import React, { createContext, useContext, useEffect, useState } from "react"
+import { safeGetStorage, safeSetStorage } from "@workspace/hooks"
 
 export type Language = "en" | "id" | "ar" | "fr"
 
@@ -23,22 +24,24 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("mw_language") as Language
+      const saved = safeGetStorage("mw_language") as Language
       if (["en", "id", "ar", "fr"].includes(saved)) {
         setLangState(saved)
-        if (saved === "ar") document.documentElement.dir = "rtl"
-        else document.documentElement.dir = "ltr"
       } else {
-        localStorage.setItem("mw_language", "en")
+        safeSetStorage("mw_language", "en")
       }
     }
   }, [])
 
+  useEffect(() => {
+    document.documentElement.lang = lang
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr"
+  }, [lang])
+
   const setLang = (newLang: Language) => {
     setLangState(newLang)
     if (typeof window !== "undefined") {
-      localStorage.setItem("mw_language", newLang)
-      document.documentElement.dir = newLang === "ar" ? "rtl" : "ltr"
+      safeSetStorage("mw_language", newLang)
     }
   }
 

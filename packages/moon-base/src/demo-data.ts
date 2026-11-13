@@ -1,4 +1,4 @@
-import { createCtx, getDb, getModel, SUPERUSER_ID } from '@moon/orm'
+import { createCtx, getDb, getModel, SUPERUSER_ID, loadJsonSeed } from '@moon/orm'
 import bcrypt from 'bcryptjs'
 
 const BCRYPT_ROUNDS = 10
@@ -13,6 +13,12 @@ export async function loadDemoData() {
   const env = createCtx(SUPERUSER_ID, {}, getModel)
   const db = getDb()
   const conn = env.trx || db
+
+  const jsonSeed = loadJsonSeed<{
+    operators?: { name: string; email: string; password: string; isAdmin: boolean }[]
+    stations?: { name: string; email: string; is_company: boolean }[]
+    reportTemplates?: any[]
+  }>('base')
 
   // Find admin group
   let adminGroupId: number | undefined
@@ -29,7 +35,7 @@ export async function loadDemoData() {
   }
 
   // ── Demo Operators ──
-  const demoUsers = [
+  const demoUsers = jsonSeed?.operators || [
     {
       name: 'Tariq Ibn Ziyad',
       email: 'tariq@moonwitness.os',
@@ -51,6 +57,18 @@ export async function loadDemoData() {
     {
       name: 'Maryam Mirzakhani',
       email: 'maryam@moonwitness.os',
+      password: 'password123',
+      isAdmin: false
+    },
+    {
+      name: 'Abu Raihan Al-Biruni',
+      email: 'biruni@moonwitness.os',
+      password: 'password123',
+      isAdmin: true
+    },
+    {
+      name: 'Ulugh Beg',
+      email: 'ulughbeg@moonwitness.os',
       password: 'password123',
       isAdmin: false
     }
@@ -108,9 +126,11 @@ export async function loadDemoData() {
   }
 
   // ── Demo Partner Stations / Observatories ──
-  const demoBranches = [
+  const demoBranches = jsonSeed?.stations || [
     { name: 'MoonWitness Observatory - Alexandria', email: 'alexandria@moonwitness.os', is_company: true },
-    { name: 'MoonWitness Lunar Station - Granada', email: 'granada@moonwitness.os', is_company: true }
+    { name: 'MoonWitness Lunar Station - Granada', email: 'granada@moonwitness.os', is_company: true },
+    { name: 'MoonWitness Observatorium Bosscha - Lembang', email: 'bosscha@moonwitness.os', is_company: true },
+    { name: 'MoonWitness Samarkand Planetary Station', email: 'samarkand@moonwitness.os', is_company: true }
   ]
   for (const b of demoBranches) {
     const existingBranch = await conn('vx_node').where({ email: b.email }).first()
@@ -129,7 +149,7 @@ export async function loadDemoData() {
   // ── Demo Report Templates ──
   const IrReport = getModel('ir.report')
   if (IrReport) {
-    const demoReports = [
+    const demoReports = jsonSeed?.reportTemplates || [
       {
         name: 'Project Milestone Status Briefing',
         model: 'pj.project',
@@ -160,12 +180,35 @@ export async function loadDemoData() {
         showQrCode: true,
         active: true,
       },
+      {
+        name: 'Financial Ledger & Zakat Disbursement Summary',
+        model: 'account.move',
+        reportType: 'audit',
+        orientation: 'landscape',
+        headerTitle: 'FINANCIAL INTEGRITY & ZAKAT DISTRIBUTION REPORT',
+        footerNotice: 'VERIFIED AGAINST DOUBLE-ENTRY LEDGER CONSTRAINTS',
+        showQrCode: true,
+        active: true,
+      },
+      {
+        name: 'Astronomical Ru’yah Observation Registry',
+        model: 'geo.city',
+        reportType: 'briefing',
+        orientation: 'portrait',
+        headerTitle: 'NATIONAL RU\'YATUL HILAL OBSERVATION REGISTRY',
+        footerNotice: 'AUTHENTICATED UNDER IMKANUR RUKYAT MABIMS CRITERIA',
+        showQrCode: true,
+        active: true,
+      }
     ]
 
     for (const r of demoReports) {
-      await (IrReport as any).spawn(IrReport, env, r)
+      const existingRep = await (IrReport as any).fetch(IrReport, env, [['name', '=', r.name]])
+      if (!existingRep.length) {
+        await (IrReport as any).spawn(IrReport, env, r)
+      }
     }
   }
 
-  console.log('[moon-base] Demo data loaded: 4 operators, 2 observatory stations, 3 report templates')
+  console.log(`[moon-base] Demo data loaded: ${demoUsers.length} operators, ${demoBranches.length} observatory stations, report templates initialized`)
 }

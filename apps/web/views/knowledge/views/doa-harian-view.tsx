@@ -39,8 +39,8 @@ export function DoaHarianView() {
 
   if (!mounted || isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-card font-mono text-sm tracking-widest text-success">
-        SYNCHRONIZING DUA & ADHKAR TELEMETRY...
+      <div className="flex min-h-screen items-center justify-center bg-card text-sm text-muted-foreground">
+        Loading daily prayers and adhkar…
       </div>
     )
   }

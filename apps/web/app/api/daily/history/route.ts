@@ -110,7 +110,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // For Witness API history, we mock enriched data based on generic formulas since we don't have batch endpoints
+    // History metadata is derived locally; content remains source-backed by the Witness API.
     const asmaulMap = new Map()
     try {
       const json = await moonClientInstance.request(
@@ -145,15 +145,10 @@ export async function GET(req: NextRequest) {
     const enrichedHistory = recentHistory.map((item, idx) => {
       const dbAyah = ayahsData[idx]
       // ORM returns snake_case. book_id = [surahNum, "SurahName"]
-      const bookId =
-        dbAyah && Array.isArray(dbAyah.book_id)
-          ? dbAyah.book_id[0]
-          : Math.max(1, Math.floor(item.ayahId / 54) + 1)
-      const bookName =
-        dbAyah && Array.isArray(dbAyah.book_id)
-          ? dbAyah.book_id[1]
-          : "Surah " + bookId
-      const ayahNum = dbAyah ? dbAyah.verse_number : item.ayahId % 54 || 1
+      if (!dbAyah) return null
+      const bookId = Array.isArray(dbAyah.book_id) ? dbAyah.book_id[0] : null
+      const bookName = Array.isArray(dbAyah.book_id) ? dbAyah.book_id[1] : null
+      const ayahNum = dbAyah.verse_number
       const asmaulSurahNum = ((bookId - 1) % 99) + 1
       const asmaulAyahNum = ((ayahNum - 1) % 99) + 1
 
@@ -164,15 +159,9 @@ export async function GET(req: NextRequest) {
           surahNumber: bookId,
           surahName: bookName,
           ayahNumber: ayahNum,
-          textArabic: dbAyah
-            ? dbAyah.text_original
-            : "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
-          textLatin: dbAyah
-            ? dbAyah.text_transliteration || ""
-            : "Bismillāhir-raḥmānir-raḥīm",
-          translationId: dbAyah
-            ? dbAyah.translation_id
-            : "Ayah history from witness.",
+          textArabic: dbAyah.text_original,
+          textLatin: dbAyah.text_transliteration || "",
+          translationId: dbAyah.translation_id,
           audioUrl:
             dbAyah?.audio_url ||
             `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${item.ayahId}.mp3`,
@@ -198,7 +187,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       totalPeriodsElapsed,
-      history: enrichedHistory,
+      history: enrichedHistory.filter(Boolean),
     })
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 })

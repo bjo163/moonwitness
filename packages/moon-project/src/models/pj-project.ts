@@ -1,4 +1,5 @@
 import { Vertex, fields } from '@moon/orm'
+import { enforceExistingCompanyScope } from './project-scope.js'
 
 export default class PjProject extends Vertex {
   static _name = 'pj.project'
@@ -8,6 +9,7 @@ export default class PjProject extends Vertex {
   code = fields.Char({ required: true, size: 32, unique: true, index: true })
   summary = fields.Text()
   ownerId = fields.Many2one({ comodel: 'vx.user', index: true })
+  companyId = fields.Many2one({ comodel: 'vx.org', index: true })
   status = fields.Selection({
     selection: [
       ['planned', 'Planned'],
@@ -24,4 +26,6 @@ export default class PjProject extends Vertex {
   taskIds = fields.One2many({ comodel: 'pj.task', inverse: 'projectId' })
   milestoneIds = fields.One2many({ comodel: 'pj.milestone', inverse: 'projectId' })
   sprintIds = fields.One2many({ comodel: 'pj.sprint', inverse: 'projectId' })
+
+  static async beforeSave(_: any, env: any, vals: Record<string, any>, id?: number) { await enforceExistingCompanyScope(env, 'pj_project', id, vals) }
 }

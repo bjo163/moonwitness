@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
+import { StatusBadge, PropertyRow, type StatusVariant } from "@workspace/ui"
 import { WhisperPanel, MercyButton } from "../whisper-panel"
 import {
   Q4Q_LEVELS,
@@ -11,15 +12,12 @@ import {
   type ScriptureTag,
 } from "./cab-data"
 
-export function StatusBadge({ status }: { status: UpgradeStatus }) {
-  const cfg = STATUS_CONFIG[status]
-  return (
-    <span
-      className={`rounded-md border px-2 py-0.5 font-mono text-[9px] font-bold tracking-widest uppercase ${cfg.color}`}
-    >
-      {cfg.label}
-    </span>
-  )
+const upgradeStatusVariantMap: Record<UpgradeStatus, StatusVariant> = {
+  PROPOSED: "pending",
+  BRIDGE_REVIEW: "warning",
+  APPROVED: "info",
+  ACTIVE: "primary",
+  COMPLETE: "success",
 }
 
 export function ScriptureTagBadge({ tag }: { tag: ScriptureTag }) {
@@ -87,7 +85,11 @@ export function UpgradeCouncilTab() {
                   {req.scriptureTags.map((tag) => (
                     <ScriptureTagBadge key={tag} tag={tag} />
                   ))}
-                  <StatusBadge status={req.status} />
+                  <StatusBadge
+                    status={upgradeStatusVariantMap[req.status] || "neutral"}
+                    label={STATUS_CONFIG[req.status]?.label || req.status}
+                    size="sm"
+                  />
                 </div>
                 <p className="font-sans text-sm font-bold text-foreground">
                   {req.title}
@@ -111,41 +113,29 @@ export function UpgradeCouncilTab() {
             {isOpen && (
               <div className="border-t border-border p-4">
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <div className="flex flex-col gap-2">
-                    <div>
-                      <p className="mb-1 font-mono text-[9px] tracking-widest text-foreground/30 uppercase">
-                        Current State
-                      </p>
-                      <p className="font-mono text-xs text-foreground/60">
-                        {req.currentState || `Level ${req.levelFrom} Baseline Assessment`}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="mb-1 font-mono text-[9px] tracking-widest text-foreground/30 uppercase">
-                        Proposed Change
-                      </p>
-                      <p className="font-mono text-xs text-yellow-300/80">
-                        {req.proposedChange || req.description}
-                      </p>
-                    </div>
+                  <div className="flex flex-col gap-3">
+                    <PropertyRow
+                      variant="stacked"
+                      label="Current State"
+                      value={req.currentState || `Level ${req.levelFrom} Baseline Assessment`}
+                    />
+                    <PropertyRow
+                      variant="stacked"
+                      label="Proposed Change"
+                      value={req.proposedChange || req.description}
+                    />
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <div>
-                      <p className="mb-1 font-mono text-[9px] tracking-widest text-foreground/30 uppercase">
-                        Scripture Basis
-                      </p>
-                      <p className="font-mono text-[10px] text-warning/80">
-                        {req.scriptureRef}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="mb-1 font-mono text-[9px] tracking-widest text-foreground/30 uppercase">
-                        End Goal — Ridwan Allah
-                      </p>
-                      <p className="font-mono text-[10px] text-foreground/50">
-                        {req.endGoalAlignment}
-                      </p>
-                    </div>
+                  <div className="flex flex-col gap-3">
+                    <PropertyRow
+                      variant="stacked"
+                      label="Scripture Basis"
+                      value={req.scriptureRef}
+                    />
+                    <PropertyRow
+                      variant="stacked"
+                      label="End Goal — Ridwan Allah"
+                      value={req.endGoalAlignment}
+                    />
                     <div className="rounded-xl border border-yellow-400/20 bg-yellow-400/5 p-3">
                       <p className="mb-1 font-mono text-[9px] tracking-widest text-warning/60 uppercase">
                         ◈ Bridge Decision

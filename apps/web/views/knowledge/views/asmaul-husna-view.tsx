@@ -42,8 +42,8 @@ export function AsmaulHusnaView() {
 
   if (loading && items.length === 0) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-card font-mono text-sm tracking-widest text-indigo-400">
-        SYNCHRONIZING ASMAUL HUSNA ONTOLOGY...
+      <div className="flex min-h-screen items-center justify-center bg-card text-sm text-muted-foreground">
+        Loading Asmaul Husna…
       </div>
     )
   }
@@ -79,7 +79,7 @@ export function AsmaulHusnaView() {
           {/* LEFT: 99 Names Cards Grid */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:col-span-2 xl:grid-cols-3">
             {filteredData.length === 0 ? (
-              <div className="col-span-full flex h-64 items-center justify-center rounded-xl border border-border bg-card font-mono text-xs text-foreground/40">
+                <div className="col-span-full flex h-64 items-center justify-center rounded-md border border-border bg-card text-sm text-muted-foreground">
                 No Divine Names found matching &ldquo;{searchQuery}&rdquo;.
               </div>
             ) : (

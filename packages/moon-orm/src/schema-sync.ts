@@ -2,6 +2,7 @@ import type { Knex } from 'knex'
 import { getSchemaDb as getDb, withSchemaDb } from './schema-connection.js'
 import type { Vertex } from './base.js'
 import type { FieldDef } from './fields.js'
+import { isPg, isSqlite, supportsVectors } from './dialect.js'
 
 interface ColumnInfo {
   column_name: string
@@ -96,14 +97,17 @@ async function runForge(options: SchemaSyncOptions): Promise<SchemaSyncResult> {
 
   const requiresVector = [...registry.values()].some((model) =>
     !(model as any)._abstract && Object.values(model.getFieldDefs(model)).some((field) => field.type === 'vector'))
-  if (requiresVector) {
+  if (requiresVector && isPg()) {
     const extension = { up: 'CREATE EXTENSION IF NOT EXISTS vector', down: '-- Shared vector extension retained intentionally' }
     if (options.dryRun) {
-      // Planning is read-only; provision extensions explicitly via generated SQL.
       const result = await getDb().raw("SELECT 1 FROM pg_extension WHERE extname = 'vector'")
       if ((result?.rows ?? result).length === 0) migrations.push(extension)
     } else {
       await getDb().raw(extension.up)
+    }
+  } else if (requiresVector && isSqlite()) {
+    if (!options.silent) {
+      console.log('[moon.schema] Vector fields detected but SQLite does not support pgvector — vector columns stored as text.')
     }
   }
 
@@ -310,6 +314,14 @@ export function getLastPending(): PendingChange[] {
 
 async function tableExists(table: string): Promise<boolean> {
   const db = getDb()
+  if (isSqlite()) {
+    const rows = await db.raw(
+      "SELECT 1 FROM sqlite_master WHERE type='table' AND name = ?",
+      [table]
+    )
+    return Array.isArray(rows) ? rows.length > 0 : false
+  }
+  // PostgreSQL
   const rows = await db
     .select(db.raw('count(*) as cnt'))
     .from('information_schema.tables')
@@ -320,6 +332,16 @@ async function tableExists(table: string): Promise<boolean> {
 
 async function hasForeignKey(table: string, colName: string, refTable: string): Promise<boolean> {
   const db = getDb()
+  if (isSqlite()) {
+    try {
+      const fks = await db.raw(`PRAGMA foreign_key_list(${sqlIdentifier(table)})`)
+      const fkRows = Array.isArray(fks) ? fks : []
+      return fkRows.some((fk: any) => fk.from === colName && fk.table === refTable)
+    } catch {
+      return false
+    }
+  }
+  // PostgreSQL
   const result = await db.raw(`
     SELECT 1
     FROM information_schema.key_column_usage kcu
@@ -338,6 +360,14 @@ async function hasForeignKey(table: string, colName: string, refTable: string): 
 
 async function hasIndex(indexName: string): Promise<boolean> {
   const db = getDb()
+  if (isSqlite()) {
+    const rows = await db.raw(
+      "SELECT 1 FROM sqlite_master WHERE type='index' AND name = ?",
+      [indexName]
+    )
+    return Array.isArray(rows) ? rows.length > 0 : false
+  }
+  // PostgreSQL
   const rows = await db
     .select(db.raw('1'))
     .from('pg_indexes')
@@ -355,9 +385,19 @@ async function createIndex(
   migrations: MigrationCommand[] = []
 ) {
   const db = getDb()
-  const sql = isVector
-    ? `CREATE INDEX ${sqlIdentifier(indexName)} ON ${sqlIdentifier(table)} USING hnsw (${sqlIdentifier(colName)} vector_cosine_ops)`
-    : `CREATE INDEX ${sqlIdentifier(indexName)} ON ${sqlIdentifier(table)} (${sqlIdentifier(colName)})`
+  let sql: string
+
+  if (isVector && isSqlite()) {
+    // SQLite does not support HNSW vector indexes; skip silently
+    return
+  }
+
+  if (isVector && isPg()) {
+    sql = `CREATE INDEX ${sqlIdentifier(indexName)} ON ${sqlIdentifier(table)} USING hnsw (${sqlIdentifier(colName)} vector_cosine_ops)`
+  } else {
+    sql = `CREATE INDEX ${sqlIdentifier(indexName)} ON ${sqlIdentifier(table)} (${sqlIdentifier(colName)})`
+  }
+
   if (dryRun) {
     migrations.push({ up: sql, down: `DROP INDEX IF EXISTS ${sqlIdentifier(indexName)}` })
   } else {
@@ -367,6 +407,23 @@ async function createIndex(
 
 async function getColumns(table: string): Promise<ColumnInfo[]> {
   const db = getDb()
+
+  if (isSqlite()) {
+    const pragmaRows = await db.raw(`PRAGMA table_info(${sqlIdentifier(table)})`)
+    const cols = Array.isArray(pragmaRows) ? pragmaRows : []
+    return cols.map((col: any) => ({
+      column_name: col.name,
+      data_type: col.type?.toLowerCase() || 'text',
+      udt_name: col.type?.toLowerCase() || 'text',
+      is_nullable: col.notnull ? 'NO' : 'YES',
+      character_maximum_length: null,
+      vector_dimension: null,
+      numeric_precision: null,
+      numeric_scale: null,
+    }))
+  }
+
+  // PostgreSQL
   const rows = await db.raw(`
     SELECT c.column_name, c.data_type, c.udt_name, c.is_nullable,
       c.character_maximum_length, c.numeric_precision, c.numeric_scale,
@@ -411,7 +468,7 @@ async function createTable(
   dryRun: boolean = false,
   migrations: MigrationCommand[] = []
 ) {
-  const cols: string[] = ['id SERIAL PRIMARY KEY']
+  const cols: string[] = [isSqlite() ? 'id INTEGER PRIMARY KEY AUTOINCREMENT' : 'id SERIAL PRIMARY KEY']
   for (const [fieldName, fieldDef] of Object.entries(fieldDefs)) {
     const colName = toSnakeCase(fieldName)
     cols.push(buildColumnSql(colName, fieldDef))
@@ -419,7 +476,8 @@ async function createTable(
   const db = getDb()
   const sql = `CREATE TABLE ${sqlIdentifier(table)} (${cols.join(', ')})`
   if (dryRun) {
-    migrations.push({ up: sql, down: `DROP TABLE IF EXISTS ${sqlIdentifier(table)} CASCADE` })
+    const dropSuffix = isPg() ? ' CASCADE' : ''
+    migrations.push({ up: sql, down: `DROP TABLE IF EXISTS ${sqlIdentifier(table)}${dropSuffix}` })
   } else {
     await db.raw(sql)
   }
@@ -449,6 +507,12 @@ async function alterColumn(
   dryRun: boolean = false,
   migrations: MigrationCommand[] = []
 ) {
+  if (isSqlite()) {
+    // SQLite does not support ALTER COLUMN TYPE; skip with a warning.
+    // Schema changes of this kind require a table rebuild migration.
+    console.warn(`[moon.schema] SQLite: Cannot alter column type for ${table}.${colName} — requires explicit migration.`)
+    return
+  }
   const db = getDb()
   const sql = `ALTER TABLE ${sqlIdentifier(table)} ALTER COLUMN ${sqlIdentifier(colName)} TYPE ${colType}`
   if (dryRun) {
@@ -475,6 +539,12 @@ async function addForeignKey(
   dryRun: boolean = false,
   migrations: MigrationCommand[] = []
 ) {
+  if (isSqlite()) {
+    // SQLite does not support ADD CONSTRAINT on existing tables.
+    // Foreign keys must be declared at CREATE TABLE time.
+    // For dev mode this is acceptable; foreign keys are created on new tables.
+    return
+  }
   const db = getDb()
   const constraintName = `${table}_${colName}_fkey`
   const sql = `
@@ -507,13 +577,41 @@ async function createM2MTable(
     )
   `
   if (dryRun) {
-    migrations.push({ up: sql, down: `DROP TABLE IF EXISTS ${sqlIdentifier(relTable)} CASCADE` })
+    const dropSuffix = isPg() ? ' CASCADE' : ''
+    migrations.push({ up: sql, down: `DROP TABLE IF EXISTS ${sqlIdentifier(relTable)}${dropSuffix}` })
   } else {
     await db.raw(sql)
   }
 }
 
 function mapFieldType(field: FieldDef): string {
+  if (isSqlite()) {
+    return mapFieldTypeSqlite(field)
+  }
+  return mapFieldTypePg(field)
+}
+
+function mapFieldTypeSqlite(field: FieldDef): string {
+  if (field.translate) return 'text'  // JSON stored as text
+  switch (field.type) {
+    case 'char':      return 'text'
+    case 'text':      return 'text'
+    case 'integer':   return 'integer'
+    case 'float':     return 'real'
+    case 'decimal':   return 'real'
+    case 'boolean':   return 'integer'
+    case 'date':      return 'text'
+    case 'datetime':  return 'text'
+    case 'selection': return 'text'
+    case 'many2one':  return 'integer'
+    case 'one2many':
+    case 'many2many': return 'text'
+    case 'vector':    return 'text'  // Stored as JSON array string
+    default:          return 'text'
+  }
+}
+
+function mapFieldTypePg(field: FieldDef): string {
   if (field.translate) {
     return 'jsonb'
   }
@@ -558,6 +656,12 @@ function needsAlter(
 ): boolean {
   const expected = mapFieldType(field)
   let actual = existing.data_type
+  if (isSqlite()) {
+    // SQLite type comparison is simpler — types are affinities
+    const expectedNorm = expected.toLowerCase().replace(/\(.*\)/, '').trim()
+    const actualNorm = actual.toLowerCase().replace(/\(.*\)/, '').trim()
+    return expectedNorm !== actualNorm
+  }
   if (field.type === 'decimal') {
     return actual !== 'numeric' || Number(existing.numeric_precision) !== field.precision ||
       Number(existing.numeric_scale) !== field.scale

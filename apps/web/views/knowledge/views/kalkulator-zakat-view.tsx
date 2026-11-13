@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Calculator, Coins, TrendingUp, ShieldCheck } from "lucide-react"
-import { ContextBlock } from "@workspace/ui"
+import { ContextBlock, Input } from "@workspace/ui"
 import { useResource } from "@workspace/hooks"
 import { fetchGoldPrice } from "@moon/client"
 
@@ -53,14 +53,15 @@ export function KalkulatorZakatView() {
 
           <div className="space-y-6">
             <div>
-              <label className="mb-2 block text-xs font-bold text-primary/70">
+              <label htmlFor="zakat-savings" className="mb-2 block text-xs font-bold text-primary/70">
                 TABUNGAN & UANG TUNAI
               </label>
               <div className="relative">
                 <span className="absolute top-1/2 left-4 -translate-y-1/2 font-bold text-primary">
                   Rp
                 </span>
-                <input
+                <Input
+                  id="zakat-savings"
                   type="number"
                   min="0"
                   className="w-full rounded-none border border-primary/30 bg-card p-3 pl-12 font-mono text-foreground focus:border-primary focus:outline-none"
@@ -71,14 +72,15 @@ export function KalkulatorZakatView() {
             </div>
 
             <div>
-              <label className="mb-2 block text-xs font-bold text-primary/70">
+              <label htmlFor="zakat-investments" className="mb-2 block text-xs font-bold text-primary/70">
                 SAHAM, REKSADANA, ATAU INVESTASI LAIN
               </label>
               <div className="relative">
                 <span className="absolute top-1/2 left-4 -translate-y-1/2 font-bold text-primary">
                   Rp
                 </span>
-                <input
+                <Input
+                  id="zakat-investments"
                   type="number"
                   min="0"
                   className="w-full rounded-none border border-primary/30 bg-card p-3 pl-12 font-mono text-foreground focus:border-primary focus:outline-none"
@@ -89,14 +91,15 @@ export function KalkulatorZakatView() {
             </div>
 
             <div>
-              <label className="mb-2 block text-xs font-bold text-primary/70">
+              <label htmlFor="zakat-gold-silver" className="mb-2 block text-xs font-bold text-primary/70">
                 NILAI EMAS/PERAK SIMPANAN (BUKAN PERHIASAN DIPAKAI)
               </label>
               <div className="relative">
                 <span className="absolute top-1/2 left-4 -translate-y-1/2 font-bold text-primary">
                   Rp
                 </span>
-                <input
+                <Input
+                  id="zakat-gold-silver"
                   type="number"
                   min="0"
                   className="w-full rounded-none border border-primary/30 bg-card p-3 pl-12 font-mono text-foreground focus:border-primary focus:outline-none"

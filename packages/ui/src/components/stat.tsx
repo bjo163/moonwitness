@@ -68,3 +68,78 @@ export function Stat({
     </div>
   )
 }
+
+export interface MetricCardProps {
+  label?: string
+  title?: string
+  value: string | number
+  detail?: string
+  icon?: React.ElementType | React.ReactNode
+  trend?: string
+  href?: string
+  action?: React.ReactNode
+  variant?: StatVariant
+  className?: string
+}
+
+export function MetricCard({
+  label,
+  title,
+  value,
+  detail,
+  icon: Icon,
+  trend,
+  href,
+  action,
+  variant = "default",
+  className = "",
+}: MetricCardProps) {
+  const displayLabel = title ?? label ?? ""
+  const variantClass = VARIANT_BORDER_CLASSES[variant] || VARIANT_BORDER_CLASSES.default
+
+  const content = (
+    <div
+      className={cn(
+        "rounded-md border bg-card p-4 transition-colors text-card-foreground",
+        variantClass,
+        href && "hover:border-primary/50 cursor-pointer",
+        className
+      )}
+    >
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm font-medium text-muted-foreground">{displayLabel}</p>
+        <div className="flex items-center gap-2">
+          {action}
+          {Icon && (
+            <span className="flex size-8 items-center justify-center rounded-md border border-border bg-muted/40 text-primary">
+              {React.isValidElement(Icon)
+                ? Icon
+                : React.createElement(Icon as React.ComponentType<{ className?: string; "aria-hidden"?: string }>, {
+                    className: "size-4",
+                    "aria-hidden": "true",
+                  })}
+            </span>
+          )}
+        </div>
+      </div>
+      <p className="mt-3 text-2xl font-semibold tracking-tight text-foreground">{value}</p>
+      {(detail || trend) && (
+        <div className="mt-1 flex items-center justify-between gap-2 text-xs text-muted-foreground">
+          {detail && <span>{detail}</span>}
+          {trend && <span className="font-medium text-success">{trend}</span>}
+        </div>
+      )}
+    </div>
+  )
+
+  if (href) {
+    return (
+      <a href={href} className="block no-underline focus:outline-none">
+        {content}
+      </a>
+    )
+  }
+
+  return content
+}
+

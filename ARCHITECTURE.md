@@ -15,16 +15,14 @@ apps/web + apps/command-center
 @moon/protocol
           |
           v
-@moon/server
-NativeServer public API
-Fastify 5 internal HTTP engine
+FASTIFY API GATEWAY & INTELLIGENCE RUNTIME (@moon/server / apps/api)
+• REST / RPC Routing        • Pure Math Compute (@moon/compute)
+• Redis Hot Caching         • pgvector Semantic RAG Retrieval
+• Public Fallback Service   • Real-Time SSE Telemetry
           |
           v
-DOMAIN + APPLICATION SERVICES
-@moon/witness + other addons + @moon/orm
-          |
-          v
-PostgreSQL / Redis / application infrastructure
+CANONICAL MASTER RELATIONAL DATASTORE
+PostgreSQL 18 + pgvector (postgres:18-pgvector)
 ```
 
 The canonical corpus is maintained separately by:
@@ -33,7 +31,7 @@ The canonical corpus is maintained separately by:
 bjo163/moonwitness-corpus
 ```
 
-The application consumes versioned corpus releases through `@moon/witness` ingestion and represents them in the canonical Witness domain graph.
+The application consumes versioned corpus releases through `@moon/witness` ingestion and registers them directly into the canonical Witness domain graph mastered in PostgreSQL 18 + pgvector.
 
 ## 2. Source and ownership boundaries
 
@@ -45,9 +43,13 @@ Owns canonical corpus authoring, upstream synchronization, source metadata, corp
 
 Owns source-aware ingestion, normalization/validation, application knowledge graph, source/artifact/snapshot records, passages/content, provenance relationships, evidence, and research-domain integration.
 
-### MoonWitness database
+### `PostgreSQL 18 + pgvector (postgres:18-pgvector)`
 
-The database is operational persistence and query projection of the application domain. It is not the editorial source of the corpus.
+The single canonical relational source of truth for all domain entities, sacred knowledge graph records (`moon.witness.*`), Mizan ethical balance evaluations (`moon.mizan.*`), disaster & myth correlations (`moon.disaster.*`), user security (`vx.user`), and enterprise operational modules (projects, tasks, accounting, stock). It replaces duplicate local relational tables.
+
+### `Fastify Gateway & Compute Engine (@moon/server)`
+
+Owns high-speed API routing, authentication token validation, public request caching, pure mathematical celestial computations (`@moon/compute`), and pgvector RAG vector retrieval. It does not maintain competing duplicate relational models.
 
 ### `apps/web`
 
@@ -74,7 +76,10 @@ immutable release / pinned revision
         +--> tradition / research graph where applicable
         |
         v
-MoonWitness API
+PostgreSQL 18 + pgvector (moon.witness.*)
+        |
+        v
+Fastify API Gateway (Hot Read Cache)
    +----+----+
    |         |
    v         v
@@ -89,19 +94,19 @@ Web and Command Center never treat raw corpus files as a parallel source of trut
 HTTP / RPC / Worker
         |
         v
-Application Service / Domain Operation
+Fastify Gateway (@moon/server)
         |
         v
-Canonical Model
+@moon/protocol Zod Contract Validation
         |
         v
-Moon ORM transaction + authorization
+Moon ORM (Native Transaction)
         |
         v
-PostgreSQL
+PostgreSQL 18 + pgvector (postgres:18-pgvector)
 ```
 
-Corpus ingestion uses the same application boundary through `@moon/witness`.
+Corpus ingestion uses the same application boundary through `@moon/witness` into PostgreSQL 18 + pgvector.
 
 ## 5. Enterprise UI architecture
 
@@ -285,10 +290,44 @@ source data       -> moonwitness-corpus
 application graph -> @moon/witness
 transport         -> @moon/server / Fastify internally
 API contract      -> @moon/protocol
-persistence       -> @moon/orm + PostgreSQL
+master store      -> PostgreSQL 18 + pgvector (postgres:18-pgvector)
+vector search     -> pgvector 0.8+ via @moon/witness RAG
+pure compute      -> @moon/compute (isomorphic mathematical engine)
 public UI         -> apps/web
 admin UI          -> apps/command-center
 shared UI         -> @workspace/ui
 ```
 
 No parallel implementation should silently compete with these owners.
+
+## 21. Polyglot monorepo architecture & contracts
+
+The repository supports an enterprise polyglot architecture enabling compute-intensive capabilities to be implemented in their most effective runtime (TypeScript for application web/admin/BFF, Python for astronomical ephemeris and AI/NLP):
+
+```text
+moonwitness/
+├── apps/
+│   ├── web/                 # Public Next.js 16 Web application (Port 3000)
+│   ├── command-center/      # Operations & administrative portal (Port 3001)
+│   └── api/                 # Fastify / NativeServer Gateway (Port 4000)
+├── services/
+│   ├── celestial-engine/    # Python 3.12 FastAPI astronomical service (Port 8001)
+│   │   ├── src/ephemeris.py # Lunar phase & orbital parameters
+│   │   └── src/astronomy.py # Qibla Great Circle & Hilal MABIMS/Odeh criteria
+│   └── ai-agent/            # Python 3.12 FastAPI AI service (Port 8002)
+│       └── src/search.py    # Arabic text normalization & BM25 ranking
+├── packages/                # 33 shared TypeScript packages (protocol, client, UI, ORM)
+├── contracts/
+│   └── openapi/             # Universal OpenAPI 3.0 contract artifact
+└── docs/                    # Structured enterprise documentation (architecture, roadmap)
+```
+
+### Universal contract flow
+1. `@moon/protocol` defines the canonical source of truth for endpoints, models, and schemas in TypeScript with Zod.
+2. `pnpm contracts:export` exports `contracts/openapi/openapi.json` from the server registry.
+3. `pnpm contracts:verify` validates that committed contracts match code with zero drift (blocking in CI and release pre-flight).
+4. `pnpm contracts:generate:python` derives strongly-typed Pydantic v2 models directly into `services/celestial-engine/src/models/contracts.py` and `services/ai-agent/src/models/contracts.py`.
+5. `apps/api` transparently proxies requests to `services/celestial-engine` and `services/ai-agent` with in-memory caching.
+6. `@moon/client` provides typed frontend methods (`fetchQiblaDirection`, `fetchHilalVisibility`, `searchSemanticPassages`) consumed by `apps/web`.
+
+

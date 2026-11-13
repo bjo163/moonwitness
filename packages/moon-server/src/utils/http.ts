@@ -130,6 +130,14 @@ export function resolveCorsOrigin(origin: string | undefined, config?: CorsConfi
   }
 
   if (effective.allowedOrigins.length === 0) {
+    if (process.env.NODE_ENV !== 'production') {
+      try {
+        const url = new URL(origin)
+        if (url.hostname === 'localhost' || url.hostname === '127.0.0.1' || url.hostname === '0.0.0.0') {
+          return origin
+        }
+      } catch {}
+    }
     return null
   }
 

@@ -17,9 +17,16 @@
 
 ## 🎨 Design Philosophy: Canonical Enterprise SaaS (shadcn/ui & Tailwind CSS v4)
 
-`@workspace/ui` enforces the **Enterprise Design System Bible** with standard shadcn/ui ergonomics, high-contrast accessible surfaces (`bg-background`, `bg-card`, `border-border`), standard rounded containers (`rounded-xl`, `rounded-2xl`), and crisp Geist/JetBrains Mono/Amiri typography.
+`@workspace/ui` enforces the **Enterprise Design System Bible** with standard shadcn/ui ergonomics, high-contrast accessible surfaces (`bg-background`, `bg-card`, `border-border`), compact containers (`rounded-md`) without default shadows, and crisp Geist/JetBrains Mono/Amiri typography.
+
+Feature code should import shared components from the public `@workspace/ui`
+barrel. Package internals use relative imports; published subpaths such as
+`@workspace/ui/components/*`, `@workspace/ui/hooks/*`, and `@workspace/ui/lib/*`
+are reserved for cases where a focused import is required.
 
 ---
+
+See [Research UI guidelines](../../docs/RESEARCH-UI.md) for typography, spacing, reading width, and accessibility. Prefer text sections and separators over nested cards.
 
 ## 📦 Component Inventory
 
@@ -36,7 +43,7 @@
 - **`<Sidebar />` & `<Topbar />`**: Standard navigation frames with role badges and ThemeToggle.
 - **`<Navbar />`**: Primary portal header with dynamic command groups.
 - **`<CommandPalette />`**: Universal `Cmd+K` / `Ctrl+K` modal indexing navigation mesh, Quran Surahs, and Hadith books.
-- **`<Panel />` & `<PanelHeader />`**: Standard container cards with rounded-xl corners and semantic variants.
+- **`<Panel />` & `<PanelHeader />`**: Compact containers with rounded-md corners and semantic variants.
 - **`<Modal />` & `<Dialog />`**: High-contrast accessible dialogs with smooth backdrops.
 - **`<Button />`**: Standard shadcn action buttons with smooth hover states.
 - **`<ThemeToggle />`**: Light / Dark / System mode switcher.

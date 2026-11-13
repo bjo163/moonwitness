@@ -82,7 +82,7 @@ export function KhidraCommandWidget() {
   }
 
   return (
-    <div className="bg-background border-success/30 flex h-[300px] flex-col gap-4 rounded-xl border-2 p-4 shadow-sm md:flex-row lg:col-span-5">
+    <div className="flex h-[300px] flex-col gap-4 rounded-md border border-border bg-card p-4 md:flex-row lg:col-span-5">
       <div className="flex w-24 shrink-0 flex-col items-center justify-center">
         <div className="bg-background border-success/50 relative h-24 w-24 overflow-hidden rounded-lg border">
           <img
@@ -90,13 +90,12 @@ export function KhidraCommandWidget() {
             src="/assets/mod_khidra.png"
             className="h-full w-full object-cover opacity-90 mix-blend-screen"
           />
-          <div className="from-background absolute inset-0 bg-gradient-to-t to-transparent opacity-50" />
         </div>
         <div className="mt-2 text-center">
-          <div className="text-[10px] font-black tracking-widest text-foreground uppercase">
-            AI ADVISOR <span className="text-success">KHIDRA</span>
+          <div className="text-sm font-semibold text-foreground">
+            AI advisor <span className="text-success">Khidra</span>
           </div>
-          <div className="text-success/70 mt-0.5 text-[7px] uppercase">
+          <div className="text-success/70 mt-0.5 text-xs">
             Knowledge Intelligence
           </div>
         </div>
@@ -105,7 +104,7 @@ export function KhidraCommandWidget() {
       <div className="border-success/20 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border bg-card">
         <div
           ref={chatRef}
-          className="hide-scrollbar flex-1 space-y-3 overflow-y-auto p-3 font-mono text-[9px] leading-relaxed"
+          className="hide-scrollbar flex-1 space-y-3 overflow-y-auto p-3 font-sans text-sm leading-relaxed"
         >
           {messages.map((msg) => (
             <div
@@ -143,12 +142,14 @@ export function KhidraCommandWidget() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             placeholder="Ask Khidra..."
-            className="border-success/30 text-success placeholder:text-success/30 focus:border-success flex-1 rounded border bg-card px-2 py-1.5 font-mono text-[10px] focus:outline-none"
+            className="border-border text-foreground placeholder:text-muted-foreground focus:border-ring flex-1 rounded-md border bg-background px-3 py-2 text-sm focus:outline-none"
           />
           <button
+            type="button"
             onClick={handleSend}
             disabled={isLoading || !input.trim()}
-            className="bg-success/20 text-success border-success/50 hover:bg-success/40 flex items-center justify-center rounded border px-3 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+            aria-label="Send message"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center rounded-md border border-primary px-3 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Send className="h-3 w-3" />
           </button>

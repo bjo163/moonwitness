@@ -24,6 +24,7 @@ export {
 
 // ── WITNESS CONTRACTS (Scripture, Hadith, Astronomy, Engine) ──
 export * from './contracts/witness.js'
+export * from './contracts/mizan.js'
 
 // ── AUTH CONTRACTS (Login, Session, Clearance) ────────────────
 export * from './contracts/auth.js'

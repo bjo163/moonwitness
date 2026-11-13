@@ -46,3 +46,27 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
 
   return [storedValue, setValue] as const
 }
+
+export function safeGetStorage(key: string, fallback = ""): string {
+  if (typeof window === "undefined") return fallback
+  try {
+    return window.localStorage.getItem(key) ?? fallback
+  } catch {
+    return fallback
+  }
+}
+
+export function safeSetStorage(key: string, value: string): void {
+  if (typeof window === "undefined") return
+  try {
+    window.localStorage.setItem(key, value)
+  } catch {}
+}
+
+export function safeRemoveStorage(key: string): void {
+  if (typeof window === "undefined") return
+  try {
+    window.localStorage.removeItem(key)
+  } catch {}
+}
+

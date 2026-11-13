@@ -1,7 +1,8 @@
 "use client"
 
 import React from "react"
-import { Database, Loader2, XCircle, RefreshCw } from "lucide-react"
+import { AlertCircle, Inbox, Loader2, RefreshCw } from "lucide-react"
+import { cn } from "@workspace/ui/lib/utils"
 
 const DEFAULT_LOADING_LINES = 3
 const BASE_SKELETON_WIDTH = 85
@@ -9,76 +10,80 @@ const SKELETON_STEP_WIDTH = 12
 const SKELETON_DELAY_SEC = 0.15
 
 export function EmptyState({
-  title = "NO TELEMETRY DATA",
-  description = "Waiting for satellite synchronization or signal connection...",
-  icon: Icon = Database,
+  title = "No data available",
+  description = "There are no records to display at this time.",
+  icon: Icon = Inbox,
+  action,
+  className,
 }: {
   title?: string
   description?: string
   icon?: React.ElementType
+  action?: React.ReactNode
+  className?: string
 }) {
   return (
-    <div className="rounded-xl border border-border/40 bg-card bg-background flex min-h-[180px] flex-col items-center justify-center border border-primary/20 p-8 text-center">
-      <div className="rounded-md mb-3 flex h-12 w-12 items-center justify-center border border-primary/40 bg-primary/10 text-primary">
-        <Icon className="h-6 w-6 animate-pulse text-primary" />
+    <div
+      className={cn(
+        "flex min-h-[180px] flex-col items-center justify-center rounded-md border border-border bg-card p-8 text-center text-card-foreground",
+        className
+      )}
+    >
+      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-md border border-border bg-muted/50 text-muted-foreground">
+        <Icon className="h-5 w-5" aria-hidden="true" />
       </div>
-      <h4 className="mb-1 text-sm font-black tracking-widest text-foreground uppercase">
-        // {title}
-      </h4>
-      <p className="max-w-sm font-mono text-[10px] text-primary">
+      <h3 className="text-sm font-semibold text-foreground">
+        {title}
+      </h3>
+      <p className="mt-1 max-w-sm text-xs leading-relaxed text-muted-foreground">
         {description}
       </p>
-      <div className="text-success mt-4 flex items-center gap-1.5 font-mono text-[10px]">
-        <span className="bg-success h-1.5 w-1.5 animate-ping rounded-full" />
-        <span>RECONNECTING TELEMETRY BUS...</span>
-      </div>
+      {action && <div className="mt-4">{action}</div>}
     </div>
   )
 }
 
 export function LoadingState({
-  title = "SYNCHRONIZING TELEMETRY",
-  description = "Connecting to satellite uplink...",
+  title = "Loading data",
+  description = "Retrieving information from sources...",
   lines = DEFAULT_LOADING_LINES,
+  className,
 }: {
   title?: string
   description?: string
   lines?: number
+  className?: string
 }) {
   return (
     <div
-      className="rounded-xl border border-border/40 bg-card bg-background flex flex-col gap-4 border border-primary/20 p-6"
+      className={cn(
+        "flex flex-col gap-4 rounded-md border border-border bg-card p-6 text-card-foreground",
+        className
+      )}
       role="status"
       aria-busy="true"
       aria-label={title}
     >
       <div className="flex items-center gap-3">
         <Loader2
-          className="h-5 w-5 shrink-0 animate-spin text-primary"
+          className="h-4 w-4 shrink-0 animate-spin text-primary"
           aria-hidden="true"
         />
-        <div className="flex flex-col gap-1">
-          <span className="text-[10px] font-black tracking-widest text-primary uppercase">
-            // {title}
+        <div className="flex flex-col">
+          <span className="text-xs font-semibold text-foreground">
+            {title}
           </span>
-          <span className="font-mono text-[9px] text-primary">
+          <span className="text-xs text-muted-foreground">
             {description}
           </span>
         </div>
-        <div className="text-success ml-auto flex shrink-0 items-center gap-1 font-mono text-[8px]">
-          <span
-            className="bg-success h-1.5 w-1.5 animate-pulse rounded-full"
-            aria-hidden="true"
-          />
-          <span>LIVE</span>
-        </div>
       </div>
 
-      <div className="space-y-2.5">
+      <div className="space-y-2 pt-2">
         {Array.from({ length: lines }).map((_, i) => (
-          <div key={i} className="flex gap-2">
+          <div key={i} className="flex">
             <div
-              className="h-3 animate-pulse border border-primary/15 bg-primary/10"
+              className="h-2.5 animate-pulse rounded-sm bg-muted"
               style={{
                 width: `${BASE_SKELETON_WIDTH - i * SKELETON_STEP_WIDTH}%`,
                 animationDelay: `${i * SKELETON_DELAY_SEC}s`,
@@ -91,80 +96,161 @@ export function LoadingState({
   )
 }
 
-export function SkeletonCard() {
+export function SkeletonCard({ className }: { className?: string }) {
   return (
     <div
-      className="rounded-xl border border-border/40 bg-card bg-background flex min-h-[160px] flex-col gap-3 border border-primary/15 p-5"
+      className={cn(
+        "flex min-h-[140px] flex-col justify-between rounded-md border border-border bg-card p-5 text-card-foreground",
+        className
+      )}
       aria-hidden="true"
     >
-      <div className="flex justify-between">
-        <div className="h-4 w-20 animate-pulse border border-primary/15 bg-primary/10" />
-        <div className="bg-primary/08 h-4 w-12 animate-pulse" />
+      <div className="flex items-center justify-between">
+        <div className="h-3 w-24 animate-pulse rounded-sm bg-muted" />
+        <div className="h-4 w-4 animate-pulse rounded-sm bg-muted" />
       </div>
-      <div className="flex items-center gap-2">
-        <div className="h-9 w-9 shrink-0 animate-pulse bg-primary/10" />
-        <div className="h-4 w-36 animate-pulse bg-primary/12" />
+      <div className="space-y-2 py-3">
+        <div className="h-6 w-32 animate-pulse rounded-sm bg-muted" />
+        <div className="h-2.5 w-48 animate-pulse rounded-sm bg-muted/60" />
       </div>
-      <div className="mt-1 space-y-1.5">
-        <div className="bg-primary/08 h-2.5 w-full animate-pulse" />
-        <div
-          className="bg-primary/08 h-2.5 w-4/5 animate-pulse"
-          style={{ animationDelay: "0.1s" }}
-        />
-      </div>
-      <div className="mt-auto flex justify-between border-t border-primary/10 pt-3">
-        <div className="bg-success/12 h-3 w-16 animate-pulse" />
-        <div className="h-3 w-10 animate-pulse bg-primary/10" />
+      <div className="border-t border-border pt-3">
+        <div className="h-2.5 w-20 animate-pulse rounded-sm bg-muted/40" />
       </div>
     </div>
   )
 }
 
 export function ErrorState({
-  title = "SIGNAL LOST",
-  description = "Unable to retrieve telemetry. Please retry the operation.",
+  title = "Unable to load data",
+  description = "A connection or source error occurred. Please try again.",
   onRetry,
   errorCode,
+  className,
 }: {
   title?: string
   description?: string
   onRetry?: () => void
   errorCode?: string
+  className?: string
 }) {
   return (
     <div
-      className="rounded-xl border border-border/40 bg-card border-danger/30 bg-background flex min-h-[180px] flex-col items-center justify-center gap-4 border p-8 text-center"
-      style={{ boxShadow: "0 0 20px rgba(255,0,85,0.08)" }}
+      className={cn(
+        "flex min-h-[180px] flex-col items-center justify-center gap-3 rounded-md border border-destructive/30 bg-destructive/5 p-8 text-center",
+        className
+      )}
       role="alert"
       aria-live="assertive"
     >
-      <div className="border-danger/40 bg-danger/10 rounded-md flex h-12 w-12 items-center justify-center border">
-        <XCircle className="text-danger h-6 w-6" aria-hidden="true" />
+      <div className="flex h-10 w-10 items-center justify-center rounded-md border border-destructive/30 bg-destructive/10 text-destructive">
+        <AlertCircle className="h-5 w-5" aria-hidden="true" />
       </div>
 
       <div className="space-y-1">
-        <h4 className="text-danger text-sm font-black tracking-widest uppercase">
-          // {title}
-        </h4>
+        <h3 className="text-sm font-semibold text-destructive">
+          {title}
+        </h3>
         {errorCode && (
-          <p className="text-danger/60 font-mono text-[8px] font-bold">
-            ERR: {errorCode}
+          <p className="font-mono text-xs text-muted-foreground">
+            Error code: {errorCode}
           </p>
         )}
-        <p className="max-w-sm font-mono text-[10px] leading-relaxed text-primary">
+        <p className="max-w-sm text-xs leading-relaxed text-muted-foreground">
           {description}
         </p>
       </div>
 
       {onRetry && (
         <button
+          type="button"
           onClick={onRetry}
-          className="btn-primary btn-primary-ghost border-danger/40 text-danger hover:border-danger hover:bg-danger/10 focus-visible:ring-danger flex items-center gap-2 px-4 py-2 text-xs  focus-visible:ring-2 focus-visible:outline-none"
+          className="mt-2 inline-flex items-center gap-2 rounded-md border border-border bg-card px-3.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-accent"
         >
           <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
-          <span>[ RETRY CONNECTION ]</span>
+          <span>Retry</span>
         </button>
       )}
     </div>
   )
 }
+
+export type StatusNoticeVariant =
+  | "destructive"
+  | "error"
+  | "success"
+  | "warning"
+  | "info"
+  | "neutral"
+
+export interface StatusNoticeProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
+  message?: React.ReactNode
+  variant?: StatusNoticeVariant
+  title?: React.ReactNode
+  action?: React.ReactNode
+  icon?: React.ReactNode
+}
+
+const statusNoticeStyles: Record<StatusNoticeVariant, string> = {
+  destructive: "border-destructive/30 bg-destructive/10 text-destructive",
+  error: "border-destructive/30 bg-destructive/10 text-destructive",
+  success: "border-success/30 bg-success/10 text-success",
+  warning: "border-warning/30 bg-warning/10 text-warning",
+  info: "border-info/30 bg-info/10 text-info",
+  neutral: "border-border bg-muted/60 text-muted-foreground",
+}
+
+export function StatusNotice({
+  message,
+  title,
+  variant = "info",
+  action,
+  icon,
+  children,
+  className,
+  role,
+  ...props
+}: StatusNoticeProps) {
+  const style = statusNoticeStyles[variant] || statusNoticeStyles.info
+  const content = children ?? message
+  const computedRole = role ?? (variant === "destructive" || variant === "error" ? "alert" : "status")
+
+  return (
+    <div
+      role={computedRole}
+      className={cn(
+        "flex items-start justify-between gap-3 rounded-md border p-3 text-sm",
+        style,
+        className
+      )}
+      {...props}
+    >
+      <div className="flex items-start gap-2.5">
+        {icon && <span className="mt-0.5 shrink-0">{icon}</span>}
+        <div>
+          {title && <div className="font-semibold text-foreground">{title}</div>}
+          {content && <div className={cn(title && "mt-0.5 text-xs opacity-90")}>{content}</div>}
+        </div>
+      </div>
+      {action && <div className="shrink-0">{action}</div>}
+    </div>
+  )
+}
+
+export function ErrorNotice({
+  message = "Content is temporarily unavailable.",
+  className,
+  children,
+}: {
+  message?: React.ReactNode
+  className?: string
+  children?: React.ReactNode
+}) {
+  return (
+    <StatusNotice
+      variant="destructive"
+      message={children ?? message}
+      className={className}
+    />
+  )
+}
+

@@ -1,22 +1,23 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef } from "react"
+import { safeGetStorage, safeSetStorage } from "./use-local-storage"
 
 export interface UseResourceOptions<T> {
-  /** Initial fallback data */
-  initialData?: T
-  /** Whether to fetch immediately on component mount (default: true) */
+  /** Optional initial data before fetch completes */
+  initialData?: T | null
+  /** Auto-fetch on mount. Defaults to true */
   autoFetch?: boolean
   /** Dependencies that trigger a refetch when changed */
   deps?: any[]
-  /** Optional polling interval in milliseconds */
+  /** Polling interval in ms. Set to 0 or omit to disable polling */
   pollIntervalMs?: number
+  /** Optional localStorage key for persistent offline fallback */
+  storageKey?: string
   /** Callback fired on successful fetch */
   onSuccess?: (data: T) => void
   /** Callback fired on error */
   onError?: (error: Error) => void
-  /** Optional localStorage key for persistent offline fallback */
-  storageKey?: string
 }
 
 export interface UseResourceReturn<T> {
@@ -25,14 +26,14 @@ export interface UseResourceReturn<T> {
   isRefetching: boolean
   error: Error | null
   refetch: () => Promise<T | null>
-  mutate: (newData: T | ((prev: T | null) => T), shouldPersist?: boolean) => void
+  mutate: (newData: T | ((prev: T | null) => T), persist?: boolean) => void
 }
 
 /**
- * ◈ useResource — Universal Zero-Boilerplate Data Fetching Hook
+ * ◈ ENTERPRISE RESOURCE HOOK
  *
- * Replaces manual useEffect + useState + try/catch boilerplate across all views.
- * Provides: auto-fetching, background revalidation, offline caching, and optimistic mutations.
+ * SWR-like lightweight resource fetcher with optional localStorage caching,
+ * background polling, manual mutation, and error boundaries.
  */
 export function useResource<T>(
   fetcher: () => Promise<T>,
@@ -42,20 +43,20 @@ export function useResource<T>(
     initialData = null,
     autoFetch = true,
     deps = [],
-    pollIntervalMs,
+    pollIntervalMs = 0,
+    storageKey,
     onSuccess,
     onError,
-    storageKey,
   } = options
 
   const [data, setData] = useState<T | null>(() => {
     if (initialData !== null) return initialData
-    if (storageKey && typeof window !== "undefined") {
+    if (storageKey) {
       try {
-        const saved = localStorage.getItem(storageKey)
+        const saved = safeGetStorage(storageKey)
         if (saved) return JSON.parse(saved) as T
       } catch (e) {
-        console.warn(`[useResource] Failed to read from localStorage[${storageKey}]:`, e)
+        console.warn(`[useResource] Failed to read from storage[${storageKey}]:`, e)
       }
     }
     return null
@@ -81,11 +82,11 @@ export function useResource<T>(
         const result = await fetcherRef.current()
         setData(result)
 
-        if (storageKey && typeof window !== "undefined") {
+        if (storageKey) {
           try {
-            localStorage.setItem(storageKey, JSON.stringify(result))
+            safeSetStorage(storageKey, JSON.stringify(result))
           } catch (e) {
-            console.warn(`[useResource] Failed to save to localStorage[${storageKey}]:`, e)
+            console.warn(`[useResource] Failed to save to storage[${storageKey}]:`, e)
           }
         }
 
@@ -125,11 +126,11 @@ export function useResource<T>(
     (newData: T | ((prev: T | null) => T), shouldPersist = true) => {
       setData((prev) => {
         const next = typeof newData === "function" ? (newData as (prev: T | null) => T)(prev) : newData
-        if (shouldPersist && storageKey && typeof window !== "undefined") {
+        if (shouldPersist && storageKey) {
           try {
-            localStorage.setItem(storageKey, JSON.stringify(next))
+            safeSetStorage(storageKey, JSON.stringify(next))
           } catch (e) {
-            console.warn(`[useResource] Failed to persist mutation to localStorage[${storageKey}]:`, e)
+            console.warn(`[useResource] Failed to persist mutation to storage[${storageKey}]:`, e)
           }
         }
         return next

@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useLocalStorage } from "@workspace/hooks"
+import { Checkbox } from "@workspace/ui"
 import { AccountPage } from "./account-view"
 
 export function PreferencesView() {
@@ -15,8 +16,7 @@ function PreferenceToggle({ id, label, checked, onChange }: { id: string; label:
   return (
     <label htmlFor={id} className="flex cursor-pointer items-center justify-between gap-4 rounded-md border border-border bg-card p-4 text-sm hover:border-primary/40 transition-colors">
       <span>{label}</span>
-      <input id={id} type="checkbox" checked={checked} onChange={onChange} className="h-5 w-5 rounded border-input text-primary focus:ring-2 focus:ring-ring" />
+      <Checkbox id={id} checked={checked} onCheckedChange={() => onChange()} aria-label={label} />
     </label>
   )
 }
-

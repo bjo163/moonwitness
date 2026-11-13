@@ -43,13 +43,13 @@ if [[ ${#COMPOSE[@]} -gt 0 ]]; then
     node cli/mw.mjs prod-check
 
     echo "▶ Step 6/7: Building deployable artifacts and verifying database state..."
-    dc build api web command-center
+    dc build api celestial-engine ai-agent web command-center
     dc up -d postgres redis
     dc run --rm api pnpm --filter=api db:install
     dc run --rm api pnpm --filter=api db:verify
 
     echo "▶ Step 7/7: Starting verified production services..."
-    dc up -d api command-center web
+    dc up -d api celestial-engine ai-agent command-center web
     dc ps
     echo "✓ Docker Compose deployment completed with verified migrations."
 elif command -v pm2 >/dev/null 2>&1; then

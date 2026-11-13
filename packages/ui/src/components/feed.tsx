@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import { ArrowRight, BookOpen, Search } from "lucide-react"
+import { Button } from "./button"
 
 type FeedItem = {
   id: string
@@ -92,9 +93,9 @@ export function Feed({ feed }: KnowledgeFeedProps) {
         ))}
       </div>
 
-      <button className="mt-4 flex items-center justify-center gap-1.5 border-t border-border pt-3 font-sans text-xs font-medium text-primary hover:underline">
+      <Button type="button" variant="ghost" className="mt-4 flex items-center justify-center gap-1.5 border-t border-border pt-3 font-sans text-xs font-medium text-primary hover:underline">
         View All Updates <ArrowRight className="h-3 w-3" />
-      </button>
+      </Button>
     </div>
   )
 }

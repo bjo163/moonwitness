@@ -1,0 +1,73 @@
+{
+  "activityTypes": [
+    { "name": "To-Do / Action Item", "summary": "General action item or operational task", "icon": "CheckSquare", "delayCount": 1, "delayUnit": "days" },
+    { "name": "Observatory Briefing", "summary": "Observation briefing and telescope setup", "icon": "Compass", "delayCount": 0, "delayUnit": "days" },
+    { "name": "Pentashih Review Meeting", "summary": "Sacred text verification session", "icon": "BookOpen", "delayCount": 3, "delayUnit": "days" },
+    { "name": "RFC Governance Ballot", "summary": "Change advisory board decision voting", "icon": "Shield", "delayCount": 7, "delayUnit": "days" },
+    { "name": "Security Audit Check", "summary": "Periodic credential and permission review", "icon": "Key", "delayCount": 14, "delayUnit": "days" },
+    { "name": "Ephemeris Reconciliation", "summary": "Comparison between calculation and observations", "icon": "Activity", "delayCount": 30, "delayUnit": "days" },
+    { "name": "Atmospheric Seeing Calibration", "summary": "DIMM instrument sensor zero-point tuning", "icon": "Wind", "delayCount": 2, "delayUnit": "days" },
+    { "name": "Sidang Isbat Preparation", "summary": "Compilation of all regional sighting testimonies for ministerial council", "icon": "Users", "delayCount": 1, "delayUnit": "days" }
+  ],
+  "activities": [
+    {
+      "resModel": "pj.project",
+      "activityTypeName": "Observatory Briefing",
+      "summary": "Monthly Crescent Sighting Coordination Meeting",
+      "note": "Prepare optical sensors and align Bosscha telescope with Kandilli Observatory feed.",
+      "delayDays": 0,
+      "state": "planned"
+    },
+    {
+      "resModel": "wx.scripture",
+      "activityTypeName": "Pentashih Review Meeting",
+      "summary": "Review Surah Al-Kahf Transliteration Alignment",
+      "note": "Ensure verse 1-10 orthography strictly follows the Uthmani standard decree.",
+      "delayDays": 7,
+      "state": "planned"
+    },
+    {
+      "resModel": "pj.project",
+      "activityTypeName": "Ephemeris Reconciliation",
+      "summary": "Quarterly Delta-T & Lunar Nutation Review",
+      "note": "Cross-check Moon altitude calculation against JPL DE440 ephemeris output.",
+      "delayDays": 14,
+      "state": "planned"
+    },
+    {
+      "resModel": "pj.project",
+      "activityTypeName": "Atmospheric Seeing Calibration",
+      "summary": "All-Sky Camera Dome Optical Inspection",
+      "note": "Check sensor optical glass clean status and recalibrate dark frame bias subtraction.",
+      "delayDays": 3,
+      "state": "planned"
+    }
+  ],
+  "messages": [
+    {
+      "body": "Sistem observasi optik berhasil disinkronkan dengan data JPL Horizons (VSOP87).",
+      "resModel": "pj.project",
+      "messageType": "notification"
+    },
+    {
+      "body": "Pentashihan digital Surah Al-Mulk ayat 1-30 telah selesai diverifikasi oleh dewan pakar.",
+      "resModel": "wx.scripture",
+      "messageType": "comment"
+    },
+    {
+      "body": "Stasiun OIF UMSU Medan melaporkan seeing atmosferik 1.2 arcsec pada altitude 15 derajat.",
+      "resModel": "pj.project",
+      "messageType": "comment"
+    },
+    {
+      "body": "Koneksi satelit optik antara Bosscha dan Samarkand teruji stabil dengan latensi <85ms.",
+      "resModel": "pj.project",
+      "messageType": "notification"
+    },
+    {
+      "body": "Integritas sanad hadits riwayat Abu Dawud no. 2320 telah diverifikasi muttashil.",
+      "resModel": "wx.scripture",
+      "messageType": "comment"
+    }
+  ]
+}

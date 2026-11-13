@@ -1,0 +1,59 @@
+{
+  "locations": [
+    { "name": "Central Vault / Storage", "usage": "internal" },
+    { "name": "Field Observation Bay", "usage": "internal" },
+    { "name": "Optical Calibration Lab", "usage": "internal" },
+    { "name": "Cleanroom Class 1000 Assembly", "usage": "internal" },
+    { "name": "Cryogenic Sensor Testing Chamber", "usage": "internal" },
+    { "name": "Transit / Dispatch Staging", "usage": "transit" },
+    { "name": "Customers / External", "usage": "customer" },
+    { "name": "Suppliers / Vendors", "usage": "supplier" },
+    { "name": "Decommissioned / Scrap Bin", "usage": "inventory" },
+    { "name": "Mobile Hilal Expedition Van #1", "usage": "internal" },
+    { "name": "Mobile Hilal Expedition Van #2", "usage": "internal" }
+  ],
+  "warehouses": [
+    { "code": "MW-MAIN", "name": "MoonWitness Main Observatory Warehouse (Bosscha)", "loc": "Central Vault / Storage" },
+    { "code": "MW-FIELD", "name": "MoonWitness Field Station Depot (Timau)", "loc": "Field Observation Bay" },
+    { "code": "MW-LAB", "name": "MoonWitness Calibration & Optics Lab", "loc": "Optical Calibration Lab" },
+    { "code": "MW-EXPED", "name": "MoonWitness Mobile Expedition Logistics", "loc": "Mobile Hilal Expedition Van #1" }
+  ],
+  "pickings": [
+    {
+      "name": "WH/OUT/2026/0001",
+      "loc": "Central Vault / Storage",
+      "destLoc": "Field Observation Bay",
+      "state": "draft"
+    },
+    {
+      "name": "WH/INT/2026/0002",
+      "loc": "Field Observation Bay",
+      "destLoc": "Optical Calibration Lab",
+      "state": "confirmed"
+    },
+    {
+      "name": "WH/DISP/2026/0003",
+      "loc": "Central Vault / Storage",
+      "destLoc": "Customers / External",
+      "state": "draft"
+    },
+    {
+      "name": "WH/EXP/2026/0004",
+      "loc": "Central Vault / Storage",
+      "destLoc": "Mobile Hilal Expedition Van #1",
+      "state": "confirmed"
+    },
+    {
+      "name": "WH/CAL/2026/0005",
+      "loc": "Optical Calibration Lab",
+      "destLoc": "Cleanroom Class 1000 Assembly",
+      "state": "confirmed"
+    },
+    {
+      "name": "WH/IN/2026/0006",
+      "loc": "Suppliers / Vendors",
+      "destLoc": "Transit / Dispatch Staging",
+      "state": "draft"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import { createCtx, getModel, SUPERUSER_ID } from '@moon/orm'
+import { createCtx, getModel, SUPERUSER_ID, loadJsonSeed } from '@moon/orm'
 
 export async function loadDemoData() {
   const PxRequest = getModel('px.request')
@@ -10,8 +10,15 @@ export async function loadDemoData() {
 
   const env = createCtx(SUPERUSER_ID, {}, getModel)
 
+  const jsonSeed = loadJsonSeed<{
+    requests?: { method: string; path: string; latencyMs: number; statusCode: number; cacheStatus: string }[]
+    caches?: { cacheKey: string; hitCount: number; missCount: number; avgLatencyMs: number; ttlSeconds: number }[]
+    queries?: { model: string; operation: string; executionMs: number; isSlow: boolean; recordCount: number }[]
+    widgets?: { name: string; widgetType: string; model: string; metricField: string; aggregation: string; accentColor: string; sequence: number; active: boolean }[]
+  }>('performance')
+
   // ── 1. HTTP Request Telemetry ──
-  const requestSeeds = [
+  const requestSeeds = jsonSeed?.requests || [
     { method: 'GET', path: '/api/witness/scriptures', latencyMs: 14.2, statusCode: 200, cacheStatus: 'HIT' },
     { method: 'GET', path: '/api/witness/hadiths', latencyMs: 18.5, statusCode: 200, cacheStatus: 'HIT' },
     { method: 'GET', path: '/api/observatory/moon-phase', latencyMs: 3.1, statusCode: 200, cacheStatus: 'MISS' },
@@ -28,7 +35,7 @@ export async function loadDemoData() {
   }
 
   // ── 2. Cache Performance ──
-  const cacheSeeds = [
+  const cacheSeeds = jsonSeed?.caches || [
     { cacheKey: 'witness:scriptures:all', hitCount: 1420, missCount: 45, avgLatencyMs: 1.2, ttlSeconds: 300 },
     { cacheKey: 'witness:hadith:bukhari', hitCount: 890, missCount: 22, avgLatencyMs: 2.1, ttlSeconds: 600 },
     { cacheKey: 'cab:summary:metrics', hitCount: 340, missCount: 18, avgLatencyMs: 0.8, ttlSeconds: 60 }
@@ -41,7 +48,7 @@ export async function loadDemoData() {
   }
 
   // ── 3. Query Benchmarks ──
-  const querySeeds = [
+  const querySeeds = jsonSeed?.queries || [
     { model: 'wx.scripture.verse', operation: 'SEARCH', executionMs: 8.4, isSlow: false, recordCount: 10 },
     { model: 'cab.change', operation: 'SELECT', executionMs: 4.2, isSlow: false, recordCount: 4 },
     { model: 'wx.relation', operation: 'SEARCH', executionMs: 112.5, isSlow: true, recordCount: 120 }
@@ -70,7 +77,7 @@ export async function loadDemoData() {
   // ── 5. Custom Dashboard Widgets ──
   const IrDashboardWidget = getModel('ir.dashboard.widget')
   if (IrDashboardWidget) {
-    const widgetSeeds = [
+    const widgetSeeds = jsonSeed?.widgets || [
       {
         name: 'Active Support Tickets',
         widgetType: 'kpi_card',
@@ -114,9 +121,12 @@ export async function loadDemoData() {
     ]
 
     for (const w of widgetSeeds) {
-      await (IrDashboardWidget as any).spawn(IrDashboardWidget, env, w)
+      const existing = await (IrDashboardWidget as any).fetch(IrDashboardWidget, env, [['name', '=', w.name]])
+      if (!existing.length) {
+        await (IrDashboardWidget as any).spawn(IrDashboardWidget, env, w)
+      }
     }
   }
 
-  console.log('[moon-performance] Demo data loaded: requests, cache, query benchmarks, system metrics, dashboard widgets')
+  console.log(`[moon-performance] Demo data loaded: ${requestSeeds.length} requests, ${cacheSeeds.length} caches, ${querySeeds.length} queries, system metrics, dashboard widgets`)
 }

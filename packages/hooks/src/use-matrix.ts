@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from "react"
 import { APP_PORTS } from "@workspace/types"
 import type { ModelSchema, ViewManifest, FieldMeta } from "@workspace/types"
 
+import { safeGetStorage } from "./use-local-storage"
+
 const getApiBase = () => {
   if (typeof window !== "undefined" && (window as any).NEXT_PUBLIC_API_URL) {
     return (window as any).NEXT_PUBLIC_API_URL
@@ -16,7 +18,7 @@ async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
   if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json")
   if (typeof window !== "undefined") {
     try {
-      const token = localStorage.getItem("mw_session_token")
+      const token = safeGetStorage("mw_session_token")
       if (token && !headers.has("Authorization")) {
         headers.set("Authorization", `Bearer ${token}`)
       }

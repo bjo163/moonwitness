@@ -1,0 +1,94 @@
+{
+  "cases": [
+    {
+      "title": "Ethical AI Data Governance in Knowledge Extraction",
+      "caseText": "Penggunaan model kecerdasan buatan untuk ekstraksi otomatis relasi teks suci. Perlu dipastikan bahwa hasil ekstraksi tidak mendistorsi makna kontekstual wahyu dan tetap mempertahankan integritas sanad.",
+      "subjectAlias": "AI-Extraction-Subsystem",
+      "status": "assessed",
+      "method": "prophetic",
+      "refCode": "QS 4:58",
+      "refSummary": "Perintah Allah untuk menyampaikan amanat kepada yang berhak dan menetapkan hukum secara adil."
+    },
+    {
+      "title": "Zakat Distribution Equity & Algorithmic Priority",
+      "caseText": "Penentuan prioritas penyaluran zakat produktif menggunakan pembobotan kebutuhan dasar (asnaf) dengan mempertimbangkan kondisi geografis dan tingkat kerentanan ekonomi mustahik.",
+      "subjectAlias": "Zakat-Equity-Engine",
+      "status": "assessed",
+      "method": "maqashid",
+      "refCode": "QS 9:60",
+      "refSummary": "Ketentuan delapan golongan asnaf yang berhak menerima zakat demi keadilan sosial."
+    },
+    {
+      "title": "Global Moon Sighting Synchronization vs Local Matla’",
+      "caseText": "Penentuan kriteria unifikasi kalender hijriyah global dengan mempertimbangkan batasan astronomis imkanur rukyat dan tradisi keilmuan mazhab fikih klasik mengenai ikhtilaf al-mathali.",
+      "subjectAlias": "Hilal-Matla-Unification",
+      "status": "assessed",
+      "method": "comparative",
+      "refCode": "QS 2:189",
+      "refSummary": "Pertanyaan mengenai bulan sabit dijawab sebagai penentu waktu ibadah dan haji."
+    },
+    {
+      "title": "Environmental Stewardship & Space Debris Mitigation",
+      "caseText": "Tinjauan etis terhadap penumpukan sampah orbit luar angkasa dari satelit konstelasi komersial berisiko mengaburkan pengamatan langit malam dan merusak keseimbangan orbit bumi.",
+      "subjectAlias": "Space-Debris-Stewardship",
+      "status": "draft",
+      "method": "mizan_balance",
+      "refCode": "QS 55:7-9",
+      "refSummary": "Penegakan neraca keseimbangan (al-mizan) dan larangan berbuat curang atau melampaui batas dalam neraca."
+    },
+    {
+      "title": "High-Latitude Prayer & Fasting Time Adjustments",
+      "caseText": "Kajian yuridis terhadap penetapan waktu shalat Subuh dan Isya serta durasi puasa di kawasan lintang tinggi (>48 derajat) di mana mega merah (syafaq) tidak hilang sepanjang malam musim panas.",
+      "subjectAlias": "High-Latitude-Falak",
+      "status": "assessed",
+      "method": "taqdir_aqrab",
+      "refCode": "QS 2:185",
+      "refSummary": "Prinsip kemudahan (yusr) dalam syariat dan larangan mempersulit umat dalam menjalankan kewajiban."
+    },
+    {
+      "title": "Stratospheric Balloon Sighting Legal Validity",
+      "caseText": "Penilaian hukum syar'i atas penggunaan kamera teleskopik pada balon stratosfer (ketinggian 20-35 km) untuk menembus awan tebal troposfer dalam rukyatul hilal.",
+      "subjectAlias": "Stratospheric-Ru’yah",
+      "status": "in_review",
+      "method": "istishab_qiyas",
+      "refCode": "HR Muslim 1081",
+      "refSummary": "Kaidah keumuman rukyatul hilal bil-bashar dan batas keterikatan dengan ufuk pengamat bumi."
+    },
+    {
+      "title": "Digital Waqf of Computing Infrastructure",
+      "caseText": "Status kepemilikan dan kelangsungan pemanfaatan server cloud compute dan klaster GPU yang diwakafkan untuk pemrosesan data hisab astronomi dan kecerdasan buatan.",
+      "subjectAlias": "Digital-Cloud-Waqf",
+      "status": "assessed",
+      "method": "waqf_manafi",
+      "refCode": "Fatwa MUI 2020",
+      "refSummary": "Keabsahan wakaf uang dan wakaf hak guna aset digital tak berwujud untuk kemaslahatan umum."
+    },
+    {
+      "title": "Orbital Spacecraft Prayer Orientation & Microgravity Wudhu",
+      "caseText": "Standarisasi fatwa arah kiblat bagi astronaut muslim di orbit rendah bumi (kecepatan orbit 28.000 km/jam mengelilingi bumi tiap 90 menit) dan thaharah debu tayamum dalam mikrogravitasi.",
+      "subjectAlias": "Space-Qibla-Protocol",
+      "status": "assessed",
+      "method": "prophetic",
+      "refCode": "QS 2:144",
+      "refSummary": "Perintah menghadapkan wajah ke arah Masjidil Haram di mana pun kamu berada sesuai kesanggupan."
+    },
+    {
+      "title": "Autonomous AI Fatwa Prohibition & Juristic Accountability",
+      "caseText": "Penetapan batas konstitusional sistem kecerdasan buatan dalam domain agama: AI dilarang mengeluarkan fatwa atau penetapan hukum otonom tanpa validasi dan tanda tangan dewan ulama mu'tabar.",
+      "subjectAlias": "AI-Ethics-Charter",
+      "status": "assessed",
+      "method": "sadd_dzara'i",
+      "refCode": "QS 16:116",
+      "refSummary": "Larangan mengatakan dusta yang diada-adakan lidah bahwa ini halal dan ini haram."
+    },
+    {
+      "title": "Aquifer Depletion & Desalination Brine Ocean Protection",
+      "caseText": "Evaluasi dampak pembuangan limbah air garam pekat dari pabrik desalinasi di Teluk Persia terhadap ekosistem terumbu karang dan keanekaragaman hayati laut.",
+      "subjectAlias": "Marine-Ecology-Mizan",
+      "status": "in_review",
+      "method": "mizan_balance",
+      "refCode": "QS 30:41",
+      "refSummary": "Tampak kerusakan di darat dan di laut disebabkan karena perbuatan tangan manusia."
+    }
+  ]
+}

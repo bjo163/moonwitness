@@ -28,19 +28,29 @@ jobs:
     runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@f520eceda224fe1a4aed5a2a27a194379a409996 # v6
         with:
           version: 10.33.4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Constitutional & Enterprise UI Audit
         run: pnpm audit:rules
+      - name: Critical package testability policy
+        run: pnpm testability:check
+      - name: Workflow reproducibility policy
+        run: pnpm workflow:check
+      - name: Governance registry validation
+        run: pnpm governance:validate
+      - name: Prompt packet validation
+        run: pnpm prompt:validate
+      - name: Universal Contract Drift Verification
+        run: pnpm contracts:verify
       - name: UMBRELLA v6 Contract Validation
         run: pnpm audit:umbrella:validate
 
@@ -49,13 +59,13 @@ jobs:
     runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@f520eceda224fe1a4aed5a2a27a194379a409996 # v6
         with:
           version: 10.33.4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
           cache: pnpm
@@ -67,13 +77,13 @@ jobs:
     runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@f520eceda224fe1a4aed5a2a27a194379a409996 # v6
         with:
           version: 10.33.4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
           cache: pnpm
@@ -87,13 +97,13 @@ jobs:
     runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@f520eceda224fe1a4aed5a2a27a194379a409996 # v6
         with:
           version: 10.33.4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
           cache: pnpm
@@ -107,114 +117,103 @@ jobs:
     runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@f520eceda224fe1a4aed5a2a27a194379a409996 # v6
         with:
           version: 10.33.4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
 
-  umbrella:
-    name: UMBRELLA v6 Evidence
+  python-services:
+    name: Python Microservices
     runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
-    timeout-minutes: 20
-    needs: [audit, lint, typecheck, test, build]
-    if: always()
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 0
-      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install fastapi uvicorn pydantic pytest httpx
+      - name: Test Celestial Engine
+        run: |
+          cd services/celestial-engine
+          PYTHONPATH=. pytest tests/
+      - name: Test AI Agent
+        run: |
+          cd services/ai-agent
+          PYTHONPATH=. pytest tests/
+
+  e2e:
+    name: Critical browser flows
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 30
+    needs: [build]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: pnpm/action-setup@f520eceda224fe1a4aed5a2a27a194379a409996 # v6
         with:
           version: 10.33.4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Collect exact-SHA GitHub evidence
-        uses: actions/github-script@v7
+      - run: pnpm --filter=@moon/testing exec playwright install --with-deps chromium
+      - name: Start public and admin portals
+        shell: bash
+        run: |
+          BOOTSTRAP_ADMIN_EMAIL=playwright-admin@invalid.example \
+          BOOTSTRAP_ADMIN_PASSWORD=playwright-admin-password \
+          pnpm dev:local > /tmp/moonwitness-stack.log 2>&1 &
+          for url in http://127.0.0.1:3000 http://127.0.0.1:3001 http://127.0.0.1:4000/health/ready; do
+            for attempt in {1..60}; do curl --fail --silent "$url" >/dev/null && break; sleep 2; done
+            curl --fail --silent "$url" >/dev/null
+          done
+      - name: Run critical browser flows
         env:
-          CANDIDATE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-          AUDIT_RESULT: ${{ needs.audit.result }}
-          LINT_RESULT: ${{ needs.lint.result }}
-          TYPECHECK_RESULT: ${{ needs.typecheck.result }}
-          TEST_RESULT: ${{ needs.test.result }}
-          BUILD_RESULT: ${{ needs.build.result }}
+          CI: 'true'
+          PLAYWRIGHT_WEB_URL: http://127.0.0.1:3000
+          PLAYWRIGHT_CC_URL: http://127.0.0.1:3001
+          PLAYWRIGHT_ADMIN_EMAIL: playwright-admin@invalid.example
+          PLAYWRIGHT_ADMIN_PASSWORD: playwright-admin-password
+        run: pnpm test:e2e
+      - name: Capture runtime evidence
+        if: always()
+        run: |
+          mkdir -p .audit/runtime
+          pnpm runtime:evidence > .audit/runtime/e2e-runtime-evidence.json || true
+      - name: Upload browser artifacts
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          script: |
-            const fs = require('fs');
-            const config = JSON.parse(fs.readFileSync('.audit/config/evidence.v1.json', 'utf8'));
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const candidateSha = process.env.CANDIDATE_SHA;
-            const branches = {};
-            for (const branch of config.github.required_branches) {
-              try {
-                const response = await github.rest.repos.getBranch({ owner, repo, branch });
-                branches[branch] = { protected: Boolean(response.data.protected) };
-              } catch (error) {
-                core.warning(`Unable to read branch ${branch}: ${error.message}`);
-                branches[branch] = { protected: null };
-              }
-            }
-            const issues = {};
-            for (const tracker of config.github.tracked_issues) {
-              try {
-                const response = await github.rest.issues.get({ owner, repo, issue_number: tracker.number });
-                issues[String(tracker.number)] = { state: response.data.state };
-              } catch (error) {
-                core.warning(`Unable to read issue #${tracker.number}: ${error.message}`);
-                issues[String(tracker.number)] = { state: 'unknown' };
-              }
-            }
-            let certification = { status: 'missing', conclusion: null };
-            try {
-              const response = await github.rest.actions.listWorkflowRunsForRepo({ owner, repo, head_sha: candidateSha, per_page: 100 });
-              const matches = response.data.workflow_runs
-                .filter((run) => run.name === config.github.certification_workflow && run.head_sha === candidateSha)
-                .sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
-              if (matches[0]) certification = { status: matches[0].status, conclusion: matches[0].conclusion };
-            } catch (error) {
-              core.warning(`Unable to read certification workflow: ${error.message}`);
-            }
-            const evidence = {
-              repository: `${owner}/${repo}`,
-              source_revision: candidateSha,
-              foundation: {
-                audit: process.env.AUDIT_RESULT,
-                lint: process.env.LINT_RESULT,
-                typecheck: process.env.TYPECHECK_RESULT,
-                test: process.env.TEST_RESULT,
-                build: process.env.BUILD_RESULT,
-              },
-              certification,
-              branches,
-              issues,
-            };
-            fs.mkdirSync('.audit/runtime', { recursive: true });
-            fs.writeFileSync('.audit/runtime/ci-evidence.json', `${JSON.stringify(evidence, null, 2)}\n`);
-      - name: Generate and validate UMBRELLA evidence report
-        run: pnpm audit:umbrella:ci
-      - name: Certify UMBRELLA determinism, parity, safety, and provenance
-        run: pnpm audit:umbrella:certify --ci-evidence=.audit/runtime/ci-evidence.json --expected-sha=${{ github.event.pull_request.head.sha || github.sha }}
+          name: playwright-report
+          path: |
+            packages/moon-testing/test-results
+            .audit/runtime/e2e-runtime-evidence.json
+          if-no-files-found: ignore
 
   report:
     name: Report
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [audit, lint, typecheck, test, build, umbrella]
+    needs: [audit, lint, typecheck, test, build, python-services, e2e]
     if: always() && github.event_name == 'pull_request'
     steps:
       - name: Post PR Comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         with:
           script: |
             const checks = {
@@ -223,12 +222,13 @@ jobs:
               'Typecheck': '${{ needs.typecheck.result }}',
               'Test': '${{ needs.test.result }}',
               'Build': '${{ needs.build.result }}',
-              'UMBRELLA v6 Evidence': '${{ needs.umbrella.result }}',
+              'Python Microservices': '${{ needs.python-services.result }}',
+              'Critical browser flows': '${{ needs.e2e.result }}',
             };
             const icon = (result) => result === 'success' ? '✅ passed' : result === 'cancelled' ? '⛔ cancelled' : '❌ failed';
             const allPassed = Object.values(checks).every((result) => result === 'success');
             const rows = Object.entries(checks).map(([name, result]) => `| ${name} | ${icon(result)} |`).join('\n');
-            const body = `${allPassed ? '## ✅ Foundation CI Passed' : '## ❌ Foundation CI — Action Required'}\n\n| Check | Status |\n|---|---|\n${rows}\n\n${allPassed ? '> All release checks passed.' : '> Every Foundation CI check is blocking. Resolve failures before promotion.'}\n\n— *MoonWitness Foundation CI · Run #${{ github.run_id }}*`;
+            const body = `${allPassed ? '## ✅ Foundation CI Passed' : '## ❌ Foundation CI — Action Required'}\n\n| Check | Status |\n|---|---|\n${rows}\n\n${allPassed ? '> All Foundation checks passed. Exact-SHA UMBRELLA replay certification is enforced by the dedicated UMBRELLA v6 Certification workflow.' : '> Every Foundation CI check is blocking. Resolve failures before promotion.'}\n\n— *MoonWitness Foundation CI · Run #${{ github.run_id }}*`;
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,

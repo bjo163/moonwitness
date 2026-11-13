@@ -1,0 +1,94 @@
+{
+  "requests": [
+    { "method": "GET", "path": "/api/witness/scriptures", "latencyMs": 14.2, "statusCode": 200, "cacheStatus": "HIT" },
+    { "method": "GET", "path": "/api/witness/hadiths", "latencyMs": 18.5, "statusCode": 200, "cacheStatus": "HIT" },
+    { "method": "GET", "path": "/api/observatory/moon-phase", "latencyMs": 3.1, "statusCode": 200, "cacheStatus": "MISS" },
+    { "method": "POST", "path": "/auth/login", "latencyMs": 45.8, "statusCode": 200, "cacheStatus": "BYPASS" },
+    { "method": "GET", "path": "/api/cab/summary", "latencyMs": 12.4, "statusCode": 200, "cacheStatus": "HIT" },
+    { "method": "GET", "path": "/api/witness/asmaul-husna", "latencyMs": 8.7, "statusCode": 200, "cacheStatus": "HIT" },
+    { "method": "GET", "path": "/api/geo/provinces", "latencyMs": 9.4, "statusCode": 200, "cacheStatus": "HIT" },
+    { "method": "GET", "path": "/api/product/catalog", "latencyMs": 22.1, "statusCode": 200, "cacheStatus": "HIT" },
+    { "method": "GET", "path": "/api/pj/tasks/board", "latencyMs": 15.3, "statusCode": 200, "cacheStatus": "HIT" },
+    { "method": "GET", "path": "/api/mizan/cases", "latencyMs": 11.8, "statusCode": 200, "cacheStatus": "HIT" },
+    { "method": "POST", "path": "/api/system/demo-seed", "latencyMs": 1850.0, "statusCode": 200, "cacheStatus": "BYPASS" },
+    { "method": "GET", "path": "/api/health", "latencyMs": 1.1, "statusCode": 200, "cacheStatus": "HIT" }
+  ],
+  "caches": [
+    { "cacheKey": "witness:scriptures:all", "hitCount": 1420, "missCount": 45, "avgLatencyMs": 1.2, "ttlSeconds": 300 },
+    { "cacheKey": "witness:hadith:bukhari", "hitCount": 890, "missCount": 22, "avgLatencyMs": 2.1, "ttlSeconds": 600 },
+    { "cacheKey": "cab:summary:metrics", "hitCount": 340, "missCount": 18, "avgLatencyMs": 0.8, "ttlSeconds": 60 },
+    { "cacheKey": "geo:cities:all", "hitCount": 2150, "missCount": 12, "avgLatencyMs": 0.5, "ttlSeconds": 1800 },
+    { "cacheKey": "product:pricelists:active", "hitCount": 560, "missCount": 31, "avgLatencyMs": 1.4, "ttlSeconds": 900 },
+    { "cacheKey": "astronomy:ephemeris:today", "hitCount": 4320, "missCount": 5, "avgLatencyMs": 0.3, "ttlSeconds": 3600 }
+  ],
+  "queries": [
+    { "model": "wx.scripture.verse", "operation": "SEARCH", "executionMs": 8.4, "isSlow": false, "recordCount": 10 },
+    { "model": "cab.change", "operation": "SELECT", "executionMs": 4.2, "isSlow": false, "recordCount": 4 },
+    { "model": "wx.relation", "operation": "SEARCH", "executionMs": 112.5, "isSlow": true, "recordCount": 120 },
+    { "model": "geo.city", "operation": "FILTER", "executionMs": 6.1, "isSlow": false, "recordCount": 29 },
+    { "model": "hd.ticket", "operation": "SELECT_SLA", "executionMs": 9.3, "isSlow": false, "recordCount": 15 },
+    { "model": "account.move.line", "operation": "AGGREGATE_BALANCE", "executionMs": 18.2, "isSlow": false, "recordCount": 240 }
+  ],
+  "widgets": [
+    {
+      "name": "Active Support Tickets",
+      "widgetType": "kpi_card",
+      "model": "hd.ticket",
+      "metricField": "id",
+      "aggregation": "count",
+      "accentColor": "cyan",
+      "sequence": 10,
+      "active": true
+    },
+    {
+      "name": "Project Task Milestones",
+      "widgetType": "kpi_card",
+      "model": "pj.task",
+      "metricField": "id",
+      "aggregation": "count",
+      "accentColor": "green",
+      "sequence": 20,
+      "active": true
+    },
+    {
+      "name": "Ticket Priority Distribution",
+      "widgetType": "metric_chart",
+      "model": "hd.ticket",
+      "metricField": "priority",
+      "aggregation": "count",
+      "accentColor": "purple",
+      "sequence": 30,
+      "active": true
+    },
+    {
+      "name": "Recent Background Jobs",
+      "widgetType": "record_feed",
+      "model": "ir.queue.job",
+      "metricField": "status",
+      "aggregation": "count",
+      "accentColor": "yellow",
+      "sequence": 40,
+      "active": true
+    },
+    {
+      "name": "Observatory Station Uptime",
+      "widgetType": "kpi_card",
+      "model": "px.system",
+      "metricField": "uptimeSeconds",
+      "aggregation": "max",
+      "accentColor": "blue",
+      "sequence": 50,
+      "active": true
+    },
+    {
+      "name": "Pending RFC Governance Queue",
+      "widgetType": "kpi_card",
+      "model": "cab.change",
+      "metricField": "id",
+      "aggregation": "count",
+      "accentColor": "rose",
+      "sequence": 60,
+      "active": true
+    }
+  ]
+}

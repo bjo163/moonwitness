@@ -10,6 +10,7 @@ import {
   Camera,
 } from "lucide-react"
 import { AutoAvatar } from "@workspace/auto-avatar"
+import { Button, PropertyRow } from "@workspace/ui"
 
 export function ProfileCard({
   profileData,
@@ -45,9 +46,9 @@ export function ProfileCard({
             />
           </div>
           {isOwnProfile && (
-            <button className="absolute right-0 bottom-0 rounded-full border border-primary/50 bg-card p-1.5 text-primary hover:bg-primary/20">
+            <Button type="button" variant="ghost" size="icon" aria-label="Change profile photo" className="absolute right-0 bottom-0 rounded-full border border-primary/50 bg-card p-1.5 text-primary hover:bg-primary/20">
               <Camera className="h-4 w-4" />
-            </button>
+            </Button>
           )}
         </div>
 
@@ -71,63 +72,43 @@ export function ProfileCard({
         </div>
 
         {/* Details Grid */}
-        <div className="grid w-full grid-cols-2 gap-x-2 gap-y-4 border-t border-primary/20 pt-4">
-          <div className="flex flex-col">
-            <span className="flex items-center gap-1.5 font-sans text-[9px] font-semibold text-primary/70 uppercase">
-              <UserIcon className="h-3 w-3" /> Username
-            </span>
-            <span className="mt-1 truncate pl-4.5 font-mono text-xs text-foreground">
-              {displayName.toLowerCase().replace(/\s+/g, ".")}
-            </span>
-          </div>
-
-          <div className="flex flex-col">
-            <span className="flex items-center gap-1.5 font-sans text-[9px] font-semibold text-primary/70 uppercase">
-              <Calendar className="h-3 w-3" /> Member Since
-            </span>
-            <span className="mt-1 pl-4.5 font-mono text-xs text-foreground">
-              26 May 2025
-            </span>
-          </div>
-
-          <div className="flex flex-col">
-            <span className="flex items-center gap-1.5 font-sans text-[9px] font-semibold text-primary/70 uppercase">
-              <Mail className="h-3 w-3" /> Email
-            </span>
-            <span
-              className="mt-1 truncate pl-4.5 font-mono text-[10px] text-foreground"
-              title={user?.email || "N/A"}
-            >
-              {user?.email || "N/A"}
-            </span>
-          </div>
-
-          <div className="flex flex-col">
-            <span className="flex items-center gap-1.5 font-sans text-[9px] font-semibold text-primary/70 uppercase">
-              <Clock className="h-3 w-3" /> Last Active
-            </span>
-            <span className="mt-1 pl-4.5 font-mono text-xs text-foreground">
-              Today, 07:13 WIB
-            </span>
-          </div>
-
-          <div className="flex flex-col">
-            <span className="flex items-center gap-1.5 font-sans text-[9px] font-semibold text-primary/70 uppercase">
-              <MapPin className="h-3 w-3" /> Location
-            </span>
-            <span className="mt-1 pl-4.5 font-mono text-xs text-foreground">
-              Jakarta, Indonesia
-            </span>
-          </div>
-
-          <div className="flex flex-col">
-            <span className="flex items-center gap-1.5 font-sans text-[9px] font-semibold text-primary/70 uppercase">
-              <GlobeIcon className="h-3 w-3" /> Timezone
-            </span>
-            <span className="mt-1 pl-4.5 font-mono text-xs text-foreground">
-              (UTC+7) Jakarta
-            </span>
-          </div>
+        <div className="grid w-full grid-cols-2 gap-x-2 gap-y-4 border-t border-border pt-4">
+          <PropertyRow
+            variant="stacked"
+            icon={UserIcon}
+            label="Username"
+            value={displayName.toLowerCase().replace(/\s+/g, ".")}
+          />
+          <PropertyRow
+            variant="stacked"
+            icon={Calendar}
+            label="Member Since"
+            value="26 May 2025"
+          />
+          <PropertyRow
+            variant="stacked"
+            icon={Mail}
+            label="Email"
+            value={user?.email || "N/A"}
+          />
+          <PropertyRow
+            variant="stacked"
+            icon={Clock}
+            label="Last Active"
+            value="Today, 07:13 WIB"
+          />
+          <PropertyRow
+            variant="stacked"
+            icon={MapPin}
+            label="Location"
+            value="Jakarta, Indonesia"
+          />
+          <PropertyRow
+            variant="stacked"
+            icon={GlobeIcon}
+            label="Timezone"
+            value="(UTC+7) Jakarta"
+          />
         </div>
       </div>
     </div>

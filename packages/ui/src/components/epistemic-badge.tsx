@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Badge } from './badge.js'
+import { Badge } from './badge'
 
 export type AuthorityClass =
   | 'REVELATION'

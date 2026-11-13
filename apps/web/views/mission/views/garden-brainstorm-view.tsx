@@ -111,29 +111,29 @@ export function GardenBrainstormView() {
               subtitle="Describe the real work before requesting a plan."
             />
             <form className="mt-4 space-y-4" onSubmit={submit}>
-              <Field
-                label="PROJECT OR REAL PROBLEM"
+              <BrainstormField
+                label="Project or real problem"
                 value={form.project}
                 onChange={(value) => updateField("project", value)}
                 placeholder="What needs to change or be built?"
                 required
               />
-              <Field
-                label="DESIRED OUTCOME"
+              <BrainstormField
+                label="Desired outcome"
                 value={form.outcome}
                 onChange={(value) => updateField("outcome", value)}
                 placeholder="What good result should this create?"
                 required
               />
-              <Field
-                label="AFFECTED PEOPLE"
+              <BrainstormField
+                label="Affected people"
                 value={form.affectedPeople}
                 onChange={(value) => updateField("affectedPeople", value)}
                 placeholder="Who benefits or carries the impact?"
                 required
               />
-              <Field
-                label="CONSTRAINTS OR ETHICAL CONCERNS"
+              <BrainstormField
+                label="Constraints or ethical concerns"
                 value={form.constraints}
                 onChange={(value) => updateField("constraints", value)}
                 placeholder="Budget, timeline, risks, trust, fairness, or safety."
@@ -191,7 +191,7 @@ export function GardenBrainstormView() {
   )
 }
 
-function Field({
+function BrainstormField({
   label,
   value,
   onChange,

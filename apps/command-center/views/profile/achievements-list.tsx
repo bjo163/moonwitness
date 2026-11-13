@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import { Button } from "@workspace/ui"
 import { Moon, BookOpen, FileText, Share2, Star } from "lucide-react"
 
 export function AchievementsList() {
@@ -48,9 +49,9 @@ export function AchievementsList() {
         <h3 className="font-sans text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           Milestones & Achievements
         </h3>
-        <button className="font-sans text-xs font-medium text-primary hover:underline">
+        <Button type="button" variant="link" className="font-sans text-xs font-medium text-primary hover:underline">
           View All
-        </button>
+        </Button>
       </div>
 
       <div className="space-y-3.5">

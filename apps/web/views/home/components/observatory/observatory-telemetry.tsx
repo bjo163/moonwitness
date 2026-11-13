@@ -1,5 +1,6 @@
 import React from "react"
 import { Activity } from "lucide-react"
+import { resolveSemanticColor, type SemanticColorToken } from "@workspace/ui"
 
 export function ObservatoryTelemetry({ obs }: { obs: any }) {
   return (
@@ -15,50 +16,50 @@ export function ObservatoryTelemetry({ obs }: { obs: any }) {
             label: "LATITUDE",
             val: "-6.2000°",
             sub: "SOUTH",
-            col: "#00F0FF",
+            col: "info" as SemanticColorToken,
           },
           {
             label: "LONGITUDE",
             val: "106.8160°",
             sub: "EAST",
-            col: "#00F0FF",
+            col: "info" as SemanticColorToken,
           },
           {
             label: "ALTITUDE",
             val: "32 M",
             sub: "SEA LEVEL",
-            col: "#10B981",
+            col: "success" as SemanticColorToken,
           },
           {
             label: "SUNSET",
             val: obs.loading ? "--:--" : obs.sun.sunset,
             sub: "WIB TIME",
-            col: "#A855F7",
+            col: "info" as SemanticColorToken,
           },
           {
             label: "WEATHER",
             val: "25°C",
             sub: "CLEAR SKY",
-            col: "#F59E0B",
+            col: "warning" as SemanticColorToken,
           },
           {
             label: "VISIBILITY",
             val: "22 KM",
             sub: "EXCELLENT",
-            col: "#10B981",
+            col: "success" as SemanticColorToken,
           },
-          { label: "HUMIDITY", val: "68%", sub: "GOOD", col: "#3B82F6" },
+          { label: "HUMIDITY", val: "68%", sub: "GOOD", col: "primary" as SemanticColorToken },
           {
             label: "PRESSURE",
             val: "1012 hPa",
             sub: "STABLE",
-            col: "#A855F7",
+            col: "info" as SemanticColorToken,
           },
           {
             label: "AIR QUALITY",
             val: "AQI 28",
             sub: "GOOD",
-            col: "#10B981",
+            col: "success" as SemanticColorToken,
           },
         ].map((t, idx) => (
           <div
@@ -70,7 +71,7 @@ export function ObservatoryTelemetry({ obs }: { obs: any }) {
             </div>
             <div
               className="my-1.5 font-mono text-base font-black text-foreground drop-shadow-sm"
-              style={{ color: t.col }}
+              style={{ color: resolveSemanticColor(t.col) }}
             >
               {t.val}
             </div>

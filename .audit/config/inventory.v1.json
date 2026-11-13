@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "version": "1.0.0",
+  "sources": {
+    "compose": "docker-compose.yml",
+    "env_example": ".env.production.example",
+    "port_constants": "packages/types/src/constants.ts",
+    "workspace_roots": ["apps", "packages"]
+  },
+  "application_port_map": {
+    "web": "PUBLIC_PORTAL",
+    "command-center": "COMMAND_CENTER",
+    "api": "API_BACKEND"
+  }
+}

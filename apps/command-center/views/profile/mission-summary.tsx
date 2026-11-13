@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import { Button } from "@workspace/ui"
 import {
   Target,
   Beaker,
@@ -79,9 +80,9 @@ export function MissionSummary() {
         ))}
       </div>
 
-      <button className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-muted/40 py-2.5 font-sans text-xs font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+      <Button type="button" variant="outline" className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-muted/40 py-2.5 font-sans text-xs font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
         View Full Statistics <ArrowRight className="h-3.5 w-3.5" />
-      </button>
+      </Button>
     </div>
   )
 }

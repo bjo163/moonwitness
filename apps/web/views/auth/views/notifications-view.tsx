@@ -2,6 +2,7 @@
 
 import { Bell, CheckCheck, Trash2 } from "lucide-react"
 import { useNotificationStore } from "@workspace/state"
+import { Button } from "@workspace/ui"
 import { AccountPage } from "./account-view"
 
 export function NotificationsView() {
@@ -13,20 +14,20 @@ export function NotificationsView() {
           {notifications.filter((item) => !item.read).length} unread notifications
         </p>
         <div className="flex gap-2">
-          <button
+          <Button
             type="button"
             onClick={markAllAsRead}
             className="rounded-md flex items-center gap-2 border border-border px-3 py-2 text-xs font-medium text-foreground hover:bg-accent"
           >
             <CheckCheck className="h-4 w-4 text-primary" /> Mark all read
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
             onClick={clearAll}
             className="rounded-md flex items-center gap-2 border border-destructive/30 px-3 py-2 text-xs font-medium text-destructive hover:bg-destructive/10"
           >
             <Trash2 className="h-4 w-4" /> Clear
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -45,14 +46,14 @@ export function NotificationsView() {
                   : "border-primary/40 bg-primary/5 shadow-sm"
               }`}
             >
-              <button
+              <Button
                 type="button"
                 onClick={() => markAsRead(item.id)}
                 className="w-full text-left"
               >
                 <p className="font-semibold text-foreground">{item.title}</p>
                 <p className="mt-1 text-sm text-muted-foreground">{item.message}</p>
-              </button>
+              </Button>
             </li>
           ))}
         </ul>

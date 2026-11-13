@@ -1,3 +1,5 @@
+import { safeGetStorage, safeSetStorage } from "@workspace/hooks"
+
 export interface StoredWhisper {
   id: string
   requestId: string
@@ -13,9 +15,8 @@ export function getWhisperStorageKey(requestId: string): string {
 }
 
 export function readStoredWhispers(requestId: string): StoredWhisper[] {
-  if (typeof window === "undefined") return []
   try {
-    const raw = window.localStorage.getItem(getWhisperStorageKey(requestId))
+    const raw = safeGetStorage(getWhisperStorageKey(requestId))
     if (!raw) return []
     const all: StoredWhisper[] = JSON.parse(raw)
     const now = Date.now()
@@ -29,14 +30,16 @@ export function writeStoredWhispers(
   requestId: string,
   whispers: StoredWhisper[]
 ): void {
-  if (typeof window === "undefined") return
   try {
     const now = Date.now()
     const active = whispers.filter((w) => w.expiresAt > now)
-    window.localStorage.setItem(
+    safeSetStorage(
       getWhisperStorageKey(requestId),
       JSON.stringify(active)
     )
-    window.dispatchEvent(new Event("storage"))
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new Event("storage"))
+    }
   } catch {}
 }
+

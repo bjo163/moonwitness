@@ -2,6 +2,7 @@
 import { useAuthSession } from "@moon/client"
 import { LogOut, UserRound } from "lucide-react"
 import { AccountNavigation } from "../../../components/profile/account-navigation"
+import { Button } from "@workspace/ui"
 
 export function ProfileView() {
   const { user, logout } = useAuthSession()
@@ -33,12 +34,13 @@ export function ProfileView() {
             <h2 className="mt-2 text-2xl font-bold text-foreground">{user.name || "User"}</h2>
             <p className="text-primary font-mono text-sm">{user.email}</p>
 
-            <button
+            <Button
+              type="button"
               onClick={handleLogout}
               className="rounded-md mt-6 flex items-center gap-2 border border-destructive/40 bg-destructive/10 px-6 py-2 text-xs font-bold font-mono tracking-wider text-destructive transition-colors hover:bg-destructive/20 focus:outline-none focus:ring-2 focus:ring-ring"
             >
               <LogOut className="h-4 w-4" /> Sign Out
-            </button>
+            </Button>
           </div>
         ) : (
           <div className="rounded-xl border border-border bg-card p-8 text-center shadow-sm">

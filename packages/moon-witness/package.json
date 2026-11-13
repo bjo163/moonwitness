@@ -27,7 +27,7 @@
   "dependencies": {
     "@moon/cache": "workspace:*",
     "@moon/compute": "workspace:*",
-    "@moon/orm": "workspace:*",
+      "@moon/orm": "workspace:*",
     "@moon/server": "workspace:*",
     "adhan": "^4.4.4",
     "dotenv": "^16.4.5"

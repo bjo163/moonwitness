@@ -8,7 +8,12 @@ function readText(rootDir, relativePath) {
   return fs.existsSync(fullPath) ? fs.readFileSync(fullPath, "utf8") : null
 }
 
-function evaluateSourceCheck(rootDir, check) {
+function contextValue(context, dottedPath) {
+  return String(dottedPath || "").split(".").filter(Boolean).reduce((value, key) => value?.[key], context)
+}
+
+export function evaluateSourceCheck(rootDir, check, context = {}) {
+  if (check.type === "context_equals") return contextValue(context, check.context_path) === check.value
   const fullPath = path.join(rootDir, check.path)
   if (check.type === "file_exists") return fs.existsSync(fullPath)
   const text = readText(rootDir, check.path)
@@ -53,11 +58,11 @@ function applyObservation(observations, profile, dimension, input) {
   }
 }
 
-export function collectSourceEvidence(rootDir, evidenceConfig) {
+export function collectSourceEvidence(rootDir, evidenceConfig, sourceContext = {}) {
   const observations = { RawHealth: {}, DeploymentReadinessScore: {} }
   const evidence = []
   for (const [collectorId, collector] of Object.entries(evidenceConfig.source_collectors || {})) {
-    const checks = collector.checks.map((check) => ({ id: check.id, passed: evaluateSourceCheck(rootDir, check) }))
+    const checks = collector.checks.map((check) => ({ id: check.id, passed: evaluateSourceCheck(rootDir, check, sourceContext) }))
     const passed = checks.filter((check) => check.passed).length
     const value = checks.length === 0 ? null : (passed / checks.length) * 100
     const input = value === null ? unknownInput("SOURCE_COLLECTOR_EMPTY") : knownInput(value, "E1", value === 100 ? [] : ["SOURCE_CONTRACT_CHECK_FAILED"])
@@ -169,8 +174,8 @@ export function mergeObservations(base, override) {
   return result
 }
 
-export function collectUmbrellaEvidence({ rootDir, evidenceConfig, ciEvidence = null }) {
-  const source = collectSourceEvidence(rootDir, evidenceConfig)
+export function collectUmbrellaEvidence({ rootDir, evidenceConfig, ciEvidence = null, sourceContext = {} }) {
+  const source = collectSourceEvidence(rootDir, evidenceConfig, sourceContext)
   const execution = collectExecutionEvidence(ciEvidence, evidenceConfig)
   return {
     observations: mergeObservations(source.observations, execution.observations),

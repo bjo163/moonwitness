@@ -18,10 +18,11 @@ describe("Phase 5 governance auditor", () => {
       "CYBER VARIABLE MISUSE",
       "RAW UI COLORS",
       "DECORATIVE UTILITIES",
+      "RESEARCH UI SPECIFICATION",
       "FORCED DARK MODE",
       "ACCESSIBILITY",
       "PACKAGE BOUNDARIES",
-      "SEMANTIC THEME PARITY",
+      "CANONICAL THEME PARITY",
     ]) expect(output).toContain(label)
   })
 
@@ -30,5 +31,35 @@ describe("Phase 5 governance auditor", () => {
     expect(source).toContain("function isDocumentation")
     expect(source).toContain("function isDomainData")
     expect(source).toContain("isActiveImplementation")
+  })
+
+  it("includes reusable component composition checks", () => {
+    const source = readFileSync(auditor, "utf8")
+    expect(source).toContain("componentReuse")
+    expect(source).toContain("data-driven reusable component")
+  })
+
+  it("includes the shared UI boundary check", () => {
+    const source = readFileSync(auditor, "utf8")
+    expect(source).toContain("SHARED UI BOUNDARY")
+    expect(source).toContain("Use Button from @workspace/ui")
+  })
+
+  it("checks repeated utility patterns as hidden components", () => {
+    const source = readFileSync(auditor, "utf8")
+    expect(source).toContain("utility class pattern repeated")
+    expect(source).toContain("classCounts")
+  })
+
+  it("checks duplicate component definitions across workspace files", () => {
+    const source = readFileSync(auditor, "utf8")
+    expect(source).toContain("DUPLICATE COMPONENT DEFINITIONS")
+    expect(source).toContain("consolidate the canonical implementation")
+  })
+
+  it("includes cross-file consistency checks", () => {
+    const source = readFileSync(auditor, "utf8")
+    expect(source).toContain("CROSS-FILE CONSISTENCY")
+    expect(source).toContain("consistencyFindings")
   })
 })

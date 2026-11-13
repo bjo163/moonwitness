@@ -1,7 +1,7 @@
 "use client"
 import { useMounted } from "@workspace/hooks"
 
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { useGuildStore } from "@workspace/state"
 import { Users, Crown, ShieldAlert } from "lucide-react"
 
@@ -14,10 +14,10 @@ export function GuildLeaderboardWidget() {
   const sortedGuilds = [...guilds].sort((a, b) => b.xp - a.xp)
 
   return (
-    <div className="bg-background/60 rounded-2xl border border-fuchsia-500/20 p-5 backdrop-blur-xl">
+    <div className="rounded-md border border-border bg-card p-4">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="font-sans text-xs font-bold tracking-wider text-fuchsia-400 uppercase">
-          Global Guild Rankings
+        <h3 className="font-sans text-sm font-semibold text-foreground">
+          Global guild rankings
         </h3>
         <Crown className="h-4 w-4 text-fuchsia-400/50" />
       </div>
@@ -30,8 +30,8 @@ export function GuildLeaderboardWidget() {
               key={g.id}
               className={`relative flex items-center justify-between overflow-hidden rounded-xl border p-3 transition-all ${
                 isMember
-                  ? "border-fuchsia-500/50 bg-fuchsia-500/10 shadow-sm"
-                  : "border-transparent bg-card hover:bg-card"
+                ? "border-primary/40 bg-primary/10"
+                  : "border-border bg-background hover:bg-muted"
               }`}
             >
               {isMember && (
@@ -43,32 +43,30 @@ export function GuildLeaderboardWidget() {
                 </span>
                 <span className="text-lg">{g.icon}</span>
                 <div>
-                  <div
-                    className={`font-sans text-xs font-bold tracking-wider uppercase ${isMember ? "text-fuchsia-300" : "text-foreground"}`}
-                  >
+                  <div className={`font-sans text-sm font-medium ${isMember ? "text-primary" : "text-foreground"}`}>
                     {g.name}
                   </div>
-                  <div className="flex items-center gap-1 font-mono text-[9px] text-fuchsia-400/60">
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
                     <Users className="h-3 w-3" /> {g.members} OPERATIVES
                   </div>
                 </div>
               </div>
 
               <div className="flex flex-col items-end gap-1">
-                <span className="font-mono text-[10px] font-black tracking-widest text-fuchsia-400 tabular-nums">
+                <span className="font-mono text-xs font-semibold text-primary tabular-nums">
                   {g.xp.toLocaleString()} XP
                 </span>
                 {isMember ? (
                   <button
                     onClick={leaveGuild}
-                    className="text-[8px] font-bold tracking-widest text-muted-foreground uppercase hover:text-foreground"
+                    className="text-xs font-medium text-muted-foreground hover:text-foreground"
                   >
                     [ LEAVE ]
                   </button>
                 ) : (
                   <button
                     onClick={() => joinGuild(g.id)}
-                    className="text-[8px] font-bold tracking-widest text-fuchsia-400 uppercase hover:text-fuchsia-300"
+                    className="text-xs font-medium text-primary hover:text-primary/80"
                   >
                     [ JOIN ]
                   </button>
@@ -80,9 +78,9 @@ export function GuildLeaderboardWidget() {
       </div>
 
       {!currentGuildId && (
-        <div className="mt-4 flex items-center gap-2 rounded border border-destructive/20 bg-destructive/10 p-2 font-mono text-[9px] text-destructive">
+        <div className="mt-4 flex items-center gap-2 rounded-md border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
           <ShieldAlert className="h-3 w-3" />
-          YOU ARE UNAFFILIATED. JOIN A GUILD TO CONTRIBUTE XP.
+          You are not affiliated with a guild. Join one to contribute XP.
         </div>
       )}
     </div>

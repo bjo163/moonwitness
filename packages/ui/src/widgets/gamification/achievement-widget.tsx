@@ -33,11 +33,11 @@ export function AchievementWidget() {
     .filter(Boolean)
 
   return (
-    <div className="rounded-xl bg-card w-full border border-fuchsia-500/20 bg-card p-4 font-mono">
+    <div className="w-full rounded-md border border-border bg-card p-4">
       <div className="mb-4 flex items-center gap-2">
         <Award className="h-4 w-4 text-fuchsia-400" />
-        <h3 className="text-xs font-bold tracking-widest text-foreground uppercase">
-          Player Status
+        <h3 className="text-sm font-semibold text-foreground">
+          Player status
         </h3>
       </div>
 
@@ -46,13 +46,13 @@ export function AchievementWidget() {
           <span className="text-lg font-black text-fuchsia-400">{level}</span>
         </div>
         <div className="flex-1">
-          <div className="mb-1 flex justify-between text-[9px] tracking-widest text-primary uppercase">
-            <span>LEVEL {level}</span>
+          <div className="mb-1 flex justify-between text-xs text-muted-foreground">
+            <span>Level {level}</span>
             <span className="text-fuchsia-400">{points} XP</span>
           </div>
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted/30">
             <div
-              className="h-full bg-gradient-to-r from-fuchsia-500 to-transparent"
+              className="h-full bg-primary"
               style={{ width: `${progressToNextLevel}%` }}
             />
           </div>
@@ -60,12 +60,12 @@ export function AchievementWidget() {
       </div>
 
       <div className="space-y-2">
-        <div className="mb-2 border-b border-border pb-1 text-[9px] tracking-widest text-primary/70 uppercase">
+        <div className="mb-2 border-b border-border pb-1 text-xs font-medium text-muted-foreground">
           Recent Unlocks
         </div>
 
         {recentAchievements.length === 0 ? (
-          <div className="py-4 text-center text-[10px] text-primary/50">
+          <div className="py-4 text-center text-sm text-muted-foreground">
             <Zap className="mx-auto mb-1 h-4 w-4 opacity-50" />
             No achievements yet
           </div>
@@ -82,14 +82,14 @@ export function AchievementWidget() {
                   <Icon className="h-3.5 w-3.5" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[10px] font-bold text-foreground">
+                  <p className="truncate text-sm font-medium text-foreground">
                     {ach.title}
                   </p>
-                  <p className="truncate text-[8px] text-primary">
+                  <p className="truncate text-xs text-muted-foreground">
                     {ach.description}
                   </p>
                 </div>
-                <div className="text-[9px] font-bold text-fuchsia-400">
+                <div className="text-xs font-semibold text-primary">
                   +{ach.points}
                 </div>
               </div>

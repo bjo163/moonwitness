@@ -36,6 +36,7 @@ defineRoute({
 defineRoute({
   method: 'GET',
   path: '/api/witness/quran/surahs',
+  auth: 'user',
   handler: async ({ env }) => {
     const Scripture = getModel('wx.scripture')
     const Book = getModel('wx.scripture.book')
@@ -67,6 +68,7 @@ defineRoute({
 defineRoute({
   method: 'GET',
   path: '/api/witness/quran/surah',
+  auth: 'user',
   handler: async ({ query, env }) => {
     const surahNumber = parseInt(query.number || '0', 10)
     if (surahNumber < 1 || surahNumber > 114) {
@@ -126,6 +128,7 @@ defineRoute({
 defineRoute({
   method: 'GET',
   path: '/api/witness/search',
+  auth: 'user',
   handler: async ({ query, env }) => {
     const q = query.q || ''
     const filter = (query.filter || 'ALL') as any
@@ -154,6 +157,7 @@ defineRoute({
 defineRoute({
   method: 'GET',
   path: '/api/witness/lookup',
+  auth: 'user',
   handler: async ({ query, env }) => {
     const ref = query.ref || query.reference || ''
     if (!ref) {
@@ -171,6 +175,7 @@ defineRoute({
 defineRoute({
   method: 'GET',
   path: '/api/witness/search/diagnostics',
+  auth: 'user',
   handler: async ({ env }) => {
     return await getSearchIndexDiagnostics(env)
   },
@@ -180,6 +185,7 @@ defineRoute({
 defineRoute({
   method: 'GET',
   path: '/api/witness/quran/search',
+  auth: 'user',
   handler: async ({ query, env }) => {
     const q = query.q || ''
     const limit = Math.min(parseInt(query.limit || '20', 10), 100)
@@ -233,6 +239,7 @@ defineRoute({
 defineRoute({
   method: 'GET',
   path: '/api/witness/provenance',
+  auth: 'user',
   handler: async ({ query, env }) => {
     const Provenance = getModel('wx.provenance')
     const Source = getModel('wx.source')
@@ -333,6 +340,7 @@ defineRoute({
 defineRoute({
   method: 'GET',
   path: '/api/witness/hadith/books',
+  auth: 'user',
   handler: async ({ env }) => {
     const M = getModel('wx.tradition')
     if (!M) throw new Error('Model not found')
@@ -345,6 +353,7 @@ defineRoute({
 defineRoute({
   method: 'GET',
   path: '/api/witness/hadith',
+  auth: 'user',
   handler: async ({ query, env }) => {
     const slug = query.slug
     const page = parseInt(query.page || '1', 10)
@@ -384,6 +393,7 @@ defineRoute({
 defineRoute({
   method: 'GET',
   path: '/api/witness/traditions',
+  auth: 'user',
   handler: async ({ env }) => {
     const Tradition = getModel('wx.tradition')
     const Item = getModel('wx.tradition.item')
@@ -408,6 +418,7 @@ defineRoute({
 defineRoute({
   method: 'GET',
   path: '/api/witness/asmaul-husna',
+  auth: 'user',
   handler: async ({ env }) => {
     const M = getModel('wx.asmaul.husna')
     if (!M) throw new Error('Model not found')
@@ -424,6 +435,7 @@ defineRoute({
 defineRoute({
   method: 'GET',
   path: '/api/witness/devotions',
+  auth: 'user',
   handler: async ({ query, env }) => {
     const M = getModel('wx.devotion')
     if (!M) throw new Error('Model not found')
@@ -480,111 +492,12 @@ defineRoute({
   },
 })
 
-// ═══════════════════════════════════════════
-// 🌍 EXTERNAL DATA PROXIES (MOCK / REAL)
-// ═══════════════════════════════════════════
-
-defineRoute({
-  method: 'GET',
-  path: '/api/external/usgs/earthquakes',
-  handler: async () => {
-    const resp = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson')
-    return await resp.json()
-  },
-})
-
-defineRoute({
-  method: 'GET',
-  path: '/api/external/iss',
-  handler: async () => {
-    const resp = await fetch('http://api.open-notify.org/iss-now.json')
-    return await resp.json()
-  },
-})
-
-defineRoute({
-  method: 'GET',
-  path: '/api/external/trends',
-  handler: async () => {
-    const resp = await fetch("https://trends.google.com/trending/rss?geo=US&t=" + Date.now(), {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      }
-    })
-    const xmlText = await resp.text()
-    const items = []
-    const itemRegex = /<item>([\s\S]*?)<\/item>/g
-    let match
-    while ((match = itemRegex.exec(xmlText)) !== null) {
-      const itemContent = match[1]
-      if (!itemContent) continue
-      const titleMatch = /<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>/.exec(itemContent)
-      const trafficMatch = /<ht:approx_traffic>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/ht:approx_traffic>/.exec(itemContent)
-      const pubDateMatch = /<pubDate>(.*?)<\/pubDate>/.exec(itemContent)
-      if (titleMatch) {
-        items.push({
-          title: titleMatch[1],
-          traffic: trafficMatch ? trafficMatch[1] : "Unknown",
-          pubDate: pubDateMatch ? pubDateMatch[1] : "",
-        })
-      }
-    }
-    return items.slice(0, 10)
-  },
-})
-
-defineRoute({
-  method: 'GET',
-  path: '/api/external/nasa/donki/cme',
-  handler: async ({ query }) => {
-    const startDate = query.startDate || new Date().toISOString().split('T')[0]
-    return await cache.remember(`nasa-cme-${startDate}`, 3600, async () => {
-      const resp = await fetch(`https://api.nasa.gov/DONKI/CME?startDate=${startDate}&api_key=DEMO_KEY`)
-      return await resp.json()
-    })
-  },
-})
-
-defineRoute({
-  method: 'GET',
-  path: '/api/external/opensky',
-  handler: async () => {
-    return await cache.remember('opensky-europe', 300, async () => {
-      const resp = await fetch('https://opensky-network.org/api/states/all?lamin=45.8389&lomin=5.9962&lamax=47.8229&lomax=10.4921')
-      return await resp.json()
-    })
-  },
-})
-
-defineRoute({
-  method: 'GET',
-  path: '/api/external/weather',
-  handler: async ({ query }) => {
-    const lat = query.latitude || '-6.2'
-    const lng = query.longitude || '106.8'
-    return await cache.remember(`weather-${lat}-${lng}`, 1800, async () => {
-      const resp = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`)
-      return await resp.json()
-    })
-  },
-})
-
-defineRoute({
-  method: 'GET',
-  path: '/api/external/binance/ticker',
-  handler: async ({ query }) => {
-    const symbol = query.symbol || 'BTCUSDT'
-    return await cache.remember(`binance-${symbol}`, 60, async () => {
-      const resp = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`)
-      return await resp.json()
-    })
-  },
-})
 
 defineRoute({
   method: 'GET',
   path: '/api/witness/bookmarks',
-  handler: async ({ query, env }) => {
+  auth: 'user',
+  handler: async ({ query, env, uid }) => {
     const userId = parseInt(query.userId || '0', 10)
     if (!userId) {
       const err = new Error('User ID required')
@@ -602,7 +515,8 @@ defineRoute({
 defineRoute({
   method: 'GET',
   path: '/api/witness/history',
-  handler: async ({ query, env }) => {
+  auth: 'user',
+  handler: async ({ query, env, uid }) => {
     const userId = parseInt(query.userId || '0', 10)
     if (!userId) {
       const err = new Error('User ID required')
@@ -625,6 +539,7 @@ defineRoute({
 defineRoute({
   method: 'GET',
   path: '/api/witness/corpus/status',
+  auth: 'user',
   handler: async ({ env }) => {
     const Snapshot = getModel('wx.source.snapshot')
     const Source = getModel('wx.source')
@@ -658,6 +573,7 @@ defineRoute({
 defineRoute({
   method: 'GET',
   path: '/api/witness/corpus/health',
+  auth: 'user',
   handler: async ({ env }) => {
     const Passage = getModel('wx.passage')
     const Content = getModel('wx.content')
@@ -695,6 +611,7 @@ defineRoute({
 defineRoute({
   method: 'POST',
   path: '/api/witness/corpus/sync',
+  auth: 'admin',
   handler: async ({ body, env }) => {
     if (env.uid && env.uid !== SUPERUSER_ID && (env.context as any)?.user?.role !== 'admin') {
       const err = new Error('Unauthorized: administrator clearance required')
@@ -734,6 +651,7 @@ defineRoute({
 defineRoute({
   method: 'POST',
   path: '/api/witness/corpus/reindex',
+  auth: 'admin',
   handler: async ({ env }) => {
     if (env.uid && env.uid !== SUPERUSER_ID && (env.context as any)?.user?.role !== 'admin') {
       const err = new Error('Unauthorized: administrator clearance required')

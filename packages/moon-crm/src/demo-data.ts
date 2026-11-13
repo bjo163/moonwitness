@@ -1,4 +1,4 @@
-import { createCtx, getModel, SUPERUSER_ID } from '@moon/orm'
+import { createCtx, getModel, SUPERUSER_ID, loadJsonSeed } from '@moon/orm'
 
 export async function loadDemoData() {
   const Stage = getModel('crm.stage')
@@ -9,11 +9,18 @@ export async function loadDemoData() {
 
   const env = createCtx(SUPERUSER_ID, {}, getModel)
 
+  const jsonSeed = loadJsonSeed<{
+    stages?: { name: string; sequence?: number; isWon?: boolean }[]
+    teams?: { name: string }[]
+    leads?: { name: string; email: string; team: string; stage: string; expectedRevenue: number; probability: number }[]
+  }>('crm')
+
   // ── CRM Stages ──
-  const stageSeeds = [
+  const stageSeeds = jsonSeed?.stages || [
     { name: 'New Inquiries', sequence: 10, isWon: false },
     { name: 'Qualification & Review', sequence: 20, isWon: false },
     { name: 'Proposal / Partnership', sequence: 30, isWon: false },
+    { name: 'Legal & Agreement Drafting', sequence: 35, isWon: false },
     { name: 'Active Partnership', sequence: 40, isWon: true }
   ]
   const stageIds: Record<string, number> = {}
@@ -28,9 +35,11 @@ export async function loadDemoData() {
   }
 
   // ── CRM Teams ──
-  const teamSeeds = [
+  const teamSeeds = jsonSeed?.teams || [
     { name: 'Global Observatory Network Outreach' },
-    { name: 'Academic & Scripture Research Partnerships' }
+    { name: 'Academic & Scripture Research Partnerships' },
+    { name: 'Civilization Heritage Digitization Wing' },
+    { name: 'Institutional Endowments & Zakat Advisory' }
   ]
   const teamIds: Record<string, number> = {}
   for (const t of teamSeeds) {
@@ -44,7 +53,7 @@ export async function loadDemoData() {
   }
 
   // ── CRM Leads ──
-  const leadSeeds = [
+  const leadSeeds = jsonSeed?.leads || [
     {
       name: 'Granada Astronomical Center Collaboration',
       email: 'partnerships@granada-astro.es',
@@ -60,6 +69,38 @@ export async function loadDemoData() {
       stage: 'Qualification & Review',
       expectedRevenue: 120000000,
       probability: 50
+    },
+    {
+      name: 'Istanbul Kandilli Observatory Celestial Ephemeris Sync',
+      email: 'ephemeris@boun.edu.tr',
+      team: 'Global Observatory Network Outreach',
+      stage: 'Active Partnership',
+      expectedRevenue: 85000000,
+      probability: 100
+    },
+    {
+      name: 'Al-Azhar University Cross-Scripture Concordance MoU',
+      email: 'research-board@alazhar.edu.eg',
+      team: 'Academic & Scripture Research Partnerships',
+      stage: 'Legal & Agreement Drafting',
+      expectedRevenue: 175000000,
+      probability: 85
+    },
+    {
+      name: 'Moroccan Royal Falak Society Joint Ru’yah Network',
+      email: 'contact@maroc-falak.ma',
+      team: 'Global Observatory Network Outreach',
+      stage: 'New Inquiries',
+      expectedRevenue: 30000000,
+      probability: 25
+    },
+    {
+      name: 'National Waqf Board Digital Transformation Initiative',
+      email: 'digital@waqf-board.org',
+      team: 'Institutional Endowments & Zakat Advisory',
+      stage: 'Proposal / Partnership',
+      expectedRevenue: 250000000,
+      probability: 60
     }
   ]
 
@@ -77,5 +118,5 @@ export async function loadDemoData() {
     }
   }
 
-  console.log('[moon-crm] Demo data loaded: 4 stages, 2 teams, 2 leads')
+  console.log(`[moon-crm] Demo data enriched: ${stageSeeds.length} stages, ${teamSeeds.length} teams, ${leadSeeds.length} leads with pipeline tracking`)
 }

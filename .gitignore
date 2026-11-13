@@ -36,6 +36,19 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.ruff_cache/
+
+# rust / go / compiled
+target/
+
 # env files (can opt-in for committing if needed)
 .env*
 !.env.example
@@ -56,3 +69,20 @@ apps/web/public/swe-worker-*.js
 # generated UMBRELLA engineering report/runtime evidence
 .audit/umbrella-report.json
 .audit/runtime/
+
+# sqlite local databases
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+data/*.db
+data/*.db-*
+
+# Local Odoo runtime/upstream sources and generated recovery artifacts
+odoo19/enterprise-addons/
+odoo19/postgresql/
+odoo19/screenshots/
+.pnpm-store-recovery/
+.audit-output.txt
+.audit-worktree-baseline.txt
+JUST-PROMT-DONT-READ/

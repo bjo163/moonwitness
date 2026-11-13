@@ -44,11 +44,11 @@ export function writeGeneratedOutputs({
 
   if (writeReport) {
     if (safeFix) assertSafeFixTarget(rootDir, reportPath, "report")
-    plan.push({ kind: "report", path: path.relative(rootDir, reportPath), bytes: Buffer.byteLength(serializedReport) })
+    plan.push({ kind: "report", path: path.relative(rootDir, reportPath).split(path.sep).join("/"), bytes: Buffer.byteLength(serializedReport) })
   }
   if (writeStatus) {
     if (safeFix) assertSafeFixTarget(rootDir, statusPath, "status")
-    plan.push({ kind: "status", path: path.relative(rootDir, statusPath), bytes: Buffer.byteLength(renderedStatus) })
+    plan.push({ kind: "status", path: path.relative(rootDir, statusPath).split(path.sep).join("/"), bytes: Buffer.byteLength(renderedStatus) })
   }
 
   if (!dryRun) {

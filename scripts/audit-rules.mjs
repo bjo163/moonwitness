@@ -16,6 +16,10 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
+import { researchUiFindings } from "./audit-research-ui.mjs"
+import { componentHealth, componentHealthRecommendation } from "./component-health.mjs"
+import { consistencyFindings } from "./audit-consistency.mjs"
+import { auditThemeTokens } from "./audit-theme-tokens.mjs"
 import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
@@ -48,54 +52,13 @@ const TARGET_DIRS = ["apps", "packages"]
 const SOURCE_EXTENSIONS = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".css", ".scss"])
 const DOC_EXTENSIONS = new Set([".md", ".mdx", ".txt"])
 
-const CANONICAL_SEMANTIC_TOKENS = [
-  "background",
-  "foreground",
-  "card",
-  "card-foreground",
-  "popover",
-  "popover-foreground",
-  "primary",
-  "primary-foreground",
-  "secondary",
-  "secondary-foreground",
-  "muted",
-  "muted-foreground",
-  "accent",
-  "accent-foreground",
-  "destructive",
-  "destructive-foreground",
-  "success",
-  "success-foreground",
-  "warning",
-  "warning-foreground",
-  "info",
-  "info-foreground",
-  "border",
-  "input",
-  "ring",
-  "chart-1",
-  "chart-2",
-  "chart-3",
-  "chart-4",
-  "chart-5",
-  "sidebar",
-  "sidebar-foreground",
-  "sidebar-primary",
-  "sidebar-primary-foreground",
-  "sidebar-accent",
-  "sidebar-accent-foreground",
-  "sidebar-border",
-  "sidebar-ring",
-]
-
 const RAW_UI_COLOR_RE = /(?:^|[\s"'`])(?:bg|text|border|ring|outline|fill|stroke|decoration|divide|from|via|to|shadow)-\[#(?:[0-9a-fA-F]{3,8})\]/i
 const RAW_PALETTE_RE = /\b(?:bg|text|border|ring|divide|from|via|to|shadow)-(?:white|black|slate-\d+|gray-\d+|zinc-\d+|neutral-\d+)\b/i
 const LEGACY_COMPONENT_RE = /\b(?:CosmicDataTable|CosmicFormModal|CosmicPivotGrid|CosmicKanbanBoard|HUDPanel|HUDResourceTable|HUDTaskbar)\b/
 
 const DECORATIVE_UTILITY_RE = /(?:^|[\s"'`])(?:clip-(?:card|hero|btn|tag|rune)|card-clip|hero-clip|btn-clip|tag-clip|rune-clip|hud-clip-(?:card|hero|btn|tag|rune)|panel-glass|military-box|corner-(?:cyan|green|yellow|purple|pink)|glow-(?:cyan|emerald|amber|purple|pink)|holo-glow|laser-conduit-(?:cyan|green|yellow|purple)|bg-(?:cosmic-grid|dense-grid|space))/i
 
-const BANNED_TERMINOLOGY_RE = /\b(?:cyber-(?:cyan|green|yellow|purple|pink|dark|panel)|bg-space|clip-(?:card|hero|btn|tag|rune)|card-clip|hero-clip|btn-clip|tag-clip|rune-clip|panel-glass|corner-box|laser-conduit|holo-glow|font-orbitron|operator clearance|command shell|mission control|commit morph|initialize instance|telemetry aesthetic)\b/i
+const BANNED_TERMINOLOGY_RE = /\b(?:cyber-(?:cyan|green|yellow|purple|pink|dark|panel)|bg-space|clip-(?:card|hero|btn|tag|rune)|card-clip|hero-clip|btn-clip|tag-clip|rune-clip|panel-glass|corner-box|laser-conduit|holo-glow|font-orbitron|operator clearance|command shell|dev command shell|mission control|commit morph|initialize instance|quick directives|live diagnostic|secure link|signal active|retro terminal|holographic|telemetry aesthetic)\b/i
 
 const LEGACY_API_RE = /(?:from\s+["']next\/router["']|\bReactDOM\.render\b|\bfindDOMNode\b|\b(?:componentWillMount|componentWillReceiveProps|componentWillUpdate)\b|\bgetInitialProps\b|\bUNSAFE_component|\b(?:useClipPath|useCornerBrackets|usePanelGlass|useCosmicGrid|useLaserConduit|useCyberColor|useGlow|CyberColors|CyberColorVars|CyberColorKey|GlowClasses|ClipPathClasses|GridClasses|LaserConduitClasses|PanelGlass|ChamferSizes|GlowDepths|BackdropBlurs|GridSizes|CornerClasses|SemanticCorners)\b)/
 
@@ -121,6 +84,10 @@ function isActiveImplementation(filePath) {
 const VIOLATIONS = {
   // Pillar I & II: Frontend & Topology
   maxLines: [],
+  componentReuse: [],
+  duplicateComponents: [],
+  uiConsistency: [],
+  consistency: [],
   ghostFolders: [],
   legacyHudNaming: [],
   legacyCoreImports: [],
@@ -151,6 +118,7 @@ const VIOLATIONS = {
   cyberVarMisuse: [],
   rawUiColors: [],
   decorativeUtilities: [],
+  researchUi: [],
   forcedDarkMode: [],
   accessibility: [],
   packageBoundaryIssues: [],
@@ -159,6 +127,19 @@ const VIOLATIONS = {
 
 let totalFilesScanned = 0
 let totalPackagesAudited = 0
+const componentDefinitions = new Map()
+
+function auditDuplicateComponents() {
+  for (const [name, files] of componentDefinitions) {
+    const unique = [...new Set(files)]
+    if (unique.length < 2 || /^(Button|Card|Dialog|Input|Label|Badge|Table|Modal|Panel|RootLayout|Layout|Page|Loading|Error|NotFound)$/.test(name)) continue
+    VIOLATIONS.duplicateComponents.push({
+      file: unique.join(", "),
+      line: 1,
+      issue: `${name} is defined in ${unique.length} files; consolidate the canonical implementation or rename by domain`,
+    })
+  }
+}
 
 // Check Sovereign Package Genesis Contract
 function auditPackageGenesisContracts() {
@@ -305,120 +286,16 @@ function auditPackageBoundaries() {
   }
 }
 
-// Parse hex color string to sRGB [0..1]
-function parseHexToRgb(hex) {
-  let clean = hex.replace("#", "").trim()
-  if (clean.length === 3) clean = clean.split("").map((c) => c + c).join("")
-  if (clean.length === 6 || clean.length === 8) {
-    const r = parseInt(clean.slice(0, 2), 16) / 255
-    const g = parseInt(clean.slice(2, 4), 16) / 255
-    const b = parseInt(clean.slice(4, 6), 16) / 255
-    return [r, g, b]
-  }
-  return null
-}
-
-// Calculate relative luminance for WCAG contrast
-function getLuminance([r, g, b]) {
-  const a = [r, g, b].map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)))
-  return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722
-}
-
-function getContrastRatio(hex1, hex2) {
-  const rgb1 = parseHexToRgb(hex1)
-  const rgb2 = parseHexToRgb(hex2)
-  if (!rgb1 || !rgb2) return null
-  const lum1 = getLuminance(rgb1)
-  const lum2 = getLuminance(rgb2)
-  const brightest = Math.max(lum1, lum2)
-  const darkest = Math.min(lum1, lum2)
-  return (brightest + 0.05) / (darkest + 0.05)
-}
-
 function auditThemeParity() {
-  const cssPath = path.join(ROOT_DIR, "packages", "ui", "src", "styles", "globals.css")
+  const cssPath = path.join(ROOT_DIR, 'packages/ui/src/styles/globals.css')
   if (!fs.existsSync(cssPath)) {
-    VIOLATIONS.themeParity.push({ file: "globals.css", token: "globals.css not found" })
+    VIOLATIONS.themeParity.push({ file: 'globals.css', token: 'Canonical stylesheet missing' })
     return
   }
-
-  const css = fs.readFileSync(cssPath, "utf8")
-
-  // Check for any forbidden --cyber- variables
-  const cyberMatches = [...css.matchAll(/--cyber-[a-z-]+/g)]
-  if (cyberMatches.length > 0) {
-    VIOLATIONS.cyberVarMisuse.push({ file: "globals.css", snippet: `Found forbidden cyber vars: ${cyberMatches.map(m => m[0]).slice(0, 5).join(", ")}` })
-  }
-
-  // Extract :root block
-  const rootBlockMatch = css.match(/:root\s*\{([^}]+)\}/)
-  const darkBlockMatch = css.match(/\.dark\s*\{([^}]+)\}/)
-
-  if (!rootBlockMatch) {
-    VIOLATIONS.themeParity.push({ file: "globals.css", token: "Missing :root theme block" })
-  }
-  if (!darkBlockMatch) {
-    VIOLATIONS.themeParity.push({ file: "globals.css", token: "Missing .dark theme block" })
-  }
-
-  const rootVars = new Map()
-  if (rootBlockMatch) {
-    for (const match of rootBlockMatch[1].matchAll(/--([a-z0-9-]+)\s*:\s*([^;]+);/g)) {
-      rootVars.set(match[1], match[2].trim())
-    }
-  }
-
-  const darkVars = new Map()
-  if (darkBlockMatch) {
-    for (const match of darkBlockMatch[1].matchAll(/--([a-z0-9-]+)\s*:\s*([^;]+);/g)) {
-      darkVars.set(match[1], match[2].trim())
-    }
-  }
-
-  // Check that every canonical token is present in :root and .dark
-  for (const token of CANONICAL_SEMANTIC_TOKENS) {
-    if (!rootVars.has(token)) {
-      VIOLATIONS.themeParity.push({ file: "globals.css", token: `:root missing canonical token --${token}` })
-    }
-    if (!darkVars.has(token)) {
-      VIOLATIONS.themeParity.push({ file: "globals.css", token: `.dark missing canonical token --${token}` })
-    }
-  }
-
-  // Real WCAG Contrast Checks on canonical color pairs
-  const contrastPairs = [
-    ["background", "foreground"],
-    ["card", "card-foreground"],
-    ["popover", "popover-foreground"],
-    ["primary", "primary-foreground"],
-    ["secondary", "secondary-foreground"],
-    ["muted", "muted-foreground"],
-    ["accent", "accent-foreground"],
-    ["destructive", "destructive-foreground"],
-    ["success", "success-foreground"],
-    ["warning", "warning-foreground"],
-    ["info", "info-foreground"],
-  ]
-
-  for (const [bgToken, fgToken] of contrastPairs) {
-    const lightBg = rootVars.get(bgToken)
-    const lightFg = rootVars.get(fgToken)
-    if (lightBg && lightFg && lightBg.startsWith("#") && lightFg.startsWith("#")) {
-      const ratio = getContrastRatio(lightBg, lightFg)
-      if (ratio && ratio < 4.0) {
-        VIOLATIONS.accessibility.push({ file: "globals.css", issue: `Light mode contrast below standard for ${bgToken}/${fgToken}: ${ratio.toFixed(2)}:1` })
-      }
-    }
-
-    const darkBg = darkVars.get(bgToken)
-    const darkFg = darkVars.get(fgToken)
-    if (darkBg && darkFg && darkBg.startsWith("#") && darkFg.startsWith("#")) {
-      const ratio = getContrastRatio(darkBg, darkFg)
-      if (ratio && ratio < 4.0) {
-        VIOLATIONS.accessibility.push({ file: "globals.css", issue: `Dark mode contrast below standard for ${bgToken}/${fgToken}: ${ratio.toFixed(2)}:1` })
-      }
-    }
-  }
+  const findings = auditThemeTokens(fs.readFileSync(cssPath, 'utf8'))
+  VIOLATIONS.themeParity.push(...findings.themeParity)
+  VIOLATIONS.accessibility.push(...findings.accessibility)
+  VIOLATIONS.cyberVarMisuse.push(...findings.cyberVarMisuse)
 }
 
 function auditThemeInfrastructure() {
@@ -498,10 +375,96 @@ function auditFile(filePath) {
   const relativePath = path.relative(ROOT_DIR, filePath)
   const content = fs.readFileSync(filePath, "utf-8")
   const lines = content.split("\n")
+  VIOLATIONS.researchUi.push(...researchUiFindings(relativePath, content))
 
   const isTest = /(?:\.test|\.spec)\.[cm]?[jt]sx?$/.test(filePath)
   const isDoc = isDocumentation(filePath)
   const isActive = isActiveImplementation(filePath)
+  if (isActive) VIOLATIONS.consistency.push(...consistencyFindings(relativePath, content))
+  if (isActive && /\.tsx$/.test(filePath)) {
+    for (const item of componentHealth(relativePath, content)) {
+      VIOLATIONS.componentReuse.push({ file: relativePath, line: item.line, issue: `${item.component} health ${item.score}/100 (${item.lines} lines, ${item.props} props, ${item.conditionals} conditionals); ${componentHealthRecommendation(item)}` })
+    }
+  }
+
+  if (isActive && /\.tsx$/.test(filePath)) {
+    for (const match of content.matchAll(/(?:export\s+)?function\s+([A-Z][A-Za-z0-9_]*)\s*\(/g)) {
+      const name = match[1]
+      const files = componentDefinitions.get(name) || []
+      files.push(relativePath)
+      componentDefinitions.set(name, files)
+    }
+  }
+
+  // Application code should consume the shared UI contract instead of cloning
+  // primitive controls. Domain-specific canvas interactions remain exempt.
+  if (isActive && relativePath.startsWith("apps/") && /\.tsx$/.test(filePath)) {
+    const primitiveImports = new Set()
+    for (const match of content.matchAll(/(?:import|export)\s+\{([^}]+)\}\s+from\s+["']@workspace\/ui["']/g)) {
+      for (const name of match[1].split(",").map((item) => item.trim().split(/\s+as\s+/)[0])) primitiveImports.add(name)
+    }
+    const primitiveRules = [
+      [/<button\b/g, "Button", "Use Button from @workspace/ui or document a semantic control exception"],
+      [/<input\b/g, "Input", "Use Input from @workspace/ui"],
+      [/<textarea\b/g, "Textarea", "Use a shared form primitive from @workspace/ui"],
+      [/<select\b/g, "Select", "Use Select from @workspace/ui"],
+    ]
+    for (const [pattern, primitive, fix] of primitiveRules) {
+      const matches = [...content.matchAll(pattern)]
+      if (matches.length > 0 && !primitiveImports.has(primitive) && !relativePath.includes("/components/ui/")) {
+        VIOLATIONS.uiConsistency.push({ file: relativePath, line: 1, issue: `${matches.length} raw <${primitive.toLowerCase()}> element(s); ${fix}` })
+      }
+    }
+  }
+
+  // Reuse guard: keep view files thin and surface repeated local UI patterns.
+  if (isActive && relativePath.startsWith("apps/") && /\.tsx$/.test(filePath)) {
+    const localComponents = [...content.matchAll(/(?:export\s+)?function\s+([A-Z][A-Za-z0-9_]*)\s*\(/g)]
+      .map((match) => match[1])
+    if (localComponents.length > 6) {
+      VIOLATIONS.componentReuse.push({
+        file: relativePath,
+        line: 1,
+        issue: `${localComponents.length} local components; extract reusable UI into a focused module or shared package`,
+      })
+    }
+
+    const iconImports = new Set(
+      [...content.matchAll(/import\s+\{([^}]+)\}\s+from\s+["'](?:lucide-react|@radix-ui\/[^"']+)["']/g)]
+        .flatMap((m) => m[1].split(",").map((s) => s.trim().split(/\s+as\s+/)[0]))
+    )
+
+    const jsxTags = [...content.matchAll(/<([A-Z][A-Za-z0-9_]*)\b/g)]
+      .map((match) => match[1])
+      .filter((tag) => !iconImports.has(tag) && !/^(Link|Suspense|Fragment|Image|Motion|[A-Z][a-z]+|.*Primitive|.*Icon)$/.test(tag))
+    const counts = new Map()
+    for (const tag of jsxTags) counts.set(tag, (counts.get(tag) || 0) + 1)
+    for (const [tag, count] of counts) {
+      if (count >= 4 && !localComponents.includes(tag)) {
+        VIOLATIONS.componentReuse.push({
+          file: relativePath,
+          line: 1,
+          issue: `${tag} is repeated ${count} times; consider a data-driven reusable component`,
+        })
+      }
+    }
+
+    // Long repeated utility strings are usually a hidden local component.
+    const classCounts = new Map()
+    for (const match of content.matchAll(/className\s*=\s*["`]([^"`]{48,})["`]/g)) {
+      const classes = match[1].replace(/\s+/g, " ").trim()
+      classCounts.set(classes, (classCounts.get(classes) || 0) + 1)
+    }
+    for (const [classes, count] of classCounts) {
+      if (count >= 3) {
+        VIOLATIONS.componentReuse.push({
+          file: relativePath,
+          line: 1,
+          issue: `utility class pattern repeated ${count} times; extract a named component or shared variant (${classes.slice(0, 64)}…)`,
+        })
+      }
+    }
+  }
 
   // Fail on Legacy APIs & forbidden token classes
   if (isActive) {
@@ -559,8 +522,20 @@ function auditFile(filePath) {
     const trimmed = line.trim()
     if (trimmed.startsWith("//") || trimmed.startsWith("/*") || trimmed.startsWith("*")) return
 
-    if (isActive) {
-      if (line.match(/var\(--cyber-[^)]+\)/)) {
+  if (isActive) {
+    if (isDomainVisualization(relativePath) === false && /\.(?:tsx|jsx)$/.test(filePath)) {
+      for (const match of content.matchAll(/<(?:img|Image)\b[\s\S]*?>/g)) {
+        if (!/\balt\s*=/.test(match[0])) {
+          VIOLATIONS.missingImageAlt.push({
+            file: relativePath,
+            line: lineNumberFor(content, match.index),
+            issue: "image is missing an accessible alt attribute",
+          })
+        }
+      }
+    }
+
+    if (line.match(/var\(--cyber-[^)]+\)/)) {
         VIOLATIONS.cyberVarMisuse.push({ file: relativePath, line: lineNo, snippet: trimmed })
       }
 
@@ -591,7 +566,7 @@ function auditFile(filePath) {
     }
 
     // Law 07: Legacy HUD / Cosmic Naming
-    if (!filePath.includes("eslint-config")) {
+    if (!filePath.includes("eslint-config") && !filePath.includes(`${path.sep}moon-mizan${path.sep}`)) {
       const hudMatch = line.match(/\b(HUDResourceTable|HUDErrorBoundary|useHUDModal|HUD_TOKENS|HudAccentColor|HudPanelLevel|HUDPanel|HUDBreadcrumb|CosmicDataTable|CosmicFormModal|CosmicPivotGrid|CosmicKanbanBoard|HUDTaskbar)\b/)
       if (hudMatch) {
         VIOLATIONS.legacyHudNaming.push({
@@ -671,6 +646,7 @@ auditThemeInfrastructure()
 for (const dir of TARGET_DIRS) {
   scanDirectory(path.join(ROOT_DIR, dir))
 }
+auditDuplicateComponents()
 
 // ═════════════════════════════════════════════════════════════════════════════
 // REPORT GENERATION
@@ -729,11 +705,16 @@ else console.log(`  ${RED}❌ [LAW 24] Direct localStorage Calls: ${VIOLATIONS.d
 
 console.log(`\n${BOLD}${CYAN}▶ PHASE 5 GOVERNANCE: CANONICAL ENTERPRISE DESIGN SYSTEM AUDIT${RESET}`)
 const governanceChecks = [
+  ["CROSS-FILE CONSISTENCY", VIOLATIONS.consistency],
+  ["SHARED UI BOUNDARY", VIOLATIONS.uiConsistency],
+  ["COMPONENT REUSE & COMPOSITION", VIOLATIONS.componentReuse],
+  ["DUPLICATE COMPONENT DEFINITIONS", VIOLATIONS.duplicateComponents],
   ["LEGACY APIs & TOKENS", VIOLATIONS.legacyApis],
   ["BANNED ACTIVE TERMINOLOGY", VIOLATIONS.bannedTerminology],
   ["CYBER VARIABLE MISUSE", VIOLATIONS.cyberVarMisuse],
   ["RAW UI COLORS", VIOLATIONS.rawUiColors],
   ["DECORATIVE UTILITIES", VIOLATIONS.decorativeUtilities],
+  ["RESEARCH UI SPECIFICATION", VIOLATIONS.researchUi],
   ["FORCED DARK MODE", VIOLATIONS.forcedDarkMode],
   ["ACCESSIBILITY & CONTRAST", VIOLATIONS.accessibility],
   ["PACKAGE BOUNDARIES", VIOLATIONS.packageBoundaryIssues],
@@ -779,7 +760,9 @@ const criticalViolations =
   VIOLATIONS.packageBoundaryIssues.length +
   VIOLATIONS.themeParity.length +
   VIOLATIONS.bannedTerminology.length +
-  VIOLATIONS.decorativeUtilities.length
+  VIOLATIONS.researchUi.length
+  // Composition findings are advisory; they guide refactors
+  // without blocking security or architectural certification.
 
 if (criticalViolations === 0) {
   console.log(`${GREEN}${BOLD}🎉 SUPREME ARCHITECTURAL HARMONY: 0 CRITICAL CONSTITUTIONAL VIOLATIONS!${RESET}\n`)

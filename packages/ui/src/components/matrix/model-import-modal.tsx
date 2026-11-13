@@ -5,6 +5,7 @@ import { X, UploadCloud, ArrowRight, CheckCircle2, AlertCircle, Play, Loader2 } 
 import type { ModelSchema } from "@workspace/types"
 import { apiPost } from "@moon/client"
 import { APP_PORTS } from "@workspace/types"
+import { Button } from "../button"
 
 const getApiBase = () => {
   if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_API_URL) {
@@ -20,12 +21,28 @@ export interface ModelImportModalProps {
   onImportSuccess?: () => void
 }
 
-export function ModelImportModal({
-  isOpen,
-  onClose,
-  schema,
-  onImportSuccess,
-}: ModelImportModalProps) {
+type ImportStats = { success: number; failed: number }
+
+type ModelImportController = {
+  csvText: string
+  headers: string[]
+  rows: string[][]
+  fieldMappings: Record<string, string>
+  importing: boolean
+  progress: number
+  error: string | null
+  importStats: ImportStats | null
+  schemaFieldOptions: Array<{ key: string; label: string }>
+  handleFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
+  handleCsvTextChange: (value: string) => void
+  handleFieldMappingChange: (header: string, value: string) => void
+  handleExecuteImport: () => Promise<void>
+}
+
+function useModelImportController(
+  schema: ModelSchema,
+  onImportSuccess?: () => void,
+): ModelImportController {
   const [csvText, setCsvText] = useState("")
   const [headers, setHeaders] = useState<string[]>([])
   const [rows, setRows] = useState<string[][]>([])
@@ -33,18 +50,17 @@ export function ModelImportModal({
   const [importing, setImporting] = useState(false)
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
-  const [importStats, setImportStats] = useState<{ success: number; failed: number } | null>(null)
+  const [importStats, setImportStats] = useState<ImportStats | null>(null)
 
   const schemaFieldOptions = Object.entries(schema.fields)
-    .filter(([_, f]) => !f.invisible && f.type !== "one2many" && f.type !== "many2many")
-    .map(([k, f]) => ({ key: k, label: f.label || k }))
+    .filter(([_, field]) => !field.invisible && field.type !== "one2many" && field.type !== "many2many")
+    .map(([key, field]) => ({ key, label: field.label || key }))
 
-  // Parse CSV text into headers and rows
   const parseCsv = (text: string) => {
     try {
       const lines = text
         .split(/\r\n|\n/)
-        .map((l) => l.trim())
+        .map((line) => line.trim())
         .filter(Boolean)
       if (lines.length < 2) {
         setError("CSV must contain at least a header line and 1 data line.")
@@ -52,22 +68,22 @@ export function ModelImportModal({
       }
 
       // Simple CSV split handling quotes
-      const splitLine = (l: string) => {
+      const splitLine = (line: string) => {
         const result: string[] = []
-        let cur = ""
+        let current = ""
         let insideQuote = false
-        for (let i = 0; i < l.length; i++) {
-          const char = l[i]
+        for (let i = 0; i < line.length; i++) {
+          const char = line[i]
           if (char === '"') {
             insideQuote = !insideQuote
           } else if (char === "," && !insideQuote) {
-            result.push(cur.trim().replace(/^"|"$/g, ""))
-            cur = ""
+            result.push(current.trim().replace(/^"|"$/g, ""))
+            current = ""
           } else {
-            cur += char
+            current += char
           }
         }
-        result.push(cur.trim().replace(/^"|"$/g, ""))
+        result.push(current.trim().replace(/^"|"$/g, ""))
         return result
       }
 
@@ -80,36 +96,46 @@ export function ModelImportModal({
 
       // Auto-map matching headers to schema keys
       const initialMap: Record<string, string> = {}
-      parsedHeaders.forEach((h) => {
-        const cleanH = h.toLowerCase().replace(/[^a-z0-9]/g, "")
-        const match = schemaFieldOptions.find((f) => {
-          const cleanF = f.key.toLowerCase().replace(/[^a-z0-9]/g, "")
-          const cleanLabel = f.label.toLowerCase().replace(/[^a-z0-9]/g, "")
-          return cleanF === cleanH || cleanLabel === cleanH
+      parsedHeaders.forEach((header) => {
+        const cleanHeader = header.toLowerCase().replace(/[^a-z0-9]/g, "")
+        const match = schemaFieldOptions.find((field) => {
+          const cleanKey = field.key.toLowerCase().replace(/[^a-z0-9]/g, "")
+          const cleanLabel = field.label.toLowerCase().replace(/[^a-z0-9]/g, "")
+          return cleanKey === cleanHeader || cleanLabel === cleanHeader
         })
         if (match) {
-          initialMap[h] = match.key
+          initialMap[header] = match.key
         } else {
-          initialMap[h] = "IGNORE"
+          initialMap[header] = "IGNORE"
         }
       })
       setFieldMappings(initialMap)
       setError(null)
-    } catch (e: any) {
-      setError(`CSV Parse Error: ${e.message || e}`)
+    } catch (parseError: any) {
+      setError(`CSV Parse Error: ${parseError.message || parseError}`)
     }
   }
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
     if (!file) return
     const reader = new FileReader()
-    reader.onload = (event) => {
-      const text = event.target?.result as string
+    reader.onload = (loadEvent) => {
+      const text = loadEvent.target?.result as string
       setCsvText(text)
       parseCsv(text)
     }
     reader.readAsText(file)
+  }
+
+  const handleCsvTextChange = (value: string) => {
+    setCsvText(value)
+    setError(null)
+    setImportStats(null)
+  }
+
+  const handleFieldMappingChange = (header: string, value: string) => {
+    setFieldMappings((previous) => ({ ...previous, [header]: value }))
   }
 
   const handleExecuteImport = async () => {
@@ -125,19 +151,19 @@ export function ModelImportModal({
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i]
       if (!row) continue
-      const rec: Record<string, any> = {}
+      const record: Record<string, any> = {}
 
-      headers.forEach((h, hIdx) => {
-        const mappedKey = fieldMappings[h]
-        if (mappedKey && mappedKey !== "IGNORE" && row[hIdx] !== undefined) {
-          rec[mappedKey] = row[hIdx]
+      headers.forEach((header, headerIndex) => {
+        const mappedKey = fieldMappings[header]
+        if (mappedKey && mappedKey !== "IGNORE" && row[headerIndex] !== undefined) {
+          record[mappedKey] = row[headerIndex]
         }
       })
 
       try {
-        await apiPost(`${getApiBase()}/api/${schema.name}`, rec)
+        await apiPost(`${getApiBase()}/api/${schema.name}`, record)
         successCount++
-      } catch (err) {
+      } catch (importError) {
         failedCount++
       }
 
@@ -152,7 +178,47 @@ export function ModelImportModal({
     }
   }
 
-  if (!isOpen) return null
+  return {
+    csvText,
+    headers,
+    rows,
+    fieldMappings,
+    importing,
+    progress,
+    error,
+    importStats,
+    schemaFieldOptions,
+    handleFileUpload,
+    handleCsvTextChange,
+    handleFieldMappingChange,
+    handleExecuteImport,
+  }
+}
+
+function ModelImportModalView({
+  schema,
+  onClose,
+  controller,
+}: {
+  schema: ModelSchema
+  onClose: () => void
+  controller: ModelImportController
+}) {
+  const {
+    csvText,
+    headers,
+    rows,
+    fieldMappings,
+    importing,
+    progress,
+    error,
+    importStats,
+    schemaFieldOptions,
+    handleFileUpload,
+    handleCsvTextChange,
+    handleFieldMappingChange,
+    handleExecuteImport,
+  } = controller
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
@@ -167,9 +233,9 @@ export function ModelImportModal({
               Import CSV Dataset
             </h2>
           </div>
-          <button onClick={onClose} className="p-1 text-muted-foreground hover:text-foreground">
+          <Button type="button" variant="ghost" onClick={onClose} aria-label="Close import dialog" className="p-1 text-muted-foreground hover:text-foreground">
             <X className="w-5 h-5" />
-          </button>
+          </Button>
         </div>
 
         {/* Content */}
@@ -208,11 +274,7 @@ export function ModelImportModal({
               <span className="text-[10px] text-muted-foreground uppercase font-semibold">Or paste raw CSV content:</span>
               <textarea
                 value={csvText}
-                onChange={(e) => {
-                  setCsvText(e.target.value)
-                  setError(null)
-                  setImportStats(null)
-                }}
+                onChange={(event) => handleCsvTextChange(event.target.value)}
                 placeholder="name,priority,stageId&#10;Task Optimization,high,1&#10;Security Patch,critical,2"
                 rows={4}
                 className="w-full bg-background border border-border rounded-lg p-2.5 text-foreground text-[11px] font-mono placeholder:text-muted-foreground focus:border-primary focus:outline-none"
@@ -229,19 +291,19 @@ export function ModelImportModal({
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {headers.map((h) => (
-                  <div key={h} className="flex items-center justify-between gap-2 p-2 bg-muted/30 border border-border rounded-lg">
-                    <span className="font-medium text-foreground truncate max-w-[120px] text-xs">{h}</span>
+                {headers.map((header) => (
+                  <div key={header} className="flex items-center justify-between gap-2 p-2 bg-muted/30 border border-border rounded-lg">
+                    <span className="font-medium text-foreground truncate max-w-[120px] text-xs">{header}</span>
                     <ArrowRight className="w-3.5 h-3.5 text-primary flex-shrink-0" />
                     <select
-                      value={fieldMappings[h] || "IGNORE"}
-                      onChange={(e) => setFieldMappings((prev) => ({ ...prev, [h]: e.target.value }))}
+                      value={fieldMappings[header] || "IGNORE"}
+                      onChange={(event) => handleFieldMappingChange(header, event.target.value)}
                       className="bg-card border border-border rounded-md px-2 py-1 text-foreground text-[11px] focus:outline-none"
                     >
                       <option value="IGNORE">-- Do Not Import --</option>
-                      {schemaFieldOptions.map((f) => (
-                        <option key={f.key} value={f.key}>
-                          {f.label}
+                      {schemaFieldOptions.map((field) => (
+                        <option key={field.key} value={field.key}>
+                          {field.label}
                         </option>
                       ))}
                     </select>
@@ -289,4 +351,17 @@ export function ModelImportModal({
       </div>
     </div>
   )
+}
+
+export function ModelImportModal({
+  isOpen,
+  onClose,
+  schema,
+  onImportSuccess,
+}: ModelImportModalProps) {
+  const controller = useModelImportController(schema, onImportSuccess)
+
+  if (!isOpen) return null
+
+  return <ModelImportModalView schema={schema} onClose={onClose} controller={controller} />
 }

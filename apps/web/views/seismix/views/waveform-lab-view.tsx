@@ -302,6 +302,215 @@ function LabCanvas({
   )
 }
 
+function WaveformPresetSelector({
+  activePreset,
+  onPresetSelect,
+}: {
+  activePreset: string
+  onPresetSelect: (preset: WavePreset) => void
+}) {
+  return (
+    <Panel level="level3" accentColor="accent">
+      <PanelHeader
+        title="WAVE PRESETS"
+        icon={AudioWaveform}
+        status={`${PRESETS.length} PATTERNS`}
+        accentColor="accent"
+      />
+
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {PRESETS.map((preset) => {
+          const Icon = preset.icon
+          const isActive = activePreset === preset.id
+          return (
+            <button
+              key={preset.id}
+              onClick={() => onPresetSelect(preset)}
+              className="w-full rounded-xl border border-border/40 bg-card/90 p-3 text-left transition-all duration-300 hover:-translate-y-0.5"
+              style={{
+                borderColor: isActive
+                  ? `${preset.color}50`
+                  : "rgba(0,240,255,0.1)",
+                boxShadow: isActive ? `0 0 20px ${preset.color}20` : "none",
+                background: isActive ? `${preset.color}05` : "transparent",
+              }}
+            >
+              <div className="mb-1 flex items-center gap-2">
+                <Icon className="h-3.5 w-3.5" style={{ color: preset.color }} />
+                <span
+                  className="font-mono text-[8px] font-bold tracking-widest"
+                  style={{ color: preset.color }}
+                >
+                  {preset.name}
+                </span>
+              </div>
+              <p className="font-mono text-[7px] leading-relaxed text-primary">
+                {preset.description}
+              </p>
+            </button>
+          )
+        })}
+      </div>
+    </Panel>
+  )
+}
+
+function WaveformOutputPanel({
+  isPlaying,
+  params,
+  activeColor,
+  onTogglePlayback,
+  onReset,
+}: {
+  isPlaying: boolean
+  params: typeof DEFAULT_PARAMS
+  activeColor: string
+  onTogglePlayback: () => void
+  onReset: () => void
+}) {
+  return (
+    <Panel level="level1" accentColor="accent" className="lg:col-span-2">
+      <PanelHeader
+        title="WAVEFORM OUTPUT"
+        icon={AudioWaveform}
+        status={isPlaying ? "LIVE" : "PAUSED"}
+        accentColor="accent"
+      />
+
+      <div
+        className="relative overflow-hidden border"
+        style={{
+          borderColor: `${activeColor}20`,
+          background: "rgba(5, 7, 10, 0.9)",
+        }}
+      >
+        <LabCanvas isPlaying={isPlaying} params={params} color={activeColor} />
+
+        <div className="absolute top-2 right-3 font-mono text-[7px] font-bold tracking-widest text-primary">
+          SEISMIX WAVEFORM LAB V1.0
+        </div>
+        <div className="absolute bottom-2 left-3 font-mono text-[8px]">
+          <span style={{ color: activeColor }}>◉ OUTPUT CHANNEL</span>
+          <span className="ml-3 text-primary">
+            FREQ: {params.frequency.toFixed(1)} Hz • AMP:{" "}
+            {params.amplitude.toFixed(0)}
+          </span>
+        </div>
+      </div>
+
+      <div className="mt-4 flex items-center gap-3">
+        <button
+          onClick={onTogglePlayback}
+          className="flex items-center gap-2 border px-4 py-2 font-mono text-[10px] font-bold tracking-widest transition-all"
+          style={{
+            borderColor: isPlaying
+              ? "rgba(0, 255, 102, 0.4)"
+              : `${activeColor}40`,
+            color: isPlaying ? "#00FF66" : activeColor,
+            background: isPlaying
+              ? "rgba(0, 255, 102, 0.08)"
+              : `${activeColor}08`,
+          }}
+        >
+          {isPlaying ? (
+            <>
+              <Pause className="h-3.5 w-3.5" />[ PAUSE ]
+            </>
+          ) : (
+            <>
+              <Play className="h-3.5 w-3.5" />[ SIMULATE ]
+            </>
+          )}
+        </button>
+        <button
+          onClick={onReset}
+          className="flex items-center gap-2 border border-primary/20 px-3 py-2 font-mono text-[10px] font-bold tracking-widest text-primary transition-all hover:border-primary/40"
+        >
+          <RotateCcw className="h-3.5 w-3.5" />
+          RESET
+        </button>
+      </div>
+    </Panel>
+  )
+}
+
+function WaveformParameterPanel({
+  params,
+  onParamChange,
+}: {
+  params: typeof DEFAULT_PARAMS
+  onParamChange: (key: keyof typeof DEFAULT_PARAMS, value: number) => void
+}) {
+  return (
+    <Panel level="level2" accentColor="primary">
+      <PanelHeader
+        title="PARAMETERS"
+        icon={Sliders}
+        status="ADJUSTABLE"
+        accentColor="primary"
+      />
+
+      <div className="space-y-5">
+        <ParamSlider
+          label="FREQUENCY"
+          value={params.frequency}
+          min={0.1}
+          max={10}
+          step={0.1}
+          onChange={(v) => onParamChange("frequency", v)}
+          unit="Hz"
+          color="#00F0FF"
+        />
+        <ParamSlider
+          label="AMPLITUDE"
+          value={params.amplitude}
+          min={5}
+          max={120}
+          step={1}
+          onChange={(v) => onParamChange("amplitude", v)}
+          color="#FFE600"
+        />
+        <ParamSlider
+          label="DAMPING"
+          value={params.damping}
+          min={0}
+          max={1}
+          step={0.01}
+          onChange={(v) => onParamChange("damping", v)}
+          color="#FF9900"
+        />
+        <ParamSlider
+          label="PHASE SHIFT"
+          value={params.phaseShift}
+          min={0}
+          max={6.28}
+          step={0.1}
+          onChange={(v) => onParamChange("phaseShift", v)}
+          unit="rad"
+          color="#A100FF"
+        />
+        <ParamSlider
+          label="NOISE LEVEL"
+          value={params.noiseLevel}
+          min={0}
+          max={30}
+          step={1}
+          onChange={(v) => onParamChange("noiseLevel", v)}
+          color="#FF0055"
+        />
+      </div>
+
+      <div className="mt-5 border-t border-primary/10 pt-3">
+        <p className="font-mono text-[7px] leading-relaxed text-primary">
+          ADJUST PARAMETERS TO OBSERVE WAVEFORM BEHAVIOR. FREQUENCY CONTROLS
+          OSCILLATION RATE. DAMPING REDUCES AMPLITUDE OVER DISTANCE. NOISE
+          SIMULATES GEOLOGICAL INTERFERENCE.
+        </p>
+      </div>
+    </Panel>
+  )
+}
+
 // ── MAIN VIEW ────────────────────────────────────────────
 export function WaveformLabView() {
   const [isPlaying, setIsPlaying] = useState(false)
@@ -337,192 +546,20 @@ export function WaveformLabView() {
         accentColor="accent"
       />
 
-      {/* Preset selector */}
-      <Panel level="level3" accentColor="accent">
-        <PanelHeader
-          title="WAVE PRESETS"
-          icon={AudioWaveform}
-          status={`${PRESETS.length} PATTERNS`}
-          accentColor="accent"
-        />
+      <WaveformPresetSelector
+        activePreset={activePreset}
+        onPresetSelect={applyPreset}
+      />
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {PRESETS.map((preset) => {
-            const Icon = preset.icon
-            const isActive = activePreset === preset.id
-            return (
-              <button
-                key={preset.id}
-                onClick={() => applyPreset(preset)}
-                className="rounded-xl border border-border/40 bg-card/90 w-full border p-3 text-left transition-all duration-300 hover:-translate-y-0.5"
-                style={{
-                  borderColor: isActive
-                    ? `${preset.color}50`
-                    : "rgba(0,240,255,0.1)",
-                  boxShadow: isActive ? `0 0 20px ${preset.color}20` : "none",
-                  background: isActive ? `${preset.color}05` : "transparent",
-                }}
-              >
-                <div className="mb-1 flex items-center gap-2">
-                  <Icon
-                    className="h-3.5 w-3.5"
-                    style={{ color: preset.color }}
-                  />
-                  <span
-                    className="font-mono text-[8px] font-bold tracking-widest"
-                    style={{ color: preset.color }}
-                  >
-                    {preset.name}
-                  </span>
-                </div>
-                <p className="font-mono text-[7px] leading-relaxed text-primary">
-                  {preset.description}
-                </p>
-              </button>
-            )
-          })}
-        </div>
-      </Panel>
-
-      {/* Waveform canvas + controls */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        {/* Canvas */}
-        <Panel level="level1" accentColor="accent" className="lg:col-span-2">
-          <PanelHeader
-            title="WAVEFORM OUTPUT"
-            icon={AudioWaveform}
-            status={isPlaying ? "LIVE" : "PAUSED"}
-            accentColor="accent"
-          />
-
-          <div
-            className="relative overflow-hidden border"
-            style={{
-              borderColor: `${activeColor}20`,
-              background: "rgba(5, 7, 10, 0.9)",
-            }}
-          >
-            <LabCanvas
-              isPlaying={isPlaying}
-              params={params}
-              color={activeColor}
-            />
-
-            {/* Overlay labels */}
-            <div className="absolute top-2 right-3 font-mono text-[7px] font-bold tracking-widest text-primary">
-              SEISMIX WAVEFORM LAB V1.0
-            </div>
-            <div className="absolute bottom-2 left-3 font-mono text-[8px]">
-              <span style={{ color: activeColor }}>◉ OUTPUT CHANNEL</span>
-              <span className="ml-3 text-primary">
-                FREQ: {params.frequency.toFixed(1)} Hz • AMP:{" "}
-                {params.amplitude.toFixed(0)}
-              </span>
-            </div>
-          </div>
-
-          {/* Transport controls */}
-          <div className="mt-4 flex items-center gap-3">
-            <button
-              onClick={() => setIsPlaying(!isPlaying)}
-              className="flex items-center gap-2 border px-4 py-2 font-mono text-[10px] font-bold tracking-widest transition-all "
-              style={{
-                borderColor: isPlaying
-                  ? "rgba(0, 255, 102, 0.4)"
-                  : `${activeColor}40`,
-                color: isPlaying ? "#00FF66" : activeColor,
-                background: isPlaying
-                  ? "rgba(0, 255, 102, 0.08)"
-                  : `${activeColor}08`,
-              }}
-            >
-              {isPlaying ? (
-                <>
-                  <Pause className="h-3.5 w-3.5" />[ PAUSE ]
-                </>
-              ) : (
-                <>
-                  <Play className="h-3.5 w-3.5" />[ SIMULATE ]
-                </>
-              )}
-            </button>
-            <button
-              onClick={resetParams}
-              className="flex items-center gap-2 border border-primary/20 px-3 py-2 font-mono text-[10px] font-bold tracking-widest text-primary transition-all  hover:border-primary/40"
-            >
-              <RotateCcw className="h-3.5 w-3.5" />
-              RESET
-            </button>
-          </div>
-        </Panel>
-
-        {/* Parameter controls */}
-        <Panel level="level2" accentColor="primary">
-          <PanelHeader
-            title="PARAMETERS"
-            icon={Sliders}
-            status="ADJUSTABLE"
-            accentColor="primary"
-          />
-
-          <div className="space-y-5">
-            <ParamSlider
-              label="FREQUENCY"
-              value={params.frequency}
-              min={0.1}
-              max={10}
-              step={0.1}
-              onChange={(v) => updateParam("frequency", v)}
-              unit="Hz"
-              color="#00F0FF"
-            />
-            <ParamSlider
-              label="AMPLITUDE"
-              value={params.amplitude}
-              min={5}
-              max={120}
-              step={1}
-              onChange={(v) => updateParam("amplitude", v)}
-              color="#FFE600"
-            />
-            <ParamSlider
-              label="DAMPING"
-              value={params.damping}
-              min={0}
-              max={1}
-              step={0.01}
-              onChange={(v) => updateParam("damping", v)}
-              color="#FF9900"
-            />
-            <ParamSlider
-              label="PHASE SHIFT"
-              value={params.phaseShift}
-              min={0}
-              max={6.28}
-              step={0.1}
-              onChange={(v) => updateParam("phaseShift", v)}
-              unit="rad"
-              color="#A100FF"
-            />
-            <ParamSlider
-              label="NOISE LEVEL"
-              value={params.noiseLevel}
-              min={0}
-              max={30}
-              step={1}
-              onChange={(v) => updateParam("noiseLevel", v)}
-              color="#FF0055"
-            />
-          </div>
-
-          <div className="mt-5 border-t border-primary/10 pt-3">
-            <p className="font-mono text-[7px] leading-relaxed text-primary">
-              ADJUST PARAMETERS TO OBSERVE WAVEFORM BEHAVIOR. FREQUENCY CONTROLS
-              OSCILLATION RATE. DAMPING REDUCES AMPLITUDE OVER DISTANCE. NOISE
-              SIMULATES GEOLOGICAL INTERFERENCE.
-            </p>
-          </div>
-        </Panel>
+        <WaveformOutputPanel
+          isPlaying={isPlaying}
+          params={params}
+          activeColor={activeColor}
+          onTogglePlayback={() => setIsPlaying(!isPlaying)}
+          onReset={resetParams}
+        />
+        <WaveformParameterPanel params={params} onParamChange={updateParam} />
       </div>
     </div>
   )

@@ -1,8 +1,8 @@
 'use client'
 
 import * as React from 'react'
-import { Card, CardHeader, CardTitle, CardContent } from './card.js'
-import { Badge } from './badge.js'
+import { Card, CardHeader, CardTitle, CardContent } from './card'
+import { Badge } from './badge'
 
 export interface EvidenceItem {
   id: string | number

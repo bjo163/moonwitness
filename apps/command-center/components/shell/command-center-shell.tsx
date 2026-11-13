@@ -12,6 +12,20 @@ export function CommandCenterShell({ children }: { children: React.ReactNode }) 
   const router = useRouter()
   const { isAuthenticated, isLoading, logout } = useAuthSession()
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
+  const menuButtonRef = React.useRef<HTMLButtonElement>(null)
+
+  React.useEffect(() => {
+    if (!sidebarOpen) return
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return
+      setSidebarOpen(false)
+      menuButtonRef.current?.focus()
+    }
+
+    window.addEventListener("keydown", closeOnEscape)
+    return () => window.removeEventListener("keydown", closeOnEscape)
+  }, [sidebarOpen])
 
   const isAuthRoute = pathname === "/login" || pathname === "/auth/login"
 
@@ -25,6 +39,11 @@ export function CommandCenterShell({ children }: { children: React.ReactNode }) 
   const handleLogout = () => {
     logout()
     router.push("/login")
+  }
+
+  const closeSidebar = () => {
+    setSidebarOpen(false)
+    menuButtonRef.current?.focus()
   }
 
   // If on login route, render full-screen without sidebar/topbar
@@ -51,11 +70,19 @@ export function CommandCenterShell({ children }: { children: React.ReactNode }) 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
       <Suspense fallback={null}>
-        <CommandCenterSidebar onLogout={handleLogout} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <CommandCenterSidebar
+          onLogout={handleLogout}
+          open={sidebarOpen}
+          onClose={closeSidebar}
+        />
       </Suspense>
       <div className="flex min-h-screen flex-col lg:pl-72">
         <Suspense fallback={null}>
-          <CommandCenterTopbar onMenu={() => setSidebarOpen(true)} />
+          <CommandCenterTopbar
+            onMenu={() => setSidebarOpen((isOpen) => !isOpen)}
+            sidebarOpen={sidebarOpen}
+            menuButtonRef={menuButtonRef}
+          />
         </Suspense>
         <main className="flex-1 overflow-x-hidden p-4 sm:p-6 lg:p-8">
           <ErrorBoundary moduleId="COMMAND_CENTER">
@@ -63,7 +90,7 @@ export function CommandCenterShell({ children }: { children: React.ReactNode }) 
           </ErrorBoundary>
         </main>
       </div>
-      <CommandPalette />
+      <CommandPalette commandCenterUrl="" />
     </div>
   )
 }

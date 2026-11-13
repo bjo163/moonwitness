@@ -21,6 +21,10 @@ import mailAddons from "@moon/mail"
 import geoAddons from "@moon/geo"
 import cronAddons from "@moon/cron"
 
+async function seedLegacyWitnessIfEnabled(): Promise<void> {
+  await seedWitnessGraphCore()
+}
+
 async function loadAllDemoData() {
   console.log("=== Loading Demo Data across all 16 Addon Packages ===")
 
@@ -39,16 +43,16 @@ async function loadAllDemoData() {
     import("@moon/geo"),
     import("@moon/cron"),
   ])
-  await Promise.all([
+  const legacyDemoLoads = [
     witnessM.loadDemoData(),
-    perfM.loadDemoData(),
     projectM.loadDemoData(),
     productM.loadDemoData(),
     accountM.loadDemoData(),
     mailM.loadDemoData(),
     geoM.loadDemoData(),
     cronM.loadDemoData(),
-  ])
+  ]
+  await Promise.all(legacyDemoLoads)
 
   console.log("[Level 2] Seeding higher-tier addon demo data...")
   const [cabM, helpdeskM, mizanM, khidraM, stockM, crmM, shootgunM] = await Promise.all([
@@ -82,7 +86,11 @@ async function run() {
   }
 
   new NativeServer({
-    database: process.env.DATABASE_URL || "postgres://localhost/moonwitness",
+    database:
+      process.env.DATABASE_URL ||
+      (process.env.NODE_ENV === "production"
+        ? "postgres://localhost/moonwitness"
+        : "sqlite://./data/moonwitness.dev.db"),
     jwtSecret,
     addons: [
       ...baseAddons.models,
@@ -127,7 +135,7 @@ async function run() {
     const integrity = verifySeedIntegrity()
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
     await loadBaseData()
-    await seedWitnessGraphCore()
+    await seedLegacyWitnessIfEnabled()
     console.log("Canonical seed completed.")
     if (isDemo || withExternal) {
       await loadAllDemoData()
@@ -136,14 +144,14 @@ async function run() {
     const integrity = verifySeedIntegrity()
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
     await loadBaseData()
-    await seedWitnessGraphCore()
+    await seedLegacyWitnessIfEnabled()
     await loadAllDemoData()
   } else if (cmd === "install") {
     await up()
     const integrity = verifySeedIntegrity()
     if (!integrity.valid) throw new Error(`Seed integrity check failed: ${integrity.errors.join(", ")}`)
     await loadBaseData()
-    await seedWitnessGraphCore()
+    await seedLegacyWitnessIfEnabled()
     console.log("Database install completed.")
     if (isDemo || withExternal) {
       await loadAllDemoData()

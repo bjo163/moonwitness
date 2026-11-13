@@ -2,24 +2,23 @@
 
 import React from "react"
 import { Anchor, Navigation, Activity } from "lucide-react"
-import { MaritimeShip } from "@moon/client"
+import { MaritimeShip, type SourceStatus } from "@moon/client"
 
 export function MaritimeTrafficWidget({
   ships = [],
+  status = "UNAVAILABLE",
 }: {
   ships: MaritimeShip[]
+  status?: SourceStatus
 }) {
-  const cargoCount = ships.filter((s) => s.type === "Cargo").length
-  const tankerCount = ships.filter((s) => s.type === "Tanker").length
-
   return (
     <div className="bg-background flex h-full flex-col rounded-xl border border-primary/30 p-4 lg:col-span-12 xl:col-span-4">
       <div className="mb-4 flex items-center justify-between border-b border-border pb-2">
         <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-primary uppercase">
           <Anchor className="h-4 w-4" />
           MARITIME TRAFFIC
-          <span className="rounded-[2px] border border-primary/50 bg-primary/20 px-1.5 py-0.5 text-[8px] text-primary">
-            LIVE
+          <span className="rounded-[2px] border border-border bg-muted/30 px-1.5 py-0.5 text-[8px] text-muted-foreground">
+            {status}
           </span>
         </div>
       </div>
@@ -60,7 +59,11 @@ export function MaritimeTrafficWidget({
           {ships.length === 0 ? (
             <div className="flex flex-col items-center gap-2 py-10 text-center font-mono text-[10px] text-primary/50">
               <Activity className="h-6 w-6 animate-pulse" />
-              Scanning oceans for vessel transponders...
+              {status === "UNAVAILABLE"
+                ? "AIS source unavailable. Vessel totals are not available."
+                : status === "SIMULATED"
+                  ? "AIS source is simulated for demonstration only."
+                  : "No verified vessel records were returned."}
             </div>
           ) : (
             ships.map((ship) => (

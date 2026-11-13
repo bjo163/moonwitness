@@ -63,3 +63,23 @@ export {
   shouldSampleQuery,
   resetQuerySampler,
 } from './telemetry.js'
+export {
+  type Dialect,
+  getDialect,
+  setDialect,
+  detectDialect,
+  parseDbUrl,
+  isPg,
+  isSqlite,
+  mapColumnType,
+  supportsVectors,
+  supportsJsonb,
+  supportsAdvisoryLocks,
+  supportsReturning,
+  booleanLiteral,
+  nowExpression,
+} from './dialect.js'
+export {
+  findWorkspaceRoot,
+  loadJsonSeed,
+} from './seed-loader.js'

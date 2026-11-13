@@ -18,6 +18,8 @@ import WxRoot from '../models/wx-root.js'
 import WxLexeme from '../models/wx-lexeme.js'
 import WxEntity from '../models/wx-entity.js'
 import WxSourceSnapshot from '../models/wx-source-snapshot.js'
+import { finalizeSearchResults } from './retrieval-projection.js'
+import { searchLexical, searchScriptureContent, searchTraditionUnits } from './retrieval-domain-search.js'
 
 export interface SearchOptions {
   query: string
@@ -51,6 +53,7 @@ export interface ReferenceLookupResult {
   root?: Record<string, unknown> | null
   lexeme?: Record<string, unknown> | null
 }
+
 
 /**
  * Normalizes Arabic text for diacritic-insensitive search matching.
@@ -232,103 +235,20 @@ export async function searchWitnessGraph(
 
   // 2. Search Scripture / Content Domain
   if (filter === 'ALL' || filter === 'SCRIPTURE') {
-    const allContents = await WxContent.fetch(WxContent, env, [['active', '=', true]], undefined, {
-      limit: 200
-    })
-
-    for (const c of allContents) {
-      const text = c.text || ''
-      const textNorm = normalizeArabic(text)
-      const matches =
-        text.toLowerCase().includes(query.toLowerCase()) ||
-        (normQuery.length >= 2 && textNorm.includes(normQuery))
-
-      if (matches) {
-        const isTranslation = (c.contentType || c.content_type) === 'TRANSLATION'
-        results.push({
-          id: `content:${c.id}`,
-          type: 'SCRIPTURE',
-          title: isTranslation ? `Translation (${c.language || c.language_code || 'id'})` : `Scripture Passage`,
-          reference: c.stableKey || c.stable_key || `content:${c.id}`,
-          link: `/scripture/1?contentId=${c.id}`,
-          snippet: extractSnippet(text, query),
-          language: c.language || c.language_code,
-          script: c.script,
-          edition: String(c.editionId || c.edition_id || ''),
-          provenanceId: c.provenanceId || c.provenance_id || null
-        })
-      }
-    }
+    results.push(...await searchScriptureContent(env, query, normQuery, normalizeArabic, extractSnippet))
   }
 
   // 3. Search Tradition / Hadith Domain
   if (filter === 'ALL' || filter === 'HADITH') {
-    const units = await WxTraditionUnit.fetch(WxTraditionUnit, env, [['active', '=', true]], undefined, {
-      limit: 100
-    })
-    for (const u of units) {
-      const stableKey = u.stableKey || u.stable_key || ''
-      if (stableKey.toLowerCase().includes(query.toLowerCase())) {
-        results.push({
-          id: `tradition:${u.id}`,
-          type: 'HADITH',
-          title: `Tradition Unit ${stableKey}`,
-          reference: stableKey,
-          link: `/hadiths?unit=${u.id}`,
-          snippet: `Tradition report sequence #${u.sequence || u.id}`,
-          provenanceId: u.provenanceId || u.provenance_id || null
-        })
-      }
-    }
+    results.push(...await searchTraditionUnits(env, query))
   }
 
   // 4. Search Lexical Domain
   if (filter === 'ALL' || filter === 'LEXICAL') {
-    const roots = await WxRoot.fetch(WxRoot, env, [['active', '=', true]], undefined, { limit: 50 })
-    for (const r of roots) {
-      const writtenForm = r.writtenForm || r.written_form || ''
-      const rootNorm = normalizeArabic(writtenForm)
-      if (writtenForm.includes(query) || rootNorm.includes(normQuery)) {
-        results.push({
-          id: `root:${r.id}`,
-          type: 'LEXICAL',
-          title: `Arabic Root (${writtenForm})`,
-          reference: r.stableKey || r.stable_key,
-          link: `/matrix/wx.root`,
-          snippet: `Lexical root: ${writtenForm}`,
-          language: r.languageCode || r.language_code,
-          provenanceId: r.provenanceId || r.provenance_id || null
-        })
-      }
-    }
-
-    const lexemes = await WxLexeme.fetch(WxLexeme, env, [['active', '=', true]], undefined, { limit: 50 })
-    for (const l of lexemes) {
-      const lemma = l.lemma || ''
-      const lemmaNorm = normalizeArabic(lemma)
-      if (lemma.includes(query) || lemmaNorm.includes(normQuery)) {
-        results.push({
-          id: `lexeme:${l.id}`,
-          type: 'LEXICAL',
-          title: `Lemma: ${lemma}`,
-          reference: l.stableKey || l.stable_key,
-          link: `/matrix/wx.lexeme`,
-          snippet: `Lexical lemma form: ${lemma}`,
-          language: l.languageCode || l.language_code,
-          provenanceId: l.provenanceId || l.provenance_id || null
-        })
-      }
-    }
+    results.push(...await searchLexical(env, query, normQuery, normalizeArabic))
   }
 
-  // Deduplicate by ID
-  const unique = [...new Map(results.map((r) => [r.id, r])).values()]
-  const paged = unique.slice(offset, offset + limit)
-
-  return {
-    total: unique.length,
-    results: paged
-  }
+  return finalizeSearchResults(results, offset, limit)
 }
 
 /**

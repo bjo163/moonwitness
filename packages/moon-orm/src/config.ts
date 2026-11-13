@@ -6,6 +6,7 @@ import {
   startDbSpan,
   shouldSampleQuery,
 } from './telemetry.js'
+import { detectDialect, parseDbUrl, setDialect, getDialect } from './dialect.js'
 
 let dbInstance: Knex | null = null
 const pendingQuerySpans = new Map<string, any>()
@@ -14,16 +15,20 @@ export type DbConfig = string | Knex | Knex.Config
 
 export function setupOrm(config: DbConfig) {
   if (typeof config === 'string') {
-    dbInstance = knex({
-      client: 'pg',
-      connection: config
-    })
-  } else if (typeof config !== 'function' && !('select' in config)) {
-    // Plain config object
+    const dialect = detectDialect(config)
+    setDialect(dialect)
+    const knexConfig = parseDbUrl(config)
+    dbInstance = knex(knexConfig as any)
+  } else if (typeof config !== 'function' && 'client' in config && typeof (config as any).client === 'string' && !('raw' in config)) {
+    // Plain Knex config object
+    const clientStr = String((config as any).client || '')
+    setDialect(detectDialect(clientStr))
     dbInstance = knex(config as any)
   } else {
-    // Already a Knex instance
+    // Already a Knex instance or mock DB instance
     dbInstance = config as Knex
+    const clientStr = String((dbInstance.client as any)?.config?.client || (dbInstance.client as any)?.driverName || '')
+    setDialect(detectDialect(clientStr))
   }
   
   if (process.env.DEBUG === 'true') {
@@ -62,7 +67,8 @@ export function setupOrm(config: DbConfig) {
     const rawTransaction = dbInstance.transaction.bind(dbInstance)
     dbInstance.transaction = async function (callback: any) {
         const span = startDbSpan('db.transaction')
-        span?.setAttribute('db.system', 'postgresql')
+        const dbSystem = getDialect() === 'pg' ? 'postgresql' : 'sqlite'
+        span?.setAttribute('db.system', dbSystem)
         try {
           const result = await rawTransaction(callback)
           span?.setStatus({ code: SpanStatusCode.OK })
@@ -80,9 +86,10 @@ export function setupOrm(config: DbConfig) {
       if (!shouldSampleQuery()) return
       const uid = query.__knexQueryUid
       if (!uid) return
+      const dbSystem = getDialect() === 'pg' ? 'postgresql' : 'sqlite'
       const span = startDbSpan('db.query', {
         attributes: {
-          'db.system': 'postgresql',
+          'db.system': dbSystem,
           'db.operation.name': databaseOperation(query.sql),
           'db.query.bindings_count': Array.isArray(query.bindings) ? query.bindings.length : 0,
         },
@@ -151,8 +158,9 @@ export async function checkDbConnection(): Promise<DbHealthStatus> {
     }
   }
 
+  const dbSystem = getDialect() === 'pg' ? 'postgresql' : 'sqlite'
   const span = startDbSpan('db.connection_check', {
-    attributes: { 'db.system': 'postgresql' }
+    attributes: { 'db.system': dbSystem }
   })
 
   const start = performance.now()
@@ -162,17 +170,25 @@ export async function checkDbConnection(): Promise<DbHealthStatus> {
 
     let version: string | undefined
     try {
-      const vResult = await dbInstance.raw('SELECT version() as version')
-      const rows = vResult?.rows || vResult
-      const row = Array.isArray(rows) && rows.length > 0 ? rows[0] : undefined
-      if (row && typeof row === 'object' && 'version' in row && row.version) {
-        const firstLine = String(row.version).split('\n')[0]
-        if (firstLine) {
-          version = firstLine.trim()
+      if (getDialect() === 'pg') {
+        const vResult = await dbInstance.raw('SELECT version() as version')
+        const rows = vResult?.rows || vResult
+        const row = Array.isArray(rows) && rows.length > 0 ? rows[0] : undefined
+        if (row && typeof row === 'object' && 'version' in row && row.version) {
+          const firstLine = String(row.version).split('\n')[0]
+          if (firstLine) {
+            version = firstLine.trim()
+          }
+        }
+      } else {
+        const vResult = await dbInstance.raw('SELECT sqlite_version() as version')
+        const rows = Array.isArray(vResult) ? vResult : []
+        if (rows.length > 0 && rows[0]?.version) {
+          version = `SQLite ${rows[0].version}`
         }
       }
     } catch {
-      // Ignored if dialect does not support SELECT version()
+      // Ignored if dialect does not support version query
     }
 
     const dialect = (dbInstance.client as any)?.dialect || (dbInstance.client as any)?.driverName || 'pg'

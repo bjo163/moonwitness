@@ -213,11 +213,11 @@ export function KhidraTelemetryDock() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-[7px] text-primary/50">DATA INTEGRITY</span>
+            <span className="text-[7px] text-primary/50">KNOWLEDGE CORE</span>
             <div className="h-1 w-24 overflow-hidden rounded-full bg-primary/20">
               <div className="h-full w-full bg-primary shadow-sm" />
             </div>
-            <span className="text-primary">100%</span>
+            <span className="text-primary">CONNECTED</span>
             <Lock className="ml-1 h-3.5 w-3.5 text-primary/50" />
           </div>
         </div>

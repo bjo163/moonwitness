@@ -13,9 +13,10 @@ import {
   forge,
   registry,
   type DbConfig,
+  isSqlite,
 } from '@moon/orm'
 import { defineEndpoint, type EndpointDef } from '@moon/protocol'
-import { authenticateRequest, AuthError, issueJwt } from './utils/auth.js'
+import { authenticateRequest, AuthError, issueJwt, resolveUserRole } from './utils/auth.js'
 import {
   handleLogin,
   handleRegister,
@@ -64,14 +65,43 @@ type MoonMiddleware = (
 
 function resolveCorsConfig(config?: CorsConfig): CorsConfig {
   if (config) return config
+  const rawOrigins = (process.env.ALLOWED_ORIGINS || '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+
+  if (rawOrigins.length > 0) {
+    return {
+      allowedOrigins: rawOrigins,
+      allowCredentials: true,
+    }
+  }
+
+  // In development, automatically allow localhost and loopback origins
+  if (process.env.NODE_ENV !== 'production') {
+    return {
+      allowedOrigins: (origin: string) => {
+        try {
+          const url = new URL(origin)
+          return (
+            url.hostname === 'localhost' ||
+            url.hostname === '127.0.0.1' ||
+            url.hostname === '0.0.0.0'
+          )
+        } catch {
+          return false
+        }
+      },
+      allowCredentials: true,
+    }
+  }
+
   return {
-    allowedOrigins: (process.env.ALLOWED_ORIGINS || '')
-      .split(',')
-      .map((origin) => origin.trim())
-      .filter(Boolean),
+    allowedOrigins: [],
     allowCredentials: true,
   }
 }
+
 
 export class FastifyAdapter {
   private readonly config: FastifyAdapterConfig
@@ -106,7 +136,34 @@ export class FastifyAdapter {
 
   private registerRoute(method: string, path: string, handler: HttpHandler, auth: 'none' | 'user' | 'admin' = 'none') {
     if (this.started) throw new Error('Moon routes must be registered before server.start()')
-    globalRoutes.push({ method, path, handler })
+
+    let effectiveHandler = handler
+    if (auth !== 'none') {
+      effectiveHandler = async (req: IncomingMessage, res: ServerResponse) => {
+        try {
+          const session = await authenticateRequest(req, this.config.jwtSecret, { allowAnonymous: false })
+          if (auth === 'admin' && session.uid !== SUPERUSER_ID) {
+            // Allow users with admin/superadmin role (clearance >= 2) in addition to SUPERUSER_ID
+            const authCtx = createCtx(session.uid, {}, getModel as any)
+            const { clearanceLevel } = await resolveUserRole(session.uid, authCtx)
+            if (clearanceLevel < 2) {
+              sendJson(res, 403, { error: 'Administrator access required', code: 'AUTH_FORBIDDEN' }, req, this.config.cors)
+              return
+            }
+          }
+          ;(req as any).__moonSession = session
+          return await handler(req, res)
+        } catch (error) {
+          if (error instanceof AuthError) {
+            sendJson(res, error.statusCode, { error: error.message, code: error.code }, req, this.config.cors)
+          } else {
+            sendJson(res, 401, { error: 'Authentication required', code: 'AUTH_REQUIRED' }, req, this.config.cors)
+          }
+        }
+      }
+    }
+
+    globalRoutes.push({ method, path, handler: effectiveHandler })
     defineEndpoint({ method: method as EndpointDef['method'], path, description: `Dynamic route ${method} ${path}`, auth })
   }
 
@@ -130,10 +187,10 @@ export class FastifyAdapter {
     method: string,
     path: string,
     targetUrl: string,
-    options?: { cache?: string; query?: string[]; headers?: Record<string, string>; apiKey?: string },
+    options?: { cache?: string; query?: string[]; headers?: Record<string, string>; apiKey?: string; timeoutMs?: number },
     auth: 'none' | 'user' | 'admin' = 'user',
   ) {
-    this.registerRoute(method, path, createProxyHandler({ targetUrl, ...options }), auth)
+    this.registerRoute(method, path, createProxyHandler({ targetUrl, method, ...options }), auth)
   }
 
   private bridgeRequest(req: FastifyRequest): IncomingMessage {
@@ -175,8 +232,13 @@ export class FastifyAdapter {
     try {
       const session = await authenticateRequest(req, this.config.jwtSecret, { allowAnonymous: false })
       if (session.uid !== SUPERUSER_ID) {
-        sendJson(res, 403, { error: 'Administrator access required', code: 'AUTH_FORBIDDEN' }, req, this.config.cors)
-        return null
+        // Allow users with admin/superadmin role (clearance >= 2) in addition to SUPERUSER_ID
+        const authCtx = createCtx(session.uid, {}, getModel as any)
+        const { clearanceLevel } = await resolveUserRole(session.uid, authCtx)
+        if (clearanceLevel < 2) {
+          sendJson(res, 403, { error: 'Administrator access required', code: 'AUTH_FORBIDDEN' }, req, this.config.cors)
+          return null
+        }
       }
       return session
     } catch (error) {
@@ -234,9 +296,10 @@ export class FastifyAdapter {
     this.addRawRoute(app, 'GET', '/auth/me', (req, res) => handleGetSession(req, res, authConfig))
     this.addRawRoute(app, 'GET', '/auth/session', (req, res) => handleGetSession(req, res, authConfig))
     this.addRawRoute(app, 'POST', '/rpc', (req, res) => handleRpc(req, res, this.config.jwtSecret))
+    
     for (const path of ['/health/live', '/livez']) this.addRawRoute(app, 'GET', path, handleLiveness)
     for (const path of ['/health/ready', '/readyz']) this.addRawRoute(app, 'GET', path, handleReadiness)
-    for (const path of ['/health', '/healthz', '/api/health']) this.addRawRoute(app, 'GET', path, handleHealth)
+    for (const path of ['/health', '/healthz', '/api/health', '/api/system/health']) this.addRawRoute(app, 'GET', path, handleHealth)
     this.addRawRoute(app, 'GET', '/db/status', handleDbStatus)
     this.addRawRoute(app, 'GET', '/meta/models', handleMetaModels)
     this.addRawRoute(app, 'GET', '/api/meta/model/:model', (req, res) => handleMetaModel(req, res, (req as any).params.model))
@@ -274,8 +337,8 @@ export class FastifyAdapter {
     app.addHook('onRequest', async (req, reply) => {
       reply.header('x-request-id', req.id)
     })
-    this.registerBuiltinRoutes(app)
     this.registerCustomRoutes(app)
+    this.registerBuiltinRoutes(app)
     app.options('/*', this.rawHandler((req, res) => {
       if (!handleCorsPreflight(req, res, this.config.cors)) {
         res.writeHead(204)
@@ -288,9 +351,13 @@ export class FastifyAdapter {
   }
 
   private async verifySchema() {
-    if (process.env.MOON_AUTO_SYNC === 'true') {
+    if (process.env.MOON_AUTO_SYNC === 'true' || isSqlite()) {
       const { applied, summary } = await forge()
-      logger.info('moon.schema', `Schema auto-sync complete: ${applied.length} changes across ${summary.totalModels} models`)
+      if (applied.length > 0) {
+        logger.info('moon.schema', `Schema auto-sync complete: ${applied.length} changes across ${summary.totalModels} models`)
+      } else {
+        logger.info('moon.schema', `Schema verified: ${summary.totalModels} models / ${summary.totalColumns} fields`)
+      }
       return
     }
     const { migrations, summary } = await forge({ dryRun: true })

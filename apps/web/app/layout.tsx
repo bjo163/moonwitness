@@ -2,7 +2,7 @@ import { Suspense } from "react"
 import { JetBrains_Mono, Geist, Amiri } from "next/font/google"
 
 import "@workspace/ui/globals.css"
-import { Navbar, Taskbar, PwaRegister } from "../components/shell"
+import { WebNavbar, Taskbar, PwaRegister } from "../components/shell"
 import { MoonProvider } from "@workspace/state"
 import {
   FlyingPropheticAIWidget,
@@ -11,7 +11,8 @@ import {
   CommandPalette,
   AudioToggle,
 } from "@workspace/ui"
-import { cn } from "@workspace/ui/lib/utils"
+import { cn } from "@workspace/ui"
+import { commandCenterUrl } from "../lib/app-urls"
 
 const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -43,14 +44,14 @@ export const metadata = {
   },
 }
 
-export default function RootLayout({
+export default function WebRootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
     <html
-      lang="id"
+      lang="en"
       suppressHydrationWarning
       className={cn(
         "antialiased",
@@ -73,7 +74,7 @@ export default function RootLayout({
         </a>
         <MoonProvider>
           <Suspense fallback={null}>
-            <Navbar />
+            <WebNavbar />
           </Suspense>
           <Suspense fallback={null}>
             <GlobalTickerWidget />
@@ -92,7 +93,7 @@ export default function RootLayout({
           </Suspense>
           <PwaRegister />
         </MoonProvider>
-        <CommandPalette />
+        <CommandPalette commandCenterUrl={commandCenterUrl} />
         <div className="fixed right-4 bottom-14 z-40 hidden sm:block">
           <AudioToggle />
         </div>

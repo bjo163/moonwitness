@@ -1,5 +1,5 @@
 "use client"
-import { useMounted } from "@workspace/hooks"
+import { useMounted, safeGetStorage, safeSetStorage } from "@workspace/hooks"
 
 import { useState, useEffect } from "react"
 import { Volume2, VolumeX } from "lucide-react"
@@ -10,8 +10,8 @@ export function AdhanNotificationWidget() {
 
   useEffect(() => {
     setTimeout(() => {
-      const saved = localStorage.getItem("mw_adhan_enabled")
-      if (saved !== null) {
+      const saved = safeGetStorage("mw_adhan_enabled")
+      if (saved) {
         setAdhanEnabled(saved === "true")
       }
     }, 0)
@@ -20,7 +20,7 @@ export function AdhanNotificationWidget() {
   function toggleAdhan() {
     const nextState = !adhanEnabled
     setAdhanEnabled(nextState)
-    localStorage.setItem("mw_adhan_enabled", String(nextState))
+    safeSetStorage("mw_adhan_enabled", String(nextState))
 
     if (nextState) {
       // Audio preview test

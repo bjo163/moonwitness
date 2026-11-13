@@ -15,6 +15,11 @@ import type {
   CabSummaryResponse,
   HealthResponse,
   DbStatusResponse,
+  QiblaCalculationResult,
+  HilalVisibilityEvaluation,
+  SemanticSearchResult,
+  CelestialPrayerTimesResult,
+  HybridSearchResult,
 } from "@workspace/types"
 
 export const API_ENDPOINTS = {
@@ -26,6 +31,13 @@ export const API_ENDPOINTS = {
     PRAYER_TIMES: "/api/prayer-times",
     HIJRI_DATE: "/api/islamic/hijri-date",
     QIBLA: "/api/islamic/qibla",
+  },
+  SERVICES: {
+    CELESTIAL_QIBLA: "/api/services/celestial/qibla",
+    CELESTIAL_HILAL: "/api/services/celestial/hilal-visibility",
+    CELESTIAL_PRAYER: "/api/services/celestial/prayer-times",
+    AI_SEARCH: "/api/services/ai/semantic/search",
+    AI_HYBRID_SEARCH: "/api/services/ai/semantic/hybrid-search",
   },
   SYSTEM: {
     HEALTH: "/api/system/health",
@@ -161,3 +173,73 @@ export async function fetchGoldPrice(): Promise<{ pricePerGramIdr: number; symbo
 export async function sendChatMessage(messages: ChatMessage[]): Promise<ChatMessage> {
   return await apiPost<ChatMessage>("/api/agent", { messages })
 }
+
+// ── POLYGLOT MICROSERVICES (CELESTIAL ENGINE & AI AGENT) ─────────────
+export async function fetchQiblaDirection(
+  latitude: number,
+  longitude: number
+): Promise<QiblaCalculationResult> {
+  return await apiGet<QiblaCalculationResult>(
+    `/api/services/celestial/qibla?lat=${encodeURIComponent(latitude)}&lon=${encodeURIComponent(longitude)}`
+  )
+}
+
+export async function fetchHilalVisibility(
+  altitudeDegrees: number,
+  elongationDegrees: number,
+  crescentWidthArcmin?: number
+): Promise<HilalVisibilityEvaluation> {
+  const params = new URLSearchParams({
+    alt: String(altitudeDegrees),
+    elong: String(elongationDegrees),
+  })
+  if (crescentWidthArcmin !== undefined) {
+    params.set("width", String(crescentWidthArcmin))
+  }
+  return await apiGet<HilalVisibilityEvaluation>(
+    `/api/services/celestial/hilal-visibility?${params.toString()}`
+  )
+}
+
+export async function searchSemanticPassages(
+  query: string,
+  topK = 5
+): Promise<SemanticSearchResult> {
+  return await apiPost<SemanticSearchResult>("/api/services/ai/semantic/search", {
+    query,
+    top_k: topK,
+  })
+}
+
+export async function fetchCelestialPrayerTimes(
+  latitude: number,
+  longitude: number,
+  date = "2026-09-06",
+  timezoneOffset = 7.0,
+  convention: "KEMENAG" | "MWL" | "ISNA" | "UMM_AL_QURA" = "KEMENAG"
+): Promise<CelestialPrayerTimesResult> {
+  const params = new URLSearchParams({
+    lat: String(latitude),
+    lon: String(longitude),
+    date,
+    tz: String(timezoneOffset),
+    convention,
+  })
+  return await apiGet<CelestialPrayerTimesResult>(
+    `/api/services/celestial/prayer-times?${params.toString()}`
+  )
+}
+
+export async function searchHybridPassages(
+  query: string,
+  topK = 5,
+  alpha = 0.5
+): Promise<HybridSearchResult> {
+  return await apiPost<HybridSearchResult>("/api/services/ai/semantic/hybrid-search", {
+    query,
+    top_k: topK,
+    alpha,
+  })
+}
+
+
